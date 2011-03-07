@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2010 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -93,7 +93,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * <h2>Disclaimer:</h2> While I did my best to get accurate results please do
  * not rely on these zmanim for <em>halacha lemaaseh</em>
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2010
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.2
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
@@ -2350,7 +2350,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
 	public double getAteretTorahSunsetOffset() {
-		return ateretTorahSunsetOffset;
+		return this.ateretTorahSunsetOffset;
 	}
 
 	/**

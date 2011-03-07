@@ -76,19 +76,19 @@ public class HebrewDateFormatter {
 	 * Returns a string containing the Hebrew date in the form,
 	 * "day Month, year" e.g. "21 Shevat, 5729"
 	 */
-	public static String getHebrewDateAsString(JewishDate hd) {
-		return hd.getJewishDayOfMonth() + " " + getHebrewMonthAsString(hd) + ", " + hd.getJewishYear();
+	public static String getHebrewDateAsString(JewishDate jd) {
+		return jd.getJewishDayOfMonth() + " " + getHebrewMonthAsString(jd) + ", " + jd.getJewishYear();
 	}
 
 	/**
 	 * returns a string of the current Hebrew month such as "Tishrei".
 	 */
-	public static String getHebrewMonthAsString(JewishDate hd) {
+	public static String getHebrewMonthAsString(JewishDate jd) {
 		// if it is a leap year and 12th month //
-		if (JewishDate.isJewishLeapYear(hd.getJewishYear()) && hd.getJewishMonth() == 12) {
+		if (JewishDate.isJewishLeapYear(jd.getJewishYear()) && jd.getJewishMonth() == 12) {
 			return "Adar I";
 		} else {
-			return hebrewMonths[hd.getJewishMonth() - 1];
+			return hebrewMonths[jd.getJewishMonth() - 1];
 		}
 	}
 	
@@ -97,8 +97,8 @@ public class HebrewDateFormatter {
 	 * an empty string if there is no Omer this day.
 	 * FIXME - Is this method really required?
 	 */
-	public static String getOmerAsString(JewishDate hd) {
-		int omer = hd.getDayOfOmer();
+	public static String getOmerAsString(JewishCalendar jc) {
+		int omer = jc.getDayOfOmer();
 
 		// if not Omer day //
 		if (omer == 0) {

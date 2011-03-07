@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2008 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -25,7 +25,7 @@ import java.util.TimeZone;
  * for specific implementations of the {@link AstronomicalCalculator} to see if
  * elevation is calculated as part o the algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2008
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.1
  */
 public class GeoLocation implements Cloneable {
@@ -34,9 +34,9 @@ public class GeoLocation implements Cloneable {
 	private String locationName;
 	private TimeZone timeZone;
 	private double elevation;
-	private int DISTANCE = 0;
-	private int INITIAL_BEARING = 1;
-	private int FINAL_BEARING = 2;
+	private static final int DISTANCE = 0;
+	private static final int INITIAL_BEARING = 1;
+	private static final int FINAL_BEARING = 2;
 
 	/** constant for milliseconds in a minute (60,000) */
 	private static final long MINUTE_MILLIS = 60 * 1000;
@@ -50,7 +50,7 @@ public class GeoLocation implements Cloneable {
 	 * @return Returns the elevation in Meters.
 	 */
 	public double getElevation() {
-		return elevation;
+		return this.elevation;
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class GeoLocation implements Cloneable {
 	 * @return Returns the latitude.
 	 */
 	public double getLatitude() {
-		return latitude;
+		return this.latitude;
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class GeoLocation implements Cloneable {
 	public void setLongitude(int degrees, int minutes, double seconds,
 			String direction) {
 		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (longTemp > 180 || longitude < 0) {
+		if (longTemp > 180 || this.longitude < 0) {
 			throw new IllegalArgumentException(
 					"Longitude must be between 0 and  180. Use the ");
 		}
@@ -245,14 +245,14 @@ public class GeoLocation implements Cloneable {
 	 * @return Returns the longitude.
 	 */
 	public double getLongitude() {
-		return longitude;
+		return this.longitude;
 	}
 
 	/**
 	 * @return Returns the location name.
 	 */
 	public String getLocationName() {
-		return locationName;
+		return this.locationName;
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class GeoLocation implements Cloneable {
 	 * @return Returns the timeZone.
 	 */
 	public TimeZone getTimeZone() {
-		return timeZone;
+		return this.timeZone;
 	}
 
 	/**
@@ -562,14 +562,14 @@ public class GeoLocation implements Cloneable {
 		if (!(object instanceof GeoLocation))
 			return false;
 		GeoLocation geo = (GeoLocation) object;
-		return Double.doubleToLongBits(latitude) == Double
+		return Double.doubleToLongBits(this.latitude) == Double
 				.doubleToLongBits(geo.latitude)
-				&& Double.doubleToLongBits(longitude) == Double
+				&& Double.doubleToLongBits(this.longitude) == Double
 						.doubleToLongBits(geo.longitude)
-				&& elevation == geo.elevation
-				&& (locationName == null ? geo.locationName == null
-						: locationName.equals(geo.locationName))
-				&& (timeZone == null ? geo.timeZone == null : timeZone
+				&& this.elevation == geo.elevation
+				&& (this.locationName == null ? geo.locationName == null
+						: this.locationName.equals(geo.locationName))
+				&& (this.timeZone == null ? geo.timeZone == null : this.timeZone
 						.equals(geo.timeZone));
 	}
 
@@ -579,9 +579,9 @@ public class GeoLocation implements Cloneable {
 	public int hashCode() {
 
 		int result = 17;
-		long latLong = Double.doubleToLongBits(latitude);
-		long lonLong = Double.doubleToLongBits(longitude);
-		long elevLong = Double.doubleToLongBits(elevation);
+		long latLong = Double.doubleToLongBits(this.latitude);
+		long lonLong = Double.doubleToLongBits(this.longitude);
+		long elevLong = Double.doubleToLongBits(this.elevation);
 		int latInt = (int) (latLong ^ (latLong >>> 32));
 		int lonInt = (int) (lonLong ^ (lonLong >>> 32));
 		int elevInt = (int) (elevLong ^ (elevLong >>> 32));
@@ -590,8 +590,8 @@ public class GeoLocation implements Cloneable {
 		result += 37 * result + lonInt;
 		result += 37 * result + elevInt;
 		result += 37 * result
-				+ (locationName == null ? 0 : locationName.hashCode());
-		result += 37 * result + (timeZone == null ? 0 : timeZone.hashCode());
+				+ (this.locationName == null ? 0 : this.locationName.hashCode());
+		result += 37 * result + (this.timeZone == null ? 0 : this.timeZone.hashCode());
 		return result;
 	}
 

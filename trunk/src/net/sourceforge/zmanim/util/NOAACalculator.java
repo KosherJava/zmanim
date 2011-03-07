@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2008 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -32,13 +32,13 @@ import java.util.Calendar;
  * <a href="http://en.wikipedia.org/wiki/Jean_Meeus">Jean Meeus</a>. Added to
  * the algorithm is an adjustment of the zenith to account for elevation.
  *
- * @author &copy; Eliyahu Hershfeld 2008
+ * @author &copy; Eliyahu Hershfeld 2011
  * @version 0.1
  */
 public class NOAACalculator extends AstronomicalCalculator {
 	private String calculatorName = "US National Oceanic and Atmospheric Administration Algorithm";
 	public String getCalculatorName() {
-		return calculatorName;
+		return this.calculatorName;
 	}
 
 	/**
@@ -47,6 +47,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunrise(AstronomicalCalendar astronomicalCalendar,
 			double zenith, boolean adjustForElevation) {
+		double adjustedZenith = zenith;
 
 //		if (astronomicalCalendar.getCalendar().get(Calendar.YEAR) <= 2000) {
 //			throw new ZmanimException(
@@ -54,16 +55,16 @@ public class NOAACalculator extends AstronomicalCalculator {
 //		}
 
 		if (adjustForElevation) {
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
 					.getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
 		double sunRise = calcSunriseUTC(calcJD(astronomicalCalendar
 				.getCalendar()), astronomicalCalendar.getGeoLocation()
 				.getLatitude(), -astronomicalCalendar.getGeoLocation()
-				.getLongitude(), zenith);
+				.getLongitude(), adjustedZenith);
 		return sunRise / 60;
 	}
 
@@ -77,24 +78,18 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunset(AstronomicalCalendar astronomicalCalendar,
 			double zenith, boolean adjustForElevation) {
-
-		// if (astronomicalCalendar.getCalendar().get(Calendar.YEAR) <= 2000) {
-		// throw new ZmanimException(
-		// "NOAACalculator can not calculate times for the year 2000. Please try
-		// a date with a different year.");
-		// }
-
+		double adjustedZenith = zenith;
 		if (adjustForElevation) {
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
 					.getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
 		double sunSet = calcSunsetUTC(
 				calcJD(astronomicalCalendar.getCalendar()),
 				astronomicalCalendar.getGeoLocation().getLatitude(),
-				-astronomicalCalendar.getGeoLocation().getLongitude(), zenith);
+				-astronomicalCalendar.getGeoLocation().getLongitude(), adjustedZenith);
 		return sunSet / 60;
 	}
 

@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2008 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -32,7 +32,7 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  * &amp; Noble</a>) and is used with his permission. Added to Kevin's code is
  * adjustment of the zenith to account for elevation.
  *
- * @author &copy; Eliyahu Hershfeld 2004 - 2008
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @author &copy; Kevin Boone 2000
  * @version 1.1
  */
@@ -40,7 +40,7 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
 public class SunTimesCalculator extends AstronomicalCalculator {
 	private String calculatorName = "US Naval Almanac Algorithm";
 	public String getCalculatorName() {
-		return calculatorName;
+		return this.calculatorName;
 	}
 
 	/**
@@ -49,20 +49,21 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunrise(AstronomicalCalendar astronomicalCalendar,
 			double zenith, boolean adjustForElevation) {
+		double adjustedZenith = zenith;
 		double doubleTime = Double.NaN;
 
 		if (adjustForElevation) {
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
 					.getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 		doubleTime = getTimeUTC(astronomicalCalendar.getCalendar().get(
 				Calendar.YEAR), astronomicalCalendar.getCalendar().get(
 				Calendar.MONTH) + 1, astronomicalCalendar.getCalendar().get(
 				Calendar.DAY_OF_MONTH), astronomicalCalendar.getGeoLocation()
 				.getLongitude(), astronomicalCalendar.getGeoLocation()
-				.getLatitude(), zenith, TYPE_SUNRISE);
+				.getLatitude(), adjustedZenith, TYPE_SUNRISE);
 		return doubleTime;
 	}
 
@@ -73,19 +74,20 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	public double getUTCSunset(AstronomicalCalendar astronomicalCalendar,
 			double zenith, boolean adjustForElevation) {
 		double doubleTime = Double.NaN;
+		double adjustedZenith = zenith;
 
 		if (adjustForElevation) {
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
 					.getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 		doubleTime = getTimeUTC(astronomicalCalendar.getCalendar().get(
 				Calendar.YEAR), astronomicalCalendar.getCalendar().get(
 				Calendar.MONTH) + 1, astronomicalCalendar.getCalendar().get(
 				Calendar.DAY_OF_MONTH), astronomicalCalendar.getGeoLocation()
 				.getLongitude(), astronomicalCalendar.getGeoLocation()
-				.getLatitude(), zenith, TYPE_SUNSET);
+				.getLatitude(), adjustedZenith, TYPE_SUNSET);
 		return doubleTime;
 	}
 

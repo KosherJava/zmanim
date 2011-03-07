@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2007 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -23,7 +23,7 @@ package net.sourceforge.zmanim.util;
  * milliseconds of a
  * {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
  *
- * @author &copy; Eliyahu Hershfeld 2004 - 2007
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 0.9.0
  */
 public class Time {
@@ -55,24 +55,25 @@ public class Time {
 	}
 
 	public Time(int millis) {
-		if(millis < 0){
-			isNegative = true;
-			millis = Math.abs(millis);
+		int adjustedMillis = millis;
+		if(adjustedMillis < 0){
+			this.isNegative = true;
+			adjustedMillis = Math.abs(adjustedMillis);
 		}
-		hours = millis / HOUR_MILLIS;
-		millis = millis - hours * HOUR_MILLIS;
+		this.hours = adjustedMillis / HOUR_MILLIS;
+		adjustedMillis = adjustedMillis - this.hours * HOUR_MILLIS;
 
-		minutes = millis / MINUTE_MILLIS;
-		millis = millis - minutes * MINUTE_MILLIS;
+		this.minutes = adjustedMillis / MINUTE_MILLIS;
+		adjustedMillis = adjustedMillis - this.minutes * MINUTE_MILLIS;
 
-		seconds = millis / SECOND_MILLIS;
-		millis = millis - seconds * SECOND_MILLIS;
+		this.seconds = adjustedMillis / SECOND_MILLIS;
+		adjustedMillis = adjustedMillis - this.seconds * SECOND_MILLIS;
 
-		milliseconds = millis;
+		this.milliseconds = adjustedMillis;
 	}
 
 	public boolean isNegative(){
-		return isNegative;
+		return this.isNegative;
 	}
 	public void setIsNegative(boolean isNegative){
 		this.isNegative = isNegative;
@@ -82,7 +83,7 @@ public class Time {
 	 * @return Returns the hour.
 	 */
 	public int getHours() {
-		return hours;
+		return this.hours;
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class Time {
 	 * @return Returns the minutes.
 	 */
 	public int getMinutes() {
-		return minutes;
+		return this.minutes;
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class Time {
 	 * @return Returns the seconds.
 	 */
 	public int getSeconds() {
-		return seconds;
+		return this.seconds;
 	}
 
 	/**
@@ -127,7 +128,7 @@ public class Time {
 	 * @return Returns the milliseconds.
 	 */
 	public int getMilliseconds() {
-		return milliseconds;
+		return this.milliseconds;
 	}
 
 	/**
@@ -139,8 +140,8 @@ public class Time {
 	}
 
 	public double getTime() {
-		return hours * HOUR_MILLIS + minutes * MINUTE_MILLIS + seconds
-				* SECOND_MILLIS + milliseconds;
+		return this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds
+				* SECOND_MILLIS + this.milliseconds;
 	}
 
 	public String toString() {
