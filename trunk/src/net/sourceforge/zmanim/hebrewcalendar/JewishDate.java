@@ -65,6 +65,7 @@ import java.util.*;
  * @author &copy; Eliyahu Hershfeld 2011
  * @version 0.2.6
  */
+@SuppressWarnings( { "MagicNumber" } )
 public class JewishDate implements Comparable, Cloneable {
 	private static final int JEWISH_EPOCH = -1373429;
 
@@ -72,10 +73,22 @@ public class JewishDate implements Comparable, Cloneable {
 	private int jewishDay;
 	private int jewishYear;
 
+	/**
+	 * The month, where 1 == January, 2 == February, etc...
+	 *<p>
+	 * Note how this is explicitly different than Java's Calendar class!
+ 	 */
 	private int gregorianMonth;
+
+	/** The day of the Gregorian month. E.g., 1st, 2nd, 3rd, etc... */
 	private int gregorianDayOfMonth;
+
+	/** The Gregorian year, e.g., 2011, 2012, etc... */
 	private int gregorianYear;
 
+	/**
+	 * 1 == Sunday, 2 == Monday, etc...
+	 */
 	private int dayOfWeek;
 
 	private int gregorianAbsDate;
@@ -84,7 +97,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * Returns the number of days in a given month in a given year.
 	 * 
 	 * @param month
-	 *            the month
+	 *            the month. As with other cases in this class, this is 1-based, not zero-based.
 	 * @param year
 	 *            the year (only impacts February)
 	 * @return the number of days in the month in the given year
@@ -113,7 +126,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * likely turn into a private method in the future.
 	 * 
 	 * @param month
-	 *            the month
+	 *            the month, where 1==January, 2==February, etc...
 	 * @return the number of days in the month
 	 */
 	int getLastDayOfGregorianMonth(int month) {
@@ -158,23 +171,21 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @param month
 	 *            the Gregorian month. Unlike the Java Calendar where January
 	 *            has the value of 0,This expects a 1 for January
-	 * @param absDate
-	 *            the Gregorian day of month. If this is > the number of days in
-	 *            the month/year, the last valid date of the month will be set
+	 * @param dayOfMonth
+	 *            the day of the month (1st, 2nd, etc...)
 	 * @return the absolute Gregorian day
 	 */
-	private static int gregorianDateToAbsDate(int year, int month,
-			int dayOfMonth) {
-		int absDate = 0; // dayOfMonth
+	private static int gregorianDateToAbsDate(int year, int month, int dayOfMonth) {
+		int absDate = dayOfMonth;
 		for (int m = month - 1; m > 0; m--) {
 			// days in prior months of the year
-			absDate = dayOfMonth + getLastDayOfGregorianMonth(m, year);
+			absDate += getLastDayOfGregorianMonth(m, year);
 		}
-		return (absDate // days this year //
-				+ 365 * (year - 1) // days in previous years ignoring leap days
-				+ (year - 1) / 4 // Julian leap days before this year...
-				- (year - 1) / 100 // ...minus prior century years...
-		+ (year - 1) / 400); // ...plus prior years divisible by 400
+		return (absDate           // days this year
+				+ 365 * (year - 1)    // days in previous years ignoring leap days
+				+ (year - 1) / 4      // Julian leap days before this year...
+				- (year - 1) / 100    // ...minus prior century years...
+				+ (year - 1) / 400);  // ...plus prior years divisible by 400
 	}
 
 	/**
@@ -185,6 +196,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @return true if it is a leap year
 	 */
 	public static boolean isJewishLeapYear(int year) {
+		//noinspection RedundantIfStatement
 		if ((((7 * year) + 1) % 19) < 7) {
 			return true;
 		} else {
@@ -215,10 +227,11 @@ public class JewishDate implements Comparable, Cloneable {
 	 *         year.
 	 */
 	private static int getJewishCalendarElapsedDays(int year) {
-		int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete
-														// cycles so far
-				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
-				+ (7 * ((year - 1) % 19) + 1) / 19; // Leap months this cycle
+		int monthsElapsed =
+			(235 * ((year - 1) / 19))             // Months in complete cycles so far
+			+ (12 * ((year - 1) % 19))            // Regular months in this cycle
+			+ ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
+
 		int partsElapsed = 204 + 793 * (monthsElapsed % 1080);
 		int hoursElapsed = 5 + 12 * monthsElapsed + 793
 				* (monthsElapsed / 1080) + partsElapsed / 1080;
@@ -371,23 +384,26 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @return the absolute date of the Jewish date.
 	 */
 	private static int jewishDateToAbsDate(int year, int month, int dayOfMonth) {
-		int m;
+
+		int absDate = dayOfMonth;
+
 		// Before Tishri, so add days in prior months
 		if (month < 7) {
 			// this year before and after Nisan.
-			for (m = 7; m <= getLastMonthOfJewishYear(year); m++) {
-				dayOfMonth = dayOfMonth + getDaysInJewishMonth(m, year);
+			for (int m = 7; m <= getLastMonthOfJewishYear(year); m++) {
+				absDate += getDaysInJewishMonth(m, year);
 			}
-			for (m = 1; m < month; m++) {
-				dayOfMonth = dayOfMonth + getDaysInJewishMonth(m, year);
+			for (int m = 1; m < month; m++) {
+				absDate += getDaysInJewishMonth(m, year);
 			}
 		} else { // Add days in prior months this year
-			for (m = 7; m < month; m++) {
-				dayOfMonth = dayOfMonth + getDaysInJewishMonth(m, year);
+			for (int m = 7; m < month; m++) {
+				absDate += getDaysInJewishMonth(m, year);
 			}
 		}
+
 		// Days in prior years + Days elapsed before absolute date 1
-		return (dayOfMonth + getJewishCalendarElapsedDays(year) + JEWISH_EPOCH);
+		return (absDate + getJewishCalendarElapsedDays(year) + JEWISH_EPOCH);
 	}
 
 	/**
@@ -708,12 +724,13 @@ public class JewishDate implements Comparable, Cloneable {
 	 * Compares two dates to see if they are equal
 	 */
 	public boolean equals(Object object) {
-		JewishDate hebDate = (JewishDate) object;
-		if (gregorianAbsDate != hebDate.getAbsDate()) {
+
+		if ( !( object instanceof JewishDate ) ) {
 			return false;
-		} else {
-			return true;
 		}
+
+		JewishDate hebDate = (JewishDate) object;
+		return gregorianAbsDate == hebDate.getAbsDate();
 	}
 
 	/**
@@ -863,7 +880,7 @@ public class JewishDate implements Comparable, Cloneable {
 
 	/** Create a copy of this date. */
 	// FIXME - create deep clone
-	public Object clone() {
+	public JewishDate clone() {
 		return new JewishDate(gregorianYear, gregorianMonth,
 				gregorianDayOfMonth);
 	}
