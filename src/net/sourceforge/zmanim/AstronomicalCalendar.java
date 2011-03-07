@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2010 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -71,7 +71,7 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * </pre>
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2010
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.2.1
  */
 public class AstronomicalCalendar implements Cloneable {
@@ -638,8 +638,9 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(time)) {
 			return null;
 		}
-		time = getOffsetTime(time);
-		time = (time + 240) % 24; // the calculators sometimes return a double
+		double calculatedTime=time;
+		calculatedTime = getOffsetTime(calculatedTime);
+		calculatedTime = (calculatedTime + 240) % 24; // the calculators sometimes return a double
 		// that is negative or slightly greater than 24
 		Calendar cal = Calendar.getInstance();
 		cal.clear();
@@ -647,18 +648,18 @@ public class AstronomicalCalendar implements Cloneable {
 		cal.set(Calendar.MONTH, getCalendar().get(Calendar.MONTH));
 		cal.set(Calendar.DAY_OF_MONTH, getCalendar().get(Calendar.DAY_OF_MONTH));
 
-		int hours = (int) time; // cut off minutes
+		int hours = (int) calculatedTime; // cut off minutes
 
-		time -= hours;
-		int minutes = (int) (time *= 60);
-		time -= minutes;
-		int seconds = (int) (time *= 60);
-		time -= seconds; // milliseconds
+		calculatedTime -= hours;
+		int minutes = (int) (calculatedTime *= 60);
+		calculatedTime -= minutes;
+		int seconds = (int) (calculatedTime *= 60);
+		calculatedTime -= seconds; // milliseconds
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
 		cal.set(Calendar.MINUTE, minutes);
 		cal.set(Calendar.SECOND, seconds);
-		cal.set(Calendar.MILLISECOND, (int) (time * 1000));
+		cal.set(Calendar.MILLISECOND, (int) (calculatedTime * 1000));
 		return cal.getTime();
 	}
 
@@ -768,7 +769,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return Returns the geoLocation.
 	 */
 	public GeoLocation getGeoLocation() {
-		return geoLocation;
+		return this.geoLocation;
 	}
 
 	/**
@@ -791,7 +792,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #setAstronomicalCalculator(AstronomicalCalculator)
 	 */
 	public AstronomicalCalculator getAstronomicalCalculator() {
-		return astronomicalCalculator;
+		return this.astronomicalCalculator;
 	}
 
 	/**
@@ -820,7 +821,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return Returns the calendar.
 	 */
 	public Calendar getCalendar() {
-		return calendar;
+		return this.calendar;
 	}
 
 	/**

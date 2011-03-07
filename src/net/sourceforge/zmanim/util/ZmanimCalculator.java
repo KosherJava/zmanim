@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2010 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the
  * GNU Lesser General Public License as published by the Free Software Foundation; either
@@ -29,13 +29,13 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  * under the GPL, it has been released under the LGPL as of April 8, 2010.
  *
  * @author &copy; Chanoch (Ken) Bloom 2003 - 2004
- * @author &copy; Eliyahu Hershfeld 2004 - 2010
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.1
  */
 public class ZmanimCalculator extends AstronomicalCalculator {
 	private String calculatorName = "US Naval Almanac Algorithm";
 	public String getCalculatorName(){
-		return calculatorName; //"US Naval Almanac Algorithm";
+		return this.calculatorName; //"US Naval Almanac Algorithm";
 	}
 
 	/**
@@ -50,10 +50,11 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		// geoLocation.getElevation());
 		// double refractionAdjustment = this.getRefraction(zenith);
 		// zenith = zenith + elevationAdjustment + refractionAdjustment;
+		double adjustedZenith = zenith;
 		if(adjustForElevation){
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
 		// step 1: First calculate the day of the year
@@ -109,7 +110,7 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		double cosDec = Math.cos(Math.asin(sinDec));
 
 		// step 7a: calculate the sun's local hour angle
-		double cosH = (Math.cos(Math.toRadians(zenith)) - (sinDec * Math
+		double cosH = (Math.cos(Math.toRadians(adjustedZenith)) - (sinDec * Math
 				.sin(Math.toRadians(astronomicalCalendar.getGeoLocation().getLatitude()))))
 				/ (cosDec * Math.cos(Math.toRadians(astronomicalCalendar.getGeoLocation().getLatitude())));
 
@@ -156,11 +157,11 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		// geoLocation.getElevation());
 		// double refractionAdjustment = this.getRefraction(zenith);
 		// zenith = zenith + elevationAdjustment + refractionAdjustment;
-
+		double adjustedZenith = zenith;
 		if(adjustForElevation){
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
 		// step 1: First calculate the day of the year
@@ -215,7 +216,7 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		double cosDec = Math.cos(Math.asin(sinDec));
 
 		// step 7a: calculate the sun's local hour angle
-		double cosH = (Math.cos(Math.toRadians(zenith)) - (sinDec * Math
+		double cosH = (Math.cos(Math.toRadians(adjustedZenith)) - (sinDec * Math
 				.sin(Math.toRadians(astronomicalCalendar.getGeoLocation().getLatitude()))))
 				/ (cosDec * Math.cos(Math.toRadians(astronomicalCalendar.getGeoLocation().getLatitude())));
 

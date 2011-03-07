@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2010 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -34,7 +34,7 @@ import net.sourceforge.zmanim.*;
  * {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour()} returns
  * the length of the hour in milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2010
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.2
  */
 public class ZmanimFormatter {
@@ -46,7 +46,7 @@ public class ZmanimFormatter {
 
 	boolean useDecimal;
 
-	private static DecimalFormat minuteSecondNF = new DecimalFormat("00");;
+	private static DecimalFormat minuteSecondNF = new DecimalFormat("00");
 
 	private DecimalFormat hourNF;
 
@@ -105,10 +105,10 @@ public class ZmanimFormatter {
 	 */
 	public ZmanimFormatter(int format, SimpleDateFormat dateFormat) {
 		String hourFormat = "0";
-		if (prependZeroHours) {
+		if (this.prependZeroHours) {
 			hourFormat = "00";
 		}
-		hourNF = new DecimalFormat(hourFormat);
+		this.hourNF = new DecimalFormat(hourFormat);
 		// decimalNF = new DecimalFormat("0.0####");
 		setTimeFormat(format);
 		this.setDateFormat(dateFormat);
@@ -121,7 +121,7 @@ public class ZmanimFormatter {
 	 *            int the format constant to use.
 	 */
 	public void setTimeFormat(int format) {
-		timeFormat = format;
+		this.timeFormat = format;
 		switch (format) {
 		case SEXAGESIMAL_XSD_FORMAT:
 			setSettings(true, true, true);
@@ -137,16 +137,16 @@ public class ZmanimFormatter {
 			break;
 		case DECIMAL_FORMAT:
 		default:
-			useDecimal = true;
+			this.useDecimal = true;
 		}
 	}
 
 	public void setDateFormat(SimpleDateFormat sdf) {
-		dateFormat = sdf;
+		this.dateFormat = sdf;
 	}
 
 	public SimpleDateFormat getDateFormat() {
-		return dateFormat;
+		return this.dateFormat;
 	}
 
 	private void setSettings(boolean prependZeroHours, boolean useSeconds,
@@ -186,18 +186,18 @@ public class ZmanimFormatter {
 	 * @return String The formatted <code>String</code>
 	 */
 	public String format(Time time) {
-		if (timeFormat == XSD_DURATION_FORMAT) {
+		if (this.timeFormat == XSD_DURATION_FORMAT) {
 			return formatXSDDurationTime(time);
 		}
 		StringBuffer sb = new StringBuffer();
-		sb.append(hourNF.format(time.getHours()));
+		sb.append(this.hourNF.format(time.getHours()));
 		sb.append(":");
 		sb.append(minuteSecondNF.format(time.getMinutes()));
-		if (useSeconds) {
+		if (this.useSeconds) {
 			sb.append(":");
 			sb.append(minuteSecondNF.format(time.getSeconds()));
 		}
-		if (useMillis) {
+		if (this.useMillis) {
 			sb.append(".");
 			sb.append(milliNF.format(time.getMilliseconds()));
 		}
@@ -215,11 +215,11 @@ public class ZmanimFormatter {
 	 * @return the formatted String
 	 */
 	public String formatDateTime(Date dateTime, Calendar calendar) {
-		dateFormat.setCalendar(calendar);
+		this.dateFormat.setCalendar(calendar);
 		if (this.dateFormat.toPattern().equals("yyyy-MM-dd'T'HH:mm:ss")) {
 			return getXSDateTime(dateTime, calendar);
 		} else {
-			return dateFormat.format(dateTime);
+			return this.dateFormat.format(dateTime);
 		}
 
 	}

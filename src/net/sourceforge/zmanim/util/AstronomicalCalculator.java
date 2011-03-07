@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2010 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -23,7 +23,7 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  * the algorithm used to be changed at runtime, easily allowing comparison the
  * results of using different algorithms.
  *
- * @author &copy; Eliyahu Hershfeld 2004 - 2010
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.1
  */
 public abstract class AstronomicalCalculator implements Cloneable {
@@ -174,12 +174,13 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link #getElevationAdjustment elevation} adjustment.
 	 */
 	double adjustZenith(double zenith, double elevation) {
+		double adjustedZenith = zenith;
 		if (zenith == AstronomicalCalendar.GEOMETRIC_ZENITH) {
-			zenith = zenith
+			adjustedZenith = zenith
 					+ (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
 		}
 
-		return zenith;
+		return adjustedZenith;
 	}
 
 	/**
@@ -195,7 +196,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return The refraction in arc minutes.
 	 */
 	double getRefraction() {
-		return refraction;
+		return this.refraction;
 	}
 
 	/**
@@ -236,7 +237,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return The sun's radius in arc minutes.
 	 */
 	double getSolarRadius() {
-		return solarRadius;
+		return this.solarRadius;
 	}
 
 	/**

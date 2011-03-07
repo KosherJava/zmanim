@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2008 Eliyahu Hershfeld
+ * Copyright (C) 2004-2011 Eliyahu Hershfeld
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
@@ -35,7 +35,7 @@ import java.util.Calendar;
  * adjustment of the zenith to account for elevation.
  *
  * @author Jonathan Stott 2000 - 2004
- * @author &copy; Eliyahu Hershfeld 2004 - 2008
+ * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.1
  * @deprecated This class is based on the NOAA algorithm but does not return calculations that match the NOAA algorithm JavaScript implementation. The calculations are about 2 minutes off. This call has been replaced by the NOAACalculator class.
  * @see net.sourceforge.zmanim.util.NOAACalculator
@@ -47,7 +47,7 @@ public class JSuntimeCalculator extends AstronomicalCalculator {
 	 * @see net.sourceforge.zmanim.util.NOAACalculator#getCalculatorName()
 	 */
 	public String getCalculatorName() {
-		return calculatorName;
+		return this.calculatorName;
 	}
 
 	/**
@@ -61,21 +61,17 @@ public class JSuntimeCalculator extends AstronomicalCalculator {
 	 *             years <> 2000.
 	 */
 	public double getUTCSunrise(AstronomicalCalendar astronomicalCalendar, double zenith, boolean adjustForElevation) {
-//		if (astronomicalCalendar.getCalendar().get(Calendar.YEAR) == 2000) {
-//			throw new ZmanimException(
-//					"JSuntimeCalculator can not calculate times for the year 2000. Please try a date with a different year.");
-//		}
-
+		double adjustedZenith = zenith;
 		if (adjustForElevation) {
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
 					.getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 		double timeMins = morningPhenomenon(dateToJulian(astronomicalCalendar
 				.getCalendar()), astronomicalCalendar.getGeoLocation()
 				.getLatitude(), -astronomicalCalendar.getGeoLocation()
-				.getLongitude(), zenith);
+				.getLongitude(), adjustedZenith);
 		return timeMins / 60;
 	}
 
@@ -90,21 +86,18 @@ public class JSuntimeCalculator extends AstronomicalCalculator {
 	 *             years <> 2000.
 	 */
 	public double getUTCSunset(AstronomicalCalendar astronomicalCalendar, double zenith, boolean adjustForElevation) {
-//		if (astronomicalCalendar.getCalendar().get(Calendar.YEAR) == 2000) {
-//			throw new ZmanimException(
-//					"JSuntimeCalculator can not calculate times for the year 2000. Please try a date with a different year.");
-//		}
+		double adjustedZenith = zenith;
 
 		if (adjustForElevation) {
-			zenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
+			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation()
 					.getElevation());
 		} else {
-			zenith = adjustZenith(zenith, 0);
+			adjustedZenith = adjustZenith(zenith, 0);
 		}
 		double timeMins = eveningPhenomenon(dateToJulian(astronomicalCalendar
 				.getCalendar()), astronomicalCalendar.getGeoLocation()
 				.getLatitude(), -astronomicalCalendar.getGeoLocation()
-				.getLongitude(), zenith);
+				.getLongitude(), adjustedZenith);
 		return timeMins / 60;
 	}
 
