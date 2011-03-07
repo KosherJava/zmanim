@@ -21,10 +21,21 @@ public class UT_JewishDateNavigation {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishDate( 5711, 1, 1 );
 		Assert.assertEquals( jewishDate.getGregorianDayOfMonth(), 5 );
-		Assert.assertEquals( jewishDate.getGregorianMonth(), Calendar.APRIL );
+		Assert.assertEquals( jewishDate.getGregorianMonth(), 4 );
 		Assert.assertEquals( jewishDate.getGregorianYear(), 2011 );
+	}
 
 
+	@Test
+	public void computeRoshHashana5771() {
+
+		// At one point, this test was failing as the JewishDate class spun through a never-ending loop...
+
+		JewishDate jewishDate = new JewishDate();
+		jewishDate.setJewishDate(5771, 7, 1);
+		Assert.assertEquals( jewishDate.getGregorianDayOfMonth(), 9 );
+		Assert.assertEquals( jewishDate.getGregorianMonth(), 9 );
+		Assert.assertEquals( jewishDate.getGregorianYear(), 2010 );
 	}
 
 
