@@ -50,6 +50,9 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude,
  * 		elevation, timeZone);
  * ComplexZmanimCalendar czc = new ComplexZmanimCalendar(location);
+ * //Optionally set the date or it will default to today's date
+ * czc.getCalendar().set(Calendar.MONTH, Calendar.FEBRUARY);
+ * czc.getCalendar().set(Calendar.DAY_OF_MONTH, 8);
  * </pre>
  * 
  * Note: For locations such as Israel where the beginning and end of daylight
