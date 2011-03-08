@@ -65,7 +65,6 @@ import java.util.*;
  * @author &copy; Eliyahu Hershfeld 2011
  * @version 0.2.6
  */
-@SuppressWarnings( { "MagicNumber" } )
 public class JewishDate implements Comparable, Cloneable {
 	private static final int JEWISH_EPOCH = -1373429;
 
@@ -196,12 +195,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @return true if it is a leap year
 	 */
 	public static boolean isJewishLeapYear(int year) {
-		//noinspection RedundantIfStatement
-		if ((((7 * year) + 1) % 19) < 7) {
-			return true;
-		} else {
-			return false;
-		}
+		return ((7 * year) + 1) % 19 < 7;
 	}
 
 	/**
