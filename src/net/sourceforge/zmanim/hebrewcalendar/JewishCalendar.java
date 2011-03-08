@@ -668,14 +668,10 @@ public class JewishCalendar extends JewishDate{
 		int week;
 		int[] array = null;
 		int index;
-		// create a clone of this date
-		JewishDate roshHashana = (JewishDate) this.clone();
-		// try {
+		
+		JewishDate roshHashana = new JewishDate();
 		// set it to Rosh Hashana of this year
 		roshHashana.setJewishDate(getJewishYear(), 7, 1);
-		// } catch (IllegalArgumentException e) {
-		// e.printStackTrace();
-		// }
 
 		// get day Rosh Hashana was on
 		roshHashanaDay = roshHashana.getDayOfWeek();
