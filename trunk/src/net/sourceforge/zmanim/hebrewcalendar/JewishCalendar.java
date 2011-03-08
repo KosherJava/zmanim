@@ -21,42 +21,25 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * The JewishDate class allows one to maintain an instance of a Gregorian date
- * along with the corresponding Jewish date. This class can use the standard
- * Java Date and Calendar classes for setting it, but does not subclass these
- * classes or use them internally to any extensive use. This class also does not
- * have a concept of a time (which the Date class does). If you are looking for
- * a class that implements a Jewish calendar version of the Calendar class, one
- * is available from <a
- * href="http://oss.software.ibm.com/developerworks/opensource/icu4j/"
- * >developerWorks</a> by IBM.
+ * The JewishCalendar extends the JewishDate class and adds calendar methods.
  * 
- * This open source Java code was written by <a
- * href="http://www.facebook.com/avromf">Avrom Finkelstien</a> from his C++
- * code. it was adapted to the KosherJava Zmanim API with simplification of the
- * non-core code. The original algorithms were untouched.
- * 
- * Some of Avrom's original C++ code was translated from <a
- * href="http://emr.cs.uiuc.edu/~reingold/calendar.C">C/C++ code</a> in <a
- * href="http://www.calendarists.com">Calendrical Calculations</a> by Nachum
- * Dershowitz and Edward M. Reingold, Software-- Practice & Experience, vol. 20,
- * no. 9 (September, 1990), pp. 899- 928. Any method with the mark "ND+ER"
- * indicates that the method was taken from this source with minor
- * modifications.
+ * This open source Java code was originally ported by <a href="http://www.facebook.com/avromf">Avrom Finkelstien</a> from his C++
+ * code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements and some bug
+ * fixing.
  * 
  * The methods used to obtain the parsha were derived from the source code of <a
- * href="http://www.sadinoff.com/hebcal/">HebCal</a> by Danny Sadinoff and JCal
- * for the Mac by Frank Yellin. Both based their code on routines by Nachum
- * Dershowitz and Edward M. Reingold. The class allows setting whether the
- * parsha and holiday scheme follows the Israel scheme or outside Israel scheme.
+ * href="http://www.sadinoff.com/hebcal/">HebCal</a> by Danny Sadinoff and JCal for the Mac by Frank Yellin. Both based
+ * their code on routines by Nachum Dershowitz and Edward M. Reingold. The class allows setting whether the parsha and
+ * holiday scheme follows the Israel scheme or outside Israel scheme.
  * 
- * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implementted in some form:
+ * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implemented in
+ * some form:
  * <ol>
- *   <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
- *   <li>Molad / shabbos mevarchim)</li>
- *   <li>Haftorah (various minhagim)</li>
- *   <li>Daf Yomi (bavli, yerushalmi, mishna yomis etc)</li>
- *   <li>Support showing the upcoming parsha for the middle of the week</li>
+ * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
+ * <li>Molad / Shabbos Mevarchim)</li>
+ * <li>Haftorah (various minhagim)</li>
+ * <li>Daf Yomi (Bavli, Yerushalmi, Mishna yomis etc)</li>
+ * <li>Support showing the upcoming parsha for the middle of the week</li>
  * </ol>
  * 
  * @see java.util.Date
@@ -65,9 +48,9 @@ import java.util.Date;
  * @author &copy; Eliyahu Hershfeld 2011
  * @version 0.0.1
  */
-public class JewishCalendar extends JewishDate{
+public class JewishCalendar extends JewishDate {
 	private boolean inIsrael = false;
-	
+
 	/**
 	 * Default constructor will set a default date to the current system date.
 	 */
@@ -76,8 +59,7 @@ public class JewishCalendar extends JewishDate{
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Date
-	 * Date} paremeter.
+	 * A constructor that initializes the date to the {@link java.util.Date Date} parameter.
 	 * 
 	 * @param date
 	 *            the <code>Date</code> to set the calendar to
@@ -87,8 +69,7 @@ public class JewishCalendar extends JewishDate{
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Calendar
-	 * Calendar} paremeter.
+	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
 	 * 
 	 * @param calendar
 	 *            the <code>Calendar</code> to set the calendar to
@@ -96,49 +77,45 @@ public class JewishCalendar extends JewishDate{
 	public JewishCalendar(Calendar calendar) {
 		super(calendar);
 	}
-	
+
 	/**
 	 * Creates a Jewish date based on a Gregorian date
 	 * 
 	 * @param gregorianYear
 	 *            the Gregorian year
 	 * @param gregorianMonth
-	 *            the Gregorian month. Unlike the Java Calendar where January
-	 *            has the value of 0,This expects a 1 for January
+	 *            the Gregorian month. Unlike the Java Calendar where January has the value of 0,This expects a 1 for
+	 *            January
 	 * @param gregorianDayOfMonth
-	 *            the Gregorian day of month. If this is > the number of days in
-	 *            the month/year, the last valid date of the month will be set
+	 *            the Gregorian day of month. If this is > the number of days in the month/year, the last valid date of
+	 *            the month will be set
 	 * 
 	 */
-	public JewishCalendar(int gregorianYear, int gregorianMonth,
-			int gregorianDayOfMonth) {
+	public JewishCalendar(int gregorianYear, int gregorianMonth, int gregorianDayOfMonth) {
 		super(gregorianYear, gregorianMonth, gregorianDayOfMonth);
 	}
-	
+
 	/**
 	 * Creates a Jewish date based on Gregorian date and whether in Israel
 	 * 
 	 * @param gregorianYear
 	 *            the Gregorian year
 	 * @param gregorianMonth
-	 *            the Gregorian month. Unlike the Java Calendar where January
-	 *            has the value of 0,This expects a 1 for January
+	 *            the Gregorian month. Unlike the Java Calendar where January has the value of 0,This expects a 1 for
+	 *            January
 	 * @param gregorianDayOfMonth
-	 *            the Gregorian day of month. If this is > the number of days in
-	 *            the month/year, the last valid date of the month will be set
+	 *            the Gregorian day of month. If this is > the number of days in the month/year, the last valid date of
+	 *            the month will be set
 	 * @param inIsrael
-	 *            whether in Israel. This affects Yom Tov and Parsha
-	 *            calculations
+	 *            whether in Israel. This affects Yom Tov and Parsha calculations
 	 */
-	public JewishCalendar(int gregorianYear, int gregorianMonth,
-			int gregorianDayOfMonth, boolean inIsrael) {
+	public JewishCalendar(int gregorianYear, int gregorianMonth, int gregorianDayOfMonth, boolean inIsrael) {
 		super(gregorianYear, gregorianMonth, gregorianDayOfMonth);
 		setInIsrael(inIsrael);
 	}
-	
+
 	/**
-	 * Sets whether to use Israel parsha and holiday scheme or not. Default is
-	 * false.
+	 * Sets whether to use Israel parsha and holiday scheme or not. Default is false.
 	 * 
 	 * @param inIsrael
 	 *            set to true for calculations for Israel
@@ -148,21 +125,19 @@ public class JewishCalendar extends JewishDate{
 	}
 
 	/**
-	 * Gets whether Israel parsha and holiday scheme is used or not. The default
-	 * (if not set) is false.
+	 * Gets whether Israel parsha and holiday scheme is used or not. The default (if not set) is false.
 	 * 
 	 * @return if the if the calendar is set to Israel
 	 */
 	public boolean getInIsrael() {
 		return inIsrael;
 	}
-	
+
 	/**
-	 * Returns a String of the Jewish holiday or fast day for the current day,
-	 * or a null if there is no holiday for this day. Has no "modern" holidays.
+	 * Returns a String of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
+	 * day. Has no "modern" holidays.
 	 * 
-	 * @return A String containing the holiday name or an empty string if it is
-	 *         not a holiday.
+	 * @return A String containing the holiday name or an empty string if it is not a holiday.
 	 */
 	public String getHoliday() {
 		// check by month (starts from Nissan)
@@ -225,8 +200,10 @@ public class JewishCalendar extends JewishDate{
 			if (getJewishDayOfMonth() == 1 || getJewishDayOfMonth() == 2) {
 				return "Rosh Hashanah";
 			} else if ((getJewishDayOfMonth() == 3 && getDayOfWeek() != 7)
-					|| (getJewishDayOfMonth() == 4 && getDayOfWeek() == 1)) { // push off Tzom
-																// Gedalia
+					|| (getJewishDayOfMonth() == 4 && getDayOfWeek() == 1)) { // push
+																				// off
+																				// Tzom
+				// Gedalia
 				// if it falls on
 				// Shabbos
 				return "Tzom Gedalia";
@@ -250,8 +227,7 @@ public class JewishCalendar extends JewishDate{
 				// return "Sukkot";
 				// }
 			}
-			if (getJewishDayOfMonth() >= 17 && getJewishDayOfMonth() <= 20
-					|| (getJewishDayOfMonth() == 16 && inIsrael)) {
+			if (getJewishDayOfMonth() >= 17 && getJewishDayOfMonth() <= 20 || (getJewishDayOfMonth() == 16 && inIsrael)) {
 				return "Chol Hamoed Sukkos";
 				// if (ashkenaz) {
 				// return "Chol Hamoed Sukkos";
@@ -353,6 +329,7 @@ public class JewishCalendar extends JewishDate{
 		// return "";
 		return null;
 	}
+
 	public String getHoliday2() {
 		// check by month (starts from Nissan)
 		switch (getJewishMonth()) {
@@ -414,8 +391,10 @@ public class JewishCalendar extends JewishDate{
 			if (getJewishDayOfMonth() == 1 || getJewishDayOfMonth() == 2) {
 				return "Rosh Hashanah";
 			} else if ((getJewishDayOfMonth() == 3 && getDayOfWeek() != 7)
-					|| (getJewishDayOfMonth() == 4 && getDayOfWeek() == 1)) { // push off Tzom
-																// Gedalia
+					|| (getJewishDayOfMonth() == 4 && getDayOfWeek() == 1)) { // push
+																				// off
+																				// Tzom
+				// Gedalia
 				// if it falls on
 				// Shabbos
 				return "Tzom Gedalia";
@@ -439,8 +418,7 @@ public class JewishCalendar extends JewishDate{
 				// return "Sukkot";
 				// }
 			}
-			if (getJewishDayOfMonth() >= 17 && getJewishDayOfMonth() <= 20
-					|| (getJewishDayOfMonth() == 16 && inIsrael)) {
+			if (getJewishDayOfMonth() >= 17 && getJewishDayOfMonth() <= 20 || (getJewishDayOfMonth() == 16 && inIsrael)) {
 				return "Chol Hamoed Sukkos";
 				// if (ashkenaz) {
 				// return "Chol Hamoed Sukkos";
@@ -542,112 +520,89 @@ public class JewishCalendar extends JewishDate{
 		// return "";
 		return null;
 	}
+
 	/**
-	 * Use the formatting class for formatting Ashkenazi VS Sephardi English
-	 * transliteration. Using the default will use the Ashkenazi pronounciation.
+	 * Use the formatting class for formatting Ashkenazi VS Sephardi English transliteration. Using the default will use
+	 * the Ashkenazi pronounciation.
 	 */
-	private static final String[] parshios = { "Bereshis", "Noach",
-			"Lech Lecha", "Vayera", "Chayei Sara", "Toldos", "Vayetzei",
-			"Vayishlach", "Vayeshev", "Miketz", "Vayigash", "Vayechi",
-			"Shemos", "Vaera", "Bo", "Beshalach", "Yisro", "Mishpatim",
-			"Terumah", "Tetzaveh", "Ki Sisa", "Vayakhel", "Pekudei", "Vayikra",
-			"Tzav", "Shmini", "Tazria", "Metzora", "Achrei Mos", "Kedoshim",
-			"Emor", "Behar", "Bechukosai", "Bamidbar", "Nasso", "Beha'aloscha",
-			"Sh'lach", "Korach", "Chukas", "Balak", "Pinchas", "Matos",
-			"Masei", "Devarim", "Vaeschanan", "Eikev", "Re'eh", "Shoftim",
-			"Ki Seitzei", "Ki Savo", "Nitzavim", "Vayeilech", "Ha'Azinu",
-			"Vayakhel Pekudei", "Tazria Metzora", "Achrei Mos Kedoshim",
-			"Behar Bechukosai", "Chukas Balak", "Matos Masei",
-			"Nitzavim Vayeilech" };
+	private static final String[] parshios = { "Bereshis", "Noach", "Lech Lecha", "Vayera", "Chayei Sara", "Toldos",
+			"Vayetzei", "Vayishlach", "Vayeshev", "Miketz", "Vayigash", "Vayechi", "Shemos", "Vaera", "Bo",
+			"Beshalach", "Yisro", "Mishpatim", "Terumah", "Tetzaveh", "Ki Sisa", "Vayakhel", "Pekudei", "Vayikra",
+			"Tzav", "Shmini", "Tazria", "Metzora", "Achrei Mos", "Kedoshim", "Emor", "Behar", "Bechukosai", "Bamidbar",
+			"Nasso", "Beha'aloscha", "Sh'lach", "Korach", "Chukas", "Balak", "Pinchas", "Matos", "Masei", "Devarim",
+			"Vaeschanan", "Eikev", "Re'eh", "Shoftim", "Ki Seitzei", "Ki Savo", "Nitzavim", "Vayeilech", "Ha'Azinu",
+			"Vayakhel Pekudei", "Tazria Metzora", "Achrei Mos Kedoshim", "Behar Bechukosai", "Chukas Balak",
+			"Matos Masei", "Nitzavim Vayeilech" };
 	// These indices were originally included in the emacs 19 distribution.
 	// These arrays determine the correct indices into the parsha names
 	// -1 means no parsha that week, values > 52 means it is a double parsha
-	private static final int[] Sat_short = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23, 24,
-			-1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44,
-			45, 46, 47, 48, 49, 50 };
+	private static final int[] Sat_short = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
+			48, 49, 50 };
 
-	private static final int[] Sat_long = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23, 24,
-			-1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44,
-			45, 46, 47, 48, 49, 59 };
+	private static final int[] Sat_long = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
+			48, 49, 59 };
 
-	private static final int[] Mon_short = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6,
-			7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23, 24,
-			-1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44,
-			45, 46, 47, 48, 49, 59 };
+	private static final int[] Mon_short = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+			18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47, 48,
+			49, 59 };
 
 	private static final int[] Mon_long = // split
-	{ 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-			18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, -1, 34, 35, 36,
-			37, 57, 40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
+	{ 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55,
+			30, 56, 33, -1, 34, 35, 36, 37, 57, 40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
 
-	private static final int[] Thu_normal = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6,
-			7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23, 24,
-			-1, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43,
-			44, 45, 46, 47, 48, 49, 50 };
-	private static final int[] Thu_normal_Israel = { 52, -1, -1, 0, 1, 2, 3, 4,
-			5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23,
-			24, -1, 25, 54, 55, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58,
+	private static final int[] Thu_normal = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+			18, 19, 20, 53, 23, 24, -1, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
+			48, 49, 50 };
+	private static final int[] Thu_normal_Israel = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+			16, 17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45,
+			46, 47, 48, 49, 50 };
+
+	private static final int[] Thu_long = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+			18, 19, 20, 21, 22, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
+			48, 49, 50 };
+
+	private static final int[] Sat_short_leap = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+			16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58,
+			43, 44, 45, 46, 47, 48, 49, 59 };
+
+	private static final int[] Sat_long_leap = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+			16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, -1, 34, 35, 36, 37, 57, 40, 58,
+			43, 44, 45, 46, 47, 48, 49, 59 };
+
+	private static final int[] Mon_short_leap = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, -1, 34, 35, 36, 37, 57, 40, 58, 43,
+			44, 45, 46, 47, 48, 49, 59 };
+	private static final int[] Mon_short_leap_Israel = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+			15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+			58, 43, 44, 45, 46, 47, 48, 49, 59 };
+
+	private static final int[] Mon_long_leap = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58,
+			43, 44, 45, 46, 47, 48, 49, 50 };
+	private static final int[] Mon_long_leap_Israel = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+			15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+			41, 42, 43, 44, 45, 46, 47, 48, 49, 50 };
+
+	private static final int[] Thu_short_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
 			43, 44, 45, 46, 47, 48, 49, 50 };
 
-	private static final int[] Thu_long = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7,
-			8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-			-1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44,
-			45, 46, 47, 48, 49, 50 };
-
-	private static final int[] Sat_short_leap = { -1, 52, -1, -1, 0, 1, 2, 3,
-			4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-			22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
-			38, 39, 40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Sat_long_leap = { -1, 52, -1, -1, 0, 1, 2, 3, 4,
-			5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-			23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, -1, 34, 35, 36, 37,
-			57, 40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Mon_short_leap = { 51, 52, -1, 0, 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-			24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, -1, 34, 35, 36, 37, 57,
-			40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
-	private static final int[] Mon_short_leap_Israel = { 51, 52, -1, 0, 1, 2,
-			3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-			21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36,
-			37, 38, 39, 40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Mon_long_leap = { 51, 52, -1, 0, 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-			24, 25, 26, 27, -1, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-			39, 40, 58, 43, 44, 45, 46, 47, 48, 49, 50 };
-	private static final int[] Mon_long_leap_Israel = { 51, 52, -1, 0, 1, 2, 3,
-			4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-			22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
-			38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 };
-
-	private static final int[] Thu_short_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-			24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-			40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 };
-
-	private static final int[] Thu_long_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5,
-			6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-			24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-			40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 59 };
+	private static final int[] Thu_long_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+			43, 44, 45, 46, 47, 48, 49, 59 };
 
 	/**
-	 * returns a string of today's parsha(ios) or an empty string if there are
-	 * none. FIXME: consider possibly return the parsha of the week for any day
-	 * during the week instead of empty. To do this the simple way, create a new
-	 * instance of the class in the mothod, roll it to the next shabbos. If the
-	 * shabbos has no parsha, keep rolling by a week till a parsha is
-	 * encountered. Possibly turn into static method that takes in a year,
-	 * month, day, roll to next shabbos (not that simple with the API for date
-	 * passed in) and if it is not a shabbos roll forwarde one week at a time to
-	 * get the parsha. I do not think it is possible to have more than 2
-	 * shabbosim in a row without a parsha, but I may be wrong.
+	 * returns a string of today's parsha(ios) or an empty string if there are none. FIXME: consider possibly return the
+	 * parsha of the week for any day during the week instead of empty. To do this the simple way, create a new instance
+	 * of the class in the mothod, roll it to the next shabbos. If the shabbos has no parsha, keep rolling by a week
+	 * till a parsha is encountered. Possibly turn into static method that takes in a year, month, day, roll to next
+	 * shabbos (not that simple with the API for date passed in) and if it is not a shabbos roll forwarde one week at a
+	 * time to get the parsha. I do not think it is possible to have more than 2 shabbosim in a row without a parsha,
+	 * but I may be wrong.
 	 * 
-	 * @return the string of the parsha. Will currently return blank for
-	 *         weekdays and a shabbos on a yom tov.
+	 * @return the string of the parsha. Will currently return blank for weekdays and a shabbos on a yom tov.
 	 */
 	public String getParsha() {
 
@@ -668,7 +623,7 @@ public class JewishCalendar extends JewishDate{
 		int week;
 		int[] array = null;
 		int index;
-		
+
 		JewishDate roshHashana = new JewishDate();
 		// set it to Rosh Hashana of this year
 		roshHashana.setJewishDate(getJewishYear(), 7, 1);
@@ -680,37 +635,41 @@ public class JewishCalendar extends JewishDate{
 		week = (((getAbsDate() - roshHashana.getAbsDate()) - (7 - roshHashanaDay)) / 7);
 
 		// get kvia
-		if (isCheshvanLong(getJewishYear()) && !isKislevShort(getJewishYear()))
+		if (isCheshvanLong(getJewishYear()) && !isKislevShort(getJewishYear())) {
 			kvia = 2;
-		else if (!isCheshvanLong(getJewishYear()) && isKislevShort(getJewishYear()))
+		} else if (!isCheshvanLong(getJewishYear()) && isKislevShort(getJewishYear())) {
 			kvia = 0;
-		else
+		} else {
 			kvia = 1;
-
+		}
 		// determine appropriate array
 		if (!isJewishLeapYear(getJewishYear())) {
 			switch (roshHashanaDay) {
 			case 7: // RH was on a Saturday
-				if (kvia == 0)
+				if (kvia == 0) {
 					array = Sat_short;
-				else if (kvia == 2)
+				} else if (kvia == 2) {
 					array = Sat_long;
+				}
 				break;
 			case 2: // RH was on a Monday
-				if (kvia == 0)
+				if (kvia == 0) {
 					array = Mon_short;
-				else if (kvia == 2)
+				} else if (kvia == 2) {
 					array = inIsrael ? Mon_short : Mon_long;
+				}
 				break;
 			case 3: // RH was on a Tuesday
-				if (kvia == 1)
+				if (kvia == 1) {
 					array = inIsrael ? Mon_short : Mon_long;
+				}
 				break;
 			case 5: // RH was on a Thursday
-				if (kvia == 1)
+				if (kvia == 1) {
 					array = inIsrael ? Thu_normal_Israel : Thu_normal;
-				else if (kvia == 2)
+				} else if (kvia == 2) {
 					array = Thu_long;
+				}
 				break;
 			}
 		}
@@ -719,26 +678,30 @@ public class JewishCalendar extends JewishDate{
 		else {
 			switch (roshHashanaDay) {
 			case 7: // RH was on a Sat
-				if (kvia == 0)
+				if (kvia == 0) {
 					array = Sat_short_leap;
-				else if (kvia == 2)
+				} else if (kvia == 2) {
 					array = inIsrael ? Sat_short_leap : Sat_long_leap;
+				}
 				break;
 			case 2: // RH was on a Mon
-				if (kvia == 0)
+				if (kvia == 0) {
 					array = inIsrael ? Mon_short_leap_Israel : Mon_short_leap;
-				else if (kvia == 2)
+				} else if (kvia == 2) {
 					array = inIsrael ? Mon_long_leap_Israel : Mon_long_leap;
+				}
 				break;
 			case 3: // RH was on a Tue
-				if (kvia == 1)
+				if (kvia == 1) {
 					array = inIsrael ? Mon_long_leap_Israel : Mon_long_leap;
+				}
 				break;
 			case 5: // RH was on a Thu
-				if (kvia == 0)
+				if (kvia == 0) {
 					array = Thu_short_leap;
-				else if (kvia == 2)
+				} else if (kvia == 2) {
 					array = Thu_long_leap;
+				}
 				break;
 			}
 		}
@@ -768,26 +731,21 @@ public class JewishCalendar extends JewishDate{
 		return parshios[index];
 		// }
 	}
-	
-	
-	
+
 	/**
 	 * Returns if the day is Rosh Chodesh.
 	 * 
 	 * @return true if it is Rosh Chodesh. Rosh Hashana will return false
 	 */
 	public boolean isRoshChodesh() {
-		// Rosh Hashana is not rosh chodesh. Elul never has 30 days		
+		// Rosh Hashana is not rosh chodesh. Elul never has 30 days
 		return (getJewishDayOfMonth() == 1 && getJewishMonth() != 7) || getJewishDayOfMonth() == 30;
-
 	}
-	
+
 	/**
-	 * Returns the int value of the Omer day or {@link Integer#MIN_VALUE} if the
-	 * day is not in the omer
+	 * Returns the int value of the Omer day or {@link Integer#MIN_VALUE} if the day is not in the omer
 	 * 
-	 * @return The Omer count as an int or {@link Integer#MIN_VALUE} if it is
-	 *         not a day of the Omer.
+	 * @return The Omer count as an int or {@link Integer#MIN_VALUE} if it is not a day of the Omer.
 	 */
 	public int getDayOfOmer() {
 		// int omer = 0;
@@ -801,10 +759,9 @@ public class JewishCalendar extends JewishDate{
 		} else if (getJewishMonth() == 2) {
 			omer = getJewishDayOfMonth() + 15;
 			// if Sivan and before Shavuos
-		} else if (getJewishMonth() == 3 && getJewishDayOfMonth() < 6)
+		} else if (getJewishMonth() == 3 && getJewishDayOfMonth() < 6) {
 			omer = getJewishDayOfMonth() + 44;
-
+		}
 		return omer;
 	}
-
 }
