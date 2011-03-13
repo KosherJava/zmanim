@@ -66,7 +66,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
-		double sunRise = calcSunriseUTC(calcJD(astronomicalCalendar
+		double sunRise = getSunriseUTC(getJulianDay(astronomicalCalendar
 				.getCalendar()), astronomicalCalendar.getGeoLocation()
 				.getLatitude(), -astronomicalCalendar.getGeoLocation()
 				.getLongitude(), adjustedZenith);
@@ -87,25 +87,25 @@ public class NOAACalculator extends AstronomicalCalculator {
 			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
-		double sunSet = calcSunsetUTC(
-				calcJD(astronomicalCalendar.getCalendar()),
+		double sunSet = getSunsetUTC(
+				getJulianDay(astronomicalCalendar.getCalendar()),
 				astronomicalCalendar.getGeoLocation().getLatitude(),
 				-astronomicalCalendar.getGeoLocation().getLongitude(), adjustedZenith);
 		return sunSet / 60;
 	}
 
 	/**
-	 * Generate a Julian day from Java Calendar
+	 * Return the Julian day from a Java Calendar
 	 *
-	 * @param date
-	 *            Java Calendar
+	 * @param calendar
+	 *            The Java Calendar
 	 * @return the Julian day corresponding to the date Note: Number is returned
 	 *         for start of day. Fractional days should be added later.
 	 */
-	private static double calcJD(Calendar date) {
-		int year = date.get(Calendar.YEAR);
-		int month = date.get(Calendar.MONTH) + 1;
-		int day = date.get(Calendar.DAY_OF_MONTH);
+	private static double getJulianDay(Calendar calendar) {
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		if (month <= 2) {
 			year -= 1;
 			month += 12;
@@ -140,13 +140,13 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * calculates the Geometric Mean Longitude of the Sun
+	 * Returns the Geometric Mean Longitude of the Sun
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the Geometric Mean Longitude of the Sun in degrees
 	 */
-	private static double calcGeomMeanLongSun(double julianCenturies) {
+	private static double getSunGeometricMeanLongitude(double julianCenturies) {
 		double L0 = 280.46646 + julianCenturies * (36000.76983 + 0.0003032 * julianCenturies);
 		while (L0 > 360.0) {
 			L0 -= 360.0;
@@ -159,36 +159,36 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Calculate the Geometric Mean Anomaly of the Sun
+	 * Return the Geometric Mean Anomaly of the Sun
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the Geometric Mean Anomaly of the Sun in degrees
 	 */
-	private static double calcGeomMeanAnomalySun(double julianCenturies) {
+	private static double getSunGeometricMeanAnomaly(double julianCenturies) {
 		return 357.52911 + julianCenturies * (35999.05029 - 0.0001537 * julianCenturies); // in degrees
 	}
 
 	/**
-	 * calculate the eccentricity of earth's orbit
+	 * Return the eccentricity of earth's orbit
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the unitless eccentricity
 	 */
-	private static double calcEccentricityEarthOrbit(double julianCenturies) {
+	private static double getEarthOrbitEccentricity(double julianCenturies) {
 		return 0.016708634 - julianCenturies * (0.000042037 + 0.0000001267 * julianCenturies); // unitless
 	}
 
 	/**
-	 * Calculate the equation of center for the sun
+	 * Return the equation of center for the sun
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the equation of center for the sun in degrees
 	 */
-	private static double calcSunEqOfCenter(double julianCenturies) {
-		double m = calcGeomMeanAnomalySun(julianCenturies);
+	private static double getSunEquationOfCenter(double julianCenturies) {
+		double m = getSunGeometricMeanAnomaly(julianCenturies);
 
 		double mrad = Math.toRadians(m);
 		double sinm = Math.sin(mrad);
@@ -200,43 +200,43 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Calculate the true longitude of the sun
+	 * Return the true longitude of the sun
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the sun's true longitude in degrees
 	 */
-	private static double calcSunTrueLong(double julianCenturies) {
-		double sunsLong = calcGeomMeanLongSun(julianCenturies);
-		double c = calcSunEqOfCenter(julianCenturies);
+	private static double getSunTrueLongitude(double julianCenturies) {
+		double sunsLong = getSunGeometricMeanLongitude(julianCenturies);
+		double c = getSunEquationOfCenter(julianCenturies);
 
 		return sunsLong + c; // in degrees
 	}
 
 //	/**
-//	 * Calculate the true anamoly of the sun
+//	 * Returns the true anamoly of the sun
 //	 *
-//	 * @param t
+//	 * @param julianCenturies
 //	 *            the number of Julian centuries since J2000.0
 //	 * @return the sun's true anamoly in degrees
 //	 */
-//	private static double calcSunTrueAnomaly(double t) {
-//		double m = calcGeomMeanAnomalySun(t);
-//		double c = calcSunEqOfCenter(t);
+//	private static double getSunTrueAnomaly(double julianCenturies) {
+//		double m = getGeometricSunMeanAnomaly(julianCenturies);
+//		double c = getSunEquationOfCenter(julianCenturies);
 //
 //		double v = m + c;
 //		return v; // in degrees
 //	}
 
 	/**
-	 * calculate the apparent longitude of the sun
+	 * Return the apparent longitude of the sun
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return sun's apparent longitude in degrees
 	 */
-	private static double calcSunApparentLong(double julianCenturies) {
-		double o = calcSunTrueLong(julianCenturies);
+	private static double getSunApparentLongitude(double julianCenturies) {
+		double o = getSunTrueLongitude(julianCenturies);
 
 		double omega = 125.04 - 1934.136 * julianCenturies;
 		double lambda = o - 0.00569 - 0.00478 * Math.sin(Math.toRadians(omega));
@@ -244,43 +244,43 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Calculate the mean obliquity of the ecliptic
+	 * Returns the mean obliquity of the ecliptic
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the mean obliquity in degrees
 	 */
-	private static double calcMeanObliquityOfEcliptic(double julianCenturies) {
+	private static double getMeanObliquityOfEcliptic(double julianCenturies) {
 		double seconds = 21.448 - julianCenturies
 				* (46.8150 + julianCenturies * (0.00059 - julianCenturies * (0.001813)));
 		return 23.0 + (26.0 + (seconds / 60.0)) / 60.0; // in degrees
 	}
 
 	/**
-	 * calculate the corrected obliquity of the ecliptic
+	 * return the corrected obliquity of the ecliptic
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return the corrected obliquity in degrees
 	 */
-	private static double calcObliquityCorrection(double julianCenturies) {
-		double obliquityOfEcliptic = calcMeanObliquityOfEcliptic(julianCenturies);
+	private static double getObliquityCorrection(double julianCenturies) {
+		double obliquityOfEcliptic = getMeanObliquityOfEcliptic(julianCenturies);
 
 		double omega = 125.04 - 1934.136 * julianCenturies;
 		return obliquityOfEcliptic + 0.00256 * Math.cos(Math.toRadians(omega)); // in degrees
 	}
 
 	/**
-	 * Calculate the declination of the sun
+	 * Return the declination of the sun
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @param sun's
 	 *            declination in degrees
 	 */
-	private static double calcSunDeclination(double julianCenturies) {
-		double obliquityCorrection = calcObliquityCorrection(julianCenturies);
-		double lambda = calcSunApparentLong(julianCenturies);
+	private static double getSunDeclination(double julianCenturies) {
+		double obliquityCorrection = getObliquityCorrection(julianCenturies);
+		double lambda = getSunApparentLongitude(julianCenturies);
 
 		double sint = Math.sin(Math.toRadians(obliquityCorrection))
 				* Math.sin(Math.toRadians(lambda));
@@ -289,17 +289,17 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * calculate the difference between true solar time and mean solar time
+	 * Return the difference between true solar time and mean solar time
 	 *
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @return equation of time in minutes of time
 	 */
-	private static double calcEquationOfTime(double julianCenturies) {
-		double epsilon = calcObliquityCorrection(julianCenturies);
-		double geomMeanLongSun = calcGeomMeanLongSun(julianCenturies);
-		double eccentricityEarthOrbit = calcEccentricityEarthOrbit(julianCenturies);
-		double geomMeanAnomalySun = calcGeomMeanAnomalySun(julianCenturies);
+	private static double getEquationOfTime(double julianCenturies) {
+		double epsilon = getObliquityCorrection(julianCenturies);
+		double geomMeanLongSun = getSunGeometricMeanLongitude(julianCenturies);
+		double eccentricityEarthOrbit = getEarthOrbitEccentricity(julianCenturies);
+		double geomMeanAnomalySun = getSunGeometricMeanAnomaly(julianCenturies);
 
 		double y = Math.tan(Math.toRadians(epsilon) / 2.0);
 		y *= y;
@@ -316,7 +316,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Calculate the hour angle of the sun at sunrise for the latitude
+	 * Return the hour angle of the sun at sunrise for the latitude
 	 *
 	 * @param lat,
 	 *            the latitude of observer in degrees
@@ -324,7 +324,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            the declination angle of sun in degrees
 	 * @return hour angle of sunrise in radians
 	 */
-	private static double calcHourAngleSunrise(double lat, double solarDec,
+	private static double getSunHourAngleAtSunrise(double lat, double solarDec,
 			double zenith) {
 		double latRad = Math.toRadians(lat);
 		double sdRad = Math.toRadians(solarDec);
@@ -335,7 +335,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Calculate the hour angle of the sun at sunset for the latitude
+	 * Returns the hour angle of the sun at sunset for the latitude
 	 *
 	 * @param lat
 	 *            the latitude of observer in degrees
@@ -344,7 +344,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @return the hour angle of sunset in radians
 	 * TODO: use - calcHourAngleSunrise implementation
 	 */
-	private static double calcHourAngleSunset(double lat, double solarDec,
+	private static double getSunHourAngleAtSunset(double lat, double solarDec,
 			double zenith) {
 		double latRad = Math.toRadians(lat);
 		double sdRad = Math.toRadians(solarDec);
@@ -356,7 +356,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Calculate the Universal Coordinated Time (UTC) of sunrise for the given
+	 * Return the Universal Coordinated Time (UTC) of sunrise for the given
 	 * day at the given location on earth
 	 *
 	 * @param julianDay
@@ -367,7 +367,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            the longitude of observer in degrees
 	 * @return the time in minutes from zero Z
 	 */
-	private static double calcSunriseUTC(double julianDay, double latitude,
+	private static double getSunriseUTC(double julianDay, double latitude,
 			double longitude, double zenith) {
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
@@ -375,14 +375,14 @@ public class NOAACalculator extends AstronomicalCalculator {
 		// that declination. This is better than start of the
 		// Julian day
 
-		double noonmin = calcSolNoonUTC(julianCenturies, longitude);
+		double noonmin = getSolarNoonUTC(julianCenturies, longitude);
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
 
 		// First pass to approximate sunrise (using solar noon)
 
-		double eqTime = calcEquationOfTime(tnoon);
-		double solarDec = calcSunDeclination(tnoon);
-		double hourAngle = calcHourAngleSunrise(latitude, solarDec, zenith);
+		double eqTime = getEquationOfTime(tnoon);
+		double solarDec = getSunDeclination(tnoon);
+		double hourAngle = getSunHourAngleAtSunrise(latitude, solarDec, zenith);
 
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta; // in minutes of time
@@ -392,9 +392,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + timeUTC
 				/ 1440.0);
-		eqTime = calcEquationOfTime(newt);
-		solarDec = calcSunDeclination(newt);
-		hourAngle = calcHourAngleSunrise(latitude, solarDec, zenith);
+		eqTime = getEquationOfTime(newt);
+		solarDec = getSunDeclination(newt);
+		hourAngle = getSunHourAngleAtSunrise(latitude, solarDec, zenith);
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
 		timeUTC = 720 + timeDiff - eqTime; // in minutes
@@ -402,31 +402,31 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * calculate the Universal Coordinated Time (UTC) of solar noon for the
+	 * Return the Universal Coordinated Time (UTC) of solar noon for the
 	 * given day at the given location on earth
 	 *
-	 * @param t
+	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
 	 * @param longitude
 	 *            the longitude of observer in degrees
-	 * @return the time in minutes from zero Z
+	 * @return the time in minutes from zero UTC
 	 */
-	private static double calcSolNoonUTC(double t, double longitude) {
+	private static double getSolarNoonUTC(double julianCenturies, double longitude) {
 		// First pass uses approximate solar noon to calculate eqtime
-		double tnoon = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(t) + longitude
+		double tnoon = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + longitude
 				/ 360.0);
-		double eqTime = calcEquationOfTime(tnoon);
+		double eqTime = getEquationOfTime(tnoon);
 		double solNoonUTC = 720 + (longitude * 4) - eqTime; // min
 
-		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(t) - 0.5
+		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) - 0.5
 				+ solNoonUTC / 1440.0);
 
-		eqTime = calcEquationOfTime(newt);
+		eqTime = getEquationOfTime(newt);
 		return 720 + (longitude * 4) - eqTime; // min
 	}
 
 	/**
-	 * calculate the Universal Coordinated Time (UTC) of sunset for the given
+	 * Return the Universal Coordinated Time (UTC) of sunset for the given
 	 * day at the given location on earth
 	 *
 	 * @param julianDay
@@ -438,7 +438,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @param zenith
 	 * @return the time in minutes from zero Universal Coordinated Time (UTC)
 	 */
-	private static double calcSunsetUTC(double julianDay, double latitude,
+	private static double getSunsetUTC(double julianDay, double latitude,
 			double longitude, double zenith) {
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
@@ -446,14 +446,14 @@ public class NOAACalculator extends AstronomicalCalculator {
 		// that declination. This is better than start of the
 		// Julian day
 
-		double noonmin = calcSolNoonUTC(julianCenturies, longitude);
+		double noonmin = getSolarNoonUTC(julianCenturies, longitude);
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
 
 		// First calculates sunrise and approx length of day
 
-		double eqTime = calcEquationOfTime(tnoon);
-		double solarDec = calcSunDeclination(tnoon);
-		double hourAngle = calcHourAngleSunset(latitude, solarDec, zenith);
+		double eqTime = getEquationOfTime(tnoon);
+		double solarDec = getSunDeclination(tnoon);
+		double hourAngle = getSunHourAngleAtSunset(latitude, solarDec, zenith);
 
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta;
@@ -463,9 +463,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + timeUTC
 				/ 1440.0);
-		eqTime = calcEquationOfTime(newt);
-		solarDec = calcSunDeclination(newt);
-		hourAngle = calcHourAngleSunset(latitude, solarDec, zenith);
+		eqTime = getEquationOfTime(newt);
+		solarDec = getSunDeclination(newt);
+		hourAngle = getSunHourAngleAtSunset(latitude, solarDec, zenith);
 
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
