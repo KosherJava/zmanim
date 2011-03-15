@@ -35,6 +35,8 @@ import java.util.*;
  * Reingold, Software-- Practice & Experience, vol. 20, no. 9 (September, 1990), pp. 899- 928. Any method with the mark
  * "ND+ER" indicates that the method was taken from this source with minor modifications.
  * 
+ * @see net.sourceforge.zmanim.hebrewcalendar.JewishCalendar
+ * @see net.sourceforge.zmanim.hebrewcalendar.HebrewDateFormatter
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
@@ -528,9 +530,10 @@ public class JewishDate implements Comparable, Cloneable {
 	 * complex formatting, use the formatter classes.
 	 * 
 	 * @return the Jewish date in the form "day Month, year" e.g. "21 Shevat, 5729"
+	 * @see HebrewDateFormatter
 	 */
 	public String toString() {
-		return HebrewDateFormatter.getHebrewDateAsString(this);
+		return new HebrewDateFormatter().getJewishDateAsString(this);
 	}
 
 	/**

@@ -23,17 +23,17 @@ import java.util.Date;
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
  * 
- * This open source Java code was originally ported by <a href="http://www.facebook.com/avromf">Avrom Finkelstien</a> from his C++
- * code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements and some bug
- * fixing.
+ * This open source Java code was originally ported by <a href="http://www.facebook.com/avromf">Avrom Finkelstien</a>
+ * from his C++ code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements
+ * and some bug fixing.
  * 
  * The methods used to obtain the parsha were derived from the source code of <a
  * href="http://www.sadinoff.com/hebcal/">HebCal</a> by Danny Sadinoff and JCal for the Mac by Frank Yellin. Both based
  * their code on routines by Nachum Dershowitz and Edward M. Reingold. The class allows setting whether the parsha and
  * holiday scheme follows the Israel scheme or outside Israel scheme.
  * 
- * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implemented in
- * some form:
+ * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implemented in some
+ * form:
  * <ol>
  * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
  * <li>Molad / Shabbos Mevarchim)</li>
@@ -521,18 +521,6 @@ public class JewishCalendar extends JewishDate {
 		return null;
 	}
 
-	/**
-	 * Use the formatting class for formatting Ashkenazi VS Sephardi English transliteration. Using the default will use
-	 * the Ashkenazi pronounciation.
-	 */
-	private static final String[] parshios = { "Bereshis", "Noach", "Lech Lecha", "Vayera", "Chayei Sara", "Toldos",
-			"Vayetzei", "Vayishlach", "Vayeshev", "Miketz", "Vayigash", "Vayechi", "Shemos", "Vaera", "Bo",
-			"Beshalach", "Yisro", "Mishpatim", "Terumah", "Tetzaveh", "Ki Sisa", "Vayakhel", "Pekudei", "Vayikra",
-			"Tzav", "Shmini", "Tazria", "Metzora", "Achrei Mos", "Kedoshim", "Emor", "Behar", "Bechukosai", "Bamidbar",
-			"Nasso", "Beha'aloscha", "Sh'lach", "Korach", "Chukas", "Balak", "Pinchas", "Matos", "Masei", "Devarim",
-			"Vaeschanan", "Eikev", "Re'eh", "Shoftim", "Ki Seitzei", "Ki Savo", "Nitzavim", "Vayeilech", "Ha'Azinu",
-			"Vayakhel Pekudei", "Tazria Metzora", "Achrei Mos Kedoshim", "Behar Bechukosai", "Chukas Balak",
-			"Matos Masei", "Nitzavim Vayeilech" };
 	// These indices were originally included in the emacs 19 distribution.
 	// These arrays determine the correct indices into the parsha names
 	// -1 means no parsha that week, values > 52 means it is a double parsha
@@ -593,23 +581,13 @@ public class JewishCalendar extends JewishDate {
 			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
 			43, 44, 45, 46, 47, 48, 49, 59 };
 
-	/**
-	 * returns a string of today's parsha(ios) or an empty string if there are none. FIXME: consider possibly return the
-	 * parsha of the week for any day during the week instead of empty. To do this the simple way, create a new instance
-	 * of the class in the mothod, roll it to the next shabbos. If the shabbos has no parsha, keep rolling by a week
-	 * till a parsha is encountered. Possibly turn into static method that takes in a year, month, day, roll to next
-	 * shabbos (not that simple with the API for date passed in) and if it is not a shabbos roll forwarde one week at a
-	 * time to get the parsha. I do not think it is possible to have more than 2 shabbosim in a row without a parsha,
-	 * but I may be wrong.
-	 * 
-	 * @return the string of the parsha. Will currently return blank for weekdays and a shabbos on a yom tov.
-	 */
-	public String getParsha() {
+	public int getParshaIndex() {
 
 		// if today is not Shabbos, then there is no normal parsha reading. If
 		// commented our will return LAST week's parsha for a non shabbos
 		if (getDayOfWeek() != 7) {
-			return "";
+			// return "";
+			return -1;
 		}
 
 		// kvia = whether a Jewish year is short/regular/long (0/1/2)
@@ -715,9 +693,9 @@ public class JewishCalendar extends JewishDate {
 		index = array[week];
 
 		// If no Parsha this week
-		if (index == -1) {
-			return "";
-		}
+		// if (index == -1) {
+		// return -1;
+		// }
 
 		// if parsha this week
 		// else {
@@ -728,8 +706,24 @@ public class JewishCalendar extends JewishDate {
 		// for 2011 for example. It will also break for Sept 25, 2011 where it
 		// goes one beyong the index of Nitzavim-Vayelech
 		// }
-		return parshios[index];
+		// return parshios[index];
+		return index;
 		// }
+	}
+
+	/**
+	 * Returns a string of today's parsha(ios) or an empty string if there are none. FIXME: consider possibly return the
+	 * parsha of the week for any day during the week instead of empty. To do this the simple way, create a new instance
+	 * of the class in the mothod, roll it to the next shabbos. If the shabbos has no parsha, keep rolling by a week
+	 * till a parsha is encountered. Possibly turn into static method that takes in a year, month, day, roll to next
+	 * shabbos (not that simple with the API for date passed in) and if it is not a shabbos roll forwarde one week at a
+	 * time to get the parsha. I do not think it is possible to have more than 2 shabbosim in a row without a parsha,
+	 * but I may be wrong.
+	 * 
+	 * @return the string of the parsha. Will currently return blank for weekdays and a shabbos on a yom tov.
+	 */
+	public String getParsha() {
+		return new HebrewDateFormatter().getTransliteratedParsha(this);
 	}
 
 	/**
@@ -749,8 +743,7 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public int getDayOfOmer() {
 		// int omer = 0;
-		// better to use MIN_VALUE that is a better equivalent to null
-		int omer = Integer.MIN_VALUE;
+		int omer = Integer.MIN_VALUE; // better to use MIN_VALUE that is a better equivalent to null
 
 		// if Nissan and second day of Pesach and on
 		if (getJewishMonth() == 1 && getJewishDayOfMonth() >= 16) {
