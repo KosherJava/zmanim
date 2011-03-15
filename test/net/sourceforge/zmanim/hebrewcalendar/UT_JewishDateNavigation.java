@@ -19,10 +19,10 @@ public class UT_JewishDateNavigation {
 	public void jewishForwardMonthToMonth() {
 
 		JewishDate jewishDate = new JewishDate();
-		jewishDate.setJewishDate( 5711, 1, 1 );
-		Assert.assertEquals( jewishDate.getGregorianDayOfMonth(), 5 );
-		Assert.assertEquals( jewishDate.getGregorianMonth(), 4 );
-		Assert.assertEquals( jewishDate.getGregorianYear(), 2011 );
+		jewishDate.setJewishDate( 5771, 1, 1 );
+		Assert.assertEquals( 5, jewishDate.getGregorianDayOfMonth() );
+		Assert.assertEquals( 4, jewishDate.getGregorianMonth() );
+		Assert.assertEquals( 2011, jewishDate.getGregorianYear() );
 	}
 
 
@@ -33,9 +33,9 @@ public class UT_JewishDateNavigation {
 
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishDate(5771, 7, 1);
-		Assert.assertEquals( jewishDate.getGregorianDayOfMonth(), 9 );
-		Assert.assertEquals( jewishDate.getGregorianMonth(), 9 );
-		Assert.assertEquals( jewishDate.getGregorianYear(), 2010 );
+		Assert.assertEquals( 9, jewishDate.getGregorianDayOfMonth() );
+		Assert.assertEquals( 9, jewishDate.getGregorianMonth() );
+		Assert.assertEquals( 2010, jewishDate.getGregorianYear() );
 	}
 
 
