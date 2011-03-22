@@ -557,10 +557,10 @@ public class AstronomicalCalendar implements Cloneable {
 		double dstOffset = 0;
 		// be nice to Newfies and use a double
 		double gmtOffset = getCalendar().getTimeZone().getRawOffset()
-				/ (60 * MINUTE_MILLIS);
+				/ (60d * MINUTE_MILLIS);
 		if (dst) {
 			dstOffset = getCalendar().getTimeZone().getDSTSavings()
-					/ (60 * MINUTE_MILLIS);
+					/ (60d * MINUTE_MILLIS);
 		}
 		return time + gmtOffset + dstOffset;
 	}
@@ -737,10 +737,12 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see java.lang.Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
-		if (this == object)
+		if (this == object) {
 			return true;
-		if (!(object instanceof AstronomicalCalendar))
+		}
+		if (!(object instanceof AstronomicalCalendar)) {
 			return false;
+		}
 		AstronomicalCalendar aCal = (AstronomicalCalendar) object;
 		return getCalendar().equals(aCal.getCalendar())
 				&& getGeoLocation().equals(aCal.getGeoLocation())
