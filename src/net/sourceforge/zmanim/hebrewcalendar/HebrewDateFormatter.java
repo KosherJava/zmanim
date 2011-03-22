@@ -43,7 +43,7 @@ public class HebrewDateFormatter {
 	private boolean useGershGershayim = true;
 	private boolean includeYom = true;
 	private boolean longWeekFormat = true;
-	
+
 	private static final String GERESH = "\u05F3";
 	private static final String GERSHAYIM = "\u05F4";
 	private String[] transliteratedMonths = { "Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei", "Cheshvan",
@@ -119,20 +119,19 @@ public class HebrewDateFormatter {
 			"\u05EA\u05E9\u05E8\u05D9", "\u05D7\u05E9\u05D5\u05D5\u05DF", "\u05DB\u05E1\u05DC\u05D5",
 			"\u05D8\u05D1\u05EA", "\u05E9\u05D1\u05D8", "\u05D0\u05D3\u05E8", "\u05D0\u05D3\u05E8 \u05D1",
 			"\u05D0\u05D3\u05E8 \u05D0" };
-	
 
 	/**
 	 * list of transliterated parshiyos. The formatParsha method formatting Ashkenazi VS Sephardi English
 	 * transliteration. Using the default will use the Ashkenazi pronounciation. FIXME: correct docs.
 	 */
-	private String[] transliteratedParshios = { "Bereshis", "Noach", "Lech Lecha", "Vayera",
-			"Chayei Sara", "Toldos", "Vayetzei", "Vayishlach", "Vayeshev", "Miketz", "Vayigash", "Vayechi", "Shemos",
-			"Vaera", "Bo", "Beshalach", "Yisro", "Mishpatim", "Terumah", "Tetzaveh", "Ki Sisa", "Vayakhel", "Pekudei",
-			"Vayikra", "Tzav", "Shmini", "Tazria", "Metzora", "Achrei Mos", "Kedoshim", "Emor", "Behar", "Bechukosai",
-			"Bamidbar", "Nasso", "Beha'aloscha", "Sh'lach", "Korach", "Chukas", "Balak", "Pinchas", "Matos", "Masei",
-			"Devarim", "Vaeschanan", "Eikev", "Re'eh", "Shoftim", "Ki Seitzei", "Ki Savo", "Nitzavim", "Vayeilech",
-			"Ha'Azinu", "Vayakhel Pekudei", "Tazria Metzora", "Achrei Mos Kedoshim", "Behar Bechukosai",
-			"Chukas Balak", "Matos Masei", "Nitzavim Vayeilech" };
+	private String[] transliteratedParshios = { "Bereshis", "Noach", "Lech Lecha", "Vayera", "Chayei Sara", "Toldos",
+			"Vayetzei", "Vayishlach", "Vayeshev", "Miketz", "Vayigash", "Vayechi", "Shemos", "Vaera", "Bo",
+			"Beshalach", "Yisro", "Mishpatim", "Terumah", "Tetzaveh", "Ki Sisa", "Vayakhel", "Pekudei", "Vayikra",
+			"Tzav", "Shmini", "Tazria", "Metzora", "Achrei Mos", "Kedoshim", "Emor", "Behar", "Bechukosai", "Bamidbar",
+			"Nasso", "Beha'aloscha", "Sh'lach", "Korach", "Chukas", "Balak", "Pinchas", "Matos", "Masei", "Devarim",
+			"Vaeschanan", "Eikev", "Re'eh", "Shoftim", "Ki Seitzei", "Ki Savo", "Nitzavim", "Vayeilech", "Ha'Azinu",
+			"Vayakhel Pekudei", "Tazria Metzora", "Achrei Mos Kedoshim", "Behar Bechukosai", "Chukas Balak",
+			"Matos Masei", "Nitzavim Vayeilech" };
 
 	/**
 	 * @return the list of transliterated Parshios
@@ -142,7 +141,8 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * @param transliteratedParshios the transliterated Parshios to set
+	 * @param transliteratedParshios
+	 *            the transliterated Parshios to set
 	 */
 	public void setTransliteratedParshiosList(String[] transliteratedParshios) {
 		this.transliteratedParshios = transliteratedParshios;
@@ -208,7 +208,7 @@ public class HebrewDateFormatter {
 	 * FIXME: add docs
 	 * 
 	 * @param jewishDate
-	 * @return
+	 * @return the formatted day of week
 	 */
 	public String formatDayOfWeek(JewishDate jewishDate) {
 		if (hebrewFormat) {
@@ -312,8 +312,6 @@ public class HebrewDateFormatter {
 	 * 
 	 * @param jewishDate
 	 *            the JewishDate to be formatted
-	 * @param hebrew
-	 *            format the date in Hebrew
 	 * @return the formatted date. If the formatter is set to Hebrew, it will format in the form, "day Month year" for
 	 *         example &#x5DB;&#x5F4;&#x5D0; &#x5E9;&#x5D1;&#x5D8; &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8;, and the format
 	 *         "21 Shevat, 5729" if not.
