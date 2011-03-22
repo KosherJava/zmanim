@@ -99,10 +99,10 @@ public class NOAACalculator extends AstronomicalCalculator {
 			year -= 1;
 			month += 12;
 		}
-		double A = Math.floor(year / 100);
-		double B = 2 - A + Math.floor(A / 4);
+		int a = year / 100;
+		int b = 2 - a + a / 4;
 
-		return Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + B - 1524.5;
+		return Math.floor(365.25 * (year + 4716)) + Math.floor(30.6001 * (month + 1)) + day + b - 1524.5;
 	}
 
 	/**
