@@ -38,13 +38,11 @@ import net.sourceforge.zmanim.*;
  * @version 1.2
  */
 public class ZmanimFormatter {
-	private boolean prependZeroHours;
+	private boolean prependZeroHours = false;
 
-	private boolean useSeconds;
+	private boolean useSeconds = false;
 
-	private boolean useMillis;
-
-	boolean useDecimal;
+	private boolean useMillis = false;
 
 	private static DecimalFormat minuteSecondNF = new DecimalFormat("00");
 
@@ -105,7 +103,7 @@ public class ZmanimFormatter {
 	 */
 	public ZmanimFormatter(int format, SimpleDateFormat dateFormat) {
 		String hourFormat = "0";
-		if (this.prependZeroHours) {
+		if (prependZeroHours) {
 			hourFormat = "00";
 		}
 		this.hourNF = new DecimalFormat(hourFormat);
@@ -135,9 +133,8 @@ public class ZmanimFormatter {
 		case SEXAGESIMAL_MILLIS_FORMAT:
 			setSettings(false, true, true);
 			break;
-		case DECIMAL_FORMAT:
-		default:
-			this.useDecimal = true;
+		//case DECIMAL_FORMAT:
+		//default:
 		}
 	}
 
@@ -357,41 +354,36 @@ public class ZmanimFormatter {
 						"yyyy-MM-dd'T'HH:mm:ss"));
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		
-		String output = "<";
+		StringBuffer sb = new StringBuffer("<");
 		if (ac.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
-			output += "AstronomicalTimes";
+			sb.append("AstronomicalTimes");
 			//TODO: use proper schema ref, and maybe build a real schema.
 			//output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			//output += xsi:schemaLocation="http://www.kosherjava.com/zmanim astronomical.xsd"
 		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
-			output += "Zmanim";
+			sb.append("Zmanim");
 			//TODO: use proper schema ref, and maybe build a real schema.
 			//output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			//output += xsi:schemaLocation="http://www.kosherjava.com/zmanim zmanim.xsd"
 		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
-			output += "BasicZmanim";
+			sb.append("BasicZmanim");
 			//TODO: use proper schema ref, and maybe build a real schema.
 			//output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			//output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
 		}  
-		output += " date=\"" + df.format(ac.getCalendar().getTime()) + "\"";
-		output += " type=\"" + ac.getClass().getName() + "\"";
-		output += " algorithm=\""
-				+ ac.getAstronomicalCalculator().getCalculatorName() + "\"";
-		output += " location=\"" + ac.getGeoLocation().getLocationName() + "\"";
-		output += " latitude=\"" + ac.getGeoLocation().getLatitude() + "\"";
-		output += " longitude=\"" + ac.getGeoLocation().getLongitude() + "\"";
-		output += " elevation=\"" + ac.getGeoLocation().getElevation() + "\"";
-		output += " timeZoneName=\""
-				+ ac.getGeoLocation().getTimeZone().getDisplayName() + "\"";
-		output += " timeZoneID=\"" + ac.getGeoLocation().getTimeZone().getID()
-				+ "\"";
-		output += " timeZoneOffset=\""
-				+ (ac.getGeoLocation().getTimeZone().getOffset(
-						ac.getCalendar().getTimeInMillis()) / ((double)HOUR_MILLIS))
-				+ "\"";
+		sb.append(" date=\"").append(df.format(ac.getCalendar().getTime())).append("\"");
+		sb.append(" type=\"").append(ac.getClass().getName()).append("\"");
+		sb.append(" algorithm=\"").append(ac.getAstronomicalCalculator().getCalculatorName()).append("\"");
+		sb.append(" location=\"").append(ac.getGeoLocation().getLocationName()).append("\"");
+		sb.append(" latitude=\"").append(ac.getGeoLocation().getLatitude()).append("\"");
+		sb.append(" longitude=\"").append(ac.getGeoLocation().getLongitude()).append("\"");
+		sb.append(" elevation=\"").append(ac.getGeoLocation().getElevation()).append("\"");
+		sb.append(" timeZoneName=\"").append(ac.getGeoLocation().getTimeZone().getDisplayName()).append("\"");
+		sb.append(" timeZoneID=\"").append(ac.getGeoLocation().getTimeZone().getID()).append("\"");
+		sb.append(" timeZoneOffset=\"").append((ac.getGeoLocation().getTimeZone().getOffset(
+						ac.getCalendar().getTimeInMillis()) / ((double)HOUR_MILLIS))).append("\"");
 
-		output += ">\n";
+		sb.append(">\n");
 
 		Method[] theMethods = ac.getClass().getMethods();
 		String tagName = "";
@@ -430,35 +422,33 @@ public class ZmanimFormatter {
 		}
 		Zman zman;
 		Collections.sort(dateList, Zman.DATE_ORDER);
+		
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
-			output += "\t<" + zman.getZmanLabel();
-			output += ">";
-			output += formatter.formatDateTime(zman.getZman(), ac.getCalendar())
-					+ "</" + zman.getZmanLabel() + ">\n";
+			sb.append("\t<").append(zman.getZmanLabel()).append(">");
+			sb.append(formatter.formatDateTime(zman.getZman(), ac.getCalendar()));
+			sb.append("</").append(zman.getZmanLabel()).append(">\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
 		for (int i = 0; i < durationList.size(); i++) {
 			zman = (Zman) durationList.get(i);
-			output += "\t<" + zman.getZmanLabel();
-			output += ">";
-			output += formatter.format((int) zman.getDuration()) + "</"
-					+ zman.getZmanLabel() + ">\n";
+			sb.append("\t<" + zman.getZmanLabel()).append(">");
+			sb.append(formatter.format((int) zman.getDuration())).append("</").append(zman.getZmanLabel()).append(">\n");
 		}
 
 		for (int i = 0; i < otherList.size(); i++) {// will probably never enter
 			// this block
-			output += "\t" + otherList.get(i) + "\n";
+			sb.append("\t").append(otherList.get(i)).append("\n");
 		}
 
 		if (ac.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
-			output += "</AstronomicalTimes>";
+			sb.append("</AstronomicalTimes>");
 		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
-			output += "</Zmanim>";
+			sb.append("</Zmanim>");
 		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
-			output += "</Basic>";
+			sb.append("</Basic>");
 		}
-		return output;
+		return sb.toString();
 	}
 	
 	/**
