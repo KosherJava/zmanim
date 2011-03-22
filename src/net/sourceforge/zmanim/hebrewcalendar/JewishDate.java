@@ -533,7 +533,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @see HebrewDateFormatter
 	 */
 	public String toString() {
-		return new HebrewDateFormatter().getJewishDateAsString(this);
+		return new HebrewDateFormatter().format(this);
 	}
 
 	/**
@@ -629,16 +629,17 @@ public class JewishDate implements Comparable, Cloneable {
 	}
 
 	/**
-	 * Compares two dates to see if they are equal
+	 * @see java.lang.Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
-
+		if (this == object) {
+			return true;
+		}
 		if (!(object instanceof JewishDate)) {
 			return false;
 		}
-
-		JewishDate hebDate = (JewishDate) object;
-		return gregorianAbsDate == hebDate.getAbsDate();
+		JewishDate jewishDate = (JewishDate) object;
+		return gregorianAbsDate == jewishDate.getAbsDate();
 	}
 
 	/**
@@ -783,10 +784,24 @@ public class JewishDate implements Comparable, Cloneable {
 		setJewishDate(jewishYear, jewishMonth, dayOfMonth);
 	}
 
-	/** Create a copy of this date. */
-	// FIXME - create deep clone, or simplify by creating a clone constructor
-	public JewishDate clone() {
-		return new JewishDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+	/**
+	 * A method that creates a <a
+	 * href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a>
+	 * of the object. <br />
+	 * 
+	 * @see java.lang.Object#clone()
+	 * @since 1.1
+	 */
+	public Object clone() {
+		JewishDate clone = null;
+		try {
+			clone = (JewishDate) super.clone();
+		} catch (CloneNotSupportedException cnse) {
+			System.out
+					.print("Required by the compiler. Should never be reached since we implement clone()");
+		}
+		clone.setGregorianDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+		return clone;
 	}
 
 	/**
