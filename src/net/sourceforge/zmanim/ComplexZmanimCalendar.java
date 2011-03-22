@@ -2772,7 +2772,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getFixedLocalChatzos() {
 		return getTimeOffset(getDateFromTime(12.0
-				- getGeoLocation().getTimeZone().getRawOffset() / HOUR_MILLIS),
+				- getGeoLocation().getTimeZone().getRawOffset() / (double)HOUR_MILLIS),
 				-getGeoLocation().getLocalMeanTimeOffset());
 	}
 
