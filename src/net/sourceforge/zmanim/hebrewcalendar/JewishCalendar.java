@@ -30,7 +30,7 @@ import java.util.Date;
  * The methods used to obtain the parsha were derived from the source code of <a
  * href="http://www.sadinoff.com/hebcal/">HebCal</a> by Danny Sadinoff and JCal for the Mac by Frank Yellin. Both based
  * their code on routines by Nachum Dershowitz and Edward M. Reingold. The class allows setting whether the parsha and
- * holiday scheme follows the Israel scheme or outside Israel scheme.
+ * holiday scheme follows the Israel scheme or outside Israel scheme. The default is the outside Israel scheme.
  * 
  * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implemented in some
  * form:
@@ -49,6 +49,35 @@ import java.util.Date;
  * @version 0.0.1
  */
 public class JewishCalendar extends JewishDate {
+	public static final int EREV_PESACH = 0;
+	public static final int PESACH = 1;
+	public static final int CHOL_HAMOED_PESACH = 2;
+	public static final int PESACH_SHENI = 3;
+	public static final int EREV_SHAVUOS = 4;
+	public static final int SHAVUOS = 5;
+	public static final int SEVENTEEN_OF_TAMMUZ = 6;
+	public static final int TISHA_BEAV = 7;
+	public static final int TU_BEAV = 8;
+	public static final int EREV_ROSH_HASHANA = 9;
+	public static final int ROSH_HASHANA = 10;
+	public static final int FAST_OF_GEDALYAH = 11;
+	public static final int EREV_YOM_KIPPUR = 12;
+	public static final int YOM_KIPPUR = 13;
+	public static final int EREV_SUCCOS = 14;
+	public static final int SUCCOS = 15;
+	public static final int CHOL_HAMOED_SUCCOS = 16;
+	public static final int HOSHANA_RABBA = 17;
+	public static final int SHEMINI_ATZERES = 18;
+	public static final int SIMCHAS_TORAH = 19;
+	public static final int EREV_CHANUKAH = 20;// probably remove this
+	public static final int CHANUKAH = 21;
+	public static final int TENTH_OF_TEVES = 22;
+	public static final int TU_BESHVAT = 23;
+	public static final int FAST_OF_ESTHER = 24;
+	public static final int PURIM = 25;
+	public static final int SHUSHAN_PURIM = 26;
+	public static final int PURIM_KATAN = 27;
+
 	private boolean inIsrael = false;
 
 	/**
@@ -134,175 +163,123 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns a String of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
+	 * Returns an index of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
 	 * day. Has no "modern" holidays.
 	 * 
 	 * @return A String containing the holiday name or an empty string if it is not a holiday.
 	 */
-	public String getHoliday() {
+	public int getYomTovIndex() {
 		// check by month (starts from Nissan)
 		switch (getJewishMonth()) {
 		case 1:
 			if (getJewishDayOfMonth() == 14) {
-				return "Erev Pesach";
+				return EREV_PESACH;
 			} else if (getJewishDayOfMonth() == 15 || getJewishDayOfMonth() == 21
 					|| (!inIsrael && (getJewishDayOfMonth() == 16 || getJewishDayOfMonth() == 22))) {
-				return "Pesach";
+				return PESACH;
 			} else if (getJewishDayOfMonth() >= 17 && getJewishDayOfMonth() <= 20
 					|| (getJewishDayOfMonth() == 16 && inIsrael)) {
-				return "Chol Hamoed Pesach";
+				return CHOL_HAMOED_PESACH;
 			}
 			break;
 		case 2:
 			if (getJewishDayOfMonth() == 14) {
-				return "Pesach Sheni";
+				return PESACH_SHENI;
 			}
 			break;
 		case 3:
 			if (getJewishDayOfMonth() == 5) {
-				return "Erev Shavuos";
-				// if (ashkenaz) {
-				// return "Erev Shavuos";
-				// } else {
-				// return "Erev Shavuot";
-				// }
+				return EREV_SHAVUOS;
 			} else if (getJewishDayOfMonth() == 6 || (getJewishDayOfMonth() == 7 && !inIsrael)) {
-				return "Shavuos";
-				// if (ashkenaz) {
-				// return "Shavuos";
-				// } else {
-				// return "Shavuot";
-				// }
+				return SHAVUOS;
 			}
 			break;
 		case 4:
 			// push off the fast day if it falls on Shabbos
 			if ((getJewishDayOfMonth() == 17 && getDayOfWeek() != 7)
 					|| (getJewishDayOfMonth() == 18 && getDayOfWeek() == 1)) {
-				return "Tzom Tammuz";
+				return SEVENTEEN_OF_TAMMUZ;
 			}
 			break;
 		case 5:
 			// if Tisha B'av falls on Shabbos, push off until Sunday
 			if ((getDayOfWeek() == 1 && getJewishDayOfMonth() == 10)
 					|| (getDayOfWeek() != 7 && getJewishDayOfMonth() == 9)) {
-				return "Tisha B'av";
+				return TISHA_BEAV;
 			} else if (getJewishDayOfMonth() == 15) {
-				return "Tu B'Av";
+				return TU_BEAV;
 			}
 			break;
 		case 6:
 			if (getJewishDayOfMonth() == 29) {
-				return "Erev Rosh Hashanah";
+				return EREV_ROSH_HASHANA;
 			}
 			break;
 		case 7:
 			if (getJewishDayOfMonth() == 1 || getJewishDayOfMonth() == 2) {
-				return "Rosh Hashanah";
+				return ROSH_HASHANA;
 			} else if ((getJewishDayOfMonth() == 3 && getDayOfWeek() != 7)
-					|| (getJewishDayOfMonth() == 4 && getDayOfWeek() == 1)) { // push
-																				// off
-																				// Tzom
-				// Gedalia
-				// if it falls on
-				// Shabbos
-				return "Tzom Gedalia";
+					|| (getJewishDayOfMonth() == 4 && getDayOfWeek() == 1)) {
+				// push off Tzom Gedalia if it falls on Shabbos
+				return FAST_OF_GEDALYAH;
 			} else if (getJewishDayOfMonth() == 9) {
-				return "Erev Yom Kippur";
+				return EREV_YOM_KIPPUR;
 			} else if (getJewishDayOfMonth() == 10) {
-				return "Yom Kippur";
+				return YOM_KIPPUR;
 			} else if (getJewishDayOfMonth() == 14) {
-				return "Erev Sukkos";
-				// if (ashkenaz) {
-				// return "Erev Sukkos";
-				// } else {
-				// return "Erev Sukkot";
-				// }
+				return EREV_SUCCOS;
 			}
 			if (getJewishDayOfMonth() == 15 || (getJewishDayOfMonth() == 16 && !inIsrael)) {
-				return "Sukkos";
-				// if (ashkenaz) {
-				// return "Sukkos";
-				// } else {
-				// return "Sukkot";
-				// }
+				return SUCCOS;
 			}
 			if (getJewishDayOfMonth() >= 17 && getJewishDayOfMonth() <= 20 || (getJewishDayOfMonth() == 16 && inIsrael)) {
-				return "Chol Hamoed Sukkos";
-				// if (ashkenaz) {
-				// return "Chol Hamoed Sukkos";
-				// } else {
-				// return "Chol Hamoed Sukkot";
-				// }
+				return CHOL_HAMOED_SUCCOS;
 			}
 			if (getJewishDayOfMonth() == 21) {
-				return "Hoshana Rabah";
+				return HOSHANA_RABBA;
 			}
 			if (getJewishDayOfMonth() == 22) {
-				return "Shmini Atzeres";
-				// if (ashkenaz) {
-				// return "Shmini Atzeres";
-				// } else {
-				// return "Shmini Atzeret";
-				// }
+				return SHEMINI_ATZERES;
 			}
 			if (getJewishDayOfMonth() == 23 && !inIsrael) {
-				return "Simchas Torah";
-				// if (ashkenaz) {
-				// return "Simchas Torah";
-				// } else {
-				// return "Simchat Torah";
-				// }
+				return SIMCHAS_TORAH;
 			}
 			break;
 		case 9:
 			if (getJewishDayOfMonth() == 24) {
-				return "Erev Chanukah";
+				return EREV_CHANUKAH;
 			} else if (getJewishDayOfMonth() >= 25) {
-				return "Chanukah";
+				return CHANUKAH;
 			}
 			break;
 		case 10:
 			if (getJewishDayOfMonth() == 1 || getJewishDayOfMonth() == 2
 					|| (getJewishDayOfMonth() == 3 && isKislevShort(getJewishYear()))) {
-				return "Chanukah";
+				return CHANUKAH;
 			} else if (getJewishDayOfMonth() == 10) {
-				return "Asarah BeTeves";
-				// if (ashkenaz) {
-				// return "Tzom Teves";
-				// } else {
-				// return "Tzom Tevet";
-				// }
+				return TENTH_OF_TEVES;
 			}
 			break;
 		case 11:
 			if (getJewishDayOfMonth() == 15) {
-				return "Tu B'Shvat";
+				return TU_BESHVAT;
 			}
 			break;
 		case 12:
 			if (!isJewishLeapYear(getJewishYear())) {
-				// if 13th Adar falls on Friday or Shabbos, push back to
-				// Thursday
+				// if 13th Adar falls on Friday or Shabbos, push back to Thursday
 				if (((getJewishDayOfMonth() == 11 || getJewishDayOfMonth() == 12) && getDayOfWeek() == 5)
 						|| (getJewishDayOfMonth() == 13 && !(getDayOfWeek() == 6 || getDayOfWeek() == 7))) {
-					return "Ta'anis Esther";
-					// if (ashkenaz) {
-					// return "Ta'anis Esther";
-					// } else {
-					// return "Ta'anit Esther";
-					// }
+					return FAST_OF_ESTHER;
 				}
 				if (getJewishDayOfMonth() == 14) {
-					return "Purim";
+					return PURIM;
 				} else if (getJewishDayOfMonth() == 15) {
-					return "Shushan Purim";
+					return SHUSHAN_PURIM;
 				}
-			}
-			// else if a leap year //
-			else {
+			} else { // else if a leap year
 				if (getJewishDayOfMonth() == 14) {
-					return "Purim Katan";
+					return PURIM_KATAN;
 				}
 			}
 			break;
@@ -310,24 +287,48 @@ public class JewishCalendar extends JewishDate {
 			// if 13th Adar falls on Friday or Shabbos, push back to Thursday
 			if (((getJewishDayOfMonth() == 11 || getJewishDayOfMonth() == 12) && getDayOfWeek() == 5)
 					|| (getJewishDayOfMonth() == 13 && !(getDayOfWeek() == 6 || getDayOfWeek() == 7))) {
-				return "Ta'anis Esther";
-				// if (ashkenaz) {
-				// return "Ta'anis Esther";
-				// } else {
-				// return "Ta'anit Esther";
-				// }
+				return FAST_OF_ESTHER;
 			}
 			if (getJewishDayOfMonth() == 14) {
-				return "Purim";
+				return PURIM;
 			} else if (getJewishDayOfMonth() == 15) {
-				return "Shushan Purim";
+				return SHUSHAN_PURIM;
 			}
 			break;
 		}
-		// if we get to this stage, then there are no holidays for the given
-		// date
-		// return "";
-		return null;
+		// if we get to this stage, then there are no holidays for the given date return -1
+		return -1;
+	}
+
+	/**
+	 * Returns a String of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
+	 * day. Has no "modern" holidays.
+	 * 
+	 * @return A String containing the holiday name or an empty string if it is not a holiday.
+	 */
+	public String getYomTov() {
+		return new HebrewDateFormatter().formatYomTov(this);
+	}
+
+	public boolean isYomTov() {
+		return getYomTovIndex() != -1;
+	}
+
+	public boolean isErevYomTov() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == EREV_PESACH || holidayIndex == EREV_SHAVUOS || holidayIndex == EREV_ROSH_HASHANA
+				|| holidayIndex == EREV_YOM_KIPPUR || holidayIndex == EREV_SUCCOS;
+	}
+
+	public boolean isErevRoshChodesh() {
+		// Erev Rosh Hashana is not Erev Rosh Chodesh.
+		return (getJewishDayOfMonth() == 29 && getJewishMonth() != 6);
+	}
+
+	public boolean isTaanis() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == SEVENTEEN_OF_TAMMUZ || holidayIndex == TISHA_BEAV || holidayIndex == YOM_KIPPUR
+				|| holidayIndex == FAST_OF_GEDALYAH || holidayIndex == TENTH_OF_TEVES || holidayIndex == FAST_OF_ESTHER;
 	}
 
 	// These indices were originally included in the emacs 19 distribution.
@@ -391,14 +392,26 @@ public class JewishCalendar extends JewishDate {
 			43, 44, 45, 46, 47, 48, 49, 59 };
 
 	/**
+	 * Returns a string of the current parsha(ios) transliterated into Latin chars using Ashkenazi pronunciation. The
+	 * {@link HebrewDateFormatter#formatParsha(JewishCalendar)} offers various formatting options for the Parsha.
+	 * 
+	 * @return the current parsha(ios) transliterated into Latin chars
+	 * @see HebrewDateFormatter#formatParsha(JewishCalendar)
+	 */
+	public String getParsha() {
+		return new HebrewDateFormatter().formatParsha(this);
+	}
+
+	/**
 	 * Returns a the index of today's parsha(ios) or a -1 if there is none. To get the name of the Parsha, use the
-	 * {@link HebrewDateFormatter#formatParsha(JewishCalendar)}FIXME: consider possibly return the parsha of the week
-	 * for any day during the week instead of empty. To do this the simple way, create a new instance of the class in
-	 * the mothod, roll it to the next shabbos. If the shabbos has no parsha, keep rolling by a week till a parsha is
-	 * encountered. Possibly turn into static method that takes in a year, month, day, roll to next shabbos (not that
-	 * simple with the API for date passed in) and if it is not a shabbos roll forwarde one week at a time to get the
-	 * parsha. I do not think it is possible to have more than 2 shabbosim in a row without a parsha, but I may be
-	 * wrong.
+	 * {@link HebrewDateFormatter#formatParsha(JewishCalendar)}.
+	 * 
+	 * FIXME: consider possibly return the parsha of the week for any day during the week instead of empty. To do this
+	 * the simple way, create a new instance of the class in the mothod, roll it to the next shabbos. If the shabbos has
+	 * no parsha, keep rolling by a week till a parsha is encountered. Possibly turn into static method that takes in a
+	 * year, month, day, roll to next shabbos (not that simple with the API for date passed in) and if it is not a
+	 * shabbos roll forwarde one week at a time to get the parsha. I do not think it is possible to have more than 2
+	 * shabbosim in a row without a parsha, but I may be wrong.
 	 * 
 	 * @return the string of the parsha. Will currently return blank for weekdays and a shabbos on a yom tov.
 	 */
@@ -543,13 +556,12 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the int value of the Omer day or {@link Integer#MIN_VALUE} if the day is not in the omer
+	 * Returns the int value of the Omer day or -1 if the day is not in the omer
 	 * 
-	 * @return The Omer count as an int or {@link Integer#MIN_VALUE} if it is not a day of the Omer.
+	 * @return The Omer count as an int or -1 if it is not a day of the Omer.
 	 */
 	public int getDayOfOmer() {
-		// int omer = 0;
-		int omer = Integer.MIN_VALUE; // better to use MIN_VALUE that is a better equivalent to null
+		int omer = -1; // not a day of the Omer
 
 		// if Nissan and second day of Pesach and on
 		if (getJewishMonth() == 1 && getJewishDayOfMonth() >= 16) {
