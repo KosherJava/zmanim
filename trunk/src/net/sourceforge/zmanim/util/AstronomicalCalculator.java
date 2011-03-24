@@ -45,7 +45,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * 
+	 * Returns the name of the algorithm.
 	 * @return the descriptive name of the algorithm.
 	 */
 	public abstract String getCalculatorName();

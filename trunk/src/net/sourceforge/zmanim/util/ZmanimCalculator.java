@@ -34,8 +34,12 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  */
 public class ZmanimCalculator extends AstronomicalCalculator {
 	private String calculatorName = "US Naval Almanac Algorithm";
+	
+	/**
+	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getCalculatorName()
+	 */
 	public String getCalculatorName(){
-		return this.calculatorName; //"US Naval Almanac Algorithm";
+		return this.calculatorName;
 	}
 
 	/**
