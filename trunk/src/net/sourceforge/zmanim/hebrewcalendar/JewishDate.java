@@ -530,7 +530,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * complex formatting, use the formatter classes.
 	 * 
 	 * @return the Jewish date in the form "day Month, year" e.g. "21 Shevat, 5729"
-	 * @see HebrewDateFormatter
+	 * @see HebrewDateFormatter#format(JewishDate)
 	 */
 	public String toString() {
 		return new HebrewDateFormatter().format(this);
@@ -785,9 +785,7 @@ public class JewishDate implements Comparable, Cloneable {
 	}
 
 	/**
-	 * A method that creates a <a
-	 * href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a>
-	 * of the object. <br />
+	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object. <br />
 	 * 
 	 * @see java.lang.Object#clone()
 	 * @since 1.1
@@ -797,8 +795,7 @@ public class JewishDate implements Comparable, Cloneable {
 		try {
 			clone = (JewishDate) super.clone();
 		} catch (CloneNotSupportedException cnse) {
-			System.out
-					.print("Required by the compiler. Should never be reached since we implement clone()");
+			//Required by the compiler. Should never be reached since we implement clone()
 		}
 		clone.setGregorianDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
 		return clone;
