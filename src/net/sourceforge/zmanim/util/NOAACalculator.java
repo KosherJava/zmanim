@@ -46,6 +46,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 	private String calculatorName = "US National Oceanic and Atmospheric Administration Algorithm";
 
+	/**
+	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getCalculatorName()
+	 */
 	public String getCalculatorName() {
 		return this.calculatorName;
 	}
@@ -329,7 +332,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            the latitude of observer in degrees
 	 * @param solarDec
 	 *            the declination angle of sun in degrees
-	 * @return the hour angle of sunset in radians TODO: use - calcHourAngleSunrise implementation
+	 * @return the hour angle of sunset in radians TODO: use - {@link #getSunHourAngleAtSunrise(double, double, double)} implementation
 	 */
 	private static double getSunHourAngleAtSunset(double lat, double solarDec, double zenith) {
 		double latRad = Math.toRadians(lat);
