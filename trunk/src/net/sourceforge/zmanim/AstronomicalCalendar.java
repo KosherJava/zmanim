@@ -473,7 +473,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         one where it does not set, {@link Double#NaN} will be returned.
 	 */
 	public double getUTCSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(this, zenith, true);
+		return getAstronomicalCalculator().getUTCSunrise(getCalendar(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -497,7 +497,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSeaLevelSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(this, zenith, false);
+		return getAstronomicalCalculator().getUTCSunrise(getCalendar(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -515,7 +515,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(this, zenith, true);
+		return getAstronomicalCalculator().getUTCSunset(getCalendar(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -539,7 +539,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
 	 */
 	public double getUTCSeaLevelSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(this, zenith, false);
+		return getAstronomicalCalculator().getUTCSunset(getCalendar(), getGeoLocation(), zenith, false);
 	}
 
 	/**
