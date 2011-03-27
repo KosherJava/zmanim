@@ -108,38 +108,43 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Creates a Jewish date based on a Gregorian date
+	 * Creates a Jewish date based on a Jewish year, month and day of month.
 	 * 
-	 * @param gregorianYear
-	 *            the Gregorian year
-	 * @param gregorianMonth
-	 *            the Gregorian month. Unlike the Java Calendar where January has the value of 0,This expects a 1 for
-	 *            January
-	 * @param gregorianDayOfMonth
-	 *            the Gregorian day of month. If this is > the number of days in the month/year, the last valid date of
-	 *            the month will be set
-	 * 
+	 * @param jewishYear
+	 *            the Jewish year
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
+	 * @param jewishDayOfMonth
+	 *            the Jewish day of month. If 30 is passed in for a month with only 29 days (for example {@link #IYAR},
+	 *            or {@link #KISLEV} in a year that {@link #isKislevShort()}), the 29th (last valid date of the month)
+	 *            will be set
+	 * @throws IllegalArgumentException
+	 *             if the day of month is < 1 or > 30, or a year of < 0 is passed in.
 	 */
-	public JewishCalendar(int gregorianYear, int gregorianMonth, int gregorianDayOfMonth) {
-		super(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+	public JewishCalendar(int jewishYear, int jewishMonth, int jewishDayOfMonth) {
+		super(jewishYear, jewishMonth, jewishDayOfMonth);
 	}
 
 	/**
-	 * Creates a Jewish date based on Gregorian date and whether in Israel
+	 * Creates a Jewish date based on a Jewish date and whether in Israel
 	 * 
-	 * @param gregorianYear
-	 *            the Gregorian year
-	 * @param gregorianMonth
-	 *            the Gregorian month. Unlike the Java Calendar where January has the value of 0,This expects a 1 for
-	 *            January
-	 * @param gregorianDayOfMonth
-	 *            the Gregorian day of month. If this is > the number of days in the month/year, the last valid date of
-	 *            the month will be set
+	 * @param jewishYear
+	 *            the Jewish year
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
+	 * @param jewishDayOfMonth
+	 *            the Jewish day of month. If 30 is passed in for a month with only 29 days (for example {@link #IYAR},
+	 *            or {@link #KISLEV} in a year that {@link #isKislevShort()}), the 29th (last valid date of the month)
+	 *            will be set
 	 * @param inIsrael
 	 *            whether in Israel. This affects Yom Tov and Parsha calculations
 	 */
-	public JewishCalendar(int gregorianYear, int gregorianMonth, int gregorianDayOfMonth, boolean inIsrael) {
-		super(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+	public JewishCalendar(int jewishYear, int jewishMonth, int jewishDayOfMonth, boolean inIsrael) {
+		super(jewishYear, jewishMonth, jewishDayOfMonth);
 		setInIsrael(inIsrael);
 	}
 
@@ -171,7 +176,7 @@ public class JewishCalendar extends JewishDate {
 	public int getYomTovIndex() {
 		// check by month (starts from Nissan)
 		switch (getJewishMonth()) {
-		case 1:
+		case NISSAN:
 			if (getJewishDayOfMonth() == 14) {
 				return EREV_PESACH;
 			} else if (getJewishDayOfMonth() == 15 || getJewishDayOfMonth() == 21
@@ -182,26 +187,26 @@ public class JewishCalendar extends JewishDate {
 				return CHOL_HAMOED_PESACH;
 			}
 			break;
-		case 2:
+		case IYAR:
 			if (getJewishDayOfMonth() == 14) {
 				return PESACH_SHENI;
 			}
 			break;
-		case 3:
+		case SIVAN:
 			if (getJewishDayOfMonth() == 5) {
 				return EREV_SHAVUOS;
 			} else if (getJewishDayOfMonth() == 6 || (getJewishDayOfMonth() == 7 && !inIsrael)) {
 				return SHAVUOS;
 			}
 			break;
-		case 4:
+		case TAMMUZ:
 			// push off the fast day if it falls on Shabbos
 			if ((getJewishDayOfMonth() == 17 && getDayOfWeek() != 7)
 					|| (getJewishDayOfMonth() == 18 && getDayOfWeek() == 1)) {
 				return SEVENTEEN_OF_TAMMUZ;
 			}
 			break;
-		case 5:
+		case AV:
 			// if Tisha B'av falls on Shabbos, push off until Sunday
 			if ((getDayOfWeek() == 1 && getJewishDayOfMonth() == 10)
 					|| (getDayOfWeek() != 7 && getJewishDayOfMonth() == 9)) {
@@ -210,12 +215,12 @@ public class JewishCalendar extends JewishDate {
 				return TU_BEAV;
 			}
 			break;
-		case 6:
+		case ELUL:
 			if (getJewishDayOfMonth() == 29) {
 				return EREV_ROSH_HASHANA;
 			}
 			break;
-		case 7:
+		case TISHREI:
 			if (getJewishDayOfMonth() == 1 || getJewishDayOfMonth() == 2) {
 				return ROSH_HASHANA;
 			} else if ((getJewishDayOfMonth() == 3 && getDayOfWeek() != 7)
@@ -245,28 +250,28 @@ public class JewishCalendar extends JewishDate {
 				return SIMCHAS_TORAH;
 			}
 			break;
-		case 9:
+		case KISLEV: // no yomtov in CHESHVAN
 			if (getJewishDayOfMonth() == 24) {
 				return EREV_CHANUKAH;
 			} else if (getJewishDayOfMonth() >= 25) {
 				return CHANUKAH;
 			}
 			break;
-		case 10:
+		case TEVES:
 			if (getJewishDayOfMonth() == 1 || getJewishDayOfMonth() == 2
-					|| (getJewishDayOfMonth() == 3 && isKislevShort(getJewishYear()))) {
+					|| (getJewishDayOfMonth() == 3 && isKislevShort())) {
 				return CHANUKAH;
 			} else if (getJewishDayOfMonth() == 10) {
 				return TENTH_OF_TEVES;
 			}
 			break;
-		case 11:
+		case SHEVAT:
 			if (getJewishDayOfMonth() == 15) {
 				return TU_BESHVAT;
 			}
 			break;
-		case 12:
-			if (!isJewishLeapYear(getJewishYear())) {
+		case ADAR:
+			if (!isJewishLeapYear()) {
 				// if 13th Adar falls on Friday or Shabbos, push back to Thursday
 				if (((getJewishDayOfMonth() == 11 || getJewishDayOfMonth() == 12) && getDayOfWeek() == 5)
 						|| (getJewishDayOfMonth() == 13 && !(getDayOfWeek() == 6 || getDayOfWeek() == 7))) {
@@ -283,7 +288,7 @@ public class JewishCalendar extends JewishDate {
 				}
 			}
 			break;
-		case 13:
+		case ADAR_II:
 			// if 13th Adar falls on Friday or Shabbos, push back to Thursday
 			if (((getJewishDayOfMonth() == 11 || getJewishDayOfMonth() == 12) && getDayOfWeek() == 5)
 					|| (getJewishDayOfMonth() == 13 && !(getDayOfWeek() == 6 || getDayOfWeek() == 7))) {
@@ -310,25 +315,73 @@ public class JewishCalendar extends JewishDate {
 		return new HebrewDateFormatter().formatYomTov(this);
 	}
 
+	/**
+	 * Returns true if the current day is Yom Tov. The method returns false for Chanukah, Erev Yom tov and fast days.
+	 * 
+	 * @return true if the current day is a Yom Tov
+	 * @see #isErevYomTov()
+	 * @see #isTaanis()
+	 */
 	public boolean isYomTov() {
+		int holidayIndex = getYomTovIndex();
+		if (isErevYomTov() || holidayIndex == CHANUKAH || (isTaanis() && holidayIndex != YOM_KIPPUR)) {
+			return false;
+		}
 		return getYomTovIndex() != -1;
 	}
 
+	/**
+	 * Returns true if the current day is erev Yom Tov. The method returns true for Erev - Pesach, Shavuos, Rosh
+	 * Hashana, Yom Kippur and Succos.
+	 * 
+	 * @return true if the current day is Erev - Pesach, Shavuos, Rosh Hashana, Yom Kippur and Succos
+	 * @see #isYomTov()
+	 */
 	public boolean isErevYomTov() {
 		int holidayIndex = getYomTovIndex();
 		return holidayIndex == EREV_PESACH || holidayIndex == EREV_SHAVUOS || holidayIndex == EREV_ROSH_HASHANA
 				|| holidayIndex == EREV_YOM_KIPPUR || holidayIndex == EREV_SUCCOS;
 	}
 
+	/**
+	 * Returns true if the current day is Erev Rosh Chodesh. Returns false for Erev Rosh Hashana
+	 * 
+	 * @return true if the current day is Erev Rosh Chodesh. Returns false for Erev Rosh Hashana
+	 * @see #isRoshChodesh()
+	 */
 	public boolean isErevRoshChodesh() {
 		// Erev Rosh Hashana is not Erev Rosh Chodesh.
-		return (getJewishDayOfMonth() == 29 && getJewishMonth() != 6);
+		return (getJewishDayOfMonth() == 29 && getJewishMonth() != ELUL);
 	}
 
+	/**
+	 * Return true if the day is a Taanis (fast day). Return true for 17 of Tammuz, Tisha B'Av, Yom Kippur, Fast of
+	 * Gedalyah, 10 of Teves and the Fast of Esther
+	 * 
+	 * @return true if today is a fast day
+	 */
 	public boolean isTaanis() {
 		int holidayIndex = getYomTovIndex();
 		return holidayIndex == SEVENTEEN_OF_TAMMUZ || holidayIndex == TISHA_BEAV || holidayIndex == YOM_KIPPUR
 				|| holidayIndex == FAST_OF_GEDALYAH || holidayIndex == TENTH_OF_TEVES || holidayIndex == FAST_OF_ESTHER;
+	}
+
+	/**
+	 * Returns the day of Chanukah or -1 if it is not Chanukah. To find out of the day is Erev Chanukah check if
+	 * {@link #getYomTovIndex()} == {@link #EREV_CHANUKAH}.
+	 * 
+	 * @return the day of Chanukah or -1 if it is not Chanukah.
+	 */
+	public int getDayOfChanukah() {
+		if (getYomTovIndex() == CHANUKAH) {
+			if (getJewishMonth() == KISLEV) {
+				return getJewishDayOfMonth() - 24;
+			} else { // teves
+				return isKislevShort() ? getJewishDayOfMonth() + 5 : getJewishDayOfMonth() + 4;
+			}
+		} else {
+			return -1;
+		}
 	}
 
 	// These indices were originally included in the emacs 19 distribution.
@@ -406,7 +459,7 @@ public class JewishCalendar extends JewishDate {
 	 * Returns a the index of today's parsha(ios) or a -1 if there is none. To get the name of the Parsha, use the
 	 * {@link HebrewDateFormatter#formatParsha(JewishCalendar)}.
 	 * 
-	 * FIXME: consider possibly return the parsha of the week for any day during the week instead of empty. To do this
+	 * TODO: consider possibly return the parsha of the week for any day during the week instead of empty. To do this
 	 * the simple way, create a new instance of the class in the mothod, roll it to the next shabbos. If the shabbos has
 	 * no parsha, keep rolling by a week till a parsha is encountered. Possibly turn into static method that takes in a
 	 * year, month, day, roll to next shabbos (not that simple with the API for date passed in) and if it is not a
@@ -447,15 +500,15 @@ public class JewishCalendar extends JewishDate {
 		week = (((getAbsDate() - roshHashana.getAbsDate()) - (7 - roshHashanaDay)) / 7);
 
 		// get kvia
-		if (isCheshvanLong(getJewishYear()) && !isKislevShort(getJewishYear())) {
+		if (isCheshvanLong() && !isKislevShort()) {
 			kvia = 2;
-		} else if (!isCheshvanLong(getJewishYear()) && isKislevShort(getJewishYear())) {
+		} else if (!isCheshvanLong() && isKislevShort()) {
 			kvia = 0;
 		} else {
 			kvia = 1;
 		}
 		// determine appropriate array
-		if (!isJewishLeapYear(getJewishYear())) {
+		if (!isJewishLeapYear()) {
 			switch (roshHashanaDay) {
 			case 7: // RH was on a Saturday
 				if (kvia == 0) {
@@ -552,7 +605,7 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean isRoshChodesh() {
 		// Rosh Hashana is not rosh chodesh. Elul never has 30 days
-		return (getJewishDayOfMonth() == 1 && getJewishMonth() != 7) || getJewishDayOfMonth() == 30;
+		return (getJewishDayOfMonth() == 1 && getJewishMonth() != TISHREI) || getJewishDayOfMonth() == 30;
 	}
 
 	/**
@@ -564,13 +617,13 @@ public class JewishCalendar extends JewishDate {
 		int omer = -1; // not a day of the Omer
 
 		// if Nissan and second day of Pesach and on
-		if (getJewishMonth() == 1 && getJewishDayOfMonth() >= 16) {
+		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() >= 16) {
 			omer = getJewishDayOfMonth() - 15;
 			// if Iyar
-		} else if (getJewishMonth() == 2) {
+		} else if (getJewishMonth() == IYAR) {
 			omer = getJewishDayOfMonth() + 15;
 			// if Sivan and before Shavuos
-		} else if (getJewishMonth() == 3 && getJewishDayOfMonth() < 6) {
+		} else if (getJewishMonth() == SIVAN && getJewishDayOfMonth() < 6) {
 			omer = getJewishDayOfMonth() + 44;
 		}
 		return omer;

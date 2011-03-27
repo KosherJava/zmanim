@@ -31,6 +31,11 @@ import java.text.SimpleDateFormat;
  * <li>&#x5DB;&#x5F4;&#x5D0; &#x5E9;&#x5D1;&#x5D8; &#x5EA;&#x5E9;&#x5DA;&#x5F3;</li>
  * </ul>
  * 
+ * <b>TODO</b>:
+ * <ol>
+ * <li>various chnages</li>
+ * </ol>
+ * 
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishDate
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishCalendar
  * 
@@ -41,7 +46,6 @@ public class HebrewDateFormatter {
 	private boolean hebrewFormat = false;
 	private boolean useLonghebrewYears = false;
 	private boolean useGershGershayim = true;
-	private boolean includeYom = true;
 	private boolean longWeekFormat = true;
 
 	/**
@@ -71,22 +75,22 @@ public class HebrewDateFormatter {
 
 	private static final String GERESH = "\u05F3";
 	private static final String GERSHAYIM = "\u05F4";
-	private String[] transliteratedMonths = { "Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei", "Cheshvan",
+	private String[] transliteratedMonths = { "Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan",
 			"Kislev", "Teves", "Shevat", "Adar", "Adar II", "Adar I" };
 	private String hebrewOmerPrefix = "\u05D1";
 
-	private String transliteratedShabbos = "Shabbos";
+	private String transliteratedShabbosDayOfweek = "Shabbos";
 
 	/**
 	 * Returns the day of Shabbos transliterated into Latin chars. The default uses Ashkenazi pronounciation "Shabbos".
-	 * This can be overwritten using the {@link #setTransliteratedShabbos(String)}
+	 * This can be overwritten using the {@link #setTransliteratedShabbosDayOfWeek(String)}
 	 * 
 	 * @return the transliteratedShabbos. The default list of months uses Ashkenazi pronounciation "Shabbos".
-	 * @see #setTransliteratedShabbos(String)
+	 * @see #setTransliteratedShabbosDayOfWeek(String)
 	 * @see #formatDayOfWeek(JewishDate)
 	 */
-	public String getTransliteratedShabbos() {
-		return transliteratedShabbos;
+	public String getTransliteratedShabbosDayOfWeek() {
+		return transliteratedShabbosDayOfweek;
 	}
 
 	/**
@@ -96,11 +100,11 @@ public class HebrewDateFormatter {
 	 * @param transliteratedShabbos
 	 *            the transliteratedShabbos to set
 	 * 
-	 * @see #getTransliteratedShabbos()
+	 * @see #getTransliteratedShabbosDayOfWeek()
 	 * @see #formatDayOfWeek(JewishDate)
 	 */
-	public void setTransliteratedShabbos(String transliteratedShabbos) {
-		this.transliteratedShabbos = transliteratedShabbos;
+	public void setTransliteratedShabbosDayOfWeek(String transliteratedShabbos) {
+		this.transliteratedShabbosDayOfweek = transliteratedShabbos;
 	}
 
 	private String[] transliteratedHolidays = { "Erev Pesach", "Pesach", "Chol Hamoed Pesach", "Pesach Sheni",
@@ -110,16 +114,32 @@ public class HebrewDateFormatter {
 			"Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim", "Purim Katan" };
 
 	/**
-	 * FIXME - Add documentation
-	 * @return the transliteratedHolidays
+	 * Returns the list of holidays transliterated into Latin chars. This is used by the
+	 * {@link #formatYomTov(JewishCalendar)} when formatting the Yom Tov String. The default list of months uses
+	 * Ashkenazi pronunciation in typical American English spelling.
+	 * 
+	 * @return the list of holidays "Adar", "Adar II", "Adar I". The default list is currently "Erev Pesach", "Pesach",
+	 *         "Chol Hamoed Pesach", "Pesach Sheni", "Erev Shavuos", "Shavuos", "Seventeenth of Tammuz", "Tishah B'Av",
+	 *         "Tu B'Av", "Erev Rosh Hashana", "Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur",
+	 *         "Erev Succos", "Succos", "Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah",
+	 *         "Erev Chanukah", "Chanukah", "Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim",
+	 *         "Purim Katan"
+	 * 
+	 * @see #setTransliteratedMonthList(String[])
+	 * @see #formatYomTov(JewishCalendar)
+	 * @see #isHebrewFormat()
 	 */
 	public String[] getTransliteratedHolidayList() {
 		return transliteratedHolidays;
 	}
 
 	/**
-	 * FIXME - Add documentation
-	 * @param transliteratedHolidays the transliteratedHolidays to set
+	 * Sets the list of holidays transliterated into Latin chars. This is used by the
+	 * {@link #formatYomTov(JewishCalendar)} when formatting the Yom Tov String.
+	 * 
+	 * @param transliteratedHolidays
+	 *            the transliteratedHolidays to set. Ensure that the sequence exactly matches the list returned by the
+	 *            defaulyt
 	 */
 	public void setTransliteratedHolidayList(String[] transliteratedHolidays) {
 		this.transliteratedHolidays = transliteratedHolidays;
@@ -157,24 +177,42 @@ public class HebrewDateFormatter {
 	 */
 	public String formatYomTov(JewishCalendar jewishCalendar) {
 		int index = jewishCalendar.getYomTovIndex();
+		if (index == JewishCalendar.CHANUKAH) {
+			int dayOfChanukah = jewishCalendar.getDayOfChanukah();
+			return hebrewFormat ? (formatHebrewNumber(dayOfChanukah) + " " + hebrewHolidays[index])
+					: (transliteratedHolidays[index] + dayOfChanukah);
+		}
 		return index == -1 ? "" : hebrewFormat ? hebrewHolidays[index] : transliteratedHolidays[index];
 	}
 
 	/**
-	 * FIXME - add documentation
+	 * Returns if the formatter is set to use Hebrew formatting in the various formatting methods.
 	 * 
 	 * @return the hebrewFormat
+	 * @see #setHebrewFormat(boolean)
+	 * @see #format(JewishDate)
+	 * @see #formatDayOfWeek(JewishDate)
+	 * @see #formatMonth(JewishDate)
+	 * @see #formatOmer(JewishCalendar)
+	 * @see #formatParsha(JewishCalendar)
+	 * @see #formatYomTov(JewishCalendar)
 	 */
 	public boolean isHebrewFormat() {
 		return hebrewFormat;
 	}
 
 	/**
-	 * Sets the formatter to format in Hebrew.
+	 * Sets the formatter to format in Hebrew in the various formatting methods.
 	 * 
 	 * @param hebrewFormat
 	 *            the hebrewFormat to set
 	 * @see #isHebrewFormat()
+	 * @see #format(JewishDate)
+	 * @see #formatDayOfWeek(JewishDate)
+	 * @see #formatMonth(JewishDate)
+	 * @see #formatOmer(JewishCalendar)
+	 * @see #formatParsha(JewishCalendar)
+	 * @see #formatYomTov(JewishCalendar)
 	 */
 	public void setHebrewFormat(boolean hebrewFormat) {
 		this.hebrewFormat = hebrewFormat;
@@ -186,7 +224,7 @@ public class HebrewDateFormatter {
 	 * 
 	 * @return the hebrewOmerPrefix
 	 * 
-	 * @see #setHebrewOmerPrefix()
+	 * @see #setHebrewOmerPrefix(String)
 	 * @see #formatOmer(JewishCalendar)
 	 */
 	public String getHebrewOmerPrefix() {
@@ -212,7 +250,7 @@ public class HebrewDateFormatter {
 	 * "Adar", "Adar II", "Adar I"
 	 * 
 	 * @return the list of months beginning in Nissan and ending in in "Adar", "Adar II", "Adar I". The default list is
-	 *         currently "Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Teves",
+	 *         currently "Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Teves",
 	 *         "Shevat", "Adar", "Adar II", "Adar I"
 	 * @see #setTransliteratedMonthList(String[])
 	 */
@@ -227,7 +265,7 @@ public class HebrewDateFormatter {
 	 * @param transliteratedMonths
 	 *            an array of 14 month names such as { "Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
 	 *            "Heshvan", "Kislev", "Tevet", "Shevat", "Adar", "Adar II", "Adar I" }
-	 * @see #getTransliteratedMonthList(String[])
+	 * @see #getTransliteratedMonthList()
 	 */
 	public void setTransliteratedMonthList(String[] transliteratedMonths) {
 		this.transliteratedMonths = transliteratedMonths;
@@ -261,7 +299,7 @@ public class HebrewDateFormatter {
 			"Matos Masei", "Nitzavim Vayeilech" };
 
 	/**
-	 * FIXME - add documentation
+	 * Retruns the list of transliterated parshiyos used by this formatter.
 	 * 
 	 * @return the list of transliterated Parshios
 	 */
@@ -316,25 +354,6 @@ public class HebrewDateFormatter {
 			"\u05E0\u05D9\u05E6\u05D1\u05D9\u05DD \u05D5\u05D9\u05DC\u05DA" };
 
 	/**
-	 * FIXME - add documentation
-	 * 
-	 * @return the includeYom
-	 */
-	public boolean isIncludeYom() {
-		return includeYom;
-	}
-
-	/**
-	 * FIXME - add documentation
-	 * 
-	 * @param includeYom
-	 *            the includeYom to set
-	 */
-	public void setIncludeYom(boolean includeYom) {
-		this.includeYom = includeYom;
-	}
-
-	/**
 	 * Unicode list of Hebrew days of week.
 	 */
 	private static final String[] hebrewDaysOfWeek = { "\u05E8\u05D0\u05E9\u05D5\u05DF", "\u05E9\u05E0\u05D9",
@@ -343,23 +362,22 @@ public class HebrewDateFormatter {
 
 	/**
 	 * Formats the day of week. If {@link #isHebrewFormat() Hebrew formatting} is set, it will display in the format
-	 * &#x05D9;&#x05D5;&#x05DD; &#x05E8;&#x05D0;&#x05E9;&#x05D5;&#x05DF; etc. If Hebrew formatting is not in use it will
-	 * return it in the format of Sunday etc. There are various formatting options that will affect the output.
+	 * &#x05E8;&#x05D0;&#x05E9;&#x05D5;&#x05DF; etc. If Hebrew formatting is not in use it will return it in the format
+	 * of Sunday etc. There are various formatting options that will affect the output.
 	 * 
 	 * @param jewishDate
 	 * @return the formatted day of week
 	 * @see #isHebrewFormat()
-	 * @see #isIncludeYom()
 	 * @see #isLongWeekFormat()
 	 */
 	public String formatDayOfWeek(JewishDate jewishDate) {
 		if (hebrewFormat) {
-			StringBuffer sb = new StringBuffer(includeYom ? "\u05D9\u05D5\u05DD " : "");
+			StringBuffer sb = new StringBuffer();
 			sb.append(longWeekFormat ? hebrewDaysOfWeek[jewishDate.getDayOfWeek() - 1] : formatHebrewNumber(jewishDate
 					.getDayOfWeek()));
 			return sb.toString();
 		} else {
-			return jewishDate.getDayOfWeek() == 7 ? getTransliteratedShabbos() : new SimpleDateFormat("EEEE")
+			return jewishDate.getDayOfWeek() == 7 ? getTransliteratedShabbosDayOfWeek() : new SimpleDateFormat("EEEE")
 					.format(jewishDate.getTime());
 		}
 	}
@@ -472,23 +490,26 @@ public class HebrewDateFormatter {
 	 * Returns a string of the current Hebrew month such as "Tishrei". Returns a string of the current Hebrew month such
 	 * as "&#x5D0;&#x5D3;&#x5E8; &#x5D1;&#x5F3;".
 	 * 
-	 * @param FIXME
-	 *            - add documentation
-	 * @return FIXME - add documentation
+	 * @param jewishDate
+	 *            the JewishDate to format
+	 * @return the formatted month name
+	 * @see #isHebrewFormat()
+	 * @see #setHebrewFormat(boolean)
+	 * @see #getTransliteratedMonthList()
+	 * @see #setTransliteratedMonthList(String[])
 	 */
 	public String formatMonth(JewishDate jewishDate) {
 		if (this.hebrewFormat) {
-			if (JewishDate.isJewishLeapYear(jewishDate.getJewishYear()) && jewishDate.getJewishMonth() == 12) {
-				return hebrewMonths[13] + (useGershGershayim ? GERESH : ""); // return Adar I and not Adar in a leap
-																				// year
-			} else if (JewishDate.isJewishLeapYear(jewishDate.getJewishYear()) && jewishDate.getJewishMonth() == 13) {
+			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
+				return hebrewMonths[13] + (useGershGershayim ? GERESH : ""); // return Adar I, not Adar in a leap year
+			} else if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR_II) {
 				return hebrewMonths[12] + (useGershGershayim ? GERESH : "");
 			} else {
 				return hebrewMonths[jewishDate.getJewishMonth() - 1];
 			}
 		} else {
-			if (JewishDate.isJewishLeapYear(jewishDate.getJewishYear()) && jewishDate.getJewishMonth() == 12) {
-				return transliteratedMonths[13]; // return Adar I and not Adar in a leap year
+			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
+				return transliteratedMonths[13]; // return Adar I, not Adar in a leap year
 			} else {
 				return transliteratedMonths[jewishDate.getJewishMonth() - 1];
 			}
