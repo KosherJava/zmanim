@@ -16,7 +16,7 @@
  */
 package net.sourceforge.zmanim.util;
 
-import net.sourceforge.zmanim.AstronomicalCalendar;
+import java.util.Calendar;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at
@@ -33,6 +33,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	private double refraction = 34 / 60d;
 
 	private double solarRadius = 16 / 60d;
+	
+	private static final double GEOMETRIC_ZENITH = 90;
 
 	/**
 	 * getDefault method returns the default sun times calculation engine.
@@ -61,48 +63,55 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A method that calculates UTC sunrise as well as any time based on an angle above or below sunrise. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param astronomicalCalendar
+	 * @param calendar
 	 *            Used to calculate day of year.
+	 * @param geoLocation
+	 *            The location information used for astronomical calculating sun
+	 *            times.
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90 degrees. for sunrise typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
 	 *            this slightly to account for solar refraction and the sun's radius. Another example would be
-	 *            {@link AstronomicalCalendar#getBeginNauticalTwilight()} that passes
-	 *            {@link AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
+	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#getBeginNauticalTwilight()} that passes
+	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @return The UTC time of sunrise in 24 hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
 	 *         {@link java.lang.Double.NaN} will be returned.
 	 */
-	public abstract double getUTCSunrise(AstronomicalCalendar astronomicalCalendar, double zenith,
+	//public abstract double getUTCSunrise(AstronomicalCalendar astronomicalCalendar, double zenith,
+	public abstract double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 
 	/**
 	 * A method that calculates UTC sunset as well as any time based on an angle above or below sunset. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param astronomicalCalendar
+	 * @param calendar
 	 *            Used to calculate day of year.
+	 * @param geoLocation
+	 *            The location information used for astronomical calculating sun
+	 *            times.
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
 	 *            this slightly to account for solar refraction and the sun's radius. Another example would be
-	 *            {@link AstronomicalCalendar#getEndNauticalTwilight()} that passes
-	 *            {@link AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
+	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes
+	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @return The UTC time of sunset in 24 hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
 	 *         {@link java.lang.Double.NaN} will be returned.
 	 */
-	public abstract double getUTCSunset(AstronomicalCalendar astronomicalCalendar, double zenith,
+	public abstract double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 
 	/**
 	 * Method to return the adjustment to the zenith required to account for the elevation. Since a person at a higher
 	 * elevation can see farther below the horizon, the calculation for sunrise / sunset is calculated below the horizon
 	 * used at sea level. This is only used for sunrise and sunset and not times before or after it such as
-	 * {@link AstronomicalCalendar#getBeginNauticalTwilight() nautical twilight} since those calculations are based on
-	 * the level of available light at the given dip below the horizon, something that is not affected by elevation, the
-	 * adjustment should only made if the zenith == 90&deg; {@link #adjustZenith adjusted} for refraction and solar
-	 * radius.<br />
+	 * {@link net.sourceforge.zmanim.AstronomicalCalendar#getBeginNauticalTwilight() nautical twilight} since those
+	 * calculations are based on the level of available light at the given dip below the horizon, something that is not
+	 * affected by elevation, the adjustment should only made if the zenith == 90&deg; {@link #adjustZenith adjusted}
+	 * for refraction and solar radius.<br />
 	 * The algorithm used is:
 	 * 
 	 * <pre>
@@ -147,7 +156,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	double adjustZenith(double zenith, double elevation) {
 		double adjustedZenith = zenith;
-		if (zenith == AstronomicalCalendar.GEOMETRIC_ZENITH) {
+		if (zenith == GEOMETRIC_ZENITH) {
 			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
 		}
 

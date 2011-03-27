@@ -16,7 +16,6 @@
  */
 package net.sourceforge.zmanim.util;
 
-import net.sourceforge.zmanim.AstronomicalCalendar;
 import java.util.Calendar;
 
 /**
@@ -54,35 +53,35 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunrise(AstronomicalCalendar, double, boolean)
+	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
 	 */
-	public double getUTCSunrise(AstronomicalCalendar astronomicalCalendar, double zenith, boolean adjustForElevation) {
+	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double adjustedZenith = zenith;
 
 		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
+			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
 		} else {
 			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
-		double sunRise = getSunriseUTC(getJulianDay(astronomicalCalendar.getCalendar()), astronomicalCalendar
-				.getGeoLocation().getLatitude(), -astronomicalCalendar.getGeoLocation().getLongitude(), adjustedZenith);
+		double sunRise = getSunriseUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+				adjustedZenith);
 		return sunRise / 60;
 	}
 
 	/**
-	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunset(AstronomicalCalendar, double, boolean)
+	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
 	 */
-	public double getUTCSunset(AstronomicalCalendar astronomicalCalendar, double zenith, boolean adjustForElevation) {
+	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double adjustedZenith = zenith;
 		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
+			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
 		} else {
 			adjustedZenith = adjustZenith(zenith, 0);
 		}
 
-		double sunSet = getSunsetUTC(getJulianDay(astronomicalCalendar.getCalendar()), astronomicalCalendar
-				.getGeoLocation().getLatitude(), -astronomicalCalendar.getGeoLocation().getLongitude(), adjustedZenith);
+		double sunSet = getSunsetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+				adjustedZenith);
 		return sunSet / 60;
 	}
 
@@ -326,13 +325,14 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 	/**
 	 * Returns the <a href="http://en.wikipedia.org/wiki/Hour_angle">hour angle</a> of the sun at sunset for the
-	 * latitude.
+	 * latitude. TODO: use - {@link #getSunHourAngleAtSunrise(double, double, double)} implementation to avoid
+	 * duplication of code.
 	 * 
 	 * @param lat
 	 *            the latitude of observer in degrees
 	 * @param solarDec
 	 *            the declination angle of sun in degrees
-	 * @return the hour angle of sunset in radians TODO: use - {@link #getSunHourAngleAtSunrise(double, double, double)} implementation
+	 * @return the hour angle of sunset in radians
 	 */
 	private static double getSunHourAngleAtSunset(double lat, double solarDec, double zenith) {
 		double latRad = Math.toRadians(lat);

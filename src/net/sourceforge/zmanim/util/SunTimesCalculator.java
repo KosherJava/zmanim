@@ -17,7 +17,6 @@
 package net.sourceforge.zmanim.util;
 
 import java.util.Calendar;
-import net.sourceforge.zmanim.AstronomicalCalendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
@@ -44,40 +43,38 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunrise(AstronomicalCalendar, double, boolean)
+	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
 	 */
-	public double getUTCSunrise(AstronomicalCalendar astronomicalCalendar, double zenith, boolean adjustForElevation) {
+	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double adjustedZenith = zenith;
 		double doubleTime = Double.NaN;
 
 		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
+			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
 		} else {
 			adjustedZenith = adjustZenith(zenith, 0);
 		}
-		doubleTime = getTimeUTC(astronomicalCalendar.getCalendar().get(Calendar.YEAR), astronomicalCalendar
-				.getCalendar().get(Calendar.MONTH) + 1, astronomicalCalendar.getCalendar().get(Calendar.DAY_OF_MONTH),
-				astronomicalCalendar.getGeoLocation().getLongitude(), astronomicalCalendar.getGeoLocation()
-						.getLatitude(), adjustedZenith, TYPE_SUNRISE);
+		doubleTime = getTimeUTC(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
+				calendar.get(Calendar.DAY_OF_MONTH), geoLocation.getLongitude(), geoLocation.getLatitude(),
+				adjustedZenith, TYPE_SUNRISE);
 		return doubleTime;
 	}
 
 	/**
-	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunset(AstronomicalCalendar, double, boolean)
+	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
 	 */
-	public double getUTCSunset(AstronomicalCalendar astronomicalCalendar, double zenith, boolean adjustForElevation) {
+	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double doubleTime = Double.NaN;
 		double adjustedZenith = zenith;
 
 		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, astronomicalCalendar.getGeoLocation().getElevation());
+			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
 		} else {
 			adjustedZenith = adjustZenith(zenith, 0);
 		}
-		doubleTime = getTimeUTC(astronomicalCalendar.getCalendar().get(Calendar.YEAR), astronomicalCalendar
-				.getCalendar().get(Calendar.MONTH) + 1, astronomicalCalendar.getCalendar().get(Calendar.DAY_OF_MONTH),
-				astronomicalCalendar.getGeoLocation().getLongitude(), astronomicalCalendar.getGeoLocation()
-						.getLatitude(), adjustedZenith, TYPE_SUNSET);
+		doubleTime = getTimeUTC(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
+				calendar.get(Calendar.DAY_OF_MONTH), geoLocation.getLongitude(), geoLocation.getLatitude(),
+				adjustedZenith, TYPE_SUNSET);
 		return doubleTime;
 	}
 
