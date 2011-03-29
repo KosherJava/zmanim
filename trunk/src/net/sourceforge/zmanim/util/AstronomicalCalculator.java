@@ -27,12 +27,23 @@ import java.util.Calendar;
  * @version 1.1
  */
 public abstract class AstronomicalCalculator implements Cloneable {
-	// private double refraction = 34.478885263888294 / 60d; Calendrical Calculations lists a more accurate global
-	// average of 34.478885263888294
+	/**
+	 * The commonly used average solar refraction. Calendrical Calculations lists a more accurate global average of
+	 * 34.478885263888294
+	 * @see #getRefraction()
+	 */
 	private double refraction = 34 / 60d;
+	// private double refraction = 34.478885263888294 / 60d;
 
+	/**
+	 * The commonly used average solar radius.
+	 * @see #getSolarRadius()
+	 */
 	private double solarRadius = 16 / 60d;
-	
+
+	/**
+	 * The zenith of astronomical sunrise and sunset. The sun is 90&deg; from the vertical 0&deg;
+	 */
 	private static final double GEOMETRIC_ZENITH = 90;
 
 	/**
@@ -47,6 +58,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/**
 	 * Returns the name of the algorithm.
+	 * 
 	 * @return the descriptive name of the algorithm.
 	 */
 	public abstract String getCalculatorName();
@@ -65,8 +77,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @param calendar
 	 *            Used to calculate day of year.
 	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun
-	 *            times.
+	 *            The location information used for astronomical calculating sun times.
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90 degrees. for sunrise typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
@@ -76,8 +87,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return The UTC time of sunrise in 24 hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
 	 *         {@link java.lang.Double.NaN} will be returned.
+	 * @see #getElevationAdjustment(double)
 	 */
-	//public abstract double getUTCSunrise(AstronomicalCalendar astronomicalCalendar, double zenith,
 	public abstract double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 
@@ -88,8 +99,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @param calendar
 	 *            Used to calculate day of year.
 	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun
-	 *            times.
+	 *            The location information used for astronomical calculating sun times.
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
@@ -99,6 +109,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return The UTC time of sunset in 24 hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
 	 *         {@link java.lang.Double.NaN} will be returned.
+	 * @see #getElevationAdjustment(double)
 	 */
 	public abstract double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
@@ -138,20 +149,23 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * Adjusts the zenith to account for solar refraction, solar radius and elevation. The value for Sun's zenith and
-	 * true rise/set Zenith (used in this class and subclasses) is the angle that the center of the Sun makes to a line
-	 * perpendicular to the Earth's surface. If the Sun were a point and the Earth were without an atmosphere, true
-	 * sunset and sunrise would correspond to a 90&deg; zenith. Because the Sun is not a point, and because the
-	 * atmosphere refracts light, this 90&deg; zenith does not, in fact, correspond to true sunset or sunrise, instead
-	 * the centre of the Sun's disk must lie just below the horizon for the upper edge to be obscured. This means that a
-	 * zenith of just above 90&deg; must be used. The Sun subtends an angle of 16 minutes of arc (this can be changed
-	 * via the {@link #setSolarRadius(double)} method , and atmospheric refraction accounts for 34 minutes or so (this
-	 * can be changed via the {@link #setRefraction(double)} method), giving a total of 50 arcminutes. The total value
-	 * for ZENITH is 90+(5/6) or 90.8333333&deg; for true sunrise/sunset. Since a person at an elevation can see blow
-	 * the horizon of a person at sea level, this will also adjust the zenith to account for elevation if available.
+	 * Adjusts the zenith of astronomical sunrise and sunset to account for solar refraction, solar radius and
+	 * elevation. The value for Sun's zenith and true rise/set Zenith (used in this class and subclasses) is the angle
+	 * that the center of the Sun makes to a line perpendicular to the Earth's surface. If the Sun were a point and the
+	 * Earth were without an atmosphere, true sunset and sunrise would correspond to a 90&deg; zenith. Because the Sun
+	 * is not a point, and because the atmosphere refracts light, this 90&deg; zenith does not, in fact, correspond to
+	 * true sunset or sunrise, instead the centre of the Sun's disk must lie just below the horizon for the upper edge
+	 * to be obscured. This means that a zenith of just above 90&deg; must be used. The Sun subtends an angle of 16
+	 * minutes of arc (this can be changed via the {@link #setSolarRadius(double)} method , and atmospheric refraction
+	 * accounts for 34 minutes or so (this can be changed via the {@link #setRefraction(double)} method), giving a total
+	 * of 50 arcminutes. The total value for ZENITH is 90+(5/6) or 90.8333333&deg; for true sunrise/sunset. Since a
+	 * person at an elevation can see blow the horizon of a person at sea level, this will also adjust the zenith to
+	 * account for elevation if available.
 	 * 
 	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
-	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment.
+	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
+	 *         sunrise and sunset (if the zenith == 90&deg;)
+	 * @see #getElevationAdjustment(double)
 	 */
 	double adjustZenith(double zenith, double elevation) {
 		double adjustedZenith = zenith;

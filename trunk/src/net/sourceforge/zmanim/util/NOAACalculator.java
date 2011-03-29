@@ -42,26 +42,19 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	private static final double JULIAN_DAYS_PER_CENTURY = 36525.0;
 
-	private String calculatorName = "US National Oceanic and Atmospheric Administration Algorithm";
-
 	/**
 	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getCalculatorName()
 	 */
 	public String getCalculatorName() {
-		return this.calculatorName;
+		return "US National Oceanic and Atmospheric Administration Algorithm";
 	}
 
 	/**
 	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double adjustedZenith = zenith;
-
-		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
-		} else {
-			adjustedZenith = adjustZenith(zenith, 0);
-		}
+		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double adjustedZenith = adjustZenith(zenith, elevation);
 
 		double sunRise = getSunriseUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith);
@@ -72,12 +65,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double adjustedZenith = zenith;
-		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
-		} else {
-			adjustedZenith = adjustZenith(zenith, 0);
-		}
+		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double adjustedZenith = adjustZenith(zenith, elevation);
 
 		double sunSet = getSunsetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith);
@@ -357,8 +346,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunriseUTC(double julianDay, double latitude, double longitude, double zenith) {
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
-		// Find the time of solar noon at the location, and use
-		// that declination. This is better than start of the
+		// Find the time of solar noon at the location, and use that declination. This is better than start of the
 		// Julian day
 
 		double noonmin = getSolarNoonUTC(julianCenturies, longitude);
@@ -428,8 +416,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunsetUTC(double julianDay, double latitude, double longitude, double zenith) {
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
-		// Find the time of solar noon at the location, and use
-		// that declination. This is better than start of the
+		// Find the time of solar noon at the location, and use that declination. This is better than start of the
 		// Julian day
 
 		double noonmin = getSolarNoonUTC(julianCenturies, longitude);

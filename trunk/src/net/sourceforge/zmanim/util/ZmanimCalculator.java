@@ -42,12 +42,8 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double adjustedZenith = zenith;
-		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
-		} else {
-			adjustedZenith = adjustZenith(zenith, 0);
-		}
+		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double adjustedZenith = adjustZenith(zenith, elevation);
 
 		// step 1: First calculate the day of the year
 		// NOT NEEDED in this implementation
@@ -56,9 +52,7 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		// approximate time
 		double lngHour = geoLocation.getLongitude() / 15;
 
-		double t = calendar.get(Calendar.DAY_OF_YEAR) + ((6 - lngHour) / 24); // use 18 for
-		// sunset instead
-		// of 6
+		double t = calendar.get(Calendar.DAY_OF_YEAR) + ((6 - lngHour) / 24); // use 18 for sunset instead of 6
 
 		// step 3: calculate the sun's mean anomaly
 		double m = (0.9856 * t) - 3.289;
@@ -102,13 +96,6 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		double cosH = (Math.cos(Math.toRadians(adjustedZenith)) - (sinDec * Math.sin(Math.toRadians(geoLocation
 				.getLatitude())))) / (cosDec * Math.cos(Math.toRadians(geoLocation.getLatitude())));
 
-		// the following line would throw an Exception if the sun never rose.
-		// this is not needed since the calculation will return a Double.NaN
-		// if (cosH > 1) throw new Exception("doesnthappen");
-
-		// FOR SUNSET use the following instead of the above if statement.
-		// if (cosH < -1)
-
 		// step 7b: finish calculating H and convert into hours
 		double H = 360 - Math.toDegrees(Math.acos(cosH));
 
@@ -137,17 +124,10 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 	 * @see net.sourceforge.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double adjustedZenith = zenith;
-		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
-		} else {
-			adjustedZenith = adjustZenith(zenith, 0);
-		}
+		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double adjustedZenith = adjustZenith(zenith, elevation);
 
 		// step 1: First calculate the day of the year
-		// int calendarDayOfYear = calelendar.DAY_OF_YEAR;
-
-		// int N=theday - date(1,1,theday.year()) + 1;
 		int N = calendar.get(Calendar.DAY_OF_YEAR);
 
 		// step 2: convert the longitude to hour value and calculate an
@@ -196,10 +176,6 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		// step 7a: calculate the sun's local hour angle
 		double cosH = (Math.cos(Math.toRadians(adjustedZenith)) - (sinDec * Math.sin(Math.toRadians(geoLocation
 				.getLatitude())))) / (cosDec * Math.cos(Math.toRadians(geoLocation.getLatitude())));
-
-		// the following line would throw an Exception if the sun never set.
-		// this is not needed since the calculation will return a Double.NaN
-		// if (cosH < -1) throw new ZmanimException("doesnthappen");
 
 		// step 7b: finish calculating H and convert into hours
 		double H = Math.toDegrees(Math.acos(cosH));

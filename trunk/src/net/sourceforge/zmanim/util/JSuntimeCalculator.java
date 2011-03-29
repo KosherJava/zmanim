@@ -59,12 +59,8 @@ public class JSuntimeCalculator extends AstronomicalCalculator {
 	 *             calculate times for years <> 2000.
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double adjustedZenith = zenith;
-		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
-		} else {
-			adjustedZenith = adjustZenith(zenith, 0);
-		}
+		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double adjustedZenith = adjustZenith(zenith, elevation);
 		double timeMins = morningPhenomenon(dateToJulian(calendar), geoLocation.getLatitude(),
 				-geoLocation.getLongitude(), adjustedZenith);
 		return timeMins / 60;
@@ -81,13 +77,8 @@ public class JSuntimeCalculator extends AstronomicalCalculator {
 	 *             calculate times for years <> 2000.
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double adjustedZenith = zenith;
-
-		if (adjustForElevation) {
-			adjustedZenith = adjustZenith(zenith, geoLocation.getElevation());
-		} else {
-			adjustedZenith = adjustZenith(zenith, 0);
-		}
+		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double adjustedZenith = adjustZenith(zenith, elevation);
 		double timeMins = eveningPhenomenon(dateToJulian(calendar), geoLocation.getLatitude(),
 				-geoLocation.getLongitude(), adjustedZenith);
 		return timeMins / 60;
