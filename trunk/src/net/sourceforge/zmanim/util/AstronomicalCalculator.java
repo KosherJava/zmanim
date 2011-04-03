@@ -169,10 +169,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	double adjustZenith(double zenith, double elevation) {
 		double adjustedZenith = zenith;
-		if (zenith == GEOMETRIC_ZENITH) {
+		if (zenith == GEOMETRIC_ZENITH) { // only adjust if it is exactly sunrise or sunset
 			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
 		}
-
 		return adjustedZenith;
 	}
 
