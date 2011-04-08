@@ -391,6 +391,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 
 	 * @return Returns the candle lighting offset to set in minutes..
 	 * @see #getCandelLighting()
+	 * @see #setCandleLightingOffset(double)
 	 */
 	public double getCandleLightingOffset() {
 		return this.candleLightingOffset;
@@ -404,6 +405,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @param candleLightingOffset
 	 *            The candle lighting offset to set in minutes.
 	 * @see #getCandelLighting()
+	 * @see #getCandleLightingOffset()
 	 */
 	public void setCandleLightingOffset(double candleLightingOffset) {
 		this.candleLightingOffset = candleLightingOffset;
