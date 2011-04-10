@@ -110,7 +110,8 @@ public class HebrewDateFormatter {
 			"Erev Shavuos", "Shavuos", "Seventeenth of Tammuz", "Tishah B'Av", "Tu B'Av", "Erev Rosh Hashana",
 			"Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur", "Erev Succos", "Succos",
 			"Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah", "Erev Chanukah", "Chanukah",
-			"Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim", "Purim Katan" };
+			"Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim", "Purim Katan", "Rosh Chodesh",
+			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim" };
 
 	/**
 	 * Returns the list of holidays transliterated into Latin chars. This is used by the
@@ -122,7 +123,7 @@ public class HebrewDateFormatter {
 	 *         "Tu B'Av", "Erev Rosh Hashana", "Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur",
 	 *         "Erev Succos", "Succos", "Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah",
 	 *         "Erev Chanukah", "Chanukah", "Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim",
-	 *         "Purim Katan"
+	 *         "Purim Katan", "Rosh Chodesh", "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim"
 	 * 
 	 * @see #setTransliteratedMonthList(String[])
 	 * @see #formatYomTov(JewishCalendar)
@@ -165,7 +166,11 @@ public class HebrewDateFormatter {
 			"\u05D7\u05E0\u05D5\u05DB\u05D4", "\u05E2\u05E9\u05E8\u05D4 \u05D1\u05D8\u05D1\u05EA",
 			"\u05D8\u05F4\u05D5 \u05D1\u05E9\u05D1\u05D8", "\u05EA\u05E2\u05E0\u05D9\u05EA \u05D0\u05E1\u05EA\u05E8",
 			"\u05E4\u05D5\u05E8\u05D9\u05DD", "\u05E4\u05D5\u05E8\u05D9\u05DD \u05E9\u05D5\u05E9\u05DF",
-			"\u05E4\u05D5\u05E8\u05D9\u05DD \u05E7\u05D8\u05DF" };
+			"\u05E4\u05D5\u05E8\u05D9\u05DD \u05E7\u05D8\u05DF", "\u05E8\u05D0\u05E9 \u05D7\u05D5\u05D3\u05E9",
+			"\u05D9\u05D5\u05DD \u05D4\u05E9\u05D5\u05D0\u05D4",
+			"\u05D9\u05D5\u05DD \u05D4\u05D6\u05D9\u05DB\u05E8\u05D5\u05DF",
+			"\u05D9\u05D5\u05DD \u05D4\u05E2\u05E6\u05DE\u05D0\u05D5\u05EA",
+			"\u05D9\u05D5\u05DD \u05D9\u05E8\u05D5\u05E9\u05DC\u05D9\u05DD" };
 
 	/**
 	 * Formats the Yom Tov (holiday) in Hebrew or transliterated Latin characters.
@@ -541,6 +546,29 @@ public class HebrewDateFormatter {
 				return "Omer " + omer;
 			}
 		}
+	}
+
+	/**
+	 * Experimental and incomplete
+	 * 
+	 * @param moladChalakim
+	 * @return the formatted molad. FIXME: define proper format in English and Hebrew.
+	 */
+	public String formatMolad(long moladChalakim) {
+		long adjustedChalakim = moladChalakim;
+		int MINUTE_CHALAKIM = 18;
+		int HOUR_CHALAKIM = 1080;
+		int DAY_CHALAKIM = 24 * HOUR_CHALAKIM;
+
+		System.out.println("adjustedChalakim 1=" + adjustedChalakim);
+		long days = adjustedChalakim / DAY_CHALAKIM;
+		adjustedChalakim = adjustedChalakim - (days * DAY_CHALAKIM);
+		int hours = (int) ((adjustedChalakim / HOUR_CHALAKIM));
+		adjustedChalakim = adjustedChalakim - (hours * HOUR_CHALAKIM);
+		int minutes = (int) (adjustedChalakim / MINUTE_CHALAKIM);
+		adjustedChalakim = adjustedChalakim - minutes * MINUTE_CHALAKIM;
+		return "year:5771, Day: " + days % 7 + " hours: " + hours + ", minutes " + minutes + ", chalakim: "
+				+ adjustedChalakim;
 	}
 
 	/**

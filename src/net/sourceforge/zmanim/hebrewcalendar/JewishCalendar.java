@@ -77,8 +77,35 @@ public class JewishCalendar extends JewishDate {
 	public static final int PURIM = 25;
 	public static final int SHUSHAN_PURIM = 26;
 	public static final int PURIM_KATAN = 27;
+	public static final int ROSH_CHODESH = 28;
+	public static final int YOM_HASHOAH = 29;
+	public static final int YOM_HAZIKARON = 30;
+	public static final int YOM_HAATZMAUT = 31;
+	public static final int YOM_YERUSHALAYIM = 32;
 
 	private boolean inIsrael = false;
+	private boolean useModernHolidays = false;
+
+	/**
+	 * Is this calendar set to return modern Israeli national holidays. By default this value is false. The holidays
+	 * are: "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut" and "Yom Yerushalayim"
+	 * 
+	 * @return the useModernHolidays true if set to return modern Israeli national holidays
+	 */
+	public boolean isUseModernHolidays() {
+		return useModernHolidays;
+	}
+
+	/**
+	 * Seth the calendar to return modern Israeli national holidays. By default this value is false. The holidays are:
+	 * "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut" and "Yom Yerushalayim"
+	 * 
+	 * @param useModernHolidays
+	 *            the useModernHolidays to set
+	 */
+	public void setUseModernHolidays(boolean useModernHolidays) {
+		this.useModernHolidays = useModernHolidays;
+	}
 
 	/**
 	 * Default constructor will set a default date to the current system date.
@@ -169,7 +196,7 @@ public class JewishCalendar extends JewishDate {
 
 	/**
 	 * Returns an index of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
-	 * day. Has no "modern" holidays.
+	 * day.
 	 * 
 	 * @return A String containing the holiday name or an empty string if it is not a holiday.
 	 */
@@ -186,10 +213,31 @@ public class JewishCalendar extends JewishDate {
 					|| (getJewishDayOfMonth() == 16 && inIsrael)) {
 				return CHOL_HAMOED_PESACH;
 			}
+			if (isUseModernHolidays()
+					&& ((getJewishDayOfMonth() == 26 && getDayOfWeek() == 5)
+							|| (getJewishDayOfMonth() == 28 && getDayOfWeek() == 1)
+							|| (getJewishDayOfMonth() == 27 && getDayOfWeek() == 3) || (getJewishDayOfMonth() == 27 && getDayOfWeek() == 5))) {
+				return YOM_HASHOAH;
+			}
 			break;
 		case IYAR:
+			if (isUseModernHolidays()
+					&& ((getJewishDayOfMonth() == 4 && getDayOfWeek() == 3) || ((getJewishDayOfMonth() == 3 || getJewishDayOfMonth() == 2) && getDayOfWeek() == 4))
+					|| (getJewishDayOfMonth() == 5 && getDayOfWeek() == 2)) {
+				return YOM_HAZIKARON;
+			}
+			// if 5 Iyar falls on Wed Yom Haatzmaut is that day. If it fal1s on Friday or Shabbos it is moved back to
+			// Thursday. If it falls on Monday it is moved to Tuesday
+			if (isUseModernHolidays()
+					&& ((getJewishDayOfMonth() == 5 && getDayOfWeek() == 4) || ((getJewishDayOfMonth() == 4 || getJewishDayOfMonth() == 3) && getDayOfWeek() == 5))
+					|| (getJewishDayOfMonth() == 6 && getDayOfWeek() == 3)) {
+				return YOM_HAATZMAUT;
+			}
 			if (getJewishDayOfMonth() == 14) {
 				return PESACH_SHENI;
+			}
+			if (isUseModernHolidays() && getJewishDayOfMonth() == 28) {
+				return YOM_YERUSHALAYIM;
 			}
 			break;
 		case SIVAN:
