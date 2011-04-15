@@ -517,7 +517,6 @@ public class JewishCalendar extends JewishDate {
 	 * @return the string of the parsha. Will currently return blank for weekdays and a shabbos on a yom tov.
 	 */
 	public int getParshaIndex() {
-
 		// if today is not Shabbos, then there is no normal parsha reading. If
 		// commented our will return LAST week's parsha for a non shabbos
 		if (getDayOfWeek() != 7) {
@@ -546,7 +545,6 @@ public class JewishCalendar extends JewishDate {
 
 		// week is the week since the first Shabbos on or after Rosh Hashana
 		week = (((getAbsDate() - roshHashana.getAbsDate()) - (7 - roshHashanaDay)) / 7);
-
 		// get kvia
 		if (isCheshvanLong() && !isKislevShort()) {
 			kvia = 2;
@@ -585,10 +583,7 @@ public class JewishCalendar extends JewishDate {
 				}
 				break;
 			}
-		}
-
-		// if leap year //
-		else {
+		} else { // if leap year
 			switch (roshHashanaDay) {
 			case 7: // RH was on a Sat
 				if (kvia == 0) {

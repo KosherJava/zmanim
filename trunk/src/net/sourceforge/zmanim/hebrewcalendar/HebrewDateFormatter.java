@@ -560,14 +560,16 @@ public class HebrewDateFormatter {
 		int HOUR_CHALAKIM = 1080;
 		int DAY_CHALAKIM = 24 * HOUR_CHALAKIM;
 
-		System.out.println("adjustedChalakim 1=" + adjustedChalakim);
 		long days = adjustedChalakim / DAY_CHALAKIM;
 		adjustedChalakim = adjustedChalakim - (days * DAY_CHALAKIM);
 		int hours = (int) ((adjustedChalakim / HOUR_CHALAKIM));
+		if(hours >= 6){
+			days += 1;
+		}
 		adjustedChalakim = adjustedChalakim - (hours * HOUR_CHALAKIM);
 		int minutes = (int) (adjustedChalakim / MINUTE_CHALAKIM);
 		adjustedChalakim = adjustedChalakim - minutes * MINUTE_CHALAKIM;
-		return "year:5771, Day: " + days % 7 + " hours: " + hours + ", minutes " + minutes + ", chalakim: "
+		return "Day: " + days % 7 + " hours: " + hours + ", minutes " + minutes + ", chalakim: "
 				+ adjustedChalakim;
 	}
 
