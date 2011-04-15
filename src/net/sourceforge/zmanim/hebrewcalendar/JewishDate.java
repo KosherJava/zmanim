@@ -68,13 +68,64 @@ public class JewishDate implements Comparable, Cloneable {
 
 	static final int JEWISH_EPOCH = -1373429;
 
+	static final int CHALAKIM_PER_MINUTE = 18;
+	static final int CHALAKIM_PER_HOUR = 1080;
 	static final int CHALAKIM_PER_DAY = 24 * 1080;
 	static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
-	static final int CHALAKIM_MOLAD_TOHU = 33364; // 1 day + 5 hours + 204 chalakim = (24 + 5) * 1080 + 204 = 33364
+	static final int CHALAKIM_MOLAD_TOHU = 31524; // Days from the beginning of Sunday till molad BaHaRaD. Calculated as
+													// 1 day, 5 hours and 204 chalakim = (24 + 5) * 1080 + 204 = 31524
 
 	private int jewishMonth;
 	private int jewishDay;
 	private int jewishYear;
+	private int moladHours;
+	private int moladMinutes;
+	private int moladChalakim;
+
+	/**
+	 * @return the moladHours
+	 */
+	public int getMoladHours() {
+		return moladHours;
+	}
+
+	/**
+	 * @param moladHours
+	 *            the moladHours to set
+	 */
+	public void setMoladHours(int moladHours) {
+		this.moladHours = moladHours;
+	}
+
+	/**
+	 * @return the moladMinutes
+	 */
+	public int getMoladMinutes() {
+		return moladMinutes;
+	}
+
+	/**
+	 * @param moladMinutes
+	 *            the moladMinutes to set
+	 */
+	public void setMoladMinutes(int moladMinutes) {
+		this.moladMinutes = moladMinutes;
+	}
+
+	/**
+	 * @param moladChalakim
+	 *            the moladChalakim to set
+	 */
+	public void setMoladChalakim(int moladChalakim) {
+		this.moladChalakim = moladChalakim;
+	}
+
+	/**
+	 * @return the moladChalakim
+	 */
+	public int getMoladChalakim() {
+		return moladChalakim;
+	}
 
 	/**
 	 * The month, where 1 == January, 2 == February, etc... Note that this is different than the Java's Calendar class
@@ -129,19 +180,19 @@ public class JewishDate implements Comparable, Cloneable {
 	/**
 	 * Computes the Gregorian date from the absolute date. ND+ER
 	 */
-	private void absDateToDate() {
-		gregorianYear = gregorianAbsDate / 366; // Search forward year by year from approximate year
-		while (gregorianAbsDate >= gregorianDateToAbsDate(gregorianYear + 1, 1, 1)) {
-			gregorianYear++;
+	private void absDateToDate(int absDate) {
+		int year = absDate / 366; // Search forward year by year from approximate year
+		while (absDate >= gregorianDateToAbsDate(year + 1, 1, 1)) {
+			year++;
 		}
 
-		gregorianMonth = 1; // Search forward month by month from January
-		while (gregorianAbsDate > gregorianDateToAbsDate(gregorianYear, gregorianMonth,
-				getLastDayOfGregorianMonth(gregorianMonth, gregorianYear))) {
-			gregorianMonth++;
+		int month = 1; // Search forward month by month from January
+		while (absDate > gregorianDateToAbsDate(year, month, getLastDayOfGregorianMonth(month, year))) {
+			month++;
 		}
 
-		gregorianDayOfMonth = gregorianAbsDate - gregorianDateToAbsDate(gregorianYear, gregorianMonth, 1) + 1;
+		int dayOfMonth = absDate - gregorianDateToAbsDate(year, month, 1) + 1;
+		setGregorianDate(year, month, dayOfMonth);
 	}
 
 	/**
@@ -208,44 +259,26 @@ public class JewishDate implements Comparable, Cloneable {
 		return isJewishLeapYear(year) ? 13 : 12;
 	}
 
-	private static int getJewishCalendarElapsedDaysEXPERIMENTAL(int year) {
-		long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);// tishrei
-		int conjunctionDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
-		int conjunctionParts = (int) (chalakimSince - conjunctionDay * CHALAKIM_PER_DAY);
-		int alternativeDay = conjunctionDay; // if no dechiyos
-		// delay Rosh Hashana for the dechiyos of the Molad - new moon 1 - Molad
-		// Zaken, 2- GaTRaD 3- BeTuTaKFoT
-		if ((conjunctionParts >= 19440) // Dechiya of Molad Zaken - molad is >= midday (18 hours * 1080 chalakim)
-				|| (((conjunctionDay % 7) == 2) // start Dechiya of GaTRaD - Ga = is a Tuesday
-						&& (conjunctionParts >= 9924) // TRaD = 9 hours, 204 parts or later (9 * 1080 + 204)
-				&& !isJewishLeapYear(year)) // of a non-leap year - end Dechiya of GaTRaD
-				|| (((conjunctionDay % 7) == 1) // start Dechiya of BeTuTaKFoT - Be = is on a Monday
-						&& (conjunctionParts >= 16789) // TRaD = 15 hours, 589 parts or later (15 * 1080 + 589)
-				&& (isJewishLeapYear(year - 1)))) { // in a year following a leap year - end Dechiya of BeTuTaKFoT
-			alternativeDay += 1; // Then postpone Rosh HaShanah one day
-		}
-		// start 4th Dechiya - Lo ADU Rosh - Rosh Hashana can't occur on A- sunday, D- Wednesday, U - Friday
-		if (((alternativeDay % 7) == 0)// If Rosh HaShanah would occur on Sunday,
-				|| ((alternativeDay % 7) == 3) // or Wednesday,
-				|| ((alternativeDay % 7) == 5)) { // or Friday - end 4th Dechiya - Lo ADU Rosh
-			alternativeDay = alternativeDay + 1; // Then postpone it one (more) day
-		}
-		return alternativeDay;
-	}
-
 	/**
 	 * Returns the number of days elapsed from the Sunday prior to the start of the Jewish calendar to the mean
-	 * conjunction of Tishri of the Jewish year.ND+ER TODO: refactor dechiyos to separate method to easily allow pure
-	 * molad calculations, including months besides Tisrei.
+	 * conjunction of Tishri of the Jewish year.
 	 * 
 	 * @param year
 	 *            the Jewish year
-	 * @return the number of days elapsed from prior to the molad Tohu BeHaRaD (Be = Monday, Ha= 5 hours and Rad =204
+	 * @return the number of days elapsed from prior to the molad Tohu BaHaRaD (Be = Monday, Ha= 5 hours and Rad =204
 	 *         chalakim/parts) prior to the start of the Jewish calendar, to the mean conjunction of Tishri of the
 	 *         Jewish year. BeHaRaD is 23:11:20 on Sunday night(5 hours 204/1080 chalakim after sunset on Sunday
 	 *         evening).
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
+		long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);
+		int conjunctionDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
+		int conjunctionParts = (int) (chalakimSince - conjunctionDay * CHALAKIM_PER_DAY);
+		// delay Rosh Hashana for the 4 dechiyos
+		return addDechiyos(year, conjunctionDay, conjunctionParts);
+	}
+
+	private static int getJewishCalendarElapsedDaysOLD(int year) {
 		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
 		// Molad Tohu = BeHaRaD - Monday, 5 hours (11 PM) and 204 chalakim
 		final int chalakimTashTZag = 793; // chalakim in a lunar month
@@ -257,13 +290,34 @@ public class JewishDate implements Comparable, Cloneable {
 				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
 				+ ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
 		// start with Molad Tohu BeHaRaD
-		// start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapse chalakim
+		// start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapsed chalakim
 		int partsElapsed = chalakimTohuRaD + chalakimTashTZag * (monthsElapsed % 1080);
 		// start with Ha hours of BeHaRaD, add 12 hour remainder of lunar month add hours elapsed
 		int hoursElapsed = hoursTohuHa + 12 * monthsElapsed + 793 * (monthsElapsed / 1080) + partsElapsed / 1080;
 		// start with Monday of BeHaRaD = 1 (0 based), add 29 days of the lunar months elapsed
 		int conjunctionDay = dayTohu + 29 * monthsElapsed + hoursElapsed / 24;
 		int conjunctionParts = 1080 * (hoursElapsed % 24) + partsElapsed % 1080;
+		return addDechiyos(year, conjunctionDay, conjunctionParts);
+	}
+
+	/**
+	 * Adds the 4 dechiyos for molad Tishrei. These are:
+	 * <ol>
+	 * <li>Lo ADU Rosh - Rosh Hashana can't fall on a Sunday, Wednesday or Friday. If the molad fell on one of these
+	 * days, Rosh Hashana is delayed to the following day.</li>
+	 * <li>Molad Zaken - If the molad of Tishrei falls after 12 noon, Rosh Hashana is delayed to the following day. If
+	 * the following day is ADU, it will be delayed an additional day.</li>
+	 * <li>GaTRaD - If on a non leap year the molad of Tishrei falls on a Tuesday (Ga) on or after 9 hours (T) and 204
+	 * chalakim (TRaD) it is delayed till Thursday (one day delay, plus one day for Lo ADU Rosh)</li>
+	 * <li>BeTuTaKFoT - FIXME</li>
+	 * </ol>
+	 * 
+	 * @param year
+	 * @param conjunctionDay
+	 * @param conjunctionParts
+	 * @return the nimber of elapsed days in the JewishCalendar adjusted for the 4 dechiyos.
+	 */
+	private static int addDechiyos(int year, int conjunctionDay, int conjunctionParts) {
 		int alternativeDay = conjunctionDay; // if no dechiyos
 		// delay Rosh Hashana for the dechiyos of the Molad - new moon 1 - Molad Zaken, 2- GaTRaD 3- BeTuTaKFoT
 		if ((conjunctionParts >= 19440) // Dechiya of Molad Zaken - molad is >= midday (18 hours * 1080 chalakim)
@@ -273,7 +327,7 @@ public class JewishDate implements Comparable, Cloneable {
 				|| (((conjunctionDay % 7) == 1) // start Dechiya of BeTuTaKFoT - Be = is on a Monday
 						&& (conjunctionParts >= 16789) // TRaD = 15 hours, 589 parts or later (15 * 1080 + 589)
 				&& (isJewishLeapYear(year - 1)))) { // in a year following a leap year - end Dechiya of BeTuTaKFoT
-			alternativeDay = conjunctionDay + 1; // Then postpone Rosh HaShanah one day
+			alternativeDay += 1; // Then postpone Rosh HaShanah one day
 		}
 		// start 4th Dechiya - Lo ADU Rosh - Rosh Hashana can't occur on A- sunday, D- Wednesday, U - Friday
 		if (((alternativeDay % 7) == 0)// If Rosh HaShanah would occur on Sunday,
@@ -294,10 +348,10 @@ public class JewishDate implements Comparable, Cloneable {
 	 *            {@link JewishDate#TISHREI}.
 	 * @return the number of chalakim (parts - 1080 to the hour) from the original hypothetical Molad Tohu
 	 */
-	private static long getChalakimSinceMoladTohu(int jewishYear, int jewishMonth) {
+	public static long getChalakimSinceMoladTohu(int jewishYear, int jewishMonth) {
 		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
 		// chalakim since Molad Tohu BeHaRaD - 1 day, 5 hours and 204 chalakim
-		int monthOfYear = getJewishMonthOfYear(jewishYear - 1, jewishMonth);
+		int monthOfYear = getJewishMonthOfYear(jewishYear, jewishMonth);
 		int monthsElapsed = (235 * ((jewishYear - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
 				+ (12 * ((jewishYear - 1) % 19)) // Regular months in this cycle
 				+ ((7 * ((jewishYear - 1) % 19) + 1) / 19) // Leap months this cycle
@@ -318,7 +372,8 @@ public class JewishDate implements Comparable, Cloneable {
 	 *             passed in
 	 */
 	private static int getJewishMonthOfYear(int jewishYear, int jewishMonth) {
-		return (jewishMonth + 5) % (JewishDate.isJewishLeapYear(jewishYear) ? 13 : 12) + 1;
+		boolean isLeapYear = JewishDate.isJewishLeapYear(jewishYear);
+		return (jewishMonth + (isLeapYear ? 6 : 5)) % (isLeapYear ? 13 : 12) + 1;
 	}
 
 	/**
@@ -523,8 +578,72 @@ public class JewishDate implements Comparable, Cloneable {
 	 */
 	private static int jewishDateToAbsDate(int year, int month, int dayOfMonth) {
 		int elapsed = getDaysSinceStartOfJewishYear(year, month, dayOfMonth);
-		// add elapsed this year + Days in prior years + Days elapsed before absolute date 1
+		// add elapsed days this year + Days in prior years + Days elapsed before absolute year 1
 		return elapsed + getJewishCalendarElapsedDays(year) + JEWISH_EPOCH;
+	}
+
+	/**
+	 * Returns the molad for a given year and month. Returns a JewishDate {@link Object} set to the date of the molad
+	 * with the {@link #getMoladHours() hours}, {@link #getMoladMinutes() minutes} and {@link #getMoladChalakim()
+	 * chalakim} set. In the current implementation, it sets the molad time based on a midnight date rollover. This
+	 * means that Rosh Chodesh Adar II, 5771 with a molad of 7 chalakim past midnight on Shabbos 29 Adar I / March 5,
+	 * 2011 12:00 AM and 7 chalakim, will have the following values: hours: 0, minutes: 0, Chalakim: 7.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year to claculate the molad for
+	 * @param jewishMonth
+	 *            the Jewish month to claculate the molad for
+	 * @return a JewishDate {@link Object} set to the date of the molad with the {@link #getMoladHours() hours},
+	 *         {@link #getMoladMinutes() minutes} and {@link #getMoladChalakim() chalakim} set.
+	 */
+	public static JewishDate getMolad(int jewishYear, int jewishMonth) {
+		JewishDate moladDate = new JewishDate(JewishDate.getChalakimSinceMoladTohu(jewishYear, jewishMonth));
+		if (moladDate.getMoladHours() >= 6) {
+			moladDate.forward();
+		}
+		moladDate.setMoladHours((moladDate.getMoladHours() + 18) % 24);
+		return moladDate;
+	}
+
+	/**
+	 * Returns the number of days from the Jewish epoch from the number of chalakim from the epoch passed in.
+	 * 
+	 * @param chalakim
+	 *            the number of chalakim since the beginning of Sunday prior to BaHaRaD
+	 * @return the number of days from the Jewish epoch
+	 */
+	private static int moladToAbsDate(long chalakim) {
+		return (int) (chalakim / CHALAKIM_PER_DAY) + JEWISH_EPOCH;
+	}
+
+	/**
+	 * Constructor that creates a JewishDate based on a molad passed in. The molad would be the number of chalakim/parts
+	 * starting at the begining of Sunday prior to the molad Tohu BeHaRaD (Be = Monday, Ha= 5 hours and Rad =204
+	 * chalakim/parts) - prior to the start of the Jewish calendar. BeHaRaD is 23:11:20 on Sunday night(5 hours 204/1080
+	 * chalakim after sunset on Sunday evening).
+	 * 
+	 * @param molad
+	 */
+	public JewishDate(long molad) {
+		absDateToDate(moladToAbsDate(molad));
+		// long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);// tishrei
+		int conjunctionDay = (int) (molad / CHALAKIM_PER_DAY);
+		int conjunctionParts = (int) (molad - conjunctionDay * CHALAKIM_PER_DAY);
+		setMoladTime(conjunctionParts);
+	}
+
+	/**
+	 * Sets the molad time (hours minutes and chalakim) based on the number of chalakim since the start of the day.
+	 * 
+	 * @param chalakim
+	 *            the number of chalakim since the start of the day.
+	 */
+	private void setMoladTime(int chalakim) {
+		int adjustedChalakim = chalakim;
+		setMoladHours(adjustedChalakim / CHALAKIM_PER_HOUR);
+		adjustedChalakim = adjustedChalakim - (getMoladHours() * CHALAKIM_PER_HOUR);
+		setMoladMinutes(adjustedChalakim / CHALAKIM_PER_MINUTE);
+		setMoladChalakim(adjustedChalakim - moladMinutes * CHALAKIM_PER_MINUTE);
 	}
 
 	/**
@@ -695,6 +814,10 @@ public class JewishDate implements Comparable, Cloneable {
 	 *             passed in
 	 */
 	public void setJewishDate(int year, int month, int dayOfMonth) {
+		setJewishDate(year, month, dayOfMonth, 0, 0, 0);
+	}
+
+	public void setJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
 		validateJewishDate(year, month, dayOfMonth);
 
 		// if 30 is passed for a month that only has 29 days (for example by rolling the month from a month that had 30
@@ -706,9 +829,12 @@ public class JewishDate implements Comparable, Cloneable {
 		jewishMonth = month;
 		jewishDay = dayOfMonth;
 		jewishYear = year;
+		moladHours = hours;
+		moladMinutes = minutes;
+		moladChalakim = chalakim;
 
 		gregorianAbsDate = jewishDateToAbsDate(jewishYear, jewishMonth, jewishDay); // reset Gregorian date
-		absDateToDate();
+		absDateToDate(gregorianAbsDate);
 
 		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // reset day of week
 	}
@@ -1048,48 +1174,5 @@ public class JewishDate implements Comparable, Cloneable {
 		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
 		result += 37 * result + gregorianAbsDate;
 		return result;
-	}
-
-	/**
-	 * Experimental
-	 * 
-	 * @deprecated
-	 * @param year
-	 */
-	private static long getMoladTishrei(int year) {
-		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
-		// Molad Tohu = BeHaRaD - Monday, 5 hours (11 PM) and 204 chalakim
-		final int chalakimTashTZag = 793; // chalakim in a lunar month
-		final int chalakimTohuRaD = 204; // chalakim from original molad Tohu BeHaRaD
-		final int hoursTohuHa = 5; // hours from original molad Tohu BeHaRaD
-		final int dayTohu = 1; // Monday (0 based)
-
-		int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
-				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
-				+ ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
-		// start with Molad Tohu BeHaRaD
-		// start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapsed chalakim
-		int partsElapsed = chalakimTohuRaD + chalakimTashTZag * (monthsElapsed % 1080);
-		// start with Ha hours of BeHaRaD, add 12 hour remainder of lunar month add hours elapsed
-		int hoursElapsed = hoursTohuHa + 12 * monthsElapsed + 793 * (monthsElapsed / 1080) + partsElapsed / 1080;
-		// start with Monday of BeHaRaD = 1 (0 based), add 29 days of the lunar months elapsed
-		int conjunctionDay = dayTohu + 29 * monthsElapsed + hoursElapsed / 24;
-		int conjunctionParts = 1080 * (hoursElapsed % 24) + partsElapsed % 1080;
-		// int moladHours = (conjunctionParts % 1080) / 18 / 24;
-		int moladHours = (hoursElapsed) % 24;
-		if (moladHours >= 6) {
-			conjunctionDay += 1;
-			moladHours -= 6;
-		}
-		int moladMinutes = (conjunctionParts % 1080) / 18;
-		int moladparts = (conjunctionParts % 1080) % 18;
-		int realmoladparts = (conjunctionParts % 1080);
-
-		// JewishDate molad = new JewishDate(year, 1, 1); conjunctionDay %= 7; molad.hour = moladHours; molad.chalakim =
-		// realmoladparts;
-
-		System.out.println("year:" + year + ", day: " + conjunctionDay % 7 + ", Time: " + moladHours + ":"
-				+ moladMinutes + " (" + moladparts + " Chalakim) - real Chalakim: " + realmoladparts);
-		return (conjunctionDay * 24 * 1080L) + (moladHours * 1080L) + realmoladparts;
 	}
 }
