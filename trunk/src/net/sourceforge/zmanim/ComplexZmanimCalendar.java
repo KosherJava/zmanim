@@ -2221,7 +2221,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisMGA()
 	 * @see #getAlos72()
-	 * @see ZmanimCalendar#getSofZmanTfilaMGA72Minutes()
+	 * @see #getSofZmanTfilaMGA72Minutes()
 	 */
 	public Date getSofZmanAchilasChametzMGA72Minutes() {
 		return getSofZmanTfilaMGA72Minutes();
@@ -2242,7 +2242,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
-	 * @see ZmanimCalendar#getSofZmanTfilaMGA16Point1Degrees()
+	 * @see #getSofZmanTfilaMGA16Point1Degrees()
 	 */
 	public Date getSofZmanAchilasChametzMGA16Point1Degrees() {
 		return getSofZmanTfilaMGA16Point1Degrees();
