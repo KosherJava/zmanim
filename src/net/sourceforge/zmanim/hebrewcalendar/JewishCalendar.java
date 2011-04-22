@@ -36,7 +36,7 @@ import java.util.Date;
  * form:
  * <ol>
  * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
- * <li>Molad / Shabbos Mevarchim)</li>
+ * <li>Shabbos Mevarchim</li>
  * <li>Haftorah (various minhagim)</li>
  * <li>Daf Yomi (Bavli, Yerushalmi, Mishna yomis etc)</li>
  * <li>Support showing the upcoming parsha for the middle of the week</li>
@@ -502,6 +502,19 @@ public class JewishCalendar extends JewishDate {
 	public String getParsha() {
 		return new HebrewDateFormatter().formatParsha(this);
 	}
+	
+	/**
+	 * Returns the kviah in the traditional 3 letter Hebrew format where the first letter represents the day of week of
+	 * Rish Hashana, the second letter represents the lengths of Cheshvan and Kislev (shelaimi, kesidran or chaaserim)
+	 * and the 3rd letter represents the day of week of Pesach. For example 5729 (1969) would return \u05D1\u05E9\u05D4,
+	 * while 5771 (2011) would return \u05D4\u05E9\u05D2.
+	 * 
+	 * @param jewishYear
+	 * @return the Hebrew String such as \u05D1\u05E9\u05D4 for 5729 (1969) and \u05D4\u05E9\u05D2 for 5771 (2011).
+	 */
+	public static String getKviah(int jewishYear) {
+		return new HebrewDateFormatter().getFormattedKviah(jewishYear);
+	}
 
 	/**
 	 * Returns a the index of today's parsha(ios) or a -1 if there is none. To get the name of the Parsha, use the
@@ -530,55 +543,46 @@ public class JewishCalendar extends JewishDate {
 		// week= current week in Jewish calendar from Rosh Hashana
 		// array= the correct index array for this Jewish year
 		// index= the index number of the parsha name
-		int kvia;
+		int kvia = JewishCalendar.getCheshvanKislevKviah(getJewishYear());
 		int roshHashanaDay;
 		int week;
 		int[] array = null;
 		int index;
 
-		JewishDate roshHashana = new JewishDate();
-		// set it to Rosh Hashana of this year
-		roshHashana.setJewishDate(getJewishYear(), 7, 1);
+		JewishDate roshHashana = new JewishDate(getJewishYear(), TISHREI, 1); // set it to Rosh Hashana of this year
 
 		// get day Rosh Hashana was on
 		roshHashanaDay = roshHashana.getDayOfWeek();
 
 		// week is the week since the first Shabbos on or after Rosh Hashana
 		week = (((getAbsDate() - roshHashana.getAbsDate()) - (7 - roshHashanaDay)) / 7);
-		// get kvia
-		if (isCheshvanLong() && !isKislevShort()) {
-			kvia = 2;
-		} else if (!isCheshvanLong() && isKislevShort()) {
-			kvia = 0;
-		} else {
-			kvia = 1;
-		}
+
 		// determine appropriate array
 		if (!isJewishLeapYear()) {
 			switch (roshHashanaDay) {
 			case 7: // RH was on a Saturday
-				if (kvia == 0) {
+				if (kvia == CHASERIM) {
 					array = Sat_short;
-				} else if (kvia == 2) {
+				} else if (kvia == SHELAIMIM) {
 					array = Sat_long;
 				}
 				break;
 			case 2: // RH was on a Monday
-				if (kvia == 0) {
+				if (kvia == CHASERIM) {
 					array = Mon_short;
-				} else if (kvia == 2) {
+				} else if (kvia == SHELAIMIM) {
 					array = inIsrael ? Mon_short : Mon_long;
 				}
 				break;
 			case 3: // RH was on a Tuesday
-				if (kvia == 1) {
+				if (kvia == KESIDRAN) {
 					array = inIsrael ? Mon_short : Mon_long;
 				}
 				break;
 			case 5: // RH was on a Thursday
-				if (kvia == 1) {
+				if (kvia == KESIDRAN) {
 					array = inIsrael ? Thu_normal_Israel : Thu_normal;
-				} else if (kvia == 2) {
+				} else if (kvia == SHELAIMIM) {
 					array = Thu_long;
 				}
 				break;
@@ -586,28 +590,28 @@ public class JewishCalendar extends JewishDate {
 		} else { // if leap year
 			switch (roshHashanaDay) {
 			case 7: // RH was on a Sat
-				if (kvia == 0) {
+				if (kvia == CHASERIM) {
 					array = Sat_short_leap;
-				} else if (kvia == 2) {
+				} else if (kvia == SHELAIMIM) {
 					array = inIsrael ? Sat_short_leap : Sat_long_leap;
 				}
 				break;
 			case 2: // RH was on a Mon
-				if (kvia == 0) {
+				if (kvia == CHASERIM) {
 					array = inIsrael ? Mon_short_leap_Israel : Mon_short_leap;
-				} else if (kvia == 2) {
+				} else if (kvia == SHELAIMIM) {
 					array = inIsrael ? Mon_long_leap_Israel : Mon_long_leap;
 				}
 				break;
 			case 3: // RH was on a Tue
-				if (kvia == 1) {
+				if (kvia == KESIDRAN) {
 					array = inIsrael ? Mon_long_leap_Israel : Mon_long_leap;
 				}
 				break;
 			case 5: // RH was on a Thu
-				if (kvia == 0) {
+				if (kvia == CHASERIM) {
 					array = Thu_short_leap;
-				} else if (kvia == 2) {
+				} else if (kvia == SHELAIMIM) {
 					array = Thu_long_leap;
 				}
 				break;

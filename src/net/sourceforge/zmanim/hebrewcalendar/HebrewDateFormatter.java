@@ -30,11 +30,6 @@ import java.text.SimpleDateFormat;
  * <li>&#x5DB;&#x5F4;&#x5D0; &#x5E9;&#x5D1;&#x5D8; &#x5EA;&#x5E9;&#x5DA;&#x5F3;</li>
  * </ul>
  * 
- * <b>TODO</b>:
- * <ol>
- * <li>various chnages</li>
- * </ol>
- * 
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishDate
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishCalendar
  * 
@@ -482,7 +477,7 @@ public class HebrewDateFormatter {
 	 *         "21 Shevat, 5729" if not.
 	 */
 	public String format(JewishDate jewishDate) {
-		if (this.hebrewFormat) {
+		if (isHebrewFormat()) {
 			return formatHebrewNumber(jewishDate.getJewishDayOfMonth()) + " " + formatMonth(jewishDate) + " "
 					+ formatHebrewNumber(jewishDate.getJewishYear());
 		} else {
@@ -503,7 +498,7 @@ public class HebrewDateFormatter {
 	 * @see #setTransliteratedMonthList(String[])
 	 */
 	public String formatMonth(JewishDate jewishDate) {
-		if (this.hebrewFormat) {
+		if (isHebrewFormat()) {
 			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
 				return hebrewMonths[13] + (useGershGershayim ? GERESH : ""); // return Adar I, not Adar in a leap year
 			} else if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR_II) {
@@ -563,14 +558,41 @@ public class HebrewDateFormatter {
 		long days = adjustedChalakim / DAY_CHALAKIM;
 		adjustedChalakim = adjustedChalakim - (days * DAY_CHALAKIM);
 		int hours = (int) ((adjustedChalakim / HOUR_CHALAKIM));
-		if(hours >= 6){
+		if (hours >= 6) {
 			days += 1;
 		}
 		adjustedChalakim = adjustedChalakim - (hours * HOUR_CHALAKIM);
 		int minutes = (int) (adjustedChalakim / MINUTE_CHALAKIM);
 		adjustedChalakim = adjustedChalakim - minutes * MINUTE_CHALAKIM;
-		return "Day: " + days % 7 + " hours: " + hours + ", minutes " + minutes + ", chalakim: "
-				+ adjustedChalakim;
+		return "Day: " + days % 7 + " hours: " + hours + ", minutes " + minutes + ", chalakim: " + adjustedChalakim;
+	}
+
+	/**
+	 * Returns the kviah in the traditional 3 letter Hebrew format where the first letter represents the day of week of
+	 * Rish Hashana, the second letter represents the lengths of Cheshvan and Kislev (shelaimi, kesidran or chaaserim)
+	 * and the 3rd letter represents the day of week of Pesach. For example 5729 (1969) would return
+	 * &#x5D1;&#x5E9;&#x5D4;, while 5771 (2011) would return &#x5D4;&#x5E9;&#x5D2;.
+	 * 
+	 * @param jewishYear
+	 * @return the Hebrew String such as &#x5D1;&#x5E9;&#x5D4; for 5729 (1969) and &#x5D4;&#x5E9;&#x5D2; for 5771
+	 *         (2011).
+	 */
+	public String getFormattedKviah(int jewishYear) {
+		JewishDate jewishDate = new JewishDate(jewishYear, JewishDate.TISHREI, 1); // set date to Rosh Hashana
+		int kviah = JewishCalendar.getCheshvanKislevKviah(jewishYear);
+		int roshHashanaDayOfweek = jewishDate.getDayOfWeek();
+		String returnValue = formatHebrewNumber(roshHashanaDayOfweek);
+		returnValue += (kviah == JewishCalendar.CHASERIM ? "\u05D7" : kviah == JewishCalendar.SHELAIMIM ? "\u05E9"
+				: "\u05DB");
+		jewishDate.setJewishDate(jewishYear, JewishDate.NISSAN, 15); // set to Pesach of the given year
+		int pesachDayOfweek = jewishDate.getDayOfWeek();
+		returnValue += formatHebrewNumber(pesachDayOfweek);
+		returnValue = returnValue.replaceAll(GERESH, "");// geresh is never used in the kviah format
+		// boolean isLeapYear = JewishDate.isJewishLeapYear(jewishYear);
+		// for efficiency we can avoid the expensive recalculation of the pesach day of week by adding 1 day to Rosh
+		// Hashana for a 353 day year, 2 for a 354 day year, 3 for a 355 or 383 day year, 4 for a 384 day year and 5 for
+		// a 385 day year
+		return returnValue;
 	}
 
 	/**

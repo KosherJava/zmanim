@@ -52,28 +52,132 @@ import java.util.*;
  * @version 0.2.6
  */
 public class JewishDate implements Comparable, Cloneable {
+	/**
+	 * Value of the month field indicating Nissan, the first numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 7th (or 8th in a {@link #isJewishLeapYear() leap
+	 * year}) month of the year.
+	 */
 	public static final int NISSAN = 1;
+
+	/**
+	 * Value of the month field indicating Iyar, the second numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 8th (or 9th in a {@link #isJewishLeapYear() leap
+	 * year}) month of the year.
+	 */
 	public static final int IYAR = 2;
+
+	/**
+	 * Value of the month field indicating Sivan, the third numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 9th (or 10th in a {@link #isJewishLeapYear() leap
+	 * year}) month of the year.
+	 */
 	public static final int SIVAN = 3;
+
+	/**
+	 * Value of the month field indicating Tammuz, the fourth numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 10th (or 11th in a {@link #isJewishLeapYear() leap
+	 * year}) month of the year.
+	 */
 	public static final int TAMMUZ = 4;
+
+	/**
+	 * Value of the month field indicating Av, the fifth numeric month of the year in the Jewish calendar. With the year
+	 * starting at {@link #TISHREI}, it would actually be the 11th (or 12th in a {@link #isJewishLeapYear() leap year})
+	 * month of the year.
+	 */
 	public static final int AV = 5;
+
+	/**
+	 * Value of the month field indicating Elul, the sixth numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 12th (or 13th in a {@link #isJewishLeapYear() leap
+	 * year}) month of the year.
+	 */
 	public static final int ELUL = 6;
+
+	/**
+	 * Value of the month field indicating Tishrei, the seventh numeric month of the year in the Jewish calendar. With
+	 * the year starting at this month, it would actually be the 1st month of the year.
+	 */
 	public static final int TISHREI = 7;
+
+	/**
+	 * Value of the month field indicating Cheshvan/marcheshvan, the eighth numeric month of the year in the Jewish
+	 * calendar. With the year starting at {@link #TISHREI}, it would actually be the 2nd month of the year.
+	 */
 	public static final int CHESHVAN = 8;
+
+	/**
+	 * Value of the month field indicating Kislev, the ninth numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 3rd month of the year.
+	 */
 	public static final int KISLEV = 9;
+
+	/**
+	 * Value of the month field indicating Teves, the tenth numeric month of the year in the Jewish calendar. With the
+	 * year starting at {@link #TISHREI}, it would actually be the 4th month of the year.
+	 */
 	public static final int TEVES = 10;
+
+	/**
+	 * Value of the month field indicating Shevat, the eleventh numeric month of the year in the Jewish calendar. With
+	 * the year starting at {@link #TISHREI}, it would actually be the 5th month of the year.
+	 */
 	public static final int SHEVAT = 11;
+
+	/**
+	 * Value of the month field indicating Adar (or Adar I in a {@link #isJewishLeapYear() leap year}), the twelfth
+	 * numeric month of the year in the Jewish calendar. With the year starting at {@link #TISHREI}, it would actually
+	 * be the 6th month of the year.
+	 */
 	public static final int ADAR = 12;
+
+	/**
+	 * Value of the month field indicating Adar II, the leap (intercalary or embolismic) thirteenth (Undecimber) numeric
+	 * month of the year added in Jewish {@link #isJewishLeapYear() leap year}). The leap years are years 3, 6, 8, 11,
+	 * 14, 17 and 19 of a 19 year cycle. With the year starting at {@link #TISHREI}, it would actually be the 7th month
+	 * of the year.
+	 */
 	public static final int ADAR_II = 13;
 
-	static final int JEWISH_EPOCH = -1373429;
+	/**
+	 * the Jewish epoch using the RD (Rata Die/Fixed Date or Reingold Dershowitz) day used in Calendrical Calculations.
+	 * Day 1 is January 1, 0001 Gregorian
+	 */
+	private static final int JEWISH_EPOCH = -1373429;
 
-	static final int CHALAKIM_PER_MINUTE = 18;
-	static final int CHALAKIM_PER_HOUR = 1080;
-	static final int CHALAKIM_PER_DAY = 24 * 1080;
-	static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
-	static final int CHALAKIM_MOLAD_TOHU = 31524; // Days from the beginning of Sunday till molad BaHaRaD. Calculated as
-													// 1 day, 5 hours and 204 chalakim = (24 + 5) * 1080 + 204 = 31524
+	private static final int CHALAKIM_PER_MINUTE = 18;
+	private static final int CHALAKIM_PER_HOUR = 1080;
+	private static final int CHALAKIM_PER_DAY = 25920; // 24 * 1080
+	private static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
+	/**
+	 * Days from the beginning of Sunday till molad BaHaRaD. Calculated as 1 day, 5 hours and 204 chalakim = (24 + 5) *
+	 * 1080 + 204 = 31524
+	 */
+	private static final int CHALAKIM_MOLAD_TOHU = 31524;
+
+	/**
+	 * A short year where both {@link #CHESHVAN} and {@link #KISLEV} are 29 days.
+	 * 
+	 * @see #getCheshvanKislevKviah(int)
+	 * @see JewishCalendar#getKviah(int)
+	 */
+	public static final int CHASERIM = 0;
+
+	/**
+	 * An ordered year where {@link #CHESHVAN} is 29 days and {@link #KISLEV} is 30 days.
+	 * 
+	 * @see #getCheshvanKislevKviah(int)
+	 * @see JewishCalendar#getKviah(int)
+	 */
+	public static final int KESIDRAN = 1;
+
+	/**
+	 * A long year where both {@link #CHESHVAN} and {@link #KISLEV} are 30 days.
+	 * 
+	 * @see #getCheshvanKislevKviah(int)
+	 * @see JewishCalendar#getKviah(int)
+	 */
+	public static final int SHELAIMIM = 2;
 
 	private int jewishMonth;
 	private int jewishDay;
@@ -83,45 +187,90 @@ public class JewishDate implements Comparable, Cloneable {
 	private int moladChalakim;
 
 	/**
-	 * @return the moladHours
+	 * Returns the molad hours. Only a JewishDate object populated with {@link #getMolad(int, int)},
+	 * {@link #setJewishDate(int, int, int, int, int, int)} or {@link #setMoladHours(int)} will have this field
+	 * populated. A regular JewishDate object will have this field set to 0.
+	 * 
+	 * @return the molad hours
+	 * @see #setMoladHours(int)
+	 * @see #getMolad(int, int)
+	 * @see #setJewishDate(int, int, int, int, int, int)
 	 */
 	public int getMoladHours() {
 		return moladHours;
 	}
 
 	/**
+	 * Sets the molad hours.
+	 * 
 	 * @param moladHours
-	 *            the moladHours to set
+	 *            the molad hours to set
+	 * @see #getMoladHours()
+	 * @see #getMolad(int, int)
+	 * @see #setJewishDate(int, int, int, int, int, int)
+	 * 
 	 */
 	public void setMoladHours(int moladHours) {
 		this.moladHours = moladHours;
 	}
 
 	/**
-	 * @return the moladMinutes
+	 * Returns the molad minutes. Only an object populated with {@link #getMolad(int, int)},
+	 * {@link #setJewishDate(int, int, int, int, int, int)} or or {@link #setMoladMinutes(int)} will have these fields
+	 * populated. A regular JewishDate object will have this field set to 0.
+	 * 
+	 * @return the molad minutes
+	 * @see #setMoladMinutes(int)
+	 * @see #getMolad(int, int)
+	 * @see #setJewishDate(int, int, int, int, int, int)
 	 */
 	public int getMoladMinutes() {
 		return moladMinutes;
 	}
 
 	/**
+	 * Sets the molad minutes. The expectation is that the traditional minute-less chalakim will be broken out to
+	 * minutes and {@link #setMoladChalakim(int) chalakim/parts} , so 793 (TaShTZaG) parts would have the minutes set to
+	 * 44 and chalakim to 1.
+	 * 
 	 * @param moladMinutes
-	 *            the moladMinutes to set
+	 *            the molad minutes to set
+	 * @see #getMoladMinutes()
+	 * @see #setMoladChalakim(int)
+	 * @see #getMolad(int, int)
+	 * @see #setJewishDate(int, int, int, int, int, int)
+	 * 
 	 */
 	public void setMoladMinutes(int moladMinutes) {
 		this.moladMinutes = moladMinutes;
 	}
 
 	/**
+	 * Sets the molad chalakim/parts. The expectation is that the traditional minute-less chalakim will be broken out to
+	 * {@link #setMoladMinutes(int) minutes} and chalakim, so 793 (TaShTZaG) parts would have the minutes set to 44 and
+	 * chalakim to 1.
+	 * 
 	 * @param moladChalakim
-	 *            the moladChalakim to set
+	 *            the molad chalakim/parts to set
+	 * @see #getMoladChalakim()
+	 * @see #setMoladMinutes(int)
+	 * @see #getMolad(int, int)
+	 * @see #setJewishDate(int, int, int, int, int, int)
+	 * 
 	 */
 	public void setMoladChalakim(int moladChalakim) {
 		this.moladChalakim = moladChalakim;
 	}
 
 	/**
-	 * @return the moladChalakim
+	 * Returns the molad chalakim/parts. Only an object populated with {@link #getMolad(int, int)},
+	 * {@link #setJewishDate(int, int, int, int, int, int)} or or {@link #setMoladChalakim(int)} will have these fields
+	 * populated. A regular JewishDate object will have this field set to 0.
+	 * 
+	 * @return the molad chalakim/parts
+	 * @see #setMoladChalakim(int)
+	 * @see #getMolad(int, int)
+	 * @see #setJewishDate(int, int, int, int, int, int)
 	 */
 	public int getMoladChalakim() {
 		return moladChalakim;
@@ -133,19 +282,13 @@ public class JewishDate implements Comparable, Cloneable {
 	 */
 	private int gregorianMonth;
 
-	/**
-	 * The day of the Gregorian month.
-	 */
+	/** The day of the Gregorian month */
 	private int gregorianDayOfMonth;
 
-	/**
-	 * The Gregorian year
-	 */
+	/** The Gregorian year */
 	private int gregorianYear;
 
-	/**
-	 * 1 == Sunday, 2 == Monday, etc...
-	 */
+	/** 1 == Sunday, 2 == Monday, etc... */
 	private int dayOfWeek;
 
 	private int gregorianAbsDate;
@@ -229,31 +372,36 @@ public class JewishDate implements Comparable, Cloneable {
 	}
 
 	/**
-	 * Returns if the year is a Jewish leap year.
+	 * Returns if the year is a Jewish leap year. Years 3, 6, 8, 11, 14, 17 and 19 in the 19 year cycle are leap years.
 	 * 
 	 * @param year
 	 *            the Jewish year.
 	 * @return true if it is a leap year
+	 * @see #isJewishLeapYear()
 	 */
 	public static boolean isJewishLeapYear(int year) {
 		return ((7 * year) + 1) % 19 < 7;
 	}
 
 	/**
-	 * Returns if the year the calendar is set to is a Jewish leap year.
+	 * Returns if the year the calendar is set to is a Jewish leap year. Years 3, 6, 8, 11, 14, 17 and 19 in the 19 year
+	 * cycle are leap years.
 	 * 
 	 * @return true if it is a leap year
+	 * @see #isJewishLeapYear(int)
 	 */
 	public boolean isJewishLeapYear() {
 		return isJewishLeapYear(getJewishYear());
 	}
 
 	/**
-	 * Returns the last month of a given Jewish year.
+	 * Returns the last month of a given Jewish year. This will be 12 on a non {@link #isJewishLeapYear(int) leap year}
+	 * or 13 on a leap year.
 	 * 
 	 * @param year
 	 *            the Jewish year.
-	 * @return 12 on a non leap-year or 13 on a leap-year
+	 * @return 12 on a non leap year or 13 on a leap year
+	 * @see #isJewishLeapYear(int)
 	 */
 	private static int getLastMonthOfJewishYear(int year) {
 		return isJewishLeapYear(year) ? 13 : 12;
@@ -272,10 +420,10 @@ public class JewishDate implements Comparable, Cloneable {
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
 		long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);
-		int conjunctionDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
-		int conjunctionParts = (int) (chalakimSince - conjunctionDay * CHALAKIM_PER_DAY);
+		int moladDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
+		int moladParts = (int) (chalakimSince - moladDay * CHALAKIM_PER_DAY);
 		// delay Rosh Hashana for the 4 dechiyos
-		return addDechiyos(year, conjunctionDay, conjunctionParts);
+		return addDechiyos(year, moladDay, moladParts);
 	}
 
 	private static int getJewishCalendarElapsedDaysOLD(int year) {
@@ -309,33 +457,34 @@ public class JewishDate implements Comparable, Cloneable {
 	 * the following day is ADU, it will be delayed an additional day.</li>
 	 * <li>GaTRaD - If on a non leap year the molad of Tishrei falls on a Tuesday (Ga) on or after 9 hours (T) and 204
 	 * chalakim (TRaD) it is delayed till Thursday (one day delay, plus one day for Lo ADU Rosh)</li>
-	 * <li>BeTuTaKFoT - FIXME</li>
+	 * <li>BeTuTaKFoT - if the year following a leap year falls on a Monday (Be) on or after 15 hours (Tu) and 589
+	 * chalakim (TaKFoT) it is delayed till Tuesday</li>
 	 * </ol>
 	 * 
 	 * @param year
-	 * @param conjunctionDay
-	 * @param conjunctionParts
+	 * @param moladDay
+	 * @param moladParts
 	 * @return the nimber of elapsed days in the JewishCalendar adjusted for the 4 dechiyos.
 	 */
-	private static int addDechiyos(int year, int conjunctionDay, int conjunctionParts) {
-		int alternativeDay = conjunctionDay; // if no dechiyos
+	private static int addDechiyos(int year, int moladDay, int moladParts) {
+		int roshHashanaDay = moladDay; // if no dechiyos
 		// delay Rosh Hashana for the dechiyos of the Molad - new moon 1 - Molad Zaken, 2- GaTRaD 3- BeTuTaKFoT
-		if ((conjunctionParts >= 19440) // Dechiya of Molad Zaken - molad is >= midday (18 hours * 1080 chalakim)
-				|| (((conjunctionDay % 7) == 2) // start Dechiya of GaTRaD - Ga = is a Tuesday
-						&& (conjunctionParts >= 9924) // TRaD = 9 hours, 204 parts or later (9 * 1080 + 204)
+		if ((moladParts >= 19440) // Dechiya of Molad Zaken - molad is >= midday (18 hours * 1080 chalakim)
+				|| (((moladDay % 7) == 2) // start Dechiya of GaTRaD - Ga = is a Tuesday
+						&& (moladParts >= 9924) // TRaD = 9 hours, 204 parts or later (9 * 1080 + 204)
 				&& !isJewishLeapYear(year)) // of a non-leap year - end Dechiya of GaTRaD
-				|| (((conjunctionDay % 7) == 1) // start Dechiya of BeTuTaKFoT - Be = is on a Monday
-						&& (conjunctionParts >= 16789) // TRaD = 15 hours, 589 parts or later (15 * 1080 + 589)
+				|| (((moladDay % 7) == 1) // start Dechiya of BeTuTaKFoT - Be = is on a Monday
+						&& (moladParts >= 16789) // TRaD = 15 hours, 589 parts or later (15 * 1080 + 589)
 				&& (isJewishLeapYear(year - 1)))) { // in a year following a leap year - end Dechiya of BeTuTaKFoT
-			alternativeDay += 1; // Then postpone Rosh HaShanah one day
+			roshHashanaDay += 1; // Then postpone Rosh HaShanah one day
 		}
 		// start 4th Dechiya - Lo ADU Rosh - Rosh Hashana can't occur on A- sunday, D- Wednesday, U - Friday
-		if (((alternativeDay % 7) == 0)// If Rosh HaShanah would occur on Sunday,
-				|| ((alternativeDay % 7) == 3) // or Wednesday,
-				|| ((alternativeDay % 7) == 5)) { // or Friday - end 4th Dechiya - Lo ADU Rosh
-			alternativeDay = alternativeDay + 1; // Then postpone it one (more) day
+		if (((roshHashanaDay % 7) == 0)// If Rosh HaShanah would occur on Sunday,
+				|| ((roshHashanaDay % 7) == 3) // or Wednesday,
+				|| ((roshHashanaDay % 7) == 5)) { // or Friday - end 4th Dechiya - Lo ADU Rosh
+			roshHashanaDay = roshHashanaDay + 1; // Then postpone it one (more) day
 		}
-		return alternativeDay;
+		return roshHashanaDay;
 	}
 
 	/**
@@ -362,14 +511,11 @@ public class JewishDate implements Comparable, Cloneable {
 
 	/**
 	 * Converts the the {@link JewishDate#NISSAN} based constants used by this class to numeric month starting from
-	 * Tishrei. This is required for Molad claculations.
+	 * {@link JewishDate#TISHREI}. This is required for Molad claculations.
 	 * 
 	 * @param jewishYear
 	 * @param jewishMonth
 	 * @return
-	 * @throws IllegalArgumentException
-	 *             if a year of < 3761, a month < 1 or > 12 (or 13 on a leap year) or the day of month is < 1 or > 30 is
-	 *             passed in
 	 */
 	private static int getJewishMonthOfYear(int jewishYear, int jewishMonth) {
 		boolean isLeapYear = JewishDate.isJewishLeapYear(jewishYear);
@@ -377,9 +523,11 @@ public class JewishDate implements Comparable, Cloneable {
 	}
 
 	/**
-	 * Validates the components of a Jewish date for validity. It will throw an {@link IllegalArgumentException} if a
-	 * year <= 3761 is used (the calendar does not currently support dates where the Gregorian calendar < 1), a month <
-	 * 1 or > 12 (or 13 on a leap year) or if th day of month < 1 or > 30.
+	 * Validates the components of a Jewish date for validity. It will throw an {@link IllegalArgumentException} if the
+	 * Jewish date is earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month < 1 or > 12 (or 13 on a
+	 * {@link #isJewishLeapYear(int) leap year}), the day of month is < 1 or > 30, an hour < 0 or > 23, a minute < 0 >
+	 * 59 or chalakim < 0 > 17. For larger a larger number of chalakim such as 793 (TaShTzaG) break the chalakim into
+	 * minutes (18 chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793/TaShTzaG).
 	 * 
 	 * @param year
 	 *            the Jewish year to validate. It will reject any year <= 3761 (lower than the year 1 Gregorian).
@@ -388,11 +536,22 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @param dayOfMonth
 	 *            the day of the Jewish month to validate. It will reject any value < 1 or > 30 TODO: check calling
 	 *            methods to see if there is any reason that the class can validate that 30 is invalid for some months.
+	 * @param hours
+	 *            the hours (for molad calculations). It will reject an hour < 0 or > 23
+	 * @param minutes
+	 *            the minutes (for molad calculations). It will reject a minute < 0 or > 59
+	 * @param chalakim
+	 *            the chalakim/parts (for molad calculations). It will reject a chalakim < 0 or > 17. For larger numbers
+	 *            such as 793 (TaShTzaG) break the chalakim into minutes (18 chalakim per minutes, so it would be 44
+	 *            minutes and 1 chelek in the case of 793/TaShTzaG)
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if a year of <= 3761, a month < 1 or > 12 (or 13 on a leap year) or the day of month is < 1 or > 30
-	 *             is passed in
+	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month < 1 or > 12 (or 13 on a
+	 *             leap year), the day of month is < 1 or > 30, an hour < 0 or > 23, a minute < 0 > 59 or chalakim < 0 >
+	 *             17. For larger a larger number of chalakim such as 793 (TaShTzaG) break the chalakim into minutes (18
+	 *             chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG).
 	 */
-	private static void validateJewishDate(int year, int month, int dayOfMonth) {
+	private static void validateJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
 		if (month < 1 || month > getLastMonthOfJewishYear(year)) {
 			throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
 					+ month + " is invalid for the year " + year + ".");
@@ -401,10 +560,27 @@ public class JewishDate implements Comparable, Cloneable {
 			throw new IllegalArgumentException("The Jewish day of month can't be < 1 or > 30.  " + dayOfMonth
 					+ " is invalid.");
 		}
+		// reject dates prior to 18 Teves, 3761 (1/1/1 AD). This restriction can be relaxed if the date coding is
+		// changed/corrected
+		if ((year < 3761) || (year == 3761 && (month >= TISHREI && month < TEVES))
+				|| (year == 3761 && month == TEVES && dayOfMonth < 18)) {
+			throw new IllegalArgumentException(
+					"A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian) can't be set. " + year + ", " + month
+							+ ", " + dayOfMonth + " is invalid.");
+		}
+		if (hours < 0 || hours > 23) {
+			throw new IllegalArgumentException("Hours < 0 > 23 can't be set. " + hours + " is invalid.");
+		}
 
-		if (year <= 3761) { // FIXME: prior to 18 Teves, 3761 (1/1/1 AD) is iinvalid. There is room to allow the year
-							// 3761 after 18 Teves
-			throw new IllegalArgumentException("A Jewish years < 3761 can't be set. " + year + " is invalid.");
+		if (minutes < 0 || minutes > 59) {
+			throw new IllegalArgumentException("Minutes < 0 > 59 can't be set. " + minutes + " is invalid.");
+		}
+
+		if (chalakim < 0 || chalakim > 17) {
+			throw new IllegalArgumentException(
+					"Chalakim/parts < 0 > 17 can't be set. "
+							+ chalakim
+							+ " is invalid. For larger numbers such as 793 (TaShTzaG) break the chalakim into minutes (18 chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG)");
 		}
 	}
 
@@ -454,8 +630,8 @@ public class JewishDate implements Comparable, Cloneable {
 	/**
 	 * Returns the number of days for the current year that the calendar is set to.
 	 * 
-	 * @see #isCheshvanLong(int)
-	 * @see #isKislevShort(int)
+	 * @see #isCheshvanLong()
+	 * @see #isKislevShort()
 	 * @see #isJewishLeapYear()
 	 */
 	public int getDaysInJewishYear() {
@@ -470,6 +646,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 *            the year
 	 * @return true if Cheshvan is long in Jewish year.
 	 * @see #isCheshvanLong()
+	 * @see #getCheshvanKislevKviah(int)
 	 */
 	public static boolean isCheshvanLong(int year) {
 		return getDaysInJewishYear(year) % 10 == 5;
@@ -494,6 +671,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 *            the Jewish year
 	 * @return true if Kislev is short for the given Jewish year.
 	 * @see #isKislevShort()
+	 * @see #getCheshvanKislevKviah(int)
 	 */
 	public static boolean isKislevShort(int year) {
 		return getDaysInJewishYear(year) % 10 == 3;
@@ -508,6 +686,28 @@ public class JewishDate implements Comparable, Cloneable {
 	 */
 	public boolean isKislevShort() {
 		return isKislevShort(getJewishYear());
+	}
+
+	/**
+	 * Returns the Cheshvan and Kislev kviah (whether a Jewish year is short, regular or long). It will return
+	 * {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Cheshvan is 29 days and Kislev
+	 * is 30 days and {@link #CHASERIM} if both are 29 days.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year
+	 * @return {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Cheshvan is 29 days and
+	 *         Kislev is 30 days and {@link #CHASERIM} if both are 29 days.
+	 * @see #isCheshvanLong(int)
+	 * @see #isKislevShort(int)
+	 */
+	public static int getCheshvanKislevKviah(int jewishYear) {
+		if (isCheshvanLong(jewishYear) && !isKislevShort(jewishYear)) {
+			return SHELAIMIM;
+		} else if (!isCheshvanLong(jewishYear) && isKislevShort(jewishYear)) {
+			return CHASERIM;
+		} else {
+			return KESIDRAN;
+		}
 	}
 
 	/**
@@ -709,7 +909,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @param date
 	 *            the <code>Date</code> to set the calendar to
 	 * @throws IllegalArgumentException
-	 *             if the date would fall prior to the year 1 AD
+	 *             if the date would fall prior to the January 1, 1 AD
 	 */
 	public JewishDate(Date date) {
 		setDate(date);
@@ -780,8 +980,7 @@ public class JewishDate implements Comparable, Cloneable {
 	 */
 	public void setGregorianDate(int year, int month, int dayOfMonth) {
 		validateGregorianDate(year, month, dayOfMonth);
-		// make sure date is a valid date for the given month, if not, set to
-		// last day of month
+		// make sure date is a valid date for the given month, if not, set to last day of month
 		if (dayOfMonth > getLastDayOfGregorianMonth(month, year)) {
 			dayOfMonth = getLastDayOfGregorianMonth(month, year);
 		}
@@ -810,15 +1009,42 @@ public class JewishDate implements Comparable, Cloneable {
 	 *            the Jewish day of month. valid values are 1-30. If the day of month is set to 30 for a month that only
 	 *            has 29 days, the day will be set as 29.
 	 * @throws IllegalArgumentException
-	 *             if a year of < 3761, a month < 1 or > 12 (or 13 on a leap year) or the day of month is < 1 or > 30 is
-	 *             passed in
+	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month < 1 or > 12 (or 13 on a
+	 *             leap year) or the day of month is < 1 or > 30 is passed in
 	 */
 	public void setJewishDate(int year, int month, int dayOfMonth) {
 		setJewishDate(year, month, dayOfMonth, 0, 0, 0);
 	}
 
+	/**
+	 * Sets the Jewish Date and updates the Gregorian date accordingly.
+	 * 
+	 * @param year
+	 *            the Jewish year. The year can't be negative
+	 * @param month
+	 *            the Jewish month starting with Nisan. A value of 1 is expected for Nissan ... 12 for Adar and 13 for
+	 *            Adar II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar
+	 *            II) to avoid any confusion.
+	 * @param dayOfMonth
+	 *            the Jewish day of month. valid values are 1-30. If the day of month is set to 30 for a month that only
+	 *            has 29 days, the day will be set as 29.
+	 * 
+	 * @param hours
+	 *            the hour of the day. Used for Molad calculations
+	 * @param minutes
+	 *            the minutes. Used for Molad calculations
+	 * @param chalakim
+	 *            the chalakim/parts. Used for Molad calculations. The chalakim should not exceed 17. Minutes should be
+	 *            used for larger numbers.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month < 1 or > 12 (or 13 on a
+	 *             leap year), the day of month is < 1 or > 30, an hour < 0 or > 23, a minute < 0 > 59 or chalakim < 0 >
+	 *             17. For larger a larger number of chalakim such as 793 (TaShTzaG) break the chalakim into minutes (18
+	 *             chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG).
+	 */
 	public void setJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
-		validateJewishDate(year, month, dayOfMonth);
+		validateJewishDate(year, month, dayOfMonth, hours, minutes, chalakim);
 
 		// if 30 is passed for a month that only has 29 days (for example by rolling the month from a month that had 30
 		// days to a month that only has 29) set the date to 29th
@@ -1131,7 +1357,8 @@ public class JewishDate implements Comparable, Cloneable {
 	 * @param year
 	 *            the Jewish year
 	 * @throws IllegalArgumentException
-	 *             if a year of < 3761 is passed in
+	 *             if a year of < 3761 is passed in. The same will happen if the year is 3761 and the month and day
+	 *             previously set are < 18 Teves (preior to Jan 1, 1 AD)
 	 */
 	public void setJewishYear(int year) {
 		setJewishDate(year, jewishMonth, jewishDay);
