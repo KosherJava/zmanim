@@ -94,7 +94,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) according to some opinions. This calculation is based on the opinion of
 	 * the Geonim that <em>tzais</em> is the time it takes to walk 3/4 of a Mil at 18 minutes a Mil, or 13.5 minutes
-	 * after sunset. The sun is 3.7&deg below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem on
+	 * after sunset. The sun is 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem on
 	 * March 16, about 4 days before the equinox, the day that a solar hour is one hour.
 	 * 
 	 * TODO AT see #getTzaisGeonim3Point7Degrees()
@@ -2150,9 +2150,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * A method that returns the local time for fixed <em>chatzos</em>. This time is noon and midnight adjusted from
 	 * standard time to account for the local latitude. The 360&deg; of the globe divided by 24 calculates to 15&deg;
-	 * per hour with 4 minutes per degree, so at a longitude of 0 , 15, 30 etc Chatzos in 12:00 noon. Lakewood, NJ whose
-	 * longitude is -74.2094 is 0.7906 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to
-	 * yeild 3 minutes and 10 seconds for a chatzos of 11:56:50. This method is not tied to the theoretical 15&deg;
+	 * per hour with 4 minutes per degree, so at a longitude of 0 , 15, 30 etc Chatzos in 12:00 noon. Lakewood, N.J.,
+	 * whose longitude is -74.2094, is 0.7906 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4
+	 * to yield 3 minutes and 10 seconds for a chatzos of 11:56:50. This method is not tied to the theoretical 15&deg;
 	 * timezones, but will adjust to the actual timezone and <a
 	 * href="http://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a>.
 	 * 
