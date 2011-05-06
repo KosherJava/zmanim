@@ -19,6 +19,9 @@ package net.sourceforge.zmanim.hebrewcalendar;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+import net.sourceforge.zmanim.util.GeoLocation;
 
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
@@ -35,6 +38,7 @@ import java.util.Date;
  * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implemented in some
  * form:
  * <ol>
+ * <li>Add Isru Chag</li>
  * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
  * <li>Shabbos Mevarchim</li>
  * <li>Haftorah (various minhagim)</li>
@@ -502,15 +506,19 @@ public class JewishCalendar extends JewishDate {
 	public String getParsha() {
 		return new HebrewDateFormatter().formatParsha(this);
 	}
-	
+
 	/**
 	 * Returns the kviah in the traditional 3 letter Hebrew format where the first letter represents the day of week of
-	 * Rish Hashana, the second letter represents the lengths of Cheshvan and Kislev (shelaimi, kesidran or chaaserim)
-	 * and the 3rd letter represents the day of week of Pesach. For example 5729 (1969) would return \u05D1\u05E9\u05D4,
-	 * while 5771 (2011) would return \u05D4\u05E9\u05D2.
+	 * Rosh Hashana, the second letter represents the lengths of Cheshvan and Kislev ({@link JewishDate#SHELAIMIM
+	 * Shelaimim} , {@link JewishDate#KESIDRAN Kesidran} or {@link JewishDate#CHASERIM Chaserim}) and the 3rd letter
+	 * represents the day of week of Pesach. For example 5729 (1969) would return &#x5D1;&#x5E9;&#x5D4; (Rosh Hashana on
+	 * Monday, Shelaimim, and Pesach on Thursday), while 5771 (2011) would return &#x5D4;&#x5E9;&#x5D2; (Rosh Hashana on
+	 * Thursday, Shelaimim, and Pesach on Tuesday).
 	 * 
 	 * @param jewishYear
-	 * @return the Hebrew String such as \u05D1\u05E9\u05D4 for 5729 (1969) and \u05D4\u05E9\u05D2 for 5771 (2011).
+	 *            the Jewish year
+	 * @return the Hebrew String such as &#x5D1;&#x5E9;&#x5D4; for 5729 (1969) and &#x5D4;&#x5E9;&#x5D2; for 5771
+	 *         (2011).
 	 */
 	public static String getKviah(int jewishYear) {
 		return new HebrewDateFormatter().getFormattedKviah(jewishYear);
@@ -674,6 +682,93 @@ public class JewishCalendar extends JewishDate {
 			omer = getJewishDayOfMonth() + 44;
 		}
 		return omer;
+	}
+
+	/**
+	 * Returns the molad in Standard Time in Yerushalayim. The traditional calculation uses local time. This method
+	 * subtracts 20.94 minutes (20 minutes and 56.435 seconds) from the local time (Har Habayis with a longitude of
+	 * 35.235149&deg; is 5.235149&deg; away from the %15 timezone longitude) to get to standard time. This does not
+	 * account for dailight savings time, since the start or end of dailight savings time may fall between the time
+	 * returned by this method and the time added in calling methods.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year
+	 * @param jewishMonth
+	 *            the Jewish month. A value of 1 is expected for {@link JewishDate#NISSAN}
+	 * @return
+	 */
+	private static Date getMoladYerushalayimStandardTime(int jewishYear, int jewishMonth) {
+		JewishDate molad = JewishDate.getMolad(jewishYear, jewishMonth);
+		String locationName = "Jerusalem, Israel";
+
+		double latitude = 31.77805; // Har Habayis lat
+		double longitude = 35.235149; // Har Habayis long
+
+		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
+
+		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimTZ);
+		Calendar cal = Calendar.getInstance(geo.getTimeZone());
+		cal.set(molad.getGregorianYear(), molad.getGregorianMonth() - 1, molad.getGregorianDayOfMonth(),
+				molad.getMoladHours(), molad.getMoladMinutes(), (int) (molad.getMoladChalakim() * 10 / 3));
+		cal.set(Calendar.MILLISECOND, 0);// FIXME set yo remainder of .333 per chelek
+		// subtract local time difference of 20.94 minutes (20 minutes and 56.435 seconds) to get to Standard time
+		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
+		return cal.getTime();
+	}
+
+	public static Date getTchilasZmanKidushLevanah3Days(int jewishYear, int jewishMonth) {
+		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(yerushalayimStandardMolad);
+		cal.add(Calendar.HOUR, 72); // 3 days after the molad
+		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
+		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
+			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
+		}
+		return cal.getTime();
+	}
+	
+	public static Date getSofZmanKidushLevanah15Days(int jewishYear, int jewishMonth) {
+		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(yerushalayimStandardMolad);
+		cal.add(Calendar.DAY_OF_YEAR, 15); // 15 days after the molad
+		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
+		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
+			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
+		}
+		return cal.getTime();
+	}
+
+	public static Date getTchilasZmanKidushLevanah7Days(int jewishYear, int jewishMonth) {
+		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(yerushalayimStandardMolad);
+		cal.add(Calendar.HOUR, 168); // 7 days after the molad
+		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
+		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
+			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
+		}
+		return cal.getTime();
+	}
+
+	public static Date getSofZmanKidushLevanahBetweenMoldos(int jewishYear, int jewishMonth) {
+		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(yerushalayimStandardMolad);
+		// add half the time between molad and molad (half of 29 days, 12 hours and 793 chalakim (44 minutes, 3.3
+		// seconds)
+		cal.add(Calendar.DAY_OF_MONTH, 14);
+		cal.add(Calendar.HOUR_OF_DAY, 18);
+		cal.add(Calendar.MINUTE, 22);
+		cal.add(Calendar.SECOND, 1);
+		cal.add(Calendar.MILLISECOND, 666);
+
+		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
+		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
+			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
+		}
+		return cal.getTime();
 	}
 
 	/**
