@@ -569,11 +569,14 @@ public class HebrewDateFormatter {
 
 	/**
 	 * Returns the kviah in the traditional 3 letter Hebrew format where the first letter represents the day of week of
-	 * Rish Hashana, the second letter represents the lengths of Cheshvan and Kislev (shelaimi, kesidran or chaaserim)
-	 * and the 3rd letter represents the day of week of Pesach. For example 5729 (1969) would return
-	 * &#x5D1;&#x5E9;&#x5D4;, while 5771 (2011) would return &#x5D4;&#x5E9;&#x5D2;.
+	 * Rosh Hashana, the second letter represents the lengths of Cheshvan and Kislev ({@link JewishDate#SHELAIMIM
+	 * Shelaimim} , {@link JewishDate#KESIDRAN Kesidran} or {@link JewishDate#CHASERIM Chaserim}) and the 3rd letter
+	 * represents the day of week of Pesach. For example 5729 (1969) would return &#x5D1;&#x5E9;&#x5D4; (Rosh Hashana on
+	 * Monday, Shelaimim, and Pesach on Thursday), while 5771 (2011) would return &#x5D4;&#x5E9;&#x5D2; (Rosh Hashana on
+	 * Thursday, Shelaimim, and Pesach on Tuesday).
 	 * 
 	 * @param jewishYear
+	 *            the Jewish year
 	 * @return the Hebrew String such as &#x5D1;&#x5E9;&#x5D4; for 5729 (1969) and &#x5D4;&#x5E9;&#x5D2; for 5771
 	 *         (2011).
 	 */
