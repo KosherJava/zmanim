@@ -770,6 +770,10 @@ public class JewishCalendar extends JewishDate {
 		}
 		return cal.getTime();
 	}
+	
+	public Daf getDafYomiBavli() {
+		return YomiCalculator.getDafYomiBavli(getTime());
+	}
 
 	/**
 	 * @see java.lang.Object#equals(Object)

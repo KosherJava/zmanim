@@ -598,6 +598,14 @@ public class HebrewDateFormatter {
 		return returnValue;
 	}
 
+	public String formatDafYomiBavli(Daf daf) {
+		if (hebrewFormat) {
+			return daf.getMasechta() + " " + formatHebrewNumber(daf.getDaf());
+		} else {
+			return daf.getMasechtaTransliterated() + " " + daf.getDaf();
+		}
+	}
+
 	/**
 	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 - 9999.
 	 * <ul>
