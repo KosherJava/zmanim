@@ -28,7 +28,7 @@ public class Daf {
 
 	private static String[] masechtosBavliTransliterated = { "Berachos", "Shabbos", "Eruvin", "Pesachim", "Shekalim",
 			"Yoma", "Sukkah", "Beitzah", "Rosh Hashana", "Taanis", "Megillah", "Moed Katan", "Chagigah", "Yevamos",
-			"Kesubos", "Nedarim", "Nazir", "Sotah", "Gitin", "Kiddushin", "Baba Kamma", "Baba Metzia", "Baba Basra",
+			"Kesubos", "Nedarim", "Nazir", "Sotah", "Gitin", "Kiddushin", "Bava Kamma", "Bava Metzia", "Bava Basra",
 			"Sanhedrin", "Makkos", "Shevuos", "Avodah Zarah", "Horiyos", "Zevachim", "Menachos", "Chullin", "Bechoros",
 			"Arachin", "Temurah", "Kerisos", "Meilah", "Kinnim", "Tamid", "Midos", "Niddah" };
 
@@ -60,8 +60,9 @@ public class Daf {
 	/**
 	 * Set the masechta number in the order of teh Daf Yomi. The sequence is: Berachos, Shabbos, Eruvin, Pesachim,
 	 * Shekalim, Yoma, Sukkah, Beitzah, Rosh Hashana, Taanis, Megillah, Moed Katan, Chagigah, Yevamos, Kesubos, Nedarim,
-	 * Nazir, Sotah, Gitin, Kiddushin, Baba Kamma, Baba Metzia, Baba Basra, Sanhedrin, Makkos, Shevuos, Avodah Zarah,
-	 * Horiyos, Zevachim, Menachos, Chullin, Bechoros, Arachin, Temurah, Kerisos, Meilah, Kinnim, Tamid, Midos and Niddah.
+	 * Nazir, Sotah, Gitin, Kiddushin, Bava Kamma, Bava Metzia, Bava Basra, Sanhedrin, Makkos, Shevuos, Avodah Zarah,
+	 * Horiyos, Zevachim, Menachos, Chullin, Bechoros, Arachin, Temurah, Kerisos, Meilah, Kinnim, Tamid, Midos and
+	 * Niddah.
 	 * 
 	 * @param masechtaNumber
 	 *            the masechtaNumber to set
@@ -82,18 +83,42 @@ public class Daf {
 		this.daf = daf;
 	}
 
+	/**
+	 * Returns the daf (page number) of the Daf Yomi
+	 * @return the daf (page number) of the Daf Yomi
+	 */
 	public int getDaf() {
 		return daf;
 	}
 
+	/**
+	 * sets the daf (page number) of the Daf Yomi
+	 * @param daf daf (page number)
+	 */
 	public void setDaf(int daf) {
 		this.daf = daf;
 	}
 
+	/**
+	 * Returns the transliterated name of the masechta (tractate) of the Daf Yomi. The list of mashechtos is: Berachos,
+	 * Shabbos, Eruvin, Pesachim, Shekalim, Yoma, Sukkah, Beitzah, Rosh Hashana, Taanis, Megillah, Moed Katan, Chagigah,
+	 * Yevamos, Kesubos, Nedarim, Nazir, Sotah, Gitin, Kiddushin, Bava Kamma, Bava Metzia, Bava Basra, Sanhedrin,
+	 * Makkos, Shevuos, Avodah Zarah, Horiyos, Zevachim, Menachos, Chullin, Bechoros, Arachin, Temurah, Kerisos, Meilah,
+	 * Kinnim, Tamid, Midos and Niddah.
+	 * 
+	 * @return the transliterated name of the masechta (tractate) of the Daf Yomi such as Berachos.
+	 */
 	public String getMasechtaTransliterated() {
 		return masechtosBavliTransliterated[daf];
 	}
 
+	/**
+	 * Returns the masechta (tractate) of the Daf Yomi in Hebrew, It will return
+	 * &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 * 
+	 * @return the masechta (tractate) of the Daf Yomi in Hebrew, It will return
+	 *         &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 */
 	public String getMasechta() {
 		return masechtosBavli[daf];
 	}

@@ -42,7 +42,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
  * <li>Shabbos Mevarchim</li>
  * <li>Haftorah (various minhagim)</li>
- * <li>Daf Yomi (Bavli, Yerushalmi, Mishna yomis etc)</li>
+ * <li>Daf Yomi Yerushalmi, Mishna yomis etc)</li>
  * <li>Support showing the upcoming parsha for the middle of the week</li>
  * </ol>
  * 
@@ -687,15 +687,15 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns the molad in Standard Time in Yerushalayim. The traditional calculation uses local time. This method
 	 * subtracts 20.94 minutes (20 minutes and 56.435 seconds) from the local time (Har Habayis with a longitude of
-	 * 35.235149&deg; is 5.235149&deg; away from the %15 timezone longitude) to get to standard time. This does not
-	 * account for dailight savings time, since the start or end of dailight savings time may fall between the time
-	 * returned by this method and the time added in calling methods.
+	 * 35.235149&deg; is 5.235149&deg; away from the %15 timezone longitude) to get to standard time. This method
+	 * intentionally uses standard time and not dailight savings time. Java will implicitly format the time to the
+	 * default (or set) Timezone.
 	 * 
 	 * @param jewishYear
-	 *            the Jewish year
-	 * @param jewishMonth
-	 *            the Jewish month. A value of 1 is expected for {@link JewishDate#NISSAN}
-	 * @return
+	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
+	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
+	 *            to avoid any confusion.
+	 * @return the Date representing the moment of the molad in Yerushalayim standard time (GMT + 2)
 	 */
 	private static Date getMoladYerushalayimStandardTime(int jewishYear, int jewishMonth) {
 		JewishDate molad = JewishDate.getMolad(jewishYear, jewishMonth);
@@ -704,73 +704,112 @@ public class JewishCalendar extends JewishDate {
 		double latitude = 31.77805; // Har Habayis lat
 		double longitude = 35.235149; // Har Habayis long
 
-		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
-
-		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimTZ);
+		// do not use "Asia/Jerusalem" timezone. Using it will lead to incorrect DST adjustments
+		TimeZone yerushalayimStandardTZ = TimeZone.getTimeZone("GMT+2");
+		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
 		Calendar cal = Calendar.getInstance(geo.getTimeZone());
+		double moladSeconds = molad.getMoladChalakim() * 10 / 3;
 		cal.set(molad.getGregorianYear(), molad.getGregorianMonth() - 1, molad.getGregorianDayOfMonth(),
-				molad.getMoladHours(), molad.getMoladMinutes(), (int) (molad.getMoladChalakim() * 10 / 3));
-		cal.set(Calendar.MILLISECOND, 0);// FIXME set yo remainder of .333 per chelek
+				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
+		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
 		// subtract local time difference of 20.94 minutes (20 minutes and 56.435 seconds) to get to Standard time
 		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
 		return cal.getTime();
 	}
 
+	/**
+	 * Returns the earliest time of Kiddush Levana calculated as 3 days after the molad.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
+	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
+	 *            to avoid any confusion.
+	 * @return the Date representing the moment 3 days after the molad.
+	 */
 	public static Date getTchilasZmanKidushLevanah3Days(int jewishYear, int jewishMonth) {
 		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(yerushalayimStandardMolad);
 		cal.add(Calendar.HOUR, 72); // 3 days after the molad
-		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
-		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
-			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
-		}
-		return cal.getTime();
-	}
-	
-	public static Date getSofZmanKidushLevanah15Days(int jewishYear, int jewishMonth) {
-		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(yerushalayimStandardMolad);
-		cal.add(Calendar.DAY_OF_YEAR, 15); // 15 days after the molad
-		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
-		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
-			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
-		}
 		return cal.getTime();
 	}
 
+	/**
+	 * Returns the earliest time of Kiddush Levana calculated as 7 days after the molad as mentioned by the <a
+	 * href="http://en.wikipedia.org/wiki/Yosef_Karo">Mechaber</a>. See the <a
+	 * href="http://en.wikipedia.org/wiki/Yoel_Sirkis">Bach's</a> opinion on this time.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
+	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
+	 *            to avoid any confusion.
+	 * @return the Date representing the moment 7 days after the molad.
+	 */
 	public static Date getTchilasZmanKidushLevanah7Days(int jewishYear, int jewishMonth) {
 		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(yerushalayimStandardMolad);
 		cal.add(Calendar.HOUR, 168); // 7 days after the molad
-		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
-		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
-			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
-		}
 		return cal.getTime();
 	}
 
+	/**
+	 * Returns the latest time of Kiddush Levana according to the <a
+	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as
+	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between molad and
+	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
+	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
+	 *            to avoid any confusion.
+	 * @return the Date representing the moment 15 days after the molad.
+	 * @see #getSofZmanKidushLevanah15Days(int, int)
+	 */
 	public static Date getSofZmanKidushLevanahBetweenMoldos(int jewishYear, int jewishMonth) {
 		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(yerushalayimStandardMolad);
 		// add half the time between molad and molad (half of 29 days, 12 hours and 793 chalakim (44 minutes, 3.3
-		// seconds)
+		// seconds, or 14 days, 18 hours, 22 minutes and 666 milliseconds)
 		cal.add(Calendar.DAY_OF_MONTH, 14);
 		cal.add(Calendar.HOUR_OF_DAY, 18);
 		cal.add(Calendar.MINUTE, 22);
 		cal.add(Calendar.SECOND, 1);
 		cal.add(Calendar.MILLISECOND, 666);
-
-		TimeZone yerushalayimTZ = TimeZone.getTimeZone("Asia/Jerusalem");
-		if (yerushalayimTZ.inDaylightTime(cal.getTime())) {
-			cal.add(Calendar.MILLISECOND, yerushalayimTZ.getDSTSavings());
-		}
 		return cal.getTime();
 	}
-	
+
+	/**
+	 * Returns the latest time of Kiddush Levana calculated as 15 days after the molad. This is the opinion brought down
+	 * in the Shulchan Aruch (Orach Chaim 426). It should be noted that some opionions hold that the
+	 * <http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
+	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> of calculating
+	 * {@link #getSofZmanKidushLevanahBetweenMoldos(int, int) half way between molad and mold} is of the opinion that
+	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan.
+	 * 
+	 * @param jewishYear
+	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
+	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
+	 *            to avoid any confusion.
+	 * @return the Date representing the moment 15 days after the molad.
+	 * @see #getSofZmanKidushLevanahBetweenMoldos(int, int)
+	 */
+	public static Date getSofZmanKidushLevanah15Days(int jewishYear, int jewishMonth) {
+		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(yerushalayimStandardMolad);
+		cal.add(Calendar.DAY_OF_YEAR, 15); // 15 days after the molad
+		return cal.getTime();
+	}
+
+	/**
+	 * Returns the Daf Yomi (Bavli) for the date that the calendar is set to. See the
+	 * {@link HebrewDateFormatter#formatDafYomiBavli(Daf)} for the ability to format the daf in Hebrew or transliterated
+	 * masechta names.
+	 * 
+	 * @return the daf as a {@link Daf}
+	 */
 	public Daf getDafYomiBavli() {
 		return YomiCalculator.getDafYomiBavli(getTime());
 	}
