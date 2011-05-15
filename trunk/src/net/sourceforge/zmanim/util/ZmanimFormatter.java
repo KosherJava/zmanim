@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import net.sourceforge.zmanim.AstronomicalCalendar;
 
@@ -49,7 +50,24 @@ public class ZmanimFormatter {
 
 	private SimpleDateFormat dateFormat;
 
+	private TimeZone timeZone = null; // TimeZone.getTimeZone("UTC");
+
 	// private DecimalFormat decimalNF;
+
+	/**
+	 * @return the timeZone
+	 */
+	public TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * @param timeZone
+	 *            the timeZone to set
+	 */
+	public void setTimeZone(TimeZone timeZone) {
+		this.timeZone = timeZone;
+	}
 
 	/**
 	 * Format using hours, minutes, seconds and milliseconds using the xsd:time format. This format will return
@@ -88,9 +106,13 @@ public class ZmanimFormatter {
 	/**
 	 * constructor that defaults to this will use the format "h:mm:ss" for dates and 00.00.00.0 for {@link Time}.
 	 */
-	public ZmanimFormatter() {
-		this(0, new SimpleDateFormat("h:mm:ss"));
+	public ZmanimFormatter(TimeZone timeZone) {
+		this(0, new SimpleDateFormat("h:mm:ss"), timeZone);
 	}
+
+	// public ZmanimFormatter() {
+	// this(0, new SimpleDateFormat("h:mm:ss"), TimeZone.getTimeZone("UTC"));
+	// }
 
 	/**
 	 * ZmanimFormatter constructor using a formatter
@@ -99,14 +121,16 @@ public class ZmanimFormatter {
 	 *            int The formatting style to use. Using ZmanimFormatter.SEXAGESIMAL_SECONDS_FORMAT will format the time
 	 *            time of 90*60*1000 + 1 as 1:30:00
 	 */
-	public ZmanimFormatter(int format, SimpleDateFormat dateFormat) {
+	public ZmanimFormatter(int format, SimpleDateFormat dateFormat, TimeZone timeZone) {
+		setTimeZone(timeZone);
 		String hourFormat = "0";
 		if (prependZeroHours) {
 			hourFormat = "00";
 		}
 		this.hourNF = new DecimalFormat(hourFormat);
 		setTimeFormat(format);
-		this.setDateFormat(dateFormat);
+		dateFormat.setTimeZone(timeZone);
+		setDateFormat(dateFormat);
 	}
 
 	/**
@@ -234,6 +258,7 @@ public class ZmanimFormatter {
 		 * if (xmlDateFormat == null || xmlDateFormat.trim().equals("")) { xmlDateFormat = xsdDateTimeFormat; }
 		 */
 		SimpleDateFormat dateFormat = new SimpleDateFormat(xsdDateTimeFormat);
+		dateFormat.setTimeZone(getTimeZone());
 
 		StringBuffer buff = new StringBuffer(dateFormat.format(dateTime));
 		// Must also include offset from UTF.
@@ -341,8 +366,9 @@ public class ZmanimFormatter {
 	 */
 	public static String toXML(AstronomicalCalendar ac) {
 		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss"));
+				"yyyy-MM-dd'T'HH:mm:ss"), ac.getGeoLocation().getTimeZone());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		df.setTimeZone(ac.getGeoLocation().getTimeZone());
 
 		StringBuffer sb = new StringBuffer("<");
 		if (ac.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {

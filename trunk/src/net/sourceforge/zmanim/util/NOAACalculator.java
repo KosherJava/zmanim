@@ -56,9 +56,18 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
 
-		double sunRise = getSunriseUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+		double sunrise = getSunriseUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith);
-		return sunRise / 60;
+		sunrise = sunrise / 60;
+
+		// ensure that the time is >= 0 and < 24
+		while (sunrise < 0.0) {
+			sunrise += 24.0;
+		}
+		while (sunrise >= 24.0) {
+			sunrise -= 24.0;
+		}
+		return sunrise;
 	}
 
 	/**
@@ -68,9 +77,18 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
 
-		double sunSet = getSunsetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+		double sunset = getSunsetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith);
-		return sunSet / 60;
+		sunset = sunset / 60;
+
+		// ensure that the time is >= 0 and < 24
+		while (sunset < 0.0) {
+			sunset += 24.0;
+		}
+		while (sunset >= 24.0) {
+			sunset -= 24.0;
+		}
+		return sunset;
 	}
 
 	/**
