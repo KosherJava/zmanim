@@ -224,9 +224,14 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that will roll the sunset time forward a day if sunset occurs before sunrise. This will typically happen
-	 * when a timezone other than the local timezone is used (calculating Los Angeles sunset using a GMT timezone for
-	 * example). In this case the sunset date will be incremented to the following date.
+	 * A method that will roll the sunset time forward a day if sunset occurs before sunrise. This is a rare occurrence
+	 * and will typically happen when calculating very early and late twilights in a location with a time zone far off
+	 * from its natural 15&deg; boundaries. This method will ensure that in this case, the sunset will be incremented to
+	 * the following date. An example of this is Marquette, Michigan that far west of the natural boundaries for EST.
+	 * When you add in DST this pushes it an additional hour off. Calculating the extreme 26&deg;twilight on March 6th
+	 * it start at 2:34:30 on the 6th and end at 1:01:46 on the following day March 7th. Occurrences are more common in
+	 * the polar region for dips as low as 3&deg; (Tested for Hooper Bay, Alaska). <b>TODO:</b> Since the occurrences
+	 * are rare, look for optimization to avoid relatively expensive calls to this method.
 	 * 
 	 * @param sunset
 	 *            the sunset date to adjust if needed
@@ -334,13 +339,14 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A utility method to return the time of an offset by degrees below or above the horizon of {@link #getSunrise()
-	 * sunrise}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; before
-	 *            sunrise, an offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 * sunrise}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; before sunrise, an
+	 * offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * 
 	 * @param offsetZenith
 	 *            the degrees before {@link #getSunrise()} to use in the calculation. For time after sunrise use
-	 *            negative numbers. Note that the degree offset is from the vertical, so for a calculation of 14&deg; before
-	 *            sunrise, an offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 *            negative numbers. Note that the degree offset is from the vertical, so for a calculation of 14&deg;
+	 *            before sunrise, an offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a
+	 *            parameter.
 	 * @return The {@link java.util.Date} of the offset after (or before) {@link #getSunrise()}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
 	 *         not rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
@@ -357,8 +363,8 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A utility method to return the time of an offset by degrees below or above the horizon of {@link #getSunset()
-	 * sunset}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; after
-	 *            sunset, an offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 * sunset}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; after sunset, an
+	 * offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * 
 	 * @param offsetZenith
 	 *            the degrees after {@link #getSunset()} to use in the calculation. For time before sunset use negative
@@ -535,6 +541,15 @@ public class AstronomicalCalendar implements Cloneable {
 		cal.set(Calendar.YEAR, getCalendar().get(Calendar.YEAR));
 		cal.set(Calendar.MONTH, getCalendar().get(Calendar.MONTH));
 		cal.set(Calendar.DAY_OF_MONTH, getCalendar().get(Calendar.DAY_OF_MONTH));
+		double gmtOffset = getCalendar().getTimeZone().getRawOffset() / (60d * MINUTE_MILLIS); // raw non DST offset
+		// Set the correct calendar date in UTC. For example Tokyo is 9 hours ahead of GMT. Sunrise at ~6 AM will be at
+		// ~21 hours GMT of the previous day and has to be set accordingly. In the case of California USA that is 7
+		// hours behind GMT, sunset at ~6 PM will be at ~1 GMT the following day and has to be set accordingly.
+		if (time + gmtOffset > 24) {
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+		} else if (time + gmtOffset < 0) {
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
 
 		int hours = (int) calculatedTime; // retain only the hours
 		calculatedTime -= hours;
