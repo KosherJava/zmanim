@@ -15,13 +15,13 @@
  */
 package net.sourceforge.zmanim.util;
 
+import java.util.TimeZone;
+
 /**
- * A class that represents a numeric time. Times that represent a time of day
- * are stored as {@link java.util.Date}s in this API. The time class is used to
- * represent numeric time such as the time in hours, minutes, seconds and
- * milliseconds of a
- * {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
- *
+ * A class that represents a numeric time. Times that represent a time of day are stored as {@link java.util.Date}s in
+ * this API. The time class is used to represent numeric time such as the time in hours, minutes, seconds and
+ * milliseconds of a {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
+ * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 0.9.0
  */
@@ -55,7 +55,7 @@ public class Time {
 
 	public Time(int millis) {
 		int adjustedMillis = millis;
-		if(adjustedMillis < 0){
+		if (adjustedMillis < 0) {
 			this.isNegative = true;
 			adjustedMillis = Math.abs(adjustedMillis);
 		}
@@ -71,10 +71,11 @@ public class Time {
 		this.milliseconds = adjustedMillis;
 	}
 
-	public boolean isNegative(){
+	public boolean isNegative() {
 		return this.isNegative;
 	}
-	public void setIsNegative(boolean isNegative){
+
+	public void setIsNegative(boolean isNegative) {
 		this.isNegative = isNegative;
 	}
 
@@ -139,11 +140,11 @@ public class Time {
 	}
 
 	public double getTime() {
-		return this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds
-				* SECOND_MILLIS + this.milliseconds;
+		return this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds * SECOND_MILLIS
+				+ this.milliseconds;
 	}
 
 	public String toString() {
-		return new ZmanimFormatter().format(this);
+		return new ZmanimFormatter(TimeZone.getTimeZone("UTC")).format(this);
 	}
 }

@@ -17,6 +17,7 @@ package net.sourceforge.zmanim;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import net.sourceforge.zmanim.util.AstronomicalCalculator;
 import net.sourceforge.zmanim.util.GeoLocation;
@@ -464,21 +465,6 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that adds time zone offset and daylight savings time to the raw UTC time.
-	 * 
-	 * @param time
-	 *            The UTC time to be adjusted.
-	 * @return The time adjusted for the time zone offset and daylight savings time.
-	 */
-	private double getOffsetTime(double time) {
-		// be nice to Newfies and use a double for offset
-		double gmtOffset = getCalendar().getTimeZone().getRawOffset() / (60d * MINUTE_MILLIS); // raw non DST offset
-		boolean isDST = getCalendar().getTimeZone().inDaylightTime(getCalendar().getTime());
-		double dstOffset = isDST ? getCalendar().getTimeZone().getDSTSavings() / (60d * MINUTE_MILLIS) : 0;
-		return time + gmtOffset + dstOffset;
-	}
-
-	/**
 	 * Method to return an {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} temporal
 	 * (solar) hour. The day from {@link #getSunrise() sunrise} to {@link #getSunset() sunset} is split into 12 equal
 	 * parts with each one being a temporal hour.
@@ -543,11 +529,8 @@ public class AstronomicalCalendar implements Cloneable {
 			return null;
 		}
 		double calculatedTime = time;
-		calculatedTime = getOffsetTime(calculatedTime); // adjust for timezone and daylight savings time
-		// the calculators sometimes return a double that is negative or slightly greater than 24
-		calculatedTime = (calculatedTime + 240) % 24; // ensure that the time is >= 0 and < 24
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();// clear all fields
 		cal.set(Calendar.YEAR, getCalendar().get(Calendar.YEAR));
 		cal.set(Calendar.MONTH, getCalendar().get(Calendar.MONTH));
