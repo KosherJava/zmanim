@@ -685,9 +685,9 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the molad in Standard Time in Yerushalayim. The traditional calculation uses local time. This method
-	 * subtracts 20.94 minutes (20 minutes and 56.435 seconds) from the local time (Har Habayis with a longitude of
-	 * 35.235149&deg; is 5.235149&deg; away from the %15 timezone longitude) to get to standard time. This method
+	 * Returns the molad in Standard Time in Yerushalayim as a Date. The traditional calculation uses local time. This
+	 * method subtracts 20.94 minutes (20 minutes and 56.496 seconds) from the local time (Har Habayis with a longitude
+	 * of 35.2354&deg; is 5.2354&deg; away from the %15 timezone longitude) to get to standard time. This method
 	 * intentionally uses standard time and not dailight savings time. Java will implicitly format the time to the
 	 * default (or set) Timezone.
 	 * 
@@ -697,22 +697,24 @@ public class JewishCalendar extends JewishDate {
 	 *            to avoid any confusion.
 	 * @return the Date representing the moment of the molad in Yerushalayim standard time (GMT + 2)
 	 */
-	private static Date getMoladYerushalayimStandardTime(int jewishYear, int jewishMonth) {
+	public static Date getMoladAsDate(int jewishYear, int jewishMonth) {
 		JewishDate molad = JewishDate.getMolad(jewishYear, jewishMonth);
 		String locationName = "Jerusalem, Israel";
 
-		double latitude = 31.77805; // Har Habayis lat
-		double longitude = 35.235149; // Har Habayis long
+		double latitude = 31.778; // Har Habayis latitude
+		double longitude = 35.2354; // Har Habayis longitude
 
-		// do not use "Asia/Jerusalem" timezone. Using it will lead to incorrect DST adjustments
+		// The molad calculation always extepcst output in standard time. Using "Asia/Jerusalem" timezone will incorrect
+		// adjust for DST.
 		TimeZone yerushalayimStandardTZ = TimeZone.getTimeZone("GMT+2");
 		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
 		Calendar cal = Calendar.getInstance(geo.getTimeZone());
+		cal.clear();
 		double moladSeconds = molad.getMoladChalakim() * 10 / 3;
 		cal.set(molad.getGregorianYear(), molad.getGregorianMonth() - 1, molad.getGregorianDayOfMonth(),
 				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
-		// subtract local time difference of 20.94 minutes (20 minutes and 56.435 seconds) to get to Standard time
+		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time
 		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
 		return cal.getTime();
 	}
@@ -730,9 +732,9 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 3 days after the molad.
 	 */
 	public static Date getTchilasZmanKidushLevanah3Days(int jewishYear, int jewishMonth) {
-		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(yerushalayimStandardMolad);
+		cal.setTime(molad);
 		cal.add(Calendar.HOUR, 72); // 3 days after the molad
 		return cal.getTime();
 	}
@@ -752,9 +754,9 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 7 days after the molad.
 	 */
 	public static Date getTchilasZmanKidushLevanah7Days(int jewishYear, int jewishMonth) {
-		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(yerushalayimStandardMolad);
+		cal.setTime(molad);
 		cal.add(Calendar.HOUR, 168); // 7 days after the molad
 		return cal.getTime();
 	}
@@ -776,11 +778,11 @@ public class JewishCalendar extends JewishDate {
 	 * @see #getSofZmanKidushLevanah15Days(int, int)
 	 */
 	public static Date getSofZmanKidushLevanahBetweenMoldos(int jewishYear, int jewishMonth) {
-		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(yerushalayimStandardMolad);
+		cal.setTime(molad);
 		// add half the time between molad and molad (half of 29 days, 12 hours and 793 chalakim (44 minutes, 3.3
-		// seconds, or 14 days, 18 hours, 22 minutes and 666 milliseconds)
+		// seconds), or 14 days, 18 hours, 22 minutes and 666 milliseconds)
 		cal.add(Calendar.DAY_OF_MONTH, 14);
 		cal.add(Calendar.HOUR_OF_DAY, 18);
 		cal.add(Calendar.MINUTE, 22);
@@ -809,9 +811,9 @@ public class JewishCalendar extends JewishDate {
 	 * @see #getSofZmanKidushLevanahBetweenMoldos(int, int)
 	 */
 	public static Date getSofZmanKidushLevanah15Days(int jewishYear, int jewishMonth) {
-		Date yerushalayimStandardMolad = getMoladYerushalayimStandardTime(jewishYear, jewishMonth);
+		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(yerushalayimStandardMolad);
+		cal.setTime(molad);
 		cal.add(Calendar.DAY_OF_YEAR, 15); // 15 days after the molad
 		return cal.getTime();
 	}
