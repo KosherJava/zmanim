@@ -48,8 +48,7 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		// step 1: First calculate the day of the year
 		// NOT NEEDED in this implementation
 
-		// step 2: convert the longitude to hour value and calculate an
-		// approximate time
+		// step 2: convert the longitude to hour value and calculate an approximate time
 		double lngHour = geoLocation.getLongitude() / 15;
 
 		double t = calendar.get(Calendar.DAY_OF_YEAR) + ((6 - lngHour) / 24); // use 18 for sunset instead of 6
@@ -130,8 +129,7 @@ public class ZmanimCalculator extends AstronomicalCalculator {
 		// step 1: First calculate the day of the year
 		int N = calendar.get(Calendar.DAY_OF_YEAR);
 
-		// step 2: convert the longitude to hour value and calculate an
-		// approximate time
+		// step 2: convert the longitude to hour value and calculate an approximate time
 		double lngHour = geoLocation.getLongitude() / 15;
 
 		double t = N + ((18 - lngHour) / 24);

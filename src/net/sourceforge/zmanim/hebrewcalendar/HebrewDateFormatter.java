@@ -549,7 +549,7 @@ public class HebrewDateFormatter {
 	 * @param moladChalakim
 	 * @return the formatted molad. FIXME: define proper format in English and Hebrew.
 	 */
-	public String formatMolad(long moladChalakim) {
+	private String formatMolad(long moladChalakim) {
 		long adjustedChalakim = moladChalakim;
 		int MINUTE_CHALAKIM = 18;
 		int HOUR_CHALAKIM = 1080;

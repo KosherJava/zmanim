@@ -19,9 +19,8 @@ import java.util.Calendar;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at
- * runtime, easily allowing comparison the results of using different algorithms. <b>TODO:</b> consider methods that
- * would allow atmospheric modeling. This can currently be adjusted by {@link #setRefraction(double) setting the
- * refraction}.
+ * runtime, easily allowing comparison the results of using different algorithms. TODO: consider methods that would
+ * allow atmospheric modeling. This can currently be adjusted by {@link #setRefraction(double) setting the refraction}.
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2011
  * @version 1.1
@@ -30,6 +29,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	/**
 	 * The commonly used average solar refraction. Calendrical Calculations lists a more accurate global average of
 	 * 34.478885263888294
+	 * 
 	 * @see #getRefraction()
 	 */
 	private double refraction = 34 / 60d;
@@ -37,6 +37,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/**
 	 * The commonly used average solar radius.
+	 * 
 	 * @see #getSolarRadius()
 	 */
 	private double solarRadius = 16 / 60d;
