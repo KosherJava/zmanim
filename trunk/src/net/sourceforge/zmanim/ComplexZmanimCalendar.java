@@ -159,8 +159,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * The zenith of 13&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>Rabainu Tam's bain hashmashos</em> according to some opinions. <br/>
 	 * <br/>
-	 * <b>FIXME:</b> See comments on {@link #getBainHasmashosRT13Degrees}. This should be changed to 13.2477 after
-	 * confirmation.
+	 * FIXME: See comments on {@link #getBainHasmashosRT13Degrees}. This should be changed to 13.2477 after confirmation
+	 * from Rabbi Harfenes.
 	 * 
 	 * @see #getBainHasmashosRT13Degrees
 	 * 
@@ -1580,10 +1580,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns Bain Hashmashos of Rabainu Tam calculated as the time the sun is 13&deg; below
 	 * {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). <br/>
 	 * <br/>
-	 * <b>FIXME:</b> As per Yisroel Vehazmanim Vol III page 1028 No 50, the 13&deg; is slightly inaccurate. He lists it
-	 * as a drop less than 13&deg;. Calculations show that is seems to be 13.2477&deg; below the horizon at that time.
-	 * This makes a difference of 1 minute and 10 seconds in Jerusalem during the Equinox, and 1 minute 29 seconds
-	 * during the solstice. For NY during the solstice, the difference is 1 minute 56 seconds.
+	 * FIXME: As per Yisroel Vehazmanim Vol III page 1028 No 50, the 13&deg; is slightly inaccurate. He lists it as a
+	 * drop less than 13&deg;. Calculations show that is seems to be 13.2477&deg; below the horizon at that time. This
+	 * makes a difference of 1 minute and 10 seconds in Jerusalem during the Equinox, and 1 minute 29 seconds during the
+	 * solstice. For NY during the solstice, the difference is 1 minute 56 seconds.
 	 * 
 	 * @return the <code>Date</code> of the sun being 13&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}
 	 *         (90&deg;). If the calculation can't be computed such as northern and southern locations even south of the
@@ -1647,14 +1647,15 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
-	 * sun's position at {@link #ZENITH_5_POINT_95 5.95&deg;} below the western horizon.
+	 * sun's position at {@link #ZENITH_3_POINT_7 3.7&deg;} below the western horizon.
 	 * 
-	 * @return the <code>Date</code> representing the time when the sun is 5.95&deg; below sea level.
-	 * @see #ZENITH_5_POINT_95
+	 * @return the <code>Date</code> representing the time when the sun is 3.7&deg; below sea level.
+	 * @see #ZENITH_3_POINT_7
 	 */
 	// public Date getTzaisGeonim3Point7Degrees() {
 	// return getSunsetOffsetByDegrees(ZENITH_3_POINT_7);
 	// }
+
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
 	 * sun's position at {@link #ZENITH_5_POINT_95 5.95&deg;} below the western horizon.
@@ -1959,7 +1960,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 1/10th of the day), 8 and 18 minutes (possibly attributed to Chacham Baruch Ben Haim). Since there is no
 	 * universal accepted offset, the user of this API will have to specify one. Chacham Yosef Harari-Raful of Yeshivat
 	 * Ateret Torah does not supply any zman for misheyakir and does not endorse any specific calculation for
-	 * misheyakir. For that reason, this method is not enabled.
+	 * misheyakir. For that reason, this method is not a public method.
 	 * 
 	 * @param minutes
 	 *            the number of minutes after alos calculated as {@link #getAlos72Zmanis() 1/10th of the day}
@@ -1968,9 +1969,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Zmanis()
 	 */
-	// public Date getMesheyakirAteretTorah(double minutes) {
-	// return getTimeOffset(getAlos72Zmanis(), minutes * MINUTE_MILLIS);
-	// }
+	private Date getMesheyakirAteretTorah(double minutes) {
+		return getTimeOffset(getAlos72Zmanis(), minutes * MINUTE_MILLIS);
+	}
+
 	/**
 	 * Method to return <em>tzais</em> (dusk) calculated as 72 minutes zmaniyos, or 1/10th of the day after
 	 * {@link #getSeaLevelSunset() sea level sunset}.

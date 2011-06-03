@@ -19,8 +19,8 @@ import java.util.Calendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
- * written by <a href="http://www.kevinboone.com/suntimes.html">Kevin Boone</a> that is based on the <a href =
- * "http://aa.usno.navy.mil/">US Naval Observatory's</a><a
+ * written by <a href="http://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
+ * Boone</a> that is based on the <a href = "http://aa.usno.navy.mil/">US Naval Observatory's</a><a
  * href="http://aa.usno.navy.mil/publications/docs/asa.php">Almanac</a> for Computer algorithm ( <a
  * href="http://www.amazon.com/exec/obidos/tg/detail/-/0160515106/">Amazon</a>, <a
  * href="http://search.barnesandnoble.com/booksearch/isbnInquiry.asp?isbn=0160515106">Barnes &amp; Noble</a>) and is
@@ -43,10 +43,10 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double doubleTime = Double.NaN;
-		
+
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		
+
 		doubleTime = getTimeUTC(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), geoLocation.getLongitude(), geoLocation.getLatitude(),
 				adjustedZenith, true);
@@ -60,7 +60,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double doubleTime = Double.NaN;
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		
+
 		doubleTime = getTimeUTC(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
 				calendar.get(Calendar.DAY_OF_MONTH), geoLocation.getLongitude(), geoLocation.getLatitude(),
 				adjustedZenith, false);
@@ -133,7 +133,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	private static double getApproxTimeDays(int dayOfYear, double hoursFromMeridian, boolean isSunrise) {
 		if (isSunrise) {
 			return dayOfYear + ((6.0 - hoursFromMeridian) / 24);
-		} else { //sunset
+		} else { // sunset
 			return dayOfYear + ((18.0 - hoursFromMeridian) / 24);
 		}
 	}
@@ -228,7 +228,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double localHourAngle = 0;
 		if (isSunrise) {
 			localHourAngle = 360.0 - acosDeg(cosLocalHourAngle);
-		} else { //sunset
+		} else { // sunset
 			localHourAngle = acosDeg(cosLocalHourAngle);
 		}
 		double localHour = localHourAngle / DEG_PER_HOUR;

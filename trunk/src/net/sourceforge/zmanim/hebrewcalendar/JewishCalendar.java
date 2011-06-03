@@ -35,8 +35,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * their code on routines by Nachum Dershowitz and Edward M. Reingold. The class allows setting whether the parsha and
  * holiday scheme follows the Israel scheme or outside Israel scheme. The default is the outside Israel scheme.
  * 
- * <b>TODO:</b> Some do not belong in this class, but here is a partial list of what should still be implemented in some
- * form:
+ * TODO: Some do not belong in this class, but here is a partial list of what should still be implemented in some form:
  * <ol>
  * <li>Add Isru Chag</li>
  * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
@@ -720,8 +719,8 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the earliest time of Kiddush Levana calculated as 3 days after the molad. <b>TODO:</b> Currently returns
-	 * the time even if it is during the day. It should return the
+	 * Returns the earliest time of Kiddush Levana calculated as 3 days after the molad. TODO: Currently returns the
+	 * time even if it is during the day. It should return the
 	 * {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() Tzais} after to the time if the zman is between Alos
 	 * and Tzais.
 	 * 
@@ -742,10 +741,9 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns the earliest time of Kiddush Levana calculated as 7 days after the molad as mentioned by the <a
 	 * href="http://en.wikipedia.org/wiki/Yosef_Karo">Mechaber</a>. See the <a
-	 * href="http://en.wikipedia.org/wiki/Yoel_Sirkis">Bach's</a> opinion on this time. <b>TODO:</b> Currently returns
-	 * the time even if it is during the day. It should return the
-	 * {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() Tzais} after to the time if the zman is between Alos
-	 * and Tzais.
+	 * href="http://en.wikipedia.org/wiki/Yoel_Sirkis">Bach's</a> opinion on this time. TODO: Currently returns the time
+	 * even if it is during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72()
+	 * Tzais} after to the time if the zman is between Alos and Tzais.
 	 * 
 	 * @param jewishYear
 	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
@@ -765,10 +763,9 @@ public class JewishCalendar extends JewishDate {
 	 * Returns the latest time of Kiddush Levana according to the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as
 	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between molad and
-	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. <b>TODO:</b> Currently returns
-	 * the time even if it is during the day. It should return the
-	 * {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} prior to the time if the zman is between Alos and
-	 * Tzais.
+	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. TODO: Currently returns the time
+	 * even if it is during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos}
+	 * prior to the time if the zman is between Alos and Tzais.
 	 * 
 	 * @param jewishYear
 	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
@@ -799,9 +796,9 @@ public class JewishCalendar extends JewishDate {
 	 * {@link #getSofZmanKidushLevanahBetweenMoldos(int, int) half way between molad and mold} is of the opinion that
 	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
 	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
-	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. <b>TODO:</b> Currently returns the time even if
-	 * it is during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} prior
-	 * to the time if the zman is between Alos and Tzais.
+	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. TODO: Currently returns the time even if it is
+	 * during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} prior to the
+	 * time if the zman is between Alos and Tzais.
 	 * 
 	 * @param jewishYear
 	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
@@ -848,9 +845,7 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public int hashCode() {
 		int result = 17;
-		result = 37 * result + getClass().hashCode(); // needed or this and
-														// subclasses will
-														// return identical hash
+		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
 		result += 37 * result + getAbsDate() + (getInIsrael() ? 1 : 3);
 		return result;
 	}

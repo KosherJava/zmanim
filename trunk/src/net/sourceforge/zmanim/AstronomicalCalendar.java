@@ -230,8 +230,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * the following date. An example of this is Marquette, Michigan that far west of the natural boundaries for EST.
 	 * When you add in DST this pushes it an additional hour off. Calculating the extreme 26&deg;twilight on March 6th
 	 * it start at 2:34:30 on the 6th and end at 1:01:46 on the following day March 7th. Occurrences are more common in
-	 * the polar region for dips as low as 3&deg; (Tested for Hooper Bay, Alaska). <b>TODO:</b> Since the occurrences
-	 * are rare, look for optimization to avoid relatively expensive calls to this method.
+	 * the polar region for dips as low as 3&deg; (Tested for Hooper Bay, Alaska). TODO: Since the occurrences are rare,
+	 * look for optimization to avoid relatively expensive calls to this method.
 	 * 
 	 * @param sunset
 	 *            the sunset date to adjust if needed
@@ -568,8 +568,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * Will return the dip below the horizon before sunrise that matches the offset minutes on passed in. For example
 	 * passing in 72 minutes for a calendar set to the equinox in Jerusalem returns a value close to 16.1&deg; Please
-	 * note that this method is very slow and inefficient and should NEVER be used in a loop. <em><b>TODO:</b></em>
-	 * Improve efficiency.
+	 * note that this method is very slow and inefficient and should NEVER be used in a loop. TODO: Improve efficiency.
 	 * 
 	 * @param minutes
 	 *            offset
@@ -592,8 +591,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * Will return the dip below the horizon after sunset that matches the offset minutes on passed in. For example
 	 * passing in 72 minutes for a calendar set to the equinox in Jerusalem returns a value close to 16.1&deg; Please
-	 * note that this method is very slow and inefficient and should NEVER be used in a loop. <em><b>TODO:</b></em>
-	 * Improve efficiency.
+	 * note that this method is very slow and inefficient and should NEVER be used in a loop. TODO: Improve efficiency.
 	 * 
 	 * @param minutes
 	 *            offset
@@ -643,9 +641,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public int hashCode() {
 		int result = 17;
-		result = 37 * result + getClass().hashCode(); // needed or this and
-														// subclasses will
-														// return identical hash
+		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
 		result += 37 * result + getCalendar().hashCode();
 		result += 37 * result + getGeoLocation().hashCode();
 		result += 37 * result + getAstronomicalCalculator().hashCode();
@@ -670,8 +666,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public void setGeoLocation(GeoLocation geoLocation) {
 		this.geoLocation = geoLocation;
-		// if not set the output will be in the original timezone. The call
-		// below is also in the constructor
 		getCalendar().setTimeZone(geoLocation.getTimeZone());
 	}
 
@@ -715,9 +709,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public void setCalendar(Calendar calendar) {
 		this.calendar = calendar;
-		if (getGeoLocation() != null) {// set the timezone if possible
-			// Always set the Calendar's timezone to match the GeoLocation
-			// TimeZone
+		if (getGeoLocation() != null) {// if available set the Calendar's timezone to the GeoLocation TimeZone
 			getCalendar().setTimeZone(getGeoLocation().getTimeZone());
 		}
 	}

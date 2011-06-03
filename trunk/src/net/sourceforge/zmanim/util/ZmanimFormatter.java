@@ -262,10 +262,8 @@ public class ZmanimFormatter {
 
 		StringBuffer buff = new StringBuffer(dateFormat.format(dateTime));
 		// Must also include offset from UTF.
-		// Get the offset (in milliseconds).
-		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
-		// If there is no offset, we have "Coordinated
-		// Universal Time."
+		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);// Get the offset (in milliseconds)
+		// If there is no offset, we have "Coordinated Universal Time"
 		if (offset == 0)
 			buff.append("Z");
 		else {
