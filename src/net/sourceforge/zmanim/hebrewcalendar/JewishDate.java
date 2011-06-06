@@ -335,7 +335,7 @@ public class JewishDate implements Comparable, Cloneable {
 		}
 
 		int dayOfMonth = absDate - gregorianDateToAbsDate(year, month, 1) + 1;
-		setGregorianDate(year, month, dayOfMonth);
+		setInternalGregorianDate(year, month, dayOfMonth);
 	}
 
 	/**
@@ -586,29 +586,64 @@ public class JewishDate implements Comparable, Cloneable {
 
 	/**
 	 * Validates the components of a Gregorian date for validity. It will throw an {@link IllegalArgumentException} if a
-	 * year of < 1, a month < 1 or > 12 or a day of month < 1 is passed in.
+	 * year of < 1, a month < 0 or > 11 or a day of month < 1 is passed in.
 	 * 
 	 * @param year
 	 *            the Gregorian year to validate. It will reject any year < 1.
 	 * @param month
-	 *            the Gregorian month number to validate. It will enforce that the month is between 1 - 12. Unlike a
-	 *            {@link GregorianCalendar}, where {@link Calendar#JANUARY} has a value of 0, this class expects a 1
-	 *            based month.
+	 *            the Gregorian month number to validate. It will enforce that the month is between 0 - 11 like a
+	 *            {@link GregorianCalendar}, where {@link Calendar#JANUARY} has a value of 0.
 	 * @param dayOfMonth
 	 *            the day of the Gregorian month to validate. It will reject any value < 1, but will allow values > 31
-	 *            since callimn methods will simply set it to the maximum for that month. TODO: check calling methods to
+	 *            since calling methods will simply set it to the maximum for that month. TODO: check calling methods to
 	 *            see if there is any reason that the class needs days > the maximum.
 	 * @throws IllegalArgumentException
-	 *             if a year of < 1, a month < 1 or > 12 or a day of month < 1 is passed in
+	 *             if a year of < 1, a month < 0 or > 11 or a day of month < 1 is passed in
+	 * @see #validateGregorianYear(int)
+	 * @see #validateGregorianMonth(int)
+	 * @see #validateGregorianDayOfMonth(int)
 	 */
 	private static void validateGregorianDate(int year, int month, int dayOfMonth) {
-		if (month > 12 || month < 1) {
-			throw new IllegalArgumentException("The Gregorian month has to be between 1 - 12. " + month
+		validateGregorianMonth(month);
+		validateGregorianDayOfMonth(dayOfMonth);
+		validateGregorianYear(year);
+	}
+
+	/**
+	 * Validates a Gregorian month for validity.
+	 * 
+	 * @param month
+	 *            the Gregorian month number to validate. It will enforce that the month is between 0 - 11 like a
+	 *            {@link GregorianCalendar}, where {@link Calendar#JANUARY} has a value of 0.
+	 */
+	private static void validateGregorianMonth(int month) {
+		if (month > 11 || month < 0) {
+			throw new IllegalArgumentException("The Gregorian month has to be between 0 - 11. " + month
 					+ " is invalid.");
 		}
+	}
+
+	/**
+	 * Validates a Gregorian day of month for validity.
+	 * 
+	 * @param dayOfMonth
+	 *            the day of the Gregorian month to validate. It will reject any value < 1, but will allow values > 31
+	 *            since calling methods will simply set it to the maximum for that month. TODO: check calling methods to
+	 *            see if there is any reason that the class needs days > the maximum.
+	 */
+	private static void validateGregorianDayOfMonth(int dayOfMonth) {
 		if (dayOfMonth <= 0) {
 			throw new IllegalArgumentException("The day of month can't be less than 1. " + dayOfMonth + " is invalid.");
 		}
+	}
+
+	/**
+	 * Validates a Gregorian year for validity.
+	 * 
+	 * @param year
+	 *            the Gregorian year to validate. It will reject any year < 1.
+	 */
+	private static void validateGregorianYear(int year) {
 		if (year < 1) {
 			throw new IllegalArgumentException("Years < 1 can't be claculated. " + year + " is invalid.");
 		}
@@ -964,27 +999,40 @@ public class JewishDate implements Comparable, Cloneable {
 	}
 
 	/**
-	 * Sets the Gregorian Date, and updates the Jewish date accordingly. Confusingly unlike the Java Calendar where
-	 * January has the value of 0,This class expects a 1 for January.
+	 * Sets the Gregorian Date, and updates the Jewish date accordingly. Like the Java Calendar A value of 0 is expected
+	 * for January.
 	 * 
 	 * @param year
 	 *            the Gregorian year
 	 * @param month
-	 *            the Gregorian month. Unlike the Java Calendar where January has the value of 0,This expects a 1 for
-	 *            January
+	 *            the Gregorian month. Like the Java Calendar, this class expects 0 for January
 	 * @param dayOfMonth
 	 *            the Gregorian day of month. If this is > the number of days in the month/year, the last valid date of
 	 *            the month will be set
 	 * @throws IllegalArgumentException
-	 *             if a year of < 1, a month < 1 or > 12 or a day of month < 1 is passed in
+	 *             if a year of < 1, a month < 0 or > 11 or a day of month < 1 is passed in
 	 */
 	public void setGregorianDate(int year, int month, int dayOfMonth) {
 		validateGregorianDate(year, month, dayOfMonth);
+		setInternalGregorianDate(year, month + 1, dayOfMonth);
+	}
+
+	/**
+	 * Sets the hidden internal representation of the Gregorian date , and updates the Jewish date accordingly. While
+	 * public getters and setters have 0 based months matching the Java Calendar classes, This class internally
+	 * represents the Gregorian month starting at 1. When this is called it will not adjust the month to match the Java
+	 * Calendar classes.
+	 * 
+	 * @param year
+	 *            the
+	 * @param month
+	 * @param dayOfMonth
+	 */
+	private void setInternalGregorianDate(int year, int month, int dayOfMonth) {
 		// make sure date is a valid date for the given month, if not, set to last day of month
 		if (dayOfMonth > getLastDayOfGregorianMonth(month, year)) {
 			dayOfMonth = getLastDayOfGregorianMonth(month, year);
 		}
-
 		// init month, date, year
 		gregorianMonth = month;
 		gregorianDayOfMonth = dayOfMonth;
@@ -1237,12 +1285,12 @@ public class JewishDate implements Comparable, Cloneable {
 	}
 
 	/**
-	 * Returns the Gregorian month (between 1-12).
+	 * Returns the Gregorian month (between 0-11).
 	 * 
-	 * @return the Gregorian month (between 1-12). Unlike the java.util.Calendar, this will be 1 based and not 0 based.
+	 * @return the Gregorian month (between 0-11). Like the java.util.Calendar, months are 0 based.
 	 */
 	public int getGregorianMonth() {
-		return gregorianMonth;
+		return gregorianMonth - 1;
 	}
 
 	/**
@@ -1308,10 +1356,11 @@ public class JewishDate implements Comparable, Cloneable {
 	 *            the Gregorian month
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if a month < 1 or > 12 is passed in
+	 *             if a month < 0 or > 11 is passed in
 	 */
 	public void setGregorianMonth(int month) {
-		setGregorianDate(gregorianYear, month, gregorianDayOfMonth);
+		validateGregorianMonth(month);
+		setInternalGregorianDate(gregorianYear, month + 1, gregorianDayOfMonth);
 	}
 
 	/**
@@ -1323,7 +1372,8 @@ public class JewishDate implements Comparable, Cloneable {
 	 *             if a year of < 1 is passed in
 	 */
 	public void setGregorianYear(int year) {
-		setGregorianDate(year, gregorianMonth, gregorianDayOfMonth);
+		validateGregorianYear(year);
+		setInternalGregorianDate(year, gregorianMonth, gregorianDayOfMonth);
 	}
 
 	/**
@@ -1335,7 +1385,8 @@ public class JewishDate implements Comparable, Cloneable {
 	 *             if the day of month of < 1 is passed in
 	 */
 	public void setGregorianDayOfMonth(int dayOfMonth) {
-		setGregorianDate(gregorianYear, gregorianMonth, dayOfMonth);
+		validateGregorianDayOfMonth(dayOfMonth);
+		setInternalGregorianDate(gregorianYear, gregorianMonth, dayOfMonth);
 	}
 
 	/**
@@ -1389,7 +1440,7 @@ public class JewishDate implements Comparable, Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			// Required by the compiler. Should never be reached since we implement clone()
 		}
-		clone.setGregorianDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+		clone.setInternalGregorianDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
 		return clone;
 	}
 

@@ -72,7 +72,7 @@ public class JewishCalendar extends JewishDate {
 	public static final int HOSHANA_RABBA = 17;
 	public static final int SHEMINI_ATZERES = 18;
 	public static final int SIMCHAS_TORAH = 19;
-	public static final int EREV_CHANUKAH = 20;// probably remove this
+	// public static final int EREV_CHANUKAH = 20;// probably remove this
 	public static final int CHANUKAH = 21;
 	public static final int TENTH_OF_TEVES = 22;
 	public static final int TU_BESHVAT = 23;
@@ -225,15 +225,15 @@ public class JewishCalendar extends JewishDate {
 			break;
 		case IYAR:
 			if (isUseModernHolidays()
-					&& ((getJewishDayOfMonth() == 4 && getDayOfWeek() == 3) || ((getJewishDayOfMonth() == 3 || getJewishDayOfMonth() == 2) && getDayOfWeek() == 4))
-					|| (getJewishDayOfMonth() == 5 && getDayOfWeek() == 2)) {
+					&& ((getJewishDayOfMonth() == 4 && getDayOfWeek() == 3)
+							|| ((getJewishDayOfMonth() == 3 || getJewishDayOfMonth() == 2) && getDayOfWeek() == 4) || (getJewishDayOfMonth() == 5 && getDayOfWeek() == 2))) {
 				return YOM_HAZIKARON;
 			}
 			// if 5 Iyar falls on Wed Yom Haatzmaut is that day. If it fal1s on Friday or Shabbos it is moved back to
 			// Thursday. If it falls on Monday it is moved to Tuesday
 			if (isUseModernHolidays()
-					&& ((getJewishDayOfMonth() == 5 && getDayOfWeek() == 4) || ((getJewishDayOfMonth() == 4 || getJewishDayOfMonth() == 3) && getDayOfWeek() == 5))
-					|| (getJewishDayOfMonth() == 6 && getDayOfWeek() == 3)) {
+					&& ((getJewishDayOfMonth() == 5 && getDayOfWeek() == 4)
+							|| ((getJewishDayOfMonth() == 4 || getJewishDayOfMonth() == 3) && getDayOfWeek() == 5) || (getJewishDayOfMonth() == 6 && getDayOfWeek() == 3))) {
 				return YOM_HAATZMAUT;
 			}
 			if (getJewishDayOfMonth() == 14) {
@@ -302,9 +302,10 @@ public class JewishCalendar extends JewishDate {
 			}
 			break;
 		case KISLEV: // no yomtov in CHESHVAN
-			if (getJewishDayOfMonth() == 24) {
-				return EREV_CHANUKAH;
-			} else if (getJewishDayOfMonth() >= 25) {
+			// if (getJewishDayOfMonth() == 24) {
+			// return EREV_CHANUKAH;
+			// } else
+			if (getJewishDayOfMonth() >= 25) {
 				return CHANUKAH;
 			}
 			break;
@@ -418,13 +419,12 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the day of Chanukah or -1 if it is not Chanukah. To find out of the day is Erev Chanukah check if
-	 * {@link #getYomTovIndex()} == {@link #EREV_CHANUKAH}.
+	 * Returns the day of Chanukah or -1 if it is not Chanukah.
 	 * 
 	 * @return the day of Chanukah or -1 if it is not Chanukah.
 	 */
 	public int getDayOfChanukah() {
-		if (getYomTovIndex() == CHANUKAH) {
+		if (isChanukah()) {
 			if (getJewishMonth() == KISLEV) {
 				return getJewishDayOfMonth() - 24;
 			} else { // teves
@@ -433,6 +433,10 @@ public class JewishCalendar extends JewishDate {
 		} else {
 			return -1;
 		}
+	}
+
+	public boolean isChanukah() {
+		return getYomTovIndex() == CHANUKAH;
 	}
 
 	// These indices were originally included in the emacs 19 distribution.
@@ -653,7 +657,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if the day is Rosh Chodesh.
+	 * Returns if the day is Rosh Chodesh. Rosh Hashana will return false
 	 * 
 	 * @return true if it is Rosh Chodesh. Rosh Hashana will return false
 	 */
@@ -691,9 +695,11 @@ public class JewishCalendar extends JewishDate {
 	 * default (or set) Timezone.
 	 * 
 	 * @param jewishYear
-	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
-	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
-	 *            to avoid any confusion.
+	 *            the Jewish year.
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
 	 * @return the Date representing the moment of the molad in Yerushalayim standard time (GMT + 2)
 	 */
 	public static Date getMoladAsDate(int jewishYear, int jewishMonth) {
@@ -725,12 +731,14 @@ public class JewishCalendar extends JewishDate {
 	 * and Tzais.
 	 * 
 	 * @param jewishYear
-	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
-	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
-	 *            to avoid any confusion.
+	 *            the Jewish year.
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
 	 * @return the Date representing the moment 3 days after the molad.
 	 */
-	public static Date getTchilasZmanKidushLevanah3Days(int jewishYear, int jewishMonth) {
+	public static Date getTchilasZmanKidushLevana3Days(int jewishYear, int jewishMonth) {
 		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(molad);
@@ -746,12 +754,14 @@ public class JewishCalendar extends JewishDate {
 	 * Tzais} after to the time if the zman is between Alos and Tzais.
 	 * 
 	 * @param jewishYear
-	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
-	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
-	 *            to avoid any confusion.
+	 *            the Jewish year.
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
 	 * @return the Date representing the moment 7 days after the molad.
 	 */
-	public static Date getTchilasZmanKidushLevanah7Days(int jewishYear, int jewishMonth) {
+	public static Date getTchilasZmanKidushLevana7Days(int jewishYear, int jewishMonth) {
 		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(molad);
@@ -768,13 +778,15 @@ public class JewishCalendar extends JewishDate {
 	 * prior to the time if the zman is between Alos and Tzais.
 	 * 
 	 * @param jewishYear
-	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
-	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
-	 *            to avoid any confusion.
-	 * @return the Date representing the moment 15 days after the molad.
-	 * @see #getSofZmanKidushLevanah15Days(int, int)
+	 *            the Jewish year.
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
+	 * @return the Date representing the moment halfway between molad and molad.
+	 * @see #getSofZmanKidushLevana15Days(int, int)
 	 */
-	public static Date getSofZmanKidushLevanahBetweenMoldos(int jewishYear, int jewishMonth) {
+	public static Date getSofZmanKidushLevanaBetweenMoldos(int jewishYear, int jewishMonth) {
 		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(molad);
@@ -793,7 +805,7 @@ public class JewishCalendar extends JewishDate {
 	 * in the Shulchan Aruch (Orach Chaim 426). It should be noted that some opinions hold that the
 	 * <http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> of calculating
-	 * {@link #getSofZmanKidushLevanahBetweenMoldos(int, int) half way between molad and mold} is of the opinion that
+	 * {@link #getSofZmanKidushLevanaBetweenMoldos(int, int) half way between molad and mold} is of the opinion that
 	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
 	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
 	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. TODO: Currently returns the time even if it is
@@ -801,13 +813,15 @@ public class JewishCalendar extends JewishDate {
 	 * time if the zman is between Alos and Tzais.
 	 * 
 	 * @param jewishYear
-	 *            the Jewish year the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar
-	 *            II. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II)
-	 *            to avoid any confusion.
+	 *            the Jewish year.
+	 * @param jewishMonth
+	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
+	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
+	 *            confusion.
 	 * @return the Date representing the moment 15 days after the molad.
-	 * @see #getSofZmanKidushLevanahBetweenMoldos(int, int)
+	 * @see #getSofZmanKidushLevanaBetweenMoldos(int, int)
 	 */
-	public static Date getSofZmanKidushLevanah15Days(int jewishYear, int jewishMonth) {
+	public static Date getSofZmanKidushLevana15Days(int jewishYear, int jewishMonth) {
 		Date molad = getMoladAsDate(jewishYear, jewishMonth);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(molad);

@@ -184,6 +184,25 @@ public class HebrewDateFormatter {
 		return index == -1 ? "" : hebrewFormat ? hebrewHolidays[index] : transliteratedHolidays[index];
 	}
 
+	public String formatRoshChodesh(JewishCalendar jewishCalendar) {
+		if (!jewishCalendar.isRoshChodesh()) {
+			return "";
+		}
+		String formattedRoshChodesh = "";
+		int month = jewishCalendar.getJewishMonth();
+		if (jewishCalendar.getJewishDayOfMonth() == 30) {
+			if (month < 12 || (month == 12 && jewishCalendar.isJewishLeapYear())) {
+				month++;
+			} else { // roll to Nissan
+				month = 1;
+			}
+		}
+		formattedRoshChodesh = hebrewFormat ? hebrewHolidays[JewishCalendar.ROSH_CHODESH]
+				: transliteratedHolidays[JewishCalendar.ROSH_CHODESH];
+		formattedRoshChodesh += " " + formatMonth(jewishCalendar.getJewishYear(), month);
+		return formattedRoshChodesh;
+	}
+
 	/**
 	 * Returns if the formatter is set to use Hebrew formatting in the various formatting methods.
 	 * 
@@ -498,19 +517,38 @@ public class HebrewDateFormatter {
 	 * @see #setTransliteratedMonthList(String[])
 	 */
 	public String formatMonth(JewishDate jewishDate) {
+//		if (isHebrewFormat()) {
+//			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
+//				return hebrewMonths[13] + (useGershGershayim ? GERESH : ""); // return Adar I, not Adar in a leap year
+//			} else if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR_II) {
+//				return hebrewMonths[12] + (useGershGershayim ? GERESH : "");
+//			} else {
+//				return hebrewMonths[jewishDate.getJewishMonth() - 1];
+//			}
+//		} else {
+//			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
+//				return transliteratedMonths[13]; // return Adar I, not Adar in a leap year
+//			} else {
+//				return transliteratedMonths[jewishDate.getJewishMonth() - 1];
+//			}
+//		}
+		return formatMonth(jewishDate.getJewishYear(), jewishDate.getJewishMonth());
+	}
+	
+	private String formatMonth(int year, int month){
 		if (isHebrewFormat()) {
-			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
+			if (JewishDate.isJewishLeapYear(year) && month == JewishDate.ADAR) {
 				return hebrewMonths[13] + (useGershGershayim ? GERESH : ""); // return Adar I, not Adar in a leap year
-			} else if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR_II) {
+			} else if (JewishDate.isJewishLeapYear(year) && month == JewishDate.ADAR_II) {
 				return hebrewMonths[12] + (useGershGershayim ? GERESH : "");
 			} else {
-				return hebrewMonths[jewishDate.getJewishMonth() - 1];
+				return hebrewMonths[month - 1];
 			}
 		} else {
-			if (jewishDate.isJewishLeapYear() && jewishDate.getJewishMonth() == JewishDate.ADAR) {
+			if (JewishDate.isJewishLeapYear(year) && month == JewishDate.ADAR) {
 				return transliteratedMonths[13]; // return Adar I, not Adar in a leap year
 			} else {
-				return transliteratedMonths[jewishDate.getJewishMonth() - 1];
+				return transliteratedMonths[month - 1];
 			}
 		}
 	}
