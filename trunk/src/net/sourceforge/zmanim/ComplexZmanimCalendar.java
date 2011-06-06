@@ -15,10 +15,11 @@
  */
 package net.sourceforge.zmanim;
 
+import java.util.Calendar;
 import java.util.Date;
-
 import net.sourceforge.zmanim.util.AstronomicalCalculator;
 import net.sourceforge.zmanim.util.GeoLocation;
+import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
 
 /**
  * This class extends ZmanimCalendar and provides many more zmanim than available in the ZmanimCalendar. The basis for
@@ -528,11 +529,12 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * Method to return <em>alos</em> (dawn) calculated using 60 minutes before {@link #getSeaLevelSunrise() sea level
-	 * sunrise} on the time to walk the distance of 4 <em>Mil</em> at 15 minutes a <em>Mil</em> (the opinion of the
-	 * Chavas Yair. See the Divray Malkiel). This is based on the opinion of most <em>Rishonim</em> who stated that the
-	 * time of the <em>Neshef</em> (time between dawn and sunrise) does not vary by the time of year or location but
-	 * purely depends on the time it takes to walk the distance of 4 <em>Mil</em>.
+	 * Method to return <em>alos</em> (dawn) calculated as 60 minutes before {@link #getSeaLevelSunrise() sea level
+	 * sunrise}. This is the time to walk the distance of 4 <em>Mil</em> at 15 minutes a <em>Mil</em> (the opinion of
+	 * the Chavas Yair. See the Divray Malkiel). Time based offset calculations for alos are based on the opinion of
+	 * most <em>Rishonim</em> who stated that the time of the <em>Neshef</em> (time between dawn and sunrise) does not
+	 * vary by the time of year or location but purely depends on the time it takes to walk the distance of 4
+	 * <em>Mil</em>.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -567,10 +569,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 96 minutes before {@link #getSeaLevelSunrise() sea level
-	 * sunrise} based on the time to walk the distance of 4 <em>Mil</em> at 24 minutes a <em>Mil</em>. This is based on
-	 * the opinion of most <em>Rishonim</em> who stated that the time of the <em>Neshef</em> (time between dawn and
-	 * sunrise) does not vary by the time of year or location but purely depends on the time it takes to walk the
-	 * distance of 4 <em>Mil</em>.
+	 * sunrise} based on the time to walk the distance of 4 <em>Mil</em> at 24 minutes a <em>Mil</em>. Time based offset
+	 * calculations for alos are based on the opinion of most <em>Rishonim</em> who stated that the time of the
+	 * <em>Neshef</em> (time between dawn and sunrise) does not vary by the time of year or location but purely depends
+	 * on the time it takes to walk the distance of 4 <em>Mil</em>.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -625,10 +627,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 90 minutes before {@link #getSeaLevelSunrise() sea level
-	 * sunrise} on the time to walk the distance of 4 <em>Mil</em> at 22.5 minutes a <em>Mil</em>. This is based on the
-	 * opinion of most <em>Rishonim</em> who stated that the time of the <em>Neshef</em> (time between dawn and sunrise)
-	 * does not vary by the time of year or location but purely depends on the time it takes to walk the distance of 4
-	 * <em>Mil</em>.
+	 * sunrise} on the time to walk the distance of 4 <em>Mil</em> at 22.5 minutes a <em>Mil</em>. TTime based offset
+	 * calculations for alos are based on the opinion of most <em>Rishonim</em> who stated that the time of the
+	 * <em>Neshef</em> (time between dawn and sunrise) does not vary by the time of year or location but purely depends
+	 * on the time it takes to walk the distance of 4 <em>Mil</em>.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -642,9 +644,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 120 minutes before {@link #getSeaLevelSunrise() sea level
 	 * sunrise} (no adjustment for elevation is made) based on the time to walk the distance of 5 <em>Mil</em>(
-	 * <em>Ula</em>) at 24 minutes a <em>Mil</em>. This is based on the opinion of most <em>Rishonim</em> who stated
-	 * that the time of the <em>Neshef</em> (time between dawn and sunrise) does not vary by the time of year or
-	 * location but purely depends on the time it takes to walk the distance of 5 <em>Mil</em>(<em>Ula</em>).
+	 * <em>Ula</em>) at 24 minutes a <em>Mil</em>. Time based offset calculations for alos are based on the opinion of
+	 * most <em>Rishonim</em> who stated that the time of the <em>Neshef</em> (time between dawn and sunrise) does not
+	 * vary by the time of year or location but purely depends on the time it takes to walk the distance of 5
+	 * <em>Mil</em>(<em>Ula</em>).
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -2188,6 +2191,176 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getSofZmanTfilaFixedLocal() {
 		return getTimeOffset(getFixedLocalChatzos(), -120 * MINUTE_MILLIS);
+	}
+
+	/**
+	 * Returns the latest time of Kiddush Levana according to the <a
+	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as
+	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between molad and
+	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. If the time of sof zman Kiddush
+	 * Levana occurs during the day (between the alos and tzais passed in as parameters), it returns the alos passed in.
+	 * 
+	 * @param alos
+	 * @param tzais
+	 * @return the Date representing the moment halfway between molad and molad. If the time occurs between alos and
+	 *         tzais, alos will be returned
+	 * @see #getSofZmanKidushLevanaBetweenMoldos()
+	 * @see #getSofZmanKidushLevana15Days(Date, Date)
+	 */
+	public Date getSofZmanKidushLevanaBetweenMoldos(Date alos, Date tzais) {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+		Calendar sofZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
+		Date sofZmanKidushLevana = JewishCalendar.getSofZmanKidushLevanaBetweenMoldos(jewishCalendar.getJewishYear(),
+				jewishCalendar.getJewishMonth());
+		sofZmanKidushLevanaCalendar.setTime(sofZmanKidushLevana);
+		if (alos != null && tzais != null
+				&& sofZmanKidushLevanaCalendar.get(Calendar.YEAR) == getCalendar().get(Calendar.YEAR)
+				&& sofZmanKidushLevanaCalendar.get(Calendar.MONTH) == getCalendar().get(Calendar.MONTH)
+				&& sofZmanKidushLevanaCalendar.get(Calendar.DAY_OF_MONTH) == getCalendar().get(Calendar.DAY_OF_MONTH)) {
+			if (sofZmanKidushLevana.after(alos) && sofZmanKidushLevana.before(tzais)) {
+				return alos;
+			} else {
+				return sofZmanKidushLevana;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the latest time of Kiddush Levana according to the <a
+	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as
+	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between molad and
+	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. If the time of sof zman Kiddush
+	 * Levana occurs during the day (between {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} and
+	 * {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() tzais}) it return the alos prior to the calculated sof
+	 * zman Kiddush Levana.
+	 * 
+	 * @return the Date representing the moment halfway between molad and molad. If the time occurs between alos and
+	 *         tzais, alos will be returned
+	 * @see #getSofZmanKidushLevanaBetweenMoldos(Date, Date)
+	 * @see #getSofZmanKidushLevana15Days()
+	 */
+	public Date getSofZmanKidushLevanaBetweenMoldos() {
+		return getSofZmanKidushLevanaBetweenMoldos(getAlos72(), getTzais72());
+	}
+
+	/**
+	 * Returns the latest time of Kiddush Levana calculated as 15 days after the molad. This is the opinion brought down
+	 * in the Shulchan Aruch (Orach Chaim 426). It should be noted that some opinions hold that the
+	 * <http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
+	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> of calculating
+	 * {@link #getSofZmanKidushLevanaBetweenMoldos(Date, Date) half way between molad and mold} is of the opinion that
+	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
+	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
+	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. If the time of sof zman Kiddush Levana occurs
+	 * during the day (between the alos and tzais passed in as parameters), it returns the alos passed in.
+	 * 
+	 * @param alos
+	 * @param tzais
+	 * @return the Date representing the moment 15 days after the molad. If the time occurs between alos and tzais, alos
+	 *         will be returned
+	 * 
+	 * @see #getSofZmanKidushLevanaBetweenMoldos(Date, Date)
+	 */
+	public Date getSofZmanKidushLevana15Days(Date alos, Date tzais) {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+		Calendar sofZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
+		Date sofZmanKidushLevana = JewishCalendar.getSofZmanKidushLevana15Days(jewishCalendar.getJewishYear(),
+				jewishCalendar.getJewishMonth());
+		sofZmanKidushLevanaCalendar.setTime(sofZmanKidushLevana);
+		if (alos != null && tzais != null
+				&& sofZmanKidushLevanaCalendar.get(Calendar.YEAR) == getCalendar().get(Calendar.YEAR)
+				&& sofZmanKidushLevanaCalendar.get(Calendar.MONTH) == getCalendar().get(Calendar.MONTH)
+				&& sofZmanKidushLevanaCalendar.get(Calendar.DAY_OF_MONTH) == getCalendar().get(Calendar.DAY_OF_MONTH)) {
+			if (sofZmanKidushLevana.after(alos) && sofZmanKidushLevana.before(tzais)) {
+				return alos;
+			} else {
+				return sofZmanKidushLevana;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the latest time of Kiddush Levana calculated as 15 days after the molad. This is the opinion brought down
+	 * in the Shulchan Aruch (Orach Chaim 426). It should be noted that some opinions hold that the
+	 * <http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
+	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> of calculating
+	 * {@link #getSofZmanKidushLevanaBetweenMoldos(Date, Date) half way between molad and mold} is of the opinion that
+	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
+	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
+	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. If the time of sof zman Kiddush
+	 * Levana occurs during the day (between {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} and
+	 * {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() tzais}) it return the alos prior to the calculated sof
+	 * zman Kiddush Levana.
+	 * 
+	 * @return the Date representing the moment 15 days after the molad. If the time occurs between alos and tzais, alos
+	 *         will be returned
+	 * 
+	 * @see #getSofZmanKidushLevana15Days(Date, Date)
+	 * @see #getSofZmanKidushLevanaBetweenMoldos()
+	 */
+	public Date getSofZmanKidushLevana15Days() {
+		return getSofZmanKidushLevana15Days(getAlos72(), getTzais72());
+	}
+
+	public Date getTchilasZmanKidushLevana3Days(Date alos, Date tzais) {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+		Date tchilasZmanKidushLevana = JewishCalendar.getTchilasZmanKidushLevana3Days(jewishCalendar.getJewishYear(),
+				jewishCalendar.getJewishMonth());
+		Calendar tchilasZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
+		tchilasZmanKidushLevanaCalendar.setTime(tchilasZmanKidushLevana);
+		if (alos != null
+				&& tzais != null
+				&& tchilasZmanKidushLevanaCalendar.get(Calendar.YEAR) == getCalendar().get(Calendar.YEAR)
+				&& tchilasZmanKidushLevanaCalendar.get(Calendar.MONTH) == getCalendar().get(Calendar.MONTH)
+				&& tchilasZmanKidushLevanaCalendar.get(Calendar.DAY_OF_MONTH) == getCalendar().get(
+						Calendar.DAY_OF_MONTH)) {
+			if (tchilasZmanKidushLevana.after(alos) && tchilasZmanKidushLevana.before(tzais)) {
+				return tzais;
+			} else {
+				return tchilasZmanKidushLevana;
+			}
+		}
+		return null;
+	}
+
+	public Date getTchilasZmanKidushLevana3Days() {
+		return getTchilasZmanKidushLevana3Days(getAlos72(), getTzais72());
+	}
+
+	public Date getTchilasZmanKidushLevana7Days(Date alos, Date tzais) {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+
+		Calendar tchilasZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
+		Date tchilasZmanKidushLevana = JewishCalendar.getTchilasZmanKidushLevana7Days(jewishCalendar.getJewishYear(),
+				jewishCalendar.getJewishMonth());
+		tchilasZmanKidushLevanaCalendar.setTime(tchilasZmanKidushLevana);
+		if (alos != null
+				&& tzais != null
+				&& tchilasZmanKidushLevanaCalendar.get(Calendar.YEAR) == getCalendar().get(Calendar.YEAR)
+				&& tchilasZmanKidushLevanaCalendar.get(Calendar.MONTH) == getCalendar().get(Calendar.MONTH)
+				&& tchilasZmanKidushLevanaCalendar.get(Calendar.DAY_OF_MONTH) == getCalendar().get(
+						Calendar.DAY_OF_MONTH)) {
+			if (tchilasZmanKidushLevana.after(alos) && tchilasZmanKidushLevana.before(tzais)) {
+				return tzais;
+			} else {
+				return tchilasZmanKidushLevana;
+			}
+		}
+		return null;
+	}
+
+	public Date getTchilasZmanKidushLevana7Days() {
+		return getTchilasZmanKidushLevana7Days(getAlos72(), getTzais72());
 	}
 
 	/**
