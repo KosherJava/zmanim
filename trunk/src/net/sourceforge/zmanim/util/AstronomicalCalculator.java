@@ -36,11 +36,39 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	// private double refraction = 34.478885263888294 / 60d;
 
 	/**
-	 * The commonly used average solar radius.
+	 * The commonly used average solar radius in minutes of a degree.
 	 * 
 	 * @see #getSolarRadius()
 	 */
 	private double solarRadius = 16 / 60d;
+
+	/**
+	 * The commonly used average earth radius in KM. At this time, this only affects elevation adjustment and not the
+	 * sunrise and sunset calculations. The value currently defaults to 6356.9 KM.
+	 * 
+	 * @see #getEarthRadius()
+	 * @see #setEarthRadius(double)
+	 */
+	private double earthRadius = 6356.9; // in KM
+
+	/**
+	 * A method that returns the earth radius in KM. The value currently defaults to 6356.9 KM if not set.
+	 * 
+	 * @return the earthRadius the earth radius in KM.
+	 */
+	public double getEarthRadius() {
+		return earthRadius;
+	}
+
+	/**
+	 * A method that allows setting the earth's radius.
+	 * 
+	 * @param earthRadius
+	 *            the earthRadius to set in KM
+	 */
+	public void setEarthRadius(double earthRadius) {
+		this.earthRadius = earthRadius;
+	}
 
 	/**
 	 * The zenith of astronomical sunrise and sunset. The sun is 90&deg; from the vertical 0&deg;
@@ -142,7 +170,6 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return the adjusted zenith
 	 */
 	double getElevationAdjustment(double elevation) {
-		double earthRadius = 6356.9;
 		// double elevationAdjustment = 0.0347 * Math.sqrt(elevation);
 		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
 		return elevationAdjustment;
