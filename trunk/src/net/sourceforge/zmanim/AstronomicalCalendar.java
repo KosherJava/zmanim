@@ -67,7 +67,6 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * @version 1.2.1
  */
 public class AstronomicalCalendar implements Cloneable {
-	private static final long serialVersionUID = 1;
 
 	/**
 	 * 90&deg; below the vertical. Used as a basis for most calculations since the location of the sun is 90&deg; below
