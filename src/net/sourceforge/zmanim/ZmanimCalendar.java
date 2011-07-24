@@ -34,7 +34,6 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * @version 1.2.1
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
-	private static final long serialVersionUID = 1;
 
 	/**
 	 * The zenith of 16.1&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
@@ -196,7 +195,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see #getCandleLightingOffset()
 	 * @see #setCandleLightingOffset(double)
 	 */
-	public Date getCandelLighting() {
+	public Date getCandleLighting() {
 		return getTimeOffset(getSunset(), -getCandleLightingOffset() * MINUTE_MILLIS);
 	}
 
@@ -358,7 +357,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * lighting time.
 	 * 
 	 * @return Returns the currently set candle lighting offset in minutes.
-	 * @see #getCandelLighting()
+	 * @see #getCandleLighting()
 	 * @see #setCandleLightingOffset(double)
 	 */
 	public double getCandleLightingOffset() {
@@ -372,7 +371,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 
 	 * @param candleLightingOffset
 	 *            The candle lighting offset to set in minutes.
-	 * @see #getCandelLighting()
+	 * @see #getCandleLighting()
 	 * @see #getCandleLightingOffset()
 	 */
 	public void setCandleLightingOffset(double candleLightingOffset) {

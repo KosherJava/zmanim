@@ -716,7 +716,7 @@ public class JewishCalendar extends JewishDate {
 		Calendar cal = Calendar.getInstance(geo.getTimeZone());
 		cal.clear();
 		double moladSeconds = molad.getMoladChalakim() * 10 / 3;
-		cal.set(molad.getGregorianYear(), molad.getGregorianMonth() - 1, molad.getGregorianDayOfMonth(),
+		cal.set(molad.getGregorianYear(), molad.getGregorianMonth(), molad.getGregorianDayOfMonth(),
 				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
 		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time

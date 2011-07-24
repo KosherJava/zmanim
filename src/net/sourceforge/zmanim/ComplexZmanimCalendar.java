@@ -89,7 +89,6 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  * @version 1.2
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
-	private static final long serialVersionUID = 1;
 
 	/**
 	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
