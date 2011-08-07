@@ -426,27 +426,27 @@ public class JewishDate implements Comparable, Cloneable {
 		return addDechiyos(year, moladDay, moladParts);
 	}
 
-	private static int getJewishCalendarElapsedDaysOLD(int year) {
-		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
-		// Molad Tohu = BeHaRaD - Monday, 5 hours (11 PM) and 204 chalakim
-		final int chalakimTashTZag = 793; // chalakim in a lunar month
-		final int chalakimTohuRaD = 204; // chalakim from original molad Tohu BeHaRaD
-		final int hoursTohuHa = 5; // hours from original molad Tohu BeHaRaD
-		final int dayTohu = 1; // Monday (0 based)
-
-		int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
-				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
-				+ ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
-		// start with Molad Tohu BeHaRaD
-		// start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapsed chalakim
-		int partsElapsed = chalakimTohuRaD + chalakimTashTZag * (monthsElapsed % 1080);
-		// start with Ha hours of BeHaRaD, add 12 hour remainder of lunar month add hours elapsed
-		int hoursElapsed = hoursTohuHa + 12 * monthsElapsed + 793 * (monthsElapsed / 1080) + partsElapsed / 1080;
-		// start with Monday of BeHaRaD = 1 (0 based), add 29 days of the lunar months elapsed
-		int conjunctionDay = dayTohu + 29 * monthsElapsed + hoursElapsed / 24;
-		int conjunctionParts = 1080 * (hoursElapsed % 24) + partsElapsed % 1080;
-		return addDechiyos(year, conjunctionDay, conjunctionParts);
-	}
+//	private static int getJewishCalendarElapsedDaysOLD(int year) {
+//		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
+//		// Molad Tohu = BeHaRaD - Monday, 5 hours (11 PM) and 204 chalakim
+//		final int chalakimTashTZag = 793; // chalakim in a lunar month
+//		final int chalakimTohuRaD = 204; // chalakim from original molad Tohu BeHaRaD
+//		final int hoursTohuHa = 5; // hours from original molad Tohu BeHaRaD
+//		final int dayTohu = 1; // Monday (0 based)
+//
+//		int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
+//				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
+//				+ ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
+//		// start with Molad Tohu BeHaRaD
+//		// start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapsed chalakim
+//		int partsElapsed = chalakimTohuRaD + chalakimTashTZag * (monthsElapsed % 1080);
+//		// start with Ha hours of BeHaRaD, add 12 hour remainder of lunar month add hours elapsed
+//		int hoursElapsed = hoursTohuHa + 12 * monthsElapsed + 793 * (monthsElapsed / 1080) + partsElapsed / 1080;
+//		// start with Monday of BeHaRaD = 1 (0 based), add 29 days of the lunar months elapsed
+//		int conjunctionDay = dayTohu + 29 * monthsElapsed + hoursElapsed / 24;
+//		int conjunctionParts = 1080 * (hoursElapsed % 24) + partsElapsed % 1080;
+//		return addDechiyos(year, conjunctionDay, conjunctionParts);
+//	}
 
 	/**
 	 * Adds the 4 dechiyos for molad Tishrei. These are:

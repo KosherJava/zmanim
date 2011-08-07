@@ -157,16 +157,15 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	protected static final double ZENITH_11_POINT_5 = GEOMETRIC_ZENITH + 11.5;
 
 	/**
-	 * The zenith of 13&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * The zenith of 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>Rabainu Tam's bain hashmashos</em> according to some opinions. <br/>
 	 * <br/>
-	 * FIXME: See comments on {@link #getBainHasmashosRT13Degrees}. This should be changed to 13.2477 after confirmation
-	 * from Rabbi Harfenes.
+	 * NOTE: See comments on {@link #getBainHasmashosRT13Point24Degrees} for additional details about the degrees.
 	 * 
-	 * @see #getBainHasmashosRT13Degrees
+	 * @see #getBainHasmashosRT13Point24Degrees
 	 * 
 	 */
-	protected static final double ZENITH_13_DEGREES = GEOMETRIC_ZENITH + 13;
+	protected static final double ZENITH_13_POINT_24 = GEOMETRIC_ZENITH + 13.24;
 
 	/**
 	 * The zenith of 19.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
@@ -435,9 +434,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * <em>Chacham Yosef Harari-Raful</em> of <em>Yeshivat Ateret Torah</em> calculated with <em>alos</em> being 1/10th
 	 * of sunrise to sunset day, or {@link #getAlos72Zmanis() 72} minutes <em>zmaniyos</em> of such a day before
 	 * {@link #getSunrise() sunrise}, and <em>tzais</em> is usually calculated as {@link #getTzaisAteretTorah() 40
-	 * minutes} after {@link #getSunset() sunset}. This day is split into 12 equal parts with each part being a
-	 * <em>shaah zmanis</em>. Note that with this system, <em>chatzos</em> (mid-day) will not be the point that the sun
-	 * is {@link #getSunTransit() halfway across the sky}.
+	 * minutes} (configurable to any offset via {@link #setAteretTorahSunsetOffset(double)}) after {@link #getSunset()
+	 * sunset}. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. Note that with this
+	 * system, <em>chatzos</em> (mid-day) will not be the point that the sun is {@link #getSunTransit() halfway across
+	 * the sky}.
 	 * 
 	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
@@ -1610,24 +1610,30 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns <em>Bain Hashmashos</em> of <em>Rabainu Tam</em> calculated as the time the sun is 13&deg;
-	 * below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). <br/>
+	 * Method to return <em>Bain Hashmasho</em> of <em>Rabainu Tam</em> calculated when the sun is
+	 * {@link #ZENITH_13_POINT_24 13.24&deg;} below the western {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;)
+	 * after sunset. This calculation is based on the same calculation of {@link #getBainHasmashosRT58Point5Minutes()
+	 * Bain Hasmashos Rabainu Tam 58.5 minutes} but uses a degree based calculation instead of 58.5 exact minutes. This
+	 * calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem during the equinox which
+	 * calculates to 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.<br/>
 	 * <br/>
-	 * FIXME: As per Yisroel Vehazmanim Vol III page 1028 No 50, the 13&deg; is slightly inaccurate. He lists it as a
-	 * drop less than 13&deg;. Calculations show that is seems to be 13.2477&deg; below the horizon at that time. This
-	 * makes a difference of 1 minute and 10 seconds in Jerusalem during the Equinox, and 1 minute 29 seconds during the
-	 * solstice. For NY during the solstice, the difference is 1 minute 56 seconds.
+	 * NOTE: As per Yisroel Vehazmanim Vol III page 1028 No 50, a dip of slightly less than 13&deg; should be used.
+	 * Calculations show that the proper dip to be 13.2456&deg; (truncated to 13.24 that provides about 1.5 second
+	 * earlier (<em>lechumra</em>) time) below the horizon at that time. This makes a difference of 1 minute and 10
+	 * seconds in Jerusalem during the Equinox, and 1 minute 29 seconds during the solstice as compared to the proper
+	 * 13.24&deg;. For NY during the solstice, the difference is 1 minute 56 seconds.
 	 * 
-	 * @return the <code>Date</code> of the sun being 13&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}
+	 * @return the <code>Date</code> of the sun being 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}
 	 *         (90&deg;). If the calculation can't be computed such as northern and southern locations even south of the
 	 *         Arctic Circle and north of the Antarctic Circle where the sun may not reach low enough below the horizon
 	 *         for this calculation, a null will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
-	 * @see #ZENITH_13_DEGREES
+	 * @see #ZENITH_13_POINT_24
+	 * @see #getBainHasmashosRT58Point5Minutes()
 	 */
-	public Date getBainHasmashosRT13Degrees() {
-		return getSunsetOffsetByDegrees(ZENITH_13_DEGREES);
+	public Date getBainHasmashosRT13Point24Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_13_POINT_24);
 	}
 
 	/**
@@ -1836,18 +1842,18 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns <em>tzais</em> usually calculated as 40 minutes after sunset. Please note that
-	 * <em>Chacham Yosef Harari-Raful</em> of <em>Yeshivat Ateret Torah</em> who uses this time, does so only for
-	 * calculating various other <em>zmanai hayom</em> such as <em>Sof Zman Krias Shema</em> and <em>Plag Hamincha</em>.
-	 * His calendars do not publish a <em>zman</em> for <em>Tzais</em>. It should also be noted that
-	 * <em>Chacham Harari-Raful</em> provided a 25 minute <em>zman</em> for Israel. This API uses 40 minutes year round
-	 * in any place on the globe by default. This offset can be changed by calling
-	 * {@link #setAteretTorahSunsetOffset(double)}.
+	 * This method returns <em>tzais</em> usually calculated as 40 minutes (configurable to any offset via
+	 * {@link #setAteretTorahSunsetOffset(double)}) after sunset. Please note that <em>Chacham Yosef Harari-Raful</em>
+	 * of <em>Yeshivat Ateret Torah</em> who uses this time, does so only for calculating various other
+	 * <em>zmanai hayom</em> such as <em>Sof Zman Krias Shema</em> and <em>Plag Hamincha</em>. His calendars do not
+	 * publish a <em>zman</em> for <em>Tzais</em>. It should also be noted that <em>Chacham Harari-Raful</em> provided a
+	 * 25 minute <em>zman</em> for Israel. This API uses 40 minutes year round in any place on the globe by default.
+	 * This offset can be changed by calling {@link #setAteretTorahSunsetOffset(double)}.
 	 * 
-	 * @return the <code>Date</code> representing 40 minutes (setable via {@link #setAteretTorahSunsetOffset}) after sea
-	 *         level sunset. If the calculation can't be computed such as in the Arctic Circle where there is at least
-	 *         one day a year where the sun does not rise, and one where it does not set, a null will be returned. See
-	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @return the <code>Date</code> representing 40 minutes (configurable via {@link #setAteretTorahSunsetOffset})
+	 *         after sea level sunset. If the calculation can't be computed such as in the Arctic Circle where there is
+	 *         at least one day a year where the sun does not rise, and one where it does not set, a null will be
+	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAteretTorahSunsetOffset()
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
@@ -1856,10 +1862,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * Returns the offset in minutes after sunset used to calculate <em>tzais</em> for the Ateret Torah zmanim. The
-	 * defaullt value is 40 minutes.
+	 * Returns the offset in minutes after sunset used to calculate sunset for the Ateret Torah zmanim. The defaullt
+	 * value is 40 minutes. This affects most zmanim, since almost all zmanim use sunbset as part of their calculation.
 	 * 
-	 * @return the number of minutes after sunset for Tzais.
+	 * @return the number of minutes after sunset for <em>Tzait</em>.
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
 	public double getAteretTorahSunsetOffset() {
@@ -1869,8 +1875,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Allows setting the offset in minutes after sunset for the Ateret Torah zmanim. The default if unset is 40
 	 * minutes. Chacham Yosef Harari-Raful of Yeshivat Ateret Torah uses 40 minutes globally with the exception of
-	 * Israel where a 25 minute offset is used. This 25 minute (or any other) offset can be overridden by this methd.
-	 * This offset impacts all Ateret Torah methods.
+	 * Israel where a 25 minute offset is used. This 40 minute (or any other) offset can be overridden by this methd.
+	 * This offset impacts all Ateret Torah zmanim.
 	 * 
 	 * @param ateretTorahSunsetOffset
 	 *            the number of minutes after sunset to use as an offset for the Ateret Torah <em>tzais</em>
@@ -1884,8 +1890,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) based on the
 	 * calculation of Chacham Yosef Harari-Raful of Yeshivat Ateret Torah, that the day starts
 	 * {@link #getAlos72Zmanis() 1/10th of the day} before sunrise and is usually calculated as ending
-	 * {@link #getTzaisAteretTorah() 40 minutes after sunset}. <em>shaos zmaniyos</em> are calculated based on this day
-	 * and added to {@link #getAlos72Zmanis() alos} to reach this time. This time is 3
+	 * {@link #getTzaisAteretTorah() 40 minutes after sunset} (configurable to any offset via
+	 * {@link #setAteretTorahSunsetOffset(double)}). <em>shaos zmaniyos</em> are calculated based on this day and added
+	 * to {@link #getAlos72Zmanis() alos} to reach this time. This time is 3
 	 * <em> {@link #getShaahZmanisAteretTorah() shaos zmaniyos}</em> (temporal hours) after
 	 * <em>{@link #getAlos72Zmanis()
 	 * alos 72 zmaniyos}</em>.<br />
@@ -1909,9 +1916,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) based on the calculation
 	 * of Chacham Yosef Harari-Raful of Yeshivat Ateret Torah, that the day starts {@link #getAlos72Zmanis() 1/10th of
 	 * the day} before sunrise and is usually calculated as ending {@link #getTzaisAteretTorah() 40 minutes after
-	 * sunset}. <em>shaos zmaniyos</em> are calculated based on this day and added to {@link #getAlos72Zmanis() alos} to
-	 * reach this time. This time is 4 * <em>{@link #getShaahZmanisAteretTorah() shaos zmaniyos}</em> (temporal hours)
-	 * after <em>{@link #getAlos72Zmanis() alos 72 zmaniyos}</em>.<br />
+	 * sunset} (configurable to any offset via {@link #setAteretTorahSunsetOffset(double)}). <em>shaos zmaniyos</em> are
+	 * calculated based on this day and added to {@link #getAlos72Zmanis() alos} to reach this time. This time is 4 *
+	 * <em>{@link #getShaahZmanisAteretTorah() shaos zmaniyos}</em> (temporal hours) after
+	 * <em>{@link #getAlos72Zmanis() alos 72 zmaniyos}</em>.<br />
 	 * <b>Note: </b> Based on this calculation <em>chatzos</em> will not be at midday.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> based on this calculation. If the
@@ -1931,11 +1939,12 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the time of <em>mincha gedola</em> based on the calculation of
 	 * <em>Chacham Yosef Harari-Raful</em> of <em>Yeshivat Ateret Torah</em>, that the day starts
 	 * {@link #getAlos72Zmanis() 1/10th of the day} before sunrise and is usually calculated as ending
-	 * {@link #getTzaisAteretTorah() 40 minutes after sunset}. This is the perfered earliest time to pray
-	 * <em>mincha</em> according to the opinion of the <em>Rambam</em> and others. For more information on this see the
-	 * documentation on <em>{@link #getMinchaGedola() mincha gedola}</em>. This is calculated as 6.5
-	 * {@link #getShaahZmanisAteretTorah() solar hours} after alos. The calculation used is 6.5 *
-	 * {@link #getShaahZmanisAteretTorah()} after <em>{@link #getAlos72Zmanis() alos}</em>.
+	 * {@link #getTzaisAteretTorah() 40 minutes after sunset} (configurable to any offset via
+	 * {@link #setAteretTorahSunsetOffset(double)}). This is the perfered earliest time to pray <em>mincha</em>
+	 * according to the opinion of the <em>Rambam</em> and others. For more information on this see the documentation on
+	 * <em>{@link #getMinchaGedola() mincha gedola}</em>. This is calculated as 6.5 {@link #getShaahZmanisAteretTorah()
+	 * solar hours} after alos. The calculation used is 6.5 * {@link #getShaahZmanisAteretTorah()} after
+	 * <em>{@link #getAlos72Zmanis() alos}</em>.
 	 * 
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
@@ -1943,6 +1952,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedola()
 	 * @see #getMinchaKetanaAteretTorah()
 	 * @see ZmanimCalendar#getMinchaGedola()
+	 * @see #getAteretTorahSunsetOffset()
+	 * @see #setAteretTorahSunsetOffset(double)
+	 * 
 	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
@@ -1956,15 +1968,18 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the time of <em>mincha ketana</em> based on the calculation of
 	 * <em>Chacham Yosef Harari-Raful</em> of <em>Yeshivat Ateret Torah</em>, that the day starts
 	 * {@link #getAlos72Zmanis() 1/10th of the day} before sunrise and is usually calculated as ending
-	 * {@link #getTzaisAteretTorah() 40 minutes after sunset}. This is the perfered earliest time to pray
-	 * <em>mincha</em> according to the opinion of the <em>Rambam</em> and others. For more information on this see the
-	 * documentation on <em>{@link #getMinchaGedola() mincha gedola}</em>. This is calculated as 9.5
-	 * {@link #getShaahZmanisAteretTorah() solar hours} after {@link #getAlos72Zmanis() alos}. The calculation used is
-	 * 9.5 * {@link #getShaahZmanisAteretTorah()} after {@link #getAlos72Zmanis() alos}.
+	 * {@link #getTzaisAteretTorah() 40 minutes after sunset} (configurable to any offset via
+	 * {@link #setAteretTorahSunsetOffset(double)}). This is the perfered earliest time to pray <em>mincha</em>
+	 * according to the opinion of the <em>Rambam</em> and others. For more information on this see the documentation on
+	 * <em>{@link #getMinchaGedola() mincha gedola}</em>. This is calculated as 9.5 {@link #getShaahZmanisAteretTorah()
+	 * solar hours} after {@link #getAlos72Zmanis() alos}. The calculation used is 9.5 *
+	 * {@link #getShaahZmanisAteretTorah()} after {@link #getAlos72Zmanis() alos}.
 	 * 
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
 	 * @see #getShaahZmanisAteretTorah()
+	 * @see #getAteretTorahSunsetOffset()
+	 * @see #setAteretTorahSunsetOffset(double)
 	 * @see #getMinchaGedola()
 	 * @see #getMinchaKetana()
 	 * @return the <code>Date</code> of the time of mincha ketana. If the calculation can't be computed such as in the
@@ -1979,8 +1994,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the time of <em>plag hamincha</em> based on the calculation of Chacham Yosef Harari-Raful of
 	 * Yeshivat Ateret Torah, that the day starts {@link #getAlos72Zmanis() 1/10th of the day} before sunrise and is
-	 * usually calculated as ending {@link #getTzaisAteretTorah() 40 minutes after sunset}. <em>shaos zmaniyos</em> are
-	 * calculated based on this day and added to {@link #getAlos72Zmanis() alos} to reach this time. This time is 10.75
+	 * usually calculated as ending {@link #getTzaisAteretTorah() 40 minutes after sunset} (configurable to any offset
+	 * via {@link #setAteretTorahSunsetOffset(double)}). <em>shaos zmaniyos</em> are calculated based on this day and
+	 * added to {@link #getAlos72Zmanis() alos} to reach this time. This time is 10.75
 	 * <em>{@link #getShaahZmanisAteretTorah() shaos zmaniyos}</em> (temporal hours) after {@link #getAlos72Zmanis()
 	 * dawn}.
 	 * 
@@ -1990,6 +2006,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
 	 * @see #getShaahZmanisAteretTorah()
+	 * @see #setAteretTorahSunsetOffset(double)
+	 * @see #getAteretTorahSunsetOffset()
 	 */
 	public Date getPlagHaminchaAteretTorah() {
 		return getTimeOffset(getAlos72Zmanis(), getShaahZmanisAteretTorah() * 10.75);
