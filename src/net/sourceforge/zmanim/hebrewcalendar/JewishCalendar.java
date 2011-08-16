@@ -428,7 +428,7 @@ public class JewishCalendar extends JewishDate {
 			if (getJewishMonth() == KISLEV) {
 				return getJewishDayOfMonth() - 24;
 			} else { // teves
-				return isKislevShort() ? getJewishDayOfMonth() + 5 : getJewishDayOfMonth() + 4;
+				return isKislevShort() ? getJewishDayOfMonth() + 5 : getJewishDayOfMonth() + 6;
 			}
 		} else {
 			return -1;
