@@ -28,8 +28,8 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * sunset} times. This class contains a {@link #getCalendar() Calendar} and can therefore use the standard Calendar
  * functionality to change dates etc... The calculation engine used to calculate the astronomical times can be changed
  * to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it with the
- * {@link #setAstronomicalCalculator(AstronomicalCalculator)}. A number of different implementations are included in the
- * util package <br />
+ * {@link #setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine implementations
+ * are included in the util package <br />
  * <b>Note:</b> There are times when the algorithms can't calculate proper values for sunrise, sunset and twilight. This
  * is usually caused by trying to calculate times for areas either very far North or South, where sunrise / sunset never
  * happen on that date. This is common when calculating twilight with a deep dip below the horizon for locations as far
@@ -322,7 +322,10 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A utility method that returns a date offset by the offset time passed in.
+	 * A utility method that returns a date offset by the offset time passed in. Please note that the level of light
+	 * during twilight is not affected by elevation, so if this is being used to calculate an offset before sunrise or
+	 * after sunset with the intent of getting a rough "level of light" calculation, the sunrise or sunset time passed
+	 * to this method should be sea level sunrise and sunset.
 	 * 
 	 * @param time
 	 *            the start time
