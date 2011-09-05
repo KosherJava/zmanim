@@ -381,6 +381,19 @@ public class JewishCalendar extends JewishDate {
 		}
 		return getYomTovIndex() != -1;
 	}
+	
+	/**
+	 * Returns true if the current day is Chol Hamoed of Pesach or Succos.
+	 * 
+	 * @return true if the current day is Chol Hamoed of Pesach or Succos
+	 * @see #isYomTov()
+	 * @see #CHOL_HAMOED_PESACH
+	 * @see #CHOL_HAMOED_SUCCOS
+	 */
+	public boolean isCholHamoed() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == JewishCalendar.CHOL_HAMOED_PESACH || holidayIndex == JewishCalendar.CHOL_HAMOED_SUCCOS;
+	}
 
 	/**
 	 * Returns true if the current day is erev Yom Tov. The method returns true for Erev - Pesach, Shavuos, Rosh
