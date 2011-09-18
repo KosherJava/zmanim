@@ -1,233 +1,154 @@
 <project name="BuildZmanim" default="all" basedir="../">
-	<target name="all" depends="jar_zmanim, jar_zmanim_output, jar_zmanim_applet, javadoc_zmanim, zip_zmanim, backup_zmanim"/>
-	<property name="version" value="1.2.1"/>
-	<property name="author" value="Eliyahu Hershfeld"/>
-	<property name="lib_dir" value="lib"/>
-	<property name="third_party_jars" value="../../dev/jars"/>
-	<property name="src_dir" value="src/Java"/>
-	<property name="tmp_dir" value="tempZmanimBuildDir"/>
-	<property name="release_dir" value="release"/>
-	<property name="doc_dir" value="docs/api"/>
-	<property name="build_dir" value="build"/>
-	<property name="backup_dir" value="backup"/>
+    <target name="all" depends="jar_zmanim, javadoc_zmanim, zip_zmanim, backup_zmanim"/>
+    <property name="version" value="1.3.0beta-Sep-09-2011"/>
+    <property name="author" value="Eliyahu Hershfeld"/>
+    <property name="lib_dir" value="lib"/>
+    <property name="third_party_jars" value="../../dev/jars"/>
+    <property name="src_dir" value="src/Java"/>
+    <property name="tmp_dir" value="tempZmanimBuildDir"/>
+    <property name="release_dir" value="release"/>
+    <property name="doc_dir" value="docs/api"/>
+    <property name="build_dir" value="build"/>
+    <property name="backup_dir" value="backup"/>
 
-	<target name="echo_values">
-		<echo message="third_party_jars = ${third_party_jars}"/>
-		<echo message="lib_dir = ${lib_dir}"/>
-		<echo message="src_dir = ${src_dir}"/>
-		<echo message="release_dir = ${release_dir}"/>
-		<echo message="doc_dir = ${doc_dir}"/>
-		<echo message="build_dir = ${build_dir}"/>
-		<echo message="backup_dir = ${backup_dir}"/>
-	</target>
-	
-	<target name = "init" depends="echo_values">
-		<delete dir="${tmp_dir}"/>
-		<mkdir dir="${tmp_dir}"/>
-		<mkdir dir="${lib_dir}"/>
-		<mkdir dir="${release_dir}"/>
-		<mkdir dir="${backup_dir}"/>
-	</target>
-	<path id="project.class.path">
-		<fileset dir="${third_party_jars}">
-			<include name="iText.jar"/>
-			<!--include name="poi-3.6-20091214.jar"/--><!--JDK greater than 1.4? -->
-			<include name="poi-3.2-FINAL-20081019.jar"/>
-			<include name="jdom-1.0.jar"/>
-			<include name="rome-1.0.jar"/>
-		</fileset>
+    <target name="echo_values">
+        <echo message="third_party_jars = ${third_party_jars}"/>
+        <echo message="lib_dir = ${lib_dir}"/>
+        <echo message="src_dir = ${src_dir}"/>
+        <echo message="release_dir = ${release_dir}"/>
+        <echo message="doc_dir = ${doc_dir}"/>
+        <echo message="build_dir = ${build_dir}"/>
+        <echo message="backup_dir = ${backup_dir}"/>
+    </target>
+
+    <target name = "init" depends="echo_values">
+        <delete dir="${tmp_dir}"/>
+        <mkdir dir="${tmp_dir}"/>
+        <mkdir dir="${lib_dir}"/>
+        <mkdir dir="${release_dir}"/>
+        <mkdir dir="${backup_dir}"/>
+    </target>
+    <path id="project.class.path">
+        <fileset dir="${third_party_jars}">
+            <include name="iText.jar"/>
+            <!--include name="poi-3.6-20091214.jar"/--><!--JDK greater than 1.4? -->
+            <include name="poi-3.2-FINAL-20081019.jar"/>
+            <include name="jdom-1.0.jar"/>
+            <include name="rome-1.0.jar"/>
+        </fileset>
     </path>
 
-	<target name="build_zmanim" depends="init">
-		<javac 
-			srcdir="${src_dir}" 
-			destdir="${tmp_dir}" 
-			debug="on" 
-			deprecation="on"
-			fork="yes"
-			target="1.2"
-			source="1.2">
-			<!--compilerarg value="-Xlint" /-->
-			<include name="net/sourceforge/zmanim/*.java"/>
-			<include name="net/sourceforge/zmanim/util/*.java"/>
-			<!--include name="net/sourceforge/zmanim/test/*.java"/-->
-		</javac>
-	</target>
-	
-	<target name = "build_zmanim_output" depends="build_zmanim">
-		<javac 
-			srcdir="${src_dir}" 
-			destdir="${tmp_dir}" 
-			debug="on" 
-			deprecation="on"
-			fork="yes"
-			target="1.2"
-			source="1.2">
-			<!--compilerarg value="-Xlint" /-->
-			<classpath refid="project.class.path"/>
-			<include name="net/sourceforge/zmanim/output/*.java"/>
-		</javac>
-	</target>
-	
-	<target name="jar_zmanim" depends="build_zmanim">
-		<tstamp>
-		    <format property="NOW" pattern="MMMM dd, yyyy, hh:mm a" locale="en"/>
-		 </tstamp>
-		<jar jarfile="${lib_dir}/zmanim-${version}.jar">
-			<manifest>
-				<attribute name="Built-By" value="${author}"/>
-				<attribute name="Specification-Title" value="Zmanim"/>
-				<attribute name="Specification-Version" value="${version} (Build Date: ${NOW})"/>
-				<attribute name="Specification-Vendor" value="${author}"/>
-				<attribute name="Implementation-Title" value="Zmanim"/>
-				<attribute name="Implementation-Version" value="${version}  (Build Date: ${NOW})"/> 
-				<attribute name="Implementation-Vendor" value="${author}"/>
-				<attribute name="Sealed" value="false"/>
-				<!-- attribute name="Main-Class" value="net.sourceforge.zmanim.test.ZmanimTester"/ -->
-			</manifest>
-			<fileset dir="${tmp_dir}">
-				<include name="net/sourceforge/zmanim/*.class"/>
-				<include name="net/sourceforge/zmanim/util/*.class"/>
-				<!-- include name="net/sourceforge/zmanim/applet/*.class"/ -->
-				<!-- include name="net/sourceforge/zmanim/test/*.class"/ -->
-			</fileset>
-		</jar>
-		<jar jarfile="${lib_dir}/zmanimAstronomical-${version}.jar">
-			<manifest>
-				<attribute name="Built-By" value="${author}"/>
-				<attribute name="Specification-Title" value="Zmanim Astronomical"/>
-				<attribute name="Specification-Version" value="${version} (Build Date: ${NOW})"/>
-				<attribute name="Specification-Vendor" value="${author}"/>
-				<attribute name="Implementation-Title" value="Zmanim Astronomical"/>
-				<attribute name="Implementation-Version" value="${version} (Build Date: ${NOW})"/> 
-				<attribute name="Implementation-Vendor" value="${author}"/>
-				<attribute name="Sealed" value="false"/>
-			</manifest>
-			<fileset dir="${tmp_dir}">
-				<include name="net/sourceforge/zmanim/AstronomicalCalendar.class"/>
-				<include name="net/sourceforge/zmanim/util/*.class"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	<target name="jar_zmanim_output" depends="build_zmanim_output">
-			<jar jarfile="${lib_dir}/zmanimoutput-${version}.jar">
-				<manifest>
-					<attribute name="Built-By" value="${author}"/>
-					<attribute name="Specification-Title" value="Zmanim Ouput"/>
-					<attribute name="Specification-Version" value="${version} (built ${NOW})"/>
-					<attribute name="Main-Class" value="net.sourceforge.zmanim.output.ZmanimXLSGenerator"/>
-					<attribute name="Specification-Vendor" value="${author}"/>
-					<attribute name="Implementation-Title" value="Zmanim Output"/>
-					<attribute name="Implementation-Version" value="${version} (built ${NOW})"/> 
-					<attribute name="Implementation-Vendor" value="${author}"/>
-					<attribute name="Class-Path" value="zmanim.jar itext-2.0.0.jar poi-3.0-alpha3-20061212.jar jdom-1.0.jar rome-0.9.jar"/>
-					<attribute name="Sealed" value="false"/>
-				</manifest>
-				<fileset dir="${tmp_dir}">
-					<include name="net/sourceforge/zmanim/output/*.class"/>
-				</fileset>
-			</jar>
-			<!--delete dir="${tmp_dir}"/-->
-		</target>
-	
-	<!--target name="zip_zmanim_full">
-		<zip zipfile="${release_dir}/zmanim_full.zip">
-			<zipfileset dir="${lib_dir}" includes="zmanim*.jar" prefix="lib"/>
-			<zipfileset dir="${src_dir}" includes="**/*.java" excludes="**/test/*.java" prefix="src"/-->
-			<!--zipfileset dir="${src_dir}" includes="**/package.html" prefix="src"/--><!-- used for javadoc and has to be in the src dir -->
-			<!--zipfileset dir="${doc_dir}" includes="**/*" prefix="docs/api"/--><!-- avoid .* to include package-list -->
-			<!--zipfileset dir="${build_dir}" includes="build.xml,packageLists/sun/package-list" prefix="build"/--><!-- avoid .* to include package-list -->
-		<!--/zip>
-	</target-->
-	
-	<target name="zip_zmanim">
-		<zip zipfile="${release_dir}/zmanim-${version}.zip">
-			<zipfileset dir="${lib_dir}" includes="zmanim-${version}.jar" prefix="lib"/>
-			<zipfileset dir="${lib_dir}" includes="zmanimoutput-${version}.jar" prefix="lib"/>
-			<zipfileset dir="${lib_dir}" includes="zmanimAstronomical-${version}.jar" prefix="lib"/>
-			<zipfileset dir="${lib_dir}" includes="zmanimApplet.jar" prefix="lib"/>
-			<zipfileset dir="${src_dir}" includes="net/sourceforge/zmanim/*.java,net/sourceforge/zmanim/util/*.java" prefix="src"/>
-			<zipfileset dir="${src_dir}" includes="net/sourceforge/zmanim/package.html,net/sourceforge/zmanim/util/package.html" prefix="src"/><!-- used for javadoc and has to be in the src dir-->
-			<zipfileset dir="${doc_dir}" includes="**/*" prefix="docs/api"/><!-- avoid .* to include package-list -->
-			<zipfileset dir="${build_dir}" includes="build.xml,packageLists/sun/package-list" prefix="build"/><!-- avoid .* to include package-list -->
-		</zip>
-	</target>
-	
-	<target name="javadoc_zmanim">
-		<delete dir="${doc_dir}"/>
-		<javadoc
-			destdir="${doc_dir}"
-			author="true"
-			version="true"
-			use="true"
-			package="true"
-			windowtitle="Zmanim API ${version}"
-			linksource="yes"
-			breakiterator="yes"
-			charset="utf-8">
-			<classpath refid="project.class.path"/>
-    		<fileset dir="${src_dir}" defaultexcludes="yes">
-    			<include name="**/*.java" />
-    			<exclude name="net/sourceforge/zmanim/test/*.java"/>
-    			<exclude name="net/sourceforge/zmanim/output/*.java"/>
-    			<exclude name="net/sourceforge/zmanim/applet/*.java"/> 
-    		</fileset>
-    		<doctitle><![CDATA[<h1>Zmanim API ${version}</h1>]]></doctitle>
-			<header><![CDATA[<a href="http://www.kosherjava.com/zmanim/" target="_top">KosherJava Zmanim Homepage</a>]]></header>
-    		<bottom><![CDATA[<i>Copyright &#169; 2004 - 2010 Eliyahu Hershfeld. All Rights Reserved. Released under the <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt">GPL 2 license</a></i>]]></bottom>
-			<link offline="true" href="http://java.sun.com/javase/6/docs/api/" packagelistLoc="${build_dir}/packageLists/sun"/>
-			<!--link offline="true" href="http://itext.ugent.be/library/api/" packagelistLoc="${build_dir}/packageLists/iText"/>
-			<link offline="true" href="http://jakarta.apache.org/poi/apidocs/" packagelistLoc="${build_dir}/packageLists/poi"/>
-			<link offline="true" href="https://rome.dev.java.net/apidocs/0_6/" packagelistLoc="${build_dir}/packageLists/rome"/-->
-  		</javadoc>
-  	</target>
+    <target name="build_zmanim" depends="init">
+        <javac 
+            srcdir="${src_dir}" 
+            destdir="${tmp_dir}" 
+            debug="on" 
+            deprecation="on"
+            fork="yes"
+            includeantruntime="false"
+            target="1.6"
+            source="1.6">
+            
+            <!--compilerarg value="-Xlint" /-->
+            <include name="net/sourceforge/zmanim/*.java"/>
+            <include name="net/sourceforge/zmanim/util/*.java"/>
+            <exclude name="net/sourceforge/zmanim/util/ExperimentalNOAACalculator.java"/>
+            <include name="net/sourceforge/zmanim/hebrewcalendar/*.java"/>
+            <!--include name="net/sourceforge/zmanim/test/*.java"/-->
+        </javac>
+    </target>
+    
+    <target name="jar_zmanim" depends="build_zmanim">
+        <tstamp>
+            <format property="NOW" pattern="MMMM dd, yyyy, hh:mm a" locale="en"/>
+         </tstamp>
+        <jar jarfile="${lib_dir}/zmanim-${version}.jar">
+            <manifest>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Specification-Title" value="Zmanim"/>
+                <attribute name="Specification-Version" value="${version} (Build Date: ${NOW})"/>
+                <attribute name="Specification-Vendor" value="${author}"/>
+                <attribute name="Implementation-Title" value="Zmanim"/>
+                <attribute name="Implementation-Version" value="${version}  (Build Date: ${NOW})"/> 
+                <attribute name="Implementation-Vendor" value="${author}"/>
+                <attribute name="Sealed" value="false"/>
+                <!-- attribute name="Main-Class" value="net.sourceforge.zmanim.test.ZmanimTester"/ -->
+            </manifest>
+            <fileset dir="${tmp_dir}">
+                <include name="net/sourceforge/zmanim/*.class"/>
+                <include name="net/sourceforge/zmanim/util/*.class"/>
+                <exclude name="net/sourceforge/zmanim/util/ExperimentalNOAACalculator.java"/>
+                <include name="net/sourceforge/zmanim/hebrewcalendar/*.class"/>
+                <!-- include name="net/sourceforge/zmanim/applet/*.class"/ -->
+                <!-- include name="net/sourceforge/zmanim/test/*.class"/ -->
+            </fileset>
+        </jar>
+        <jar jarfile="${lib_dir}/zmanimAstronomical-${version}.jar">
+            <manifest>
+                <attribute name="Built-By" value="${author}"/>
+                <attribute name="Specification-Title" value="Zmanim Astronomical"/>
+                <attribute name="Specification-Version" value="${version} (Build Date: ${NOW})"/>
+                <attribute name="Specification-Vendor" value="${author}"/>
+                <attribute name="Implementation-Title" value="Zmanim Astronomical"/>
+                <attribute name="Implementation-Version" value="${version} (Build Date: ${NOW})"/> 
+                <attribute name="Implementation-Vendor" value="${author}"/>
+                <attribute name="Sealed" value="false"/>
+            </manifest>
+            <fileset dir="${tmp_dir}">
+                <include name="net/sourceforge/zmanim/AstronomicalCalendar.class"/>
+                <include name="net/sourceforge/zmanim/util/*.class"/>
+                <exclude name="net/sourceforge/zmanim/util/ExperimentalNOAACalculator.java"/>
+            </fileset>
+        </jar>
+    </target>
+    
+    <target name="zip_zmanim">
+        <zip zipfile="${release_dir}/zmanim-${version}.zip">
+            <zipfileset dir="${lib_dir}" includes="zmanim-${version}.jar" prefix="lib"/>
+            <zipfileset dir="${lib_dir}" includes="zmanimAstronomical-${version}.jar" prefix="lib"/>
+            <!--zipfileset dir="${lib_dir}" includes="zmanimApplet.jar" prefix="lib"/-->
+            <zipfileset dir="${src_dir}" includes="net/sourceforge/zmanim/*.java,net/sourceforge/zmanim/util/*.java,net/sourceforge/zmanim/hebrewcalendar/*.java" prefix="src"/>
+            <zipfileset dir="${src_dir}" includes="net/sourceforge/zmanim/package.html,net/sourceforge/zmanim/util/package.html,net/sourceforge/zmanim/hebrewcalendar/package.html" prefix="src"/><!-- used for javadoc and has to be in the src dir-->
+            <zipfileset dir="${doc_dir}" includes="**/*" prefix="docs/api"/><!-- avoid .* to include package-list -->
+            <zipfileset dir="${build_dir}" includes="build.xml,packageLists/oracle/package-list" prefix="build"/><!-- avoid .* to include package-list -->
+        </zip>
+    </target>
+    
+    <target name="javadoc_zmanim">
+        <delete dir="${doc_dir}"/>
+        <javadoc
+            destdir="${doc_dir}"
+            author="true"
+            version="true"
+            use="true"
+            package="true"
+            windowtitle="Zmanim API ${version}"
+            linksource="yes"
+            breakiterator="yes"
+            charset="utf-8">
+            <classpath refid="project.class.path"/>
+            <fileset dir="${src_dir}" defaultexcludes="yes">
+                <include name="**/*.java" />
+                <exclude name="net/sourceforge/zmanim/applet/*.java"/> 
+            </fileset>
+            <doctitle><![CDATA[Zmanim API ${version}]]></doctitle>
+            <header><![CDATA[<a href="http://www.kosherjava.com/zmanim/" target="_top">KosherJava Zmanim Homepage</a>]]></header>
+            <bottom><![CDATA[<i>Copyright &#169; 2004 - 2011 Eliyahu Hershfeld. All Rights Reserved. Released under the <a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">LGPL 2.1 license</a></i>]]></bottom>
+            <link offline="true" href="http://download.oracle.com/javase/7/docs/api/" packagelistLoc="${build_dir}/packageLists/oracle"/>
+            <!--link offline="true" href="http://itext.ugent.be/library/api/" packagelistLoc="${build_dir}/packageLists/iText"/>
+            <link offline="true" href="http://jakarta.apache.org/poi/apidocs/" packagelistLoc="${build_dir}/packageLists/poi"/>
+            <link offline="true" href="https://rome.dev.java.net/apidocs/0_6/" packagelistLoc="${build_dir}/packageLists/rome"/-->
+        </javadoc>
+    </target>
 
-	<target name = "build_zmanim_applet"  depends="jar_zmanim">
-		<javac 
-			srcdir="${src_dir}" 
-			destdir="${tmp_dir}"
-			debug="on" 
-			deprecation="off"
-			fork="yes"
-			target="1.2"
-			source="1.2">
-			<!--compilerarg value="-Xlint" /-->
-			<classpath refid="project.class.path"/>
-			<include name="net/sourceforge/zmanim/applet/*.java"/>
-		</javac>
-	</target>
-	
-	<target name="jar_zmanim_applet" depends="build_zmanim_applet">
-		<jar jarfile="${lib_dir}/zmanimApplet.jar">
-			<manifest>
-				<attribute name="Built-By" value="${author}"/>
-				<attribute name="Specification-Title" value="Zmanim Clock Applet"/>
-				<attribute name="Specification-Version" value="${version}"/>
-				<attribute name="Specification-Vendor" value="${author}"/>
-				<attribute name="Implementation-Title" value="Zmanim Clock Applet"/>
-				<attribute name="Implementation-Version" value="${version}"/> 
-				<attribute name="Implementation-Vendor" value="${author}"/>
-				<attribute name="Sealed" value="false"/>
-				<attribute name="Main-Class" value="net.sourceforge.zmanim.applet.ZmanimClock"/>
-			</manifest>
-			<fileset dir="${tmp_dir}">
-				<include name="net/sourceforge/zmanim/applet/*.class"/>
-			</fileset>
-			<fileset dir="${src_dir}">
-				<include name="**/*.properties"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	<target name="backup_zmanim">
-		<tstamp>
-		    <format property="backupTime" pattern="MMMM-dd-yyyy-hhmma" locale="en"/>
-		 </tstamp>
-		<zip zipfile="${backup_dir}/zmanim_backup_${backupTime}.zip">
-			<zipfileset dir="${lib_dir}" includes="zmanim*.jar" prefix="lib"/>
-			<zipfileset dir="${src_dir}" includes="**/*" prefix="src"/>
-			<zipfileset dir="${build_dir}" includes="build.xml,packageLists/sun/package-list" prefix="build"/><!-- avoid .* to include package-list -->
-		</zip>
-	</target>
+    <target name="backup_zmanim">
+        <tstamp>
+            <format property="backupTime" pattern="MMMM-dd-yyyy-hhmma" locale="en"/>
+         </tstamp>
+        <zip zipfile="${backup_dir}/zmanim_backup_${backupTime}.zip">
+            <zipfileset dir="${lib_dir}" includes="zmanim*.jar" prefix="lib"/>
+            <zipfileset dir="${src_dir}" includes="**/*" prefix="src"/>
+            <zipfileset dir="${build_dir}" includes="build.xml,packageLists/oracle/package-list" prefix="build"/><!-- avoid .* to include package-list -->
+        </zip>
+    </target>
 </project>
