@@ -1051,9 +1051,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * From the GRA in Kol Eliyahu on Berachos #173 that states that <em>zman krias shema</em> is calculated as half the
-	 * time from {@link #getSeaLevelSunrise() sea level sunset} to fixed local <em>chatzos</em>. The GRA himself seems
-	 * to contradict this when he stated that <em>zman krias shema</em> is 1/4 of the day from sunrise to sunset. See
-	 * <em>Sarah Lamoed</em> #25 in Yisroel Vehazmanim Vol III page 1016.
+	 * time from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getFixedLocalChatzos() fixed local chatzos}.
+	 * The GRA himself seems to contradict this when he stated that <em>zman krias shema</em> is 1/4 of the day from
+	 * sunrise to sunset. See <em>Sarah Lamoed</em> #25 in Yisroel Vehazmanim Vol III page 1016.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> based on this calculation. If the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
