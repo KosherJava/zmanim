@@ -260,21 +260,21 @@ public class ZmanimFormatter {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(xsdDateTimeFormat);
 		dateFormat.setTimeZone(getTimeZone());
 
-		StringBuffer buff = new StringBuffer(dateFormat.format(dateTime));
+		StringBuffer sb = new StringBuffer(dateFormat.format(dateTime));
 		// Must also include offset from UTF.
 		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);// Get the offset (in milliseconds)
 		// If there is no offset, we have "Coordinated Universal Time"
 		if (offset == 0)
-			buff.append("Z");
+			sb.append("Z");
 		else {
 			// Convert milliseconds to hours and minutes
 			int hrs = offset / (60 * 60 * 1000);
 			// In a few cases, the time zone may be +/-hh:30.
 			int min = offset % (60 * 60 * 1000);
 			char posneg = hrs < 0 ? '-' : '+';
-			buff.append(posneg + formatDigits(hrs) + ':' + formatDigits(min));
+			sb.append(posneg + formatDigits(hrs) + ':' + formatDigits(min));
 		}
-		return buff.toString();
+		return sb.toString();
 	}
 
 	/**
@@ -403,9 +403,9 @@ public class ZmanimFormatter {
 		Method[] theMethods = ac.getClass().getMethods();
 		String tagName = "";
 		Object value = null;
-		List dateList = new ArrayList();
-		List durationList = new ArrayList();
-		List otherList = new ArrayList();
+		List<Zman> dateList = new ArrayList<Zman>();
+		List<Zman> durationList = new ArrayList<Zman>();
+		List<String> otherList = new ArrayList<String>();
 		for (int i = 0; i < theMethods.length; i++) {
 			if (includeMethod(theMethods[i])) {
 				tagName = theMethods[i].getName().substring(3);
@@ -472,10 +472,10 @@ public class ZmanimFormatter {
 	 * @return
 	 */
 	private static boolean includeMethod(Method method) {
-		List methodWhiteList = new ArrayList();
+		List<String> methodWhiteList = new ArrayList<String>();
 		// methodWhiteList.add("getName");
 
-		List methodBlackList = new ArrayList();
+		List<String> methodBlackList = new ArrayList<String>();
 		// methodBlackList.add("getGregorianChange");
 
 		if (methodWhiteList.contains(method.getName()))
