@@ -557,7 +557,7 @@ public class GeoLocation implements Cloneable {
 			//Required by the compiler. Should never be reached since we implement clone()
 		}
 		clone.timeZone = (TimeZone) getTimeZone().clone();
-		clone.locationName = (String) getLocationName();
+		clone.locationName = getLocationName();
 		return clone;
 	}
 }

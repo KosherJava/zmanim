@@ -74,10 +74,10 @@ public class YomiCalculator {
 					+ dafYomiStartDate);
 		}
 		if (date.equals(shekalimChangeDate) || date.after(shekalimChangeDate)) {
-			cycleNo = 8 + (int) ((julianDay - shekalimJulianChangeDay) / 2711);
+			cycleNo = 8 + ((julianDay - shekalimJulianChangeDay) / 2711);
 			dafNo = ((julianDay - shekalimJulianChangeDay) % 2711);
 		} else {
-			cycleNo = 1 + (int) ((julianDay - dafYomiJulianStartDay) / 2702);
+			cycleNo = 1 + ((julianDay - dafYomiJulianStartDay) / 2702);
 			dafNo = ((julianDay - dafYomiJulianStartDay) % 2702);
 		}
 

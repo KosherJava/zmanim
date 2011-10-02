@@ -620,10 +620,10 @@ public class HebrewDateFormatter {
 	 */
 	public String getFormattedKviah(int jewishYear) {
 		JewishDate jewishDate = new JewishDate(jewishYear, JewishDate.TISHREI, 1); // set date to Rosh Hashana
-		int kviah = JewishCalendar.getCheshvanKislevKviah(jewishYear);
+		int kviah = JewishDate.getCheshvanKislevKviah(jewishYear);
 		int roshHashanaDayOfweek = jewishDate.getDayOfWeek();
 		String returnValue = formatHebrewNumber(roshHashanaDayOfweek);
-		returnValue += (kviah == JewishCalendar.CHASERIM ? "\u05D7" : kviah == JewishCalendar.SHELAIMIM ? "\u05E9"
+		returnValue += (kviah == JewishDate.CHASERIM ? "\u05D7" : kviah == JewishDate.SHELAIMIM ? "\u05E9"
 				: "\u05DB");
 		jewishDate.setJewishDate(jewishYear, JewishDate.NISSAN, 15); // set to Pesach of the given year
 		int pesachDayOfweek = jewishDate.getDayOfWeek();
@@ -691,52 +691,52 @@ public class HebrewDateFormatter {
 		// next check for all possible single Hebrew digit years
 		boolean singleDigitNumber = (shortNumber < 11 || (shortNumber < 100 && shortNumber % 10 == 0) || (shortNumber <= 400 && shortNumber % 100 == 0));
 		int thousands = number / 1000; // get # thousands
-		StringBuffer returnBuffer = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 		// append thousands to String
 		if (number % 1000 == 0) { // in year is 5000, 4000 etc
-			returnBuffer.append(jOnes[thousands]);
+			sb.append(jOnes[thousands]);
 			if (isUseGershGershayim()) {
-				returnBuffer.append(GERESH);
+				sb.append(GERESH);
 			}
-			returnBuffer.append(" ");
-			returnBuffer.append(ALAFIM); // add # of thousands plus word thousand (overide alafim boolean)
-			return returnBuffer.toString();
+			sb.append(" ");
+			sb.append(ALAFIM); // add # of thousands plus word thousand (overide alafim boolean)
+			return sb.toString();
 		} else if (useLonghebrewYears && number >= 1000) { // if alafim boolean display thousands
-			returnBuffer.append(jOnes[thousands]);
+			sb.append(jOnes[thousands]);
 			if (isUseGershGershayim()) {
-				returnBuffer.append(GERESH); // append thousands quote
+				sb.append(GERESH); // append thousands quote
 			}
-			returnBuffer.append(" ");
+			sb.append(" ");
 		}
 		number = number % 1000; // remove 1000s
 		int hundreds = number / 100; // # of hundreds
-		returnBuffer.append(jHundreds[hundreds]); // add hundreds to String
+		sb.append(jHundreds[hundreds]); // add hundreds to String
 		number = number % 100; // remove 100s
 		if (number == 15) { // special case 15
-			returnBuffer.append(tavTaz[0]);
+			sb.append(tavTaz[0]);
 		} else if (number == 16) { // special case 16
-			returnBuffer.append(tavTaz[1]);
+			sb.append(tavTaz[1]);
 		} else {
 			int tens = number / 10;
 			if (number % 10 == 0) { // if evenly divisable by 10
 				if (singleDigitNumber == false) {
-					returnBuffer.append(jTenEnds[tens]); // end letters so years like 5750 will end with an end nun
+					sb.append(jTenEnds[tens]); // end letters so years like 5750 will end with an end nun
 				} else {
-					returnBuffer.append(jTens[tens]); // standard letters so years like 5050 will end with a regular nun
+					sb.append(jTens[tens]); // standard letters so years like 5050 will end with a regular nun
 				}
 			} else {
-				returnBuffer.append(jTens[tens]);
+				sb.append(jTens[tens]);
 				number = number % 10;
-				returnBuffer.append(jOnes[number]);
+				sb.append(jOnes[number]);
 			}
 		}
 		if (isUseGershGershayim()) {
 			if (singleDigitNumber == true) {
-				returnBuffer.append(GERESH); // append single quote
+				sb.append(GERESH); // append single quote
 			} else { // append double quote before last digit
-				returnBuffer.insert(returnBuffer.length() - 1, GERSHAYIM);
+				sb.insert(sb.length() - 1, GERSHAYIM);
 			}
 		}
-		return returnBuffer.toString();
+		return sb.toString();
 	}
 }

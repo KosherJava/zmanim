@@ -567,7 +567,7 @@ public class JewishCalendar extends JewishDate {
 		// week= current week in Jewish calendar from Rosh Hashana
 		// array= the correct index array for this Jewish year
 		// index= the index number of the parsha name
-		int kvia = JewishCalendar.getCheshvanKislevKviah(getJewishYear());
+		int kvia = JewishDate.getCheshvanKislevKviah(getJewishYear());
 		int roshHashanaDay;
 		int week;
 		int[] array = null;

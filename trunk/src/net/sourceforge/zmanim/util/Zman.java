@@ -65,26 +65,20 @@ public class Zman {
 		this.zmanLabel = label;
 	}
 
-	public static final Comparator DATE_ORDER = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			Zman z1 = (Zman) o1;
-			Zman z2 = (Zman) o2;
+	public static final Comparator<Zman> DATE_ORDER = new Comparator<Zman>() {
+		public int compare(Zman z1, Zman z2) {
 			return z1.getZman().compareTo(z2.getZman());
 		}
 	};
 
-	public static final Comparator NAME_ORDER = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			Zman z1 = (Zman) o1;
-			Zman z2 = (Zman) o2;
+	public static final Comparator<Zman> NAME_ORDER = new Comparator<Zman>() {
+		public int compare(Zman z1, Zman z2) {
 			return z1.getZmanLabel().compareTo(z2.getZmanLabel());
 		}
 	};
 
-	public static final Comparator DURATION_ORDER = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			Zman z1 = (Zman) o1;
-			Zman z2 = (Zman) o2;
+	public static final Comparator<Zman> DURATION_ORDER = new Comparator<Zman>() {
+		public int compare(Zman z1, Zman z2) {
 			return z1.getDuration() == z2.getDuration() ? 0
 					: z1.getDuration() > z2.getDuration() ? 1 : -1;
 		}

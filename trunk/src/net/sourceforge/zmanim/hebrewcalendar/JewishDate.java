@@ -51,7 +51,7 @@ import java.util.*;
  * @author &copy; Eliyahu Hershfeld 2011
  * @version 0.2.6
  */
-public class JewishDate implements Comparable, Cloneable {
+public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * Value of the month field indicating Nissan, the first numeric month of the year in the Jewish calendar. With the
 	 * year starting at {@link #TISHREI}, it would actually be the 7th (or 8th in a {@link #isJewishLeapYear() leap
@@ -1279,9 +1279,8 @@ public class JewishDate implements Comparable, Cloneable {
 	 * date is "less than" (before) the date, greater than 0 if this date is "greater than" (after) the date, or 0 if
 	 * they are equal.
 	 */
-	public int compareTo(Object o) {
-		JewishDate hebDate = (JewishDate) o;
-		return gregorianAbsDate < hebDate.getAbsDate() ? -1 : gregorianAbsDate > hebDate.getAbsDate() ? 1 : 0;
+	public int compareTo(JewishDate jewishDate) {
+		return gregorianAbsDate < jewishDate.getAbsDate() ? -1 : gregorianAbsDate > jewishDate.getAbsDate() ? 1 : 0;
 	}
 
 	/**
