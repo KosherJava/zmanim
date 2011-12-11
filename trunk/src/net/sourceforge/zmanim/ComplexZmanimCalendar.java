@@ -2274,8 +2274,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
 		Calendar sofZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
-		Date sofZmanKidushLevana = JewishCalendar.getSofZmanKidushLevanaBetweenMoldos(jewishCalendar.getJewishYear(),
-				jewishCalendar.getJewishMonth());
+		Date sofZmanKidushLevana = jewishCalendar.getSofZmanKidushLevanaBetweenMoldos();
 		sofZmanKidushLevanaCalendar.setTime(sofZmanKidushLevana);
 		if (alos != null && tzais != null
 				&& sofZmanKidushLevanaCalendar.get(Calendar.YEAR) == getCalendar().get(Calendar.YEAR)
@@ -2333,8 +2332,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
 		Calendar sofZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
-		Date sofZmanKidushLevana = JewishCalendar.getSofZmanKidushLevana15Days(jewishCalendar.getJewishYear(),
-				jewishCalendar.getJewishMonth());
+		Date sofZmanKidushLevana = jewishCalendar.getSofZmanKidushLevana15Days();
 		sofZmanKidushLevanaCalendar.setTime(sofZmanKidushLevana);
 		if (alos != null && tzais != null
 				&& sofZmanKidushLevanaCalendar.get(Calendar.YEAR) == getCalendar().get(Calendar.YEAR)
@@ -2376,8 +2374,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
-		Date tchilasZmanKidushLevana = JewishCalendar.getTchilasZmanKidushLevana3Days(jewishCalendar.getJewishYear(),
-				jewishCalendar.getJewishMonth());
+		Date tchilasZmanKidushLevana = jewishCalendar.getTchilasZmanKidushLevana3Days();
 		Calendar tchilasZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
 		tchilasZmanKidushLevanaCalendar.setTime(tchilasZmanKidushLevana);
 		if (alos != null
@@ -2405,8 +2402,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 				getCalendar().get(Calendar.DAY_OF_MONTH));
 
 		Calendar tchilasZmanKidushLevanaCalendar = (Calendar) getCalendar().clone();
-		Date tchilasZmanKidushLevana = JewishCalendar.getTchilasZmanKidushLevana7Days(jewishCalendar.getJewishYear(),
-				jewishCalendar.getJewishMonth());
+		Date tchilasZmanKidushLevana = jewishCalendar.getTchilasZmanKidushLevana7Days();
 		tchilasZmanKidushLevanaCalendar.setTime(tchilasZmanKidushLevana);
 		if (alos != null
 				&& tzais != null

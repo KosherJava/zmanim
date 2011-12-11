@@ -157,24 +157,24 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * A short year where both {@link #CHESHVAN} and {@link #KISLEV} are 29 days.
 	 * 
-	 * @see #getCheshvanKislevKviah(int)
-	 * @see JewishCalendar#getKviah(int)
+	 * @see #getCheshvanKislevKviah()
+	 * @see HebrewDateFormatter#getFormattedKviah(int)
 	 */
 	public static final int CHASERIM = 0;
 
 	/**
 	 * An ordered year where {@link #CHESHVAN} is 29 days and {@link #KISLEV} is 30 days.
 	 * 
-	 * @see #getCheshvanKislevKviah(int)
-	 * @see JewishCalendar#getKviah(int)
+	 * @see #getCheshvanKislevKviah()
+	 * @see HebrewDateFormatter#getFormattedKviah(int)
 	 */
 	public static final int KESIDRAN = 1;
 
 	/**
 	 * A long year where both {@link #CHESHVAN} and {@link #KISLEV} are 30 days.
 	 * 
-	 * @see #getCheshvanKislevKviah(int)
-	 * @see JewishCalendar#getKviah(int)
+	 * @see #getCheshvanKislevKviah()
+	 * @see HebrewDateFormatter#getFormattedKviah(int)
 	 */
 	public static final int SHELAIMIM = 2;
 
@@ -186,13 +186,13 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	private int moladChalakim;
 
 	/**
-	 * Returns the molad hours. Only a JewishDate object populated with {@link #getMolad(int, int)},
+	 * Returns the molad hours. Only a JewishDate object populated with {@link #getMolad()},
 	 * {@link #setJewishDate(int, int, int, int, int, int)} or {@link #setMoladHours(int)} will have this field
 	 * populated. A regular JewishDate object will have this field set to 0.
 	 * 
 	 * @return the molad hours
 	 * @see #setMoladHours(int)
-	 * @see #getMolad(int, int)
+	 * @see #getMolad()
 	 * @see #setJewishDate(int, int, int, int, int, int)
 	 */
 	public int getMoladHours() {
@@ -205,7 +205,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param moladHours
 	 *            the molad hours to set
 	 * @see #getMoladHours()
-	 * @see #getMolad(int, int)
+	 * @see #getMolad()
 	 * @see #setJewishDate(int, int, int, int, int, int)
 	 * 
 	 */
@@ -214,13 +214,13 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns the molad minutes. Only an object populated with {@link #getMolad(int, int)},
+	 * Returns the molad minutes. Only an object populated with {@link #getMolad()},
 	 * {@link #setJewishDate(int, int, int, int, int, int)} or or {@link #setMoladMinutes(int)} will have these fields
 	 * populated. A regular JewishDate object will have this field set to 0.
 	 * 
 	 * @return the molad minutes
 	 * @see #setMoladMinutes(int)
-	 * @see #getMolad(int, int)
+	 * @see #getMolad()
 	 * @see #setJewishDate(int, int, int, int, int, int)
 	 */
 	public int getMoladMinutes() {
@@ -236,7 +236,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the molad minutes to set
 	 * @see #getMoladMinutes()
 	 * @see #setMoladChalakim(int)
-	 * @see #getMolad(int, int)
+	 * @see #getMolad()
 	 * @see #setJewishDate(int, int, int, int, int, int)
 	 * 
 	 */
@@ -253,7 +253,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the molad chalakim/parts to set
 	 * @see #getMoladChalakim()
 	 * @see #setMoladMinutes(int)
-	 * @see #getMolad(int, int)
+	 * @see #getMolad()
 	 * @see #setJewishDate(int, int, int, int, int, int)
 	 * 
 	 */
@@ -262,17 +262,26 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns the molad chalakim/parts. Only an object populated with {@link #getMolad(int, int)},
+	 * Returns the molad chalakim/parts. Only an object populated with {@link #getMolad()},
 	 * {@link #setJewishDate(int, int, int, int, int, int)} or or {@link #setMoladChalakim(int)} will have these fields
 	 * populated. A regular JewishDate object will have this field set to 0.
 	 * 
 	 * @return the molad chalakim/parts
 	 * @see #setMoladChalakim(int)
-	 * @see #getMolad(int, int)
+	 * @see #getMolad()
 	 * @see #setJewishDate(int, int, int, int, int, int)
 	 */
 	public int getMoladChalakim() {
 		return moladChalakim;
+	}
+	
+	/**
+	 * Returns the last day in a gregorian month
+	 * @param month the Gregorian month
+	 * @return the last day of the Gregorian month
+	 */
+	int getLastDayOfGregorianMonth(int month) {
+		return getLastDayOfGregorianMonth( month, gregorianYear );
 	}
 
 	/**
@@ -378,7 +387,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return true if it is a leap year
 	 * @see #isJewishLeapYear()
 	 */
-	public static boolean isJewishLeapYear(int year) {
+	private static boolean isJewishLeapYear(int year) {
 		return ((7 * year) + 1) % 19 < 7;
 	}
 
@@ -403,7 +412,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @see #isJewishLeapYear(int)
 	 */
 	private static int getLastMonthOfJewishYear(int year) {
-		return isJewishLeapYear(year) ? 13 : 12;
+		return isJewishLeapYear(year) ? ADAR_II : ADAR;
 	}
 
 	/**
@@ -506,6 +515,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 				+ (monthOfYear - 1); // add elapsed months till the start of the molad of the month
 		// return chalakim prior to BeHaRaD + number of chalakim since
 		return CHALAKIM_MOLAD_TOHU + (CHALAKIM_PER_MONTH * monthsElapsed);
+	}
+	
+	public long getChalakimSinceMoladTohu() {
+		return getChalakimSinceMoladTohu( jewishYear, jewishMonth );
 	}
 
 	/**
@@ -680,9 +693,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the year
 	 * @return true if Cheshvan is long in Jewish year.
 	 * @see #isCheshvanLong()
-	 * @see #getCheshvanKislevKviah(int)
+	 * @see #getCheshvanKislevKviah()
 	 */
-	public static boolean isCheshvanLong(int year) {
+	private static boolean isCheshvanLong(int year) {
 		return getDaysInJewishYear(year) % 10 == 5;
 	}
 
@@ -691,7 +704,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * name isLong is done since in a Kesidran (ordered) year Cheshvan is short.
 	 * 
 	 * @return true if Cheshvan is long for the current year that the calendar is set to
-	 * @see #isCheshvanLong(int)
+	 * @see #isCheshvanLong()
 	 */
 	public boolean isCheshvanLong() {
 		return isCheshvanLong(getJewishYear());
@@ -707,7 +720,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @see #isKislevShort()
 	 * @see #getCheshvanKislevKviah(int)
 	 */
-	public static boolean isKislevShort(int year) {
+	private static boolean isKislevShort(int year) {
 		return getDaysInJewishYear(year) % 10 == 3;
 	}
 
@@ -727,17 +740,15 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Cheshvan is 29 days and Kislev
 	 * is 30 days and {@link #CHASERIM} if both are 29 days.
 	 * 
-	 * @param jewishYear
-	 *            the Jewish year
 	 * @return {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Cheshvan is 29 days and
 	 *         Kislev is 30 days and {@link #CHASERIM} if both are 29 days.
-	 * @see #isCheshvanLong(int)
-	 * @see #isKislevShort(int)
+	 * @see #isCheshvanLong()
+	 * @see #isKislevShort()
 	 */
-	public static int getCheshvanKislevKviah(int jewishYear) {
-		if (isCheshvanLong(jewishYear) && !isKislevShort(jewishYear)) {
+	public int getCheshvanKislevKviah() {
+		if (isCheshvanLong() && !isKislevShort()) {
 			return SHELAIMIM;
-		} else if (!isCheshvanLong(jewishYear) && isKislevShort(jewishYear)) {
+		} else if (!isCheshvanLong() && isKislevShort()) {
 			return CHASERIM;
 		} else {
 			return KESIDRAN;
@@ -823,15 +834,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * means that Rosh Chodesh Adar II, 5771 with a molad of 7 chalakim past midnight on Shabbos 29 Adar I / March 5,
 	 * 2011 12:00 AM and 7 chalakim, will have the following values: hours: 0, minutes: 0, Chalakim: 7.
 	 * 
-	 * @param jewishYear
-	 *            the Jewish year to claculate the molad for
-	 * @param jewishMonth
-	 *            the Jewish month to claculate the molad for
 	 * @return a JewishDate {@link Object} set to the date of the molad with the {@link #getMoladHours() hours},
 	 *         {@link #getMoladMinutes() minutes} and {@link #getMoladChalakim() chalakim} set.
 	 */
-	public static JewishDate getMolad(int jewishYear, int jewishMonth) {
-		JewishDate moladDate = new JewishDate(JewishDate.getChalakimSinceMoladTohu(jewishYear, jewishMonth));
+	public JewishDate getMolad() {
+		JewishDate moladDate = new JewishDate(getChalakimSinceMoladTohu());
 		if (moladDate.getMoladHours() >= 6) {
 			moladDate.forward();
 		}

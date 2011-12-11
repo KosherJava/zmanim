@@ -49,20 +49,22 @@ public class YomiCalculator {
 	 * cycle beginning on June 24, 1975 the length of the Yerushalmi shekalim was changed from 13 to 22 daf to follow
 	 * the Vilna Shas that is in common use today.
 	 * 
-	 * @param date
+	 * @param calendar
 	 *            the calendar date for calculation
 	 * @return the {@link Daf}.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if the date is prior to the September 11, 1923 start date of the first Daf Yomi cycle
 	 */
-	public static Daf getDafYomiBavli(Date date) {
+	public static Daf getDafYomiBavli(JewishCalendar calendar) {
 		/**
 		 * The number of daf per masechta. Since the number of blatt in Shekalim changed on the 8th Daf Yomi cycle
 		 * beginning on June 24, 1975
 		 */
 		int[] blattPerMasechta = { 64, 157, 105, 121, 22, 88, 56, 40, 35, 31, 32, 29, 27, 122, 112, 91, 66, 49, 90, 82,
 				119, 119, 176, 113, 24, 49, 76, 14, 120, 110, 142, 61, 34, 34, 28, 22, 4, 10, 4, 73 };
+		Date date = calendar.getTime();
+		
 		Daf dafYomi = null;
 		int julianDay = getJulianDay(date);
 		int cycleNo = 0;
