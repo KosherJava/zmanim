@@ -16,7 +16,9 @@
  */
 package net.sourceforge.zmanim.hebrewcalendar;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * The JewishDate class allows one to maintain an instance of a Gregorian date along with the corresponding Jewish date.
@@ -274,14 +276,16 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public int getMoladChalakim() {
 		return moladChalakim;
 	}
-	
+
 	/**
 	 * Returns the last day in a gregorian month
-	 * @param month the Gregorian month
+	 * 
+	 * @param month
+	 *            the Gregorian month
 	 * @return the last day of the Gregorian month
 	 */
 	int getLastDayOfGregorianMonth(int month) {
-		return getLastDayOfGregorianMonth( month, gregorianYear );
+		return getLastDayOfGregorianMonth(month, gregorianYear);
 	}
 
 	/**
@@ -399,7 +403,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @see #isJewishLeapYear(int)
 	 */
 	public boolean isJewishLeapYear() {
-		return isJewishLeapYear(getJewishYear());
+		// return isJewishLeapYear(getJewishYear());
+		return ((7 * getJewishYear()) + 1) % 19 < 7;
 	}
 
 	/**
@@ -434,27 +439,27 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		return addDechiyos(year, moladDay, moladParts);
 	}
 
-//	private static int getJewishCalendarElapsedDaysOLD(int year) {
-//		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
-//		// Molad Tohu = BeHaRaD - Monday, 5 hours (11 PM) and 204 chalakim
-//		final int chalakimTashTZag = 793; // chalakim in a lunar month
-//		final int chalakimTohuRaD = 204; // chalakim from original molad Tohu BeHaRaD
-//		final int hoursTohuHa = 5; // hours from original molad Tohu BeHaRaD
-//		final int dayTohu = 1; // Monday (0 based)
-//
-//		int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
-//				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
-//				+ ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
-//		// start with Molad Tohu BeHaRaD
-//		// start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapsed chalakim
-//		int partsElapsed = chalakimTohuRaD + chalakimTashTZag * (monthsElapsed % 1080);
-//		// start with Ha hours of BeHaRaD, add 12 hour remainder of lunar month add hours elapsed
-//		int hoursElapsed = hoursTohuHa + 12 * monthsElapsed + 793 * (monthsElapsed / 1080) + partsElapsed / 1080;
-//		// start with Monday of BeHaRaD = 1 (0 based), add 29 days of the lunar months elapsed
-//		int conjunctionDay = dayTohu + 29 * monthsElapsed + hoursElapsed / 24;
-//		int conjunctionParts = 1080 * (hoursElapsed % 24) + partsElapsed % 1080;
-//		return addDechiyos(year, conjunctionDay, conjunctionParts);
-//	}
+	// private static int getJewishCalendarElapsedDaysOLD(int year) {
+	// // Jewish lunar month = 29 days, 12 hours and 793 chalakim
+	// // Molad Tohu = BeHaRaD - Monday, 5 hours (11 PM) and 204 chalakim
+	// final int chalakimTashTZag = 793; // chalakim in a lunar month
+	// final int chalakimTohuRaD = 204; // chalakim from original molad Tohu BeHaRaD
+	// final int hoursTohuHa = 5; // hours from original molad Tohu BeHaRaD
+	// final int dayTohu = 1; // Monday (0 based)
+	//
+	// int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
+	// + (12 * ((year - 1) % 19)) // Regular months in this cycle
+	// + ((7 * ((year - 1) % 19) + 1) / 19); // Leap months this cycle
+	// // start with Molad Tohu BeHaRaD
+	// // start with RaD of BeHaRaD and add TaShTzaG (793) chalakim plus elapsed chalakim
+	// int partsElapsed = chalakimTohuRaD + chalakimTashTZag * (monthsElapsed % 1080);
+	// // start with Ha hours of BeHaRaD, add 12 hour remainder of lunar month add hours elapsed
+	// int hoursElapsed = hoursTohuHa + 12 * monthsElapsed + 793 * (monthsElapsed / 1080) + partsElapsed / 1080;
+	// // start with Monday of BeHaRaD = 1 (0 based), add 29 days of the lunar months elapsed
+	// int conjunctionDay = dayTohu + 29 * monthsElapsed + hoursElapsed / 24;
+	// int conjunctionParts = 1080 * (hoursElapsed % 24) + partsElapsed % 1080;
+	// return addDechiyos(year, conjunctionDay, conjunctionParts);
+	// }
 
 	/**
 	 * Adds the 4 dechiyos for molad Tishrei. These are:
@@ -499,39 +504,48 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Returns the number of chalakim (parts - 1080 to the hour) from the original hypothetical Molad Tohu to the year
 	 * and month passed in.
 	 * 
-	 * @param jewishYear
-	 * @param jewishMonth
-	 *            the Jewish month, with the month numbers starting from Nisan. Use the JewishDate constants such as
-	 *            {@link JewishDate#TISHREI}.
+	 * @param year
+	 *            the Jewish year
+	 * @param month
+	 *            the Jewish month the Jewish month, with the month numbers starting from Nisan. Use the JewishDate
+	 *            constants such as {@link JewishDate#TISHREI}.
 	 * @return the number of chalakim (parts - 1080 to the hour) from the original hypothetical Molad Tohu
 	 */
-	public static long getChalakimSinceMoladTohu(int jewishYear, int jewishMonth) {
+	private static long getChalakimSinceMoladTohu(int year, int month) {
 		// Jewish lunar month = 29 days, 12 hours and 793 chalakim
 		// chalakim since Molad Tohu BeHaRaD - 1 day, 5 hours and 204 chalakim
-		int monthOfYear = getJewishMonthOfYear(jewishYear, jewishMonth);
-		int monthsElapsed = (235 * ((jewishYear - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
-				+ (12 * ((jewishYear - 1) % 19)) // Regular months in this cycle
-				+ ((7 * ((jewishYear - 1) % 19) + 1) / 19) // Leap months this cycle
+		int monthOfYear = getJewishMonthOfYear(year, month);
+		int monthsElapsed = (235 * ((year - 1) / 19)) // Months in complete 19 year lunar (Metonic) cycles so far
+				+ (12 * ((year - 1) % 19)) // Regular months in this cycle
+				+ ((7 * ((year - 1) % 19) + 1) / 19) // Leap months this cycle
 				+ (monthOfYear - 1); // add elapsed months till the start of the molad of the month
 		// return chalakim prior to BeHaRaD + number of chalakim since
 		return CHALAKIM_MOLAD_TOHU + (CHALAKIM_PER_MONTH * monthsElapsed);
 	}
-	
+
+	/**
+	 * Returns the number of chalakim (parts - 1080 to the hour) from the original hypothetical Molad Tohu to the Jewish
+	 * year and month that this Object is set to.
+	 * 
+	 * @return the number of chalakim (parts - 1080 to the hour) from the original hypothetical Molad Tohu
+	 */
 	public long getChalakimSinceMoladTohu() {
-		return getChalakimSinceMoladTohu( jewishYear, jewishMonth );
+		return getChalakimSinceMoladTohu(jewishYear, jewishMonth);
 	}
 
 	/**
 	 * Converts the the {@link JewishDate#NISSAN} based constants used by this class to numeric month starting from
 	 * {@link JewishDate#TISHREI}. This is required for Molad claculations.
 	 * 
-	 * @param jewishYear
-	 * @param jewishMonth
+	 * @param year
+	 *            The Jewish year
+	 * @param month
+	 *            The Jewish Month
 	 * @return
 	 */
-	private static int getJewishMonthOfYear(int jewishYear, int jewishMonth) {
-		boolean isLeapYear = JewishDate.isJewishLeapYear(jewishYear);
-		return (jewishMonth + (isLeapYear ? 6 : 5)) % (isLeapYear ? 13 : 12) + 1;
+	private static int getJewishMonthOfYear(int year, int month) {
+		boolean isLeapYear = JewishDate.isJewishLeapYear(year);
+		return (month + (isLeapYear ? 6 : 5)) % (isLeapYear ? 13 : 12) + 1;
 	}
 
 	/**
@@ -564,7 +578,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *             chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG).
 	 */
 	private static void validateJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
-		if (month < 1 || month > getLastMonthOfJewishYear(year)) {
+		if (month < NISSAN || month > getLastMonthOfJewishYear(year)) {
 			throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
 					+ month + " is invalid for the year " + year + ".");
 		}
@@ -667,8 +681,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param year
 	 *            the Jewish year
 	 * @return the number of days for a given Jewish year.
-	 * @see #isCheshvanLong(int)
-	 * @see #isKislevShort(int)
+	 * @see #isCheshvanLong()
+	 * @see #isKislevShort()
 	 */
 	public static int getDaysInJewishYear(int year) {
 		return getJewishCalendarElapsedDays(year + 1) - getJewishCalendarElapsedDays(year);
@@ -729,7 +743,6 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Kesidran (ordered) year Kislev is long.
 	 * 
 	 * @return true if Kislev is short for the year that this class is set to
-	 * @see #isKislevShort(int)
 	 */
 	public boolean isKislevShort() {
 		return isKislevShort(getJewishYear());
@@ -764,7 +777,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish Year
 	 * @return the number of days for a given Jewish month
 	 */
-	public static int getDaysInJewishMonth(int month, int year) {
+	private static int getDaysInJewishMonth(int month, int year) {
 		if ((month == IYAR) || (month == TAMMUZ) || (month == ELUL) || ((month == CHESHVAN) && !(isCheshvanLong(year)))
 				|| ((month == KISLEV) && isKislevShort(year)) || (month == TEVES)
 				|| ((month == ADAR) && !(isJewishLeapYear(year))) || (month == ADAR_II)) {
@@ -777,7 +790,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * Returns the number of days of the Jewish month that the calendar is currently set to.
 	 * 
-	 * @return the number of days for a given Jewish month that the calendar is currently set to.
+	 * @return the number of days for the Jewish month that the calendar is currently set to.
 	 */
 	public int getDaysInJewishMonth() {
 		return getDaysInJewishMonth(getJewishMonth(), getJewishYear());
@@ -790,17 +803,16 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		// Approximation from below
 		jewishYear = (gregorianAbsDate + JEWISH_EPOCH) / 366;
 		// Search forward for year from the approximation
-		while (gregorianAbsDate >= jewishDateToAbsDate(jewishYear + 1, 7, 1)) {
+		while (gregorianAbsDate >= jewishDateToAbsDate(jewishYear + 1, TISHREI, 1)) {
 			jewishYear++;
 		}
 		// Search forward for month from either Tishri or Nisan.
-		if (gregorianAbsDate < jewishDateToAbsDate(jewishYear, 1, 1)) {
+		if (gregorianAbsDate < jewishDateToAbsDate(jewishYear, NISSAN, 1)) {
 			jewishMonth = TISHREI;// Start at Tishri
 		} else {
 			jewishMonth = NISSAN;// Start at Nisan
 		}
-		while (gregorianAbsDate > jewishDateToAbsDate(jewishYear, jewishMonth,
-				getDaysInJewishMonth(jewishMonth, jewishYear))) {
+		while (gregorianAbsDate > jewishDateToAbsDate(jewishYear, jewishMonth, getDaysInJewishMonth())) {
 			jewishMonth++;
 		}
 		// Calculate the day by subtraction
@@ -1184,7 +1196,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		}
 
 		// Change the Jewish Date
-		if (jewishDay == getDaysInJewishMonth(jewishMonth, jewishYear)) {
+		if (jewishDay == getDaysInJewishMonth()) {
 			// if it last day of elul (i.e. last day of Jewish year)
 			if (jewishMonth == ELUL) {
 				jewishYear++;
@@ -1253,7 +1265,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			} else {
 				jewishMonth--;
 			}
-			jewishDay = getDaysInJewishMonth(jewishMonth, jewishYear);
+			jewishDay = getDaysInJewishMonth();
 		} else {
 			jewishDay--;
 		}
@@ -1267,7 +1279,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#equals(Object)
+	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -1435,7 +1447,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object. <br />
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @see Object#clone()
 	 * @since 1.1
 	 */
 	public Object clone() {
@@ -1450,7 +1462,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#hashCode()
+	 * @see Object#hashCode()
 	 */
 	public int hashCode() {
 		int result = 17;
