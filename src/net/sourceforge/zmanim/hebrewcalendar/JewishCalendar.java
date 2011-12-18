@@ -357,16 +357,6 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns a String of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
-	 * day. Has no "modern" holidays.
-	 * 
-	 * @return A String containing the holiday name or an empty string if it is not a holiday.
-	 */
-	public String getYomTov() {
-		return new HebrewDateFormatter().formatYomTov(this);
-	}
-
-	/**
 	 * Returns true if the current day is Yom Tov. The method returns false for Chanukah, Erev Yom tov and fast days.
 	 * 
 	 * @return true if the current day is a Yom Tov
@@ -380,7 +370,7 @@ public class JewishCalendar extends JewishDate {
 		}
 		return getYomTovIndex() != -1;
 	}
-	
+
 	/**
 	 * Returns true if the current day is Chol Hamoed of Pesach or Succos.
 	 * 
@@ -510,17 +500,6 @@ public class JewishCalendar extends JewishDate {
 	private static final int[] Thu_long_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
 			43, 44, 45, 46, 47, 48, 49, 59 };
-
-	/**
-	 * Returns a string of the current parsha(ios) transliterated into Latin chars using Ashkenazi pronunciation. The
-	 * {@link HebrewDateFormatter#formatParsha(JewishCalendar)} offers various formatting options for the Parsha.
-	 * 
-	 * @return the current parsha(ios) transliterated into Latin chars
-	 * @see HebrewDateFormatter#formatParsha(JewishCalendar)
-	 */
-	public String getParsha() {
-		return new HebrewDateFormatter().formatParsha(this);
-	}
 
 	/**
 	 * Returns a the index of today's parsha(ios) or a -1 if there is none. To get the name of the Parsha, use the
@@ -776,9 +755,9 @@ public class JewishCalendar extends JewishDate {
 	 * in the Shulchan Aruch (Orach Chaim 426). It should be noted that some opinions hold that the
 	 * <http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> of calculating
-	 * {@link #getSofZmanKidushLevanaBetweenMoldos() half way between molad and mold} is of the opinion that
-	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
-	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
+	 * {@link #getSofZmanKidushLevanaBetweenMoldos() half way between molad and mold} is of the opinion that Mechaber
+	 * agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi Dovid
+	 * Heber's very detailed writeup in Siman Daled (chapter 4) of <a
 	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. TODO: Currently returns the time even if it is
 	 * during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} prior to the
 	 * time if the zman is between Alos and Tzais.
@@ -806,7 +785,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * @see java.lang.Object#equals(Object)
+	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -820,7 +799,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * @see java.lang.Object#hashCode()
+	 * @see Object#hashCode()
 	 */
 	public int hashCode() {
 		int result = 17;

@@ -191,12 +191,16 @@ public class HebrewDateFormatter {
 		String formattedRoshChodesh = "";
 		int month = jewishCalendar.getJewishMonth();
 		if (jewishCalendar.getJewishDayOfMonth() == 30) {
-			if (month < 12 || (month == 12 && jewishCalendar.isJewishLeapYear())) {
+			if (month < JewishCalendar.ADAR || (month == JewishCalendar.ADAR && jewishCalendar.isJewishLeapYear())) {
 				month++;
 			} else { // roll to Nissan
-				month = 1;
+				month = JewishCalendar.NISSAN;
 			}
 		}
+
+		// This method is only about formatting, so we shouldn't make any changes to the params passed in...
+		jewishCalendar = (JewishCalendar) jewishCalendar.clone();
+		jewishCalendar.setJewishMonth(month);
 		formattedRoshChodesh = hebrewFormat ? hebrewHolidays[JewishCalendar.ROSH_CHODESH]
 				: transliteratedHolidays[JewishCalendar.ROSH_CHODESH];
 		formattedRoshChodesh += " " + formatMonth(jewishCalendar);
@@ -605,8 +609,7 @@ public class HebrewDateFormatter {
 		int kviah = jewishDate.getCheshvanKislevKviah();
 		int roshHashanaDayOfweek = jewishDate.getDayOfWeek();
 		String returnValue = formatHebrewNumber(roshHashanaDayOfweek);
-		returnValue += (kviah == JewishDate.CHASERIM ? "\u05D7" : kviah == JewishDate.SHELAIMIM ? "\u05E9"
-				: "\u05DB");
+		returnValue += (kviah == JewishDate.CHASERIM ? "\u05D7" : kviah == JewishDate.SHELAIMIM ? "\u05E9" : "\u05DB");
 		jewishDate.setJewishDate(jewishYear, JewishDate.NISSAN, 15); // set to Pesach of the given year
 		int pesachDayOfweek = jewishDate.getDayOfWeek();
 		returnValue += formatHebrewNumber(pesachDayOfweek);
