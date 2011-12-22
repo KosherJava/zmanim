@@ -403,8 +403,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @see #isJewishLeapYear(int)
 	 */
 	public boolean isJewishLeapYear() {
-		// return isJewishLeapYear(getJewishYear());
-		return ((7 * getJewishYear()) + 1) % 19 < 7;
+		return isJewishLeapYear(getJewishYear());
 	}
 
 	/**
