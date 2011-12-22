@@ -1060,6 +1060,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         the sun does not rise, and one where it does not set, a null will be returned. See detailed explanation
 	 *         on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getFixedLocalChatzos()
+	 * @deprecated Pending confirmation from Rabbi Harfenes, this method is deprecated and should not be used.
 	 */
 	public Date getSofZmanShmaKolEliyahu() {
 		Date chatzos = getFixedLocalChatzos();
