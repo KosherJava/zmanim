@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2012 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -63,7 +63,7 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * </pre>
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2011
+ * @author &copy; Eliyahu Hershfeld 2004 - 2012
  * @version 1.2.1
  */
 public class AstronomicalCalendar implements Cloneable {
@@ -609,7 +609,7 @@ public class AstronomicalCalendar implements Cloneable {
 		Date offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
 
 		java.math.BigDecimal degrees = new java.math.BigDecimal(0);
-		java.math.BigDecimal incrementor = new java.math.BigDecimal("0.0001");
+		java.math.BigDecimal incrementor = new java.math.BigDecimal("0.001");
 		while (offsetByDegrees == null || offsetByDegrees.getTime() < offsetByTime.getTime()) {
 			degrees = degrees.add(incrementor);
 			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
@@ -690,7 +690,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * with a number of different implementations of the <code>abstract</code> {@link AstronomicalCalculator} based on
 	 * different algorithms, including {@link net.sourceforge.zmanim.util.SunTimesCalculator one implementation} based
 	 * on the <a href = "http://aa.usno.navy.mil/">US Naval Observatory's</a> algorithm, and
-	 * {@link net.sourceforge.zmanim.util.JSuntimeCalculator another} based on <a href=""http://noaa.gov">NOAA's</a>
+	 * {@link net.sourceforge.zmanim.util.NOAACalculator another} based on <a href=""http://noaa.gov">NOAA's</a>
 	 * algorithm. This allows easy runtime switching and comparison of different algorithms.
 	 * 
 	 * @param astronomicalCalculator

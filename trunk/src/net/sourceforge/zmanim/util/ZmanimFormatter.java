@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2012 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,7 +32,7 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  * example the {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour()} returns the length of the hour in
  * milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2011
+ * @author &copy; Eliyahu Hershfeld 2004 - 2012
  * @version 1.2
  */
 public class ZmanimFormatter {
@@ -469,7 +469,7 @@ public class ZmanimFormatter {
 	 * Determines if a method should be output by the {@link #toXML(AstronomicalCalendar)}
 	 * 
 	 * @param method
-	 * @return
+	 * @return if the method should be included in serialization
 	 */
 	private static boolean includeMethod(Method method) {
 		List<String> methodWhiteList = new ArrayList<String>();

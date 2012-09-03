@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2012 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2011
+ * @author &copy; Eliyahu Hershfeld 2004 - 2012
  * @version 1.1
  */
 public class GeoLocation implements Cloneable {
@@ -470,8 +470,8 @@ public class GeoLocation implements Cloneable {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<GeoLocation>\n");
 		sb.append("\t<LocationName>").append(getLocationName()).append("</LocationName>\n");
-		sb.append("\t<Latitude>").append(getLatitude()).append("&deg;").append("</Latitude>\n");
-		sb.append("\t<Longitude>").append(getLongitude()).append("&deg;").append("</Longitude>\n");
+		sb.append("\t<Latitude>").append(getLatitude()).append("</Latitude>\n");
+		sb.append("\t<Longitude>").append(getLongitude()).append("</Longitude>\n");
 		sb.append("\t<Elevation>").append(getElevation()).append(" Meters").append("</Elevation>\n");
 		sb.append("\t<TimezoneName>").append(getTimeZone().getID()).append("</TimezoneName>\n");
 		sb.append("\t<TimeZoneDisplayName>").append(getTimeZone().getDisplayName()).append("</TimeZoneDisplayName>\n");
@@ -526,8 +526,8 @@ public class GeoLocation implements Cloneable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\nLocation Name:\t\t\t").append(getLocationName());
-		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("&deg;");
-		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("&deg;");
+		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("°");
+		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("°");
 		sb.append("\nElevation:\t\t\t").append(getElevation()).append(" Meters");
 		sb.append("\nTimezone Name:\t\t\t").append(getTimeZone().getID());
 		/*

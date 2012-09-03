@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2012 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -47,7 +47,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011
+ * @author &copy; Eliyahu Hershfeld 2011 - 2012
  * @version 0.0.1
  */
 public class JewishCalendar extends JewishDate {
@@ -683,7 +683,7 @@ public class JewishCalendar extends JewishDate {
 		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
 		Calendar cal = Calendar.getInstance(geo.getTimeZone());
 		cal.clear();
-		double moladSeconds = molad.getMoladChalakim() * 10 / 3;
+		double moladSeconds = molad.getMoladChalakim() * 10 / (double)3;
 		cal.set(molad.getGregorianYear(), molad.getGregorianMonth(), molad.getGregorianDayOfMonth(),
 				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));

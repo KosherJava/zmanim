@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2012 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -30,7 +30,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * <h2>Disclaimer:</h2> I did my best to get accurate results but please do not rely on these zmanim for
  * <em>halacha lemaaseh</em>.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2011
+ * @author &copy; Eliyahu Hershfeld 2004 - 2012
  * @version 1.2.1
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
@@ -93,7 +93,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #GEOMETRIC_ZENITH geometric horizon} before {@link #getSunrise sunrise}. For more information the source
 	 * of 16.1&deg; see {@link #ZENITH_16_POINT_1}.
 	 * 
-	 * @see net.sourceforge.zmanim.ZmanimCalendar#ZENITH_16_POINT_1
+	 * @see #ZENITH_16_POINT_1
 	 * @return The <code>Date</code> of dawn. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
 	 *         low enough below the horizon for this calculation, a null will be returned. See detailed explanation on
@@ -164,7 +164,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * sunrise to sunset. This returns the time 3 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea
 	 * level sunrise}.
 	 * 
-	 * @see net.sourceforge.zmanim.ZmanimCalendar#getShaahZmanisGra()
+	 * @see #getSofZmanShma(Date, Date)
+	 * @see #getShaahZmanisGra()
 	 * @return the <code>Date</code> of the latest zman shema according to the GRA and Baal Hatanya. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
 	 *         not rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
@@ -177,14 +178,15 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite shema in the morning) in the opinion of
 	 * the <em>MGA</em> based on <em>alos</em> being 72 minutes before {@link #getSunrise() sunrise}. This time is 3
-	 * <em> shaos zmaniyos</em> (solar hours) after dawn based on the opinion of the <em>MGA</em> that the day is
+	 * <em>shaos zmaniyos</em> (solar hours) after dawn based on the opinion of the <em>MGA</em> that the day is
 	 * calculated from a dawn of 72 minutes before sunrise to nightfall of 72 minutes after sunset. This returns the
 	 * time of 3 * <em>shaos zmaniyos</em> after dawn.
 	 * 
-	 * @return the <code>Date</code> of the latest zman shema. If the calculation can't be computed such as in the
-	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
-	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
-	 *         documentation.
+	 * @return the <code>Date</code> of the latest <em>zman shema</em>. If the calculation can't be computed such as in
+	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
+	 *         does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * @see #getSofZmanShma(Date, Date)
 	 * @see ComplexZmanimCalendar#getShaahZmanis72Minutes()
 	 * @see ComplexZmanimCalendar#getAlos72()
 	 * @see ComplexZmanimCalendar#getSofZmanShmaMGA72Minutes()
@@ -253,7 +255,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * calculated from sunrise to sunset. This returns the time 4 * {@link #getShaahZmanisGra()} after
 	 * {@link #getSeaLevelSunrise() sea level sunrise}.
 	 * 
-	 * @see net.sourceforge.zmanim.ZmanimCalendar#getShaahZmanisGra()
+	 * @see #getSofZmanTfila(Date, Date)
+	 * @see #getShaahZmanisGra()
 	 * @return the <code>Date</code> of the latest zman tefilah. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
@@ -275,6 +278,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set), a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
+	 * @see #getSofZmanTfila(Date, Date)
 	 * @see #getShaahZmanisMGA()
 	 * @see #getAlos72()
 	 */
@@ -316,6 +320,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * the <em>Baal Hatanya</em> that the day is calculated from sunrise to sunset. This returns the time 6.5 *
 	 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea level sunrise}.
 	 * 
+	 * @see #getMinchaGedola(Date, Date)
 	 * @see #getShaahZmanisGra()
 	 * @see #getMinchaKetana()
 	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
@@ -360,6 +365,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * the opinion of the <em>GRA</em> and the <em>Baal Hatanya</em> that the day is calculated from sunrise to sunset.
 	 * This returns the time 9.5 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea level sunrise}.
 	 * 
+	 * @see #getMinchaKetana(Date, Date)
 	 * @see #getShaahZmanisGra()
 	 * @see #getMinchaGedola()
 	 * @return the <code>Date</code> of the time of mincha ketana. If the calculation can't be computed such as in the
@@ -398,6 +404,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * from sunrise to sunset. This returns the time 10.75 * {@link #getShaahZmanisGra()} after
 	 * {@link #getSeaLevelSunrise() sea level sunrise}.
 	 * 
+	 * @see #getPlagHamincha(Date, Date)
 	 * @return the <code>Date</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a null will be returned. See detailed explanation on top of the
