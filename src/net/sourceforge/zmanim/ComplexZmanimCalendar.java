@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2012 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -85,7 +85,7 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  * <h2>Disclaimer:</h2> While I did my best to get accurate results please do not rely on these zmanim for
  * <em>halacha lemaaseh</em>
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2011
+ * @author &copy; Eliyahu Hershfeld 2004 - 2012
  * @version 1.2
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
@@ -844,14 +844,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getSofZmanShmaMGA16Point1Degrees() {
 		return getSofZmanShma(getAlos16Point1Degrees(), getTzais16Point1Degrees());
 	}
-	
+
 	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) according to the
 	 * opinion of the <em>MGA</em> based on <em>alos</em> being {@link #getAlos18Degrees() 18&deg;} before
-	 * {@link #getSunrise() sunrise}. This time is 3 <em>{@link #getShaahZmanis18Degrees() shaos zmaniyos}</em>
-	 * (solar hours) after {@link #getAlos18Degrees() dawn} based on the opinion of the <em>MGA</em> that the day
-	 * is calculated from dawn to nightfall with both being 18&deg; below sunrise or sunset. This returns the time of
-	 * 3 * {@link #getShaahZmanis18Degrees()} after {@link #getAlos18Degrees() dawn}.
+	 * {@link #getSunrise() sunrise}. This time is 3 <em>{@link #getShaahZmanis18Degrees() shaos zmaniyos}</em> (solar
+	 * hours) after {@link #getAlos18Degrees() dawn} based on the opinion of the <em>MGA</em> that the day is calculated
+	 * from dawn to nightfall with both being 18&deg; below sunrise or sunset. This returns the time of 3 *
+	 * {@link #getShaahZmanis18Degrees()} after {@link #getAlos18Degrees() dawn}.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
@@ -1127,14 +1127,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getSofZmanTfilaMGA16Point1Degrees() {
 		return getSofZmanTfila(getAlos16Point1Degrees(), getTzais16Point1Degrees());
 	}
-	
+
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) according to the opinion
-	 * of the <em>MGA</em> based on <em>alos</em> being {@link #getAlos18Degrees() 18&deg;} before
-	 * {@link #getSunrise() sunrise}. This time is 4 <em>{@link #getShaahZmanis18Degrees() shaos zmaniyos}</em>
-	 * (solar hours) after {@link #getAlos18Degrees() dawn} based on the opinion of the <em>MGA</em> that the day
-	 * is calculated from dawn to nightfall with both being 18&deg; below sunrise or sunset. This returns the time of
-	 * 4 * {@link #getShaahZmanis18Degrees()} after {@link #getAlos18Degrees() dawn}.
+	 * of the <em>MGA</em> based on <em>alos</em> being {@link #getAlos18Degrees() 18&deg;} before {@link #getSunrise()
+	 * sunrise}. This time is 4 <em>{@link #getShaahZmanis18Degrees() shaos zmaniyos}</em> (solar hours) after
+	 * {@link #getAlos18Degrees() dawn} based on the opinion of the <em>MGA</em> that the day is calculated from dawn to
+	 * nightfall with both being 18&deg; below sunrise or sunset. This returns the time of 4 *
+	 * {@link #getShaahZmanis18Degrees()} after {@link #getAlos18Degrees() dawn}.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
@@ -1834,8 +1834,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
-	 * sun's position at {@link #ZENITH_7_POINT_083 7.083&deg;} below the western horizon.
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 30
+	 * minutes after sunset during the equinox in Yerushalayim. The sun's position at this time computes to
+	 * {@link #ZENITH_7_POINT_083 7.083&deg; (or 7&deg 5\u2032} below the western horizon. Note that this is a common
+	 * and rounded number. Computation shows the accurate number is 7.2&deg;
 	 * 
 	 * @return the <code>Date</code> representing the time when the sun is 7.083&deg; below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -2331,9 +2333,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between
 	 * <em>molad</em> and <em>molad</em> (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. If
 	 * the time of <em>sof zman Kiddush Levana</em> occurs during the day (between
-	 * <em>{@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos}</em> and
-	 * <em>{@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() tzais}</em>) it return the <em>alos</em> prior to
-	 * the calculated <em>sof zman Kiddush Levana</em>.
+	 * <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it
+	 * return the <em>alos</em> prior to the calculated <em>sof zman Kiddush Levana</em>.
 	 * 
 	 * @return the Date representing the moment halfway between molad and molad. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned
@@ -2392,9 +2393,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
 	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
 	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. If the time of <em>sof zman Kiddush Levana</em>
-	 * occurs during the day (between <em>{@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos}</em> and
-	 * <em>{@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() tzais}</em>) it return the <em>alos</em> prior to
-	 * the calculated <em>sof zman Kiddush Levana</em>.
+	 * occurs during the day (between <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and
+	 * <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it return the <em>alos</em> prior to the calculated
+	 * <em>sof zman Kiddush Levana</em>.
 	 * 
 	 * @return the Date representing the moment 15 days after the <em>molad</em>. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned

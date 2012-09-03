@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2012 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -49,7 +49,7 @@ import java.util.GregorianCalendar;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011
+ * @author &copy; Eliyahu Hershfeld 2011 - 2012
  * @version 0.2.6
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
@@ -432,8 +432,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
 		long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);
-		int moladDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
-		int moladParts = (int) (chalakimSince - moladDay * CHALAKIM_PER_DAY);
+		int moladDay = (int) (chalakimSince / (long) CHALAKIM_PER_DAY);
+		int moladParts = (int) (chalakimSince - moladDay * (long) CHALAKIM_PER_DAY);
 		// delay Rosh Hashana for the 4 dechiyos
 		return addDechiyos(year, moladDay, moladParts);
 	}
@@ -540,7 +540,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            The Jewish year
 	 * @param month
 	 *            The Jewish Month
-	 * @return
+	 * @return the Jewish month of the year starting with Tishrei
 	 */
 	private static int getJewishMonthOfYear(int year, int month) {
 		boolean isLeapYear = JewishDate.isJewishLeapYear(year);
@@ -731,7 +731,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish year
 	 * @return true if Kislev is short for the given Jewish year.
 	 * @see #isKislevShort()
-	 * @see #getCheshvanKislevKviah(int)
+	 * @see #getCheshvanKislevKviah()
 	 */
 	private static boolean isKislevShort(int year) {
 		return getDaysInJewishYear(year) % 10 == 3;
@@ -879,8 +879,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
 		// long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);// tishrei
-		int conjunctionDay = (int) (molad / CHALAKIM_PER_DAY);
-		int conjunctionParts = (int) (molad - conjunctionDay * CHALAKIM_PER_DAY);
+		int conjunctionDay = (int) (molad / (long) CHALAKIM_PER_DAY);
+		int conjunctionParts = (int) (molad - conjunctionDay * (long) CHALAKIM_PER_DAY);
 		setMoladTime(conjunctionParts);
 	}
 
