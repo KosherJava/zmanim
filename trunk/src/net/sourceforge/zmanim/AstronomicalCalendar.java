@@ -515,15 +515,16 @@ public class AstronomicalCalendar implements Cloneable {
 	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
 	 * ="http://en.wikipedia.org/wiki/Transit_%28astronomy%29">transitting</a> the <a
 	 * href="http://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
-	 * calculated as halfway between sunrise and sunset, which can be slightly off the real transit time due to the
-	 * lengthening or shortening day.
+	 * calculated as halfway between sea level sunrise and sunset, which can be slightly off the real transit time due
+	 * to chnages in declination (the lengthening or shortening day).
 	 * 
 	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, null will be returned. See detailed explanation on top of the page.
 	 */
 	public Date getSunTransit() {
-		return getTimeOffset(getSunrise(), getTemporalHour() * 6);
+		long temporalHour = getTemporalHour(getSeaLevelSunrise(), getSeaLevelSunset());
+		return getTimeOffset(getSeaLevelSunrise(), temporalHour * 6);
 	}
 
 	/**

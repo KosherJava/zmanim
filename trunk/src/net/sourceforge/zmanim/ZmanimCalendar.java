@@ -121,8 +121,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 
 	/**
 	 * This method returns <em>chatzos</em> (midday) following the opinion of the GRA that the day for Jewish halachic
-	 * times start at {@link #getSunrise sunrise} and ends at {@link #getSunset sunset}. The returned value is identical
-	 * to {@link #getSunTransit()}
+	 * times start at {@link #getSeaLevelSunrise sea level sunrise} and ends at {@link #getSeaLevelSunset sea level
+	 * sunset}. The returned value is identical to {@link #getSunTransit()}
 	 * 
 	 * @see AstronomicalCalendar#getSunTransit()
 	 * @return the <code>Date</code> of chatzos. If the calculation can't be computed such as in the Arctic Circle where
