@@ -485,9 +485,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return the <code>long</code> millisecond length of a temporal hour. If the calculation can't be computed,
 	 *         {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the page.
+	 * 
+	 * @see #getTemporalHour(Date, Date)
 	 */
 	public long getTemporalHour() {
-		return getTemporalHour(getSunrise(), getSunset());
+		return getTemporalHour(getSeaLevelSunrise(), getSeaLevelSunset());
 	}
 
 	/**
@@ -500,31 +502,57 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            The start of the day.
 	 * @param sunset
 	 *            The end of the day.
-	 * @see #getTemporalHour()
+	 * 
 	 * @return the <code>long</code> millisecond length of the temporal hour. If the calculation can't be computed a
 	 *         {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the page.
+	 * 
+	 * @see #getTemporalHour()
 	 */
-	public long getTemporalHour(Date sunrise, Date sunset) {
-		if (sunrise == null || sunset == null) {
+	public long getTemporalHour(Date startOfday, Date endOfDay) {
+		if (startOfday == null || endOfDay == null) {
 			return Long.MIN_VALUE;
 		}
-		return (sunset.getTime() - sunrise.getTime()) / 12;
+		return (endOfDay.getTime() - startOfday.getTime()) / 12;
 	}
 
 	/**
 	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
 	 * ="http://en.wikipedia.org/wiki/Transit_%28astronomy%29">transitting</a> the <a
 	 * href="http://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
-	 * calculated as halfway between sea level sunrise and sunset, which can be slightly off the real transit time due
-	 * to chnages in declination (the lengthening or shortening day).
+	 * calculated as halfway between sea level sunrise and sea level sunset, which can be slightly off the real transit
+	 * time due to changes in declination (the lengthening or shortening day).
+	 * 
+	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, null will be returned. See detailed explanation on top of the page.
+	 * @see #getSunTransit(Date, Date)
+	 * @see #getTemporalHour()
+	 */
+	public Date getSunTransit() {
+		return getSunTransit(getSeaLevelSunrise(), getSeaLevelSunrise());
+	}
+
+	/**
+	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
+	 * ="http://en.wikipedia.org/wiki/Transit_%28astronomy%29">transitting</a> the <a
+	 * href="http://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
+	 * calculated as halfway between the sunrise and sunset passed to this method. This time can be slightly off the
+	 * real transit time due to changes in declination (the lengthening or shortening day).
+	 * 
+	 * @param startOfDay
+	 *            the start of day for calculating the sun's transit. This can be sea level sunrise, visual sunrise (or
+	 *            any arbitrary start of day) passed to this method.
+	 * @param endOfDay
+	 *            the end of day for calculating the sun's transit. This can be sea level sunset, visual sunset (or any
+	 *            arbitrary end of day) passed to this method.
 	 * 
 	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, null will be returned. See detailed explanation on top of the page.
 	 */
-	public Date getSunTransit() {
-		long temporalHour = getTemporalHour(getSeaLevelSunrise(), getSeaLevelSunset());
-		return getTimeOffset(getSeaLevelSunrise(), temporalHour * 6);
+	public Date getSunTransit(Date startOfDay, Date endOfDay) {
+		long temporalHour = getTemporalHour(startOfDay, endOfDay);
+		return getTimeOffset(startOfDay, temporalHour * 6);
 	}
 
 	/**
