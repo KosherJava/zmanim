@@ -498,9 +498,9 @@ public class AstronomicalCalendar implements Cloneable {
 	 * non-elevation adjusted temporal hour by passing in {@link #getSeaLevelSunrise() sea level sunrise} and
 	 * {@link #getSeaLevelSunset() sea level sunset} as parameters.
 	 * 
-	 * @param sunrise
+	 * @param startOfday
 	 *            The start of the day.
-	 * @param sunset
+	 * @param endOfDay
 	 *            The end of the day.
 	 * 
 	 * @return the <code>long</code> millisecond length of the temporal hour. If the calculation can't be computed a
@@ -529,7 +529,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #getTemporalHour()
 	 */
 	public Date getSunTransit() {
-		return getSunTransit(getSeaLevelSunrise(), getSeaLevelSunrise());
+		return getSunTransit(getSeaLevelSunrise(), getSeaLevelSunset());
 	}
 
 	/**
