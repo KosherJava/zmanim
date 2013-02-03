@@ -15,6 +15,7 @@
  */
 package net.sourceforge.zmanim;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -613,8 +614,8 @@ public class AstronomicalCalendar implements Cloneable {
 		Date offsetByDegrees = getSeaLevelSunrise();
 		Date offsetByTime = getTimeOffset(getSeaLevelSunrise(), -(minutes * MINUTE_MILLIS));
 
-		java.math.BigDecimal degrees = new java.math.BigDecimal(0);
-		java.math.BigDecimal incrementor = new java.math.BigDecimal("0.0001");
+		BigDecimal degrees = new BigDecimal(0);
+		BigDecimal incrementor = new BigDecimal("0.0001");
 		while (offsetByDegrees == null || offsetByDegrees.getTime() > offsetByTime.getTime()) {
 			degrees = degrees.add(incrementor);
 			offsetByDegrees = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
@@ -637,8 +638,8 @@ public class AstronomicalCalendar implements Cloneable {
 		Date offsetByDegrees = getSeaLevelSunset();
 		Date offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
 
-		java.math.BigDecimal degrees = new java.math.BigDecimal(0);
-		java.math.BigDecimal incrementor = new java.math.BigDecimal("0.001");
+		BigDecimal degrees = new BigDecimal(0);
+		BigDecimal incrementor = new BigDecimal("0.001");
 		while (offsetByDegrees == null || offsetByDegrees.getTime() < offsetByTime.getTime()) {
 			degrees = degrees.add(incrementor);
 			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());

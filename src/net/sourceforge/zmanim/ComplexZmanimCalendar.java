@@ -234,6 +234,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	protected static final double ZENITH_3_POINT_65 = GEOMETRIC_ZENITH + 3.65;
 
+	protected static final double ZENITH_3_POINT_676 = GEOMETRIC_ZENITH + 3.676;
+
 	protected static final double ZENITH_5_POINT_88 = GEOMETRIC_ZENITH + 5.88;
 
 	private double ateretTorahSunsetOffset = 40;
@@ -1762,7 +1764,25 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #ZENITH_3_POINT_65
 	 */
 	public Date getTzaisGeonim3Point65Degrees() {
-		return getSunsetOffsetByDegrees(ComplexZmanimCalendar.ZENITH_3_POINT_65);
+		return getSunsetOffsetByDegrees(ZENITH_3_POINT_65);
+	}
+
+	/**
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
+	 * of a <a href= "http://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >Mil</a> based on an 18
+	 * minute Mil, or 13.5 minutes. It is the sun's position at {@link #ZENITH_3_POINT_676 3.676&deg;} below the western
+	 * horizon based on the calculations of Stanley Fishkind. This is a very early <em>zman</em> and should not be
+	 * relied on without Rabbinical guidance.
+	 * 
+	 * @return the <code>Date</code> representing the time when the sun is 3.676&deg; below sea level. If the
+	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
+	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
+	 *         calculation, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * @see #ZENITH_3_POINT_676
+	 */
+	public Date getTzaisGeonim3Point676Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_3_POINT_676);
 	}
 
 	/**
@@ -1778,7 +1798,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #ZENITH_4_POINT_61
 	 */
 	public Date getTzaisGeonim4Point61Degrees() {
-		return getSunsetOffsetByDegrees(ComplexZmanimCalendar.ZENITH_4_POINT_61);
+		return getSunsetOffsetByDegrees(ZENITH_4_POINT_61);
 	}
 
 	/**
@@ -1794,7 +1814,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #ZENITH_4_POINT_37
 	 */
 	public Date getTzaisGeonim4Point37Degrees() {
-		return getSunsetOffsetByDegrees(ComplexZmanimCalendar.ZENITH_4_POINT_37);
+		return getSunsetOffsetByDegrees(ZENITH_4_POINT_37);
 	}
 
 	/**
@@ -1813,7 +1833,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #ZENITH_5_POINT_88
 	 */
 	public Date getTzaisGeonim5Point88Degrees() {
-		return getSunsetOffsetByDegrees(ComplexZmanimCalendar.ZENITH_5_POINT_88);
+		return getSunsetOffsetByDegrees(ZENITH_5_POINT_88);
 	}
 
 	/**
@@ -1830,7 +1850,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #ZENITH_4_POINT_8
 	 */
 	public Date getTzaisGeonim4Point8Degrees() {
-		return getSunsetOffsetByDegrees(ComplexZmanimCalendar.ZENITH_4_POINT_8);
+		return getSunsetOffsetByDegrees(ZENITH_4_POINT_8);
 	}
 
 	/**

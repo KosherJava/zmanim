@@ -213,7 +213,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * A method to return candle lighting time. This is calculated as {@link #getCandleLightingOffset()} minutes before
 	 * {@link #getSeaLevelSunset() sea level sunset}. This will return the time for any day of the week, since it can be
-	 * used to calculate candle lighting time for <em>yom tov</em> (mid-week holidays) as well.
+	 * used to calculate candle lighting time for <em>yom tov</em> (mid-week holidays) as well. To calculate the offset
+	 * of non-sea level sunset, pass the elevation adjusted sunset to {@link #getTimeOffset(Date, long)}.
 	 * 
 	 * @return candle lighting time. If the calculation can't be computed such as in the Arctic Circle where there is at
 	 *         least one day a year where the sun does not rise, and one where it does not set, a null will be returned.
