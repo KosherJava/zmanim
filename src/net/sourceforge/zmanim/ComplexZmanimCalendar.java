@@ -2088,9 +2088,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 * @see #getAlos72Zmanis()
 	 */
-	private Date getMesheyakirAteretTorah(double minutes) {
-		return getTimeOffset(getAlos72Zmanis(), minutes * MINUTE_MILLIS);
-	}
+	// private Date getMesheyakirAteretTorah(double minutes) {
+	// return getTimeOffset(getAlos72Zmanis(), minutes * MINUTE_MILLIS);
+	// }
 
 	/**
 	 * Method to return <em>tzais</em> (dusk) calculated as 72 minutes zmaniyos, or 1/10th of the day after
@@ -2317,10 +2317,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between molad and
 	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. If the time of
 	 * <em>sof zman Kiddush Levana</em> occurs during the day (between the <em>alos</em> and <em>tzais</em> passed in as
-	 * parameters), it returns the <em>alos</em> passed in.
+	 * parameters), it returns the <em>alos</em> passed in. This method is available in the 1.3 release of the API but
+	 * may change or be removed in the future since it depends on the still changing {@link JewishCalendar} and related
+	 * classes.
 	 * 
 	 * @param alos
+	 *            the begining of the Jewish day
 	 * @param tzais
+	 *            the end of the Jewish day
 	 * @return the Date representing the moment halfway between molad and molad. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
@@ -2353,7 +2357,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * <em>molad</em> and <em>molad</em> (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. If
 	 * the time of <em>sof zman Kiddush Levana</em> occurs during the day (between
 	 * <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it
-	 * return the <em>alos</em> prior to the calculated <em>sof zman Kiddush Levana</em>.
+	 * return the <em>alos</em> prior to the calculated <em>sof zman Kiddush Levana</em>. This method is available in
+	 * the 1.3 release of the API but may change or be removed in the future since it depends on the still changing
+	 * {@link JewishCalendar} and related classes.
 	 * 
 	 * @return the Date representing the moment halfway between molad and molad. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned
@@ -2374,10 +2380,13 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
 	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. If the time of <em>sof zman Kiddush Levana</em>
 	 * occurs during the day (between the <em>alos</em> and <em>tzais</em> passed in as parameters), it returns the
-	 * <em>alos</em> passed in.
+	 * <em>alos</em> passed in. This method is available in the 1.3 release of the API but may change or be removed in
+	 * the future since it depends on the still changing {@link JewishCalendar} and related classes.
 	 * 
 	 * @param alos
+	 *            the begining of the Jewish day
 	 * @param tzais
+	 *            the end of the Jewish day
 	 * @return the Date representing the moment 15 days after the molad. If the time occurs between <em>alos</em> and
 	 *         <em>tzais</em>, <em>alos</em> will be returned
 	 * 
@@ -2414,7 +2423,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. If the time of <em>sof zman Kiddush Levana</em>
 	 * occurs during the day (between <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and
 	 * <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it return the <em>alos</em> prior to the calculated
-	 * <em>sof zman Kiddush Levana</em>.
+	 * <em>sof zman Kiddush Levana</em>. This method is available in the 1.3 release of the API but may change or be
+	 * removed in the future since it depends on the still changing {@link JewishCalendar} and related classes.
 	 * 
 	 * @return the Date representing the moment 15 days after the <em>molad</em>. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned
@@ -2426,6 +2436,22 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		return getSofZmanKidushLevana15Days(getAlos72(), getTzais72());
 	}
 
+	/**
+	 * Returns the earliest time of <em>Kiddush Levana</em> according to <em>Rabbainu Yonah</em>'s opinion that it can
+	 * be said 3 days after the molad.If the time of <em>tchilas zman Kiddush Levana</em> occurs during the day (between
+	 * <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it
+	 * return the next <em>tzais</em>. This method is available in the 1.3 release of the API but may change or be
+	 * removed in the future since it depends on the still changing {@link JewishCalendar} and related classes.
+	 * 
+	 * @param alos
+	 *            the begining of the Jewish day
+	 * @param tzais
+	 *            the end of the Jewish day
+	 * @return the Date representing the moment 3 days after the molad. If the time occurs between <em>alos</em> and
+	 *         <em>tzais</em>, <em>tzais</em> will be returned
+	 * @see #getTchilasZmanKidushLevana3Days()
+	 * @see #getTchilasZmanKidushLevana7Days(Date, Date)
+	 */
 	public Date getTchilasZmanKidushLevana3Days(Date alos, Date tzais) {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
@@ -2448,10 +2474,38 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		return null;
 	}
 
+	/**
+	 * Returns the earliest time of <em>Kiddush Levana</em> according to <em>Rabbainu Yonah</em>'s opinion that it can
+	 * be said 3 days after the molad.If the time of <em>tchilas zman Kiddush Levana</em> occurs during the day (between
+	 * <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it
+	 * return the next <em>tzais</em>. This method is available in the 1.3 release of the API but may change or be
+	 * removed in the future since it depends on the still changing {@link JewishCalendar} and related classes.
+	 * 
+	 * @return the Date representing the moment 3 days after the molad. If the time occurs between <em>alos</em> and
+	 *         <em>tzais</em>, <em>tzais</em> will be returned
+	 * @see #getTchilasZmanKidushLevana3Days(Date, Date)
+	 * @see #getTchilasZmanKidushLevana7Days()
+	 */
 	public Date getTchilasZmanKidushLevana3Days() {
 		return getTchilasZmanKidushLevana3Days(getAlos72(), getTzais72());
 	}
 
+	/**
+	 * Returns the earliest time of <em>Kiddush Levana</em> according to the opinions that it should not be said until 7
+	 * days after the molad. If the time of <em>tchilas zman Kiddush Levana</em> occurs during the day (between
+	 * <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it
+	 * return the next <em>tzais</em>. This method is available in the 1.3 release of the API but may change or be
+	 * removed in the future since it depends on the still changing {@link JewishCalendar} and related classes.
+	 * 
+	 * @param alos
+	 *            the begining of the Jewish day
+	 * @param tzais
+	 *            the end of the Jewish day
+	 * @return the Date representing the moment 7 days after the molad. If the time occurs between <em>alos</em> and
+	 *         <em>tzais</em>, <em>tzais</em> will be returned
+	 * @see #getTchilasZmanKidushLevana3Days(Date, Date)
+	 * @see #getTchilasZmanKidushLevana7Days()
+	 */
 	public Date getTchilasZmanKidushLevana7Days(Date alos, Date tzais) {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
@@ -2475,6 +2529,18 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		return null;
 	}
 
+	/**
+	 * Returns the earliest time of <em>Kiddush Levana</em> according to the opinions that it should not be said until 7
+	 * days after the molad. If the time of <em>tchilas zman Kiddush Levana</em> occurs during the day (between
+	 * <em>{@link ZmanimCalendar#getAlos72() Alos}</em> and <em>{@link ZmanimCalendar#getTzais72() tzais}</em>) it
+	 * return the next <em>tzais</em>. This method is available in the 1.3 release of the API but may change or be
+	 * removed in the future since it depends on the still changing {@link JewishCalendar} and related classes.
+	 * 
+	 * @return the Date representing the moment 7 days after the molad. If the time occurs between <em>alos</em> and
+	 *         <em>tzais</em>, <em>tzais</em> will be returned
+	 * @see #getTchilasZmanKidushLevana7Days(Date, Date)
+	 * @see #getTchilasZmanKidushLevana3Days()
+	 */
 	public Date getTchilasZmanKidushLevana7Days() {
 		return getTchilasZmanKidushLevana7Days(getAlos72(), getTzais72());
 	}
