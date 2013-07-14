@@ -357,7 +357,8 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns true if the current day is Yom Tov. The method returns false for Chanukah, Erev Yom tov and fast days.
+	 * Returns true if the current day is Yom Tov. The method returns false for Chanukah, Erev Yom Tov (with the
+	 * exception of Hoshana Rabba and Erev the second days of Pesach) and fast days.
 	 * 
 	 * @return true if the current day is a Yom Tov
 	 * @see #isErevYomTov()
@@ -365,7 +366,8 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean isYomTov() {
 		int holidayIndex = getYomTovIndex();
-		if (isErevYomTov() || holidayIndex == CHANUKAH || (isTaanis() && holidayIndex != YOM_KIPPUR)) {
+		if ((isErevYomTov() && (holidayIndex != HOSHANA_RABBA && (holidayIndex == CHOL_HAMOED_PESACH && getJewishDayOfMonth() != 20)))
+				|| holidayIndex == CHANUKAH || (isTaanis() && holidayIndex != YOM_KIPPUR)) {
 			return false;
 		}
 		return getYomTovIndex() != -1;
@@ -385,8 +387,8 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns true if the current day is erev Yom Tov. The method returns true for Erev - Pesach, Shavuos, Rosh
-	 * Hashana, Yom Kippur and Succos.
+	 * Returns true if the current day is erev Yom Tov. The method returns true for Erev - Pesach (first and last days),
+	 * Shavuos, Rosh Hashana, Yom Kippur and Succos and Hoshana Rabba.
 	 * 
 	 * @return true if the current day is Erev - Pesach, Shavuos, Rosh Hashana, Yom Kippur and Succos
 	 * @see #isYomTov()
@@ -394,7 +396,8 @@ public class JewishCalendar extends JewishDate {
 	public boolean isErevYomTov() {
 		int holidayIndex = getYomTovIndex();
 		return holidayIndex == EREV_PESACH || holidayIndex == EREV_SHAVUOS || holidayIndex == EREV_ROSH_HASHANA
-				|| holidayIndex == EREV_YOM_KIPPUR || holidayIndex == EREV_SUCCOS;
+				|| holidayIndex == EREV_YOM_KIPPUR || holidayIndex == EREV_SUCCOS || holidayIndex == HOSHANA_RABBA
+				|| (holidayIndex == CHOL_HAMOED_PESACH && getJewishDayOfMonth() == 20);
 	}
 
 	/**
@@ -683,7 +686,7 @@ public class JewishCalendar extends JewishDate {
 		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
 		Calendar cal = Calendar.getInstance(geo.getTimeZone());
 		cal.clear();
-		double moladSeconds = molad.getMoladChalakim() * 10 / (double)3;
+		double moladSeconds = molad.getMoladChalakim() * 10 / (double) 3;
 		cal.set(molad.getGregorianYear(), molad.getGregorianMonth(), molad.getGregorianDayOfMonth(),
 				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
