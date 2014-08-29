@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2012 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2012
+ * @author &copy; Eliyahu Hershfeld 2004 - 2014
  * @version 1.1
  */
 public class GeoLocation implements Cloneable {
@@ -70,10 +70,10 @@ public class GeoLocation implements Cloneable {
 	 * @param name
 	 *            The location name for display use such as &quot;Lakewood, NJ&quot;
 	 * @param latitude
-	 *            the latitude in a double format such as 40.095965 for Lakewood, NJ <br/>
+	 *            the latitude in a double format such as 40.095965 for Lakewood, NJ.
 	 *            <b>Note: </b> For latitudes south of the equator, a negative value should be used.
 	 * @param longitude
-	 *            double the longitude in a double format such as -74.222130 for Lakewood, NJ. <br/>
+	 *            double the longitude in a double format such as -74.222130 for Lakewood, NJ.
 	 *            <b>Note: </b> For longitudes east of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime
 	 *            Meridian </a> (Greenwich), a negative value should be used.
 	 * @param timeZone
@@ -89,10 +89,10 @@ public class GeoLocation implements Cloneable {
 	 * @param name
 	 *            The location name for display use such as &quot;Lakewood, NJ&quot;
 	 * @param latitude
-	 *            the latitude in a double format such as 40.095965 for Lakewood, NJ <br/>
+	 *            the latitude in a double format such as 40.095965 for Lakewood, NJ.
 	 *            <b>Note: </b> For latitudes south of the equator, a negative value should be used.
 	 * @param longitude
-	 *            double the longitude in a double format such as -74.222130 for Lakewood, NJ. <br/>
+	 *            double the longitude in a double format such as -74.222130 for Lakewood, NJ.
 	 *            <b>Note: </b> For longitudes east of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime
 	 *            Meridian </a> (Greenwich), a negative value should be used.
 	 * @param elevation
@@ -291,6 +291,7 @@ public class GeoLocation implements Cloneable {
 	 * 
 	 * @param location
 	 *            the destination location
+	 * @return the initial bearing
 	 */
 	public double getGeodesicInitialBearing(GeoLocation location) {
 		return vincentyFormula(location, INITIAL_BEARING);
@@ -305,6 +306,7 @@ public class GeoLocation implements Cloneable {
 	 * 
 	 * @param location
 	 *            the destination location
+	 * @return the final bearing
 	 */
 	public double getGeodesicFinalBearing(GeoLocation location) {
 		return vincentyFormula(location, FINAL_BEARING);
@@ -317,8 +319,10 @@ public class GeoLocation implements Cloneable {
 	 * href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
 	 * with application of nested equations</a>", Survey Review, vol XXII no 176, 1975
 	 * 
+	 * @see #vincentyFormula(GeoLocation, int)
 	 * @param location
 	 *            the destination location
+	 * @return the geodesic distance in Meters
 	 */
 	public double getGeodesicDistance(GeoLocation location) {
 		return vincentyFormula(location, DISTANCE);
@@ -336,6 +340,7 @@ public class GeoLocation implements Cloneable {
 	 * @param formula
 	 *            This formula calculates initial bearing ({@link #INITIAL_BEARING}), final bearing (
 	 *            {@link #FINAL_BEARING}) and distance ({@link #DISTANCE}).
+	 * @return geodesic distance in Meters
 	 */
 	private double vincentyFormula(GeoLocation location, int formula) {
 		double a = 6378137;
@@ -540,7 +545,7 @@ public class GeoLocation implements Cloneable {
 
 	/**
 	 * An implementation of the {@link java.lang.Object#clone()} method that creates a <a
-	 * href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object. <br/>
+	 * href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * <b>Note:</b> If the {@link java.util.TimeZone} in the clone will be changed from the original, it is critical
 	 * that {@link net.sourceforge.zmanim.AstronomicalCalendar#getCalendar()}.
 	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} is called after cloning in order for the

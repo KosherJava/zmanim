@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2012 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -30,7 +30,7 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * functionality to change dates etc... The calculation engine used to calculate the astronomical times can be changed
  * to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it with the
  * {@link #setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine implementations
- * are included in the util package <br />
+ * are included in the util package.
  * <b>Note:</b> There are times when the algorithms can't calculate proper values for sunrise, sunset and twilight. This
  * is usually caused by trying to calculate times for areas either very far North or South, where sunrise / sunset never
  * happen on that date. This is common when calculating twilight with a deep dip below the horizon for locations as far
@@ -40,7 +40,7 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * reason that <code>Exception</code>s are not thrown in these cases is because the lack of a rise/set or twilight is
  * not an exception, but an expected condition in many parts of the world.
  * 
- * Here is a simple example of how to use the API to calculate sunrise: <br />
+ * Here is a simple example of how to use the API to calculate sunrise.
  * First create the Calendar for the location you would like to calculate sunrise or sunset times for:
  * 
  * <pre>
@@ -64,14 +64,14 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * </pre>
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2012
+ * @author &copy; Eliyahu Hershfeld 2004 - 2014
  * @version 1.2.1
  */
 public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * 90&deg; below the vertical. Used as a basis for most calculations since the location of the sun is 90&deg; below
-	 * the horizon at sunrise and sunset.<br />
+	 * the horizon at sunrise and sunset.
 	 * <b>Note </b>: it is important to note that for sunrise and sunset the {@link AstronomicalCalculator#adjustZenith
 	 * adjusted zenith} is required to account for the radius of the sun and refraction. The adjusted zenith should not
 	 * be used for calculations above or below 90&deg; since they are usuallyes are calculated as an offset to 90&deg;.
@@ -720,7 +720,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * with a number of different implementations of the <code>abstract</code> {@link AstronomicalCalculator} based on
 	 * different algorithms, including {@link net.sourceforge.zmanim.util.SunTimesCalculator one implementation} based
 	 * on the <a href = "http://aa.usno.navy.mil/">US Naval Observatory's</a> algorithm, and
-	 * {@link net.sourceforge.zmanim.util.NOAACalculator another} based on <a href=""http://noaa.gov">NOAA's</a>
+	 * {@link net.sourceforge.zmanim.util.NOAACalculator another} based on <a href="http://noaa.gov">NOAA's</a>
 	 * algorithm. This allows easy runtime switching and comparison of different algorithms.
 	 * 
 	 * @param astronomicalCalculator
@@ -751,7 +751,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object. <br />
+	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * <b>Note:</b> If the {@link java.util.TimeZone} in the cloned {@link net.sourceforge.zmanim.util.GeoLocation} will
 	 * be changed from the original, it is critical that
 	 * {@link net.sourceforge.zmanim.AstronomicalCalendar#getCalendar()}.

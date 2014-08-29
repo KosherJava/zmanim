@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -20,7 +20,7 @@ package net.sourceforge.zmanim.util;
  * Most of the code in this class is ported from <a href="http://www.movable-type.co.uk/">Chris Veness'</a>
  * <a href="http://www.fsf.org/licensing/licenses/lgpl.html">LGPL</a> Javascript Implementation
  *
- * @author &copy; Eliyahu Hershfeld 2009
+ * @author &copy; Eliyahu Hershfeld 2009 - 2014
  * @version 0.1
  */
 public class GeoLocationUtils {
@@ -30,7 +30,7 @@ public class GeoLocationUtils {
 
 	/**
 	 * Calculate the initial <a
-	 * href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing
+	 * href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> initial bearing
 	 * between this Object and a second Object passed to this method using <a
 	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a>
 	 * inverse formula See T Vincenty, "<a
@@ -39,7 +39,10 @@ public class GeoLocationUtils {
 	 * equations</a>", Survey Review, vol XXII no 176, 1975.
 	 *
 	 * @param location
+	 *            the initial location
+	 * @param destination
 	 *            the destination location
+	 * @return the geodesic bearing
 	 */
 	public static double getGeodesicInitialBearing(GeoLocation location, GeoLocation destination) {
 		return vincentyFormula(location, destination, INITIAL_BEARING);
@@ -47,7 +50,7 @@ public class GeoLocationUtils {
 
 	/**
 	 * Calculate the final <a
-	 * href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing
+	 * href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> final bearing
 	 * between this Object and a second Object passed to this method using <a
 	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a>
 	 * inverse formula See T Vincenty, "<a
@@ -56,7 +59,10 @@ public class GeoLocationUtils {
 	 * equations</a>", Survey Review, vol XXII no 176, 1975.
 	 *
 	 * @param location
+	 *            the initial location
+	 * @param destination
 	 *            the destination location
+	 * @return the geodesic bearing
 	 */
 	public static double getGeodesicFinalBearing(GeoLocation location, GeoLocation destination) {
 		return vincentyFormula(location, destination, FINAL_BEARING);
@@ -74,7 +80,10 @@ public class GeoLocationUtils {
 	 * equations</a>", Survey Review, vol XXII no 176, 1975.
 	 *
 	 * @param location
+	 *            the initial location
+	 * @param destination
 	 *            the destination location
+	 * @return the geodesic distance in Meters
 	 */
 	public static double getGeodesicDistance(GeoLocation location, GeoLocation destination) {
 		return vincentyFormula(location, destination, DISTANCE);
@@ -92,10 +101,13 @@ public class GeoLocationUtils {
 	 * equations</a>", Survey Review, vol XXII no 176, 1975.
 	 *
 	 * @param location
+	 *            the initial location
+	 * @param destination
 	 *            the destination location
 	 * @param formula
 	 *            This formula calculates initial bearing ({@link #INITIAL_BEARING}),
 	 *            final bearing ({@link #FINAL_BEARING}) and distance ({@link #DISTANCE}).
+	 * @param the geodesic distance, initial or final bearing (based on the formula passed in)
 	 */
 	private static double vincentyFormula(GeoLocation location, GeoLocation destination, int formula) {
 		double a = 6378137;
@@ -186,7 +198,9 @@ public class GeoLocationUtils {
 	 * bearing from the current location to the GeoLocation passed in.
 	 *
 	 * @param location
-	 *            destination location
+	 *            the initial location
+	 * @param destination
+	 *            the destination location
 	 * @return the bearing in degrees
 	 */
 	public static double getRhumbLineBearing(GeoLocation location, GeoLocation destination) {
@@ -205,6 +219,8 @@ public class GeoLocationUtils {
 	 * Ported from <a href="http://www.movable-type.co.uk/">Chris Veness'</a> Javascript Implementation
 	 *
 	 * @param location
+	 *            the initial location
+	 * @param destination
 	 *            the destination location
 	 * @return the distance in Meters
 	 */

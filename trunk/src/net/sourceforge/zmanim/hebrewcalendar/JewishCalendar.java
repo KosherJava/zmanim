@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2012 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2014 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -47,7 +47,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2012
+ * @author &copy; Eliyahu Hershfeld 2011 - 2014
  * @version 0.0.1
  */
 public class JewishCalendar extends JewishDate {
@@ -150,7 +150,7 @@ public class JewishCalendar extends JewishDate {
 	 *            or {@link #KISLEV} in a year that {@link #isKislevShort()}), the 29th (last valid date of the month)
 	 *            will be set
 	 * @throws IllegalArgumentException
-	 *             if the day of month is < 1 or > 30, or a year of < 0 is passed in.
+	 *             if the day of month is &lt; 1 or &gt; 30, or a year of &lt; 0 is passed in.
 	 */
 	public JewishCalendar(int jewishYear, int jewishMonth, int jewishDayOfMonth) {
 		super(jewishYear, jewishMonth, jewishDayOfMonth);
@@ -756,7 +756,7 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns the latest time of Kiddush Levana calculated as 15 days after the molad. This is the opinion brought down
 	 * in the Shulchan Aruch (Orach Chaim 426). It should be noted that some opinions hold that the
-	 * <http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
+	 * <a href="http://en.wikipedia.org/wiki/Moses_Isserles">Rema</a> who brings down the opinion of the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> of calculating
 	 * {@link #getSofZmanKidushLevanaBetweenMoldos() half way between molad and mold} is of the opinion that Mechaber
 	 * agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi Dovid
