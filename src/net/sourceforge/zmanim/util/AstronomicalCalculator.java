@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2013 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -22,7 +22,7 @@ import java.util.Calendar;
  * runtime, easily allowing comparison the results of using different algorithms. TODO: consider methods that would
  * allow atmospheric modeling. This can currently be adjusted by {@link #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2013
+ * @author &copy; Eliyahu Hershfeld 2004 - 2014
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -112,9 +112,11 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            this slightly to account for solar refraction and the sun's radius. Another example would be
 	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#getBeginNauticalTwilight()} that passes
 	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
+	 * @param adjustForElevation
+	 *            Should the time be adjusted for elevation
 	 * @return The UTC time of sunrise in 24 hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
-	 *         {@link java.lang.Double.NaN} will be returned.
+	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
 	public abstract double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith,
@@ -134,9 +136,11 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            this slightly to account for solar refraction and the sun's radius. Another example would be
 	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes
 	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
+	 * @param adjustForElevation
+	 *            Should the time be adjusted for elevation
 	 * @return The UTC time of sunset in 24 hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
-	 *         {@link java.lang.Double.NaN} will be returned.
+	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
 	public abstract double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith,
@@ -149,8 +153,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * {@link net.sourceforge.zmanim.AstronomicalCalendar#getBeginNauticalTwilight() nautical twilight} since those
 	 * calculations are based on the level of available light at the given dip below the horizon, something that is not
 	 * affected by elevation, the adjustment should only made if the zenith == 90&deg; {@link #adjustZenith adjusted}
-	 * for refraction and solar radius.<br />
-	 * The algorithm used is:
+	 * for refraction and solar radius. The algorithm used is
 	 * 
 	 * <pre>
 	 * elevationAdjustment = Math.toDegrees(Math.acos(earthRadiusInMeters / (earthRadiusInMeters + elevationMeters)));
@@ -189,6 +192,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * person at an elevation can see blow the horizon of a person at sea level, this will also adjust the zenith to
 	 * account for elevation if available.
 	 * 
+	 * @param zenith
+	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
+	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
+	 *            this slightly to account for solar refraction and the sun's radius. Another example would be
+	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes
+	 *            {@link net.sourceforge.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
+	 * @param elevation
+	 *            elevation in Meters.
 	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
 	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
 	 *         sunrise and sunset (if the zenith == 90&deg;)

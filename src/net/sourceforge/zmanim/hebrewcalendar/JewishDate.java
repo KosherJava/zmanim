@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2012 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2014 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -37,7 +37,7 @@ import java.util.GregorianCalendar;
  * 
  * Some of Avrom's original C++ code was translated from <a href="http://emr.cs.uiuc.edu/~reingold/calendar.C">C/C++
  * code</a> in <a href="http://www.calendarists.com">Calendrical Calculations</a> by Nachum Dershowitz and Edward M.
- * Reingold, Software-- Practice & Experience, vol. 20, no. 9 (September, 1990), pp. 899- 928. Any method with the mark
+ * Reingold, Software-- Practice &amp; Experience, vol. 20, no. 9 (September, 1990), pp. 899- 928. Any method with the mark
  * "ND+ER" indicates that the method was taken from this source with minor modifications.
  * 
  * If you are looking for a class that implements a Jewish calendar version of the Calendar class, one is available from
@@ -49,7 +49,7 @@ import java.util.GregorianCalendar;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2012
+ * @author &copy; Eliyahu Hershfeld 2011 - 2014
  * @version 0.2.6
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
@@ -690,6 +690,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * Returns the number of days for the current year that the calendar is set to.
 	 * 
+	 * @return the number of days for the Object's current Jewish year.
 	 * @see #isCheshvanLong()
 	 * @see #isKislevShort()
 	 * @see #isJewishLeapYear()
@@ -874,7 +875,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * chalakim/parts) - prior to the start of the Jewish calendar. BeHaRaD is 23:11:20 on Sunday night(5 hours 204/1080
 	 * chalakim after sunset on Sunday evening).
 	 * 
-	 * @param molad
+	 * @param molad the number of chalakim since the beginning of Sunday prior to BaHaRaD
 	 */
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
@@ -942,7 +943,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            or {@link #KISLEV} in a year that {@link #isKislevShort()}), the 29th (last valid date of the month)
 	 *            will be set
 	 * @throws IllegalArgumentException
-	 *             if the day of month is < 1 or > 30, or a year of < 0 is passed in.
+	 *             if the day of month is &lt; 1 or &gt; 30, or a year of &lt; 0 is passed in.
 	 */
 	public JewishDate(int jewishYear, int jewishMonth, int jewishDayOfMonth) {
 		setJewishDate(jewishYear, jewishMonth, jewishDayOfMonth);
@@ -1024,10 +1025,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param month
 	 *            the Gregorian month. Like the Java Calendar, this class expects 0 for January
 	 * @param dayOfMonth
-	 *            the Gregorian day of month. If this is > the number of days in the month/year, the last valid date of
+	 *            the Gregorian day of month. If this is &gt; the number of days in the month/year, the last valid date of
 	 *            the month will be set
 	 * @throws IllegalArgumentException
-	 *             if a year of < 1, a month < 0 or > 11 or a day of month < 1 is passed in
+	 *             if a year of &lt; 1, a month &lt; 0 or &gt; 11 or a day of month &lt; 1 is passed in
 	 */
 	public void setGregorianDate(int year, int month, int dayOfMonth) {
 		validateGregorianDate(year, month, dayOfMonth);
@@ -1074,8 +1075,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish day of month. valid values are 1-30. If the day of month is set to 30 for a month that only
 	 *            has 29 days, the day will be set as 29.
 	 * @throws IllegalArgumentException
-	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month < 1 or > 12 (or 13 on a
-	 *             leap year) or the day of month is < 1 or > 30 is passed in
+	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
+	 *             leap year) or the day of month is &lt; 1 or &gt; 30 is passed in
 	 */
 	public void setJewishDate(int year, int month, int dayOfMonth) {
 		setJewishDate(year, month, dayOfMonth, 0, 0, 0);
@@ -1103,8 +1104,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            used for larger numbers.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month < 1 or > 12 (or 13 on a
-	 *             leap year), the day of month is < 1 or > 30, an hour < 0 or > 23, a minute < 0 > 59 or chalakim < 0 >
+	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
+	 *             leap year), the day of month is &lt; 1 or &gt; 30, an hour &lt; 0 or &gt; 23, a minute &lt; 0 &gt; 59 or chalakim &lt; 0 &gt;
 	 *             17. For larger a larger number of chalakim such as 793 (TaShTzaG) break the chalakim into minutes (18
 	 *             chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG).
 	 */
@@ -1372,7 +1373,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Gregorian month
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if a month < 0 or > 11 is passed in
+	 *             if a month &lt; 0 or &gt; 11 is passed in
 	 */
 	public void setGregorianMonth(int month) {
 		validateGregorianMonth(month);
@@ -1385,7 +1386,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param year
 	 *            the Gregorian year.
 	 * @throws IllegalArgumentException
-	 *             if a year of < 1 is passed in
+	 *             if a year of &lt; 1 is passed in
 	 */
 	public void setGregorianYear(int year) {
 		validateGregorianYear(year);
@@ -1398,7 +1399,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param dayOfMonth
 	 *            the Gregorian Day of month.
 	 * @throws IllegalArgumentException
-	 *             if the day of month of < 1 is passed in
+	 *             if the day of month of &lt; 1 is passed in
 	 */
 	public void setGregorianDayOfMonth(int dayOfMonth) {
 		validateGregorianDayOfMonth(dayOfMonth);
@@ -1412,7 +1413,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish month from 1 to 12 (or 13 years in a leap year). The month count starts with 1 for Nisan
 	 *            and goes to 13 for Adar II
 	 * @throws IllegalArgumentException
-	 *             if a month < 1 or > 12 (or 13 on a leap year) is passed in
+	 *             if a month &lt; 1 or &gt; 12 (or 13 on a leap year) is passed in
 	 */
 	public void setJewishMonth(int month) {
 		setJewishDate(jewishYear, month, jewishDay);
@@ -1424,8 +1425,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param year
 	 *            the Jewish year
 	 * @throws IllegalArgumentException
-	 *             if a year of < 3761 is passed in. The same will happen if the year is 3761 and the month and day
-	 *             previously set are < 18 Teves (preior to Jan 1, 1 AD)
+	 *             if a year of &lt; 3761 is passed in. The same will happen if the year is 3761 and the month and day
+	 *             previously set are &lt; 18 Teves (preior to Jan 1, 1 AD)
 	 */
 	public void setJewishYear(int year) {
 		setJewishDate(year, jewishMonth, jewishDay);
@@ -1437,14 +1438,14 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param dayOfMonth
 	 *            the Jewish day of month
 	 * @throws IllegalArgumentException
-	 *             if the day of month is < 1 or > 30 is passed in
+	 *             if the day of month is &lt; 1 or &gt; 30 is passed in
 	 */
 	public void setJewishDayOfMonth(int dayOfMonth) {
 		setJewishDate(jewishYear, jewishMonth, dayOfMonth);
 	}
 
 	/**
-	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object. <br />
+	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * 
 	 * @see Object#clone()
 	 * @since 1.1

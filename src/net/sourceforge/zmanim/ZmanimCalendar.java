@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2013 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -25,12 +25,12 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * (religious times) for prayers and other Jewish religious duties. This class contains the main functionality of the
  * Zmanim library. For a much more extensive list of zmanim use the {@link ComplexZmanimCalendar} that extends this
  * class. See documentation for the {@link ComplexZmanimCalendar} and {@link AstronomicalCalendar} for simple examples
- * on using the API. <br/>
+ * on using the API.
  * <b>Note:</b> It is important to read the technical notes on top of the {@link AstronomicalCalculator} documentation.
  * <h2>Disclaimer:</h2> I did my best to get accurate results but please do not rely on these zmanim for
  * <em>halacha lemaaseh</em>.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2013
+ * @author &copy; Eliyahu Hershfeld 2004 - 2014
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
 
@@ -228,20 +228,20 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 
 	/**
-	 * This is a generic method for calculating the latest <em>zman tefilah<em> (time to recite the morning prayers)
+	 * This is a generic method for calculating the latest <em>zman tefilah</em> (time to recite the morning prayers)
 	 * based on the start and end of day passed to the method. The time from the start of day to the end of day
 	 * are divided into 12 shaos zmaniyos (temporal hours), and <em>zman krias shema</em> is calculated as 4 shaos
 	 * zmaniyos from the beginning of the day. As an example, passing {@link #getSeaLevelSunrise() sea level sunrise}
-	 * and {@link #getSeaLevelSunset sea level sunset} to this method will return <em>zman tefilah<em> according to
+	 * and {@link #getSeaLevelSunset sea level sunset} to this method will return <em>zman tefilah</em> according to
 	 * the opinion of the <em>GRA</em> and the <em>Baal Hatanya</em>.
 	 * 
 	 * @param startOfDay
-	 *            the start of day for calculating <em>zman tefilah<em>. This can be sunrise or any alos passed to
+	 *            the start of day for calculating <em>zman tefilah</em>. This can be sunrise or any alos passed to
 	 *            this method.
 	 * @param endOfDay
-	 *            the start of day for calculating <em>zman tefilah<em>. This can be sunset or any tzais passed to this
+	 *            the start of day for calculating <em>zman tefilah</em>. This can be sunset or any tzais passed to this
 	 *            method.
-	 * @return the <code>Date</code> of the latest <em>zman tefilah<em> based on the start and end of day times passed
+	 * @return the <code>Date</code> of the latest <em>zman tefilah</em> based on the start and end of day times passed
 	 *         to this method. If the calculation can't be computed such as in the Arctic Circle where there is at least
 	 *         one day a year where the sun does not rise, and one where it does not set, a null will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
@@ -252,8 +252,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 
 	/**
-	 * This method returns the latest <em>zman tefilah<em> (time to recite the morning prayers). This time is 4
-	 * hours into the day based on the opinion of the <em>GRA</em> and the </em>Baal Hatanya</em> that the day is
+	 * This method returns the latest <em>zman tefilah</em> (time to recite the morning prayers). This time is 4
+	 * hours into the day based on the opinion of the <em>GRA</em> and the <em>Baal Hatanya</em> that the day is
 	 * calculated from sunrise to sunset. This returns the time 4 * {@link #getShaahZmanisGra()} after
 	 * {@link #getSeaLevelSunrise() sea level sunrise}.
 	 * 

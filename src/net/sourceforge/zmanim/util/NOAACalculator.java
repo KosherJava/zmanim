@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2011 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -19,8 +19,8 @@ import java.util.Calendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times based on the <a
- * href=""http://noaa.gov">NOAA</a> algorithm. This calculator uses the Java algorithm based on the implementation by <a
- * href=""http://noaa.gov">NOAA - National Oceanic and Atmospheric Administration</a>'s <a href =
+ * href="http://noaa.gov">NOAA</a> algorithm. This calculator uses the Java algorithm based on the implementation by <a
+ * href="http://noaa.gov">NOAA - National Oceanic and Atmospheric Administration</a>'s <a href =
  * "http://www.srrb.noaa.gov/highlights/sunrise/sunrise.html">Surface Radiation Research Branch</a>. NOAA's <a
  * href="http://www.srrb.noaa.gov/highlights/sunrise/solareqns.PDF">implementation</a> is based on equations from <a
  * href="http://www.willbell.com/math/mc1.htm">Astronomical Algorithms</a> by <a
@@ -28,7 +28,7 @@ import java.util.Calendar;
  * to account for elevation. The algorithm can be found in the <a
  * href="http://en.wikipedia.org/wiki/Sunrise_equation">Wikipedia Sunrise Equation</a> article.
  * 
- * @author &copy; Eliyahu Hershfeld 2011
+ * @author &copy; Eliyahu Hershfeld 2011 - 2014
  * @version 0.1
  */
 public class NOAACalculator extends AstronomicalCalculator {
@@ -347,6 +347,73 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double hourAngle = (Math.acos(Math.cos(Math.toRadians(zenith)) / (Math.cos(latRad) * Math.cos(sdRad))
 				- Math.tan(latRad) * Math.tan(sdRad)));
 		return -hourAngle; // in radians
+	}
+
+	/**
+	 * Return the <a href="http://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
+	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
+	 * horizon. Not corrected for altitude.
+	 * 
+	 * @param cal
+	 *            time of calculation
+	 * @param lat
+	 *            latitude of location for calculation
+	 * @param lon
+	 *            longitude of location for calculation
+	 * @return solar elevation in degrees - horizon is 0 degrees, civil twilight is -6 degrees
+	 */
+
+	public static double getSolarElevation(Calendar cal, double lat, double lon) {
+		double julianDay = getJulianDay(cal);
+		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
+
+		Double eot = getEquationOfTime(julianCenturies);
+
+		double longitude = (cal.get(Calendar.HOUR_OF_DAY) + 12.0)
+				+ (cal.get(Calendar.MINUTE) + eot + cal.get(Calendar.SECOND) / 60.0) / 60.0;
+
+		longitude = -(longitude * 360.0 / 24.0) % 360.0;
+		double hourAngle_rad = Math.toRadians(lon - longitude);
+		double declination = getSunDeclination(julianCenturies);
+		double dec_rad = Math.toRadians(declination);
+		double lat_rad = Math.toRadians(lat);
+		return Math.toDegrees(Math.asin((Math.sin(lat_rad) * Math.sin(dec_rad))
+				+ (Math.cos(lat_rad) * Math.cos(dec_rad) * Math.cos(hourAngle_rad))));
+
+	}
+
+	/**
+	 * Return the <a href="http://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> for the
+	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 0
+	 * degrees.
+	 * 
+	 * @param cal
+	 *            time of calculation
+	 * @param lat
+	 *            latitude of location for calculation
+	 * @param lon
+	 *            longitude of location for calculation
+	 * @return FIXME
+	 */
+
+	public static double getSolarAzimuth(Calendar cal, double lat, double lon) {
+		double julianDay = getJulianDay(cal);
+		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
+
+		Double eot = getEquationOfTime(julianCenturies);
+
+		double longitude = (cal.get(Calendar.HOUR_OF_DAY) + 12.0)
+				+ (cal.get(Calendar.MINUTE) + eot + cal.get(Calendar.SECOND) / 60.0) / 60.0;
+
+		longitude = -(longitude * 360.0 / 24.0) % 360.0;
+		double hourAngle_rad = Math.toRadians(lon - longitude);
+		double declination = getSunDeclination(julianCenturies);
+		double dec_rad = Math.toRadians(declination);
+		double lat_rad = Math.toRadians(lat);
+
+		return Math.toDegrees(Math.atan(Math.sin(hourAngle_rad)
+				/ ((Math.cos(hourAngle_rad) * Math.sin(lat_rad)) - (Math.tan(dec_rad) * Math.cos(lat_rad)))))+180;
+
 	}
 
 	/**

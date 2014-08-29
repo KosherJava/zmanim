@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2012 Eliyahu Hershfeld
+ * Copyright (C) 2004-2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,7 +32,7 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  * example the {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour()} returns the length of the hour in
  * milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2012
+ * @author &copy; Eliyahu Hershfeld 2004 - 2014
  * @version 1.2
  */
 public class ZmanimFormatter {
@@ -105,6 +105,7 @@ public class ZmanimFormatter {
 
 	/**
 	 * constructor that defaults to this will use the format "h:mm:ss" for dates and 00.00.00.0 for {@link Time}.
+	 * @param timeZone the TimeZone Object
 	 */
 	public ZmanimFormatter(TimeZone timeZone) {
 		this(0, new SimpleDateFormat("h:mm:ss"), timeZone);
@@ -120,6 +121,8 @@ public class ZmanimFormatter {
 	 * @param format
 	 *            int The formatting style to use. Using ZmanimFormatter.SEXAGESIMAL_SECONDS_FORMAT will format the time
 	 *            time of 90*60*1000 + 1 as 1:30:00
+	 * @param dateFormat the SimpleDateFormat Object
+	 * @param timeZone the TimeZone Object
 	 */
 	public ZmanimFormatter(int format, SimpleDateFormat dateFormat, TimeZone timeZone) {
 		setTimeZone(timeZone);
@@ -159,10 +162,18 @@ public class ZmanimFormatter {
 		}
 	}
 
-	public void setDateFormat(SimpleDateFormat sdf) {
-		this.dateFormat = sdf;
+	/**
+	 * Sets the SimpleDateFormat Object
+	 * @param simpleDateFormat the SimpleDateFormat Object to set
+	 */
+	public void setDateFormat(SimpleDateFormat simpleDateFormat) {
+		this.dateFormat = simpleDateFormat;
 	}
 
+	/**
+	 * returns the SimpleDateFormat Object
+	 * @return the SimpleDateFormat Object
+	 */
 	public SimpleDateFormat getDateFormat() {
 		return this.dateFormat;
 	}
@@ -251,8 +262,11 @@ public class ZmanimFormatter {
 	 * href="http://www.iso.ch/markete/8601.pdf">[ISO 8601]</a> for details. The date/time string format must include a
 	 * time zone, either a Z to indicate Coordinated Universal Time or a + or - followed by the difference between the
 	 * difference from UTC represented as hh:mm.
+	 * @param dateTime the Date Object
+	 * @param calendar Calendar Object
+	 * @return the XSD dateTime
 	 */
-	public String getXSDateTime(Date dateTime, Calendar cal) {
+	public String getXSDateTime(Date dateTime, Calendar calendar) {
 		String xsdDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 		/*
 		 * if (xmlDateFormat == null || xmlDateFormat.trim().equals("")) { xmlDateFormat = xsdDateTimeFormat; }
@@ -262,7 +276,7 @@ public class ZmanimFormatter {
 
 		StringBuffer sb = new StringBuffer(dateFormat.format(dateTime));
 		// Must also include offset from UTF.
-		int offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);// Get the offset (in milliseconds)
+		int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);// Get the offset (in milliseconds)
 		// If there is no offset, we have "Coordinated Universal Time"
 		if (offset == 0)
 			sb.append("Z");
@@ -347,7 +361,9 @@ public class ZmanimFormatter {
 	 * times such as sunrise, and <a href="http://www.w3.org/TR/xmlschema11-2/#duration">xsd:duration</a> format for
 	 * times that are a duration such as the length of a
 	 * {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}. The output of this method is
-	 * returned by the {@link #toString() toString} .
+	 * returned by the {@link #toString() toString}.
+	 * 
+	 * @param astronomicalCalendar the AstronomicalCalendar Object
 	 * 
 	 * @return The XML formatted <code>String</code>. The format will be:
 	 * 
@@ -362,45 +378,45 @@ public class ZmanimFormatter {
 	 *         TODO: add proper schema, and support for nulls. XSD duration (for solar hours), should probably return
 	 *         nil and not P
 	 */
-	public static String toXML(AstronomicalCalendar ac) {
+	public static String toXML(AstronomicalCalendar astronomicalCalendar) {
 		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss"), ac.getGeoLocation().getTimeZone());
+				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getTimeZone());
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		df.setTimeZone(ac.getGeoLocation().getTimeZone());
+		df.setTimeZone(astronomicalCalendar.getGeoLocation().getTimeZone());
 
 		StringBuffer sb = new StringBuffer("<");
-		if (ac.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
+		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
 			sb.append("AstronomicalTimes");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim astronomical.xsd"
-		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
 			sb.append("Zmanim");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim zmanim.xsd"
-		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
 			sb.append("BasicZmanim");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
 		}
-		sb.append(" date=\"").append(df.format(ac.getCalendar().getTime())).append("\"");
-		sb.append(" type=\"").append(ac.getClass().getName()).append("\"");
-		sb.append(" algorithm=\"").append(ac.getAstronomicalCalculator().getCalculatorName()).append("\"");
-		sb.append(" location=\"").append(ac.getGeoLocation().getLocationName()).append("\"");
-		sb.append(" latitude=\"").append(ac.getGeoLocation().getLatitude()).append("\"");
-		sb.append(" longitude=\"").append(ac.getGeoLocation().getLongitude()).append("\"");
-		sb.append(" elevation=\"").append(ac.getGeoLocation().getElevation()).append("\"");
-		sb.append(" timeZoneName=\"").append(ac.getGeoLocation().getTimeZone().getDisplayName()).append("\"");
-		sb.append(" timeZoneID=\"").append(ac.getGeoLocation().getTimeZone().getID()).append("\"");
+		sb.append(" date=\"").append(df.format(astronomicalCalendar.getCalendar().getTime())).append("\"");
+		sb.append(" type=\"").append(astronomicalCalendar.getClass().getName()).append("\"");
+		sb.append(" algorithm=\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\"");
+		sb.append(" location=\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\"");
+		sb.append(" latitude=\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\"");
+		sb.append(" longitude=\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\"");
+		sb.append(" elevation=\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\"");
+		sb.append(" timeZoneName=\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getDisplayName()).append("\"");
+		sb.append(" timeZoneID=\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getID()).append("\"");
 		sb.append(" timeZoneOffset=\"")
-				.append((ac.getGeoLocation().getTimeZone().getOffset(ac.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
+				.append((astronomicalCalendar.getGeoLocation().getTimeZone().getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
 				.append("\"");
 
 		sb.append(">\n");
 
-		Method[] theMethods = ac.getClass().getMethods();
+		Method[] theMethods = astronomicalCalendar.getClass().getMethods();
 		String tagName = "";
 		Object value = null;
 		List<Zman> dateList = new ArrayList<Zman>();
@@ -411,7 +427,7 @@ public class ZmanimFormatter {
 				tagName = theMethods[i].getName().substring(3);
 				// String returnType = theMethods[i].getReturnType().getName();
 				try {
-					value = theMethods[i].invoke(ac, (Object[]) null);
+					value = theMethods[i].invoke(astronomicalCalendar, (Object[]) null);
 					if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
 						otherList.add("<" + tagName + ">N/A</" + tagName + ">");
 						// TODO: instead of N/A, consider return proper xs:nil.
@@ -440,7 +456,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
 			sb.append("\t<").append(zman.getZmanLabel()).append(">");
-			sb.append(formatter.formatDateTime(zman.getZman(), ac.getCalendar()));
+			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
 			sb.append("</").append(zman.getZmanLabel()).append(">\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
@@ -455,11 +471,11 @@ public class ZmanimFormatter {
 			sb.append("\t").append(otherList.get(i)).append("\n");
 		}
 
-		if (ac.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
+		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
 			sb.append("</AstronomicalTimes>");
-		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
 			sb.append("</Zmanim>");
-		} else if (ac.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
 			sb.append("</Basic>");
 		}
 		return sb.toString();

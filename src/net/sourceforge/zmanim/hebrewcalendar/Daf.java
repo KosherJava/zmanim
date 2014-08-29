@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2014 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -19,8 +19,8 @@ package net.sourceforge.zmanim.hebrewcalendar;
 /**
  * An Object representing a Daf in the Daf Yomi cycle.
  * 
- * @author &copy; Eliyahu Hershfeld 2011
- * @version 0.0.1
+ * @author &copy; Eliyahu Hershfeld 2011 - 2014
+ * @version 0.0.2
  */
 public class Daf {
 	private int masechtaNumber;
@@ -58,14 +58,14 @@ public class Daf {
 	}
 
 	/**
-	 * Set the masechta number in the order of teh Daf Yomi. The sequence is: Berachos, Shabbos, Eruvin, Pesachim,
+	 * Set the masechta number in the order of the Daf Yomi. The sequence is: Berachos, Shabbos, Eruvin, Pesachim,
 	 * Shekalim, Yoma, Sukkah, Beitzah, Rosh Hashana, Taanis, Megillah, Moed Katan, Chagigah, Yevamos, Kesubos, Nedarim,
 	 * Nazir, Sotah, Gitin, Kiddushin, Bava Kamma, Bava Metzia, Bava Basra, Sanhedrin, Makkos, Shevuos, Avodah Zarah,
 	 * Horiyos, Zevachim, Menachos, Chullin, Bechoros, Arachin, Temurah, Kerisos, Meilah, Kinnim, Tamid, Midos and
 	 * Niddah.
 	 * 
 	 * @param masechtaNumber
-	 *            the masechtaNumber to set
+	 *            the masechtaNumber in the order of the Daf Yomi to set
 	 */
 	public void setMasechtaNumber(int masechtaNumber) {
 		this.masechtaNumber = masechtaNumber;
@@ -75,8 +75,8 @@ public class Daf {
 	 * Constructor that creates a Daf setting the {@link #setMasechtaNumber(int) masechta Number} and
 	 * {@link #setDaf(int) daf Number}
 	 * 
-	 * @param masechtaNumber
-	 * @param daf
+	 * @param masechtaNumber the masechtaNumber in the order of the Daf Yomi to set
+	 * @param daf the daf (page) number to set
 	 */
 	public Daf(int masechtaNumber, int daf) {
 		this.masechtaNumber = masechtaNumber;
@@ -92,8 +92,8 @@ public class Daf {
 	}
 
 	/**
-	 * sets the daf (page number) of the Daf Yomi
-	 * @param daf daf (page number)
+	 * Sets the daf (page number) of the Daf Yomi
+	 * @param daf the daf (page) number
 	 */
 	public void setDaf(int daf) {
 		this.daf = daf;
