@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishDate
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2014
+ * @author &copy; Eliyahu Hershfeld 2011 - 2015
  * @version 0.3
  */
 public class HebrewDateFormatter {
@@ -400,7 +400,7 @@ public class HebrewDateFormatter {
 			return sb.toString();
 		} else {
 			return jewishDate.getDayOfWeek() == 7 ? getTransliteratedShabbosDayOfWeek() : new SimpleDateFormat("EEEE")
-					.format(jewishDate.getTime());
+					.format(jewishDate.getGregorianCalendar().getTime());
 		}
 	}
 

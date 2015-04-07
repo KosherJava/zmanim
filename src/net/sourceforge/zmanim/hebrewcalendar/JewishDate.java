@@ -49,7 +49,7 @@ import java.util.GregorianCalendar;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2014
+ * @author &copy; Eliyahu Hershfeld 2011 - 2015
  * @version 0.2.6
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
@@ -1132,15 +1132,16 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns this object's date as a java.util.Date object. <b>Note</b>: This class does not have a concept of time.
+	 * Returns this object's date as a {@link java.util.Calendar} object.
 	 * 
-	 * @return The <code>Date</code>
+	 * @return The {@link java.util.Calendar}
 	 */
-	public Date getTime() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(gregorianYear, gregorianMonth - 1, gregorianDayOfMonth);
-		return cal.getTime();
+	public Calendar getGregorianCalendar() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(getGregorianYear(), getGregorianMonth() - 1, getGregorianDayOfMonth());
+		return calendar;
 	}
+	
 
 	/**
 	 * Resets this date to the current system date.
