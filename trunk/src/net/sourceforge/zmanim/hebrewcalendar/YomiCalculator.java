@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
  * may cover Yerushalmi, Mishna Yomis etc in the future.
  * 
  * @author &copy; Bob Newell (original C code)
- * @author &copy; Eliyahu Hershfeld 2011
+ * @author &copy; Eliyahu Hershfeld 2011 - 2015
  * @version 0.0.1
  */
 public class YomiCalculator {
@@ -64,7 +64,7 @@ public class YomiCalculator {
 		 */
 		int[] blattPerMasechta = { 64, 157, 105, 121, 22, 88, 56, 40, 35, 31, 32, 29, 27, 122, 112, 91, 66, 49, 90, 82,
 				119, 119, 176, 113, 24, 49, 76, 14, 120, 110, 142, 61, 34, 34, 28, 22, 4, 10, 4, 73 };
-		Date date = calendar.getTime();
+		Date date = calendar.getGregorianCalendar().getTime();
 
 		Daf dafYomi = null;
 		int julianDay = getJulianDay(date);
