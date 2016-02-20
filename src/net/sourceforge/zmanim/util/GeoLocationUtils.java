@@ -112,7 +112,7 @@ public class GeoLocationUtils {
 	private static double vincentyFormula(GeoLocation location, GeoLocation destination, int formula) {
 		double a = 6378137;
 		double b = 6356752.3142;
-		double f = 1 / 298.257223563; // WGS-84 ellipsiod
+		double f = 1 / 298.257223563; // WGS-84 ellipsoid
 		double L = Math.toRadians(destination.getLongitude() - location.getLongitude());
 		double U1 = Math
 				.atan((1 - f) * Math.tan(Math.toRadians(location.getLatitude())));

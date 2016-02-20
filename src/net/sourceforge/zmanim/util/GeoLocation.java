@@ -531,8 +531,8 @@ public class GeoLocation implements Cloneable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\nLocation Name:\t\t\t").append(getLocationName());
-		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("°");
-		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("°");
+		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("\u00B0");
+		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("\u00B0");
 		sb.append("\nElevation:\t\t\t").append(getElevation()).append(" Meters");
 		sb.append("\nTimezone Name:\t\t\t").append(getTimeZone().getID());
 		/*
