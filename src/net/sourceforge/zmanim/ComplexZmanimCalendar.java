@@ -1750,6 +1750,25 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
+	 * This method returns the time of <em>bain hashmashos</em> based on the calculation of 13.5 minutes zmaniyos (3/4 of an 18
+	 * minute <em>Mil</em> before shkiah calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083&deg;}.
+	 * 
+	 * @return the <code>Date</code> of the <em>bain hashmashos</em> of <em>Rabainu Tam</em> in this calculation. If the
+	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
+	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
+	 *         calculation, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * @see #getTzaisGeonim7Point083Degrees()
+	 */
+	public Date getBainHasmashosRT13Point5MinutesZmanisBefore7Point083Degrees() {
+		long shaahZmanis = getShaahZmanis();
+		if (shaahZmanis == Long.MIN_VALUE) {
+			return null;
+		}
+		return getTimeOffset(getSunsetOffsetByDegrees(ZENITH_7_POINT_083), -0.225 * shaahZmanis);
+	}
+
+	/**
 	 * This method returns <em>bain hashmashos</em> of <em>Rabainu Tam</em> calculated according to the opinion of the
 	 * <em>Divray Yosef</em> (see Yisrael Vehazmanim) calculated 5/18th (27.77%) of the time between <em>alos</em>
 	 * (calculated as 19.8&deg; before sunrise) and sunrise. This is added to sunset to arrive at the time for
