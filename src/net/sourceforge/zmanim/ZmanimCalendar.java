@@ -35,6 +35,16 @@ import net.sourceforge.zmanim.util.GeoLocation;
 public class ZmanimCalendar extends AstronomicalCalendar {
 
 	/**
+	 * A type that returns a <em>shaah zmanis</em> ( {@link #getTemporalHour(Date, Date) temporal hour}) according to
+	 * the opinion of the <em>GRA</em> and the <em>Baal Hatanya</em>.
+	 */
+	public static final int SHAAH_ZMANIS_GRA = 0;
+	/**
+	 * A type that returns a <em>shaah zmanis</em> (temporal hour) according to the opinion of the Magen Avraham.
+	 */
+	public static final int SHAAH_ZMANIS_MGA = 1;
+
+	/**
 	 * The zenith of 16.1&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
 	 * (dawn) and <em>tzais</em> (nightfall) in some opinions. It is based on the calculation that the time between dawn
 	 * and sunrise (and sunset to nightfall) is 72 minutes, the time that is takes to walk 4 <em>mil</em> at 18 minutes
@@ -71,6 +81,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #setCandleLightingOffset(double)} and retrieved by the {@link #getCandleLightingOffset()}.
 	 */
 	private double candleLightingOffset = 18;
+
+	protected int shaahZmanisType = SHAAH_ZMANIS_GRA;
 
 	/**
 	 * A method that returns <em>tzais</em> (nightfall) when the sun is 8.5&deg; below the western geometric horizon
@@ -455,6 +467,30 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public long getShaahZmanisMGA() {
 		return getTemporalHour(getAlos72(), getTzais72());
+	}
+
+	/**
+	 * A method that returns a <em>shaah zmanis</em> ( {@link #getTemporalHour(Date, Date) temporal hour}).
+	 * 
+	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>.
+	 * @see #getShaahZmanisGra()
+	 */
+	public long getShaahZmanis() {
+		switch (shaahZmanisType) {
+			case SHAAH_ZMANIS_MGA:
+				return getShaahZmanisMGA();
+			case SHAAH_ZMANIS_GRA:
+			default:
+				return getShaahZmanisGra(); 
+		}
+	}
+
+	/**
+	 * Set the type of <em>shaah zmanis</em>.
+	 * @param type the type.
+	 */
+	public void setShaahZmanisType(int type) {
+		shaahZmanisType = type;
 	}
 
 	/**
