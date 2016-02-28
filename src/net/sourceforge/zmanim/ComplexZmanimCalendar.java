@@ -85,7 +85,7 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  * <h2>Disclaimer:</h2> While I did my best to get accurate results please do not rely on these zmanim for
  * <em>halacha lemaaseh</em>
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2014
+ * @author &copy; Eliyahu Hershfeld 2004 - 2016
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
@@ -123,7 +123,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzaisGeonim7Point083Degrees()
 	 * @see #getBainHasmashosRT13Point5MinutesBefore7Point083Degrees()
 	 */
-	protected static final double ZENITH_7_POINT_083 = GEOMETRIC_ZENITH + 7 + (5 / 60);
+	protected static final double ZENITH_7_POINT_083 = GEOMETRIC_ZENITH + 7 + (5.0 / 60);
 
 	/**
 	 * The zenith of 10.2&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
