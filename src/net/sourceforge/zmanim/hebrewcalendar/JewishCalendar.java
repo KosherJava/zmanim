@@ -217,13 +217,8 @@ public class JewishCalendar extends JewishDate {
 			}
 			if (isUseModernHolidays()
 					&& ((getJewishDayOfMonth() == 26 && getDayOfWeek() == 5)
-<<<<<<< HEAD
 							|| (getJewishDayOfMonth() == 28 && getDayOfWeek() == 1)
 							|| (getJewishDayOfMonth() == 27 && getDayOfWeek() != 1 && getDayOfWeek() != 6))) {
-=======
-							|| (getJewishDayOfMonth() == 28 && getDayOfWeek() == 2)
-							|| (getJewishDayOfMonth() == 27 && getDayOfWeek() == 3) || (getJewishDayOfMonth() == 27 && getDayOfWeek() == 5))) {
->>>>>>> upstream/master
 				return YOM_HASHOAH;
 			}
 			break;
