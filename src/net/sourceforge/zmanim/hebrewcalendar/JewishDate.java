@@ -801,7 +801,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private void absDateToJewishDate() {
 		// Approximation from below
-		jewishYear = (gregorianAbsDate + JEWISH_EPOCH) / 366;
+		jewishYear = (gregorianAbsDate - JEWISH_EPOCH) / 366;
 		// Search forward for year from the approximation
 		while (gregorianAbsDate >= jewishDateToAbsDate(jewishYear + 1, TISHREI, 1)) {
 			jewishYear++;
