@@ -656,6 +656,16 @@ public class AstronomicalCalendar implements Cloneable {
 	public String toString() {
 		return ZmanimFormatter.toXML(this);
 	}
+	
+	/**
+	 * @return a JSON formatted representation of the class. It returns the default output of the
+	 *         {@link net.sourceforge.zmanim.util.ZmanimFormatter#toJSON(AstronomicalCalendar) toJSON} method.
+	 * @see net.sourceforge.zmanim.util.ZmanimFormatter#toJSON(AstronomicalCalendar)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toJSON() {
+		return ZmanimFormatter.toJSON(this);
+	}
 
 	/**
 	 * @see java.lang.Object#equals(Object)
