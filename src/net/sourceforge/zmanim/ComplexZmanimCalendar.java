@@ -52,10 +52,10 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  * <b>Note:</b> For locations such as Israel where the beginning and end of daylight savings time can fluctuate from
  * year to year create a {@link java.util.SimpleTimeZone} with the known start and end of DST.
  * To get <em>alos</em> calculated as 14&deg; below the horizon (as calculated in the calendars published in Montreal),
- * add {@link AstronomicalCalendar#ASTRONOMICAL_ZENITH} (90) to the 14&deg; offset to get the desired time:
+ * add {@link AstronomicalCalendar#GEOMETRIC_ZENITH} (90) to the 14&deg; offset to get the desired time:
  * 
  * <pre>
- * Date alos14 = czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#ASTRONOMICAL_ZENITH} + 14);
+ * Date alos14 = czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 14);
  * </pre>
  * 
  * To get <em>mincha gedola</em> calculated based on the MGA using a <em>shaah
@@ -76,9 +76,9 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  * 12&deg; before sunset
  * 
  * <pre>
- * long shaahZmanis = czc.getTemporalHour(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#ASTRONOMICAL_ZENITH} + 12),
- * 						czc.getSunsetOffsetByDegrees({@link AstronomicalCalendar#ASTRONOMICAL_ZENITH} + 12));
- * Date plag = getTimeOffset(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#ASTRONOMICAL_ZENITH} + 12), 
+ * long shaahZmanis = czc.getTemporalHour(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12),
+ * 						czc.getSunsetOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12));
+ * Date plag = getTimeOffset(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12), 
  * 					shaahZmanis * 10.75);
  * </pre>
  * 
