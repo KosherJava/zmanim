@@ -89,6 +89,16 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
+    public static final int SHAAH_ZMANIS_120MINUTES = 2;
+    public static final int SHAAH_ZMANIS_16POINT1DEGREES = 3;
+    public static final int SHAAH_ZMANIS_18DEGREES = 4;
+    public static final int SHAAH_ZMANIS_19POINT8DEGREES = 5;
+    public static final int SHAAH_ZMANIS_26DEGREES = 6;
+    public static final int SHAAH_ZMANIS_60MINUTES = 7;
+    public static final int SHAAH_ZMANIS_72MINUTES = 8;
+    public static final int SHAAH_ZMANIS_90MINUTES = 9;
+    public static final int SHAAH_ZMANIS_96MINUTES = 10;
+
 	/**
 	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> that <em>tzais</em> is the
@@ -96,9 +106,20 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * is 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem on March 16, about 4 days
 	 * before the equinox, the day that a solar hour is 60 minutes.
 	 *
-	 * TODO AT see #getTzaisGeonim3Point7Degrees()
+	 * @see #getTzaisGeonim3Point7Degrees()
 	 */
 	protected static final double ZENITH_3_POINT_7 = GEOMETRIC_ZENITH + 3.7;
+
+	/**
+	 * The zenith of 3.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> that <em>tzais</em> is the
+	 * time it takes to walk 3/4 of a <em>Mil</em> at 18 minutes a <em>Mil</em>, or 13.5 minutes after sunset. The sun
+	 * is 3.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem on March 16, about 4 days
+	 * before the equinox, the day that a solar hour is 60 minutes.
+	 *
+	 * @see #getTzaisGeonim3Point7Degrees()
+	 */
+	protected static final double ZENITH_3_POINT_8 = GEOMETRIC_ZENITH + 3.8;
 
 	/**
 	 * The zenith of 5.95&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
@@ -500,6 +521,32 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public long getShaahZmanis120MinutesZmanis() {
 		return getTemporalHour(getAlos120Zmanis(), getTzais120Zmanis());
+	}
+
+	@Override
+	public long getShaahZmanis() {
+		switch (shaahZmanisType) {
+			case SHAAH_ZMANIS_120MINUTES:
+				return getShaahZmanis120Minutes();
+			case SHAAH_ZMANIS_16POINT1DEGREES:
+				return getShaahZmanis16Point1Degrees();
+			case SHAAH_ZMANIS_18DEGREES:
+				return getShaahZmanis18Degrees();
+			case SHAAH_ZMANIS_19POINT8DEGREES:
+				return getShaahZmanis19Point8Degrees();
+			case SHAAH_ZMANIS_26DEGREES:
+				return getShaahZmanis26Degrees();
+			case SHAAH_ZMANIS_60MINUTES:
+				return getShaahZmanis60Minutes();
+			case SHAAH_ZMANIS_72MINUTES:
+				return getShaahZmanis72Minutes();
+			case SHAAH_ZMANIS_90MINUTES:
+				return getShaahZmanis90Minutes();
+			case SHAAH_ZMANIS_96MINUTES:
+				return getShaahZmanis96Minutes();
+			default:
+				return super.getShaahZmanis();
+		}
 	}
 
 	/**
@@ -1703,6 +1750,25 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
+	 * This method returns the time of <em>bain hashmashos</em> based on the calculation of 13.5 minutes zmaniyos (3/4 of an 18
+	 * minute <em>Mil</em> before shkiah calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083&deg;}.
+	 *
+	 * @return the <code>Date</code> of the <em>bain hashmashos</em> of <em>Rabainu Tam</em> in this calculation. If the
+	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
+	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
+	 *         calculation, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * @see #getTzaisGeonim7Point083Degrees()
+	 */
+	public Long getBainHasmashosRT13Point5MinutesZmanisBefore7Point083Degrees() {
+		long shaahZmanis = getShaahZmanis();
+		if (shaahZmanis == Long.MIN_VALUE) {
+			return null;
+		}
+		return getTimeOffset(getSunsetOffsetByDegrees(ZENITH_7_POINT_083), -0.225 * shaahZmanis);
+	}
+
+	/**
 	 * This method returns <em>bain hashmashos</em> of <em>Rabainu Tam</em> calculated according to the opinion of the
 	 * <em>Divray Yosef</em> (see Yisrael Vehazmanim) calculated 5/18th (27.77%) of the time between <em>alos</em>
 	 * (calculated as 19.8&deg; before sunrise) and sunrise. This is added to sunset to arrive at the time for
@@ -1730,9 +1796,20 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @return the date representing the time when the sun is 3.7&deg; below sea level.
 	 * @see #ZENITH_3_POINT_7
 	 */
-	// public Long getTzaisGeonim3Point7Degrees() {
-	// return getSunsetOffsetByDegrees(ZENITH_3_POINT_7);
-	// }
+	public Long getTzaisGeonim3Point7Degrees() {
+	 	return getSunsetOffsetByDegrees(ZENITH_3_POINT_7);
+	}
+
+	/**
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
+	 * sun's position at {@link #ZENITH_3_POINT_8 3.8&deg;} below the western horizon.
+	 *
+	 * @return the <code>Date</code> representing the time when the sun is 3.8&deg; below sea level.
+	 * @see #ZENITH_3_POINT_8
+	 */
+	public Long getTzaisGeonim3Point8Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_3_POINT_8);
+	}
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
