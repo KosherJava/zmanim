@@ -17,6 +17,9 @@ allprojects {
 
 apply plugin: 'java'
 
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
 sourceSets {
     main {
         java {
@@ -28,4 +31,9 @@ sourceSets {
             srcDirs = ['test']
         }
     }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
 }
