@@ -78,18 +78,18 @@ public class UT_DaysInGregorianMonth {
 		JewishDate  hebrewDate
 	) {
 
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 ) );
-		Assert.assertEquals( febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth( 2 ) );
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 3 ) );
-		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 4 ) );
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 5 ) );
-		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 6 ) );
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 7 ) );
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 8 ) );
-		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 9 ) );
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 10 ) );
-		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 11 ) );
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 12 ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.JANUARY ) );
+		Assert.assertEquals( febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.FEBRUARY ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.MARCH ) );
+		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.APRIL ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.MAY ) );
+		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.JUNE ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.JULY ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.AUGUST ) );
+		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.SEPTEMBER ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.OCTOBER ) );
+		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.NOVEMBER ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.DECEMBER ) );
 	}
 
 
