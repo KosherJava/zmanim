@@ -147,7 +147,7 @@ public class GeoLocationUtils {
 			cosSqAlpha = 1 - sinAlpha * sinAlpha;
 			cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cosSqAlpha;
 			if (Double.isNaN(cos2SigmaM))
-				cos2SigmaM = 0; // equatorial line: cosSqAlpha=0 (§6)
+				cos2SigmaM = 0; // equatorial line: cosSqAlpha=0 (Â§6)
 			C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
 			lambdaP = lambda;
 			lambda = L
@@ -234,7 +234,7 @@ public class GeoLocationUtils {
 				/ Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4));
 		double q = (Math.abs(dLat) > 1e-10) ? dLat / dPhi : Math.cos(Math
 				.toRadians(location.getLatitude()));
-		// if dLon over 180° take shorter rhumb across 180° meridian:
+		// if dLon over 180Â° take shorter rhumb across 180Â° meridian:
 		if (dLon > Math.PI)
 			dLon = 2 * Math.PI - dLon;
 		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);
