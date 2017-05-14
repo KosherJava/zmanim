@@ -215,15 +215,9 @@ public class JewishCalendar extends JewishDate {
 				return CHOL_HAMOED_PESACH;
 			}
 			if (isUseModernHolidays()
-<<<<<<< HEAD
 					&& ((day == 26 && dayOfWeek == 5)
 							|| (day == 28 && dayOfWeek == 1)
-							|| (day == 27 && dayOfWeek == 3) || (day == 27 && dayOfWeek == 5))) {
-=======
-					&& ((getJewishDayOfMonth() == 26 && getDayOfWeek() == 5)
-							|| (getJewishDayOfMonth() == 28 && getDayOfWeek() == 1)
-							|| (getJewishDayOfMonth() == 27 && getDayOfWeek() != 1 && getDayOfWeek() != 6))) {
->>>>>>> KosherJava/master
+							|| (day == 27 && dayOfWeek != 1 && dayOfWeek != 6))) {
 				return YOM_HASHOAH;
 			}
 			break;
