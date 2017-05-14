@@ -29,26 +29,20 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * from his C++ code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements
  * and some bug fixing.
  * 
- * The methods used to obtain the parsha were derived from the source code of <a
- * href="http://www.sadinoff.com/hebcal/">HebCal</a> by Danny Sadinoff and JCal for the Mac by Frank Yellin. Both based
- * their code on routines by Nachum Dershowitz and Edward M. Reingold. The class allows setting whether the parsha and
- * holiday scheme follows the Israel scheme or outside Israel scheme. The default is the outside Israel scheme.
+ * The class allows setting whether the holiday scheme follows the Israel scheme or outside Israel scheme. The default is the outside Israel scheme.
  * 
  * TODO: Some do not belong in this class, but here is a partial list of what should still be implemented in some form:
  * <ol>
  * <li>Add Isru Chag</li>
- * <li>Add special parshiyos (shekalim, parah, zachor and hachodesh</li>
  * <li>Shabbos Mevarchim</li>
- * <li>Haftorah (various minhagim)</li>
  * <li>Daf Yomi Yerushalmi, Mishna yomis etc)</li>
- * <li>Support showing the upcoming parsha for the middle of the week</li>
  * </ol>
  * 
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2014
- * @version 0.0.1
+ * @author &copy; Eliyahu Hershfeld 2011 - 2016
+ * @version 1.0.0
  */
 public class JewishCalendar extends JewishDate {
 	public static final int EREV_PESACH = 0;
@@ -170,7 +164,7 @@ public class JewishCalendar extends JewishDate {
 	 *            or {@link #KISLEV} in a year that {@link #isKislevShort()}), the 29th (last valid date of the month)
 	 *            will be set
 	 * @param inIsrael
-	 *            whether in Israel. This affects Yom Tov and Parsha calculations
+	 *            whether in Israel. This affects Yom Tov calculations
 	 */
 	public JewishCalendar(int jewishYear, int jewishMonth, int jewishDayOfMonth, boolean inIsrael) {
 		super(jewishYear, jewishMonth, jewishDayOfMonth);
@@ -178,7 +172,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Sets whether to use Israel parsha and holiday scheme or not. Default is false.
+	 * Sets whether to use Israel holiday scheme or not. Default is false.
 	 * 
 	 * @param inIsrael
 	 *            set to true for calculations for Israel
@@ -188,7 +182,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Gets whether Israel parsha and holiday scheme is used or not. The default (if not set) is false.
+	 * Gets whether Israel holiday scheme is used or not. The default (if not set) is false.
 	 * 
 	 * @return if the if the calendar is set to Israel
 	 */
@@ -221,9 +215,15 @@ public class JewishCalendar extends JewishDate {
 				return CHOL_HAMOED_PESACH;
 			}
 			if (isUseModernHolidays()
+<<<<<<< HEAD
 					&& ((day == 26 && dayOfWeek == 5)
 							|| (day == 28 && dayOfWeek == 1)
 							|| (day == 27 && dayOfWeek == 3) || (day == 27 && dayOfWeek == 5))) {
+=======
+					&& ((getJewishDayOfMonth() == 26 && getDayOfWeek() == 5)
+							|| (getJewishDayOfMonth() == 28 && getDayOfWeek() == 1)
+							|| (getJewishDayOfMonth() == 27 && getDayOfWeek() != 1 && getDayOfWeek() != 6))) {
+>>>>>>> KosherJava/master
 				return YOM_HASHOAH;
 			}
 			break;
@@ -386,6 +386,17 @@ public class JewishCalendar extends JewishDate {
 		}
 		return getYomTovIndex() != -1;
 	}
+	
+	/**
+	 * Returns true if the Yom Tov day has a melacha (work)  prohibition. This method will return false for a non Yom Tov day, even if it is Shabbos.
+	 * 
+	 * @return if the Yom Tov day has a melacha (work)  prohibition.
+	 */
+	public boolean isYomTovAssurBemelacha(){
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == PESACH || holidayIndex == SHAVUOS || holidayIndex == SUCCOS || holidayIndex == SHEMINI_ATZERES || 
+				holidayIndex == SIMCHAS_TORAH || holidayIndex == ROSH_HASHANA  || holidayIndex == YOM_KIPPUR;
+	}
 
 	/**
 	 * Returns true if the current day is Chol Hamoed of Pesach or Succos.
@@ -457,195 +468,6 @@ public class JewishCalendar extends JewishDate {
 
 	public boolean isChanukah() {
 		return getYomTovIndex() == CHANUKAH;
-	}
-
-	// These indices were originally included in the emacs 19 distribution.
-	// These arrays determine the correct indices into the parsha names
-	// -1 means no parsha that week, values > 52 means it is a double parsha
-	private static final int[] Sat_short = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
-			48, 49, 50 };
-
-	private static final int[] Sat_long = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
-			48, 49, 59 };
-
-	private static final int[] Mon_short = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-			18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47, 48,
-			49, 59 };
-
-	private static final int[] Mon_long = // split
-	{ 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55,
-			30, 56, 33, -1, 34, 35, 36, 37, 57, 40, 58, 43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Thu_normal = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-			18, 19, 20, 53, 23, 24, -1, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
-			48, 49, 50 };
-	private static final int[] Thu_normal_Israel = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-			16, 17, 18, 19, 20, 53, 23, 24, -1, 25, 54, 55, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45,
-			46, 47, 48, 49, 50 };
-
-	private static final int[] Thu_long = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-			18, 19, 20, 21, 22, 23, 24, -1, 25, 54, 55, 30, 56, 33, 34, 35, 36, 37, 38, 39, 40, 58, 43, 44, 45, 46, 47,
-			48, 49, 50 };
-
-	private static final int[] Sat_short_leap = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-			16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58,
-			43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Sat_long_leap = { -1, 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-			16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, -1, 34, 35, 36, 37, 57, 40, 58,
-			43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Mon_short_leap = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, -1, 34, 35, 36, 37, 57, 40, 58, 43,
-			44, 45, 46, 47, 48, 49, 59 };
-	private static final int[] Mon_short_leap_Israel = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-			15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-			58, 43, 44, 45, 46, 47, 48, 49, 59 };
-
-	private static final int[] Mon_long_leap = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 58,
-			43, 44, 45, 46, 47, 48, 49, 50 };
-	private static final int[] Mon_long_leap_Israel = { 51, 52, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-			15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, -1, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-			41, 42, 43, 44, 45, 46, 47, 48, 49, 50 };
-
-	private static final int[] Thu_short_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
-			43, 44, 45, 46, 47, 48, 49, 50 };
-
-	private static final int[] Thu_long_leap = { 52, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-			17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, -1, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
-			43, 44, 45, 46, 47, 48, 49, 59 };
-
-	/**
-	 * Returns a the index of today's parsha(ios) or a -1 if there is none. To get the name of the Parsha, use the
-	 * {@link HebrewDateFormatter#formatParsha(JewishCalendar)}.
-	 * 
-	 * TODO: consider possibly return the parsha of the week for any day during the week instead of empty. To do this
-	 * the simple way, create a new instance of the class in the mothod, roll it to the next shabbos. If the shabbos has
-	 * no parsha, keep rolling by a week till a parsha is encountered. Possibly turn into static method that takes in a
-	 * year, month, day, roll to next shabbos (not that simple with the API for date passed in) and if it is not a
-	 * shabbos roll forwarde one week at a time to get the parsha. I do not think it is possible to have more than 2
-	 * shabbosim in a row without a parsha, but I may be wrong.
-	 * 
-	 * @return the string of the parsha. Will currently return blank for weekdays and a shabbos on a yom tov.
-	 */
-	public int getParshaIndex() {
-		// if today is not Shabbos, then there is no normal parsha reading. If
-		// commented our will return LAST week's parsha for a non shabbos
-		if (getDayOfWeek() != 7) {
-			// return "";
-			return -1;
-		}
-
-		// kvia = whether a Jewish year is short/regular/long (0/1/2)
-		// roshHashana = Rosh Hashana of this Jewish year
-		// roshHashanaDay= day of week Rosh Hashana was on this year
-		// week= current week in Jewish calendar from Rosh Hashana
-		// array= the correct index array for this Jewish year
-		// index= the index number of the parsha name
-		int kvia = getCheshvanKislevKviah();
-		int roshHashanaDay;
-		int week;
-		int[] array = null;
-		int index;
-
-		JewishDate roshHashana = new JewishDate(getJewishYear(), TISHREI, 1); // set it to Rosh Hashana of this year
-
-		// get day Rosh Hashana was on
-		roshHashanaDay = roshHashana.getDayOfWeek();
-
-		// week is the week since the first Shabbos on or after Rosh Hashana
-		week = (((getAbsDate() - roshHashana.getAbsDate()) - (7 - roshHashanaDay)) / 7);
-
-		// determine appropriate array
-		if (!isJewishLeapYear()) {
-			switch (roshHashanaDay) {
-			case 7: // RH was on a Saturday
-				if (kvia == CHASERIM) {
-					array = Sat_short;
-				} else if (kvia == SHELAIMIM) {
-					array = Sat_long;
-				}
-				break;
-			case 2: // RH was on a Monday
-				if (kvia == CHASERIM) {
-					array = Mon_short;
-				} else if (kvia == SHELAIMIM) {
-					array = inIsrael ? Mon_short : Mon_long;
-				}
-				break;
-			case 3: // RH was on a Tuesday
-				if (kvia == KESIDRAN) {
-					array = inIsrael ? Mon_short : Mon_long;
-				}
-				break;
-			case 5: // RH was on a Thursday
-				if (kvia == KESIDRAN) {
-					array = inIsrael ? Thu_normal_Israel : Thu_normal;
-				} else if (kvia == SHELAIMIM) {
-					array = Thu_long;
-				}
-				break;
-			}
-		} else { // if leap year
-			switch (roshHashanaDay) {
-			case 7: // RH was on a Sat
-				if (kvia == CHASERIM) {
-					array = Sat_short_leap;
-				} else if (kvia == SHELAIMIM) {
-					array = inIsrael ? Sat_short_leap : Sat_long_leap;
-				}
-				break;
-			case 2: // RH was on a Mon
-				if (kvia == CHASERIM) {
-					array = inIsrael ? Mon_short_leap_Israel : Mon_short_leap;
-				} else if (kvia == SHELAIMIM) {
-					array = inIsrael ? Mon_long_leap_Israel : Mon_long_leap;
-				}
-				break;
-			case 3: // RH was on a Tue
-				if (kvia == KESIDRAN) {
-					array = inIsrael ? Mon_long_leap_Israel : Mon_long_leap;
-				}
-				break;
-			case 5: // RH was on a Thu
-				if (kvia == CHASERIM) {
-					array = Thu_short_leap;
-				} else if (kvia == SHELAIMIM) {
-					array = Thu_long_leap;
-				}
-				break;
-			}
-		}
-		// if something goes wrong
-		if (array == null) {
-			throw new RuntimeException(
-					"Unable to claculate the parsha. No index array matched any of the known types for the date: "
-							+ toString());
-		}
-		// get index from array
-		index = array[week];
-
-		// If no Parsha this week
-		// if (index == -1) {
-		// return -1;
-		// }
-
-		// if parsha this week
-		// else {
-		// if (getDayOfWeek() != 7){//in weekday return next shabbos's parsha
-		// System.out.print(" index=" + index + " ");
-		// return parshios[index + 1];
-		// this code returns odd data for yom tov. See parshas kedoshim display
-		// for 2011 for example. It will also break for Sept 25, 2011 where it
-		// goes one beyong the index of Nitzavim-Vayelech
-		// }
-		// return parshios[index];
-		return index;
-		// }
 	}
 
 	/**
