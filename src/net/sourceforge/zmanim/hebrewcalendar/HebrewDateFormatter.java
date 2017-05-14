@@ -420,7 +420,7 @@ public class HebrewDateFormatter {
 	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
 	 */
 	public String formatParsha(JewishCalendar jewishCalendar) {
-		int index = jewishCalendar.getParshaIndex();
+		int index = -1;//FIXME: DELETED jewishCalendar.getParshaIndex();
 		return index == -1 ? "" : hebrewFormat ? hebrewParshiyos[index] : transliteratedParshios[index];
 	}
 
