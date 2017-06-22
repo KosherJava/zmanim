@@ -108,7 +108,7 @@ public class GeoLocationUtils {
 	 * @param formula
 	 *            This formula calculates initial bearing ({@link #INITIAL_BEARING}),
 	 *            final bearing ({@link #FINAL_BEARING}) and distance ({@link #DISTANCE}).
-	 * @param the geodesic distance, initial or final bearing (based on the formula passed in)
+	 * @return the geodesic distance, initial or final bearing (based on the formula passed in)
 	 */
 	private static double vincentyFormula(GeoLocation location, GeoLocation destination, int formula) {
 		double a = 6378137; // length of semi-major axis of the ellipsoid (radius at equator) in metres based on WGS-84
