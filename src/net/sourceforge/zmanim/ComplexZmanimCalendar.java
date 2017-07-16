@@ -1762,7 +1762,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Long getBainHasmashosRT13Point5MinutesZmanisBefore7Point083Degrees() {
 		long shaahZmanis = getShaahZmanis();
-		if (shaahZmanis == Long.MIN_VALUE) {
+		if (shaahZmanis == NEVER) {
 			return null;
 		}
 		return getTimeOffset(getSunsetOffsetByDegrees(ZENITH_7_POINT_083), -0.225 * shaahZmanis);

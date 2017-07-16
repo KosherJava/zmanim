@@ -104,7 +104,7 @@ public class AstronomicalCalendar implements Cloneable {
 	static final long HOUR_MILLIS = MINUTE_MILLIS * 60;
 
 	/** Invalid date. */
-	protected static final long NEVER = Long.MIN_VALUE;
+	public static final long NEVER = Long.MIN_VALUE;
 
 	/**
 	 * The Java Calendar encapsulated by this class to track the current date used by the class
