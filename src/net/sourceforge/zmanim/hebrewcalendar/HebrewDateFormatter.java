@@ -631,6 +631,15 @@ public class HebrewDateFormatter {
 			return daf.getMasechtaTransliterated() + " " + daf.getDaf();
 		}
 	}
+	public String formatDafYomiYerushalmi(Daf daf) {
+		if (hebrewFormat) {
+			String dafName = daf.getDaf() == 0 ? "" : " " + formatHebrewNumber(daf.getDaf());
+			return daf.getYerushalmiMasechta() + dafName;
+		} else {
+			String dafName = daf.getDaf() == 0 ? "" : " " + daf.getDaf();
+			return daf.getYerushlmiMasechtaTransliterated() + dafName;
+		}
+	}
 
 	/**
 	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 - 9999.
