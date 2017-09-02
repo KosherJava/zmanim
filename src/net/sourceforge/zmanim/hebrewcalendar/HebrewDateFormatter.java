@@ -631,6 +631,7 @@ public class HebrewDateFormatter {
 			return daf.getMasechtaTransliterated() + " " + daf.getDaf();
 		}
 	}
+	
 	public String formatDafYomiYerushalmi(Daf daf) {
 		if (hebrewFormat) {
 			String dafName = daf.getDaf() == 0 ? "" : " " + formatHebrewNumber(daf.getDaf());

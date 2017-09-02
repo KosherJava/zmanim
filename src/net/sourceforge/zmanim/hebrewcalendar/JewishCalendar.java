@@ -604,7 +604,7 @@ public class JewishCalendar extends JewishDate {
 	}
 	/**
 	 * Returns the Daf Yomi (Yerushalmi) for the date that the calendar is set to. See the
-	 * {@link HebrewDateFormatter#formatDafYomiBavli(Daf)} for the ability to format the daf in Hebrew or transliterated
+	 * {@link HebrewDateFormatter#formatDafYomiYerushalmi(Daf)} for the ability to format the daf in Hebrew or transliterated
 	 * masechta names.
 	 * 
 	 * @return the daf as a {@link Daf}
