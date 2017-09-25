@@ -114,7 +114,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	private static int getDayOfYear(int year, int month, int day) {
 		int n1 = 275 * month / 9;
 		int n2 = (month + 9) / 12;
-		int n3 = (1 + ((year - 4 * (year / 4) + 2) / 3));
+		int n3 = (1 + (int)((year - 4 * (int)(year / 4) + 2) / 3));
 		return n1 - (n2 * n3) + day - 30;
 	}
 
