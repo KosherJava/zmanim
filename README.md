@@ -13,6 +13,8 @@ The ZmanimCalendar contains the most common zmanim or religious time calculation
 extensive list of _zmanim_ use the ComplexZmanimCalendar.
 This class contains the main functionality of the Zmanim library.
 
+For a basic set of instructions on the use of the API, see [How to Use the Zmanim API](http://www.kosherjava.com/zmanim-project/how-to-use-the-zmanim-api/), [zmanim code samples](http://www.kosherjava.com/tag/code-sample/) and the [KosherJava FAQ](http://www.kosherjava.com/tag/faq/).
+
 Disclaimer:
 -----------
 __While I did my best to get accurate results please do
