@@ -602,6 +602,17 @@ public class JewishCalendar extends JewishDate {
 	public Daf getDafYomiBavli() {
 		return YomiCalculator.getDafYomiBavli(this);
 	}
+	/**
+	 * Returns the Daf Yomi (Yerushalmi) for the date that the calendar is set to. See the
+	 * {@link HebrewDateFormatter#formatDafYomiYerushalmi(Daf)} for the ability to format the daf in Hebrew or transliterated
+	 * masechta names.
+	 * 
+	 * @return the daf as a {@link Daf}
+	 */
+	public Daf getDafYomiYerushalmi() {
+		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
+	}
+
 
 	/**
 	 * @see Object#equals(Object)
