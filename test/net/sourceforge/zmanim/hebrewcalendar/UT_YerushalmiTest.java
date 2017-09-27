@@ -5,7 +5,7 @@ import java.util.Calendar;
 import org.junit.*;
 
 import junit.framework.TestCase;
-public class UT_YerushalmiTest extends TestCase{
+public class UT_YerushalmiTest {
 	private static HebrewDateFormatter hdf = new HebrewDateFormatter();
 	static {
 		hdf.setHebrewFormat(true);		
