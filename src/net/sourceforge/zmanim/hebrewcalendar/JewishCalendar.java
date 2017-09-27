@@ -496,7 +496,7 @@ public class JewishCalendar extends JewishDate {
 		double latitude = 31.778; // Har Habayis latitude
 		double longitude = 35.2354; // Har Habayis longitude
 
-		// The molad calculation always extepcst output in standard time. Using "Asia/Jerusalem" timezone will incorrect
+		// The molad calculation always expects output in standard time. Using "Asia/Jerusalem" timezone will incorrect
 		// adjust for DST.
 		TimeZone yerushalayimStandardTZ = TimeZone.getTimeZone("GMT+2");
 		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
