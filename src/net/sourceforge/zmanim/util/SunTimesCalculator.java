@@ -220,13 +220,13 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
 				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
-		double pocessedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
-		while (pocessedTime < 0.0) {
-			pocessedTime += 24.0;
+		double processedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
+		while (processedTime < 0.0) {
+			processedTime += 24.0;
 		}
-		while (pocessedTime >= 24.0) {
-			pocessedTime -= 24.0;
+		while (processedTime >= 24.0) {
+			processedTime -= 24.0;
 		}
-		return pocessedTime;
+		return processedTime;
 	}
 }
