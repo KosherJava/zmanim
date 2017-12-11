@@ -545,15 +545,6 @@ public class AstronomicalCalendar implements Cloneable {
 		cal.set(Calendar.YEAR, getCalendar().get(Calendar.YEAR));
 		cal.set(Calendar.MONTH, getCalendar().get(Calendar.MONTH));
 		cal.set(Calendar.DAY_OF_MONTH, getCalendar().get(Calendar.DAY_OF_MONTH));
-		double gmtOffset = getCalendar().getTimeZone().getRawOffset() / (60d * MINUTE_MILLIS); // raw non DST offset
-		// Set the correct calendar date in UTC. For example Tokyo is 9 hours ahead of GMT. Sunrise at ~6 AM will be at
-		// ~21 hours GMT of the previous day and has to be set accordingly. In the case of California USA that is 7
-		// hours behind GMT, sunset at ~6 PM will be at ~1 GMT the following day and has to be set accordingly.
-		if (time + gmtOffset > 24) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
-		} else if (time + gmtOffset < 0) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		}
 
 		int hours = (int) calculatedTime; // retain only the hours
 		calculatedTime -= hours;
