@@ -26,6 +26,11 @@ The KosherJava Zmanim API has benn ported to:
 * .NET - https://github.com/Yitzchok/Zmanim
 * JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim
 
+Web Api
+------------------------
+There is a web api that returns json or xml and is based on the .NET port. It is available at https://wyrezmanim.herokuapp.com
+
+Source code for the web api if you would like to self host is at https://github.com/greatjack1/dotnetcoreZmanim
 
 Disclaimer:
 -----------
