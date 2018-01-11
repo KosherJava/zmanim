@@ -10,19 +10,19 @@ plugins {
 
 repositories {
     mavenLocal()
-    maven {
-        url = uri('https://repo.maven.apache.org/maven2')
-    }
+    mavenCentral()
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 group = 'com.kosherjava'
 version = '2.1.0'
-sourceCompatibility = JavaVersion.VERSION_1_9
-targetCompatibility = JavaVersion.VERSION_1_9
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
 publishing {
     publications {
