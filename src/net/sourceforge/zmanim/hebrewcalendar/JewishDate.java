@@ -299,7 +299,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the last day of the Gregorian month
 	 */
 	int getLastDayOfGregorianMonth(int month) {
-		return getLastDayOfGregorianMonth(month, gregorianYear);
+		return getLastDayOfGregorianMonth(gregorianYear, month);
 	}
 
 	/**
@@ -321,14 +321,14 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Returns the number of days in a given month in a given month and year.
-	 * 
-	 * @param month
-	 *            the month. As with other cases in this class, this is 1-based, not zero-based.
+	 *
 	 * @param year
 	 *            the year (only impacts February)
+	 * @param month
+	 *            the month. As with other cases in this class, this is 1-based, not zero-based.
 	 * @return the number of days in the month in the given year
 	 */
-	private static int getLastDayOfGregorianMonth(int month, int year) {
+	protected static int getLastDayOfGregorianMonth(int year, int month) {
 		switch (month) {
 		case MONTH_FEBRUARY:
 			if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
@@ -356,7 +356,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		}
 
 		int month = MONTH_JANUARY; // Search forward month by month from January
-		while (absDate > gregorianDateToAbsDate(year, month, getLastDayOfGregorianMonth(month, year))) {
+		while (absDate > gregorianDateToAbsDate(year, month, getLastDayOfGregorianMonth(year, month))) {
 			month++;
 		}
 
@@ -388,13 +388,14 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	private static int gregorianDateToAbsDate(int year, int month, int dayOfMonth) {
 		int absDate = dayOfMonth;
 		for (int m = month - 1; m > 0; m--) {
-			absDate += getLastDayOfGregorianMonth(m, year); // days in prior months of the year
+			absDate += getLastDayOfGregorianMonth(year, m); // days in prior months of the year
 		}
+		int y = year - 1;
 		return (absDate // days this year
-				+ 365 * (year - 1) // days in previous years ignoring leap days
-				+ (year - 1) / 4 // Julian leap days before this year
-				- (year - 1) / 100 // minus prior century years
-		+ (year - 1) / 400); // plus prior years divisible by 400
+				+ (y * 365) // days in previous years ignoring leap days
+				+ (y / 4) // Julian leap days before this year
+				- (y / 100) // minus prior century years
+				+ (y / 400)); // plus prior years divisible by 400
 	}
 
 	/**
@@ -784,17 +785,22 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Returns the number of days of a Jewish month for a given month and year.
-	 * 
+	 *
+	 * @param year
+	 *            the Jewish year
 	 * @param month
 	 *            the Jewish month
-	 * @param year
-	 *            the Jewish Year
 	 * @return the number of days for a given Jewish month
 	 */
-	private static int getDaysInJewishMonth(int month, int year) {
-		if ((month == IYAR) || (month == TAMMUZ) || (month == ELUL) || ((month == CHESHVAN) && !(isCheshvanLong(year)))
-				|| ((month == KISLEV) && isKislevShort(year)) || (month == TEVES)
-				|| ((month == ADAR) && !(isJewishLeapYear(year))) || (month == ADAR_II)) {
+	private static int getLastDayOfJewishMonth(int year, int month) {
+		if ((month == IYAR)
+			|| (month == TAMMUZ)
+			|| (month == ELUL)
+			|| ((month == CHESHVAN) && !isCheshvanLong(year))
+			|| ((month == KISLEV) && isKislevShort(year))
+			|| (month == TEVES)
+			|| ((month == ADAR) && !isJewishLeapYear(year))
+			|| (month == ADAR_II)) {
 			return 29;
 		} else {
 			return 30;
@@ -807,30 +813,30 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the number of days for the Jewish month that the calendar is currently set to.
 	 */
 	public int getDaysInJewishMonth() {
-		return getDaysInJewishMonth(getJewishMonth(), getJewishYear());
+		return getLastDayOfJewishMonth(getJewishYear(), getJewishMonth());
 	}
 
 	/**
 	 * Computes the Jewish date from the absolute date. ND+ER
 	 */
-	private void absDateToJewishDate() {
+	private void absDateToJewishDate(int absDate) {
 		// Approximation from below
-		jewishYear = (gregorianAbsDate - JEWISH_EPOCH) / 366;
+		jewishYear = (absDate + JEWISH_EPOCH) / 366;
 		// Search forward for year from the approximation
-		while (gregorianAbsDate >= jewishDateToAbsDate(jewishYear + 1, TISHREI, 1)) {
+		while (absDate >= jewishDateToAbsDate(jewishYear + 1, TISHREI, 1)) {
 			jewishYear++;
 		}
-		// Search forward for month from either Tishri or Nisan.
-		if (gregorianAbsDate < jewishDateToAbsDate(jewishYear, NISSAN, 1)) {
-			jewishMonth = TISHREI;// Start at Tishri
+		// Search forward for month from either Tishrei or Nissan.
+		if (absDate < jewishDateToAbsDate(jewishYear, NISSAN, 1)) {
+			jewishMonth = TISHREI;// Start at Tishrei
 		} else {
-			jewishMonth = NISSAN;// Start at Nisan
+			jewishMonth = NISSAN;// Start at Nissan
 		}
-		while (gregorianAbsDate > jewishDateToAbsDate(jewishYear, jewishMonth, getDaysInJewishMonth())) {
+		while (absDate > jewishDateToAbsDate(jewishYear, jewishMonth, getLastDayOfJewishMonth(jewishYear, jewishMonth))) {
 			jewishMonth++;
 		}
 		// Calculate the day by subtraction
-		jewishDay = gregorianAbsDate - jewishDateToAbsDate(jewishYear, jewishMonth, 1) + 1;
+		jewishDay = absDate - jewishDateToAbsDate(jewishYear, jewishMonth, 1) + 1;
 	}
 
 	/**
@@ -929,15 +935,15 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		// Before Tishrei (from Nissan to Tishrei), add days in prior months
 		if (month < TISHREI) {
 			// this year before and after Nisan.
-			for (int m = TISHREI; m <= getLastMonthOfJewishYear(year); m++) {
-				elapsedDays += getDaysInJewishMonth(m, year);
+			for (int m = getLastMonthOfJewishYear(year); m >= TISHREI ; m--) {
+				elapsedDays += getLastDayOfJewishMonth(year, m);
 			}
 			for (int m = NISSAN; m < month; m++) {
-				elapsedDays += getDaysInJewishMonth(m, year);
+				elapsedDays += getLastDayOfJewishMonth(year, m);
 			}
 		} else { // Add days in prior months this year
 			for (int m = TISHREI; m < month; m++) {
-				elapsedDays += getDaysInJewishMonth(m, year);
+				elapsedDays += getLastDayOfJewishMonth(year, m);
 			}
 		}
 		return elapsedDays;
@@ -1007,13 +1013,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			throw new IllegalArgumentException("Calendars with a BC era are not supported. The year "
 					+ calendar.get(Calendar.YEAR) + " BC is invalid.");
 		}
-		gregorianMonth = calendar.get(Calendar.MONTH) + 1;
-		gregorianDayOfMonth = calendar.get(Calendar.DATE);
-		gregorianYear = calendar.get(Calendar.YEAR);
-		gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth); // init the date
-		absDateToJewishDate();
-
-		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // set day of week
+		setGregorianDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 	}
 
 	/**
@@ -1062,16 +1062,17 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private void setInternalGregorianDate(int year, int month, int dayOfMonth) {
 		// make sure date is a valid date for the given month, if not, set to last day of month
-		if (dayOfMonth > getLastDayOfGregorianMonth(month, year)) {
-			dayOfMonth = getLastDayOfGregorianMonth(month, year);
+		int lastDay = getLastDayOfGregorianMonth(year, month);
+		if (dayOfMonth > lastDay) {
+			dayOfMonth = lastDay;
 		}
 		// init month, date, year
 		gregorianMonth = month;
 		gregorianDayOfMonth = dayOfMonth;
 		gregorianYear = year;
 
-		gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth); // init date
-		absDateToJewishDate();
+		gregorianAbsDate = gregorianDateToAbsDate(year, month, dayOfMonth); // init date
+		absDateToJewishDate(gregorianAbsDate);
 
 		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // set day of week
 	}
@@ -1128,8 +1129,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 		// if 30 is passed for a month that only has 29 days (for example by rolling the month from a month that had 30
 		// days to a month that only has 29) set the date to 29th
-		if (dayOfMonth > getDaysInJewishMonth(month, year)) {
-			dayOfMonth = getDaysInJewishMonth(month, year);
+		int lastDay = getLastDayOfJewishMonth(year, month);
+		if (dayOfMonth > lastDay) {
+			dayOfMonth = lastDay;
 		}
 
 		jewishMonth = month;
@@ -1196,7 +1198,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public void forward() {
 		// Change Gregorian date
-		if (gregorianDayOfMonth == getLastDayOfGregorianMonth(gregorianMonth, gregorianYear)) {
+		if (gregorianDayOfMonth == getLastDayOfGregorianMonth(gregorianYear, gregorianMonth)) {
 			// if last day of year
 			if (gregorianMonth == MONTH_DECEMBER) {
 				gregorianYear++;
@@ -1211,7 +1213,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		}
 
 		// Change the Jewish Date
-		if (jewishDay == getDaysInJewishMonth()) {
+		if (jewishDay == getLastDayOfJewishMonth(jewishYear, jewishMonth)) {
 			// if it last day of elul (i.e. last day of Jewish year)
 			if (jewishMonth == ELUL) {
 				jewishYear++;
@@ -1266,7 +1268,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 				gregorianMonth--;
 			}
 			// change to last day of previous month
-			gregorianDayOfMonth = getLastDayOfGregorianMonth(gregorianMonth, gregorianYear);
+			gregorianDayOfMonth = getLastDayOfGregorianMonth(gregorianYear, gregorianMonth);
 		} else {
 			gregorianDayOfMonth--;
 		}
@@ -1280,7 +1282,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			} else {
 				jewishMonth--;
 			}
-			jewishDay = getDaysInJewishMonth();
+			jewishDay = getLastDayOfJewishMonth(jewishYear, jewishMonth);
 		} else {
 			jewishDay--;
 		}
@@ -1304,7 +1306,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			return false;
 		}
 		JewishDate jewishDate = (JewishDate) object;
-		return gregorianAbsDate == jewishDate.getAbsDate();
+		return gregorianAbsDate == jewishDate.gregorianAbsDate;
 	}
 
 	/**
@@ -1313,7 +1315,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * they are equal.
 	 */
 	public int compareTo(JewishDate jewishDate) {
-		return gregorianAbsDate < jewishDate.getAbsDate() ? -1 : gregorianAbsDate > jewishDate.getAbsDate() ? 1 : 0;
+		return gregorianAbsDate - jewishDate.gregorianAbsDate;
 	}
 
 	/**
@@ -1480,9 +1482,6 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @see Object#hashCode()
 	 */
 	public int hashCode() {
-		int result = 17;
-		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
-		result += 37 * result + gregorianAbsDate;
-		return result;
+		return gregorianAbsDate;
 	}
 }

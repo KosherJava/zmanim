@@ -6,6 +6,7 @@ package net.sourceforge.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
+import static net.sourceforge.zmanim.hebrewcalendar.JewishDate.MONTH_FEBRUARY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -78,6 +79,27 @@ public class UT_JewishLeapYear {
 	public static boolean isLeapYearICU(int year) {
 		int x = (year * 12 + 17) % 19;
 		return x >= ((x < 0) ? -7 : 12);
+	}
+
+	@Test
+	public void leapYears(){
+		for (int y = 0; y < 10000; y++) {
+			assertEquals(isLeapYearWiki(y), JewishDate.getLastDayOfGregorianMonth(y, MONTH_FEBRUARY) == 29);
+		}
+	}
+
+	/** https://en.wikipedia.org/wiki/Leap_year#Algorithm */
+	private static boolean isLeapYearWiki(int year) {
+		if (year % 4 != 0) {
+			return false;
+		}
+		if (year % 100 != 0) {
+			return true;
+		}
+		if (year % 400 != 0) {
+			return false;
+		}
+		return true;
 	}
 
 } // End of UT_JewishLeapYear class
