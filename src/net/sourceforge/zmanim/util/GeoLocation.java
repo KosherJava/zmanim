@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2014 Eliyahu Hershfeld
+ * Copyright (C) 2004-2016 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2014
+ * @author &copy; Eliyahu Hershfeld 2004 - 2016
  * @version 1.1
  */
 public class GeoLocation implements Cloneable {
@@ -141,8 +141,8 @@ public class GeoLocation implements Cloneable {
 	 * Method to set the latitude in degrees, minutes and seconds.
 	 * 
 	 * @param degrees
-	 *            The degrees of latitude to set between -90 and 90. An IllegalArgumentException will be thrown if the
-	 *            value exceeds the limit. For example 40 would be used for Lakewood, NJ.
+	 *            The degrees of latitude to set between 0&deg; and 90&deg;. For example 40 would be used for Lakewood, NJ.
+	 *            An IllegalArgumentException will be thrown if the value exceeds the limit.
 	 * @param minutes
 	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
 	 * @param seconds
@@ -152,7 +152,7 @@ public class GeoLocation implements Cloneable {
 	 */
 	public void setLatitude(int degrees, int minutes, double seconds, String direction) {
 		double tempLat = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (tempLat > 90 || tempLat < 0) {
+		if (tempLat > 90 || tempLat < 0) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
 			throw new IllegalArgumentException(
 					"Latitude must be between 0 and  90. Use direction of S instead of negative.");
 		}
@@ -192,22 +192,21 @@ public class GeoLocation implements Cloneable {
 	 * Method to set the longitude in degrees, minutes and seconds.
 	 * 
 	 * @param degrees
-	 *            The degrees of longitude to set between -180 and 180. An IllegalArgumentException will be thrown if
-	 *            the value exceeds the limit. For example -74 would be used for Lakewood, NJ. Note: for longitudes east
-	 *            of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian </a> (Greenwich) a
-	 *            negative value should be used.
+	 *            The degrees of longitude to set between 0&deg; and 180&deg;. As an example 74 would be set for Lakewood, NJ.
+	 *            An IllegalArgumentException will be thrown if the value exceeds the limits.
 	 * @param minutes
 	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
 	 * @param seconds
 	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>
 	 * @param direction
-	 *            E for east of the Prime Meridian or W for west of it. An IllegalArgumentException will be thrown if
+	 *            E for east of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian </a> or W for west of it.
+	 *            An IllegalArgumentException will be thrown if
 	 *            the value is not E or W.
 	 */
 	public void setLongitude(int degrees, int minutes, double seconds, String direction) {
 		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (longTemp > 180 || this.longitude < 0) {
-			throw new IllegalArgumentException("Longitude must be between 0 and  180. Use the ");
+		if (longTemp > 180 || this.longitude < 0) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
+			throw new IllegalArgumentException("Longitude must be between 0 and  180.  Use a direction of W instead of negative.");
 		}
 		if (direction.equals("W")) {
 			longTemp *= -1;
@@ -377,7 +376,7 @@ public class GeoLocation implements Cloneable {
 			cosSqAlpha = 1 - sinAlpha * sinAlpha;
 			cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cosSqAlpha;
 			if (Double.isNaN(cos2SigmaM))
-				cos2SigmaM = 0; // equatorial line: cosSqAlpha=0 (§6)
+				cos2SigmaM = 0; // equatorial line: cosSqAlpha=0 (Â§6)
 			C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
 			lambdaP = lambda;
 			lambda = L + (1 - C) * f * sinAlpha
@@ -444,7 +443,7 @@ public class GeoLocation implements Cloneable {
 		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLongitude()) / 2 + Math.PI / 4)
 				/ Math.tan(Math.toRadians(getLatitude()) / 2 + Math.PI / 4));
 		double q = (Math.abs(dLat) > 1e-10) ? dLat / dPhi : Math.cos(Math.toRadians(getLatitude()));
-		// if dLon over 180° take shorter rhumb across 180° meridian:
+		// if dLon over 180Â° take shorter rhumb across 180Â° meridian:
 		if (dLon > Math.PI)
 			dLon = 2 * Math.PI - dLon;
 		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);

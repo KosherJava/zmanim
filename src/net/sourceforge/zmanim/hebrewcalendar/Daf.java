@@ -49,6 +49,28 @@ public class Daf {
 			"\u05EA\u05DE\u05D5\u05E8\u05D4", "\u05DB\u05E8\u05D9\u05EA\u05D5\u05EA", "\u05DE\u05E2\u05D9\u05DC\u05D4",
 			"\u05EA\u05DE\u05D9\u05D3", "\u05E7\u05D9\u05E0\u05D9\u05DD", "\u05DE\u05D9\u05D3\u05D5\u05EA",
 			"\u05E0\u05D3\u05D4" };
+	
+	private static String[] masechtosYerushalmiTransliterated = { "Berachos", "Pe'ah", "Demai", "Kilayim", "Shevi'is",
+			"Terumos", "Ma'asros", "Ma'aser Sheni", "Chalah", "Orlah", "Bikurim", "Shabbos", "Eruvin", "Pesachim",
+			"Beitzah", "Rosh Hashanah", "Yoma", "Sukah", "Ta'anis", "Shekalim", "Megilah", "Chagigah", "Moed Katan",
+			"Yevamos", "Kesuvos", "Sotah", "Nedarim", "Nazir", "Gitin", "Kidushin", "Bava Kama", "Bava Metzia",
+			"Bava Basra", "Sanhedrin", "Makos", "Shevuos", "Avodah Zarah", "Horayos", "Nidah", "No Daf Today" };
+	
+	
+	private static String[] masechtosYerushlmi = { "\u05d1\u05e8\u05db\u05d5\u05ea","\u05e4\u05d9\u05d0\u05d4",
+			"\u05d3\u05de\u05d0\u05d9","\u05db\u05dc\u05d0\u05d9\u05d9\u05dd","\u05e9\u05d1\u05d9\u05e2\u05d9\u05ea",
+			"\u05ea\u05e8\u05d5\u05de\u05d5\u05ea","\u05de\u05e2\u05e9\u05e8\u05d5\u05ea","\u05de\u05e2\u05e9\u05e8 \u05e9\u05e0\u05d9",
+			"\u05d7\u05dc\u05d4","\u05e2\u05d5\u05e8\u05dc\u05d4","\u05d1\u05d9\u05db\u05d5\u05e8\u05d9\u05dd",
+			"\u05e9\u05d1\u05ea","\u05e2\u05d9\u05e8\u05d5\u05d1\u05d9\u05df","\u05e4\u05e1\u05d7\u05d9\u05dd",
+			"\u05d1\u05d9\u05e6\u05d4","\u05e8\u05d0\u05e9 \u05d4\u05e9\u05e0\u05d4","\u05d9\u05d5\u05de\u05d0",
+			"\u05e1\u05d5\u05db\u05d4","\u05ea\u05e2\u05e0\u05d9\u05ea","\u05e9\u05e7\u05dc\u05d9\u05dd","\u05de\u05d2\u05d9\u05dc\u05d4",
+			"\u05d7\u05d2\u05d9\u05d2\u05d4","\u05de\u05d5\u05e2\u05d3 \u05e7\u05d8\u05df","\u05d9\u05d1\u05de\u05d5\u05ea",
+			"\u05db\u05ea\u05d5\u05d1\u05d5\u05ea","\u05e1\u05d5\u05d8\u05d4","\u05e0\u05d3\u05e8\u05d9\u05dd","\u05e0\u05d6\u05d9\u05e8",
+			"\u05d2\u05d9\u05d8\u05d9\u05df","\u05e7\u05d9\u05d3\u05d5\u05e9\u05d9\u05df","\u05d1\u05d1\u05d0 \u05e7\u05de\u05d0",
+			"\u05d1\u05d1\u05d0 \u05de\u05e6\u05d9\u05e2\u05d0","\u05d1\u05d1\u05d0 \u05d1\u05ea\u05e8\u05d0",
+			"\u05e9\u05d1\u05d5\u05e2\u05d5\u05ea","\u05de\u05db\u05d5\u05ea","\u05e1\u05e0\u05d4\u05d3\u05e8\u05d9\u05df",
+			"\u05e2\u05d1\u05d5\u05d3\u05d4 \u05d6\u05e8\u05d4","\u05d4\u05d5\u05e8\u05d9\u05d5\u05ea","\u05e0\u05d9\u05d3\u05d4",
+			"\u05d0\u05d9\u05df \u05d3\u05e3 \u05d4\u05d9\u05d5\u05dd" };
 
 	/**
 	 * @return the masechtaNumber
@@ -122,4 +144,29 @@ public class Daf {
 	public String getMasechta() {
 		return masechtosBavli[masechtaNumber];
 	}
+
+	/**
+	 * Returns the transliterated name of the masechta (tractate) of the Daf Yomi in Yerushalmi. The list of mashechtos is:  Berachos ,
+	 * Pe'ah ,  Demai ,  Kilayim ,  Shevi'is ,  Terumos ,  Ma'asros ,  Ma'aser Sheni ,  Chalah ,  Orlah ,  Bikurim ,  Shabbos ,
+	 * Eruvin ,  Pesachim ,  Beitzah ,  Rosh Hashanah ,  Yoma ,  Sukah ,  Ta'anis ,  Shekalim ,  Megilah ,  Chagigah , 
+	 * Moed Katan ,  Yevamos ,  Kesuvos ,  Sotah ,  Nedarim ,  Nazir ,  Gitin ,  Kidushin ,  Bava Kama ,  Bava Metzia ,
+	 * Bava Basra ,  Sanhedrin ,  Makos ,  Shevuos ,  Avodah Zarah ,  Horayos ,  And Nidah .
+	 * 
+	 * @return the transliterated name of the masechta (tractate) of the Daf Yomi such as Berachos.
+	 */
+	public String getYerushlmiMasechtaTransliterated() {
+		return masechtosYerushalmiTransliterated[masechtaNumber];
+	}
+
+	/**
+	 * Returns the Yerushlmi masechta (tractate) of the Daf Yomi in Hebrew, It will return
+	 * &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 * 
+	 * @return the Yerushalmi masechta (tractate) of the Daf Yomi in Hebrew, It will return
+	 *         &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 */
+	public String getYerushalmiMasechta() {
+		return masechtosYerushlmi[masechtaNumber];
+	}
+
 }

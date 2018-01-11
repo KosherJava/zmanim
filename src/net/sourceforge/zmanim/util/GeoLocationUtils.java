@@ -72,13 +72,13 @@ public class GeoLocationUtils {
 	 * Calculate <a
 	 * href="http://en.wikipedia.org/wiki/Great-circle_distance">geodesic
 	 * distance</a> in Meters between this Object and a second Object passed to
-	 * this method using <a
-	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a>
-	 * inverse formula See T Vincenty, "<a
-	 * href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse
+	 * this method using the <a
+	 * href="https://en.wikipedia.org/wiki/Vincenty%27s_formulae">Thaddeus Vincenty formulae</a>.
+	 * See T Vincenty, "<a href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse
 	 * Solutions of Geodesics on the Ellipsoid with application of nested
 	 * equations</a>", Survey Review, vol XXII no 176, 1975.
 	 *
+	 * This uses the WGS-84 geodetic model
 	 * @param location
 	 *            the initial location
 	 * @param destination
@@ -98,7 +98,8 @@ public class GeoLocationUtils {
 	 * inverse formula See T Vincenty, "<a
 	 * href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse
 	 * Solutions of Geodesics on the Ellipsoid with application of nested
-	 * equations</a>", Survey Review, vol XXII no 176, 1975.
+	 * equations</a>", Survey Review, vol XXII no 176, 1975. This uses
+	 * the <a href="https://en.wikipedia.org/wiki/World_Geodetic_System#A_new_World_Geodetic_System:_WGS_84">WGS-84 geodetic model</a>.
 	 *
 	 * @param location
 	 *            the initial location
@@ -110,14 +111,12 @@ public class GeoLocationUtils {
 	 * @param the geodesic distance, initial or final bearing (based on the formula passed in)
 	 */
 	private static double vincentyFormula(GeoLocation location, GeoLocation destination, int formula) {
-		double a = 6378137;
-		double b = 6356752.3142;
-		double f = 1 / 298.257223563; // WGS-84 ellipsoid
-		double L = Math.toRadians(destination.getLongitude() - location.getLongitude());
-		double U1 = Math
-				.atan((1 - f) * Math.tan(Math.toRadians(location.getLatitude())));
-		double U2 = Math.atan((1 - f)
-				* Math.tan(Math.toRadians(destination.getLatitude())));
+		double a = 6378137; // length of semi-major axis of the ellipsoid (radius at equator) in metres based on WGS-84
+		double b = 6356752.3142; // length of semi-minor axis of the ellipsoid (radius at the poles) in meters based on WGS-84
+		double f = 1 / 298.257223563; // flattening of the ellipsoid based on WGS-84
+		double L = Math.toRadians(destination.getLongitude() - location.getLongitude()); //difference in longitude of two points;
+		double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(location.getLatitude()))); // reduced latitude (latitude on the auxiliary sphere)
+		double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(destination.getLatitude()))); // reduced latitude (latitude on the auxiliary sphere)
 		double sinU1 = Math.sin(U1), cosU1 = Math.cos(U1);
 		double sinU2 = Math.sin(U2), cosU2 = Math.cos(U2);
 
@@ -147,7 +146,7 @@ public class GeoLocationUtils {
 			cosSqAlpha = 1 - sinAlpha * sinAlpha;
 			cos2SigmaM = cosSigma - 2 * sinU1 * sinU2 / cosSqAlpha;
 			if (Double.isNaN(cos2SigmaM))
-				cos2SigmaM = 0; // equatorial line: cosSqAlpha=0 (§6)
+				cos2SigmaM = 0; // equatorial line: cosSqAlpha=0 (Â§6)
 			C = f / 16 * cosSqAlpha * (4 + f * (4 - 3 * cosSqAlpha));
 			lambdaP = lambda;
 			lambda = L
@@ -234,7 +233,7 @@ public class GeoLocationUtils {
 				/ Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4));
 		double q = (Math.abs(dLat) > 1e-10) ? dLat / dPhi : Math.cos(Math
 				.toRadians(location.getLatitude()));
-		// if dLon over 180° take shorter rhumb across 180° meridian:
+		// if dLon over 180Â° take shorter rhumb across 180Â° meridian:
 		if (dLon > Math.PI)
 			dLon = 2 * Math.PI - dLon;
 		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);
