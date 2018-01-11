@@ -476,10 +476,147 @@ public class ZmanimFormatter {
 		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
 			sb.append("</Zmanim>");
 		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
-			sb.append("</Basic>");
+			sb.append("</BasicZmanim>");
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * A method that returns a JSON formatted <code>String</code> representing the serialized <code>Object</code>. The
+	 * format used is:
+	 * <pre>
+	 * {
+	 *    &quot;metadata&quot;:{
+	 *      &quot;date&quot;:&quot;1969-02-08&quot;,
+	 *      &quot;type&quot;:&quot;net.sourceforge.zmanim.AstronomicalCalendar&quot;,
+	 *      &quot;algorithm&quot;:&quot;US Naval Almanac Algorithm&quot;,
+	 *      &quot;location&quot;:&quot;Lakewood, NJ&quot;,
+	 *      &quot;latitude&quot;:&quot;40.095965&quot;,
+	 *      &quot;longitude&quot;:&quot;-74.22213&quot;,
+	 *      &quot;elevation:&quot;31.0&quot;,
+	 *      &quot;timeZoneName&quot;:&quot;Eastern Standard Time&quot;,
+	 *      &quot;timeZoneID&quot;:&quot;America/New_York&quot;,
+	 *      &quot;timeZoneOffset&quot;:&quot;-5&quot;},
+	 *    &quot;AstronomicalTimes&quot;:{
+	 *     &quot;Sunrise&quot;:&quot;2007-02-18T06:45:27-05:00&quot;,
+	 *     &quot;TemporalHour&quot;:&quot;PT54M17.529S&quot;
+	 *     ...
+	 *     }
+	 * }
+	 * </pre>
+	 * 
+	 * Note that the output uses the <a href="http://www.w3.org/TR/xmlschema11-2/#dateTime">xsd:dateTime</a> format for
+	 * times such as sunrise, and <a href="http://www.w3.org/TR/xmlschema11-2/#duration">xsd:duration</a> format for
+	 * times that are a duration such as the length of a
+	 * {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
+	 * 
+	 * @param astronomicalCalendar the AstronomicalCalendar Object
+	 * 
+	 * @return The JSON formatted <code>String</code>. The format will be:
+	 * <pre>
+	 * {
+	 *    &quot;metadata&quot;:{
+	 *      &quot;date&quot;:&quot;1969-02-08&quot;,
+	 *      &quot;type&quot;:&quot;net.sourceforge.zmanim.AstronomicalCalendar&quot;,
+	 *      &quot;algorithm&quot;:&quot;US Naval Almanac Algorithm&quot;,
+	 *      &quot;location&quot;:&quot;Lakewood, NJ&quot;,
+	 *      &quot;latitude&quot;:&quot;40.095965&quot;,
+	 *      &quot;longitude&quot;:&quot;-74.22213&quot;,
+	 *      &quot;elevation:&quot;31.0&quot;,
+	 *      &quot;timeZoneName&quot;:&quot;Eastern Standard Time&quot;,
+	 *      &quot;timeZoneID&quot;:&quot;America/New_York&quot;,
+	 *      &quot;timeZoneOffset&quot;:&quot;-5&quot;},
+	 *    &quot;AstronomicalTimes&quot;:{
+	 *     &quot;Sunrise&quot;:&quot;2007-02-18T06:45:27-05:00&quot;,
+	 *     &quot;TemporalHour&quot;:&quot;PT54M17.529S&quot;
+	 *     ...
+	 *     }
+	 * }
+	 * </pre>
+	 */
+	public static String toJSON(AstronomicalCalendar astronomicalCalendar) {
+		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, new SimpleDateFormat(
+				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getTimeZone());
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		df.setTimeZone(astronomicalCalendar.getGeoLocation().getTimeZone());
+
+		StringBuffer sb = new StringBuffer("{\n\"metadata\":{\n");
+		sb.append("\t\"date\":\"").append(df.format(astronomicalCalendar.getCalendar().getTime())).append("\",\n");
+		sb.append("\t\"type\":\"").append(astronomicalCalendar.getClass().getName()).append("\",\n");
+		sb.append("\t\"algorithm\":\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\",\n");
+		sb.append("\t\"location\":\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\",\n");
+		sb.append("\t\"latitude\":\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\",\n");
+		sb.append("\t\"longitude\":\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\",\n");
+		sb.append("\t\"elevation\":\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\",\n");
+		sb.append("\t\"timeZoneName\":\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getDisplayName()).append("\",\n");
+		sb.append("\t\"timeZoneID\":\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getID()).append("\",\n");
+		sb.append("\t\"timeZoneOffset\":\"")
+				.append((astronomicalCalendar.getGeoLocation().getTimeZone().getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
+				.append("\"");
+
+		sb.append("},\n\"");
+		
+		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
+			sb.append("AstronomicalTimes");
+		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
+			sb.append("Zmanim");
+		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
+			sb.append("BasicZmanim");
+		}
+		sb.append("\":{\n");
+		Method[] theMethods = astronomicalCalendar.getClass().getMethods();
+		String tagName = "";
+		Object value = null;
+		List<Zman> dateList = new ArrayList<Zman>();
+		List<Zman> durationList = new ArrayList<Zman>();
+		List<String> otherList = new ArrayList<String>();
+		for (int i = 0; i < theMethods.length; i++) {
+			if (includeMethod(theMethods[i])) {
+				tagName = theMethods[i].getName().substring(3);
+				// String returnType = theMethods[i].getReturnType().getName();
+				try {
+					value = theMethods[i].invoke(astronomicalCalendar, (Object[]) null);
+					if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
+						otherList.add("\"" + tagName + "\":\"N/A\",");
+					} else if (value instanceof Date) {
+						dateList.add(new Zman((Date) value, tagName));
+					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
+						if (((Long) value).longValue() == Long.MIN_VALUE) {
+							otherList.add("\"" + tagName + "\":\"N/A\"");
+						} else {
+							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
+						}
+					} else { // will probably never enter this block, but is present to be future proof
+						otherList.add("\"" + tagName + "\":\"" + value + "\",");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Zman zman;
+		Collections.sort(dateList, Zman.DATE_ORDER);
+		for (int i = 0; i < dateList.size(); i++) {
+			zman = (Zman) dateList.get(i);
+			sb.append("\t\"").append(zman.getZmanLabel()).append("\":\"");
+			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
+			sb.append("\",\n");
+		}
+		Collections.sort(durationList, Zman.DURATION_ORDER);
+		for (int i = 0; i < durationList.size(); i++) {
+			zman = (Zman) durationList.get(i);
+			sb.append("\t\"" + zman.getZmanLabel()).append("\":\"");
+			sb.append(formatter.format((int) zman.getDuration())).append("\",\n");
+		}
+
+		for (int i = 0; i < otherList.size(); i++) {// will probably never enter this block
+			sb.append("\t").append(otherList.get(i)).append("\n");
+		}
+		sb.setLength(sb.length() - 2);
+		sb.append("}\n}");
+		return sb.toString();
+	}
+
 
 	/**
 	 * Determines if a method should be output by the {@link #toXML(AstronomicalCalendar)}
