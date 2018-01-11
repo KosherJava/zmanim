@@ -17,9 +17,10 @@ package net.sourceforge.zmanim;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
 import net.sourceforge.zmanim.util.AstronomicalCalculator;
 import net.sourceforge.zmanim.util.GeoLocation;
-import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
 
 /**
  * This class extends ZmanimCalendar and provides many more zmanim than available in the ZmanimCalendar. The basis for
