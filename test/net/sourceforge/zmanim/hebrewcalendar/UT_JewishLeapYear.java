@@ -6,6 +6,7 @@ package net.sourceforge.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -64,6 +65,19 @@ public class UT_JewishLeapYear {
 		jewishDate.setJewishYear(year);
 
 		assertFalse(jewishDate.isJewishLeapYear(  ));
+	}
+
+	@Test
+	public void icu() {
+		for (int y = 0; y < 10000; y++) {
+			assertEquals(isLeapYearICU(y), JewishDate.isJewishLeapYear(y));
+		}
+	}
+
+	/** android.icu.util.HebrewCalendar */
+	public static boolean isLeapYearICU(int year) {
+		int x = (year * 12 + 17) % 19;
+		return x >= ((x < 0) ? -7 : 12);
 	}
 
 } // End of UT_JewishLeapYear class

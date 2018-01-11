@@ -405,7 +405,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return true if it is a leap year
 	 * @see #isJewishLeapYear()
 	 */
-	private static boolean isJewishLeapYear(int year) {
+	public static boolean isJewishLeapYear(int year) {
 		return ((7 * year) + 1) % 19 < 7;
 	}
 
@@ -445,7 +445,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *         evening).
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
-		long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);
+		long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);
 		int moladDay = (int) (chalakimSince / (long) CHALAKIM_PER_DAY);
 		int moladParts = (int) (chalakimSince - moladDay * (long) CHALAKIM_PER_DAY);
 		// delay Rosh Hashana for the 4 dechiyos
@@ -557,7 +557,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the Jewish month of the year starting with Tishrei
 	 */
 	private static int getJewishMonthOfYear(int year, int month) {
-		boolean isLeapYear = JewishDate.isJewishLeapYear(year);
+		boolean isLeapYear = isJewishLeapYear(year);
 		return (month + (isLeapYear ? 6 : 5)) % (isLeapYear ? 13 : 12) + 1;
 	}
 
@@ -893,7 +893,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
-		// long chalakimSince = getChalakimSinceMoladTohu(year, JewishDate.TISHREI);// tishrei
+		// long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);// tishrei
 		int conjunctionDay = (int) (molad / (long) CHALAKIM_PER_DAY);
 		int conjunctionParts = (int) (molad - conjunctionDay * (long) CHALAKIM_PER_DAY);
 		setMoladTime(conjunctionParts);
