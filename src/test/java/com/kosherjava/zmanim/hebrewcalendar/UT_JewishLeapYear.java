@@ -4,6 +4,9 @@
 
 package com.kosherjava.zmanim.hebrewcalendar;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.*;
 
 /**
@@ -52,7 +55,7 @@ public class UT_JewishLeapYear {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		assertTrue(jewishDate.isJewishLeapYear());
 	}
 
 
@@ -60,7 +63,7 @@ public class UT_JewishLeapYear {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isJewishLeapYear(  ));
+		assertFalse(jewishDate.isJewishLeapYear());
 	}
 
 } // End of UT_JewishLeapYear class
