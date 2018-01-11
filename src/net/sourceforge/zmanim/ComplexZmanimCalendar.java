@@ -89,16 +89,6 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
-    public static final int SHAAH_ZMANIS_120MINUTES = 2;
-    public static final int SHAAH_ZMANIS_16POINT1DEGREES = 3;
-    public static final int SHAAH_ZMANIS_18DEGREES = 4;
-    public static final int SHAAH_ZMANIS_19POINT8DEGREES = 5;
-    public static final int SHAAH_ZMANIS_26DEGREES = 6;
-    public static final int SHAAH_ZMANIS_60MINUTES = 7;
-    public static final int SHAAH_ZMANIS_72MINUTES = 8;
-    public static final int SHAAH_ZMANIS_90MINUTES = 9;
-    public static final int SHAAH_ZMANIS_96MINUTES = 10;
-
 	/**
 	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> that <em>tzais</em> is the
@@ -526,23 +516,23 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	@Override
 	public long getShaahZmanis() {
 		switch (shaahZmanisType) {
-			case SHAAH_ZMANIS_120MINUTES:
+			case MINUTES_120:
 				return getShaahZmanis120Minutes();
-			case SHAAH_ZMANIS_16POINT1DEGREES:
+			case DEGREES_16POINT1:
 				return getShaahZmanis16Point1Degrees();
-			case SHAAH_ZMANIS_18DEGREES:
+			case DEGREES_18:
 				return getShaahZmanis18Degrees();
-			case SHAAH_ZMANIS_19POINT8DEGREES:
+			case DEGREES_19POINT8:
 				return getShaahZmanis19Point8Degrees();
-			case SHAAH_ZMANIS_26DEGREES:
+			case DEGREES_26:
 				return getShaahZmanis26Degrees();
-			case SHAAH_ZMANIS_60MINUTES:
+			case MINUTES_60:
 				return getShaahZmanis60Minutes();
-			case SHAAH_ZMANIS_72MINUTES:
+			case MINUTES_72:
 				return getShaahZmanis72Minutes();
-			case SHAAH_ZMANIS_90MINUTES:
+			case MINUTES_90:
 				return getShaahZmanis90Minutes();
-			case SHAAH_ZMANIS_96MINUTES:
+			case MINUTES_96:
 				return getShaahZmanis96Minutes();
 			default:
 				return super.getShaahZmanis();
