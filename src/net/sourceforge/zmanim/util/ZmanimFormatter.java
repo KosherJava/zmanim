@@ -478,7 +478,7 @@ public class ZmanimFormatter {
 		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
 			sb.append("</Zmanim>");
 		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
-			sb.append("</Basic>");
+			sb.append("</BasicZmanim>");
 		}
 		return sb.toString();
 	}

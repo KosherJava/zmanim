@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 Eliyahu Hershfeld
+ * Copyright (C) 2011-2017 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -16,7 +16,6 @@
 package net.sourceforge.zmanim.hebrewcalendar;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -24,15 +23,14 @@ import java.util.GregorianCalendar;
  * may cover Yerushalmi, Mishna Yomis etc in the future.
  * 
  * @author &copy; Bob Newell (original C code)
- * @author &copy; Eliyahu Hershfeld 2011 - 2015
- * @version 0.0.1
+ * @author &copy; Eliyahu Hershfeld 2011 - 2017
  */
 public class YomiCalculator {
 
-	private static Date dafYomiStartDate = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11).getTime();
-	private static int dafYomiJulianStartDay = getJulianDay(dafYomiStartDate);
-	private static Date shekalimChangeDate = new GregorianCalendar(1975, Calendar.JUNE, 24).getTime();
-	private static int shekalimJulianChangeDay = getJulianDay(shekalimChangeDate);
+	private static Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
+	private static int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
+	private static Calendar shekalimChangeDay = new GregorianCalendar(1975, Calendar.JUNE, 24);
+	private static int shekalimJulianChangeDay = getJulianDay(shekalimChangeDay);
 
 	/**
 	 * Returns the <a href="http://en.wikipedia.org/wiki/Daf_yomi">Daf Yomi</a> <a
@@ -49,14 +47,15 @@ public class YomiCalculator {
 	 * cycle beginning on June 24, 1975 the length of the Yerushalmi shekalim was changed from 13 to 22 daf to follow
 	 * the Vilna Shas that is in common use today.
 	 * 
-	 * @param calendar
-	 *            the calendar date for calculation
+	 * @param jewishCalendar
+	 *            The JewishCalendar date for calculation. TODO: this can be changed to use a regular GregorianCalendar since
+	 *            there is nothing specific to the JewishCalendar in this class.
 	 * @return the {@link Daf}.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             if the date is prior to the September 11, 1923 start date of the first Daf Yomi cycle
 	 */
-	public static Daf getDafYomiBavli(JewishCalendar calendar) {
+	public static Daf getDafYomiBavli(JewishCalendar jewishCalendar) {
 		/*
 		 * The number of daf per masechta. Since the number of blatt in Shekalim changed on the 8th Daf Yomi cycle
 		 * beginning on June 24, 1975 from 13 to 22, the actual calculation for blattPerMasechta[4] will later be
@@ -64,18 +63,18 @@ public class YomiCalculator {
 		 */
 		int[] blattPerMasechta = { 64, 157, 105, 121, 22, 88, 56, 40, 35, 31, 32, 29, 27, 122, 112, 91, 66, 49, 90, 82,
 				119, 119, 176, 113, 24, 49, 76, 14, 120, 110, 142, 61, 34, 34, 28, 22, 4, 10, 4, 73 };
-		Date date = calendar.getGregorianCalendar().getTime();
+		Calendar calendar = jewishCalendar.getGregorianCalendar();
 
 		Daf dafYomi = null;
-		int julianDay = getJulianDay(date);
+		int julianDay = getJulianDay(calendar);
 		int cycleNo = 0;
 		int dafNo = 0;
-		if (date.before(dafYomiStartDate)) {
+		if (calendar.before(dafYomiStartDay)) {
 			// TODO: should we return a null or throw an IllegalArgumentException?
-			throw new IllegalArgumentException(date + " is prior to organized Daf Yomi Bavli cycles that started on "
-					+ dafYomiStartDate);
+			throw new IllegalArgumentException(calendar + " is prior to organized Daf Yomi Bavli cycles that started on "
+					+ dafYomiStartDay);
 		}
-		if (date.equals(shekalimChangeDate) || date.after(shekalimChangeDate)) {
+		if (calendar.equals(shekalimChangeDay) || calendar.after(shekalimChangeDay)) {
 			cycleNo = 8 + ((julianDay - shekalimJulianChangeDay) / 2711);
 			dafNo = ((julianDay - shekalimJulianChangeDay) % 2711);
 		} else {
@@ -116,15 +115,13 @@ public class YomiCalculator {
 	}
 
 	/**
-	 * Return the <a href="http://en.wikipedia.org/wiki/Julian_day">Julian day</a> from a Java Date.
+	 * Return the <a href="http://en.wikipedia.org/wiki/Julian_day">Julian day</a> from a Java Calendar.
 	 * 
-	 * @param date
-	 *            The Java Date
+	 * @param calendar
+	 *            The Java Calendar of the date to be calculated
 	 * @return the Julian day number corresponding to the date
 	 */
-	private static int getJulianDay(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
+	private static int getJulianDay(Calendar calendar) {
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH) + 1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);

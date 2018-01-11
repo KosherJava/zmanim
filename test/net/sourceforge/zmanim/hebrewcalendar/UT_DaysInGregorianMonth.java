@@ -12,7 +12,7 @@ import java.util.Calendar;
  * Verify the calculation of the number of days in a month. Not too hard...just the rules about when February
  *  has 28 or 29 days...
  */
-@SuppressWarnings( { "MagicNumber" } )
+@SuppressWarnings({ "MagicNumber" })
 public class UT_DaysInGregorianMonth {
 
 
@@ -22,11 +22,11 @@ public class UT_DaysInGregorianMonth {
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
-		cal.set( Calendar.YEAR, 2011 );
-		cal.set( Calendar.MONTH, Calendar.JANUARY );
-		hebrewDate.setDate( cal );
+		cal.set(Calendar.YEAR, 2011);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
+		hebrewDate.setDate(cal);
 
-		assertDaysInMonth( false, hebrewDate );
+		assertDaysInMonth(false, hebrewDate);
 	}
 
 
@@ -37,11 +37,11 @@ public class UT_DaysInGregorianMonth {
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
-		cal.set( Calendar.YEAR, 2012 );
-		cal.set( Calendar.MONTH, Calendar.JANUARY );
-		hebrewDate.setDate( cal );
+		cal.set(Calendar.YEAR, 2012);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
+		hebrewDate.setDate(cal);
 
-		assertDaysInMonth( true, hebrewDate );
+		assertDaysInMonth(true, hebrewDate);
 	}
 
 
@@ -51,11 +51,11 @@ public class UT_DaysInGregorianMonth {
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
-		cal.set( Calendar.YEAR, 2100 );
-		cal.set( Calendar.MONTH, Calendar.JANUARY );
-		hebrewDate.setDate( cal );
+		cal.set(Calendar.YEAR, 2100);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
+		hebrewDate.setDate(cal);
 
-		assertDaysInMonth( false, hebrewDate );
+		assertDaysInMonth(false, hebrewDate);
 	}
 
 
@@ -65,11 +65,11 @@ public class UT_DaysInGregorianMonth {
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
-		cal.set( Calendar.YEAR, 2000 );
-		cal.set( Calendar.MONTH, Calendar.JANUARY );
-		hebrewDate.setDate( cal );
+		cal.set(Calendar.YEAR, 2000);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
+		hebrewDate.setDate(cal);
 
-		assertDaysInMonth( true, hebrewDate );
+		assertDaysInMonth(true, hebrewDate);
 	}
 
 
@@ -78,7 +78,7 @@ public class UT_DaysInGregorianMonth {
 		JewishDate  hebrewDate
 	) {
 
-		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.JANUARY ) );
+		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.JANUARY) );
 		Assert.assertEquals( febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.FEBRUARY ) );
 		Assert.assertEquals( 31, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.MARCH ) );
 		Assert.assertEquals( 30, hebrewDate.getLastDayOfGregorianMonth( 1 + Calendar.APRIL ) );

@@ -216,7 +216,7 @@ public class JewishCalendar extends JewishDate {
 				}
 				if (isUseModernHolidays()
 						&& ((day == 26 && dayOfWeek == 5)
-						|| (day == 28 && dayOfWeek == 1)
+						|| (day == 28 && dayOfWeek == 2)
 						|| (day == 27 && dayOfWeek != 1 && dayOfWeek != 6))) {
 					return YOM_HASHOAH;
 				}
@@ -619,6 +619,17 @@ public class JewishCalendar extends JewishDate {
 	public Daf getDafYomiBavli() {
 		return YomiCalculator.getDafYomiBavli(this);
 	}
+	/**
+	 * Returns the Daf Yomi (Yerushalmi) for the date that the calendar is set to. See the
+	 * {@link HebrewDateFormatter#formatDafYomiYerushalmi(Daf)} for the ability to format the daf in Hebrew or transliterated
+	 * masechta names.
+	 *
+	 * @return the daf as a {@link Daf}
+	 */
+	public Daf getDafYomiYerushalmi() {
+		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
+	}
+
 
 	@Override
 	public boolean equals(Object object) {
