@@ -80,18 +80,18 @@ public class UT_DaysInGregorianMonth {
 		JewishDate  hebrewDate
 	) {
 
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_JANUARY));
-		assertEquals(febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_FEBRUARY));
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_MARCH));
-		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_APRIL));
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_MAY));
-		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_JUNE));
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_JULY));
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_AUGUST));
-		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_SEPTEMBER));
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_OCTOBER));
-		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_NOVEMBER));
-		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_DECEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.JANUARY));
+		assertEquals(febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth(Calendar.FEBRUARY));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.MARCH));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.APRIL));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.MAY));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.JUNE));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.JULY));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.AUGUST));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.SEPTEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.OCTOBER));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.NOVEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.DECEMBER));
 	}
 
 
