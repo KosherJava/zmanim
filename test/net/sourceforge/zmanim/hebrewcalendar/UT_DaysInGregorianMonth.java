@@ -8,6 +8,8 @@ import org.junit.*;
 
 import java.util.Calendar;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Verify the calculation of the number of days in a month. Not too hard...just the rules about when February
  *  has 28 or 29 days...
@@ -78,18 +80,18 @@ public class UT_DaysInGregorianMonth {
 		JewishDate  hebrewDate
 	) {
 
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(1));
-		Assert.assertEquals(febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth(2));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(3));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(4));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(5));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(6));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(7));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(8));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(9));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(10));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(11));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(12));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_JANUARY));
+		assertEquals(febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_FEBRUARY));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_MARCH));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_APRIL));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_MAY));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_JUNE));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_JULY));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_AUGUST));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_SEPTEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_OCTOBER));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_NOVEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(JewishDate.MONTH_DECEMBER));
 	}
 
 

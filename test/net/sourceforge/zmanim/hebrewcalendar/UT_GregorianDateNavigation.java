@@ -4,10 +4,11 @@
 
 package net.sourceforge.zmanim.hebrewcalendar;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Calendar;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Checks that we can roll forward & backward the gregorian dates...
@@ -24,121 +25,121 @@ public class UT_GregorianDateNavigation {
 		cal.set(Calendar.DATE, 31);
 
 		JewishDate hebrewDate = new JewishDate(cal);
-		Assert.assertEquals(5771, hebrewDate.getJewishYear());
-		Assert.assertEquals(11, hebrewDate.getJewishMonth());
-		Assert.assertEquals(26, hebrewDate.getJewishDayOfMonth());
+		assertEquals(5771, hebrewDate.getJewishYear());
+		assertEquals(JewishDate.SHEVAT, hebrewDate.getJewishMonth());
+		assertEquals(26, hebrewDate.getJewishDayOfMonth());
 
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.FEBRUARY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(11, hebrewDate.getJewishMonth());
-		Assert.assertEquals(27, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.FEBRUARY, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.SHEVAT, hebrewDate.getJewishMonth());
+		assertEquals(27, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.FEBRUARY);
 		cal.set(Calendar.DATE, 28);
 		hebrewDate.setDate(cal);
-		Assert.assertEquals(Calendar.FEBRUARY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(28, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(12, hebrewDate.getJewishMonth());
-		Assert.assertEquals(24, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.FEBRUARY, hebrewDate.getGregorianMonth());
+		assertEquals(28, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.ADAR, hebrewDate.getJewishMonth());
+		assertEquals(24, hebrewDate.getJewishDayOfMonth());
 
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.MARCH, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(12, hebrewDate.getJewishMonth());
-		Assert.assertEquals(25, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.MARCH, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.ADAR, hebrewDate.getJewishMonth());
+		assertEquals(25, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.MARCH);
 		cal.set(Calendar.DATE, 31);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.APRIL, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(13, hebrewDate.getJewishMonth());
-		Assert.assertEquals(26, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.APRIL, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.ADAR_II, hebrewDate.getJewishMonth());
+		assertEquals(26, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.APRIL);
 		cal.set(Calendar.DATE, 30);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.MAY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(1, hebrewDate.getJewishMonth());
-		Assert.assertEquals(27, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.MAY, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.NISSAN, hebrewDate.getJewishMonth());
+		assertEquals(27, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.MAY);
 		cal.set(Calendar.DATE, 31);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.JUNE, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(2, hebrewDate.getJewishMonth());
-		Assert.assertEquals(28, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.JUNE, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.IYAR, hebrewDate.getJewishMonth());
+		assertEquals(28, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.JUNE);
 		cal.set(Calendar.DATE, 30);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.JULY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(3, hebrewDate.getJewishMonth());
-		Assert.assertEquals(29, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.JULY, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.SIVAN, hebrewDate.getJewishMonth());
+		assertEquals(29, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.JULY);
 		cal.set(Calendar.DATE, 31);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.AUGUST, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(5, hebrewDate.getJewishMonth());
-		Assert.assertEquals(1, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.AUGUST, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.AV, hebrewDate.getJewishMonth());
+		assertEquals(1, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.AUGUST);
 		cal.set(Calendar.DATE, 31);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.SEPTEMBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(6, hebrewDate.getJewishMonth());
-		Assert.assertEquals(2, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.SEPTEMBER, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.ELUL, hebrewDate.getJewishMonth());
+		assertEquals(2, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
 		cal.set(Calendar.DATE, 30);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.OCTOBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(7, hebrewDate.getJewishMonth());
-		Assert.assertEquals(3, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.OCTOBER, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.TISHREI, hebrewDate.getJewishMonth());
+		assertEquals(3, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.OCTOBER);
 		cal.set(Calendar.DATE, 31);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.NOVEMBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(5772, hebrewDate.getJewishYear());
-		Assert.assertEquals(8, hebrewDate.getJewishMonth());
-		Assert.assertEquals(4, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.NOVEMBER, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(5772, hebrewDate.getJewishYear());
+		assertEquals(JewishDate.CHESHVAN, hebrewDate.getJewishMonth());
+		assertEquals(4, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.NOVEMBER);
 		cal.set(Calendar.DATE, 30);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(Calendar.DECEMBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(9, hebrewDate.getJewishMonth());
-		Assert.assertEquals(5, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.DECEMBER, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.KISLEV, hebrewDate.getJewishMonth());
+		assertEquals(5, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.MONTH, Calendar.DECEMBER);
 		cal.set(Calendar.DATE, 31);
 		hebrewDate.setDate(cal);
 		hebrewDate.forward();
-		Assert.assertEquals(2012, hebrewDate.getGregorianYear());
-		Assert.assertEquals(Calendar.JANUARY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(1, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(10, hebrewDate.getJewishMonth());
-		Assert.assertEquals(6, hebrewDate.getJewishDayOfMonth());
+		assertEquals(2012, hebrewDate.getGregorianYear());
+		assertEquals(Calendar.JANUARY, hebrewDate.getGregorianMonth());
+		assertEquals(1, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.TEVES, hebrewDate.getJewishMonth());
+		assertEquals(6, hebrewDate.getJewishDayOfMonth());
 	}
 
 
@@ -152,112 +153,116 @@ public class UT_GregorianDateNavigation {
 
 		JewishDate hebrewDate = new JewishDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(2010, hebrewDate.getGregorianYear());
-		Assert.assertEquals(Calendar.DECEMBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(10, hebrewDate.getJewishMonth());
-		Assert.assertEquals(24, hebrewDate.getJewishDayOfMonth());
+		assertEquals(2010, hebrewDate.getGregorianYear());
+		assertEquals(Calendar.DECEMBER, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.TEVES, hebrewDate.getJewishMonth());
+		assertEquals(24, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.DECEMBER);
 		cal.set(Calendar.YEAR, 2010);
 		hebrewDate.setDate(cal);
+		assertEquals(5771, hebrewDate.getJewishYear());
+		assertEquals(JewishDate.KISLEV, hebrewDate.getJewishMonth());
+		assertEquals(24, hebrewDate.getJewishDayOfMonth());
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.NOVEMBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(30, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(9, hebrewDate.getJewishMonth());
-		Assert.assertEquals(23, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.NOVEMBER, hebrewDate.getGregorianMonth());
+		assertEquals(30, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(5771, hebrewDate.getJewishYear());
+		assertEquals(JewishDate.KISLEV, hebrewDate.getJewishMonth());
+		assertEquals(23, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.NOVEMBER);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.OCTOBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(8, hebrewDate.getJewishMonth());
-		Assert.assertEquals(23, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.OCTOBER, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.CHESHVAN, hebrewDate.getJewishMonth());
+		assertEquals(23, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.OCTOBER);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.SEPTEMBER, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(30, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(7, hebrewDate.getJewishMonth());
-		Assert.assertEquals(22, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.SEPTEMBER, hebrewDate.getGregorianMonth());
+		assertEquals(30, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.TISHREI, hebrewDate.getJewishMonth());
+		assertEquals(22, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.AUGUST, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(5770, hebrewDate.getJewishYear());
-		Assert.assertEquals(6, hebrewDate.getJewishMonth());
-		Assert.assertEquals(21, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.AUGUST, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(5770, hebrewDate.getJewishYear());
+		assertEquals(JewishDate.ELUL, hebrewDate.getJewishMonth());
+		assertEquals(21, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.AUGUST);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.JULY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(5, hebrewDate.getJewishMonth());
-		Assert.assertEquals(20, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.JULY, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.AV, hebrewDate.getJewishMonth());
+		assertEquals(20, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.JULY);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.JUNE, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(30, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(4, hebrewDate.getJewishMonth());
-		Assert.assertEquals(18, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.JUNE, hebrewDate.getGregorianMonth());
+		assertEquals(30, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.TAMMUZ, hebrewDate.getJewishMonth());
+		assertEquals(18, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.JUNE);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.MAY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(3, hebrewDate.getJewishMonth());
-		Assert.assertEquals(18, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.MAY, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.SIVAN, hebrewDate.getJewishMonth());
+		assertEquals(18, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.MAY);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.APRIL, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(30, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(2, hebrewDate.getJewishMonth());
-		Assert.assertEquals(16, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.APRIL, hebrewDate.getGregorianMonth());
+		assertEquals(30, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.IYAR, hebrewDate.getJewishMonth());
+		assertEquals(16, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.APRIL);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.MARCH, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(1, hebrewDate.getJewishMonth());
-		Assert.assertEquals(16, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.MARCH, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.NISSAN, hebrewDate.getJewishMonth());
+		assertEquals(16, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.MARCH);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.FEBRUARY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(28, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(12, hebrewDate.getJewishMonth());
-		Assert.assertEquals(14, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.FEBRUARY, hebrewDate.getGregorianMonth());
+		assertEquals(28, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.ADAR, hebrewDate.getJewishMonth());
+		assertEquals(14, hebrewDate.getJewishDayOfMonth());
 
 		cal.set(Calendar.DATE, 1);
 		cal.set(Calendar.MONTH, Calendar.FEBRUARY);
 		hebrewDate.setDate(cal);
 		hebrewDate.back();
-		Assert.assertEquals(Calendar.JANUARY, hebrewDate.getGregorianMonth());
-		Assert.assertEquals(31, hebrewDate.getGregorianDayOfMonth());
-		Assert.assertEquals(11, hebrewDate.getJewishMonth());
-		Assert.assertEquals(16, hebrewDate.getJewishDayOfMonth());
+		assertEquals(Calendar.JANUARY, hebrewDate.getGregorianMonth());
+		assertEquals(31, hebrewDate.getGregorianDayOfMonth());
+		assertEquals(JewishDate.SHEVAT, hebrewDate.getJewishMonth());
+		assertEquals(16, hebrewDate.getJewishDayOfMonth());
 
 	}
 

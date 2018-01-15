@@ -8,6 +8,8 @@ import org.junit.*;
 
 import java.util.Calendar;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  *
  */
@@ -19,10 +21,10 @@ public class UT_JewishDateNavigation {
 	public void jewishForwardMonthToMonth() {
 
 		JewishDate jewishDate = new JewishDate();
-		jewishDate.setJewishDate(5771, 1, 1);
-		Assert.assertEquals(5, jewishDate.getGregorianDayOfMonth());
-		Assert.assertEquals(Calendar.APRIL, jewishDate.getGregorianMonth());
-		Assert.assertEquals(2011, jewishDate.getGregorianYear());
+		jewishDate.setJewishDate(5771, JewishDate.NISSAN, 1);
+		assertEquals(5, jewishDate.getGregorianDayOfMonth());
+		assertEquals(Calendar.APRIL, jewishDate.getGregorianMonth());
+		assertEquals(2011, jewishDate.getGregorianYear());
 	}
 
 
@@ -32,10 +34,10 @@ public class UT_JewishDateNavigation {
 		// At one point, this test was failing as the JewishDate class spun through a never-ending loop...
 
 		JewishDate jewishDate = new JewishDate();
-		jewishDate.setJewishDate(5771, 7, 1);
-		Assert.assertEquals(9, jewishDate.getGregorianDayOfMonth());
-		Assert.assertEquals(Calendar.SEPTEMBER, jewishDate.getGregorianMonth());
-		Assert.assertEquals(2010, jewishDate.getGregorianYear());
+		jewishDate.setJewishDate(5771, JewishDate.TISHREI, 1);
+		assertEquals(9, jewishDate.getGregorianDayOfMonth());
+		assertEquals(Calendar.SEPTEMBER, jewishDate.getGregorianMonth());
+		assertEquals(2010, jewishDate.getGregorianYear());
 	}
 
 
