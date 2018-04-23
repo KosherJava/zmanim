@@ -390,7 +390,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         not set, {@link Double#NaN} will be returned. See detailed explanation on top of the page.
 	 */
 	public double getUTCSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(getCalendar(), getGeoLocation(), zenith, true);
+		return getAstronomicalCalculator().getUTCSunrise(getAdjustedCalendar(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSeaLevelSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(getCalendar(), getGeoLocation(), zenith, false);
+		return getAstronomicalCalculator().getUTCSunrise(getAdjustedCalendar(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -423,7 +423,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(getCalendar(), getGeoLocation(), zenith, true);
+		return getAstronomicalCalculator().getUTCSunset(getAdjustedCalendar(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -442,7 +442,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
 	 */
 	public double getUTCSeaLevelSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(getCalendar(), getGeoLocation(), zenith, false);
+		return getAstronomicalCalculator().getUTCSunset(getAdjustedCalendar(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -541,11 +541,12 @@ public class AstronomicalCalendar implements Cloneable {
 		}
 		double calculatedTime = time;
 
+		Calendar copyFrom = getAdjustedCalendar();
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();// clear all fields
-		cal.set(Calendar.YEAR, getCalendar().get(Calendar.YEAR));
-		cal.set(Calendar.MONTH, getCalendar().get(Calendar.MONTH));
-		cal.set(Calendar.DAY_OF_MONTH, getCalendar().get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.YEAR, copyFrom.get(Calendar.YEAR));
+		cal.set(Calendar.MONTH, copyFrom.get(Calendar.MONTH));
+		cal.set(Calendar.DAY_OF_MONTH, copyFrom.get(Calendar.DAY_OF_MONTH));
 
 		int hours = (int) calculatedTime; // retain only the hours
 		calculatedTime -= hours;
@@ -663,6 +664,17 @@ public class AstronomicalCalendar implements Cloneable {
 		result += 37 * result + getGeoLocation().hashCode();
 		result += 37 * result + getAstronomicalCalculator().hashCode();
 		return result;
+	}
+
+	private Calendar getAdjustedCalendar(){
+		int offset = getGeoLocation().getAntimeridianAdjustment();
+		if (offset == 0)
+		{
+			return getCalendar();
+		}
+		Calendar adjustedCalendar = getCalendar().clone();
+		adjustedCalendar.add(Calendar.DAY_OF_MONTH, offset);
+		return adjustedCalendar;
 	}
 
 	/**
