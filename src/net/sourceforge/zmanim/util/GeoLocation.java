@@ -312,6 +312,30 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
+	 * Number of Days to adjust due to antimeridian crossover
+     *
+     * The actual Time Zone offset may deviate from the expected offset based on the longitude
+     * But since the 'absolute time' calculations are always based on longitudinal offset from UTC
+     * for a given date, the date is presumed to only increase East of the Prime Meridian, and to
+     * only decrease West of it.
+     * For Time Zones that cross the antimeridian, the date will be artificially adjusted before calculation
+     * to conform with this presumption.
+     *
+     * For example, Samoa (located around 172W) uses a local offset of +14:00.  When asking to calculate for
+     * 2017-03-15, the calculator should operate using 2017-03-14 since the expected zone is -11.  After
+     * determining the UTC time, the local offset of +14:00 should be applied to bring the date back to 2017-03-15.
+	 */
+	public int getAntimeridianAdjustment() {
+		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
+		if (localHoursOffset >= 20){
+			return 1;
+		} else if (localHoursOffset <= -20) {
+			return -1;
+		}
+		return 0;
+	}
+
+	/**
 	 * Calculate the initial <a href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing between this
 	 * Object and a second Object passed to this method using <a
 	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
