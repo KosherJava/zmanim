@@ -1,7 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2017 Eliyahu Hershfeld
- * Copyright (C) September 2002 Avrom Finkelstien 
+ * Copyright (C) 2011 - 2018 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -33,14 +32,14 @@ import java.text.SimpleDateFormat;
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishDate
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2017
- * @version 0.3
+ * @author &copy; Eliyahu Hershfeld 2011 - 2018
  */
 public class HebrewDateFormatter {
 	private boolean hebrewFormat = false;
 	private boolean useLonghebrewYears = false;
 	private boolean useGershGershayim = true;
 	private boolean longWeekFormat = true;
+	private SimpleDateFormat weekFormat = null;
 
 	/**
 	 * returns if the {@link #formatDayOfWeek(JewishDate)} will use the long format such as
@@ -65,6 +64,11 @@ public class HebrewDateFormatter {
 	 */
 	public void setLongWeekFormat(boolean longWeekFormat) {
 		this.longWeekFormat = longWeekFormat;
+		if(longWeekFormat) {
+			weekFormat = new SimpleDateFormat("EEEE");
+		} else {
+			weekFormat = new SimpleDateFormat("EEE");
+		}
 	}
 
 	private static final String GERESH = "\u05F3";
@@ -323,13 +327,25 @@ public class HebrewDateFormatter {
 	 */
 	public String formatDayOfWeek(JewishDate jewishDate) {
 		if (hebrewFormat) {
-			StringBuffer sb = new StringBuffer();
-			sb.append(longWeekFormat ? hebrewDaysOfWeek[jewishDate.getDayOfWeek() - 1] : formatHebrewNumber(jewishDate
-					.getDayOfWeek()));
-			return sb.toString();
+			if(isLongWeekFormat()) {
+				return hebrewDaysOfWeek[jewishDate.getDayOfWeek() - 1];
+			} else {
+				if(jewishDate.getDayOfWeek() == 7) {
+					return formatHebrewNumber(300);
+				} else {
+					return formatHebrewNumber(jewishDate.getDayOfWeek());
+				}
+			}
 		} else {
-			return jewishDate.getDayOfWeek() == 7 ? getTransliteratedShabbosDayOfWeek() : new SimpleDateFormat("EEEE")
-					.format(jewishDate.getGregorianCalendar().getTime());
+			if(jewishDate.getDayOfWeek() == 7) {
+				if(isLongWeekFormat()) {
+					return getTransliteratedShabbosDayOfWeek();
+				} else {
+					return getTransliteratedShabbosDayOfWeek().substring(0,3);
+				}
+			} else {
+				return weekFormat.format(jewishDate.getGregorianCalendar().getTime());
+			}
 		}
 	}
 
@@ -577,7 +593,7 @@ public class HebrewDateFormatter {
 		String[] jOnes = new String[] { "", "\u05D0", "\u05D1", "\u05D2", "\u05D3", "\u05D4", "\u05D5", "\u05D6",
 				"\u05D7", "\u05D8" };
 
-		if (number == 0) { // do we realy need this? Should it be applicable to a date?
+		if (number == 0) { // do we realyl need this? Should it be applicable to a date?
 			return EFES;
 		}
 		int shortNumber = number % 1000; // discard thousands
