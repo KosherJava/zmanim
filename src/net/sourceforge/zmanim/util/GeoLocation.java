@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2016 Eliyahu Hershfeld
+ * Copyright (C) 2004-2018 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2016
+ * @author &copy; Eliyahu Hershfeld 2004 - 2018
  * @version 1.1
  */
 public class GeoLocation implements Cloneable {
@@ -280,6 +280,36 @@ public class GeoLocation implements Cloneable {
 	public long getLocalMeanTimeOffset() {
 		return (long) (getLongitude() * 4 * MINUTE_MILLIS - getTimeZone().getRawOffset());
 	}
+	
+	/**
+	 * Adjust the date for <a href="https://en.wikipedia.org/wiki/180th_meridian">antimeridian</a> crossover. This is
+	 * needed to deal with edge cases such as Samoa that use a different calendar date than expected based on their
+	 * geographic location.
+	 *
+	 * The actual Time Zone offset may deviate from the expected offset based on the longitude. Since the 'absolute time'
+	 * calculations are always based on longitudinal offset from UTC for a given date, the date is presumed to only
+	 * increase East of the Prime Meridian, and to only decrease West of it. For Time Zones that cross the antimeridian,
+	 * the date will be artificially adjusted before calculation to conform with this presumption.
+	 *
+	 * For example, Apia, Samoa with a longitude of -171.75 uses a local offset of +14:00.  When calculating sunrise for
+	 * 2018-02-03, the calculator should operate using 2018-02-02 since the expected zone is -11.  After determining the
+	 * UTC time, the local DST offset of <a href="https://en.wikipedia.org/wiki/UTC%2B14:00">UTC+14:00</a> should be applied
+	 * to bring the date back to 2018-02-03.
+	 * 
+	 * @return the number of days to adjust the date This will typically be 0 unless the date crosses the antimeridian
+	 */
+	public int getAntimeridianAdjustment() {
+		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
+		
+		if (localHoursOffset >= 20){// if the offset is 20 hours or more in the future (never expected anywhere other
+									// than a location using a timezone across the anti meridian to the east such as Samoa)
+			return 1; // roll the date forward a day
+		} else if (localHoursOffset <= -20) {	// if the offset is 20 hours or more in the past (no current location is known
+												//that crosses the antimeridian to the west, but better safe than sorry)
+			return -1; // roll the date back a day
+		}
+		return 0; //99.999% of the world will have no adjustment
+	}
 
 	/**
 	 * Calculate the initial <a href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing between this
@@ -533,10 +563,9 @@ public class GeoLocation implements Cloneable {
 		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("°");
 		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("°");
 		sb.append("\nElevation:\t\t\t").append(getElevation()).append(" Meters");
-		sb.append("\nTimezone Name:\t\t\t").append(getTimeZone().getID());
-		/*
-		 * sb.append("\nTimezone Display Name:\t\t").append( getTimeZone().getDisplayName());
-		 */
+		sb.append("\nTimezone ID:\t\t\t").append(getTimeZone().getID());
+		sb.append("\nTimezone Display Name:\t\t").append(getTimeZone().getDisplayName())
+				.append(" (").append(getTimeZone().getDisplayName(false, TimeZone.SHORT)).append(")");
 		sb.append("\nTimezone GMT Offset:\t\t").append(getTimeZone().getRawOffset() / HOUR_MILLIS);
 		sb.append("\nTimezone DST Offset:\t\t").append(getTimeZone().getDSTSavings() / HOUR_MILLIS);
 		return sb.toString();

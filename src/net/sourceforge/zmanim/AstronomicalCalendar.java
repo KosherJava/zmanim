@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2016 Eliyahu Hershfeld
+ * Copyright (C) 2004-2018 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -64,7 +64,7 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * </pre>
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2016
+ * @author &copy; Eliyahu Hershfeld 2004 - 2018
  */
 public class AstronomicalCalendar implements Cloneable {
 
@@ -134,7 +134,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunrise)) {
 			return null;
 		} else {
-			return getDateFromTime(sunrise);
+			return getDateFromTime(sunrise, true);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunrise)) {
 			return null;
 		} else {
-			return getDateFromTime(sunrise);
+			return getDateFromTime(sunrise, true);
 		}
 	}
 
@@ -218,36 +218,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
-			return getAdjustedSunsetDate(getDateFromTime(sunset), getSunrise());
-		}
-	}
-
-	/**
-	 * A method that will roll the sunset time forward a day if sunset occurs before sunrise. This is a rare occurrence
-	 * and will typically happen when calculating very early and late twilights in a location with a time zone far off
-	 * from its natural 15&deg; boundaries. This method will ensure that in this case, the sunset will be incremented to
-	 * the following date. An example of this is Marquette, Michigan that far west of the natural boundaries for EST.
-	 * When you add in DST this pushes it an additional hour off. Calculating the extreme 26&deg;twilight on March 6th
-	 * it start at 2:34:30 on the 6th and end at 1:01:46 on the following day March 7th. Occurrences are more common in
-	 * the polar region for dips as low as 3&deg; (Tested for Hooper Bay, Alaska). TODO: Since the occurrences are rare,
-	 * look for optimization to avoid relatively expensive calls to this method.
-	 * 
-	 * @param sunset
-	 *            the sunset date to adjust if needed
-	 * @param sunrise
-	 *            the sunrise to compare to the sunset
-	 * @return the adjusted sunset date. If the calculation can't be computed such as in the Arctic Circle where there
-	 *         is at least one day a year where the sun does not rise, and one where it does not set, a null will be
-	 *         returned. See detailed explanation on top of the page.
-	 */
-	private Date getAdjustedSunsetDate(Date sunset, Date sunrise) {
-		if (sunset != null && sunrise != null && sunrise.compareTo(sunset) >= 0) {
-			Calendar clonedCalendar = (Calendar) getCalendar().clone();
-			clonedCalendar.setTime(sunset);
-			clonedCalendar.add(Calendar.DAY_OF_MONTH, 1);
-			return clonedCalendar.getTime();
-		} else {
-			return sunset;
+			return getDateFromTime(sunset, false);
 		}
 	}
 
@@ -268,7 +239,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
-			return getAdjustedSunsetDate(getDateFromTime(sunset), getSeaLevelSunrise());
+			return getDateFromTime(sunset, false);
 		}
 	}
 
@@ -360,7 +331,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(dawn)) {
 			return null;
 		} else {
-			return getDateFromTime(dawn);
+			return getDateFromTime(dawn, true);
 		}
 	}
 
@@ -383,7 +354,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
-			return getAdjustedSunsetDate(getDateFromTime(sunset), getSunriseOffsetByDegrees(offsetZenith));
+			return getDateFromTime(sunset, false);
 		}
 	}
 
@@ -419,7 +390,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         not set, {@link Double#NaN} will be returned. See detailed explanation on top of the page.
 	 */
 	public double getUTCSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(getCalendar(), getGeoLocation(), zenith, true);
+		return getAstronomicalCalculator().getUTCSunrise(getAdjustedCalendar(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -437,7 +408,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSeaLevelSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(getCalendar(), getGeoLocation(), zenith, false);
+		return getAstronomicalCalculator().getUTCSunrise(getAdjustedCalendar(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -452,7 +423,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(getCalendar(), getGeoLocation(), zenith, true);
+		return getAstronomicalCalculator().getUTCSunset(getAdjustedCalendar(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -471,7 +442,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
 	 */
 	public double getUTCSeaLevelSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(getCalendar(), getGeoLocation(), zenith, false);
+		return getAstronomicalCalculator().getUTCSunset(getAdjustedCalendar(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -560,29 +531,22 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @param time
 	 *            The time to be set as the time for the <code>Date</code>. The time expected is in the format: 18.75
-	 *            for 6:45:00 PM.
+	 *            for 6:45:00 PM.time is sunrise and false if it is sunset
+	 * @param isSunrise true if the 
 	 * @return The Date.
 	 */
-	protected Date getDateFromTime(double time) {
+	protected Date getDateFromTime(double time, boolean isSunrise) {
 		if (Double.isNaN(time)) {
 			return null;
 		}
 		double calculatedTime = time;
-
+		
+		Calendar adjustedCalendar = getAdjustedCalendar();
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();// clear all fields
-		cal.set(Calendar.YEAR, getCalendar().get(Calendar.YEAR));
-		cal.set(Calendar.MONTH, getCalendar().get(Calendar.MONTH));
-		cal.set(Calendar.DAY_OF_MONTH, getCalendar().get(Calendar.DAY_OF_MONTH));
-		double gmtOffset = getCalendar().getTimeZone().getRawOffset() / (60d * MINUTE_MILLIS); // raw non DST offset
-		// Set the correct calendar date in UTC. For example Tokyo is 9 hours ahead of GMT. Sunrise at ~6 AM will be at
-		// ~21 hours GMT of the previous day and has to be set accordingly. In the case of California USA that is 7
-		// hours behind GMT, sunset at ~6 PM will be at ~1 GMT the following day and has to be set accordingly.
-		if (time + gmtOffset > 24) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
-		} else if (time + gmtOffset < 0) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		}
+		cal.set(Calendar.YEAR, adjustedCalendar.get(Calendar.YEAR));
+		cal.set(Calendar.MONTH, adjustedCalendar.get(Calendar.MONTH));
+		cal.set(Calendar.DAY_OF_MONTH, adjustedCalendar.get(Calendar.DAY_OF_MONTH));
 
 		int hours = (int) calculatedTime; // retain only the hours
 		calculatedTime -= hours;
@@ -590,6 +554,15 @@ public class AstronomicalCalendar implements Cloneable {
 		calculatedTime -= minutes;
 		int seconds = (int) (calculatedTime *= 60); // retain only the seconds
 		calculatedTime -= seconds; // remaining milliseconds
+		
+		// Check if a date transition has occurred, or is about to occur - this indicates the date of the event is
+		// actually not the target date, but the day prior or after
+		int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
+		if (isSunrise && localTimeHours + hours > 18) {
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+		} else if (!isSunrise && localTimeHours + hours < 6) {
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
 		cal.set(Calendar.MINUTE, minutes);
@@ -644,6 +617,22 @@ public class AstronomicalCalendar implements Cloneable {
 			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
 		}
 		return degrees.doubleValue();
+	}
+	
+	/**
+	 * Adjusts the <code>Calendar</code> to deal with edge cases where the location crosses the antimeridian.
+	 * 
+	 * @see GeoLocation#getAntimeridianAdjustment()
+	 * @return the adjusted Calendar
+	 */
+	private Calendar getAdjustedCalendar(){
+		int offset = getGeoLocation().getAntimeridianAdjustment();
+		if (offset == 0) {
+			return getCalendar();
+		}
+		Calendar adjustedCalendar = (Calendar) getCalendar().clone();
+		adjustedCalendar.add(Calendar.DAY_OF_MONTH, offset);
+		return adjustedCalendar;
 	}
 
 	/**
