@@ -96,9 +96,20 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * is 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem on March 16, about 4 days
 	 * before the equinox, the day that a solar hour is 60 minutes.
 	 * 
-	 * TODO AT see #getTzaisGeonim3Point7Degrees()
+	 * @see #getTzaisGeonim3Point7Degrees()
 	 */
 	protected static final double ZENITH_3_POINT_7 = GEOMETRIC_ZENITH + 3.7;
+
+	/**
+	 * The zenith of 3.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> that <em>tzais</em> is the
+	 * time it takes to walk 3/4 of a <em>Mil</em> at 18 minutes a <em>Mil</em>, or 13.5 minutes after sunset. The sun
+	 * is 3.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem on March 16, about 4 days
+	 * before the equinox, the day that a solar hour is 60 minutes.
+	 *
+	 * @see #getTzaisGeonim3Point7Degrees()
+	 */
+	protected static final double ZENITH_3_POINT_8 = GEOMETRIC_ZENITH + 3.8;
 
 	/**
 	 * The zenith of 5.95&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
@@ -1730,9 +1741,20 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @return the <code>Date</code> representing the time when the sun is 3.7&deg; below sea level.
 	 * @see #ZENITH_3_POINT_7
 	 */
-	// public Date getTzaisGeonim3Point7Degrees() {
-	// return getSunsetOffsetByDegrees(ZENITH_3_POINT_7);
-	// }
+	public Date getTzaisGeonim3Point7Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_3_POINT_7);
+	}
+
+	/**
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
+	 * sun's position at {@link #ZENITH_3_POINT_8 3.8&deg;} below the western horizon.
+	 *
+	 * @return the <code>Date</code> representing the time when the sun is 3.8&deg; below sea level.
+	 * @see #ZENITH_3_POINT_8
+	 */
+	public Date getTzaisGeonim3Point8Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_3_POINT_8);
+	}
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the

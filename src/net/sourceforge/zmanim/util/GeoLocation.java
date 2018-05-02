@@ -142,7 +142,7 @@ public class GeoLocation implements Cloneable {
 	 * 
 	 * @param degrees
 	 *            The degrees of latitude to set between 0&deg; and 90&deg;. For example 40 would be used for Lakewood, NJ.
-	 *            An IllegalArgumentException will be thrown if the value exceeds the limit. 
+	 *            An IllegalArgumentException will be thrown if the value exceeds the limit.
 	 * @param minutes
 	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
 	 * @param seconds
@@ -193,7 +193,7 @@ public class GeoLocation implements Cloneable {
 	 * 
 	 * @param degrees
 	 *            The degrees of longitude to set between 0&deg; and 180&deg;. As an example 74 would be set for Lakewood, NJ.
-	 *            An IllegalArgumentException will be thrown if the value exceeds the limits. 
+	 *            An IllegalArgumentException will be thrown if the value exceeds the limits.
 	 * @param minutes
 	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
 	 * @param seconds
@@ -560,8 +560,8 @@ public class GeoLocation implements Cloneable {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\nLocation Name:\t\t\t").append(getLocationName());
-		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("°");
-		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("°");
+		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("\u00B0");
+		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("\u00B0");
 		sb.append("\nElevation:\t\t\t").append(getElevation()).append(" Meters");
 		sb.append("\nTimezone ID:\t\t\t").append(getTimeZone().getID());
 		sb.append("\nTimezone Display Name:\t\t").append(getTimeZone().getDisplayName())

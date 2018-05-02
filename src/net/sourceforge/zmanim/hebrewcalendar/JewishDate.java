@@ -1142,7 +1142,6 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		calendar.set(getGregorianYear(), getGregorianMonth(), getGregorianDayOfMonth());
 		return calendar;
 	}
-	
 
 	/**
 	 * Resets this date to the current system date.
