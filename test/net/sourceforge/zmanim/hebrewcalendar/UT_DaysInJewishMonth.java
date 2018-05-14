@@ -6,6 +6,9 @@ package net.sourceforge.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Validate the days in a Hebrew month (in various types of years) are correct.
  */
@@ -62,8 +65,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong());
-		Assert.assertTrue(jewishDate.isKislevShort());
+		assertFalse(jewishDate.isCheshvanLong());
+		assertTrue(jewishDate.isKislevShort());
 	}
 
 
@@ -72,7 +75,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertHaser(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear());
+		assertTrue(jewishDate.isJewishLeapYear());
 	}
 
 
@@ -80,8 +83,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong(  ));
-		Assert.assertFalse(jewishDate.isKislevShort(  ));
+		assertFalse(jewishDate.isCheshvanLong(  ));
+		assertFalse(jewishDate.isKislevShort(  ));
 	}
 
 
@@ -90,7 +93,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertQesidrah(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		assertTrue(jewishDate.isJewishLeapYear(  ));
 	}
 
 
@@ -98,8 +101,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertTrue(jewishDate.isCheshvanLong(  ));
-		Assert.assertFalse(jewishDate.isKislevShort(  ));
+		assertTrue(jewishDate.isCheshvanLong(  ));
+		assertFalse(jewishDate.isKislevShort(  ));
 	}
 
 
@@ -108,7 +111,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertShalem(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		assertTrue(jewishDate.isJewishLeapYear(  ));
 	}
 
 } // End of UT_DaysInJewishMonth class

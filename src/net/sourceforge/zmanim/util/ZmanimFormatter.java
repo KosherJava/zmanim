@@ -18,13 +18,13 @@ package net.sourceforge.zmanim.util;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import java.text.SimpleDateFormat;
 import net.sourceforge.zmanim.AstronomicalCalendar;
 
 /**
@@ -480,7 +480,7 @@ public class ZmanimFormatter {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * A method that returns a JSON formatted <code>String</code> representing the serialized <code>Object</code>. The
 	 * format used is:
