@@ -104,7 +104,7 @@ public class YomiCalculator {
 				} else if (masechta == 37) {
 					blatt += 24;
 				} else if (masechta == 38) {
-					blatt += 33;
+					blatt += 32;
 				}
 				dafYomi = new Daf(masechta, blatt);
 				break;
