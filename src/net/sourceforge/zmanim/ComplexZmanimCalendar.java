@@ -247,6 +247,36 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	protected static final double ZENITH_5_POINT_88 = GEOMETRIC_ZENITH + 5.88;
 
+	/**
+	 * The zenith of 1.583&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating <em>netz amiti</em> (sunrise) and <em>shkiah amiti</em> (sunset) based on the opinion of the <em>Baal Hatanya</em>.
+	 *
+	 * @see #getSunriseBaalHatanya()
+	 * @see #getSunsetBaalHatanya()
+	 */
+	protected static final double ZENITH_1_POINT_583 = GEOMETRIC_ZENITH + 1.583;
+
+	/**
+	 * The zenith of 16.9&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
+	 * (dawn) based on the opinion of the <em>Baal Hatanya</em>. It is based on the calculation that the time between dawn
+	 * and <em>netz amiti</em> (sunrise) is 72 minutes, the time that is takes to walk 4 <em>mil</em> at 18 minutes
+	 * a mil (<em>Rambam</em> and others). The sun's position at 72 minutes before {@link #getSunriseBaalHatanya
+	 * <em>netz amiti</em> (sunrise)} in Jerusalem on the equinox is 16.9&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 *
+	 * @see #getAlosBaalHatanya()
+	 */
+	protected static final double ZENITH_16_POINT_9 = GEOMETRIC_ZENITH + 16.9;
+
+	/**
+	 * The zenith of 6&deg; below geometric zenith (90&deg;). This calculation is used for calculating <em>tzais</em>
+	 * (nightfall) based on the opinion of the <em>Baal Hatanya</em. This calculation is based on the position of the sun 24
+	 * minutes after {@link #getSunset sunset} in Jerusalem on March 16, about 4 days before the equinox, the day that a
+	 * solar hour is 60 minutes, which is 6&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 *
+	 * @see #getTzaisBaalHatanya()
+	 */
+	protected static final double ZENITH_6_DEGREES = GEOMETRIC_ZENITH + 6;
+
 	private double ateretTorahSunsetOffset = 40;
 
 	public ComplexZmanimCalendar(GeoLocation location) {
@@ -2705,5 +2735,279 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		Date sunset = getSeaLevelSunset();
 		Date sunrise = clonedCal.getSeaLevelSunrise();
 		return getTimeOffset(sunset, getTemporalHour(sunset, sunrise) * 6);
+	}
+
+	/**
+	 * A method that returns <em>netz amiti</em> (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double) elevation
+	 * adjustment}. Non-sunrise and sunset calculations such as dawn and dusk, depend on the amount of visible light,
+	 * something that is not affected by elevation. This method returns sunrise calculated at sea level. This forms the
+	 * base for dawn calculations that are calculated as a dip below the horizon before sunrise.
+	 *
+	 * According to the <em>Baal Hatanya</em>, <em>netz amiti</em> true (halachic) sunrise, is when the top of the sun's disk is visible at an 
+	 * elevation similar to the mountains of Eretz Yisrael. The time is calculated as the point at which the center of the sun's disk 
+	 * is 1.583&deg; below the horizon.
+	 *
+	 * Note: <em>netz amiti</em> is used only for calculating certain zmanim, and is intentionally unpublished. For practical purposes, 
+	 * daytime mitzvahs like shofar and lulav should not be done until after the published time for netz-sunrise.
+	 *
+	 * For further explanation see <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">Chabad.org</a>
+	 * 
+	 * @return the <code>Date</code> representing the exact sea-level <em>netz amiti</em> (sunrise) time. If the calculation can't be computed
+	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set, a null will be returned. See detailed explanation on top of the page.
+	 * @see AstronomicalCalendar#getSunrise
+	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
+	 * @see #getSeaLevelSunrise()
+	 * @see #getSunsetBaalHatanya()
+	 */
+	private Date getSunriseBaalHatanya() {
+		double sunrise = getUTCSeaLevelSunrise(ZENITH_1_POINT_583);
+		if (Double.isNaN(sunrise)) {
+			return null;
+		} else {
+			return getDateFromTime(sunrise, true);
+		}
+	}
+
+	/**
+	 * A method that returns <em>shkiah amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double) elevation
+	 * adjustment}. Non-sunrise and sunset calculations such as dawn and dusk, depend on the amount of visible light,
+	 * something that is not affected by elevation. This method returns sunset calculated at sea level. This forms the
+	 * base for dusk calculations that are calculated as a dip below the horizon after sunset.
+	 * 
+	 * According to the <em>Baal Hatanya</em>, <em>shkiah amiti</em>, true (halachic) sunset, is when the top of the 
+	 * sun's disk disappears from view at an elevation similar to the mountains of Eretz Yisrael.
+	 * This time is calculated as the point at which the center of the sun's disk is 1.583 degrees below the horizon.
+	 * Note: <em>shkiah amiti</em> is used only for calculating certain zmanim, and is intentionally unpublished. For practical 
+	 * purposes, all daytime mitzvahs should be completed before the published time for shkiah-sunset.
+	 *
+	 * For further explanation see <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">Chabad.org</a>
+	 * 
+	 * @return the <code>Date</code> representing the exact sea-level <em>shkiah amiti</em> (sunset) time. If the calculation can't be computed
+	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set, a null will be returned. See detailed explanation on top of the page.
+	 * @see AstronomicalCalendar#getSunset
+	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
+	 */
+	private Date getSunsetBaalHatanya() {
+		double sunset = getUTCSeaLevelSunset(ZENITH_1_POINT_583);
+		if (Double.isNaN(sunset)) {
+			return null;
+		} else {
+			return getDateFromTime(sunset, false);
+		}
+	}
+
+	/**
+	 * A method that returns a <em>shaah zmanis</em> ( {@link #getTemporalHour(Date, Date) temporal hour}) calculated 
+	 * using a 1.583&deg; dip using <em>netz amiti</em> and <em>shkiah amiti</em> according to the opinion of the <em>Baal Hatanya</em>. This calculation divides the day 
+	 * based on the opinion of the <em>Baal Hatanya</em> that the day runs from {@link #getSunriseBaalHatanya()
+	 * netz amiti} to {@link #getSunsetBaalHatanya() shkiah amiti}. The calculations are based on a day from
+	 * {@link #getSunriseBaalHatanya() sea level netz amiti} to {@link #getSunsetBaalHatanya() sea level shkiah amiti}. The day is
+	 * split into 12 equal parts with each one being a <em>shaah zmanis</em>. This method is similar to
+	 * {@link #getTemporalHour}, but all calculations are based on a sealevel sunrise and sunset.
+	 * 
+	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em> calculated from
+	 *         {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)} to {@link #getSunsetBaalHatanya() <em>shkiah amiti</em> (sunset)}. If the
+	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
+	 *         the sun does not rise, and one where it does not set, {@link Long#MIN_VALUE} will be returned. See
+	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getTemporalHour(Date, Date)
+	 * @see #getSunriseBaalHatanya()
+	 * @see #getSunsetBaalHatanya()
+	 */
+	public long getShaahZmanisBaalHatanya() {
+		return getTemporalHour(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * Returns <em>alos</em> (dawn) based on the time when the sun is 16.9&deg; below the eastern
+	 * {@link #GEOMETRIC_ZENITH geometric horizon} before {@link #getSunrise sunrise}. For more information the source
+	 * of 16.9&deg; see {@link #ZENITH_16_POINT_9}.
+	 * 
+	 * @see #ZENITH_16_POINT_9
+	 * @return The <code>Date</code> of dawn. If the calculation can't be computed such as northern and southern
+	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
+	 *         low enough below the horizon for this calculation, a null will be returned. See detailed explanation on
+	 *         top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getAlosBaalHatanya() {
+		return getSunriseOffsetByDegrees(ZENITH_16_POINT_9);
+	}
+
+	/**
+	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning). This time is 3
+	 * <em>{@link #getShaahZmanisBaalHatanya() shaos zmaniyos}</em> (solar hours) after {@link #getSunriseBaalHatanya() 
+	 * <em>netz amiti</em> (sunrise)} based on the opinion of the <em>Baal Hatanya</em> that the day is calculated from
+	 * sunrise to sunset. This returns the time 3 * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() 
+	 * <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see ZmanimCalendar#getSofZmanShma(Date, Date)
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @return the <code>Date</code> of the latest zman shema according to the Baal Hatanya. If the calculation
+	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
+	 *         not rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getSofZmanShmaBaalHatanya() {
+		return getSofZmanShma(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * This method returns the latest <em>zman tefilah</em> (time to recite the morning prayers). This time is 4
+	 * hours into the day based on the opinion of the <em>Baal Hatanya</em> that the day is
+	 * calculated from sunrise to sunset. This returns the time 4 * {@link #getShaahZmanisBaalHatanya()} after
+	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see ZmanimCalendar#getSofZmanTfila(Date, Date)
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @return the <code>Date</code> of the latest zman tefilah. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 */
+	public Date getSofZmanTfilaBaalHatanya() {
+		return getSofZmanTfila(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * This method returns the latest time one is allowed eating chametz on Erev Pesach according to the opinion of the
+	 * <em>Baal Hatanya</em>. This time is identical to the {@link #getSofZmanTfilaBaalHatanya() Sof zman
+	 * tefilah Baal Hatanya}. This time is 4 hours into the day based on the opinion of the <em>Baal
+	 * Hatanya</em> that the day is calculated from sunrise to sunset. This returns the time 4 *
+	 * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getSofZmanTfilaBaalHatanya()
+	 * @return the <code>Date</code> one is allowed eating chametz on Erev Pesach. If the calculation can't be computed
+	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getSofZmanAchilasChametzBaalHatanya() {
+		return getSofZmanTfilaBaalHatanya();
+	}
+
+	/**
+	 * This method returns the latest time for burning chametz on Erev Pesach according to the opinion of the
+	 * <em>Baal Hatanya</em>. This time is 5 hours into the day based on the opinion of the
+	 * <em>Baal Hatanya</em> that the day is calculated from sunrise to sunset. This returns the
+	 * time 5 * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @return the <code>Date</code> of the latest time for burning chametz on Erev Pesach. If the calculation can't be
+	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
+	 *         and one where it does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getSofZmanBiurChametzBaalHatanya() {
+		return getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 5);
+	}
+
+	/**
+	 * This method returns <em>chatzos</em> (midday) following the opinion of the Baal Hatanya that the day for Jewish halachic
+	 * times start at {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)} and ends at {@link #getSunsetBaalHatanya() 
+	 * <em>shkiah amiti</em> (sunset)}.
+	 * 
+	 * @see AstronomicalCalendar#getSunTransit()
+	 * @return the <code>Date</code> of chatzos. If the calculation can't be computed such as in the Arctic Circle where
+	 *         there is at least one day where the sun does not rise, and one where it does not set, a null will be
+	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getChatzosBaalHatanya() {
+		return getSunTransit(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * This method returns the time of <em>mincha gedola</em>. <em>Mincha gedola</em> is the earliest time one can pray
+	 * mincha. The Ramba"m is of the opinion that it is better to delay <em>mincha</em> until
+	 * <em>{@link #getMinchaKetanaBaalHatanya() mincha ketana}</em> while the <em>Ra"sh,
+	 * Tur, GRA</em> and others are of the opinion that <em>mincha</em> can be prayed <em>lechatchila</em> starting at
+	 * <em>mincha gedola</em>. This is calculated as 6.5 {@link #getShaahZmanisBaalHatanya() sea level solar hours} after
+	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. This calculation is based on the opinion of 
+	 * the <em>Baal Hatanya</em> that the day is calculated from sunrise to sunset. This returns the time 6.5 *
+	 * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see #getMinchaGedola(Date, Date)
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getMinchaKetanaBaalHatanya()
+	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 */
+	public Date getMinchaGedolaBaalHatanya() {
+		return getMinchaGedola(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * This is a conveniance methd that returns the later of {@link #getMinchaGedolaBaalHatanya()} and
+	 * {@link #getMinchaGedola30Minutes()}. In the winter when a <em>{@link #getShaahZmanisBaalHatanya() shaah zmanis}</em> is
+	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedolaBaalHatanya()}
+	 * will be returned.
+	 * 
+	 * @return the <code>Date</code> of the later of {@link #getMinchaGedolaBaalHatanya()} and {@link #getMinchaGedola30Minutes()}.
+	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
+	 *         where the sun does not rise, and one where it does not set, a null will be returned. See detailed
+	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getMinchaGedolaBaalHatanyaGreaterThan30() {
+		if (getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 6.5) == null || getMinchaGedolaBaalHatanya() == null) {
+			return null;
+		} else {
+			return getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 6.5).compareTo(getMinchaGedolaBaalHatanya()) > 0 
+					? getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 6.5) : getMinchaGedolaBaalHatanya();
+		}
+	}
+
+	/**
+	 * This method returns the time of <em>mincha ketana</em>. This is the preferred earliest time to pray
+	 * <em>mincha</em> in the opinion of the Rambam and others. For more information on this see the documentation on
+	 * <em>{@link #getMinchaGedolaBaalHatanya() mincha gedola}</em>. This is calculated as 9.5 {@link #getShaahZmanisBaalHatanya() 
+	 * sea level solar hours} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. This calculation 
+	 * is calculated based on the opinion of the <em>Baal Hatanya</em> that the day is calculated from sunrise to sunset.
+	 * This returns the time 9.5 * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see #getMinchaKetana(Date, Date)
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getMinchaGedolaBaalHatanya()
+	 * @return the <code>Date</code> of the time of mincha ketana. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 */
+	public Date getMinchaKetanaBaalHatanya() {
+		return getMinchaKetana(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * This method returns the time of <em>plag hamincha</em>. This is calculated as 10.75 hours after sunrise. This
+	 * calculation is based on the opinion ofthe <em>Baal Hatanya</em> that the day is calculated
+	 * from sunrise to sunset. This returns the time 10.75 * {@link #getShaahZmanisBaalHatanya()} after
+	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}.
+	 * 
+	 * @see #getPlagHamincha(Date, Date)
+	 * @return the <code>Date</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
+	 *         does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getPlagHaminchaBaalHatanya() {
+		return getPlagHamincha(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
+	/**
+	 * A method that returns <em>tzais</em> (nightfall) when the sun is 6&deg; below the western geometric horizon
+	 * (90&deg;) after {@link #getSunset sunset}. For information on the source of this calculation see
+	 * {@link #ZENITH_6_DEGREES}.
+	 * 
+	 * @return The <code>Date</code> of nightfall. If the calculation can't be computed such as northern and southern
+	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
+	 *         low enough below the horizon for this calculation, a null will be returned. See detailed explanation on
+	 *         top of the {@link AstronomicalCalendar} documentation.
+	 * @see #ZENITH_6_DEGREES
+	 */
+	public Date getTzaisBaalHatanya() {
+		return this.getSunsetOffsetByDegrees(ZENITH_6_DEGREES);
 	}
 }
