@@ -2939,20 +2939,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns <em>chatzos</em> (midday) following the opinion of the Baal Hatanya that the day for Jewish halachic
-	 * times start at {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)} and ends at {@link #getSunsetBaalHatanya() 
-	 * <em>shkiah amiti</em> (sunset)}.
-	 * 
-	 * @see AstronomicalCalendar#getSunTransit()
-	 * @return the <code>Date</code> of chatzos. If the calculation can't be computed such as in the Arctic Circle where
-	 *         there is at least one day where the sun does not rise, and one where it does not set, a null will be
-	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 */
-	public Date getChatzosBaalHatanya() {
-		return getSunTransit(getSunriseBaalHatanya(), getSunsetBaalHatanya());
-	}
-
-	/**
 	 * This method returns the time of <em>mincha gedola</em>. <em>Mincha gedola</em> is the earliest time one can pray
 	 * mincha. The Ramba"m is of the opinion that it is better to delay <em>mincha</em> until
 	 * <em>{@link #getMinchaKetanaBaalHatanya() mincha ketana}</em> while the <em>Ra"sh,
