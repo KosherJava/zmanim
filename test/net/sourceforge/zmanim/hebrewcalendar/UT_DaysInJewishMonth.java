@@ -6,6 +6,14 @@ package net.sourceforge.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import static net.sourceforge.zmanim.hebrewcalendar.JewishDate.TISHREI;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Validate the days in a Hebrew month (in various types of years) are correct.
  */
@@ -62,8 +70,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong());
-		Assert.assertTrue(jewishDate.isKislevShort());
+		assertFalse(jewishDate.isCheshvanLong());
+		assertTrue(jewishDate.isKislevShort());
 	}
 
 
@@ -72,7 +80,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertHaser(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear());
+		assertTrue(jewishDate.isJewishLeapYear());
 	}
 
 
@@ -80,8 +88,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong(  ));
-		Assert.assertFalse(jewishDate.isKislevShort(  ));
+		assertFalse(jewishDate.isCheshvanLong(  ));
+		assertFalse(jewishDate.isKislevShort(  ));
 	}
 
 
@@ -90,7 +98,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertQesidrah(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		assertTrue(jewishDate.isJewishLeapYear(  ));
 	}
 
 
@@ -98,8 +106,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertTrue(jewishDate.isCheshvanLong(  ));
-		Assert.assertFalse(jewishDate.isKislevShort(  ));
+		assertTrue(jewishDate.isCheshvanLong(  ));
+		assertFalse(jewishDate.isKislevShort(  ));
 	}
 
 
@@ -108,7 +116,18 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertShalem(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		assertTrue(jewishDate.isJewishLeapYear(  ));
+	}
+
+	@Test
+	public void earlyGregorian() {
+		GregorianCalendar gregorianCalendar = new GregorianCalendar(1582, Calendar.OCTOBER, 15);
+		JewishDate jewishDate = new JewishDate(gregorianCalendar);
+		assertEquals(Calendar.FRIDAY, gregorianCalendar.get(Calendar.DAY_OF_WEEK));
+
+		assertEquals(5343, jewishDate.getJewishYear());
+		assertEquals(TISHREI, jewishDate.getJewishMonth());
+		assertEquals(19, jewishDate.getJewishDayOfMonth());
 	}
 
 } // End of UT_DaysInJewishMonth class
