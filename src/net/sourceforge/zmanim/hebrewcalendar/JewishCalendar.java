@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2014 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2018 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -41,8 +41,7 @@ import net.sourceforge.zmanim.util.GeoLocation;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2016
- * @version 1.0.0
+ * @author &copy; Eliyahu Hershfeld 2011 - 2018
  */
 public class JewishCalendar extends JewishDate {
 	public static final int EREV_PESACH = 0;
@@ -390,6 +389,28 @@ public class JewishCalendar extends JewishDate {
 		int holidayIndex = getYomTovIndex();
 		return holidayIndex == PESACH || holidayIndex == SHAVUOS || holidayIndex == SUCCOS || holidayIndex == SHEMINI_ATZERES ||
 				holidayIndex == SIMCHAS_TORAH || holidayIndex == ROSH_HASHANA  || holidayIndex == YOM_KIPPUR;
+	}
+	
+	/**
+	 * Returns true if the day has candle lighting. This will return true on erev <em>Shabbos</em>, erev <em>Yom Tov</em>, the
+	 * first day of <em>Rosh Hashana</em> and erev the second days of <em>Yom Tov</em> out of Israel.
+	 * 
+	 * @return if the day has candle lighting
+	 */
+	public boolean hasCandleLighting() {
+		return getDayOfWeek() == 6 || isErevYomTov() || isErevYomTovSheni();
+	}
+	
+	/**
+	 * Retruns true if the day is the second day of <em>Yom Tov</em>.
+	 * @return
+	 */
+	public boolean isErevYomTovSheni() {
+		return (getJewishMonth() == JewishCalendar.TISHREI && (getJewishDayOfMonth() == 1))
+		|| (! getInIsrael()
+				&& ((getJewishMonth() == JewishCalendar.NISSAN && (getJewishDayOfMonth() == 15 || getJewishDayOfMonth() == 21))
+				|| (getJewishMonth() == JewishCalendar.TISHREI && (getJewishDayOfMonth() == 15 || getJewishDayOfMonth() == 22))
+				|| (getJewishMonth() == JewishCalendar.SIVAN && getJewishDayOfMonth() == 6 )));
 	}
 
 	/**
