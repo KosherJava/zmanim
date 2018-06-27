@@ -1880,7 +1880,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * of a 24 minute
 	 * <em><a href= "http://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >Mil</a></em>, (
 	 * <em>Baal Hatanya</em>) based on a <em>Mil</em> being 24 minutes, and is calculated as 18 + 2 + 4 for a total of
-	 * 24 minutes (FIXME: additional documentation details needed). It is the sun's position at
+	 * 24 minutes (TODO: additional documentation details needed). It is the sun's position at
 	 * {@link #ZENITH_5_POINT_88 5.88&deg;} below the western horizon. This is a very early <em>zman</em> and should not
 	 * be relied on without Rabbinical guidance.
 	 * 
@@ -1898,7 +1898,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
 	 * of a <a href= "http://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >Mil</a> based on the
 	 * sun's position at {@link #ZENITH_4_POINT_8 4.8&deg;} below the western horizon. This is based on Rabbi Leo Levi's
-	 * calculations. FIXME: additional documentation needed. This is the This is a very early <em>zman</em> and should
+	 * calculations. TODO: additional documentation needed. This is the This is a very early <em>zman</em> and should
 	 * not be relied on without Rabbinical guidance.
 	 * 
 	 * @return the <code>Date</code> representing the time when the sun is 4.8&deg; below sea level. If the calculation
@@ -1916,7 +1916,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> as calculated by Rabbi
 	 * Yechiel Michel Tukachinsky. It is based on of the position of the sun no later than {@link #getTzaisGeonim6Point45Degrees() 31
 	 * minutes} after sunset in Jerusalem, and at the height of the summer solstice, this zman is 28 minutes after
-	 * <em>shkiah</em>. This computes to 6.45&deg; below the western horizon. (FIXME: additional documentation details needed)
+	 * <em>shkiah</em>. This computes to 6.45&deg; below the western horizon. (TODO: additional documentation details needed)
 	 * 
 	 * @return the <code>Date</code> representing the time when the sun is 6.45&deg; below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -2416,7 +2416,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
-		//TODO optimize for impossible dates
+
+		// Do not calculate for impossible dates, but account for extreme cases. In the the extreme case of Rapa Iti in French
+		// Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush Levana
+		// will be on the 12th of the Teves. In the case of Anadyr, Russia on Jan, 2071, sof zman Kiddush Levana between the
+		// moldos will occur is on the night of 17th of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
+		if(jewishCalendar.getJewishDayOfMonth() < 11 || jewishCalendar.getJewishDayOfMonth() > 16) { 
+			return null;
+		}
 		return getMoladBasedTime(jewishCalendar.getSofZmanKidushLevanaBetweenMoldos(), alos, tzais, false);
 	}
 	
@@ -2509,7 +2516,13 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
-		//TODO optimize for impossible dates
+		// Do not calculate for impossible dates, but account for extreme cases. In the the extreme case of Rapa Iti in
+		// French Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush
+		// Levana will be on the 12th of the Teves. in the case of Anadyr, Russia on Jan, 2071, sof zman kiddush levana will
+		// occur after midnight on the 17th of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
+		if(jewishCalendar.getJewishDayOfMonth() < 11 || jewishCalendar.getJewishDayOfMonth() > 17) {
+			return null;
+		}
 		return getMoladBasedTime(jewishCalendar.getSofZmanKidushLevana15Days(), alos, tzais, false);
 	}
 
@@ -2584,8 +2597,26 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
-		//TODO optimize for impossible dates
-		return getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), alos, tzais, true);
+		
+		// Do not calculate for impossible dates, but account for extreme cases. Tchilas zman kiddush Levana 3 days for
+		// the extreme case of Rapa Iti in French Polynesia on Dec 2027 when kiddush Levana 3 days can be said on the evening
+		// of the 30th, the second night of Rosh Chodesh. The 3rd day after the <em>molad</em> will be on the 4th of the month.
+		// In the case of Anadyr, Russia on Jan, 2071, when sof zman kiddush levana is on the 17th of the month, the 3rd day
+		// from the molad will be on the 5th day of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
+		if(jewishCalendar.getJewishDayOfMonth() > 5 && jewishCalendar.getJewishDayOfMonth() < 30) {
+			return null;
+		}
+		
+		Date zman = getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), null, null, true);
+		
+		//Get the following month's zman kiddush Levana for the extreme case of Rapa Iti in French Polynesia on Dec 2027 when
+		// kiddush Levana can be said on Rosh Chodesh (the evening of the 30th). See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (page 32)
+		if(zman == null && jewishCalendar.getJewishDayOfMonth() == 30) {
+			jewishCalendar.forward(Calendar.MONTH, 1);
+			zman = getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), null, null, true);
+		}
+		
+		return zman;
 	}
 	
 	/**
@@ -2603,8 +2634,17 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
+		
+		// Optimize to not calculate for impossible dates, but account for extreme cases. The molad in the extreme case of Rapa
+		// Iti in French Polynesia on Dec 2027 occurs on the night of the 27th of Kislev. In the case of Anadyr, Russia on
+		// Jan 2071, the molad will be on the 2nd day of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
+		if(jewishCalendar.getJewishDayOfMonth() > 2 && jewishCalendar.getJewishDayOfMonth() < 27) {
+			return null;
+		}
 		Date molad = getMoladBasedTime(jewishCalendar.getMoladAsDate(), null, null, true);
-		if(molad == null && jewishCalendar.getJewishDayOfMonth() > 27 ) { //attempt to get the following molad. FIXME test with Rapa Iti in 2028 and other extreme cases
+
+		// deal with molad that happens on the end of the previous month
+		if(molad == null && jewishCalendar.getJewishDayOfMonth() > 26 ) {
 			jewishCalendar.forward(Calendar.MONTH, 1);
 			molad = getMoladBasedTime(jewishCalendar.getMoladAsDate(), null, null, true);
 		}
@@ -2667,7 +2707,16 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
-		//TODO optimize for impossible dates
+		
+		// Optimize to not calculate for impossible dates, but account for extreme cases. Tchilas zman kiddush Levana 7 days for
+		// the extreme case of Rapa Iti in French Polynesia on Jan 2028 (when kiddush Levana 3 days can be said on the evening
+		// of the 30th, the second night of Rosh Chodesh), the 7th day after the molad will be on the 4th of the month.
+		// In the case of Anadyr, Russia on Jan, 2071, when sof zman kiddush levana is on the 17th of the month, the 7th day
+		// from the molad will be on the 9th day of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
+		if(jewishCalendar.getJewishDayOfMonth() < 4 || jewishCalendar.getJewishDayOfMonth() > 9) { 
+			return null;
+		}
+		
 		return getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana7Days(), alos, tzais, true);
 	}
 
