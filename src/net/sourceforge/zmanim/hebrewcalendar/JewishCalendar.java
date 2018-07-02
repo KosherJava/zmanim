@@ -16,11 +16,11 @@
  */
 package net.sourceforge.zmanim.hebrewcalendar;
 
+import net.sourceforge.zmanim.util.GeoLocation;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-import net.sourceforge.zmanim.util.GeoLocation;
 
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
@@ -403,7 +403,8 @@ public class JewishCalendar extends JewishDate {
 	
 	/**
 	 * Retruns true if the day is the second day of <em>Yom Tov</em>.
-	 * @return
+	 *
+	 * @return if the day is the second day of Yom Tov.
 	 */
 	public boolean isErevYomTovSheni() {
 		return (getJewishMonth() == JewishCalendar.TISHREI && (getJewishDayOfMonth() == 1))

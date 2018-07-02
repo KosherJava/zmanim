@@ -220,7 +220,6 @@ public class HebrewDateFormatter {
 	 * @see #formatDayOfWeek(JewishDate)
 	 * @see #formatMonth(JewishDate)
 	 * @see #formatOmer(JewishCalendar)
-	 * @see net.sourceforge.zmanim.hebrewcalendar.parsha.ParshaFormatter#formatParsha(JewishCalendar)
 	 * @see #formatYomTov(JewishCalendar)
 	 */
 	public boolean isHebrewFormat() {
@@ -237,7 +236,6 @@ public class HebrewDateFormatter {
 	 * @see #formatDayOfWeek(JewishDate)
 	 * @see #formatMonth(JewishDate)
 	 * @see #formatOmer(JewishCalendar)
-	 * @see net.sourceforge.zmanim.hebrewcalendar.parsha.ParshaFormatter#formatParsha(JewishCalendar)
 	 * @see #formatYomTov(JewishCalendar)
 	 */
 	public void setHebrewFormat(boolean hebrewFormat) {
