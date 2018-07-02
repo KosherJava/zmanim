@@ -334,6 +334,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Computes the Gregorian date from the absolute date. ND+ER
+	 * @param absDate the absolute date
 	 */
 	private void absDateToDate(int absDate) {
 		int year = absDate / 366; // Search forward year by year from approximate year
@@ -473,10 +474,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * chalakim (TaKFoT) it is delayed till Tuesday</li>
 	 * </ol>
 	 * 
-	 * @param year
-	 * @param moladDay
-	 * @param moladParts
-	 * @return the nimber of elapsed days in the JewishCalendar adjusted for the 4 dechiyos.
+	 * @param year the year
+	 * @param moladDay the molad day
+	 * @param moladParts the molad parts
+	 * @return the number of elapsed days in the JewishCalendar adjusted for the 4 dechiyos.
 	 */
 	private static int addDechiyos(int year, int moladDay, int moladParts) {
 		int roshHashanaDay = moladDay; // if no dechiyos
@@ -1041,10 +1042,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * represents the Gregorian month starting at 1. When this is called it will not adjust the month to match the Java
 	 * Calendar classes.
 	 * 
-	 * @param year
-	 *            the
-	 * @param month
-	 * @param dayOfMonth
+	 * @param year the year
+	 * @param month the month
+	 * @param dayOfMonth the day of month
 	 */
 	private void setInternalGregorianDate(int year, int month, int dayOfMonth) {
 		// make sure date is a valid date for the given month, if not, set to last day of month
