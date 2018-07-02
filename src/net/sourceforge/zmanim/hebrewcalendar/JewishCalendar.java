@@ -35,7 +35,7 @@ import java.util.TimeZone;
  * <ol>
  * <li>Add Isru Chag</li>
  * <li>Shabbos Mevarchim</li>
- * <li>Daf Yomi Yerushalmi, Mishna yomis etc)</li>
+ * <li>Mishna yomis etc)</li>
  * </ol>
  * 
  * @see java.util.Date
@@ -369,6 +369,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return true if the current day is a Yom Tov
 	 * @see #isErevYomTov()
+	 * @see #isErevYomTovSheni()
 	 * @see #isTaanis()
 	 */
 	public boolean isYomTov() {
@@ -381,9 +382,10 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns true if the Yom Tov day has a melacha (work)  prohibition. This method will return false for a non Yom Tov day, even if it is Shabbos.
+	 * Returns true if the <em>Yom Tov</em> day has a <em>melacha</em> (work)  prohibition. This method will return false for a
+	 * non-<em>Yom Tov</em> day, even if it is <em>Shabbos</em>.
 	 *
-	 * @return if the Yom Tov day has a melacha (work)  prohibition.
+	 * @return if the <em>Yom Tov</em> day has a <em>melacha</em> (work)  prohibition.
 	 */
 	public boolean isYomTovAssurBemelacha(){
 		int holidayIndex = getYomTovIndex();
@@ -402,9 +404,10 @@ public class JewishCalendar extends JewishDate {
 	}
 	
 	/**
-	 * Retruns true if the day is the second day of <em>Yom Tov</em>.
-	 *
-	 * @return if the day is the second day of Yom Tov.
+	 * Returns true if the day is the second day of <em>Yom Tov</em>. This impacts the second day of <em>Rosh Hashana</em> everywhere and
+	 * the second days of Yom Tov in <em>chutz laaretz</em> (out of Israel).
+	 * 
+	 * @return  if the day is the second day of <em>Yom Tov</em>.
 	 */
 	public boolean isErevYomTovSheni() {
 		return (getJewishMonth() == JewishCalendar.TISHREI && (getJewishDayOfMonth() == 1))
@@ -415,9 +418,9 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns true if the current day is Chol Hamoed of Pesach or Succos.
+	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em> or <em>Succos</em>.
 	 * 
-	 * @return true if the current day is Chol Hamoed of Pesach or Succos
+	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em> or <em>Succos</em>
 	 * @see #isYomTov()
 	 * @see #CHOL_HAMOED_PESACH
 	 * @see #CHOL_HAMOED_SUCCOS
@@ -433,6 +436,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return true if the current day is Erev - Pesach, Shavuos, Rosh Hashana, Yom Kippur and Succos
 	 * @see #isYomTov()
+	 * @see #isErevYomTovSheni()
 	 */
 	public boolean isErevYomTov() {
 		int holidayIndex = getYomTovIndex();
@@ -551,12 +555,14 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the earliest time of Kiddush Levana calculated as 3 days after the molad. TODO: Currently returns the
-	 * time even if it is during the day. It should return the
-	 * {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72() Tzais} after to the time if the zman is between Alos
-	 * and Tzais.
+	 * Returns the earliest time of <em>Kiddush Levana</em> calculated as 3 days after the molad. This method returns the time
+	 * even if it is during the day when <em>Kiddush Levana</em> can't be said. Callers of this method should consider
+	 * displaying the next <em>tzais</em> if the zman is between <em>alos</em> and <em>tzais</em>.
 	 * 
 	 * @return the Date representing the moment 3 days after the molad.
+	 * 
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana3Days()
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana3Days(Date, Date)
 	 */
 	public Date getTchilasZmanKidushLevana3Days() {
 		Date molad = getMoladAsDate();
@@ -569,11 +575,14 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns the earliest time of Kiddush Levana calculated as 7 days after the molad as mentioned by the <a
 	 * href="http://en.wikipedia.org/wiki/Yosef_Karo">Mechaber</a>. See the <a
-	 * href="http://en.wikipedia.org/wiki/Yoel_Sirkis">Bach's</a> opinion on this time. TODO: Currently returns the time
-	 * even if it is during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getTzais72()
-	 * Tzais} after to the time if the zman is between Alos and Tzais.
+	 * href="http://en.wikipedia.org/wiki/Yoel_Sirkis">Bach's</a> opinion on this time. This method returns the time
+	 * even if it is during the day when <em>Kiddush Levana</em> can't be said. Callers of this method should consider
+	 * displaying the next <em>tzais</em> if the zman is between <em>alos</em> and <em>tzais</em>.
 	 * 
 	 * @return the Date representing the moment 7 days after the molad.
+	 * 
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana7Days()
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana7Days(Date, Date)
 	 */
 	public Date getTchilasZmanKidushLevana7Days() {
 		Date molad = getMoladAsDate();
@@ -587,12 +596,14 @@ public class JewishCalendar extends JewishDate {
 	 * Returns the latest time of Kiddush Levana according to the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as
 	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between molad and
-	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. TODO: Currently returns the time
-	 * even if it is during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos}
-	 * prior to the time if the zman is between Alos and Tzais.
+	 * molad (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. This method returns the time
+	 * even if it is during the day when <em>Kiddush Levana</em> can't be said. Callers of this method should consider
+	 * displaying <em>alos</em> before this time if the zman is between <em>alos</em> and <em>tzais</em>.
 	 * 
 	 * @return the Date representing the moment halfway between molad and molad.
 	 * @see #getSofZmanKidushLevana15Days()
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
 	 */
 	public Date getSofZmanKidushLevanaBetweenMoldos() {
 		Date molad = getMoladAsDate();
@@ -616,12 +627,14 @@ public class JewishCalendar extends JewishDate {
 	 * {@link #getSofZmanKidushLevanaBetweenMoldos() half way between molad and mold} is of the opinion that Mechaber
 	 * agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi Dovid
 	 * Heber's very detailed writeup in Siman Daled (chapter 4) of <a
-	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. TODO: Currently returns the time even if it is
-	 * during the day. It should return the {@link net.sourceforge.zmanim.ZmanimCalendar#getAlos72() Alos} prior to the
-	 * time if the zman is between Alos and Tzais.
+	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. This method returns the time even if it is during
+	 * the day when <em>Kiddush Levana</em> can't be said. Callers of this method should consider displaying <em>alos</em>
+	 * before this time if the zman is between <em>alos</em> and <em>tzais</em>.
 	 * 
 	 * @return the Date representing the moment 15 days after the molad.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevana15Days()
+	 * @see net.sourceforge.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevana15Days(Date, Date)
 	 */
 	public Date getSofZmanKidushLevana15Days() {
 		Date molad = getMoladAsDate();
