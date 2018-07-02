@@ -15,11 +15,12 @@
  */
 package net.sourceforge.zmanim;
 
-import java.util.Calendar;
-import java.util.Date;
+import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
 import net.sourceforge.zmanim.util.AstronomicalCalculator;
 import net.sourceforge.zmanim.util.GeoLocation;
-import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * This class extends ZmanimCalendar and provides many more zmanim than available in the ZmanimCalendar. The basis for
@@ -268,7 +269,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * The zenith of 6&deg; below geometric zenith (90&deg;). This calculation is used for calculating <em>tzais</em>
-	 * (nightfall) based on the opinion of the <em>Baal Hatanya</em. This calculation is based on the position of the sun 24
+	 * (nightfall) based on the opinion of the <em>Baal Hatanya</em>. This calculation is based on the position of the sun 24
 	 * minutes after {@link #getSunset sunset} in Jerusalem on March 16, about 4 days before the equinox, the day that a
 	 * solar hour is 60 minutes, which is 6&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 *
@@ -2467,10 +2468,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * halfway between molad and molad. This adds half the 29 days, 12 hours and 793 chalakim time between
 	 * <em>molad</em> and <em>molad</em> (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's molad. The sof
 	 * zman Kiddush Levana will be returned even if it occures durring the day. To limit the time to between <em>tzais</em>
-	 * and <alos>, see {@link #getSofZmanKidushLevanaBetweenMoldos(Date, Date)}.
+	 * and <em>alos</em>, see {@link #getSofZmanKidushLevanaBetweenMoldos(Date, Date)}.
 	 * This method is available in the current release of the API but may change or be removed in the future since it depends
-	 * on the still changing {@link JewishCalendar} and related classes, and adds a dependancy to the
-	 * {@link net.sourceforge.hebrewcalendar} package.
+	 * on the still changing {@link JewishCalendar} and related classes, and adds a dependency to the
+	 * {@link net.sourceforge.zmanim.hebrewcalendar} package.
 	 * 
 	 * @return the Date representing the moment halfway between molad and molad. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned
@@ -2535,7 +2536,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Mechaber agrees to his opinion. Also see the Aruch Hashulchan. For additional details on the subject, See Rabbi
 	 * Dovid Heber's very detailed writeup in Siman Daled (chapter 4) of <a
 	 * href="http://www.worldcat.org/oclc/461326125">Shaarei Zmanim</a>. The sof zman Kiddush Levana will be returned even
-	 * if it occures durring the day. To limit the time to between <em>tzais</em> and <alos>,
+	 * if it occures durring the day. To limit the time to between <em>tzais</em> and <em>alos</em>,
 	 * see {@link #getSofZmanKidushLevana15Days(Date, Date)}.
 	 * This method is available in the current release of the API but may change or be
 	 * removed in the future since it depends on the still changing {@link JewishCalendar} and related classes.
