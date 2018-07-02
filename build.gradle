@@ -1,0 +1,74 @@
+import java.text.DateFormat
+
+plugins {
+  id 'java'
+}
+
+group 'net.sourceforge'
+version '1.5.0alpha'
+
+sourceCompatibility = 1.8
+
+static def buildTime() {
+    def DateFormat df = DateFormat.getDateTimeInstance()
+    df.setTimeZone( TimeZone.getTimeZone( "America/Los_Angeles" ) )
+    return "\"" + df.format( new Date() ) + "\"";
+  }
+
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+sourceSets {
+  main {
+    java {
+      srcDirs = ['src']
+    }
+    resources {
+      srcDirs = [ 'resources' ]
+    }
+  }
+  test {
+    java {
+      srcDirs = ['test']
+    }
+  }
+}
+
+
+ext.author = "Eliyahu Hershfeld"
+ext.buildTime = buildTime()
+
+jar {
+  manifest {
+    attributes  'Built-By':     author,
+			'Specification-Title':    'Zmanim',
+			'Specification-Version':  version + " " + buildTime,
+			'Specification-Vendor':   author,
+			'Implementation-Title':   'Zmanim',
+			'Implementation-Version': version + " " + buildTime,
+			'Implementation-Vendor':  author,
+			'Sealed':                 'false'
+  }
+}
+
+javadoc {
+  source = sourceSets.main.allJava
+  options.author( true )
+  options.version( true )
+  options.use( true )
+  options.showFromPackage()
+  options.windowTitle( "Zmanim API ${version}" )
+  options.setLinkSource( true )
+  options.setBreakIterator( true )
+  options.charSet( "utf-8" )
+  options.docTitle( "Zmanim API ${version}" )
+  options.header( "<a href=\"http://www.kosherjava.com/zmanim/\" target=\"_top\">KosherJava Zmanim Homepage</a>" )
+  options.bottom( "<i>Copyright &#169; 2004 - 2018 Eliyahu Hershfeld. All Rights Reserved. Released under the <a href=\"http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html\">LGPL 2.1 license</a></i>" )
+  options.linksOffline( "http://docs.oracle.com/javase/8/docs/api/", "${sourceSets.main.resources.srcDirs[ 0 ]}/packageLists/oracle" )
+}
