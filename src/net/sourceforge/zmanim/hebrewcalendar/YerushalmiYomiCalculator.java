@@ -1,9 +1,31 @@
+/*
+ * Zmanim Java API
+ * Copyright (C) 2017 - 2018 Eliyahu Hershfeld
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+ * details.
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
+ * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ */
 package net.sourceforge.zmanim.hebrewcalendar;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
+
+/**
+ * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> <a href=
+ * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
+ * 
+ * @author &copy; elihaidv
+ * @author &copy; Eliyahu Hershfeld 2017 - 2018
+ */
 public class YerushalmiYomiCalculator {
 	
 	private final static Calendar DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
@@ -14,10 +36,10 @@ public class YerushalmiYomiCalculator {
 			19, 85, 72, 47, 40, 47, 54, 48, 44, 37, 34, 44, 9, 57, 37, 19, 13};
 
 	/**
-	 * Returns the Daf Yomi<a
-	 * href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> {@link Daf} for a given date. The first Daf Yomi cycle
-	 * started on To Bishvat 5740 (Febuary, 2, 1980) and calculations prior to this date will result in an
-	 * IllegalArgumentException thrown.
+	 * Returns the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a>
+	 * <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> page ({@link Daf}) for a given date.
+	 * The first Daf Yomi cycle started on To Bishvat 5740 (Febuary, 2, 1980) and calculations prior to this
+	 * date will result in an IllegalArgumentException thrown.
 	 * 
 	 * @param calendar
 	 *            the calendar date for calculation
@@ -62,11 +84,11 @@ public class YerushalmiYomiCalculator {
 		// Get the number of days from cycle start until request.
 		int dafNo = (int)(getDiffBetweenDays(prevCycle, requested));
 		
-		// Get the number of special day to substruct
+		// Get the number of special day to subtract
 		int specialDays = getNumOfSpecialDays(prevCycle, requested);
 		int total = dafNo - specialDays;
 				
-		/* Finally find the daf. */
+		// Finally find the daf.
 		for (int j = 0; j < BLATT_PER_MASSECTA.length; j++) {
 			
 			if (total <= BLATT_PER_MASSECTA[j]) {
@@ -84,8 +106,8 @@ public class YerushalmiYomiCalculator {
 	 * Return the number of special days (Yom Kippur and Tisha Beav) That there is no Daf in this days.
 	 * From the last given number of days until given date
 	 * 
-	 * @param numOfDays number of days to calculate
-	 * @param jewishCalendar end date to calculate
+	 * @param start start date to calculate
+	 * @param end end date to calculate
 	 * @return the number of special days
 	 */
 	private static int getNumOfSpecialDays(Calendar start, Calendar end) {
@@ -97,7 +119,7 @@ public class YerushalmiYomiCalculator {
 		// Value to return
 		int specialDays = 0;
 		
-		//Instant of the spacial Dates
+		//Instant of special Dates
 		JewishCalendar yom_kippur = new JewishCalendar(5770, 7, 10);
 		JewishCalendar tisha_beav = new JewishCalendar(5770, 5, 9);
 
@@ -118,23 +140,22 @@ public class YerushalmiYomiCalculator {
 	}
 
 	/**
-	 * Return if the middle date is between to dates
+	 * Return if the date is between two dates
 	 * 
 	 * @param start the start date
-	 * @param middle the asked date
+	 * @param date the date being compared
 	 * @param end the end date
-	 * @return if the date is between them
+	 * @return if the date is between the start and end dates
 	 */
-	private static boolean isBetween( Calendar start, Calendar middle, Calendar end ) {
-		return start.before(middle) && end.after(middle);
+	private static boolean isBetween( Calendar start, Calendar date, Calendar end ) {
+		return start.before(date) && end.after(date);
 	}
 	
 	/**
-	 * Return the number of days past from the given date
-	 * 
-	 * @param date
-	 *            The Java Date
-	 * @return the number of days
+	 * Return the number of days between the dates passed in
+	 * @param start the start date
+	 * @param end the end date
+	 * @return the number of days between the start and end dates
 	 */
 	private static long getDiffBetweenDays(Calendar start, Calendar end) {
 		return  ( end.getTimeInMillis() - start.getTimeInMillis()) / DAY_MILIS;
