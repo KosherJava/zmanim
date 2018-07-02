@@ -480,9 +480,10 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Experimental and incomplete
+	 * Formats a molad.
+	 * TODO: Experimental and incomplete
 	 * 
-	 * @param moladChalakim
+	 * @param moladChalakim the chalakim of the molad
 	 * @return the formatted molad. FIXME: define proper format in English and Hebrew.
 	 */
 	private String formatMolad(long moladChalakim) {
