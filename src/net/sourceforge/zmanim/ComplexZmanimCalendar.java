@@ -23,23 +23,23 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * This class extends ZmanimCalendar and provides many more zmanim than available in the ZmanimCalendar. The basis for
- * most zmanim in this class are from the <em>sefer</em> <b>Yisroel Vehazmanim</b> by <b>Rabbi Yisroel Dovid
- * Harfenes</b>.
- * As an example of the number of different <em>zmanim</em> made available by this class, there are methods to return 12
- * different calculations for <em>alos</em> (dawn) available in this class. The real power of this API is the ease in
- * calculating <em>zmanim</em> that are not part of the API. The methods for doing <em>zmanim</em> calculations not
- * present in this class or it's superclass the {@link ZmanimCalendar} are contained in the {@link AstronomicalCalendar}
- * , the base class of the calendars in our API since they are generic methods for calculating time based on degrees or
- * time before or after {@link #getSunrise sunrise} and {@link #getSunset sunset} and are of interest for calculation
- * beyond <em>zmanim</em> calculations. Here are some examples:
- * First create the Calendar for the location you would like to calculate:
+ * <p>This class extends ZmanimCalendar and provides many more zmanim than available in the ZmanimCalendar. The basis for
+ * most zmanim in this class are from the <em>sefer</em> <b><a href="http://hebrewbooks.org/9765">Yisroel Vehazmanim</a></b>
+ * by <b><a href="https://en.wikipedia.org/wiki/Yisroel_Dovid_Harfenes">Rabbi Yisroel Dovid Harfenes</a></b>.
+ * As an example of the number of different <em>zmanim</em> made available by this class, there are methods to return 14
+ * different calculations for <em>alos</em> (dawn) and 25 for <em>tzais</em> available in this API. The real power of this
+ * API is the ease in calculating <em>zmanim</em> that are not part of the library. The methods for <em>zmanim</em>
+ * calculations not present in this class or it's superclass  {@link ZmanimCalendar} are contained in the
+ * {@link AstronomicalCalendar}, the base class of the calendars in our API since they are generic methods for calculating
+ * time based on degrees or time before or after {@link #getSunrise sunrise} and {@link #getSunset sunset} and are of interest
+ * for calculation beyond <em>zmanim</em> calculations. Here are some examples.
+ * <p>First create the Calendar for the location you would like to calculate:
  * 
- * <pre>
+ * <pre style="background: #FEF0C9; display: inline-block;">
  * String locationName = &quot;Lakewood, NJ&quot;;
  * double latitude = 40.0828; // Lakewood, NJ
  * double longitude = -74.2094; // Lakewood, NJ
- * double elevation = 0;
+ * double elevation = 20; // optional elevation correction in Meters
  * // the String parameter in getTimeZone() has to be a valid timezone listed in
  * // {@link java.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
@@ -47,44 +47,64 @@ import java.util.Date;
  * ComplexZmanimCalendar czc = new ComplexZmanimCalendar(location);
  * // Optionally set the date or it will default to today's date
  * czc.getCalendar().set(Calendar.MONTH, Calendar.FEBRUARY);
- * czc.getCalendar().set(Calendar.DAY_OF_MONTH, 8);
- * </pre>
- * 
+ * czc.getCalendar().set(Calendar.DAY_OF_MONTH, 8);</pre>
+ * <p>
  * <b>Note:</b> For locations such as Israel where the beginning and end of daylight savings time can fluctuate from
- * year to year create a {@link java.util.SimpleTimeZone} with the known start and end of DST.
+ * year to year, if your version of Java does not have an <a href=
+ * "http://www.oracle.com/technetwork/java/javase/tzdata-versions-138805.html">up to date timezone database</a>, create a
+ * {@link java.util.SimpleTimeZone} with the known start and end of DST.
  * To get <em>alos</em> calculated as 14&deg; below the horizon (as calculated in the calendars published in Montreal),
  * add {@link AstronomicalCalendar#GEOMETRIC_ZENITH} (90) to the 14&deg; offset to get the desired time:
+ * <br><br>
+ * <pre style="background: #FEF0C9; display: inline-block;">
+ *  Date alos14 = czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 14);</pre>
+ * <p>
+ * To get <em>mincha gedola</em> calculated based on the MGA using a <em>shaah zmanis</em> based on the day starting
+ * 16.1&deg; below the horizon (and ending 16.1&deg; after sunset) the following calculation can be used:
  * 
- * <pre>
- * Date alos14 = czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 14);
- * </pre>
- * 
- * To get <em>mincha gedola</em> calculated based on the MGA using a <em>shaah
- * zmanis</em> based on the day starting 16.1&deg; below the horizon (and ending 16.1&deg; after sunset) the following
- * calculation can be used:
- * 
- * <pre>
- * Date minchaGedola = czc.getTimeOffset(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees() * 6.5);
- * </pre>
- * 
- * A little more complex example would be calculating <em>plag hamincha</em> based on a <em>shaah zmanis</em> that was
- * not present in this class. While a drop more complex it is still rather easy. For example if you wanted to calculate
- * <em>plag</em> based on the day starting 12&deg; before sunrise and ending 12&deg; after sunset as calculated in the
- * calendars in Manchester, England (there is nothing that would prevent your calculating the day using sunrise and
- * sunset offsets that are not identical degrees, but this would lead to <em>chatzos</em> being a time other than the
- * {@link #getSunTransit() solar transit} (solar midday)). The steps involved would be to first calculate the
- * <em>shaah zmanis</em> and then use that time in milliseconds to calculate 10.75 hours after sunrise starting at
- * 12&deg; before sunset
- * 
- * <pre>
+ * <pre style="background: #FEF0C9; display: inline-block;">
+ * Date minchaGedola = czc.getTimeOffset(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees() * 6.5);</pre>
+ * <p>
+ * or even simpler using the included convenience methods
+ * <pre style="background: #FEF0C9; display: inline-block;">
+ * Date minchaGedola = czc.getMinchaGedola(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees());</pre>
+ * <p>
+ * A little more complex example would be calculating zmanim that rely on a <em>shaah zmanis</em> that is
+ * not present in this library. While a drop more complex, it is still rather easy. An example would be to calculate
+ * the <em><a href="https://en.wikipedia.org/wiki/Israel_Isserlein">Trumas Hadeshen</a>'s</em> <em>alos</em> to
+ * <em>tzais</em> based <em>plag hamincha</em> as calculated in the Machzikei Hadass calendar in Manchester, England.
+ * A number of this calendar's zmanim are calculated based on a day starting at <em>alos</em> of 12&deg; before sunrise
+ * and ending at <em>tzais</em> of 7.083&deg; after sunset. Be aware that since the <em>alos</em> and <em>tzais</em>
+ * do not use identical degree based offsets, this leads to <em>chatzos</em> being at a time other than the
+ * {@link #getSunTransit() solar transit} (solar midday). To calculate this zman, use the following steps. Note that
+ * <em>plag hamincha</em> is 10.75 hours after the start of the day, and the following steps are all that it takes.
+ * <br>
+ * <pre style="background: #FEF0C9; display: inline-block;">
+ * Date plag = czc.getPlagHamincha(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12),
+ * 				czc.getSunsetOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + ZENITH_7_POINT_083));</pre>
+ * <p>
+ * Something a drop more challenging, but still simple, would be calculating a zman using the same "complex" offset day
+ * used in the above mentioned Manchester calendar, but for a <em>shaos zmaniyos</em> based <em>zman</em> not not
+ * supported by this library, such as calculating
+ * <em><a href="http://www.hebrewbooks.org/pdfpager.aspx?req=37941&amp;pgnum=434">zman shchitas Korban Pesach</a></em>
+ * that is 8.5 <em>shaos zmaniyos</em> into the day.
+ * <ol>
+ * 	<li>Calculate the <em>shaah zmanis</em> in milliseconds for this day</li>
+ * 	<li>Add 8.5 of these <em>shaos zmaniyos</em> to alos starting at 12&deg;</li>
+ * </ol>
+ * <br>
+ * <pre style="background: #FEF0C9; display: inline-block;">
  * long shaahZmanis = czc.getTemporalHour(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12),
- * 						czc.getSunsetOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12));
- * Date plag = getTimeOffset(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12), 
- * 					shaahZmanis * 10.75);
- * </pre>
+ * 						czc.getSunsetOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + ZENITH_7_POINT_083));
+ * Date zmanShchita = getTimeOffset(czc.getSunriseOffsetByDegrees({@link AstronomicalCalendar#GEOMETRIC_ZENITH} + 12), 
+ * 					shaahZmanis * 8.5);</pre>
+ * <p>
+ * Calculating <em>zman shchitas Korban Pesach</em> according to the <em>GRA</em> is simplicity itself.
+ * <pre style="background: #FEF0C9; display: inline-block;">
+ * Date zmanShchita = czc.getTimeOffset(czc.getSunrise(), czc.getShaahZmanisGra() * 8.5);</pre>
  * 
- * <h2>Disclaimer:</h2> While I did my best to get accurate results please do not rely on these zmanim for
- * <em>halacha lemaaseh</em>
+ * <h2>Documentation from the {@link ZmanimCalendar} parent class</h2>
+ * {@inheritDoc}
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2018
  */
