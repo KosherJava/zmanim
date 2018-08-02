@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2017 Eliyahu Hershfeld
+ * Copyright (C) 2004-2018 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -26,9 +26,8 @@ import java.util.Calendar;
  * href="http://search.barnesandnoble.com/booksearch/isbnInquiry.asp?isbn=0160515106">Barnes &amp; Noble</a>) and is
  * used with his permission. Added to Kevin's code is adjustment of the zenith to account for elevation.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2017
+ * @author &copy; Eliyahu Hershfeld 2004 - 2018
  * @author &copy; Kevin Boone 2000
- * @version 1.1
  */
 public class SunTimesCalculator extends AstronomicalCalculator {
 
@@ -97,9 +96,12 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	private static double tanDeg(double deg) {
 		return Math.tan(deg * 2.0 * Math.PI / 360.0);
 	}
-
+	
 	/**
-	 * @return cos of the angle in degrees
+	 * Calculate cosine of the angle in degrees
+	 * 
+	 * @param deg degrees
+	 * @return cosine of the angle in degrees
 	 */
 	private static double cosDeg(double deg) {
 		return Math.cos(deg * 2.0 * Math.PI / 360.0);
@@ -114,8 +116,15 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	private static double getHoursFromMeridian(double longitude) {
 		return longitude / DEG_PER_HOUR;
 	}
-
+	
 	/**
+	 * Calculate the approximate time of sunset or sunrise in days since midnight Jan 1st, assuming 6am and 6pm events. We
+	 * need this figure to derive the Sun's mean anomaly.
+	 * 
+	 * @param dayOfYear the day of year
+	 * @param hoursFromMeridian hours from the meridian
+	 * @param isSunrise true for sunrise and false for sunset
+	 * 
 	 * @return the approximate time of sunset or sunrise in days since midnight Jan 1st, assuming 6am and 6pm events. We
 	 * need this figure to derive the Sun's mean anomaly.
 	 */
@@ -126,9 +135,14 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 			return dayOfYear + ((18.0 - hoursFromMeridian) / 24);
 		}
 	}
-
+	
 	/**
 	 * Calculate the Sun's mean anomaly in degrees, at sunrise or sunset, given the longitude in degrees
+	 * 
+	 * @param dayOfYear the day of the year
+	 * @param longitude longitude
+	 * @param isSunrise true for sunrise and false for sunset
+	 * @return the Sun's mean anomaly in degrees
 	 */
 	private static double getMeanAnomaly(int dayOfYear, double longitude, boolean isSunrise) {
 		return (0.9856 * getApproxTimeDays(dayOfYear, getHoursFromMeridian(longitude), isSunrise)) - 3.289;
@@ -168,6 +182,11 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
+	 * Calculate the cosine of the Sun's local hour angle
+	 * 
+	 * @param sunTrueLongitude the sun's true longitude
+	 * @param latitude the latitude
+	 * @param zenith the zenith
 	 * @return the cosine of the Sun's local hour angle
 	 */
 	private static double getCosLocalHourAngle(double sunTrueLongitude, double latitude, double zenith) {
@@ -175,11 +194,15 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double cosDec = cosDeg(asinDeg(sinDec));
 		return (cosDeg(zenith) - (sinDec * sinDeg(latitude))) / (cosDec * cosDeg(latitude));
 	}
-
+	
 	/**
 	 * Calculate local mean time of rising or setting. By 'local' is meant the exact time at the location, assuming that
 	 * there were no time zone. That is, the time difference between the location and the Meridian depended entirely on
 	 * the longitude. We can't do anything with this time directly; we must convert it to UTC and then to a local time.
+	 * 
+	 * @param localHour the local hour
+	 * @param sunRightAscensionHours the sun's right ascention in hours
+	 * @param approxTimeDays approximate time days
 	 * 
 	 * @return the fractional number of hours since midnight as a double
 	 */
@@ -220,13 +243,13 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
 				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
-		double processedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
-		while (processedTime < 0.0) {
-			processedTime += 24.0;
+		double pocessedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
+		while (pocessedTime < 0.0) {
+			pocessedTime += 24.0;
 		}
-		while (processedTime >= 24.0) {
-			processedTime -= 24.0;
+		while (pocessedTime >= 24.0) {
+			pocessedTime -= 24.0;
 		}
-		return processedTime;
+		return pocessedTime;
 	}
 }
