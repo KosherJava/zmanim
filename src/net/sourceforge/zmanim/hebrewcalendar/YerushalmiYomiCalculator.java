@@ -38,7 +38,7 @@ public class YerushalmiYomiCalculator {
 	/**
 	 * Returns the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a>
 	 * <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> page ({@link Daf}) for a given date.
-	 * The first Daf Yomi cycle started on To Bishvat 5740 (Febuary, 2, 1980) and calculations prior to this
+	 * The first Daf Yomi cycle started on To Bishvat 5740 (February, 2, 1980) and calculations prior to this
 	 * date will result in an IllegalArgumentException thrown.
 	 * 
 	 * @param calendar
