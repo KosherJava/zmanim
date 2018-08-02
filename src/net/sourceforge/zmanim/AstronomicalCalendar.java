@@ -73,7 +73,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * the horizon at sunrise and sunset.
 	 * <b>Note </b>: it is important to note that for sunrise and sunset the {@link AstronomicalCalculator#adjustZenith
 	 * adjusted zenith} is required to account for the radius of the sun and refraction. The adjusted zenith should not
-	 * be used for calculations above or below 90&deg; since they are usuallyes are calculated as an offset to 90&deg;.
+	 * be used for calculations above or below 90&deg; since they are usually calculated as an offset to 90&deg;.
 	 */
 	public static final double GEOMETRIC_ZENITH = 90;
 
