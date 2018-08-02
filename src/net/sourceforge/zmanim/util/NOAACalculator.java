@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2014 Eliyahu Hershfeld
+ * Copyright (C) 2004-2018 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -28,8 +28,7 @@ import java.util.Calendar;
  * to account for elevation. The algorithm can be found in the <a
  * href="http://en.wikipedia.org/wiki/Sunrise_equation">Wikipedia Sunrise Equation</a> article.
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2014
- * @version 0.1
+ * @author &copy; Eliyahu Hershfeld 2011 - 2018
  */
 public class NOAACalculator extends AstronomicalCalculator {
 	/**
@@ -271,8 +270,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * 
 	 * @param julianCenturies
 	 *            the number of Julian centuries since J2000.0
-	 * @param sun
-	 *            's declination in degrees
+	 * @return
+	 *            the sun's declination in degrees
 	 */
 	private static double getSunDeclination(double julianCenturies) {
 		double obliquityCorrection = getObliquityCorrection(julianCenturies);
@@ -319,6 +318,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            , the latitude of observer in degrees
 	 * @param solarDec
 	 *            the declination angle of sun in degrees
+	 * @param zenith
+	 *            the zenith
 	 * @return hour angle of sunrise in radians
 	 */
 	private static double getSunHourAngleAtSunrise(double lat, double solarDec, double zenith) {
@@ -338,6 +339,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            the latitude of observer in degrees
 	 * @param solarDec
 	 *            the declination angle of sun in degrees
+	 * @param zenith
+	 *            the zenith
 	 * @return the hour angle of sunset in radians
 	 */
 	private static double getSunHourAngleAtSunset(double lat, double solarDec, double zenith) {
@@ -426,6 +429,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            the latitude of observer in degrees
 	 * @param longitude
 	 *            the longitude of observer in degrees
+	 * @param zenith
+	 *            the zenith
 	 * @return the time in minutes from zero UTC
 	 */
 	private static double getSunriseUTC(double julianDay, double latitude, double longitude, double zenith) {
@@ -494,8 +499,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @param latitude
 	 *            the latitude of observer in degrees
 	 * @param longitude
-	 *            : longitude of observer in degrees
+	 *            longitude of observer in degrees
 	 * @param zenith
+	 *            zenith
 	 * @return the time in minutes from zero Universal Coordinated Time (UTC)
 	 */
 	private static double getSunsetUTC(double julianDay, double latitude, double longitude, double zenith) {
