@@ -21,11 +21,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * The JewishDate class allows one to maintain an instance of a Gregorian date along with the corresponding Jewish date.
- * This class can use the standard Java Date and Calendar classes for setting it, but does not subclass these classes or
- * use them internally to any extensive use. This class also does not have a concept of a time (which the Date class
- * does). Please note that the calendar does not currently support dates prior to 1/1/1 Gregorian. Also keep in mind
- * that the Gregorian calendar started on October 15, 1582, so any calculations prior to that are suspect (at least from
+ * The JewishDate is the base calendar class, that supports maintenance of a {@link java.util.GregorianCalendar}
+ * instance along with the corresponding Jewish date. This class can use the standard Java Date and Calendar
+ * classes for setting and maintaining the dates, but it does not subclass these classes or use them internally
+ * in any calculations. This class also does not have a concept of a time (which the Date class does). Please
+ * note that the calendar does not currently support dates prior to 1/1/1 Gregorian. Also keep in mind that the
+ * Gregorian calendar started on October 15, 1582, so any calculations prior to that are suspect (at least from
  * a Gregorian perspective). While 1/1/1 Gregorian and forward are technically supported, any calculations prior to <a
  * href="http://en.wikipedia.org/wiki/Hillel_II">Hillel II's (Hakatan's</a>) calendar (4119 in the Jewish Calendar / 359
  * CE Julian as recorded by <a href="http://en.wikipedia.org/wiki/Hai_Gaon">Rav Hai Gaon</a>) would be just an
