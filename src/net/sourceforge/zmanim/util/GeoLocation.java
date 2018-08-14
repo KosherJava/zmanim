@@ -467,19 +467,24 @@ public class GeoLocation implements Cloneable {
 	 * @return the distance in Meters
 	 */
 	public double getRhumbLineDistance(GeoLocation location) {
-		double R = 6371; // earth's mean radius in km
-		double dLat = Math.toRadians(location.getLatitude() - getLatitude());
-		double dLon = Math.toRadians(Math.abs(location.getLongitude() - getLongitude()));
-		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLongitude()) / 2 + Math.PI / 4)
+		double earthRadius = 6378137; // Earth's radius in meters (WGS-84)
+		double dLat = Math.toRadians(location.getLatitude()) - Math.toRadians(getLatitude());
+		double dLon = Math.abs(Math.toRadians(location.getLongitude()) - Math.toRadians(getLongitude()));
+		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4)
 				/ Math.tan(Math.toRadians(getLatitude()) / 2 + Math.PI / 4));
-		double q = (Math.abs(dLat) > 1e-10) ? dLat / dPhi : Math.cos(Math.toRadians(getLatitude()));
-		// if dLon over 180° take shorter rhumb across 180° meridian:
-		if (dLon > Math.PI)
-			dLon = 2 * Math.PI - dLon;
-		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);
-		return d * R;
-	}
+		double q = dLat / dPhi;
 
+		if (!Double.isFinite(q)) {
+			q = Math.cos(Math.toRadians(getLatitude()));
+		}
+		// if dLon over 180° take shorter rhumb across 180° meridian:
+		if (dLon > Math.PI) {
+			dLon = 2 * Math.PI - dLon;
+		}
+		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);
+		return d * earthRadius;
+	}
+	
 	/**
 	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very
 	 * similar to the toString method but the return value is in an xml format. The format currently used (subject to
