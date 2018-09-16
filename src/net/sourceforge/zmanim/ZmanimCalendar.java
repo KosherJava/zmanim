@@ -15,8 +15,10 @@
  */
 package net.sourceforge.zmanim;
 
+import java.util.Calendar;
 import java.util.Date;
 
+import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
 import net.sourceforge.zmanim.util.AstronomicalCalculator;
 import net.sourceforge.zmanim.util.GeoLocation;
 
@@ -136,17 +138,15 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	private double candleLightingOffset = 18;
 	
 	/**
-	 * This method overrides the {@link AstronomicalCalendar#getSunrise()} and will return {@link #getSeaLevelSunrise()
-	 * sea level sunrise} if {@link #isUseElevation()} is false (the default), or elevation adjusted {@link
-	 * AstronomicalCalendar#getSunrise()} if it is true. This allows all zmanim in this and extending classes (such as
-	 * the {@link ComplexZmanimCalendar}) to automatically adjust to the elevation setting.
+	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false
+	 * (the default), or elevation adjusted {@link AstronomicalCalendar#getSunrise()} if it is true. This allows relevant zmanim
+	 * in this and extending classes (such as the {@link ComplexZmanimCalendar}) to automatically adjust to the elevation setting.
 	 * 
 	 * @return {@link #getSeaLevelSunrise()} if {@link #isUseElevation()} is false (the default), or elevation adjusted
 	 *          {@link AstronomicalCalendar#getSunrise()} if it is true.
 	 * @see net.sourceforge.zmanim.AstronomicalCalendar#getSunrise()
 	 */
-	@Override
-	public Date getSunrise() {
+	protected Date getElevationAdjustedSunrise() {
 		if(isUseElevation()) {
 			return super.getSunrise();
 		}
@@ -154,17 +154,15 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
-	 * This method overrides the {@link AstronomicalCalendar#getSunset()} and will return {@link #getSeaLevelSunset()
-	 * sea level sunset} if {@link #isUseElevation()} is false (the default), or elevation adjusted {@link
-	 * #getSunset()} if it is true. This allows all zmanim in this and extending classes (such as
-	 * the {@link ComplexZmanimCalendar}) to automatically adjust to the elevation setting.
+	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false
+	 * (the default), or elevation adjusted {@link AstronomicalCalendar#getSunrise()} if it is true. This allows relevant zmanim
+	 * in this and extending classes (such as the {@link ComplexZmanimCalendar}) to automatically adjust to the elevation setting.
 	 * 
 	 * @return {@link #getSeaLevelSunset()} if {@link #isUseElevation()} is false (the default), or elevation adjusted
 	 *          {@link AstronomicalCalendar#getSunset()} if it is true.
 	 * @see net.sourceforge.zmanim.AstronomicalCalendar#getSunset()
 	 */
-	@Override
-	public Date getSunset() {
+	protected Date getElevationAdjustedSunset() {
 		if(isUseElevation()) {
 			return super.getSunset();
 		}
@@ -224,7 +222,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         documentation.
 	 */
 	public Date getAlos72() {
-		return getTimeOffset(getSunrise(), -72 * MINUTE_MILLIS);
+		return getTimeOffset(getElevationAdjustedSunrise(), -72 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -289,7 +287,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * documentation.
 	 */
 	public Date getSofZmanShmaGRA() {
-		return getSofZmanShma(getSunrise(), getSunset());
+		return getSofZmanShma(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 	}
 
 	/**
@@ -327,7 +325,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getTzais72() {
-		return getTimeOffset(getSunset(), 72 * MINUTE_MILLIS);
+		return getTimeOffset(getElevationAdjustedSunset(), 72 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -394,7 +392,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         documentation.
 	 */
 	public Date getSofZmanTfilaGRA() {
-		return getSofZmanTfila(getSunrise(), getSunset());
+		return getSofZmanTfila(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 	}
 
 	/**
@@ -466,7 +464,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         documentation.
 	 */
 	public Date getMinchaGedola() {
-		return getMinchaGedola(getSunrise(), getSunset());
+		return getMinchaGedola(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 	}
 
 	/**
@@ -519,7 +517,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         documentation.
 	 */
 	public Date getMinchaKetana() {
-		return getMinchaKetana(getSunrise(), getSunset());
+		return getMinchaKetana(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 	}
 
 	/**
@@ -563,7 +561,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getPlagHamincha() {
-		return getPlagHamincha(getSunrise(), getSunset());
+		return getPlagHamincha(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 	}
 
 	/**
@@ -585,7 +583,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see ComplexZmanimCalendar#getShaahZmanisBaalHatanya()
 	 */
 	public long getShaahZmanisGra() {
-		return getTemporalHour(getSunrise(), getSunset());
+		return getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 	}
 
 	/**
