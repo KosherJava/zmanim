@@ -652,4 +652,37 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public void setCandleLightingOffset(double candleLightingOffset) {
 		this.candleLightingOffset = candleLightingOffset;
 	}
+	
+	/**
+	 * This is a utility method to determine if the current Date (date-time) passed in has a <em>melacha</em> (work) prohibition.
+	 * Since there are many opinions on the time of <em>tzais</em>, the <em>tzais</em> for the current day has to be passed to this
+	 * class. Sunset is the classes current day's {@link #getElevationAdjustedSunset() elevation adjusted sunset} that observes the
+	 * {@link isUseElevation()} settings. The {@link JewishCalendar#getInIsrael()} will be set by the inIsrael parameter.
+	 * 
+	 * @param currentTime the current time
+	 * @param tzais the time of tzais
+	 * @param inIsrael whether to use Israel holiday scheme or not
+	 * 
+	 * @return true if <em>melacha</em> is prohibited or false if it is not.
+	 * 
+	 * @see JewishCalendar#isAssurBemelacha()
+	 * @see JewishCalendar#hasCandleLighting()
+	 * @see JewishCalendar#setInIsrael(boolean)
+	 */
+	public boolean isAssurBemlacha(Date currentTime, Date tzais, boolean inIsrael) {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+		jewishCalendar.setInIsrael(inIsrael);
+		
+		if(jewishCalendar.hasCandleLighting() && currentTime.compareTo(getElevationAdjustedSunset()) >= 0) { //erev shabbos, YT or YT sheni and after shkiah
+			return true;
+		}
+		
+		if(jewishCalendar.isAssurBemelacha()  && currentTime.compareTo(tzais) <= 0) { //is shabbos or YT and it is before tzais
+			return true;
+		}
+		
+		return false;
+	}
 }
