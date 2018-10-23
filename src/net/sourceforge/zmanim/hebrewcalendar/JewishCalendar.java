@@ -404,7 +404,7 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns true if the day has candle lighting. This will return true on erev <em>Shabbos</em>, erev <em>Yom Tov</em>, the
 	 * first day of <em>Rosh Hashana</em> and the first days of <em>Yom Tov</em> out of Israel. It is identical
-	 * to calling {@link isTomorrowYomTov()}.
+	 * to calling {@link isTomorrowShabbosOrYomTov()}.
 	 * 
 	 * @return if the day has candle lighting
 	 */
@@ -416,7 +416,7 @@ public class JewishCalendar extends JewishDate {
 	 * Returns true if tomorrow is <em>Shabbos</em> or <em>Yom Tov</em>. This will return true on erev <em>Shabbos</em>, erev
 	 * <em>Yom Tov</em>, the first day of <em>Rosh Hashana</em> and <em>erev</em> the first days of <em>Yom Tov</em> out of
 	 * Israel. It is identical to calling {@link hasCandleLighting()}.
-	 * @return
+	 * @return will return if the next day is <em>Shabbos</em> or <em>Yom Tov</em>
 	 */
 	public boolean isTomorrowShabbosOrYomTov() {
 		return getDayOfWeek() == 6 || isErevYomTov() || isErevYomTovSheni();
