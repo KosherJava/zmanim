@@ -592,7 +592,7 @@ public class HebrewDateFormatter {
 		String[] jOnes = new String[] { "", "\u05D0", "\u05D1", "\u05D2", "\u05D3", "\u05D4", "\u05D5", "\u05D6",
 				"\u05D7", "\u05D8" };
 
-		if (number == 0) { // do we realyl need this? Should it be applicable to a date?
+		if (number == 0) { // do we really need this? Should it be applicable to a date?
 			return EFES;
 		}
 		int shortNumber = number % 1000; // discard thousands
