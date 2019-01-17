@@ -932,6 +932,15 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
+	 * returns the number of days from Rosh Hashana of the date passed in, to the full date passed in.
+	 * 
+	 * @return the number of days
+	 */
+	public int getDaysSinceStartOfJewishYear() {
+		return getDaysSinceStartOfJewishYear(getJewishYear(), getJewishMonth(), getJewishDayOfMonth());
+	}
+
+	/**
 	 * Creates a Jewish date based on a Jewish year, month and day of month.
 	 * 
 	 * @param jewishYear
