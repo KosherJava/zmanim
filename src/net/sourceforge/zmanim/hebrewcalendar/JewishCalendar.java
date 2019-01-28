@@ -16,6 +16,7 @@
  */
 package net.sourceforge.zmanim.hebrewcalendar;
 
+import java.time.LocalDate;
 import net.sourceforge.zmanim.util.GeoLocation;
 
 import java.util.Calendar;
@@ -126,6 +127,16 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public JewishCalendar(Calendar calendar) {
 		super(calendar);
+	}
+
+        /**
+	 * A constructor that initializes the date to the {@link java.time.LocalDate LocalDate} parameter.
+	 * 
+	 * @param localDate
+	 *            the <code>LocalDate</code> to set the calendar to
+	 */
+	public JewishCalendar(LocalDate localDate) {
+		super(localDate);
 	}
 
 	/**
