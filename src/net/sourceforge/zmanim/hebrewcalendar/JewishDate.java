@@ -1351,6 +1351,24 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
+	 * Returns this object's date as a {@link java.util.Date} object.
+	 * 
+	 * @return The {@link java.util.Date}
+	 */
+        public Date toDate() {
+            return getGregorianCalendar().getTime();
+        }
+
+	/**
+	 * Returns this object's date as a {@link java.time.LocalDate} object.
+	 * 
+	 * @return The {@link java.time.LocalDate}
+	 */
+        public LocalDate toLocalDate() {
+            return LocalDate.of(getGregorianYear(), getGregorianMonth() + 1, getGregorianDayOfMonth());
+        }
+
+	/**
 	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
