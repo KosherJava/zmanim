@@ -3361,7 +3361,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaGedolaBaalHatanyaGreaterThan30() {
-		if (getMinchaGedola30Minutes == null || getMinchaGedolaBaalHatanya() == null) {
+		if (getMinchaGedola30Minutes() == null || getMinchaGedolaBaalHatanya() == null) {
 			return null;
 		} else {
 			return getMinchaGedola30Minutes().compareTo(getMinchaGedolaBaalHatanya()) > 0 ? getMinchaGedola30Minutes()
