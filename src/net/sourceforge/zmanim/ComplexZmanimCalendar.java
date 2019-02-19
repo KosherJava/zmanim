@@ -3361,11 +3361,11 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaGedolaBaalHatanyaGreaterThan30() {
-		if (getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 6.5) == null || getMinchaGedolaBaalHatanya() == null) {
+		if (getMinchaGedola30Minutes == null || getMinchaGedolaBaalHatanya() == null) {
 			return null;
 		} else {
-			return getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 6.5).compareTo(getMinchaGedolaBaalHatanya()) > 0 
-					? getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 6.5) : getMinchaGedolaBaalHatanya();
+			return getMinchaGedola30Minutes().compareTo(getMinchaGedolaBaalHatanya()) > 0 ? getMinchaGedola30Minutes()
+					: getMinchaGedolaBaalHatanya();
 		}
 	}
 
