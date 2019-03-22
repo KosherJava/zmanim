@@ -13,15 +13,15 @@ The ZmanimCalendar contains the most common zmanim or religious time calculation
 extensive list of _zmanim_ use the ComplexZmanimCalendar.
 This class contains the main functionality of the Zmanim library.
 
-For a basic set of instructions on the use of the API, see [How to Use the Zmanim API](http://www.kosherjava.com/zmanim-project/how-to-use-the-zmanim-api/), [zmanim code samples](http://www.kosherjava.com/tag/code-sample/) and the [KosherJava FAQ](http://www.kosherjava.com/tag/faq/).
+For a basic set of instructions on the use of the API, see [How to Use the Zmanim API](https://kosherjava.com/zmanim-project/how-to-use-the-zmanim-api/), [zmanim code samples](https://kosherjava.com/tag/code-sample/) and the [KosherJava FAQ](https://kosherjava.com/tag/faq/). See the <a href="https://kosherjava.com">KosherJava Zmanim site</a> for additional information.
 
 License
 -------
-The library is released under the [LGPL 2.1 license](http://www.kosherjava.com/2011/05/09/kosherjava-zmanim-api-released-under-the-lgpl-license/).
+The library is released under the [LGPL 2.1 license](https://kosherjava.com/2011/05/09/kosherjava-zmanim-api-released-under-the-lgpl-license/).
 
 Ports to Other Languages
 ------------------------
-The KosherJava Zmanim API has benn ported to:
+The KosherJava Zmanim API has been ported to:
 * Objective-C / Swift - https://github.com/MosheBerman/KosherCocoa
 * .NET - https://github.com/Yitzchok/Zmanim
 * JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim
