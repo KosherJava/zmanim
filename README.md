@@ -24,7 +24,7 @@ Ports to Other Languages
 The KosherJava Zmanim API has been ported to:
 * Objective-C / Swift - https://github.com/MosheBerman/KosherCocoa
 * .NET - https://github.com/Yitzchok/Zmanim
-* JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim
+* JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim and https://github.com/yparitcher/zmanJS
 * Ruby - https://github.com/pinnymz/ruby-zmanim
 * Scala - https://github.com/nafg/jewish-date
 * C - https://github.com/yparitcher/libzmanim
