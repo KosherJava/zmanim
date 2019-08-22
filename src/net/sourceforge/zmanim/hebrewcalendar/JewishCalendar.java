@@ -445,8 +445,31 @@ public class JewishCalendar extends JewishDate {
 	 * @see #CHOL_HAMOED_SUCCOS
 	 */
 	public boolean isCholHamoed() {
+		return isCholHamoedPesach() || isCholHamoedSuccos();
+	}
+
+	/**
+	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em>.
+	 *
+	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em>
+	 * @see #isYomTov()
+	 * @see #CHOL_HAMOED_PESACH
+	 */
+	public boolean isCholHamoedPesach() {
 		int holidayIndex = getYomTovIndex();
-		return holidayIndex == JewishCalendar.CHOL_HAMOED_PESACH || holidayIndex == JewishCalendar.CHOL_HAMOED_SUCCOS;
+		return holidayIndex == JewishCalendar.CHOL_HAMOED_PESACH;
+	}
+
+	/**
+	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Succos</em>.
+	 *
+	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Succos</em>
+	 * @see #isYomTov()
+	 * @see #CHOL_HAMOED_SUCCOS
+	 */
+	public boolean isCholHamoedSuccos() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == JewishCalendar.CHOL_HAMOED_SUCCOS;
 	}
 
 	/**
