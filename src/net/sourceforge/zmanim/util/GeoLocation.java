@@ -436,7 +436,7 @@ public class GeoLocation implements Cloneable {
 			return fwdAz;
 		} else if (formula == FINAL_BEARING) {
 			return revAz;
-		} else { // should never happpen
+		} else { // should never happen
 			return Double.NaN;
 		}
 	}

@@ -159,7 +159,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * elevationAdjustment = Math.toDegrees(Math.acos(earthRadiusInMeters / (earthRadiusInMeters + elevationMeters)));
 	 * </pre>
 	 * 
-	 * The source of this algorthitm is <a href="http://www.calendarists.com">Calendrical Calculations</a> by Edward M.
+	 * The source of this algorithm is <a href="http://www.calendarists.com">Calendrical Calculations</a> by Edward M.
 	 * Reingold and Nachum Dershowitz. An alternate algorithm that produces an almost identical (but not accurate)
 	 * result found in Ma'aglay Tzedek by Moishe Kosower and other sources is:
 	 * 
@@ -216,7 +216,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	/**
 	 * Method to get the refraction value to be used when calculating sunrise and sunset. The default value is 34 arc
 	 * minutes. The <a href="http://emr.cs.iit.edu/home/reingold/calendar-book/second-edition/errata.pdf">Errata and
-	 * Notes for Calendrical Calculations: The Millenium Eddition</a> by Edward M. Reingold and Nachum Dershowitz lists
+	 * Notes for Calendrical Calculations: The Millennium Edition</a> by Edward M. Reingold and Nachum Dershowitz lists
 	 * the actual average refraction value as 34.478885263888294 or approximately 34' 29". The refraction value as well
 	 * as the solarRadius and elevation adjustment are added to the zenith used to calculate sunrise and sunset.
 	 * 
