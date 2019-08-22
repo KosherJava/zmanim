@@ -80,10 +80,10 @@ public class HebrewDateFormatter {
 	private String transliteratedShabbosDayOfweek = "Shabbos";
 
 	/**
-	 * Returns the day of Shabbos transliterated into Latin chars. The default uses Ashkenazi pronounciation "Shabbos".
+	 * Returns the day of Shabbos transliterated into Latin chars. The default uses Ashkenazi pronunciation "Shabbos".
 	 * This can be overwritten using the {@link #setTransliteratedShabbosDayOfWeek(String)}
 	 * 
-	 * @return the transliteratedShabbos. The default list of months uses Ashkenazi pronounciation "Shabbos".
+	 * @return the transliteratedShabbos. The default list of months uses Ashkenazi pronunciation "Shabbos".
 	 * @see #setTransliteratedShabbosDayOfWeek(String)
 	 * @see #formatDayOfWeek(JewishDate)
 	 */
@@ -138,7 +138,7 @@ public class HebrewDateFormatter {
 	 * 
 	 * @param transliteratedHolidays
 	 *            the transliteratedHolidays to set. Ensure that the sequence exactly matches the list returned by the
-	 *            defaulyt
+	 *            default
 	 */
 	public void setTransliteratedHolidayList(String[] transliteratedHolidays) {
 		this.transliteratedHolidays = transliteratedHolidays;
@@ -378,7 +378,7 @@ public class HebrewDateFormatter {
 	 * calculated for 729 and format as &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8;. When set to true the long format year such
 	 * as &#x5D4;&#x5F3; &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8; for 5729/1969 is returned.
 	 * 
-	 * @return true if set to use the the thousands digit when formatting Hebrew dates and numbers.
+	 * @return true if set to use the thousands digit when formatting Hebrew dates and numbers.
 	 */
 	public boolean isUseLongHebrewYears() {
 		return useLonghebrewYears;
