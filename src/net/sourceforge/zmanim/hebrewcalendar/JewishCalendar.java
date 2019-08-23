@@ -441,7 +441,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return if the current day is <em>Aseret Yemei Teshuvah</em>
 	 */
-	public boolean isAseretYemeiTeshuva(){
+	public boolean isAseresYemeiTeshuva(){
 		return getJewishMonth() == JewishCalendar.TISHREI && getJewishDayOfMonth() <= 10;
 	}
 
