@@ -2,6 +2,7 @@
  * Zmanim Java API
  * Copyright (C) 2011 - 2018 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
+ * Copyright (C) 2019 Y Paritcher
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -27,18 +28,19 @@ import java.util.TimeZone;
  * 
  * This open source Java code was originally ported by <a href="http://www.facebook.com/avromf">Avrom Finkelstien</a>
  * from his C++ code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements
- * and some bug fixing. The class allows setting whether the holiday scheme follows the Israel scheme or outside Israel
+ * and some bug fixing. The class allows setting whether the holiday and parsha scheme follows the Israel scheme or outside Israel
  * scheme. The default is the outside Israel scheme.
+ * The parsha code was ported by Y Paritcher from libzmanim <a href="https://github.com/yparitcher/libzmanim">
  * 
  * @todo Some do not belong in this class, but here is a partial list of what should still be implemented in some form:
  * <ol>
  * <li>Add Isru Chag</li>
- * <li>Shabbos Mevarchim</li>
  * <li>Mishna yomis etc</li>
  * </ol>
  * 
  * @see java.util.Date
  * @see java.util.Calendar
+ * @author &copy; Y Paritcher 2019
  * @author &copy; Avrom Finkelstien 2002
  * @author &copy; Eliyahu Hershfeld 2011 - 2018
  */
@@ -79,6 +81,26 @@ public class JewishCalendar extends JewishDate {
 
 	private boolean inIsrael = false;
 	private boolean useModernHolidays = false;
+
+	public static enum parshah {NONE, BERESHIS, NOACH, LECH_LECHA, VAYERA, CHAYEI_SARA, TOLDOS, VAYETZEI, VAYISHLACH, VAYESHEV, MIKETZ, VAYIGASH, VAYECHI, SHEMOS, VAERA, BO, BESHALACH, YISRO, MISHPATIM, TERUMAH, TETZAVEH, KI_SISA, VAYAKHEL, PEKUDEI, VAYIKRA, TZAV, SHMINI, TAZRIA, METZORA, ACHREI_MOS, KEDOSHIM, EMOR, BEHAR, BECHUKOSAI, BAMIDBAR, NASSO, BEHAALOSCHA, SHLACH, KORACH, CHUKAS, BALAK, PINCHAS, MATOS, MASEI, DEVARIM, VAESCHANAN, EIKEV, REEH, SHOFTIM, KI_SEITZEI, KI_SAVO, NITZAVIM, VAYEILECH, HAAZINU, VZOS_HABERACHA, VAYAKHEL_PEKUDEI, TAZRIA_METZORA, ACHREI_MOS_KEDOSHIM, BEHAR_BECHUKOSAI, CHUKAS_BALAK, MATOS_MASEI, NITZAVIM_VAYEILECH, SHKALIM, ZACHOR, PARA, HACHODESH};
+	public static final parshah[][] parshahlist = {
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NONE, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS_BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NONE, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS_BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.ACHREI_MOS, parshah.NONE, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS, parshah.MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.ACHREI_MOS, parshah.NONE, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS, parshah.MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NONE, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS_BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR_BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL_PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.NONE, parshah.SHMINI, parshah.TAZRIA_METZORA, parshah.ACHREI_MOS_KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH},
+		{parshah.NONE, parshah.VAYEILECH, parshah.HAAZINU, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS, parshah.MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM},
+		{parshah.NONE, parshah.NONE, parshah.HAAZINU, parshah.NONE, parshah.NONE, parshah.BERESHIS, parshah.NOACH, parshah.LECH_LECHA, parshah.VAYERA, parshah.CHAYEI_SARA, parshah.TOLDOS, parshah.VAYETZEI, parshah.VAYISHLACH, parshah.VAYESHEV, parshah.MIKETZ, parshah.VAYIGASH, parshah.VAYECHI, parshah.SHEMOS, parshah.VAERA, parshah.BO, parshah.BESHALACH, parshah.YISRO, parshah.MISHPATIM, parshah.TERUMAH, parshah.TETZAVEH, parshah.KI_SISA, parshah.VAYAKHEL, parshah.PEKUDEI, parshah.VAYIKRA, parshah.TZAV, parshah.SHMINI, parshah.TAZRIA, parshah.METZORA, parshah.NONE, parshah.ACHREI_MOS, parshah.KEDOSHIM, parshah.EMOR, parshah.BEHAR, parshah.BECHUKOSAI, parshah.BAMIDBAR, parshah.NASSO, parshah.BEHAALOSCHA, parshah.SHLACH, parshah.KORACH, parshah.CHUKAS, parshah.BALAK, parshah.PINCHAS, parshah.MATOS_MASEI, parshah.DEVARIM, parshah.VAESCHANAN, parshah.EIKEV, parshah.REEH, parshah.SHOFTIM, parshah.KI_SEITZEI, parshah.KI_SAVO, parshah.NITZAVIM_VAYEILECH}};
 
 	/**
 	 * Is this calendar set to return modern Israeli national holidays. By default this value is false. The holidays
@@ -186,6 +208,131 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean getInIsrael() {
 		return inIsrael;
+	}
+
+	/**
+	 * return the type of year for parshah calculations.
+	*/
+	private int getYearType()
+	{
+		int yearWday = (getJewishCalendarElapsedDays(getJewishYear())+1)%7;
+		if (isJewishLeapYear())
+		{
+			switch (yearWday)
+			{
+			case 2:
+				if (isKislevShort())
+				{
+					if (getInIsrael()) { return 14;}
+					return 6;
+				}
+				if (isCheshvanLong())
+				{
+					if (getInIsrael()) { return 15;}
+					return 7;
+				}
+				break;
+			case 3:
+				if (getInIsrael()) { return 15;}
+				return 7;
+			case 5:
+				if (isKislevShort()) {return 8;}
+				if (isCheshvanLong()) {return 9;}
+				break;
+			case 0:
+				if (isKislevShort()) {return 10;}
+				if (isCheshvanLong())
+				{
+					if (getInIsrael()) { return 16;}
+					return 11;
+				}
+				break;
+			}
+		} else {
+			switch (yearWday)
+			{
+			case 2:
+				if (isKislevShort()) {return 0;}
+				if (isCheshvanLong())
+				{
+					if (getInIsrael()) { return 12;}
+					return 1;
+				}
+				break;
+			case 3:
+				if (getInIsrael()) { return 12;}
+				return 1;
+			case 5:
+				if (isCheshvanLong()) {return 3;}
+				if (!isKislevShort())
+				{
+					if (getInIsrael()) { return 13;}
+					return 2;
+				}
+				break;
+			case 0:
+				if (isKislevShort()) {return 4;}
+				if (isCheshvanLong()) {return 5;}
+				break;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * returns a parshah enum with the weeks parshah if it is Shabbos.
+	 * returns NONE if a weekday or if there is no parshah that week (for example Yomtov is on Shabbos)
+	 * @return the current parshah
+	*/
+	public parshah getParshahIndex()
+	{
+		int yearType = getYearType();
+		int yearWday = getJewishCalendarElapsedDays(getJewishYear())%7;
+		int day = yearWday + getDaysSinceStartOfJewishYear();
+		if (getDayOfWeek() != 7) {return parshah.NONE;}
+		if (yearType >= 0)
+		{
+			return parshahlist[yearType][day/7];
+		}
+		return parshah.NONE;
+	}
+
+	/**
+	 * returns a parshah enum if the week is one of the four parshahs if it is Shabbos.
+	 * returns NONE if a weekday
+	 * @return one of the four parshahs
+	*/
+	public parshah getSpecialShabbos() {
+		if(getDayOfWeek() != 7)
+		{
+			if((getJewishMonth() == 11 && !isJewishLeapYear()) || (getJewishMonth() == 12 && isJewishLeapYear()))
+			{
+				if(getJewishDayOfMonth() == 25
+				|| getJewishDayOfMonth() == 27
+				|| getJewishDayOfMonth() == 29)
+				{return parshah.SHKALIM;}
+			}
+			if((getJewishMonth() == 12 && !isJewishLeapYear()) || getJewishMonth() == 13)
+			{
+				if(getJewishDayOfMonth() == 1) {return parshah.SHKALIM;}
+				if(getJewishDayOfMonth() == 8
+				|| getJewishDayOfMonth() == 9
+				|| getJewishDayOfMonth() == 11
+				|| getJewishDayOfMonth() == 13)
+				{return parshah.ZACHOR;}
+				if(getJewishDayOfMonth() == 18
+				|| getJewishDayOfMonth() == 20
+				|| getJewishDayOfMonth() == 22
+				|| getJewishDayOfMonth() == 23)
+				{return parshah.PARA;}
+				if(getJewishDayOfMonth() == 25
+				|| getJewishDayOfMonth() == 27
+				|| getJewishDayOfMonth() == 29)
+				{return parshah.HACHODESH;}
+			}
+			if(getJewishMonth() == 1 && getJewishDayOfMonth() == 1) {return parshah.HACHODESH;}
+		}
+		return parshah.NONE;
 	}
 
 	/**
@@ -386,7 +533,7 @@ public class JewishCalendar extends JewishDate {
 	 *
 	 * @return if the <em>Yom Tov</em> day has a <em>melacha</em> (work)  prohibition.
 	 */
-	public boolean isYomTovAssurBemelacha(){
+	public boolean isYomTovAssurBemelacha() {
 		int holidayIndex = getYomTovIndex();
 		return holidayIndex == PESACH || holidayIndex == SHAVUOS || holidayIndex == SUCCOS || holidayIndex == SHEMINI_ATZERES ||
 				holidayIndex == SIMCHAS_TORAH || holidayIndex == ROSH_HASHANA  || holidayIndex == YOM_KIPPUR;
@@ -397,7 +544,7 @@ public class JewishCalendar extends JewishDate {
 	 * This method will return false for a.
 	 * @return if the day is a <em>Yom Tov</em> that is <em>assur bemlacha</em> or <em>Shabbos</em>
 	 */
-	public boolean isAssurBemelacha(){
+	public boolean isAssurBemelacha() {
 		return getDayOfWeek() == 7 || isYomTovAssurBemelacha();
 	}
 	
@@ -540,6 +687,24 @@ public class JewishCalendar extends JewishDate {
 	public boolean isRoshChodesh() {
 		// Rosh Hashana is not rosh chodesh. Elul never has 30 days
 		return (getJewishDayOfMonth() == 1 && getJewishMonth() != TISHREI) || getJewishDayOfMonth() == 30;
+	}
+
+	/**
+	 * Returns if the day is Shabbos and sunday is Rosh Chodesh.
+	 *
+	 * @return true if it is Shabbos and sunday is Rosh Chodesh.
+	 */
+	public boolean isMacharChodesh() {
+		return (getDayOfWeek() == 7 && (getJewishDayOfMonth() == 30 || getJewishDayOfMonth() == 29));
+	}
+
+	/**
+	 * Returns if the day is Shabbos Mevorchim.
+	 *
+	 * @return true if it is Shabbos Mevorchim.
+	 */
+	public boolean isShabbosMevorchim() {
+		return (getDayOfWeek() == 7 && getJewishDayOfMonth() >= 23 && getJewishDayOfMonth() <= 29);
 	}
 
 	/**
