@@ -331,6 +331,17 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzaisGeonim6Point45Degrees()
 	 */
 	protected static final double ZENITH_6_POINT_45 = GEOMETRIC_ZENITH + 6.45;
+
+	/**
+	 * The zenith of 7.12&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating <em>tzais</em> (nightfall) according to some opinions. This is based on the calculations of <a href=
+	 * "https://en.wikipedia.org/wiki/Moshe_Feinstein">Rabbi Moshe Feinstein</a> of the position of the sun no later
+	 * than {@link #getTzaisGeonim7Point12Degrees() 41 minutes} after sunset in New York for those who find fasting
+	 * difficult. This computes to 7.12&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * 
+	 * @see #getTzaisGeonim7Point12Degrees()
+	 */
+	protected static final double ZENITH_7_POINT_12 = GEOMETRIC_ZENITH + 7.12;
 	
 	/**
 	 * The zenith of 7.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
@@ -2133,6 +2144,24 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getTzaisGeonim6Point45Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_6_POINT_45);
+	}
+
+	/**
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> as calculated by
+	 * <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rabbi Moshe Feinstein</a> of the position of the sun no later
+	 * than {@link #getTzaisGeonim7Point12Degrees() 41 minutes} after sunset in New York for those who find fasting
+	 * difficult. This computes to 7.12&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * @todo Additional documentation details needed.
+	 * 
+	 * @return the <code>Date</code> representing the time when the sun is 7.12&deg; below sea level. If the
+	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
+	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
+	 *         calculation, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * @see #ZENITH_7_POINT_12
+	 */
+	public Date getTzaisGeonim7Point12Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_7_POINT_12);
 	}
 
 	/**
