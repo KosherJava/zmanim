@@ -39,6 +39,7 @@ public class HebrewDateFormatter {
 	private boolean useLonghebrewYears = false;
 	private boolean useGershGershayim = true;
 	private boolean longWeekFormat = true;
+	private boolean useFinalFormLetters = false;
 	private SimpleDateFormat weekFormat = null;
 
 	/**
@@ -373,6 +374,31 @@ public class HebrewDateFormatter {
 	}
 
 	/**
+	 * Returns whether the class is set to use the &#x05DE;&#x05E0;&#x05E6;&#x05E4;&#x05F4;&#x05DA; letters when
+	 * formatting years ending in 20, 40, 50, 80 and 90. Traditionally non-final form letters are used, so the year
+	 * 5780 would be formatted as &#x05EA;&#x05E9;&#x05F4;&#x05E4; if the default false is used here. If this returns
+	 * true, the format &#x05EA;&#x05E9;&#x05F4;&#x05E3; would be used.
+	 * 
+	 * @return true if set to use final form letters when formatting Hebrew years. The default value is false.
+	 */
+	public boolean isUseFinalFormLetters() {
+		return useFinalFormLetters;
+	}
+
+	/**
+	 * When formatting a Hebrew Year, traditionally years ending in 20, 40, 50, 80 and 90 are formatted using non-final
+	 * form letters for example &#x05EA;&#x05E9;&#x05F4;&#x05E4; for the year 5780. Setting this to true (the default
+	 * is false) will use the final form letters for &#x05DE;&#x05E0;&#x05E6;&#x05E4;&#x05F4;&#x05DA; and will format
+	 * the year 5780 as &#x05EA;&#x05E9;&#x05F4;&#x05E3;.
+	 * 
+	 * @param useFinalFormLetters
+	 *            Set this to true to use final form letters when formatting Hebrew years.
+	 */
+	public void setUseFinalFormLetters(boolean useFinalFormLetters) {
+		this.useFinalFormLetters = useFinalFormLetters;
+	}
+
+	/**
 	 * Returns whether the class is set to use the thousands digit when formatting. When formatting a Hebrew Year,
 	 * traditionally the thousands digit is omitted and output for a year such as 5729 (1969 Gregorian) would be
 	 * calculated for 729 and format as &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8;. When set to true the long format year such
@@ -396,7 +422,6 @@ public class HebrewDateFormatter {
 	public void setUseLongHebrewYears(boolean useLongHebrewYears) {
 		this.useLonghebrewYears = useLongHebrewYears;
 	}
-
 	/**
 	 * Formats the Jewish date. If the formatter is set to Hebrew, it will format in the form, "day Month year" for
 	 * example &#x5DB;&#x5F4;&#x5D0; &#x5E9;&#x5D1;&#x5D8; &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8;, and the format
@@ -628,7 +653,11 @@ public class HebrewDateFormatter {
 			int tens = number / 10;
 			if (number % 10 == 0) { // if evenly divisable by 10
 				if (singleDigitNumber == false) {
-					sb.append(jTenEnds[tens]); // end letters so years like 5750 will end with an end nun
+					if(isUseFinalFormLetters()) {
+						sb.append(jTenEnds[tens]); // years like 5780 will end with a final form &#x05E3;
+					} else {
+						sb.append(jTens[tens]); // years like 5780 will end with a regular &#x05E4;
+					}
 				} else {
 					sb.append(jTens[tens]); // standard letters so years like 5050 will end with a regular nun
 				}
