@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2014 Eliyahu Hershfeld
+ * Copyright (C) 2004-2019 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -19,10 +19,11 @@ import java.util.Calendar;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at
- * runtime, easily allowing comparison the results of using different algorithms. TODO: consider methods that would
- * allow atmospheric modeling. This can currently be adjusted by {@link #setRefraction(double) setting the refraction}.
+ * runtime, easily allowing comparison the results of using different algorithms.
+ * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
+ * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2014
+ * @author &copy; Eliyahu Hershfeld 2004 - 2019
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -75,13 +76,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	private static final double GEOMETRIC_ZENITH = 90;
 
 	/**
-	 * getDefault method returns the default sun times calculation engine.
+	 * Returns the default class for calculating sunrise and sunset. This is currently the {@link NOAACalculator},
+	 * but this may change.
 	 * 
 	 * @return AstronomicalCalculator the default class for calculating sunrise and sunset. In the current
-	 *         implementation the default calculator returned is the {@link SunTimesCalculator}.
+	 *         implementation the default calculator returned is the {@link NOAACalculator}.
 	 */
 	public static AstronomicalCalculator getDefault() {
-		return new SunTimesCalculator();
+		return new NOAACalculator();
 	}
 
 	/**
@@ -175,7 +177,6 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		// double elevationAdjustment = 0.0347 * Math.sqrt(elevation);
 		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
 		return elevationAdjustment;
-
 	}
 
 	/**
@@ -227,9 +228,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * A method to allow overriding the default refraction of the calculator. TODO: At some point in the future, an
-	 * AtmosphericModel or Refraction object that models the atmosphere of different locations might be used for
-	 * increased accuracy.
+	 * A method to allow overriding the default refraction of the calculator.
+	 * @todo At some point in the future, an AtmosphericModel or Refraction object that models the atmosphere of different
+	 * locations might be used for increased accuracy.
 	 * 
 	 * @param refraction
 	 *            The refraction in arc minutes.
