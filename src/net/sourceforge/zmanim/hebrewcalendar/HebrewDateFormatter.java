@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2018 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2019 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishDate
  * @see net.sourceforge.zmanim.hebrewcalendar.JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2018
+ * @author &copy; Eliyahu Hershfeld 2011 - 2019
  */
 public class HebrewDateFormatter {
 	private boolean hebrewFormat = false;
@@ -481,7 +481,7 @@ public class HebrewDateFormatter {
 
 	/**
 	 * Formats a molad.
-	 * TODO: Experimental and incomplete
+	 * @todo Experimental and incomplete.
 	 * 
 	 * @param moladChalakim the chalakim of the molad
 	 * @return the formatted molad. FIXME: define proper format in English and Hebrew.
