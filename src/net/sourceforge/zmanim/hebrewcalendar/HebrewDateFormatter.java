@@ -17,6 +17,8 @@ package net.sourceforge.zmanim.hebrewcalendar;
 
 import java.text.SimpleDateFormat;
 
+import net.sourceforge.zmanim.hebrewcalendar.parsha.Parsha;
+
 /**
  * The HebrewDateFormatter class formats a {@link JewishDate}.
  * 
@@ -45,7 +47,7 @@ public class HebrewDateFormatter {
 	private SimpleDateFormat weekFormat = null;
 
 	/**
-	 * returns if the {@link #formatDayOfWeek(JewishDate)} will use the long format such as
+	 * Returns if the {@link #formatDayOfWeek(JewishDate)} will use the long format such as
 	 * &#x05E8;&#x05D0;&#x05E9;&#x05D5;&#x05DF; or short such as &#x05D0; when formatting the day of week in
 	 * {@link #isHebrewFormat() Hebrew}.
 	 * 
@@ -191,6 +193,15 @@ public class HebrewDateFormatter {
 		return index == -1 ? "" : hebrewFormat ? hebrewHolidays[index] : transliteratedHolidays[index];
 	}
 
+	/**
+	 * Formats a day as Rosh Chodesh in the format of in the format of &#x05E8;&#x05D0;&#x05E9;
+	 * &#x05D7;&#x05D5;&#x05D3;&#x05E9; &#x05E9;&#x05D1;&#x05D8; or Rosh Chodesh Shevat. If it
+	 * is not Rosh Chodesh, an empty <code>String</code> will be returned.
+	 * @param jewishCalendar the JewishCalendar
+	 * @return The formatted <code>String</code> in the format of &#x05E8;&#x05D0;&#x05E9;
+	 * &#x05D7;&#x05D5;&#x05D3;&#x05E9; &#x05E9;&#x05D1;&#x05D8; or Rosh Chodesh Shevat. If it
+	 * is not Rosh Chodesh, an empty <code>String</code> will be returned.
+	 */
 	public String formatRoshChodesh(JewishCalendar jewishCalendar) {
 		if (!jewishCalendar.isRoshChodesh()) {
 			return "";
@@ -299,7 +310,10 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Unicode list of Hebrew months.
+	 * Unicode list of Hebrew months in the format of ["\u05E0\u05D9\u05E1\u05DF","\u05D0\u05D9\u05D9\u05E8",
+	 * "\u05E1\u05D9\u05D5\u05DF","\u05EA\u05DE\u05D5\u05D6","\u05D0\u05D1","\u05D0\u05DC\u05D5\u05DC",
+	 * "\u05EA\u05E9\u05E8\u05D9","\u05D7\u05E9\u05D5\u05DF","\u05DB\u05E1\u05DC\u05D5","\u05D8\u05D1\u05EA",
+	 * "\u05E9\u05D1\u05D8","\u05D0\u05D3\u05E8","\u05D0\u05D3\u05E8 \u05D1","\u05D0\u05D3\u05E8 \u05D0"]
 	 * 
 	 * @see #formatMonth(JewishDate)
 	 */
@@ -310,7 +324,9 @@ public class HebrewDateFormatter {
 			"\u05D0\u05D3\u05E8 \u05D0" };
 
 	/**
-	 * Unicode list of Hebrew days of week.
+	 * Unicode list of Hebrew days of week in the format of ["&#x05E8;&#x05D0;&#x05E9;&#x05D5;&#x05DF;",
+	 * "&#x05E9;&#x05E0;&#x05D9;","&#x05E9;&#x05DC;&#x05D9;&#x05E9;&#x05D9;","&#x05E8;&#x05D1;&#x05D9;&#x05E2;&#x05D9;",
+	 * "&#x05D7;&#x05DE;&#x05D9;&#x05E9;&#x05D9;","&#x05E9;&#x05E9;&#x05D9;","&#x05E9;&#x05D1;&#x05EA;"]
 	 */
 	private static final String[] hebrewDaysOfWeek = { "\u05E8\u05D0\u05E9\u05D5\u05DF", "\u05E9\u05E0\u05D9",
 			"\u05E9\u05DC\u05D9\u05E9\u05D9", "\u05E8\u05D1\u05D9\u05E2\u05D9", "\u05D7\u05DE\u05D9\u05E9\u05D9",
@@ -600,6 +616,9 @@ public class HebrewDateFormatter {
 	 * @param number
 	 *            the number to be formatted. It will trow an IllegalArgumentException if the number is &lt; 0 or &gt; 9999.
 	 * @return the Hebrew formatted number such as &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8;
+	 * @see #isUseFinalFormLetters()
+	 * @see #isUseGershGershayim()
+	 * @see #isHebrewFormat()
 	 * 
 	 */
 	public String formatHebrewNumber(int number) {
@@ -680,5 +699,96 @@ public class HebrewDateFormatter {
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * Unicode list of Hebrew parshiyos.
+	 */
+	private static final String[] hebrewParshiyos = { "\u05D1\u05E8\u05D0\u05E9\u05D9\u05EA", "\u05E0\u05D7",
+			"\u05DC\u05DA \u05DC\u05DA", "\u05D5\u05D9\u05E8\u05D0", "\u05D7\u05D9\u05D9 \u05E9\u05E8\u05D4",
+			"\u05EA\u05D5\u05DC\u05D3\u05D5\u05EA", "\u05D5\u05D9\u05E6\u05D0", "\u05D5\u05D9\u05E9\u05DC\u05D7",
+			"\u05D5\u05D9\u05E9\u05D1", "\u05DE\u05E7\u05E5", "\u05D5\u05D9\u05D2\u05E9", "\u05D5\u05D9\u05D7\u05D9",
+
+			"\u05E9\u05DE\u05D5\u05EA", "\u05D5\u05D0\u05E8\u05D0", "\u05D1\u05D0", "\u05D1\u05E9\u05DC\u05D7",
+			"\u05D9\u05EA\u05E8\u05D5", "\u05DE\u05E9\u05E4\u05D8\u05D9\u05DD", "\u05EA\u05E8\u05D5\u05DE\u05D4",
+			"\u05EA\u05E6\u05D5\u05D4", "\u05DB\u05D9 \u05EA\u05E9\u05D0", "\u05D5\u05D9\u05E7\u05D4\u05DC",
+			"\u05E4\u05E7\u05D5\u05D3\u05D9",
+
+			"\u05D5\u05D9\u05E7\u05E8\u05D0", "\u05E6\u05D5", "\u05E9\u05DE\u05D9\u05E0\u05D9",
+			"\u05EA\u05D6\u05E8\u05D9\u05E2", "\u05DE\u05E6\u05E8\u05E2",
+			"\u05D0\u05D7\u05E8\u05D9 \u05DE\u05D5\u05EA", "\u05E7\u05D3\u05D5\u05E9\u05D9\u05DD",
+			"\u05D0\u05DE\u05D5\u05E8", "\u05D1\u05D4\u05E8", "\u05D1\u05D7\u05E7\u05EA\u05D9",
+
+			"\u05D1\u05DE\u05D3\u05D1\u05E8", "\u05E0\u05E9\u05D0", "\u05D1\u05D4\u05E2\u05DC\u05EA\u05DA",
+			"\u05E9\u05DC\u05D7 \u05DC\u05DA", "\u05E7\u05E8\u05D7", "\u05D7\u05D5\u05E7\u05EA", "\u05D1\u05DC\u05E7",
+			"\u05E4\u05D9\u05E0\u05D7\u05E1", "\u05DE\u05D8\u05D5\u05EA", "\u05DE\u05E1\u05E2\u05D9",
+
+			"\u05D3\u05D1\u05E8\u05D9\u05DD", "\u05D5\u05D0\u05EA\u05D7\u05E0\u05DF", "\u05E2\u05E7\u05D1",
+			"\u05E8\u05D0\u05D4", "\u05E9\u05D5\u05E4\u05D8\u05D9\u05DD", "\u05DB\u05D9 \u05EA\u05E6\u05D0",
+			"\u05DB\u05D9 \u05EA\u05D1\u05D5\u05D0", "\u05E0\u05D9\u05E6\u05D1\u05D9\u05DD",
+			"\u05D5\u05D9\u05DC\u05DA", "\u05D4\u05D0\u05D6\u05D9\u05E0\u05D5",
+
+			"\u05D5\u05D9\u05E7\u05D4\u05DC \u05E4\u05E7\u05D5\u05D3\u05D9",
+			"\u05EA\u05D6\u05E8\u05D9\u05E2 \u05DE\u05E6\u05E8\u05E2",
+			"\u05D0\u05D7\u05E8\u05D9 \u05DE\u05D5\u05EA \u05E7\u05D3\u05D5\u05E9\u05D9\u05DD",
+			"\u05D1\u05D4\u05E8 \u05D1\u05D7\u05E7\u05EA\u05D9", "\u05D7\u05D5\u05E7\u05EA \u05D1\u05DC\u05E7",
+			"\u05DE\u05D8\u05D5\u05EA \u05DE\u05E1\u05E2\u05D9",
+			"\u05E0\u05D9\u05E6\u05D1\u05D9\u05DD \u05D5\u05D9\u05DC\u05DA" };
+	
+	/**
+	 * list of transliterated parshiyos using the default Ashkenazi pronounciation. The formatParsha method uses this
+	 * for transliterated parsha display. This list can be overridden (for Sephardi English transliteration for example)
+	 * by setting the {@link #setTransliteratedParshiosList(String[])}.
+	 * 
+	 * @see #formatParsha(JewishCalendar)
+	 */
+	private String[] transliteratedParshios = { "Bereshis", "Noach", "Lech Lecha", "Vayera", "Chayei Sara", "Toldos",
+			"Vayetzei", "Vayishlach", "Vayeshev", "Miketz", "Vayigash", "Vayechi", "Shemos", "Vaera", "Bo",
+			"Beshalach", "Yisro", "Mishpatim", "Terumah", "Tetzaveh", "Ki Sisa", "Vayakhel", "Pekudei", "Vayikra",
+			"Tzav", "Shmini", "Tazria", "Metzora", "Achrei Mos", "Kedoshim", "Emor", "Behar", "Bechukosai", "Bamidbar",
+			"Nasso", "Beha'aloscha", "Sh'lach", "Korach", "Chukas", "Balak", "Pinchas", "Matos", "Masei", "Devarim",
+			"Vaeschanan", "Eikev", "Re'eh", "Shoftim", "Ki Seitzei", "Ki Savo", "Nitzavim", "Vayeilech", "Ha'Azinu",
+			"Vayakhel Pekudei", "Tazria Metzora", "Achrei Mos Kedoshim", "Behar Bechukosai", "Chukas Balak",
+			"Matos Masei", "Nitzavim Vayeilech" };
+
+	/**
+	 * Retruns the list of transliterated parshiyos used by this formatter.
+	 * 
+	 * @return the list of transliterated Parshios
+	 */
+	public String[] getTransliteratedParshiosList() {
+		return transliteratedParshios;
+	}
+
+	/**
+	 * Setter method to allow overriding of the default list of parshiyos transliterated into into Latin chars. The
+	 * default uses Ashkenazi American English transliteration.
+	 * 
+	 * @param transliteratedParshios
+	 *            the transliterated Parshios to set
+	 * @see #getTransliteratedParshiosList()
+	 */
+	public void setTransliteratedParshiosList(String[] transliteratedParshios) {
+		this.transliteratedParshios = transliteratedParshios;
+	}
+	
+	/**
+	 * If the formatter is set to format in Hebrew, returns a string of the current parsha(ios) in Hebrew for example
+	 * &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD;
+	 * &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if there are none. If not set to Hebrew, it returns a string
+	 * of the parsha(ios) transliterated into Latin chars. The default uses Ashkenazi pronunciation in typical American
+	 * English spelling, for example Bereshis or Nitzavim Vayeilech or an empty string if there are none.
+	 * 
+	 * @param jewishCalendar the JewishCalendar Object
+	 * @return today's parsha(ios) in Hebrew for example, if the formatter is set to format in Hebrew, returns a string
+	 *         of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
+	 *         &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if
+	 *         there are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin
+	 *         chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
+	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
+	 */
+	public String formatParsha(JewishCalendar jewishCalendar) {
+		int index = new Parsha(jewishCalendar).getParshaIndex();
+		return index == -1 ? "" : hebrewFormat ? hebrewParshiyos[index] : transliteratedParshios[index];
 	}
 }
