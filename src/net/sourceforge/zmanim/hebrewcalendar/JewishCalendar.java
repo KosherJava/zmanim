@@ -237,7 +237,7 @@ public class JewishCalendar extends JewishDate {
 	 * @return the type of year for parsha calculations.
 	 */
 	private int getParshaYearType() {
-		int roshHashanaDayOfWeek = (getJewishCalendarElapsedDays(getJewishYear()) + 1) % 7; // Day of week plus one day
+		int roshHashanaDayOfWeek = (getJewishCalendarElapsedDays(getJewishYear()) + 1) % 7; // plus one to the original Rosh Hashana of year 1 to get a week starting on Sunday
 		if(roshHashanaDayOfWeek == 0) {
 			roshHashanaDayOfWeek = 7; // convert 0 to 7 for Shabbos for readability
 		}
@@ -328,7 +328,7 @@ public class JewishCalendar extends JewishDate {
 	 * Returns a parsha enum with the weeks parsha if it is Shabbos.
 	 * returns Parsha.NONE if a weekday or if there is no parshah that week (for example Yomtov is on Shabbos)
 	 * @return the current parsha
-	*/
+	 */
 	public Parsha getParshah() {
 		if (getDayOfWeek() != Calendar.SATURDAY) {
 			return Parsha.NONE;
@@ -347,9 +347,8 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns a parsha enum if the Shabbos is one of the four parshiyos of Parsha.SHKALIM, Parsha.ZACHOR, Parsha.PARA,
 	 * Parsha.HACHODESH or Parsha.NONE for a regular Shabbos (or any weekday).
-	 * returns NONE if a weekday
 	 * @return one of the four parshiyos of Parsha.SHKALIM, Parsha.ZACHOR, Parsha.PARA, Parsha.HACHODESH or Parsha.NONE.
-	*/
+	 */
 	public Parsha getSpecialShabbos() {
 		if(getDayOfWeek() == Calendar.SATURDAY)	{
 			if((getJewishMonth() == SHEVAT && !isJewishLeapYear()) || (getJewishMonth() == ADAR && isJewishLeapYear())) {
