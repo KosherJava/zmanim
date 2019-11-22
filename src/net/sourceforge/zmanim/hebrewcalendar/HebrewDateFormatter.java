@@ -48,7 +48,7 @@ public class HebrewDateFormatter {
 	/**
 	 * list of transliterated parshiyos using the default Ashkenazi pronounciation. The formatParsha method uses this
 	 * for transliterated parsha display. This list can be overridden (for Sephardi English transliteration for example)
-	 * by setting the {@link #setTransliteratedParshiosList(String[])}.
+	 * by setting the {@link #setTransliteratedParshiosList(EnumMap)}.
 	 * 
 	 * @see #formatParsha(JewishCalendar)
 	 */
