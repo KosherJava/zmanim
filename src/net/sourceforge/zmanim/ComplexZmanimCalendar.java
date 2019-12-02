@@ -1620,7 +1620,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This is a convenience method that returns the later of {@link #getMinchaGedola()} and
-	 * {@link #getMinchaGedola30Minutes()}. In the winter when a <em>{@link #getShaahZmanisGra() shaah zmanis}</em> is
+	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a <em>{@link #getShaahZmanisGra() shaah zmanis}</em> is
 	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedola()}
 	 * will be returned.
 	 * 
@@ -3351,7 +3351,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This is a convenience method that returns the later of {@link #getMinchaGedolaBaalHatanya()} and
-	 * {@link #getMinchaGedola30Minutes()}. In the winter when a <em>{@link #getShaahZmanisBaalHatanya() shaah zmanis}</em> is
+	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a <em>{@link #getShaahZmanisBaalHatanya() shaah zmanis}</em> is
 	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedolaBaalHatanya()}
 	 * will be returned.
 	 * 
