@@ -221,14 +221,14 @@ public class JewishCalendar extends JewishDate {
 	 * <a href="https://en.wikipedia.org/wiki/Birkat_Hachama">Birkas Hachamah</a> is recited every 28 years based on
 	 * Tekufas Shmulel (Julian years) that a year is 365.25 days. The <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a>
 	 * in <a href="http://hebrewbooks.org/pdfpager.aspx?req=14278&amp;st=&amp;pgnum=323">Hilchos Kiddush Hachodesh 9:3</a> states that
-	 * tekufas Nisan of year 0 was 7 days + 9 hours before molad Nisan. This is calculated as every 10,227 days (28 * 365.25).  
+	 * tekufas Nisan of year 1 was 7 days + 9 hours before molad Nisan. This is calculated as every 10,227 days (28 * 365.25).  
 	 * @return true for a day that Birkas Hachamah is recited.
 	 */
 	public boolean isBirkasHachamah() {
 		int elapsedDays = getJewishCalendarElapsedDays(getJewishYear()); //elapsed days since molad ToHu
 		elapsedDays = elapsedDays + getDaysSinceStartOfJewishYear(); //elapsed days to the current calendar date
 		
-		/* Molad Nisan year 0 was 177 days after molad tohu of Tishrei. We multiply 29.5 day months * 6 months from Tishrei
+		/* Molad Nisan year 1 was 177 days after molad tohu of Tishrei. We multiply 29.5 day months * 6 months from Tishrei
 		 * to Nisan = 177. Subtract 7 days since tekufas Nisan was 7 days and 9 hours before the molad as stated in the Rambam
 		 * and we are now at 170 days. Because getJewishCalendarElapsedDays and getDaysSinceStartOfJewishYear use the value for
 		 * Rosh Hashana as 1, we have to add 1 day days for a total of 171. To this add a day since the tekufah is on a Tuesday
