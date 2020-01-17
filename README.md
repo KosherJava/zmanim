@@ -30,6 +30,7 @@ The KosherJava Zmanim API has been ported to:
 * C - https://github.com/yparitcher/libzmanim
 * Python - https://github.com/pinnymz/python-zmanim & https://pypi.org/project/zmanim/
 * PHP - https://github.com/zachweix/PhpZmanim/
+* Dart / Flutter - https://github.com/yakir8/kosher_dart
 
 Web Api
 ------------------------
