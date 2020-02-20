@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2018 Eliyahu Hershfeld
+ * Copyright (C) 2004-2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -106,7 +106,7 @@ import net.sourceforge.zmanim.hebrewcalendar.JewishCalendar;
  * <h2>Documentation from the {@link ZmanimCalendar} parent class</h2>
  * {@inheritDoc}
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2018
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
@@ -2871,7 +2871,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 			return null;
 		}
 		
-		Date zman = getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), null, null, true);
+		Date zman = getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), alos, tzais, true);
 		
 		//Get the following month's zman kiddush Levana for the extreme case of Rapa Iti in French Polynesia on Dec 2027 when
 		// kiddush Levana can be said on Rosh Chodesh (the evening of the 30th). See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (page 32)
