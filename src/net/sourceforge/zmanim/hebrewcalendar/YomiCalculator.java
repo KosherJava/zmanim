@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011-2018 Eliyahu Hershfeld
+ * Copyright (C) 2011-2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -23,14 +23,14 @@ import java.util.GregorianCalendar;
  * use the {@link YerushalmiYomiCalculator}. The library may cover Mishna Yomi etc. at some point in the future.
  * 
  * @author &copy; Bob Newell (original C code)
- * @author &copy; Eliyahu Hershfeld 2011 - 2018
+ * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
 public class YomiCalculator {
 
-	private static Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
-	private static int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
-	private static Calendar shekalimChangeDay = new GregorianCalendar(1975, Calendar.JUNE, 24);
-	private static int shekalimJulianChangeDay = getJulianDay(shekalimChangeDay);
+	private static final Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
+	private static final int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
+	private static final Calendar shekalimChangeDay = new GregorianCalendar(1975, Calendar.JUNE, 24);
+	private static final int shekalimJulianChangeDay = getJulianDay(shekalimChangeDay);
 
 	/**
 	 * Returns the <a href="http://en.wikipedia.org/wiki/Daf_yomi">Daf Yomi</a> <a
@@ -87,19 +87,19 @@ public class YomiCalculator {
 		int masechta = -1;
 		int blatt = 0;
 
-		/* Fix Shekalim for old cycles. */
+		// Fix Shekalim for old cycles.
 		if (cycleNo <= 7) {
 			blattPerMasechta[4] = 13;
 		} else {
 			blattPerMasechta[4] = 22; // correct any change that may have been changed from a prior calculation
 		}
-		/* Finally find the daf. */
+		// Finally find the daf.
 		for (int j = 0; j < blattPerMasechta.length; j++) {
 			masechta++;
 			total = total + blattPerMasechta[j] - 1;
 			if (dafNo < total) {
 				blatt = 1 + blattPerMasechta[j] - (total - dafNo);
-				/* Fiddle with the weird ones near the end. */
+				// Fiddle with the weird ones near the end.
 				if (masechta == 36) {
 					blatt += 21;
 				} else if (masechta == 37) {
