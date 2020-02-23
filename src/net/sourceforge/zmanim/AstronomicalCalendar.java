@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2019 Eliyahu Hershfeld
+ * Copyright (C) 2004-2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -64,7 +64,7 @@ import net.sourceforge.zmanim.util.ZmanimFormatter;
  * </pre>
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2019
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  */
 public class AstronomicalCalendar implements Cloneable {
 
@@ -288,7 +288,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            the offset in milliseconds to add to the time
 	 * @return the {@link java.util.Date}with the offset added to it
 	 */
-	public Date getTimeOffset(Date time, double offset) {
+	public static Date getTimeOffset(Date time, double offset) {
 		return getTimeOffset(time, (long) offset);
 	}
 
@@ -304,7 +304,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            the offset in milliseconds to add to the time.
 	 * @return the {@link java.util.Date} with the offset in milliseconds added to it
 	 */
-	public Date getTimeOffset(Date time, long offset) {
+	public static Date getTimeOffset(Date time, long offset) {
 		if (time == null || offset == Long.MIN_VALUE) {
 			return null;
 		}
@@ -591,7 +591,8 @@ public class AstronomicalCalendar implements Cloneable {
 
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.0001");
-		while (offsetByDegrees == null || offsetByDegrees.getTime() > offsetByTime.getTime()) {
+		while (offsetByDegrees == null || offsetByDegrees.getTime() > offsetByTime.getTime()) { //FIXME needs some work
+		//while (offsetByDegrees != null && offsetByDegrees.getTime() > offsetByTime.getTime()) {
 			degrees = degrees.add(incrementor);
 			offsetByDegrees = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
 		}
@@ -612,10 +613,10 @@ public class AstronomicalCalendar implements Cloneable {
 	public double getSunsetSolarDipFromOffset(double minutes) {
 		Date offsetByDegrees = getSeaLevelSunset();
 		Date offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
-
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.001");
-		while (offsetByDegrees == null || offsetByDegrees.getTime() < offsetByTime.getTime()) {
+		while (offsetByDegrees == null || offsetByDegrees.getTime() > offsetByTime.getTime()) { // FIXME needs some work
+		//while (offsetByDegrees != null && offsetByDegrees.getTime() < offsetByTime.getTime()) {
 			degrees = degrees.add(incrementor);
 			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
 		}
@@ -704,6 +705,7 @@ public class AstronomicalCalendar implements Cloneable {
 	public void setGeoLocation(GeoLocation geoLocation) {
 		this.geoLocation = geoLocation;
 		getCalendar().setTimeZone(geoLocation.getTimeZone());
+		//FIXME posibly adjust for horizon elevation. It may be smart to just have the calculator check the GeoLocation though it doesn't really belong there
 	}
 
 	/**
