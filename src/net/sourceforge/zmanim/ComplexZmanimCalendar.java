@@ -303,8 +303,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * (dawn) based on the opinion of the <em>Baal Hatanya</em>. It is based on the calculation that the time between dawn
 	 * and <em>netz amiti</em> (sunrise) is 72 minutes, the time that is takes to walk 4 <em>mil</em> at 18 minutes
 	 * a mil (<em><a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a></em> and others). The sun's position at 72
-	 * minutes before {@link #getSunriseBaalHatanya <em>netz amiti</em> (sunrise)} in Jerusalem on the equinox is 16.9&deg;
-	 * below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * minutes before {@link #getSunriseBaalHatanya <em>netz amiti</em> (sunrise)} in Jerusalem on the equinox (on March 16,
+	 * about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes) is 16.9&deg; below
+	 * {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 *
 	 * @see #getAlosBaalHatanya()
 	 */
@@ -860,8 +861,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * A method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_26_DEGREES 26&deg;} below the
 	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
 	 * {@link #getAlos120() 120 minutes} but uses a degree based calculation instead of 120 exact minutes. This
-	 * calculation is based on the position of the sun 120 minutes before sunrise in Jerusalem during the equinox which
-	 * calculates to 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * calculation is based on the position of the sun 120 minutes before sunrise in Jerusalem during the equinox (on March
+	 * 16, about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes) which calculates to 26&deg;
+	 * below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * 
 	 * @return the <code>Date</code> representing <em>alos</em>. If the calculation can't be computed such as northern
 	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun
@@ -912,7 +914,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_19_POINT_8 19.8&deg;} below the
 	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
 	 * {@link #getAlos90() 90 minutes} but uses a degree based calculation instead of 90 exact minutes. This calculation
-	 * is based on the position of the sun 90 minutes before sunrise in Jerusalem during the equinox which calculates to
+	 * is based on the position of the sun 90 minutes before sunrise in Jerusalem during the equinox (on March 16,
+	 * about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes) which calculates to
 	 * 19.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}
 	 * 
 	 * @return the <code>Date</code> representing <em>alos</em>. If the calculation can't be computed such as northern
@@ -930,7 +933,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_16_POINT_1 16.1&deg;} below the
 	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
 	 * {@link #getAlos72() 72 minutes} but uses a degree based calculation instead of 72 exact minutes. This calculation
-	 * is based on the position of the sun 72 minutes before sunrise in Jerusalem during the equinox which calculates to
+	 * is based on the position of the sun 72 minutes before sunrise in Jerusalem during the equinox (on March 16,
+	 * about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes) which calculates to
 	 * 16.1&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * 
 	 * @return the <code>Date</code> representing <em>alos</em>. If the calculation can't be computed such as northern
@@ -948,7 +952,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns <em>misheyakir</em> based on the position of the sun when it is {@link #ZENITH_11_DEGREES
 	 * 11.5&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for calculating
 	 * <em>misheyakir</em> according to some opinions. This calculation is based on the position of the sun 52 minutes
-	 * before {@link #getSunrise sunrise} in Jerusalem during the equinox which calculates to 11.5&deg; below
+	 * before {@link #getSunrise sunrise} in Jerusalem during the equinox (on March 16, about 4 days before the
+	 * astronomical equinox, the day that a solar hour is 60 minutes) which calculates to 11.5&deg; below
 	 * {@link #GEOMETRIC_ZENITH geometric zenith}
 	 * 
 	 * @return the <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as northern and
@@ -965,7 +970,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns <em>misheyakir</em> based on the position of the sun when it is {@link #ZENITH_11_DEGREES
 	 * 11&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for calculating
 	 * <em>misheyakir</em> according to some opinions. This calculation is based on the position of the sun 48 minutes
-	 * before {@link #getSunrise sunrise} in Jerusalem during the equinox which calculates to 11&deg; below
+	 * before {@link #getSunrise sunrise} in Jerusalem during the equinox (on March 16, about 4 days before the
+	 * astronomical equinox, the day that a solar hour is 60 minutes) which calculates to 11&deg; below
 	 * {@link #GEOMETRIC_ZENITH geometric zenith}
 	 * 
 	 * @return If the calculation can't be computed such as northern and southern locations even south of the Arctic
@@ -982,7 +988,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns <em>misheyakir</em> based on the position of the sun when it is {@link #ZENITH_10_POINT_2
 	 * 10.2&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for calculating
 	 * <em>misheyakir</em> according to some opinions. This calculation is based on the position of the sun 45 minutes
-	 * before {@link #getSunrise sunrise} in Jerusalem during the equinox which calculates to 10.2&deg; below
+	 * before {@link #getSunrise sunrise} in Jerusalem during the equinox (on March 16, about 4 days before the
+	 * astronomical equinox, the day that a solar hour is 60 minutes) which calculates to 10.2&deg; below
 	 * {@link #GEOMETRIC_ZENITH geometric zenith}
 	 * 
 	 * @return the <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as
@@ -998,7 +1005,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns <em>misheyakir</em> based on the position of the sun when it is {@link #ZENITH_7_POINT_65
 	 * 7.65&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). The degrees are based on a 35/36 minute zman
-	 * during the equinox when the <em>neshef</em> (twilight) is the shortest. This time is based on <a href=
+	 * during the equinox (on March 16, about 4 days before the astronomical equinox, the day that a solar hour is 60
+	 * minutes) when the <em>neshef</em> (twilight) is the shortest. This time is based on <a href=
 	 * "https://en.wikipedia.org/wiki/Moshe_Feinstein">Rabbi Moshe Feinstein</a> who writes in <a href=
 	 * "http://www.hebrewbooks.org/pdfpager.aspx?req=14677&amp;pgnum=7">Ohr Hachaim Vol. 4, Ch. 6</a>)
 	 * that misheyakir in New York is 35-40 minutes before sunset, something that is a drop less than 8&deg;.
@@ -1905,8 +1913,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * {@link #ZENITH_13_POINT_24 13.24&deg;} below the western {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;)
 	 * after sunset. This calculation is based on the same calculation of {@link #getBainHasmashosRT58Point5Minutes()
 	 * Bain Hashmashos Rabbeinu Tam 58.5 minutes} but uses a degree based calculation instead of 58.5 exact minutes. This
-	 * calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem during the equinox which
-	 * calculates to 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem during the equinox (on
+	 * March 16, about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes) which calculates
+	 * to 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * NOTE: As per Yisrael Vehazmanim Vol. III page 1028 No 50, a dip of slightly less than 13&deg; should be used.
 	 * Calculations show that the proper dip to be 13.2456&deg; (truncated to 13.24 that provides about 1.5 second
 	 * earlier (<em>lechumra</em>) time) below the horizon at that time. This makes a difference of 1 minute and 10
@@ -2137,7 +2146,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 30
-	 * minutes after sunset during the equinox in Yerushalayim. The sun's position at this time computes to
+	 * minutes after sunset during the equinox (on March 16, about 4 days before the astronomical equinox, the day that
+	 * a solar hour is 60 minutes) in Yerushalayim. The sun's position at this time computes to
 	 * {@link #ZENITH_7_POINT_083 7.083&deg; (or 7&deg; 5\u2032} below the western horizon. Note that this is a common
 	 * and rounded number. Computation shows the accurate number is 7.2&deg;
 	 * 
@@ -2210,7 +2220,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 60
-	 * minutes after sunset during the equinox in New York. The sun's position at this time computes to
+	 * minutes after sunset during the equinox (on March 16, about 4 days before the astronomical equinox, the day that
+	 * a solar hour is 60 minutes) in New York. The sun's position at this time computes to
 	 * {@link #ZENITH_9_POINT_75 9.75&deg;} below the western horizon. This is the opinion of <a href=
 	 * "https://en.wikipedia.org/wiki/Yosef_Eliyahu_Henkin">Rabbi Eliyahu Henkin</a>.  This also follows the opinion of
 	 * <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a>. Rabbi Yaakov Shakow presented
