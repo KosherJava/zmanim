@@ -1240,14 +1240,13 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			// Change Gregorian date
 			for (int i = 0; i < amount; i++) {
 				if (gregorianDayOfMonth == getLastDayOfGregorianMonth(gregorianMonth, gregorianYear)) {
+					gregorianDayOfMonth = 1;
 					// if last day of year
 					if (gregorianMonth == 12) {
 						gregorianYear++;
 						gregorianMonth = 1;
-						gregorianDayOfMonth = 1;
 					} else {
 						gregorianMonth++;
-						gregorianDayOfMonth = 1;
 					}
 				} else { // if not last day of month
 					gregorianDayOfMonth++;

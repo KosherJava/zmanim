@@ -827,7 +827,7 @@ public class HebrewDateFormatter {
 		} else {
 			int tens = number / 10;
 			if (number % 10 == 0) { // if evenly divisable by 10
-				if (singleDigitNumber == false) {
+				if (!singleDigitNumber) {
 					if(isUseFinalFormLetters()) {
 						sb.append(jTenEnds[tens]); // years like 5780 will end with a final form &#x05E3;
 					} else {
@@ -843,7 +843,7 @@ public class HebrewDateFormatter {
 			}
 		}
 		if (isUseGershGershayim()) {
-			if (singleDigitNumber == true) {
+			if (singleDigitNumber) {
 				sb.append(GERESH); // append single quote
 			} else { // append double quote before last digit
 				sb.insert(sb.length() - 1, GERSHAYIM);
