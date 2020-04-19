@@ -1181,7 +1181,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Returns this object's date as a {@link java.time.LocalDate} object.
-	 * 
+	 *
 	 * @return The {@link java.time.LocalDate}
 	 */
 	public LocalDate getLocalDate() {
@@ -1387,7 +1387,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * they are equal.
 	 */
 	public int compareTo(JewishDate jewishDate) {
-		return gregorianAbsDate < jewishDate.getAbsDate() ? -1 : gregorianAbsDate > jewishDate.getAbsDate() ? 1 : 0;
+		return Integer.compare(gregorianAbsDate, jewishDate.getAbsDate());
 	}
 
 	/**
