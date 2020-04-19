@@ -384,6 +384,10 @@ public class ZmanimFormatter {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		df.setTimeZone(astronomicalCalendar.getGeoLocation().getTimeZone());
 
+		Date date = astronomicalCalendar.getCalendar().getTime();
+		TimeZone tz = astronomicalCalendar.getGeoLocation().getTimeZone();
+		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
+
 		StringBuffer sb = new StringBuffer("<");
 		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
 			sb.append("AstronomicalTimes");
@@ -401,17 +405,17 @@ public class ZmanimFormatter {
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
 		}
-		sb.append(" date=\"").append(df.format(astronomicalCalendar.getCalendar().getTime())).append("\"");
+		sb.append(" date=\"").append(df.format(date)).append("\"");
 		sb.append(" type=\"").append(astronomicalCalendar.getClass().getName()).append("\"");
 		sb.append(" algorithm=\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\"");
 		sb.append(" location=\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\"");
 		sb.append(" latitude=\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\"");
 		sb.append(" longitude=\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\"");
 		sb.append(" elevation=\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\"");
-		sb.append(" timeZoneName=\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getDisplayName()).append("\"");
-		sb.append(" timeZoneID=\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getID()).append("\"");
+		sb.append(" timeZoneName=\"").append(tz.getDisplayName(daylight, TimeZone.LONG)).append("\"");
+		sb.append(" timeZoneID=\"").append(tz.getID()).append("\"");
 		sb.append(" timeZoneOffset=\"")
-				.append((astronomicalCalendar.getGeoLocation().getTimeZone().getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
+				.append((tz.getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
 				.append("\"");
 
 		sb.append(">\n");
@@ -540,18 +544,22 @@ public class ZmanimFormatter {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		df.setTimeZone(astronomicalCalendar.getGeoLocation().getTimeZone());
 
+		Date date = astronomicalCalendar.getCalendar().getTime();
+		TimeZone tz = astronomicalCalendar.getGeoLocation().getTimeZone();
+		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
+
 		StringBuffer sb = new StringBuffer("{\n\"metadata\":{\n");
-		sb.append("\t\"date\":\"").append(df.format(astronomicalCalendar.getCalendar().getTime())).append("\",\n");
+		sb.append("\t\"date\":\"").append(df.format(date)).append("\",\n");
 		sb.append("\t\"type\":\"").append(astronomicalCalendar.getClass().getName()).append("\",\n");
 		sb.append("\t\"algorithm\":\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\",\n");
 		sb.append("\t\"location\":\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\",\n");
 		sb.append("\t\"latitude\":\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\",\n");
 		sb.append("\t\"longitude\":\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\",\n");
 		sb.append("\t\"elevation\":\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\",\n");
-		sb.append("\t\"timeZoneName\":\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getDisplayName()).append("\",\n");
-		sb.append("\t\"timeZoneID\":\"").append(astronomicalCalendar.getGeoLocation().getTimeZone().getID()).append("\",\n");
+		sb.append("\t\"timeZoneName\":\"").append(tz.getDisplayName(daylight, TimeZone.LONG)).append("\",\n");
+		sb.append("\t\"timeZoneID\":\"").append(tz.getID()).append("\",\n");
 		sb.append("\t\"timeZoneOffset\":\"")
-				.append((astronomicalCalendar.getGeoLocation().getTimeZone().getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
+				.append((tz.getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
 				.append("\"");
 
 		sb.append("},\n\"");
