@@ -457,15 +457,15 @@ public class ZmanimFormatter {
 
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
-			sb.append("\t<").append(zman.getZmanLabel()).append(">");
+			sb.append("\t<").append(zman.getLabel()).append(">");
 			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
-			sb.append("</").append(zman.getZmanLabel()).append(">\n");
+			sb.append("</").append(zman.getLabel()).append(">\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
 		for (int i = 0; i < durationList.size(); i++) {
 			zman = (Zman) durationList.get(i);
-			sb.append("\t<" + zman.getZmanLabel()).append(">");
-			sb.append(formatter.format((int) zman.getDuration())).append("</").append(zman.getZmanLabel())
+			sb.append("\t<" + zman.getLabel()).append(">");
+			sb.append(formatter.format((int) zman.getDuration())).append("</").append(zman.getLabel())
 					.append(">\n");
 		}
 
@@ -604,14 +604,14 @@ public class ZmanimFormatter {
 		Collections.sort(dateList, Zman.DATE_ORDER);
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
-			sb.append("\t\"").append(zman.getZmanLabel()).append("\":\"");
+			sb.append("\t\"").append(zman.getLabel()).append("\":\"");
 			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
 			sb.append("\",\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
 		for (int i = 0; i < durationList.size(); i++) {
 			zman = (Zman) durationList.get(i);
-			sb.append("\t\"" + zman.getZmanLabel()).append("\":\"");
+			sb.append("\t\"" + zman.getLabel()).append("\":\"");
 			sb.append(formatter.format((int) zman.getDuration())).append("\",\n");
 		}
 
