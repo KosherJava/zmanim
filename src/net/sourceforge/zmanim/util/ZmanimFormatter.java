@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2018 Eliyahu Hershfeld
+ * Copyright (C) 2004-2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,8 +32,7 @@ import net.sourceforge.zmanim.AstronomicalCalendar;
  * example the {@link net.sourceforge.zmanim.AstronomicalCalendar#getTemporalHour()} returns the length of the hour in
  * milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2018
- * @version 1.2
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  */
 public class ZmanimFormatter {
 	private boolean prependZeroHours = false;
@@ -375,8 +374,7 @@ public class ZmanimFormatter {
 	 *  &lt;/AstronomicalTimes&gt;
 	 * </pre>
 	 * 
-	 *         TODO: add proper schema, and support for nulls. XSD duration (for solar hours), should probably return
-	 *         nil and not P
+	 * @todo Add proper schema, and support for nulls. XSD duration (for solar hours), should probably return nil and not P.
 	 */
 	public static String toXML(AstronomicalCalendar astronomicalCalendar) {
 		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, new SimpleDateFormat(
@@ -624,7 +622,6 @@ public class ZmanimFormatter {
 		sb.append("}\n}");
 		return sb.toString();
 	}
-
 
 	/**
 	 * Determines if a method should be output by the {@link #toXML(AstronomicalCalendar)}
