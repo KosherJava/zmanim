@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 /**
- * A wrapper class for a astronomical times / <em>zmanim</em> that us mostly intended to allow sorting collections of astronomical times.
+ * A wrapper class for a astronomical times / <em>zmanim</em> that is mostly intended to allow sorting collections of astronomical times.
  * It has fields for both date/time and duration based <em>zmanim</em>, name / labels as well as a longer description or explanation of a
  * <em>zman</em>.
  * 
