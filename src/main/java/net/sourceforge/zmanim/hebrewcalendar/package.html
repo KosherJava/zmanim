@@ -1,0 +1,15 @@
+<body>
+The package contain classes that convert between Jewish and Gregorian dates. This package is loosely based on
+<a href="http://www.facebook.com/avromf">Avrom Finkelstien's</a> code refactored to fit the Zmanim API.
+
+<h3>Design:</h3>
+	<ul>
+		<li>JewishDate is the base class, allowing the maintainance of an instance of a Gregorian date along with the corresponding Jewish date.
+		<li>JewishCalendar extends JewishDate and adds some methods related to the calendar
+		<li>HebrewDateFormatter defines the basics for taking a JewishCalendar and formatting the dates.
+		<li>YomiCalculator calculates the Daf Yomi for a given JewishCalendar
+	</ul>
+
+Note that there should be no circular dependencies: Formatters and Calculators depend on Dates and Calendars, but
+not the other way around.
+</body>
