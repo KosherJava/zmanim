@@ -4,21 +4,38 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.sourceforge</groupId>
+    <groupId>com.kosherjava</groupId>
     <artifactId>zmanim</artifactId>
     <version>1.4-SNAPSHOT</version>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <layout>default</layout>
-            <url>https://repo1.maven.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    <name>KosherJava Zmanim</name>
+    <description>
+        The Zmanim library is an API for a specialized calendar that can calculate different astronomical times
+        including sunrise and sunset and Jewish zmanim or religious times for prayers and other Jewish religious duties.
+    </description>
+    <url>https://kosherjava.com/</url>
+
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE</name>
+            <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Eliyahu Hershfeld</name>
+            <email>ehershfeld@outlook.com</email>
+            <organization>Kosher Java</organization>
+            <organizationUrl>https://kosherjava.com/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/KosherJava/zmanim.git</connection>
+        <developerConnection>scm:git:ssh://github.com:KosherJava/zmanim.git</developerConnection>
+        <url>http://github.com/simpligility/ossrh-demo/tree/master</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -52,7 +69,6 @@
                     <tags>
                         <tag>
                             <name>todo</name>
-                            <!-- todo tag for all places -->
                             <placement>a</placement>
                             <head>To do something:</head>
                         </tag>
@@ -81,6 +97,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -88,4 +112,5 @@
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
     </properties>
+
 </project>
