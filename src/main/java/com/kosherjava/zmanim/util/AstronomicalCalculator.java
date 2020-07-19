@@ -23,7 +23,7 @@ import java.util.Calendar;
  * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
  * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2019
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**

@@ -28,7 +28,7 @@ import java.util.Calendar;
  * to account for elevation. The algorithm can be found in the <a
  * href="http://en.wikipedia.org/wiki/Sunrise_equation">Wikipedia Sunrise Equation</a> article.
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2018
+ * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
 public class NOAACalculator extends AstronomicalCalculator {
 	/**

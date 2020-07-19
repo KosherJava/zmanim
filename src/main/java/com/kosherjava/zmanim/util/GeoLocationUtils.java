@@ -20,7 +20,7 @@ package com.kosherjava.zmanim.util;
  * Most of the code in this class is ported from <a href="http://www.movable-type.co.uk/">Chris Veness'</a>
  * <a href="http://www.fsf.org/licensing/licenses/lgpl.html">LGPL</a> Javascript Implementation
  *
- * @author &copy; Eliyahu Hershfeld 2009 - 2018
+ * @author &copy; Eliyahu Hershfeld 2009 - 2020
  */
 public class GeoLocationUtils {
 	private static int DISTANCE = 0;

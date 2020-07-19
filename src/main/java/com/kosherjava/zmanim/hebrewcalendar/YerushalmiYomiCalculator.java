@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2017 - 2018 Eliyahu Hershfeld
+ * Copyright (C) 2017 - 2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
  * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
  * 
  * @author &copy; elihaidv
- * @author &copy; Eliyahu Hershfeld 2017 - 2018
+ * @author &copy; Eliyahu Hershfeld 2017 - 2020
  */
 public class YerushalmiYomiCalculator {
 	

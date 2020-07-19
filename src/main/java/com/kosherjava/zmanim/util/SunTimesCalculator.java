@@ -26,7 +26,7 @@ import java.util.Calendar;
  * href="http://search.barnesandnoble.com/booksearch/isbnInquiry.asp?isbn=0160515106">Barnes &amp; Noble</a>) and is
  * used with his permission. Added to Kevin's code is adjustment of the zenith to account for elevation.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2018
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  * @author &copy; Kevin Boone 2000
  */
 public class SunTimesCalculator extends AstronomicalCalculator {

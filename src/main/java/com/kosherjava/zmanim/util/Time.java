@@ -22,7 +22,7 @@ import java.util.TimeZone;
  * this API. The time class is used to represent numeric time such as the time in hours, minutes, seconds and
  * milliseconds of a {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2011
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  * @version 0.9.0
  */
 public class Time {

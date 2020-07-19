@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2018
+ * @author &copy; Eliyahu Hershfeld 2004 - 2020
  * @version 1.1
  */
 public class GeoLocation implements Cloneable {

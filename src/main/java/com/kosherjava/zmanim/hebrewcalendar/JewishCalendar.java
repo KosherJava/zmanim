@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2019 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2020 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  * Copyright (C) 2019 Y Paritcher
  *
@@ -42,7 +42,7 @@ import java.util.TimeZone;
  * @see java.util.Calendar
  * @author &copy; Y Paritcher 2019
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2019
+ * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
 public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishDate {
 	public static final int EREV_PESACH = 0;

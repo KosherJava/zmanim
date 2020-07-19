@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2019 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2020 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -51,7 +51,7 @@ import java.util.GregorianCalendar;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2019
+ * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
