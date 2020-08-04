@@ -289,6 +289,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		return getLastDayOfGregorianMonth(month, gregorianYear);
 	}
 
+	boolean isGregorianLeapYear(int year) {
+		return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+	}
+
 	/**
 	 * The month, where 1 == January, 2 == February, etc... Note that this is different than the Java's Calendar class
 	 * where January ==0

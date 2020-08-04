@@ -933,6 +933,58 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 
+	public boolean mashivHaruachStarts() {
+		return getJewishMonth() == 7 && getJewishDayOfMonth() == 22;
+	}
+
+	public boolean mashivHaruachEnds() {
+		return getJewishMonth() == 1 && getJewishDayOfMonth() == 15;
+	}
+
+	public boolean mashivHaruach() {
+		JewishDate startDate = new JewishDate(getJewishYear(), 7, 22);
+		JewishDate endDate = new JewishDate(getJewishYear(), 1, 15);
+		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
+	}
+
+	public boolean moridHatal() {
+		return !mashivHaruach() || mashivHaruachStarts() || mashivHaruachEnds();
+	}
+
+	/**
+	 * This presumes the evenings of December 4/5 are always the initial start date outside of Israel
+	 * Because the jewish date does not auto-increment in the evening, we use December 5/6 as the start date
+	 * and rely on the user to increment the jewish date after nightfall.
+	 * Note that according to many, the date for Vesein Tal Umatar is tied to the Julian calendar and has historically
+	 * moved over time as the deviance from the Gregorian calendar increases.  The date of December 4/5 is to be used
+	 * for the 20th and 21st century.
+	 */
+	public boolean veseinTalUmatar() {
+		JewishDate startDate = gregorianVeseinTalUmatarStart();
+		JewishDate endDate = new JewishDate(getJewishYear(), 1, 15);
+		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
+	}
+
+	public boolean veseinTalUmatarStartsTonight() {
+		JewishDate startDate = gregorianVeseinTalUmatarStart();
+		JewishDate prevDate = gregorianVeseinTalUmatarStart();
+		prevDate.back();
+		return (getDayOfWeek() == 7 && equals(startDate)) || (getDayOfWeek() != 6 || equals(prevDate));
+	}
+
+	public boolean veseinBeracha() {
+		return !veseinTalUmatar();
+	}
+
+	public JewishDate gregorianVeseinTalUmatarStart() {
+		JewishDate startDate = new JewishDate(getJewishYear(), 8, 7);
+		if (inIsrael) {
+			startDate.setGregorianDate(startDate.getGregorianYear(), 12, isGregorianLeapYear(startDate.getGregorianYear()+1)?6:5);
+		}
+		return startDate;
+	}
+
+
 	/**
 	 * @see Object#equals(Object)
 	 */
