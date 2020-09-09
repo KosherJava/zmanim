@@ -764,7 +764,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 * @return true if it is Shabbos Mevorchim.
 	 */
 	public boolean isShabbosMevorchim() {
-		return (getDayOfWeek() == Calendar.SATURDAY && getJewishDayOfMonth() >= 23 && getJewishDayOfMonth() <= 29);
+		return (getDayOfWeek() == Calendar.SATURDAY && getJewishDayOfMonth() >= 23 && getJewishDayOfMonth() <= 29 && getJewishMonth() != ELUL);
 	}
 
 	/**
