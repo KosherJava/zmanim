@@ -806,8 +806,9 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 		double latitude = 31.778; // Har Habayis latitude
 		double longitude = 35.2354; // Har Habayis longitude
 
-		// The molad calculation always expects output in standard time. Using "Asia/Jerusalem" timezone will incorrect
-		// adjust for DST.
+		// The raw molad Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will result in the time
+		// being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual time in DST will be done by the date
+		// formatter class used to display the Date.
 		TimeZone yerushalayimStandardTZ = TimeZone.getTimeZone("GMT+2");
 		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
 		Calendar cal = Calendar.getInstance(geo.getTimeZone());
