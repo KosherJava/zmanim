@@ -239,7 +239,7 @@ public class Zman {
 		sb.append("\nLabel:\t\t\t").append(this.getLabel());
 		sb.append("\nZman:\t\t\t").append(getZman());
 		sb.append("\nDuration:\t\t\t").append(getDuration());
-		sb.append("\nDescription:\t\t\t").append(getDuration());
+		sb.append("\nDescription:\t\t\t").append(getDescription());
 		return sb.toString();
 	}
 }
