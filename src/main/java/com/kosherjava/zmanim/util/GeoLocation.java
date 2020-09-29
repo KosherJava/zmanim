@@ -474,7 +474,7 @@ public class GeoLocation implements Cloneable {
 				/ Math.tan(Math.toRadians(getLatitude()) / 2 + Math.PI / 4));
 		double q = dLat / dPhi;
 
-		if (!Double.isFinite(q)) {
+		if (!(Math.abs(q) <= Double.MAX_VALUE)) {
 			q = Math.cos(Math.toRadians(getLatitude()));
 		}
 		// if dLon over 180° take shorter rhumb across 180° meridian:
