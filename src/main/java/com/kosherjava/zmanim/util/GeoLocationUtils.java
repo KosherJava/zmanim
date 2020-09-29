@@ -220,7 +220,7 @@ public class GeoLocationUtils {
 				/ Math.tan(Math.toRadians(destination.getLatitude()) / 2 + Math.PI / 4));
 		double q = dLat / dPhi;
 
-		if (!Double.isFinite(q)) {
+		if (!(Math.abs(q) <= Double.MAX_VALUE)) {
 			q = Math.cos(Math.toRadians(destination.getLatitude()));
 		}
 		// if dLon over 180° take shorter rhumb across 180° meridian:
