@@ -15,6 +15,25 @@ This class contains the main functionality of the Zmanim library.
 
 For a basic set of instructions on the use of the API, see [How to Use the Zmanim API](https://kosherjava.com/zmanim-project/how-to-use-the-zmanim-api/), [zmanim code samples](https://kosherjava.com/tag/code-sample/) and the [KosherJava FAQ](https://kosherjava.com/tag/faq/). See the <a href="https://kosherjava.com">KosherJava Zmanim site</a> for additional information.
 
+# Get Started
+To add KosherJava as a dependency to your project, add the following dependency:
+
+#### Maven
+Add the following to your `pom.xml` file:
+```xml
+<dependency>
+  <groupId>com.kosherjava</groupId>
+  <artifactId>zmanim</artifactId>
+  <version>2.0</version>
+</dependency>
+```
+
+#### Gradle
+Add the following to your `build.gradle` file:
+```groovy
+implementation group: 'com.kosherjava', name: 'zmanim', version: '2.01'
+```
+
 License
 -------
 The library is released under the [LGPL 2.1 license](https://kosherjava.com/2011/05/09/kosherjava-zmanim-api-released-under-the-lgpl-license/).
