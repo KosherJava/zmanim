@@ -34,7 +34,7 @@
     <scm>
         <connection>scm:git:git://github.com/KosherJava/zmanim.git</connection>
         <developerConnection>scm:git:ssh://github.com:KosherJava/zmanim.git</developerConnection>
-        <url>http://github.com/simpligility/ossrh-demo/tree/master</url>
+        <url>https://github.com/KosherJava/zmanim/tree/master</url>
     </scm>
 
     <dependencies>
