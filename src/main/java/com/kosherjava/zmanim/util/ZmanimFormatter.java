@@ -349,7 +349,7 @@ public class ZmanimFormatter {
 	 * format used is:
 	 * 
 	 * <pre>
-	 *  &lt;AstronomicalTimes date=&quot;1969-02-08&quot; type=&quot;net.sourceforge.zmanim.AstronomicalCalendar algorithm=&quot;US Naval Almanac Algorithm&quot; location=&quot;Lakewood, NJ&quot; latitude=&quot;40.095965&quot; longitude=&quot;-74.22213&quot; elevation=&quot;31.0&quot; timeZoneName=&quot;Eastern Standard Time&quot; timeZoneID=&quot;America/New_York&quot; timeZoneOffset=&quot;-5&quot;&gt;
+	 *  &lt;AstronomicalTimes date=&quot;1969-02-08&quot; type=&quot;com.kosherjava.zmanim.AstronomicalCalendar algorithm=&quot;US Naval Almanac Algorithm&quot; location=&quot;Lakewood, NJ&quot; latitude=&quot;40.095965&quot; longitude=&quot;-74.22213&quot; elevation=&quot;31.0&quot; timeZoneName=&quot;Eastern Standard Time&quot; timeZoneID=&quot;America/New_York&quot; timeZoneOffset=&quot;-5&quot;&gt;
 	 *     &lt;Sunrise&gt;2007-02-18T06:45:27-05:00&lt;/Sunrise&gt;
 	 *     &lt;TemporalHour&gt;PT54M17.529S&lt;/TemporalHour&gt;
 	 *     ...
@@ -367,7 +367,7 @@ public class ZmanimFormatter {
 	 * @return The XML formatted <code>String</code>. The format will be:
 	 * 
 	 *         <pre>
-	 *  &lt;AstronomicalTimes date=&quot;1969-02-08&quot; type=&quot;net.sourceforge.zmanim.AstronomicalCalendar algorithm=&quot;US Naval Almanac Algorithm&quot; location=&quot;Lakewood, NJ&quot; latitude=&quot;40.095965&quot; longitude=&quot;-74.22213&quot; elevation=&quot;31.0&quot; timeZoneName=&quot;Eastern Standard Time&quot; timeZoneID=&quot;America/New_York&quot; timeZoneOffset=&quot;-5&quot;&gt;
+	 *  &lt;AstronomicalTimes date=&quot;1969-02-08&quot; type=&quot;com.kosherjava.zmanim.AstronomicalCalendar algorithm=&quot;US Naval Almanac Algorithm&quot; location=&quot;Lakewood, NJ&quot; latitude=&quot;40.095965&quot; longitude=&quot;-74.22213&quot; elevation=&quot;31.0&quot; timeZoneName=&quot;Eastern Standard Time&quot; timeZoneID=&quot;America/New_York&quot; timeZoneOffset=&quot;-5&quot;&gt;
 	 *     &lt;Sunrise&gt;2007-02-18T06:45:27-05:00&lt;/Sunrise&gt;
 	 *     &lt;TemporalHour&gt;PT54M17.529S&lt;/TemporalHour&gt;
 	 *     ...
@@ -387,17 +387,17 @@ public class ZmanimFormatter {
 		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
 
 		StringBuffer sb = new StringBuffer("<");
-		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
+		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
 			sb.append("AstronomicalTimes");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim astronomical.xsd"
-		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
 			sb.append("Zmanim");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim zmanim.xsd"
-		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
 			sb.append("BasicZmanim");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
@@ -473,11 +473,11 @@ public class ZmanimFormatter {
 			sb.append("\t").append(otherList.get(i)).append("\n");
 		}
 
-		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
+		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
 			sb.append("</AstronomicalTimes>");
-		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
 			sb.append("</Zmanim>");
-		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
 			sb.append("</BasicZmanim>");
 		}
 		return sb.toString();
@@ -490,7 +490,7 @@ public class ZmanimFormatter {
 	 * {
 	 *    &quot;metadata&quot;:{
 	 *      &quot;date&quot;:&quot;1969-02-08&quot;,
-	 *      &quot;type&quot;:&quot;net.sourceforge.zmanim.AstronomicalCalendar&quot;,
+	 *      &quot;type&quot;:&quot;com.kosherjava.zmanim.AstronomicalCalendar&quot;,
 	 *      &quot;algorithm&quot;:&quot;US Naval Almanac Algorithm&quot;,
 	 *      &quot;location&quot;:&quot;Lakewood, NJ&quot;,
 	 *      &quot;latitude&quot;:&quot;40.095965&quot;,
@@ -519,7 +519,7 @@ public class ZmanimFormatter {
 	 * {
 	 *    &quot;metadata&quot;:{
 	 *      &quot;date&quot;:&quot;1969-02-08&quot;,
-	 *      &quot;type&quot;:&quot;net.sourceforge.zmanim.AstronomicalCalendar&quot;,
+	 *      &quot;type&quot;:&quot;com.kosherjava.zmanim.AstronomicalCalendar&quot;,
 	 *      &quot;algorithm&quot;:&quot;US Naval Almanac Algorithm&quot;,
 	 *      &quot;location&quot;:&quot;Lakewood, NJ&quot;,
 	 *      &quot;latitude&quot;:&quot;40.095965&quot;,
@@ -562,11 +562,11 @@ public class ZmanimFormatter {
 
 		sb.append("},\n\"");
 		
-		if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.AstronomicalCalendar")) {
+		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
 			sb.append("AstronomicalTimes");
-		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
 			sb.append("Zmanim");
-		} else if (astronomicalCalendar.getClass().getName().equals("net.sourceforge.zmanim.ZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
 			sb.append("BasicZmanim");
 		}
 		sb.append("\":{\n");
