@@ -19,6 +19,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import com.kosherjava.zmanim.util.GeoLocation;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -155,6 +156,16 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 */
 	public JewishCalendar(Calendar calendar) {
 		super(calendar);
+	}
+
+	/**
+	 * A constructor that initializes the date to the {@link java.time.LocalDate LocalDate} parameter.
+	 * 
+	 * @param localDate
+	 *            the <code>LocalDate</code> to set the calendar to
+	 */
+	public JewishCalendar(LocalDate localDate) {
+		super(localDate);
 	}
 
 	/**
