@@ -16,6 +16,7 @@
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -992,6 +993,18 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
+	 * A constructor that initializes the date to the {@link java.time.LocalDate LocalDate} paremeter.
+	 *
+	 * @param localDate
+	 *            the <code>LocalDate</code> to set the calendar to
+	 * @throws IllegalArgumentException
+	 *            if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
+	 */
+	public JewishDate(LocalDate localDate) {
+		setDate(localDate);
+	}
+
+	/**
 	 * Sets the date based on a {@link java.util.Calendar Calendar} object. Modifies the Jewish date as well.
 	 * 
 	 * @param calendar
@@ -1024,6 +1037,20 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public void setDate(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
+		setDate(cal);
+	}
+
+	/**
+	 * Sets the date based on a {@link java.time.LocalDate LocalDate} object. Modifies the Jewish date as well.
+	 *
+	 * @param localDate
+	 *            the <code>LocalDate</code> to set the calendar to
+	 * @throws IllegalArgumentException
+	 *             if the date would fall prior to the year 1 AD
+	 */
+	public void setDate(LocalDate localDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth());
 		setDate(cal);
 	}
 
@@ -1151,7 +1178,15 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		calendar.set(getGregorianYear(), getGregorianMonth(), getGregorianDayOfMonth());
 		return calendar;
 	}
-	
+
+	/**
+	 * Returns this object's date as a {@link java.time.LocalDate} object.
+	 * 
+	 * @return The {@link java.time.LocalDate}
+	 */
+	public LocalDate getLocalDate() {
+		return LocalDate.of(getGregorianYear(), getGregorianMonth() + 1, getGregorianDayOfMonth());
+	}
 
 	/**
 	 * Resets this date to the current system date.
