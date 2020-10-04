@@ -11,7 +11,7 @@ plugins {
 repositories {
     mavenLocal()
     maven {
-        url = uri('http://repo.maven.apache.org/maven2')
+        url = uri('https://repo.maven.apache.org/maven2')
     }
 }
 
@@ -20,7 +20,7 @@ dependencies {
 }
 
 group = 'com.kosherjava'
-version = '1.4-SNAPSHOT'
+version = '2.0.3'
 sourceCompatibility = '6'
 targetCompatibility = '1.6'
 

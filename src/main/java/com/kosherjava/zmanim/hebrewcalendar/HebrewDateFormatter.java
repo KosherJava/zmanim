@@ -695,9 +695,9 @@ public class HebrewDateFormatter {
 		if (hours >= 6) {
 			days += 1;
 		}
-		adjustedChalakim = adjustedChalakim - (hours * HOUR_CHALAKIM);
+		adjustedChalakim = adjustedChalakim - (hours * (long) HOUR_CHALAKIM);
 		int minutes = (int) (adjustedChalakim / MINUTE_CHALAKIM);
-		adjustedChalakim = adjustedChalakim - minutes * MINUTE_CHALAKIM;
+		adjustedChalakim = adjustedChalakim - minutes * (long) MINUTE_CHALAKIM;
 		return "Day: " + days % 7 + " hours: " + hours + ", minutes " + minutes + ", chalakim: " + adjustedChalakim;
 	}
 
