@@ -3,7 +3,7 @@
  * and allows conversion between {@link JewishDate Jewish} and {@link java.util.GregorianCalendar Gregorian dates}. It is loosely
  * based on <a href="http://www.facebook.com/avromf">Avrom Finkelstien's</a> code, refactored to fit the Zmanim API.
  * 
- * <h3>Design:</h3>
+ * <h2>Design:</h2>
  * <ul>
  *   <li>{@link JewishDate} is the base class, allowing the maintainance of an instance of a Gregorian date along with the corresponding Jewish date.
  *   <li>{@link JewishCalendar} extends JewishDate and adds some methods related to the calendar
