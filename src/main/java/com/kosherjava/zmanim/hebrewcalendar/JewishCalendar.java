@@ -84,7 +84,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	private boolean useModernHolidays = false;
 
 	/**
-	 * Note that despite there being a Vezos Habracha value, this is for consistency, and this is not currently used 
+	 * Note that despite there being a Vezos Habracha value in the source, this is for consistency, and this is not currently used.
 	 *
 	 */
 	public static enum Parsha {
