@@ -58,15 +58,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.2.0</version>
                 <configuration>
                     <tags>
                         <tag>
                             <name>todo</name>
                             <placement>a</placement>
-                            <head>To do something:</head>
+                            <head>TODO:</head>
                         </tag>
                     </tags>
+                    <links>
+                        <link>https://docs.oracle.com/en/java/javase/15/docs/api/</link>
+                    </links>
+                    <show>private</show>
+                    <header><![CDATA[<a href="http://www.kosherjava.com" target="_top">KosherJava.com</a>]]></header>
+                    <bottom>
+                        <![CDATA[<i>Copyright &#169; {inceptionYear} - {currentYear} Eliyahu Hershfeld. All Rights Reserved. Released under the <a href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">LGPL 2.1 license</a></i>]]></bottom>
+                    <encoding>utf-8</encoding>
+                    <breakiterator>true</breakiterator>
+                    <linksource>true</linksource>
                 </configuration>
                 <executions>
                     <execution>
