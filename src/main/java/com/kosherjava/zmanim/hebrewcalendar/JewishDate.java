@@ -1181,7 +1181,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Returns this object's date as a {@link java.time.LocalDate} object.
-	 * 
+	 *
 	 * @return The {@link java.time.LocalDate}
 	 */
 	public LocalDate getLocalDate() {
@@ -1240,14 +1240,13 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			// Change Gregorian date
 			for (int i = 0; i < amount; i++) {
 				if (gregorianDayOfMonth == getLastDayOfGregorianMonth(gregorianMonth, gregorianYear)) {
+					gregorianDayOfMonth = 1;
 					// if last day of year
 					if (gregorianMonth == 12) {
 						gregorianYear++;
 						gregorianMonth = 1;
-						gregorianDayOfMonth = 1;
 					} else {
 						gregorianMonth++;
-						gregorianDayOfMonth = 1;
 					}
 				} else { // if not last day of month
 					gregorianDayOfMonth++;
@@ -1387,7 +1386,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * they are equal.
 	 */
 	public int compareTo(JewishDate jewishDate) {
-		return gregorianAbsDate < jewishDate.getAbsDate() ? -1 : gregorianAbsDate > jewishDate.getAbsDate() ? 1 : 0;
+		return Integer.compare(gregorianAbsDate, jewishDate.getAbsDate());
 	}
 
 	/**
