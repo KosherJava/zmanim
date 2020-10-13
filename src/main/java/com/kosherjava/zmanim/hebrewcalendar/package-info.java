@@ -1,7 +1,9 @@
 /**
  * This package contain classes that represent a <a href="https://en.wikipedia.org/wiki/Hebrew_calendar">Jewish Date/Calendar</a>,
- * and allows conversion between {@link JewishDate Jewish} and {@link java.util.GregorianCalendar Gregorian dates}. It is loosely
- * based on <a href="http://www.facebook.com/avromf">Avrom Finkelstien's</a> code, refactored to fit the Zmanim API.
+ * and allows conversion between {@link JewishDate Jewish} and {@link java.util.GregorianCalendar Gregorian dates}. The main calendar
+ * classes {@link JewishCalendar} and {@link JewishDate} are based on <a href="http://www.facebook.com/avromf">Avrom Finkelstien's</a> code,
+ * refactored to fit the Zmanim API. The parsha code was ported by Y. Paritcher from his
+ * <a href="https://github.com/yparitcher/libzmanim">libzmanim</a> code.
  * 
  * <h2>Design:</h2>
  * <ul>

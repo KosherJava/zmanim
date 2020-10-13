@@ -47,8 +47,8 @@ import java.util.GregorianCalendar;
  * the <a href="http://site.icu-project.org/" >ICU (International Components for Unicode)</a> project, formerly part of
  * IBM's DeveloperWorks.
  * 
- * @see com.kosherjava.zmanim.hebrewcalendar.JewishCalendar
- * @see com.kosherjava.zmanim.hebrewcalendar.HebrewDateFormatter
+ * @see JewishCalendar
+ * @see HebrewDateFormatter
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
@@ -1367,6 +1367,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
+	 * Indicates whether some other object is "equal to" this one.
 	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
@@ -1549,6 +1550,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
+	 * Overrides {@link Object#hashCode()}.
 	 * @see Object#hashCode()
 	 */
 	public int hashCode() {

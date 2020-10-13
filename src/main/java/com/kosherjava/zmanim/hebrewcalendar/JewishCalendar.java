@@ -31,7 +31,7 @@ import java.util.TimeZone;
  * from his C++ code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements
  * and some bug fixing. The class allows setting whether the holiday and parsha scheme follows the Israel scheme or outside Israel
  * scheme. The default is the outside Israel scheme.
- * The parsha code was ported by Y Paritcher from his <a href="https://github.com/yparitcher/libzmanim">libzmanim</a> code.
+ * The parsha code was ported by Y. Paritcher from his <a href="https://github.com/yparitcher/libzmanim">libzmanim</a> code.
  * 
  * @todo Some do not belong in this class, but here is a partial list of what should still be implemented in some form:
  * <ol>
@@ -41,11 +41,11 @@ import java.util.TimeZone;
  * 
  * @see java.util.Date
  * @see java.util.Calendar
- * @author &copy; Y Paritcher 2019
+ * @author &copy; Y. Paritcher 2019
  * @author &copy; Avrom Finkelstien 2002
  * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
-public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishDate {
+public class JewishCalendar extends JewishDate {
 	public static final int EREV_PESACH = 0;
 	public static final int PESACH = 1;
 	public static final int CHOL_HAMOED_PESACH = 2;
@@ -80,6 +80,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	public static final int YOM_HAATZMAUT = 31;
 	public static final int YOM_YERUSHALAYIM = 32;
 	public static final int LAG_BAOMER = 33;
+	public static final int SHUSHAN_PURIM_KATAN = 34;
 
 	private boolean inIsrael = false;
 	private boolean useModernHolidays = false;
@@ -405,7 +406,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 * @todo consider using enums instead of the constant ints.
 	 * 
 	 * @return the index of the holiday such as the constant {@link #LAG_BAOMER} or {@link #YOM_KIPPUR} or a -1 if it is not a holiday.
-	 * @see com.kosherjava.zmanim.hebrewcalendar.HebreDateFormatter
+	 * @see HebrewDateFormatter
 	 */
 	public int getYomTovIndex() {
 		final int day = getJewishDayOfMonth();
@@ -557,6 +558,9 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 			} else { // else if a leap year
 				if (day == 14) {
 					return PURIM_KATAN;
+				}
+				if (day == 15) {
+					return SHUSHAN_PURIM_KATAN;
 				}
 			}
 			break;
@@ -742,9 +746,10 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 	/**
-	 * Returns the day of Chanukah or -1 if it is not Chanukah.
+	 * Returns the day of <em>Chanukah</em> or -1 if it is not <em>Chanukah</em>.
 	 * 
-	 * @return the day of Chanukah or -1 if it is not Chanukah.
+	 * @return the day of <em>Chanukah</em> or -1 if it is not <em>Chanukah</em>.
+	 * @see #isChanukah()
 	 */
 	public int getDayOfChanukah() {
 		final int day = getJewishDayOfMonth();
@@ -759,6 +764,11 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 		}
 	}
 
+	/**
+	 * Returns true if the current day is one of the 8 days of <em>Chanukah</em>.
+	 * @return if the current day is one of the 8 days of <em>Chanukah</em>.
+	 * @see #getDayOfChanukah()
+	 */
 	public boolean isChanukah() {
 		return getYomTovIndex() == CHANUKAH;
 	}
@@ -824,7 +834,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 * @return the Date representing the moment of the molad in Yerushalayim standard time (GMT + 2)
 	 */
 	public Date getMoladAsDate() {
-		com.kosherjava.zmanim.hebrewcalendar.JewishDate molad = getMolad();
+		JewishDate molad = getMolad();
 		String locationName = "Jerusalem, Israel";
 
 		double latitude = 31.778; // Har Habayis latitude
@@ -959,6 +969,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 
 
 	/**
+	 * Indicates whether some other object is "equal to" this one.
 	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
@@ -973,6 +984,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 	/**
+	 * Overrides {@link Object#hashCode()}.
 	 * @see Object#hashCode()
 	 */
 	public int hashCode() {

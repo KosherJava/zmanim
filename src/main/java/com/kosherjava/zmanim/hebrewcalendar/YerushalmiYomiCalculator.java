@@ -28,6 +28,9 @@ import java.util.GregorianCalendar;
  */
 public class YerushalmiYomiCalculator {
 	
+	/**
+	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 18 Teves, 5740.
+	 */
 	private final static Calendar DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
 	private final static int DAY_MILIS = 1000 * 60 * 60 * 24;
 	private final static int WHOLE_SHAS_DAFS = 1554;

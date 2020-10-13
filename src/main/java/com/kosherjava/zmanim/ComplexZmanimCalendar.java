@@ -108,7 +108,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2020
  */
-public class ComplexZmanimCalendar extends com.kosherjava.zmanim.ZmanimCalendar {
+public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for

@@ -21,7 +21,9 @@ import java.util.EnumMap;
 /**
  * The HebrewDateFormatter class formats a {@link JewishDate}.
  * 
- * The class formats Jewish dates in Hebrew or Latin chars, and has various settings. Sample full date output includes
+ * The class formats Jewish dates, numbers, Daf Yomi (Bavli and Yerushalmi), the Omer, Parshas Hashavua (including special parshiyos
+ * such as Shekalim, Zachor, Parah, Hachodesh), Yomim Tovim and the Molad (experimental) in Hebrew or Latin chars, and has various
+ * settings. Sample full date output includes
  * (using various options):
  * <ul>
  * <li>21 Shevat, 5729</li>
@@ -32,33 +34,90 @@ import java.util.EnumMap;
  * <li>&#x05DB;&#x05F3; &#x05E9;&#x05D1;&#x05D8; &#x05D5;&#x05F3; &#x05D0;&#x05DC;&#x05E4;&#x05D9;&#x05DD;</li>
  * </ul>
  * 
- * @see com.kosherjava.zmanim.hebrewcalendar.JewishDate
- * @see com.kosherjava.zmanim.hebrewcalendar.JewishCalendar
+ * @see JewishDate
+ * @see JewishCalendar
  * 
  * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
 public class HebrewDateFormatter {
+	
+	/**
+	 * See {@link #isHebrewFormat()} and {@link #setHebrewFormat(boolean)}.
+	 */
 	private boolean hebrewFormat = false;
+	
+	/**
+	 * See {@link #isUseLongHebrewYears()} and {@link #setUseLongHebrewYears(boolean)}.
+	 */
 	private boolean useLonghebrewYears = false;
+	
+	/**
+	 * See {@link #isUseGershGershayim()} and {@link #setUseGershGershayim(boolean)}.
+	 */
 	private boolean useGershGershayim = true;
+	
+	/**
+	 * See {@link #isLongWeekFormat()} and {@link #setLongWeekFormat(boolean)}.
+	 */
 	private boolean longWeekFormat = true;
+	
+	/**
+	 * See {@link #isUseFinalFormLetters()} and {@link #setUseFinalFormLetters(boolean)}.
+	 */
 	private boolean useFinalFormLetters = false;
+	
+	/**
+	 * The internal DateFormat.&nbsp; See {@link #isLongWeekFormat()} and {@link #setLongWeekFormat(boolean)}.
+	 */
 	private SimpleDateFormat weekFormat = null;
 	
 	/**
-	 * list of transliterated parshiyos using the default Ashkenazi pronounciation. The formatParsha method uses this
-	 * for transliterated parsha display. This list can be overridden (for Sephardi English transliteration for example)
-	 * by setting the {@link #setTransliteratedParshiosList(EnumMap)}.
+	 * List of transliterated parshiyos using the default Ashkenazi pronounciation.&nbsp; The formatParsha method uses this
+	 * for transliterated parsha formatting.&nbsp; This list can be overridden (for Sephardi English transliteration for
+	 * example) by setting the {@link #setTransliteratedParshiosList(EnumMap)}.&nbsp; The list includes double and special
+	 * parshiyos is set as "Bereshis, Noach, Lech Lecha, Vayera, Chayei Sara, Toldos, Vayetzei, Vayishlach, Vayeshev, Miketz,
+	 * Vayigash, Vayechi, Shemos, Vaera, Bo, Beshalach, Yisro, Mishpatim, Terumah, Tetzaveh, Ki Sisa, Vayakhel, Pekudei,
+	 * Vayikra, Tzav, Shmini, Tazria, Metzora, Achrei Mos, Kedoshim, Emor, Behar, Bechukosai, Bamidbar, Nasso, Beha'aloscha,
+	 * Sh'lach, Korach, Chukas, Balak, Pinchas, Matos, Masei, Devarim, Vaeschanan, Eikev, Re'eh, Shoftim, Ki Seitzei, Ki Savo,
+	 * Nitzavim, Vayeilech, Ha'Azinu, Vezos Habracha, Vayakhel Pekudei, Tazria Metzora, Achrei Mos Kedoshim, Behar Bechukosai,
+	 * Chukas Balak, Matos Masei, Nitzavim Vayeilech, Shekalim, Zachor, Parah, Hachodesh".
 	 * 
 	 * @see #formatParsha(JewishCalendar)
 	 */
 	private EnumMap<JewishCalendar.Parsha, String> transliteratedParshaMap;
 	
 	/**
-	 * Unicode list of Hebrew parshiyos.
+	 * Unicode {@link EnumMap} of Hebrew parshiyos.&nbsp; the The list includes double and special parshiyos and contains
+	 *  <code dir="rtl" lang="he">"&#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA;, &#x05E0;&#x05D7;, &#x05DC;&#x05DA; &#x05DC;&#x05DA;,
+	 *  &#x05D5;&#x05D9;&#x05E8;&#x05D0;, &#x05D7;&#x05D9;&#x05D9; &#x05E9;&#x05E8;&#x05D4;,
+	 *  &#x05EA;&#x05D5;&#x05DC;&#x05D3;&#x05D5;&#x05EA;, &#x05D5;&#x05D9;&#x05E6;&#x05D0;, &#x05D5;&#x05D9;&#x05E9;&#x05DC;&#x05D7;,
+	 *  &#x05D5;&#x05D9;&#x05E9;&#x05D1;, &#x05DE;&#x05E7;&#x05E5;, &#x05D5;&#x05D9;&#x05D2;&#x05E9;, &#x05D5;&#x05D9;&#x05D7;&#x05D9;,
+	 *  &#x05E9;&#x05DE;&#x05D5;&#x05EA;, &#x05D5;&#x05D0;&#x05E8;&#x05D0;, &#x05D1;&#x05D0;, &#x05D1;&#x05E9;&#x05DC;&#x05D7;,
+	 *  &#x05D9;&#x05EA;&#x05E8;&#x05D5;, &#x05DE;&#x05E9;&#x05E4;&#x05D8;&#x05D9;&#x05DD;, &#x05EA;&#x05E8;&#x05D5;&#x05DE;&#x05D4;,
+	 *  &#x05EA;&#x05E6;&#x05D5;&#x05D4;, &#x05DB;&#x05D9; &#x05EA;&#x05E9;&#x05D0;, &#x05D5;&#x05D9;&#x05E7;&#x05D4;&#x05DC;,
+	 *  &#x05E4;&#x05E7;&#x05D5;&#x05D3;&#x05D9;, &#x05D5;&#x05D9;&#x05E7;&#x05E8;&#x05D0;, &#x05E6;&#x05D5;,
+	 *  &#x05E9;&#x05DE;&#x05D9;&#x05E0;&#x05D9;, &#x05EA;&#x05D6;&#x05E8;&#x05D9;&#x05E2;, &#x05DE;&#x05E6;&#x05E8;&#x05E2;,
+	 *  &#x05D0;&#x05D7;&#x05E8;&#x05D9; &#x05DE;&#x05D5;&#x05EA;, &#x05E7;&#x05D3;&#x05D5;&#x05E9;&#x05D9;&#x05DD;,
+	 *  &#x05D0;&#x05DE;&#x05D5;&#x05E8;, &#x05D1;&#x05D4;&#x05E8;, &#x05D1;&#x05D7;&#x05E7;&#x05EA;&#x05D9;,
+	 *  &#x05D1;&#x05DE;&#x05D3;&#x05D1;&#x05E8;, &#x05E0;&#x05E9;&#x05D0;, &#x05D1;&#x05D4;&#x05E2;&#x05DC;&#x05EA;&#x05DA;,
+	 *  &#x05E9;&#x05DC;&#x05D7; &#x05DC;&#x05DA;, &#x05E7;&#x05E8;&#x05D7;, &#x05D7;&#x05D5;&#x05E7;&#x05EA;, &#x05D1;&#x05DC;&#x05E7;,
+	 *  &#x05E4;&#x05D9;&#x05E0;&#x05D7;&#x05E1;, &#x05DE;&#x05D8;&#x05D5;&#x05EA;, &#x05DE;&#x05E1;&#x05E2;&#x05D9;,
+	 *  &#x05D3;&#x05D1;&#x05E8;&#x05D9;&#x05DD;, &#x05D5;&#x05D0;&#x05EA;&#x05D7;&#x05E0;&#x05DF;, &#x05E2;&#x05E7;&#x05D1;,
+	 *  &#x05E8;&#x05D0;&#x05D4;, &#x05E9;&#x05D5;&#x05E4;&#x05D8;&#x05D9;&#x05DD;, &#x05DB;&#x05D9; &#x05EA;&#x05E6;&#x05D0;,
+	 *  &#x05DB;&#x05D9; &#x05EA;&#x05D1;&#x05D5;&#x05D0;, &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD;, &#x05D5;&#x05D9;&#x05DC;&#x05DA;,
+	 *  &#x05D4;&#x05D0;&#x05D6;&#x05D9;&#x05E0;&#x05D5;, &#x05D5;&#x05D6;&#x05D0;&#x05EA; &#x05D4;&#x05D1;&#x05E8;&#x05DB;&#x05D4;,
+	 *  &#x05D5;&#x05D9;&#x05E7;&#x05D4;&#x05DC; &#x05E4;&#x05E7;&#x05D5;&#x05D3;&#x05D9;, &#x05EA;&#x05D6;&#x05E8;&#x05D9;&#x05E2;
+	 *  &#x05DE;&#x05E6;&#x05E8;&#x05E2;, &#x05D0;&#x05D7;&#x05E8;&#x05D9; &#x05DE;&#x05D5;&#x05EA;
+	 *  &#x05E7;&#x05D3;&#x05D5;&#x05E9;&#x05D9;&#x05DD;, &#x05D1;&#x05D4;&#x05E8; &#x05D1;&#x05D7;&#x05E7;&#x05EA;&#x05D9;,
+	 *  &#x05D7;&#x05D5;&#x05E7;&#x05EA; &#x05D1;&#x05DC;&#x05E7;, &#x05DE;&#x05D8;&#x05D5;&#x05EA; &#x05DE;&#x05E1;&#x05E2;&#x05D9;,
+	 *  &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA;, &#x05E9;&#x05E7;&#x05DC;&#x05D9;&#x05DD;,
+	 *  &#x05D6;&#x05DB;&#x05D5;&#x05E8;, &#x05E4;&#x05E8;&#x05D4;, &#x05D4;&#x05D7;&#x05D3;&#x05E9;"</code>
 	 */
 	private EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
 	
+	/**
+	 * Default constructor sets the {@link EnumMap}s of Hebrew and default transliterated parshiyos.
+	 */
 	public HebrewDateFormatter() {
 		transliteratedParshaMap = new EnumMap<JewishCalendar.Parsha, String>(JewishCalendar.Parsha.class);
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NONE, "");
@@ -227,12 +286,40 @@ public class HebrewDateFormatter {
 		}
 	}
 
+	/**
+	 * The <a href="https://en.wikipedia.org/wiki/Geresh#Punctuation_mark">gersh</a> character is the &#x05F3; char
+	 * that is similar to a single quote and is used in formatting Hebrew numbers.
+	 */
 	private static final String GERESH = "\u05F3";
+	
+	/**
+	 * The <a href="https://en.wikipedia.org/wiki/Gershayim#Punctuation_mark">gershyim</a> character is the &#x05F4; char
+	 * that is similar to a double quote and is used in formatting Hebrew numbers.
+	 */
 	private static final String GERSHAYIM = "\u05F4";
+	
+	/**
+	 * Transliterated month names.&nbsp; Defaults to ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan",
+	 * "Kislev", "Teves", "Shevat", "Adar", "Adar II", "Adar I" ].
+	 * @see #getTransliteratedMonthList()
+	 * @see #setTransliteratedMonthList(String[])
+	 */
 	private String[] transliteratedMonths = { "Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan",
 			"Kislev", "Teves", "Shevat", "Adar", "Adar II", "Adar I" };
+	
+	/**
+	 * The Hebrew omer prefix charachter. It defaults to &#x05D1; producing &#x05D1;&#x05E2;&#x05D5;&#x05DE;&#x05E8;,
+	 * but can be set to &#x05DC; to produce &#x05DC;&#x05E2;&#x05D5;&#x05DE;&#x05E8; (or any other prefix).
+	 * @see #getHebrewOmerPrefix()
+	 * @see #setHebrewOmerPrefix(String)
+	 */
 	private String hebrewOmerPrefix = "\u05D1";
 
+	/**
+	 * The default value for formatting Shabbos (Saturday).&nbsp; Defaults to Shabbos.
+	 * @see #getTransliteratedShabbosDayOfWeek()
+	 * @see #setTransliteratedShabbosDayOfWeek(String)
+	 */
 	private String transliteratedShabbosDayOfweek = "Shabbos";
 
 	/**
@@ -261,24 +348,28 @@ public class HebrewDateFormatter {
 		this.transliteratedShabbosDayOfweek = transliteratedShabbos;
 	}
 
-	private String[] transliteratedHolidays = { "Erev Pesach", "Pesach", "Chol Hamoed Pesach", "Pesach Sheni",
+	/**
+	 * See {@link #getTransliteratedHolidayList()} and {@link #setTransliteratedHolidayList(String[])}.
+	 */
+	private String[] transliteratedHolidays = {"Erev Pesach", "Pesach", "Chol Hamoed Pesach", "Pesach Sheni",
 			"Erev Shavuos", "Shavuos", "Seventeenth of Tammuz", "Tishah B'Av", "Tu B'Av", "Erev Rosh Hashana",
 			"Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur", "Erev Succos", "Succos",
 			"Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah", "Erev Chanukah", "Chanukah",
 			"Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim", "Purim Katan", "Rosh Chodesh",
-			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim","Lag B'Omer"};
+			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim", "Lag B'Omer","Shushan Purim Katan"};
 
 	/**
 	 * Returns the list of holidays transliterated into Latin chars. This is used by the
 	 * {@link #formatYomTov(JewishCalendar)} when formatting the Yom Tov String. The default list of months uses
 	 * Ashkenazi pronunciation in typical American English spelling.
 	 * 
-	 * @return the list of holidays "Adar", "Adar II", "Adar I". The default list is currently "Erev Pesach", "Pesach",
+	 * @return the list of transliterated holidays. The default list is currently ["Erev Pesach", "Pesach",
 	 *         "Chol Hamoed Pesach", "Pesach Sheni", "Erev Shavuos", "Shavuos", "Seventeenth of Tammuz", "Tishah B'Av",
 	 *         "Tu B'Av", "Erev Rosh Hashana", "Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur",
 	 *         "Erev Succos", "Succos", "Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah",
 	 *         "Erev Chanukah", "Chanukah", "Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim",
-	 *         "Purim Katan", "Rosh Chodesh", "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim"
+	 *         "Purim Katan", "Rosh Chodesh", "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim",
+	 *         "Lag B'Omer","Shushan Purim Katan"].
 	 * 
 	 * @see #setTransliteratedMonthList(String[])
 	 * @see #formatYomTov(JewishCalendar)
@@ -301,9 +392,40 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Hebrew holiday list
+	 * Hebrew holiday array in the following format<br><code dir="rtl" lang="he">["&#x05E2;&#x05E8;&#x05D1; &#x05E4;&#x05E1;&#x05D7;",
+	 * "&#x05E4;&#x05E1;&#x05D7;", "&#x05D7;&#x05D5;&#x05DC; &#x05D4;&#x05DE;&#x05D5;&#x05E2;&#x05D3;
+	 * &#x05E4;&#x05E1;&#x05D7;", "&#x05E4;&#x05E1;&#x05D7; &#x05E9;&#x05E0;&#x05D9;", "&#x05E2;&#x05E8;&#x05D1;
+	 * &#x05E9;&#x05D1;&#x05D5;&#x05E2;&#x05D5;&#x05EA;", "&#x05E9;&#x05D1;&#x05D5;&#x05E2;&#x05D5;&#x05EA;",
+	 * "&#x05E9;&#x05D1;&#x05E2;&#x05D4; &#x05E2;&#x05E9;&#x05E8; &#x05D1;&#x05EA;&#x05DE;&#x05D5;&#x05D6;",
+	 * "&#x05EA;&#x05E9;&#x05E2;&#x05D4; &#x05D1;&#x05D0;&#x05D1;",
+	 * "&#x05D8;&#x05F4;&#x05D5; &#x05D1;&#x05D0;&#x05D1;",
+	 * "&#x05E2;&#x05E8;&#x05D1; &#x05E8;&#x05D0;&#x05E9; &#x05D4;&#x05E9;&#x05E0;&#x05D4;",
+	 * "&#x05E8;&#x05D0;&#x05E9; &#x05D4;&#x05E9;&#x05E0;&#x05D4;",
+	 * "&#x05E6;&#x05D5;&#x05DD; &#x05D2;&#x05D3;&#x05DC;&#x05D9;&#x05D4;",
+	 * "&#x05E2;&#x05E8;&#x05D1; &#x05D9;&#x05D5;&#x05DD; &#x05DB;&#x05D9;&#x05E4;&#x05D5;&#x05E8;",
+	 * "&#x05D9;&#x05D5;&#x05DD; &#x05DB;&#x05D9;&#x05E4;&#x05D5;&#x05E8;",
+	 * "&#x05E2;&#x05E8;&#x05D1; &#x05E1;&#x05D5;&#x05DB;&#x05D5;&#x05EA;",
+	 * "&#x05E1;&#x05D5;&#x05DB;&#x05D5;&#x05EA;",
+	 * "&#x05D7;&#x05D5;&#x05DC; &#x05D4;&#x05DE;&#x05D5;&#x05E2;&#x05D3; &#x05E1;&#x05D5;&#x05DB;&#x05D5;&#x05EA;",
+	 * "&#x05D4;&#x05D5;&#x05E9;&#x05E2;&#x05E0;&#x05D0; &#x05E8;&#x05D1;&#x05D4;",
+	 * "&#x05E9;&#x05DE;&#x05D9;&#x05E0;&#x05D9; &#x05E2;&#x05E6;&#x05E8;&#x05EA;",
+	 * "&#x05E9;&#x05DE;&#x05D7;&#x05EA; &#x05EA;&#x05D5;&#x05E8;&#x05D4;",
+	 * "&#x05E2;&#x05E8;&#x05D1; &#x05D7;&#x05E0;&#x05D5;&#x05DB;&#x05D4;",
+	 * "&#x05D7;&#x05E0;&#x05D5;&#x05DB;&#x05D4;", "&#x05E2;&#x05E9;&#x05E8;&#x05D4; &#x05D1;&#x05D8;&#x05D1;&#x05EA;",
+	 * "&#x05D8;&#x05F4;&#x05D5; &#x05D1;&#x05E9;&#x05D1;&#x05D8;",
+	 * "&#x05EA;&#x05E2;&#x05E0;&#x05D9;&#x05EA; &#x05D0;&#x05E1;&#x05EA;&#x05E8;",
+	 * "&#x05E4;&#x05D5;&#x05E8;&#x05D9;&#x05DD;",
+	 * "&#x05E4;&#x05D5;&#x05E8;&#x05D9;&#x05DD; &#x05E9;&#x05D5;&#x05E9;&#x05DF;",
+	 * "&#x05E4;&#x05D5;&#x05E8;&#x05D9;&#x05DD; &#x05E7;&#x05D8;&#x05DF;",
+	 * "&#x05E8;&#x05D0;&#x05E9; &#x05D7;&#x05D5;&#x05D3;&#x05E9;",
+	 * "&#x05D9;&#x05D5;&#x05DD; &#x05D4;&#x05E9;&#x05D5;&#x05D0;&#x05D4;",
+	 * "&#x05D9;&#x05D5;&#x05DD; &#x05D4;&#x05D6;&#x05D9;&#x05DB;&#x05E8;&#x05D5;&#x05DF;",
+	 * "&#x05D9;&#x05D5;&#x05DD; &#x05D4;&#x05E2;&#x05E6;&#x05DE;&#x05D0;&#x05D5;&#x05EA;",
+	 * "&#x05D9;&#x05D5;&#x05DD; &#x05D9;&#x05E8;&#x05D5;&#x05E9;&#x05DC;&#x05D9;&#x05DD;",
+	 * "&#x05DC;&#x05F4;&#x05D2; &#x05D1;&#x05E2;&#x05D5;&#x05DE;&#x05E8;",
+	 * "&#x05E4;&#x05D5;&#x05E8;&#x05D9;&#x05DD; &#x05E9;&#x05D5;&#x05E9;&#x05DF; &#x05E7;&#x05D8;&#x05DF;"]</code>
 	 */
-	private String[] hebrewHolidays = { "\u05E2\u05E8\u05D1 \u05E4\u05E1\u05D7", "\u05E4\u05E1\u05D7",
+	private final String[] hebrewHolidays = { "\u05E2\u05E8\u05D1 \u05E4\u05E1\u05D7", "\u05E4\u05E1\u05D7",
 			"\u05D7\u05D5\u05DC \u05D4\u05DE\u05D5\u05E2\u05D3 \u05E4\u05E1\u05D7",
 			"\u05E4\u05E1\u05D7 \u05E9\u05E0\u05D9", "\u05E2\u05E8\u05D1 \u05E9\u05D1\u05D5\u05E2\u05D5\u05EA",
 			"\u05E9\u05D1\u05D5\u05E2\u05D5\u05EA",
@@ -326,7 +448,8 @@ public class HebrewDateFormatter {
 			"\u05D9\u05D5\u05DD \u05D4\u05D6\u05D9\u05DB\u05E8\u05D5\u05DF",
 			"\u05D9\u05D5\u05DD \u05D4\u05E2\u05E6\u05DE\u05D0\u05D5\u05EA",
 			"\u05D9\u05D5\u05DD \u05D9\u05E8\u05D5\u05E9\u05DC\u05D9\u05DD",
-			"\u05DC\u05F4\u05D2 \u05D1\u05E2\u05D5\u05DE\u05E8"};
+			"\u05DC\u05F4\u05D2 \u05D1\u05E2\u05D5\u05DE\u05E8",
+			"\u05E4\u05D5\u05E8\u05D9\u05DD \u05E9\u05D5\u05E9\u05DF \u05E7\u05D8\u05DF"};
 
 	/**
 	 * Formats the Yom Tov (holiday) in Hebrew or transliterated Latin characters.
@@ -335,7 +458,7 @@ public class HebrewDateFormatter {
 	 * @return the formatted holiday or an empty String if the day is not a holiday.
 	 * @see #isHebrewFormat()
 	 */
-	public String formatYomTov(com.kosherjava.zmanim.hebrewcalendar.JewishCalendar jewishCalendar) {
+	public String formatYomTov(JewishCalendar jewishCalendar) {
 		int index = jewishCalendar.getYomTovIndex();
 		if (index == JewishCalendar.CHANUKAH) {
 			int dayOfChanukah = jewishCalendar.getDayOfChanukah();
@@ -354,7 +477,7 @@ public class HebrewDateFormatter {
 	 * &#x05D7;&#x05D5;&#x05D3;&#x05E9; &#x05E9;&#x05D1;&#x05D8; or Rosh Chodesh Shevat. If it
 	 * is not Rosh Chodesh, an empty <code>String</code> will be returned.
 	 */
-	public String formatRoshChodesh(com.kosherjava.zmanim.hebrewcalendar.JewishCalendar jewishCalendar) {
+	public String formatRoshChodesh(JewishCalendar jewishCalendar) {
 		if (!jewishCalendar.isRoshChodesh()) {
 			return "";
 		}
@@ -409,11 +532,13 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Returns the Hebrew Omer prefix. By default it is the letter &#x5D1;, but can be set to &#x5DC; (or any other
-	 * prefix) using the {@link #setHebrewOmerPrefix(String)}.
+	 * Returns the Hebrew Omer prefix.&nbsp; By default it is the letter &#x05D1; producing
+	 * &#x05D1;&#x05E2;&#x05D5;&#x05DE;&#x05E8;, but it can be set to &#x05DC; to produce
+	 * &#x05DC;&#x05E2;&#x05D5;&#x05DE;&#x05E8; (or any other prefix) using the {@link #setHebrewOmerPrefix(String)}.
 	 * 
 	 * @return the hebrewOmerPrefix
 	 * 
+	 * @see #hebrewOmerPrefix
 	 * @see #setHebrewOmerPrefix(String)
 	 * @see #formatOmer(JewishCalendar)
 	 */
@@ -422,11 +547,12 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Method to set the Hebrew Omer prefix. By default it is the letter &#x5D1;, but this allows setting it to a
-	 * &#x5DC; (or any other prefix).
-	 * 
+	 * Method to set the Hebrew Omer prefix.&nbsp; By default it is the letter &#x05D1; producing
+	 * &#x05D1;&#x05E2;&#x05D5;&#x05DE;&#x05E8;, but it can be set to &#x05DC; to produce
+	 * &#x05DC;&#x05E2;&#x05D5;&#x05DE;&#x05E8; (or any other prefix)
 	 * @param hebrewOmerPrefix
 	 *            the hebrewOmerPrefix to set. You can use the Unicode &#92;u05DC to set it to &#x5DC;.
+	 * @see #hebrewOmerPrefix
 	 * @see #getHebrewOmerPrefix()
 	 * @see #formatOmer(JewishCalendar)
 	 */
@@ -440,8 +566,8 @@ public class HebrewDateFormatter {
 	 * "Adar", "Adar II", "Adar I"
 	 * 
 	 * @return the list of months beginning in Nissan and ending in in "Adar", "Adar II", "Adar I". The default list is
-	 *         currently "Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Teves",
-	 *         "Shevat", "Adar", "Adar II", "Adar I"
+	 *         currently ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Teves",
+	 *         "Shevat", "Adar", "Adar II", "Adar I"].
 	 * @see #setTransliteratedMonthList(String[])
 	 */
 	public String[] getTransliteratedMonthList() {
@@ -453,8 +579,8 @@ public class HebrewDateFormatter {
 	 * uses Ashkenazi American English transliteration.
 	 * 
 	 * @param transliteratedMonths
-	 *            an array of 14 month names such as { "Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
-	 *            "Heshvan", "Kislev", "Tevet", "Shevat", "Adar", "Adar II", "Adar I" }
+	 *            an array of 14 month names that defaults to ["Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
+	 *            "Heshvan", "Kislev", "Tevet", "Shevat", "Adar", "Adar II", "Adar I"].
 	 * @see #getTransliteratedMonthList()
 	 */
 	public void setTransliteratedMonthList(String[] transliteratedMonths) {
@@ -462,10 +588,10 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Unicode list of Hebrew months in the format of ["\u05E0\u05D9\u05E1\u05DF","\u05D0\u05D9\u05D9\u05E8",
+	 * Unicode list of Hebrew months in the format of <code dir="rtl" lang="he">["\u05E0\u05D9\u05E1\u05DF","\u05D0\u05D9\u05D9\u05E8",
 	 * "\u05E1\u05D9\u05D5\u05DF","\u05EA\u05DE\u05D5\u05D6","\u05D0\u05D1","\u05D0\u05DC\u05D5\u05DC",
 	 * "\u05EA\u05E9\u05E8\u05D9","\u05D7\u05E9\u05D5\u05DF","\u05DB\u05E1\u05DC\u05D5","\u05D8\u05D1\u05EA",
-	 * "\u05E9\u05D1\u05D8","\u05D0\u05D3\u05E8","\u05D0\u05D3\u05E8 \u05D1","\u05D0\u05D3\u05E8 \u05D0"]
+	 * "\u05E9\u05D1\u05D8","\u05D0\u05D3\u05E8","\u05D0\u05D3\u05E8 \u05D1","\u05D0\u05D3\u05E8 \u05D0"]</code>
 	 * 
 	 * @see #formatMonth(JewishDate)
 	 */
@@ -476,9 +602,9 @@ public class HebrewDateFormatter {
 			"\u05D0\u05D3\u05E8 \u05D0" };
 
 	/**
-	 * Unicode list of Hebrew days of week in the format of ["&#x05E8;&#x05D0;&#x05E9;&#x05D5;&#x05DF;",
+	 * Unicode list of Hebrew days of week in the format of <code dir="rtl" lang="he">["&#x05E8;&#x05D0;&#x05E9;&#x05D5;&#x05DF;",
 	 * "&#x05E9;&#x05E0;&#x05D9;","&#x05E9;&#x05DC;&#x05D9;&#x05E9;&#x05D9;","&#x05E8;&#x05D1;&#x05D9;&#x05E2;&#x05D9;",
-	 * "&#x05D7;&#x05DE;&#x05D9;&#x05E9;&#x05D9;","&#x05E9;&#x05E9;&#x05D9;","&#x05E9;&#x05D1;&#x05EA;"]
+	 * "&#x05D7;&#x05DE;&#x05D9;&#x05E9;&#x05D9;","&#x05E9;&#x05E9;&#x05D9;","&#x05E9;&#x05D1;&#x05EA;"]</code>
 	 */
 	private static final String[] hebrewDaysOfWeek = { "\u05E8\u05D0\u05E9\u05D5\u05DF", "\u05E9\u05E0\u05D9",
 			"\u05E9\u05DC\u05D9\u05E9\u05D9", "\u05E8\u05D1\u05D9\u05E2\u05D9", "\u05D7\u05DE\u05D9\u05E9\u05D9",
@@ -494,7 +620,7 @@ public class HebrewDateFormatter {
 	 * @see #isHebrewFormat()
 	 * @see #isLongWeekFormat()
 	 */
-	public String formatDayOfWeek(com.kosherjava.zmanim.hebrewcalendar.JewishDate jewishDate) {
+	public String formatDayOfWeek(JewishDate jewishDate) {
 		if (hebrewFormat) {
 			if(isLongWeekFormat()) {
 				return hebrewDaysOfWeek[jewishDate.getDayOfWeek() - 1];
@@ -606,7 +732,7 @@ public class HebrewDateFormatter {
 	 *         example &#x5DB;&#x5F4;&#x5D0; &#x5E9;&#x5D1;&#x5D8; &#x5EA;&#x5E9;&#x5DB;&#x5F4;&#x5D8;, and the format
 	 *         "21 Shevat, 5729" if not.
 	 */
-	public String format(com.kosherjava.zmanim.hebrewcalendar.JewishDate jewishDate) {
+	public String format(JewishDate jewishDate) {
 		if (isHebrewFormat()) {
 			return formatHebrewNumber(jewishDate.getJewishDayOfMonth()) + " " + formatMonth(jewishDate) + " "
 					+ formatHebrewNumber(jewishDate.getJewishYear());
@@ -627,7 +753,7 @@ public class HebrewDateFormatter {
 	 * @see #getTransliteratedMonthList()
 	 * @see #setTransliteratedMonthList(String[])
 	 */
-	public String formatMonth(com.kosherjava.zmanim.hebrewcalendar.JewishDate jewishDate) {
+	public String formatMonth(JewishDate jewishDate) {
 		final int month = jewishDate.getJewishMonth();
 		if (isHebrewFormat()) {
 			if (jewishDate.isJewishLeapYear() && month == JewishDate.ADAR) {
@@ -648,7 +774,7 @@ public class HebrewDateFormatter {
 
 	/**
 	 * Returns a String of the Omer day in the form &#x5DC;&#x5F4;&#x5D2; &#x5D1;&#x05E2;&#x05D5;&#x05DE;&#x5E8; if
-	 * Hebrew Format is set, or "Omer X" or "Lag BaOmer" if not. An empty string if there is no Omer this day.
+	 * Hebrew Format is set, or "Omer X" or "Lag B'Omer" if not. An empty string if there is no Omer this day.
 	 * 
 	 * @param jewishCalendar
 	 *            the JewishCalendar to be formatted
@@ -661,7 +787,7 @@ public class HebrewDateFormatter {
 	 * @see #getHebrewOmerPrefix()
 	 * @see #setHebrewOmerPrefix(String)
 	 */
-	public String formatOmer(com.kosherjava.zmanim.hebrewcalendar.JewishCalendar jewishCalendar) {
+	public String formatOmer(JewishCalendar jewishCalendar) {
 		int omer = jewishCalendar.getDayOfOmer();
 		if (omer == -1) {
 			return "";
@@ -669,8 +795,8 @@ public class HebrewDateFormatter {
 		if (hebrewFormat) {
 			return formatHebrewNumber(omer) + " " + hebrewOmerPrefix + "\u05E2\u05D5\u05DE\u05E8";
 		} else {
-			if (omer == 33) { // if lag b'omer
-				return "Lag BaOmer";
+			if (omer == 33) { // if Lag B'Omer
+				return transliteratedHolidays[33];
 			} else {
 				return "Omer " + omer;
 			}
@@ -732,6 +858,13 @@ public class HebrewDateFormatter {
 		return returnValue;
 	}
 
+	/**
+	 * Formats the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> Bavli in the format of
+	 * "&#x05E2;&#x05D9;&#x05E8;&#x05D5;&#x05D1;&#x05D9;&#x05DF; &#x05E0;&#x05F4;&#x05D1;" in {@link #isHebrewFormat() Hebrew},
+	 * or the transliterated format of "Eruvin 52".
+	 * @param daf the Daf to be formatted.
+	 * @return the formatted daf.
+	 */
 	public String formatDafYomiBavli(Daf daf) {
 		if (hebrewFormat) {
 			return daf.getMasechta() + " " + formatHebrewNumber(daf.getDaf());
@@ -740,6 +873,14 @@ public class HebrewDateFormatter {
 		}
 	}
 	
+	/**
+	 * Formats the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud#Daf_Yomi_Yerushalmi">Daf Yomi Yerushalmi</a> in the format
+	 * of "&#x05E2;&#x05D9;&#x05E8;&#x05D5;&#x05D1;&#x05D9;&#x05DF; &#x05E0;&#x05F4;&#x05D1;" in {@link #isHebrewFormat() Hebrew}, or
+	 * the transliterated format of "Eruvin 52".
+	 * 
+	 * @param daf the Daf to be formatted.
+	 * @return the formatted daf.
+	 */
 	public String formatDafYomiYerushalmi(Daf daf) {
 		if (hebrewFormat) {
 			String dafName = daf.getDaf() == 0 ? "" : " " + formatHebrewNumber(daf.getDaf());
@@ -890,7 +1031,7 @@ public class HebrewDateFormatter {
 	 *         chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
 	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
 	 */
-	public String formatParsha(com.kosherjava.zmanim.hebrewcalendar.JewishCalendar jewishCalendar) {
+	public String formatParsha(JewishCalendar jewishCalendar) {
 		JewishCalendar.Parsha parsha =  jewishCalendar.getParshah();
 		return hebrewFormat ? hebrewParshaMap.get(parsha) : transliteratedParshaMap.get(parsha);
 	}
@@ -912,7 +1053,7 @@ public class HebrewDateFormatter {
 	 *         into Latin chars. The default uses Ashkenazi pronunciation in typical American English spelling of Shekalim,
 	 *         Zachor, Parah or Hachodesh. An empty string if there are none.
 	 */
-	public String formatSpecialParsha(com.kosherjava.zmanim.hebrewcalendar.JewishCalendar jewishCalendar) {
+	public String formatSpecialParsha(JewishCalendar jewishCalendar) {
 		JewishCalendar.Parsha specialParsha =  jewishCalendar.getSpecialShabbos();
 		return hebrewFormat ? hebrewParshaMap.get(specialParsha) : transliteratedParshaMap.get(specialParsha);
 	}
