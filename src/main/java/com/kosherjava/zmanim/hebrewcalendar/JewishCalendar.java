@@ -80,6 +80,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	public static final int YOM_HAATZMAUT = 31;
 	public static final int YOM_YERUSHALAYIM = 32;
 	public static final int LAG_BAOMER = 33;
+	public static final int SHUSHAN_PURIM_KATAN = 34;
 
 	private boolean inIsrael = false;
 	private boolean useModernHolidays = false;
@@ -557,6 +558,9 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 			} else { // else if a leap year
 				if (day == 14) {
 					return PURIM_KATAN;
+				}
+				if (day == 15) {
+					return SHUSHAN_PURIM_KATAN;
 				}
 			}
 			break;
