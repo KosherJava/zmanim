@@ -79,6 +79,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	public static final int YOM_HAZIKARON = 30;
 	public static final int YOM_HAATZMAUT = 31;
 	public static final int YOM_YERUSHALAYIM = 32;
+	public static final int LAG_BAOMER = 33;
 
 	private boolean inIsrael = false;
 	private boolean useModernHolidays = false;
@@ -397,16 +398,20 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 	/**
-	 * Returns an index of the Jewish holiday or fast day for the current day, or a null if there is no holiday for this
-	 * day.
+	 * Returns an index of the Jewish holiday or fast day for the current day, or a -1 if there is no holiday for this
+	 * day. There are constants in this class representing each Yom Tov. Formatting of the Yomim tovim is done in the
+	 * ZmanimFormatter#
 	 * 
-	 * @return A String containing the holiday name or an empty string if it is not a holiday.
+	 * @todo consider using enums instead of the constant ints.
+	 * 
+	 * @return the index of the holiday such as the constant {@link #LAG_BAOMER} or {@link #YOM_KIPPUR} or a -1 if it is not a holiday.
+	 * @see com.kosherjava.zmanim.hebrewcalendar.HebreDateFormatter
 	 */
 	public int getYomTovIndex() {
 		final int day = getJewishDayOfMonth();
 		final int dayOfWeek = getDayOfWeek();
 
-		// check by month (starts from Nissan)
+		// check by month (starting from Nissan)
 		switch (getJewishMonth()) {
 		case NISSAN:
 			if (day == 14) {
@@ -442,6 +447,9 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 			}
 			if (day == 14) {
 				return PESACH_SHENI;
+			}
+			if (day == 18) {
+				return LAG_BAOMER;
 			}
 			if (isUseModernHolidays() && day == 28) {
 				return YOM_YERUSHALAYIM;
@@ -571,18 +579,24 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 	/**
-	 * Returns true if the current day is Yom Tov. The method returns false for Chanukah, Erev Yom Tov (with the
-	 * exception of Hoshana Rabba and Erev the second days of Pesach) and fast days.
+	 * Returns true if the current day is Yom Tov. The method returns true even for holidays such as {@link #CHANUKAH} and minor
+	 * ones such as {@link #TU_BEAV} and {@link #PESACH_SHENI}. Erev Yom Tov (with the exception of {@link #HOSHANA_RABBA},
+	 * Erev the second days of Pesach) returns false, as do {@link #isTaanis() fast days} besides {@link #YOM_KIPPUR}. Use
+	 * {@link #isAssurBemelacha()} to find the days that have a prohibition of work. 
 	 * 
 	 * @return true if the current day is a Yom Tov
+	 * 
+	 * @see #getYomTovIndex()
 	 * @see #isErevYomTov()
 	 * @see #isErevYomTovSheni()
 	 * @see #isTaanis()
+	 * @see #isAssurBemelacha()
+	 * @see #isCholHamoed()
 	 */
 	public boolean isYomTov() {
 		int holidayIndex = getYomTovIndex();
 		if ((isErevYomTov() && (holidayIndex != HOSHANA_RABBA && (holidayIndex == CHOL_HAMOED_PESACH && getJewishDayOfMonth() != 20)))
-				|| holidayIndex == CHANUKAH || (isTaanis() && holidayIndex != YOM_KIPPUR)) {
+				|| (isTaanis() && holidayIndex != YOM_KIPPUR)) {
 			return false;
 		}
 		return getYomTovIndex() != -1;
