@@ -2449,7 +2449,13 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * Method to return <em>tzais</em> (dusk) calculated as 72 minutes zmaniyos, or 1/10th of the day after
-	 * {@link #getSeaLevelSunset() sea level sunset}.
+	 * {@link #getSeaLevelSunset() sea level sunset}.This is the way that the <a href=
+	 * "https://en.wikipedia.org/wiki/Abraham_Cohen_Pimentel">Minchas Cohen</a> in Ma'amar 2:4 calculates Rebbeinu Tam's
+	 * time of <em>tzeis. It should be noted that this calculation results in the shortest time from sunset to
+	 * <em>tzais</em> being during the winter solstice, the longest at the summer solstice and 72 clock minutes at the
+	 * equinox. This does not match reality, since there is no direct relationship between the length of the day and
+	 * twilight. The shortest twilight is during the equinox, the longest is during the the summer solstice, and in the
+	 * winter with the shortest daylight, the twilight period is longer than during the equinoxes.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -2554,6 +2560,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
+	 * This calculates the time of <em>tzais</em> at the point when the sun is 16.1&deg; below the horizon. This is
+	 * the sun's dip below the horizon 72 minutes after sunset according Rabbeinu Tam's calculation of <em>tzais</em>
+	 * around the equinox in Jerusalem. This is the opinion of Rabbi Meir Posen in the  <a href=
+	 * "https://www.worldcat.org/oclc/956316270">Ohr Meir</a> and others. See Yisrael Vehazmanim vol I, 34:1:4.
 	 * For information on how this is calculated see the comments on {@link #getAlos16Point1Degrees()}
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as northern and
