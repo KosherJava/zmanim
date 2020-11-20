@@ -591,10 +591,17 @@ public class AstronomicalCalendar implements Cloneable {
 
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.0001");
-		while (offsetByDegrees == null || offsetByDegrees.getTime() > offsetByTime.getTime()) { //FIXME needs some work
-		//while (offsetByDegrees != null && offsetByDegrees.getTime() > offsetByTime.getTime()) {
-			degrees = degrees.add(incrementor);
+
+		
+		while (offsetByDegrees == null || ((minutes < 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
+				(minutes > 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
+			if(minutes > 0.0) {
+				degrees = degrees.add(incrementor);
+			} else {
+				degrees = degrees.subtract(incrementor);
+			}
 			offsetByDegrees = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
+			//System.out.println("offsetByDegrees: " + offsetByDegrees);
 		}
 		return degrees.doubleValue();
 	}
@@ -615,9 +622,13 @@ public class AstronomicalCalendar implements Cloneable {
 		Date offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.001");
-		while (offsetByDegrees == null || offsetByDegrees.getTime() > offsetByTime.getTime()) { // FIXME needs some work
-		//while (offsetByDegrees != null && offsetByDegrees.getTime() < offsetByTime.getTime()) {
-			degrees = degrees.add(incrementor);
+		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
+				(minutes < 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
+			if(minutes > 0.0) {
+				degrees = degrees.add(incrementor);
+			} else {
+				degrees = degrees.subtract(incrementor);
+			}
 			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
 		}
 		return degrees.doubleValue();

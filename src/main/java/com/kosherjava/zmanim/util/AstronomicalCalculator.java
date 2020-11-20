@@ -185,13 +185,19 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * that the center of the Sun makes to a line perpendicular to the Earth's surface. If the Sun were a point and the
 	 * Earth were without an atmosphere, true sunset and sunrise would correspond to a 90&deg; zenith. Because the Sun
 	 * is not a point, and because the atmosphere refracts light, this 90&deg; zenith does not, in fact, correspond to
-	 * true sunset or sunrise, instead the centre of the Sun's disk must lie just below the horizon for the upper edge
+	 * true sunset or sunrise, instead the center of the Sun's disk must lie just below the horizon for the upper edge
 	 * to be obscured. This means that a zenith of just above 90&deg; must be used. The Sun subtends an angle of 16
 	 * minutes of arc (this can be changed via the {@link #setSolarRadius(double)} method , and atmospheric refraction
 	 * accounts for 34 minutes or so (this can be changed via the {@link #setRefraction(double)} method), giving a total
 	 * of 50 arcminutes. The total value for ZENITH is 90+(5/6) or 90.8333333&deg; for true sunrise/sunset. Since a
 	 * person at an elevation can see blow the horizon of a person at sea level, this will also adjust the zenith to
-	 * account for elevation if available.
+	 * account for elevation if available. Note that this will only adjust the value if the zenith is exactly 90 degrees.
+	 * For values below and above this no correction is done. As an example, astronomical twilight is when the sun is
+	 * 18&deg; below the horizon or {@link com.kosherjava.zmanim.AstronomicalCalendar#ASTRONOMICAL_ZENITH 108&deg;
+	 * below the zenith}. This is traditionally calculated with none of the above mentioned adjustments. The same goes
+	 * for various <em>tzais</em> and <em>alos</em> times such as the
+	 * {@link com.kosherjava.zmanim.ZmanimCalendar#ZENITH_16_POINT_1 16.1&deg;} dip used in
+	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getAlos16Point1Degrees()}.
 	 * 
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith

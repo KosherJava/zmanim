@@ -327,7 +327,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a> of the position of
 	 * the sun no later than {@link #getTzaisGeonim6Point45Degrees() 31 minutes} after sunset in Jerusalem, and at the
 	 * height of the summer solstice, this zman is 28 minutes after<em>shkiah</em>. This computes to 6.45&deg; below
-	 * {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * {@link #GEOMETRIC_ZENITH geometric zenith}. This calculation is found in the <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=50536&st=&pgnum=51">Birur Halacha Yoreh Deah 262</a> it the commonly used
+	 * <em>zman</em> in Israel. It should be noted that this differs from the 6.1&deg;/6.2&deg; calculation for Rabbi
+	 * Tucazinsky's time as calculated by the Hazmanim Bahalacha Vol II chapter 50:7 (page 515).
 	 * 
 	 * @see #getTzaisGeonim6Point45Degrees()
 	 */
@@ -2129,7 +2132,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> as calculated by
 	 * <a href="https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a>. It is
 	 * based on of the position of the sun no later than {@link #getTzaisGeonim6Point45Degrees() 31 minutes} after sunset
-	 * in Jerusalem, and at the height of the summer solstice, this zman is 28 minutes after <em>shkiah</em>. This
+	 * in Jerusalem the height of the summer solstice and is 28 minutes after <em>shkiah</em> at the equinox. This
 	 * computes to 6.45&deg; below the western horizon.
 	 * @todo Additional documentation details needed.
 	 * 
@@ -2451,7 +2454,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>tzais</em> (dusk) calculated as 72 minutes zmaniyos, or 1/10th of the day after
 	 * {@link #getSeaLevelSunset() sea level sunset}.This is the way that the <a href=
 	 * "https://en.wikipedia.org/wiki/Abraham_Cohen_Pimentel">Minchas Cohen</a> in Ma'amar 2:4 calculates Rebbeinu Tam's
-	 * time of <em>tzeis. It should be noted that this calculation results in the shortest time from sunset to
+	 * time of <em>tzeis</em>. It should be noted that this calculation results in the shortest time from sunset to
 	 * <em>tzais</em> being during the winter solstice, the longest at the summer solstice and 72 clock minutes at the
 	 * equinox. This does not match reality, since there is no direct relationship between the length of the day and
 	 * twilight. The shortest twilight is during the equinox, the longest is during the the summer solstice, and in the
