@@ -375,6 +375,36 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzaisGeonim9Point75Degrees()
 	 */
 	protected static final double ZENITH_9_POINT_75 = GEOMETRIC_ZENITH + 9.75;
+	
+	/**
+	 * The zenith of 2.03&deg; above {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating the start of <em>bain hashmashos</em> (twilight) of 13.5 minutes before sunset converted to degrees
+	 * according to the Yereim. As is traditional with degrees below the horizon, this is calculated without refraction
+	 * and from the center of the sun. It would be 0.833&deg; less without this. 
+	 * 
+	 * @see #getBainHasmashosYereim2Point03Degrees()
+	 */
+	protected static final double ZENITH_MINUS_2_POINT_03 = GEOMETRIC_ZENITH - 2.03;
+	
+	/**
+	 * The zenith of 2.75&deg; above {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating the start of <em>bain hashmashos</em> (twilight) of 16.875 minutes before sunset converted to degrees
+	 * according to the Yereim. As is traditional with degrees below the horizon, this is calculated without refraction
+	 * and from the center of the sun. It would be 0.833&deg; less without this.
+	 * 
+	 * @see #getBainHasmashosYereim2Point75Degrees()
+	 */
+	protected static final double ZENITH_MINUS_2_POINT_75 = GEOMETRIC_ZENITH - 2.75;
+	
+	/**
+	 * The zenith of 2.99&deg; above {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating the start of <em>bain hashmashos</em> (twilight) of 18 minutes before sunset converted to degrees
+	 * according to the Yereim. As is traditional with degrees below the horizon, this is calculated without refraction
+	 * and from the center of the sun. It would be 0.833&deg; less without this.
+	 * 
+	 * @see #getBainHasmashosYereim2Point99Degrees()
+	 */
+	protected static final double ZENITH_MINUS_2_POINT_99 = GEOMETRIC_ZENITH - 2.99;
 
 	/**
 	 * The offset in minutes (defaults to 40) after sunset used for <em>tzeit</em> for Ateret Torah calculations.
@@ -1912,13 +1942,13 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * Method to return <em>Bain Hashmashos</em> of <em>Rabbeinu Tam</em> calculated when the sun is
+	 * Method to return the beginning of <em>bain hashmashos</em> of <em>Rabbeinu Tam</em> calculated when the sun is
 	 * {@link #ZENITH_13_POINT_24 13.24&deg;} below the western {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;)
 	 * after sunset. This calculation is based on the same calculation of {@link #getBainHasmashosRT58Point5Minutes()
-	 * Bain Hashmashos Rabbeinu Tam 58.5 minutes} but uses a degree based calculation instead of 58.5 exact minutes. This
-	 * calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem during the equinox (on
-	 * March 16, about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes) which calculates
-	 * to 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * <em>bain hashmashos</em> Rabbeinu Tam 58.5 minutes} but uses a degree based calculation instead of 58.5 exact
+	 * minutes. This calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem during the
+	 * equinox (on March 16, about 4 days before the astronomical equinox, the day that a solar hour is 60 minutes)
+	 * which calculates to 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * NOTE: As per Yisrael Vehazmanim Vol. III page 1028 No 50, a dip of slightly less than 13&deg; should be used.
 	 * Calculations show that the proper dip to be 13.2456&deg; (truncated to 13.24 that provides about 1.5 second
 	 * earlier (<em>lechumra</em>) time) below the horizon at that time. This makes a difference of 1 minute and 10
@@ -1939,9 +1969,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns <em>Bain Hashmashos</em> of <em>Rabbeinu Tam</em> calculated as a 58.5 minute offset after
-	 * sunset. <em>Bain hashmashos</em> is 3/4 of a <em>Mil</em> before <em>tzais</em> or 3 1/4 <em>Mil</em> after
-	 * sunset. With a <em>Mil</em> calculated as 18 minutes, 3.25 * 18 = 58.5 minutes.
+	 * This method returns the beginning of <em>Bain hashmashos</em> of <em>Rabbeinu Tam</em> calculated as a 58.5
+	 * minute offset after sunset. <em>bain hashmashos</em> is 3/4 of a <em>Mil</em> before <em>tzais</em> or 3 1/4
+	 * <em>Mil</em> after sunset. With a <em>Mil</em> calculated as 18 minutes, 3.25 * 18 = 58.5 minutes.
 	 * 
 	 * @return the <code>Date</code> of 58.5 minutes after sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
@@ -1954,8 +1984,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns the time of <em>bain hashmashos</em> based on the calculation of 13.5 minutes (3/4 of an 18
-	 * minute <em>Mil</em> before shkiah calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083&deg;}.
+	 * This method returns the beginning of <em>bain hashmashos</em> based on the calculation of 13.5 minutes (3/4 of an
+	 * 18 minute <em>Mil</em>) before <em>shkiah</em> calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083&deg;}.
 	 * 
 	 * @return the <code>Date</code> of the <em>bain hashmashos</em> of <em>Rabbeinu Tam</em> in this calculation. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -1969,10 +1999,10 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns <em>bain hashmashos</em> of <em>Rabbeinu Tam</em> calculated according to the opinion of the
-	 * <em>Divrei Yosef</em> (see Yisrael Vehazmanim) calculated 5/18th (27.77%) of the time between <em>alos</em>
-	 * (calculated as 19.8&deg; before sunrise) and sunrise. This is added to sunset to arrive at the time for
-	 * <em>bain hashmashos</em> of <em>Rabbeinu Tam</em>).
+	 * This method returns the beginning of <em>bain hashmashos</em> of <em>Rabbeinu Tam</em> calculated according to the
+	 * opinion of the <em>Divrei Yosef</em> (see Yisrael Vehazmanim) calculated 5/18th (27.77%) of the time between
+	 * <em>alos</em> (calculated as 19.8&deg; before sunrise) and sunrise. This is added to sunset to arrive at the time
+	 * for <em>bain hashmashos</em> of <em>Rabbeinu Tam</em>).
 	 * 
 	 * @return the <code>Date</code> of <em>bain hashmashos</em> of <em>Rabbeinu Tam</em> for this calculation. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -1989,7 +2019,117 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 		return getTimeOffset(getElevationAdjustedSunset(), (sunrise.getTime() - alos19Point8.getTime()) * (5 / 18d));
 	}
-
+	
+	/**
+	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 18 minutes
+	 * or 3/4 of a 24 minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4
+	 * of a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * 
+	 * @return the <code>Date</code> of 18 minutes before sunset. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * @see #getBainHasmashosYereim2Point99Degrees()
+	 */
+	public Date getBainHasmashosYereim18Minutes() {
+		return getTimeOffset(getElevationAdjustedSunset(), -18 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * This method returns the beginning of <em>hain hashmashos</em> (twilight) according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
+	 * position 2.99&deg; above the horizon during the equinox (on March 16, about 4 days before the astronomical
+	 * equinox, the day that a solar hour is 60 minutes) in Yerushalayim, its position 18 minutes or 3/4 of an 24
+	 * minute <em>Mil</em> before sunset. According to the Yereim, bain hashmashos starts 3/4 of a <em>Mil</em> before
+	 * sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * 
+	 * @return the <code>Date</code> of the sun's position 2.99&deg; minutes before sunset. If the calculation can't
+	 *         be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
+	 *         rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #ZENITH_MINUS_2_POINT_99
+	 * @see #getBainHasmashosYereim18Minutes()
+	 */
+	public Date getBainHasmashosYereim2Point99Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_99);
+	}
+	
+	/**
+	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 16.875
+	 * minutes or 3/4 of a 22.5 minute <em>Mil</em> before sunset. According to the Yereim, bain hashmashos starts 3/4 of a
+	 * <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * 
+	 * @return the <code>Date</code> of 16.875 minutes before sunset. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * 
+	 * @see #getBainHasmashosYereim2Point75Degrees()
+	 */
+	public Date getBainHasmashosYereim16Point875Minutes() {
+		return getTimeOffset(getElevationAdjustedSunset(), -16.875 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
+	 * position 2.75&deg; above the horizon during the equinox (on March 16, about 4 days before the astronomical
+	 * equinox, the day that a solar hour is 60 minutes) in Yerushalayim, its position 16.875 minutes or 3/4 of an 18
+	 * minute <em>Mil</em> before sunset. According to the Yereim, bain hashmashos starts 3/4 of a <em>Mil</em> before
+	 * sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * 
+	 * @return the <code>Date</code> of the sun's position 2.75&deg; minutes before sunset. If the calculation can't
+	 *         be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
+	 *         rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #ZENITH_MINUS_2_POINT_75
+	 * @see #getBainHasmashosYereim16Point875Minutes()
+	 */
+	public Date getBainHasmashosYereim2Point75Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_75);
+	}
+	
+	/**
+	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 13.5 minutes
+	 * or 3/4 of an 18 minute <em>Mil</em> before sunset. According to the Yereim, bain hashmashos starts 3/4 of a
+	 * <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * 
+	 * @return the <code>Date</code> of 13.5 minutes before sunset. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * 
+	 * @see #getBainHasmashosYereim2Point03Degrees()
+	 */
+	public Date getBainHasmashosYereim13Point5Minutes() {
+		return getTimeOffset(getElevationAdjustedSunset(), -13.5 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * This method returns the beginning of <em>bain hashmashos</em> according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
+	 * position 2.03&deg; above the horizon during the equinox (on March 16, about 4 days before the astronomical
+	 * equinox, the day that a solar hour is 60 minutes) in Yerushalayim, its position 13.5 minutes or 3/4 of an 18
+	 * minute <em>Mil</em> before sunset. According to the Yereim, bain hashmashos starts 3/4 of a <em>Mil</em> before
+	 * sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * 
+	 * @return the <code>Date</code> of the sun's position 2.03&deg; minutes before sunset. If the calculation can't
+	 *         be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
+	 *         rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #ZENITH_MINUS_2_POINT_03
+	 * @see #getBainHasmashosYereim13Point5Minutes()
+	 */
+	public Date getBainHasmashosYereim2Point03Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_03);
+	}
+	
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
 	 * sun's position at {@link #ZENITH_3_POINT_7 3.7&deg;} below the western horizon.
