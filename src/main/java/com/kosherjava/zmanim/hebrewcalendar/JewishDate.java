@@ -148,9 +148,14 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private static final int JEWISH_EPOCH = -1373429;
 
+	/** The number  of <em>chalakim</em> (18) in a minute.*/
 	private static final int CHALAKIM_PER_MINUTE = 18;
+	/** The number  of <em>chalakim</em> (1080) in an hour.*/
 	private static final int CHALAKIM_PER_HOUR = 1080;
+	/** The number of <em>chalakim</em> (25,920) in a 24 hour day .*/
 	private static final int CHALAKIM_PER_DAY = 25920; // 24 * 1080
+	/** The number  of <em>chalakim</em> in an average Jewish month. A month has 29 days, 12 hours and 793
+	 * <em>chalakim</em> (44 minutes and 3.3 seconds) for a total of 765,433 <em>chalakim</em>*/
 	private static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
 	/**
 	 * Days from the beginning of Sunday till molad BaHaRaD. Calculated as 1 day, 5 hours and 204 chalakim = (24 + 5) *
@@ -182,11 +187,17 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public static final int SHELAIMIM = 2;
 
+	/** the internal Jewish month.*/
 	private int jewishMonth;
+	/** the internal Jewish day.*/
 	private int jewishDay;
+	/** the internal Jewish year.*/
 	private int jewishYear;
+	/** the internal count of <em>molad</em> hours.*/
 	private int moladHours;
+	/** the internal count of <em>molad</em> minutes.*/
 	private int moladMinutes;
+	/** the internal count of <em>molad</em> <em>chalakim</em>.*/
 	private int moladChalakim;
 
 	/**
@@ -305,6 +316,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/** 1 == Sunday, 2 == Monday, etc... */
 	private int dayOfWeek;
 
+	/** Returns the absolute date (days since January 1, 0001 on the Gregorian calendar).
+	 * @see #getAbsDate()
+	 * @see #absDateToJewishDate()
+	 */
 	private int gregorianAbsDate;
 
 	/**
@@ -800,7 +815,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Computes the Jewish date from the absolute date. ND+ER
+	 * Computes the Jewish date from the absolute date.
 	 */
 	private void absDateToJewishDate() {
 		// Approximation from below

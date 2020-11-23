@@ -46,51 +46,131 @@ import java.util.TimeZone;
  * @author &copy; Eliyahu Hershfeld 2011 - 2020
  */
 public class JewishCalendar extends JewishDate {
+	/** The 14th day of Nisan, the day before of Pesach (Passover).*/
 	public static final int EREV_PESACH = 0;
+	/** The holiday of Pesach (Passover) on the 15th (and 16th out of Israel) day of Nisan.*/
 	public static final int PESACH = 1;
+	/** Chol Hamoed (interim days) of Pesach (Passover)*/
 	public static final int CHOL_HAMOED_PESACH = 2;
+	/**Pesach Sheni, the 14th day of Iyar, a minor holiday.*/
 	public static final int PESACH_SHENI = 3;
+	/**Erev Shavuos (the day before Shavuos), the 5th of Sivan*/
 	public static final int EREV_SHAVUOS = 4;
+	/**Shavuos (Pentecost), the 6th of Sivan*/
 	public static final int SHAVUOS = 5;
+	/** The fast of the 17th day of Tamuz*/
 	public static final int SEVENTEEN_OF_TAMMUZ = 6;
+	/** The fast of the 9th of Av*/
 	public static final int TISHA_BEAV = 7;
+	/** The 15th day of Av, a minor holiday*/
 	public static final int TU_BEAV = 8;
+	/**Erev Rosh Hashana (the day before Rosh Hashana), the 29th of Elul*/
 	public static final int EREV_ROSH_HASHANA = 9;
+	/** Rosh Hashana, the first of Tishrei.*/
 	public static final int ROSH_HASHANA = 10;
+	/** The fast of Gedalyah, the 3rd of Tishrei.*/
 	public static final int FAST_OF_GEDALYAH = 11;
+	/** The 9th day of Tishrei, the day before of Yom Kippur.*/
 	public static final int EREV_YOM_KIPPUR = 12;
+	/** The holiday of Yom Kippur, the 10th day of Tishrei*/
 	public static final int YOM_KIPPUR = 13;
+	/** The 14th day of Tishrei, the day before of Succos/Sukkos (Tabernacles).*/
 	public static final int EREV_SUCCOS = 14;
+	/** The holiday of Succos/Sukkos (Tabernacles), the 15th (and 16th out of Israel) day of Tishrei */
 	public static final int SUCCOS = 15;
+	/** Chol Hamoed (interim days) of Succos/Sukkos (Tabernacles)*/
 	public static final int CHOL_HAMOED_SUCCOS = 16;
+	/** Hoshana Rabba, the 7th day of Succos/Sukkos that occurs on the 21st of Tishrei. */
 	public static final int HOSHANA_RABBA = 17;
+	/** Shmini Atzeres, the 8th day of Succos/Sukkos is an independent holiday that occurs on the 22nd of Tishrei. */
 	public static final int SHEMINI_ATZERES = 18;
+	/** Simchas Torah, the 9th day of Succos/Sukkos, or the second day of Shmini Atzeres that is celebrated
+	 * {@link #getInIsrael() out of Israel} on the 23rd of Tishrei.
+	 */
 	public static final int SIMCHAS_TORAH = 19;
 	// public static final int EREV_CHANUKAH = 20;// probably remove this
+	/** The holiday of Chanukah. 8 days starting on the 25th day Kislev.*/
 	public static final int CHANUKAH = 21;
+	/** The fast of the 10th day of Teves.*/
 	public static final int TENTH_OF_TEVES = 22;
+	/** Tu Bishvat on the 15th day of Shevat, a minor holiday.*/
 	public static final int TU_BESHVAT = 23;
+	/** The fast of Esther, usually on the 13th day of Adar (or Adar II on leap years). It is earlier on some years.*/
 	public static final int FAST_OF_ESTHER = 24;
+	/** The holiday of Purim on the 14th day of Adar (or Adar II on leap years).*/
 	public static final int PURIM = 25;
+	/** The holiday of Shushan Purim on the 15th day of Adar (or Adar II on leap years).*/
 	public static final int SHUSHAN_PURIM = 26;
+	/** The holiday of Purim Katan on the 14th day of Adar I on a leap year when Purim is on Adar II, a minor holiday.*/
 	public static final int PURIM_KATAN = 27;
+	/**
+	 * Rosh Chodesh, the new moon on the first day of the Jewish month, and the 30th day of the previous month in the
+	 * case of a month with 30 days.
+	 */
 	public static final int ROSH_CHODESH = 28;
+	/** Yom HaShoah, Holocaust Remembrance Day, usually held on the 27th of Nisan. If it falls on a Friday, it is moved
+	 * to the 26th, and if it falls on a Sunday it is moved to the 28th. A {@link #isUseModernHolidays() modern holiday}.
+	 */
 	public static final int YOM_HASHOAH = 29;
+	/**
+	 * Yom HaZikaron, Israeli Memorial Day, held a day before Yom Ha'atzmaut.  A {@link #isUseModernHolidays() modern holiday}.
+	 */
 	public static final int YOM_HAZIKARON = 30;
+	
+	/** Yom Ha'atzmaut, Israel Independence Day, the 5th of Iyar, but if it occurs on a Friday or Saturday, the holiday is
+	 * moved back to Thursday, the 3rd of 4th of Iyar, and if it falls on a Monday, it is moved forward to Tuesday the
+	 * 6th of Iyar.  A {@link #isUseModernHolidays() modern holiday}.*/
 	public static final int YOM_HAATZMAUT = 31;
+	/**
+	 * Yom Yerushalayim or Jerusalem Day, on 28 Iyar. A {@link #isUseModernHolidays() modern holiday}.
+	 */
 	public static final int YOM_YERUSHALAYIM = 32;
+	
+	/** The 33rd day of the Omer, the 18th of Iyar, a minor holiday.*/
 	public static final int LAG_BAOMER = 33;
+	
+	/** The holiday of Purim Katan on the 15th day of Adar I on a leap year when Purim is on Adar II, a minor holiday.*/
 	public static final int SHUSHAN_PURIM_KATAN = 34;
 
+	/**
+	 * Is the calendar set to Israel, where some holidays have different rules.
+	 * @see #getInIsrael()
+	 * @see #setInIsrael(boolean)
+	 */
 	private boolean inIsrael = false;
+	
+	/**
+	 * Is the calendar set to use modern Israeli holidays such as Yom Haatzmaut.
+	 * @see #isUseModernHolidays()
+	 * @see #setUseModernHolidays(boolean)
+	 */
 	private boolean useModernHolidays = false;
 
 	/**
-	 * The {@link #VZOS_HABERACHA} enum exists for consistency, but is not currently used.
+	 * List of <em>parshiyos</em>. {@link #NONE} indicates a week without a <em>parsha</em>, while the enum for the <em>parsha</em> of
+	 * {@link #VZOS_HABERACHA} exists for consistency, but is not currently used.
 	 */
 	public static enum Parsha {
-		NONE, BERESHIS, NOACH, LECH_LECHA, VAYERA, CHAYEI_SARA, TOLDOS, VAYETZEI, VAYISHLACH, VAYESHEV, MIKETZ, VAYIGASH, VAYECHI, SHEMOS, VAERA, BO, BESHALACH, YISRO, MISHPATIM, TERUMAH, TETZAVEH, KI_SISA, VAYAKHEL, PEKUDEI, VAYIKRA, TZAV, SHMINI, TAZRIA, METZORA, ACHREI_MOS, KEDOSHIM, EMOR, BEHAR, BECHUKOSAI, BAMIDBAR, NASSO, BEHAALOSCHA, SHLACH, KORACH, CHUKAS, BALAK, PINCHAS, MATOS, MASEI, DEVARIM, VAESCHANAN, EIKEV, REEH, SHOFTIM, KI_SEITZEI, KI_SAVO, NITZAVIM, VAYEILECH, HAAZINU, VZOS_HABERACHA, VAYAKHEL_PEKUDEI, TAZRIA_METZORA, ACHREI_MOS_KEDOSHIM, BEHAR_BECHUKOSAI, CHUKAS_BALAK, MATOS_MASEI, NITZAVIM_VAYEILECH, SHKALIM, ZACHOR, PARA, HACHODESH
+		/**NONE A week without any <em>parsha</em> such as <em>Shabbos Chol Hamoed</em> */NONE,
+		/**BERESHIS*/BERESHIS, /**NOACH*/NOACH, /**LECH_LECHA*/LECH_LECHA, /**VAYERA*/VAYERA, /**CHAYEI_SARA*/CHAYEI_SARA, /**TOLDOS*/TOLDOS, 
+		/**VAYETZEI*/VAYETZEI, /**VAYISHLACH*/VAYISHLACH, /**VAYESHEV*/VAYESHEV, /**MIKETZ*/MIKETZ, /**VAYIGASH*/VAYIGASH, /**VAYECHI*/VAYECHI,
+		/**SHEMOS*/SHEMOS, /**VAERA*/VAERA, /**BO*/BO, /**BESHALACH*/BESHALACH, /**YISRO*/YISRO, /**MISHPATIM*/MISHPATIM, /**TERUMAH*/TERUMAH,
+		/**TETZAVEH*/TETZAVEH, /***KI_SISA*/KI_SISA, /**VAYAKHEL*/VAYAKHEL, /**PEKUDEI*/PEKUDEI, /**VAYIKRA*/VAYIKRA, /**TZAV*/TZAV, /**SHMINI*/SHMINI, 
+		/**TAZRIA*/TAZRIA, /**METZORA*/METZORA, /**ACHREI_MOS*/ACHREI_MOS, /**KEDOSHIM*/KEDOSHIM, /**EMOR*/EMOR, /**BEHAR*/BEHAR, /**BECHUKOSAI*/BECHUKOSAI,
+		/**BAMIDBAR*/BAMIDBAR, /**NASSO*/NASSO, /**BEHAALOSCHA*/BEHAALOSCHA, /**SHLACH*/SHLACH, /**KORACH*/KORACH, /**CHUKAS*/CHUKAS, /**BALAK*/BALAK,
+		/**PINCHAS*/PINCHAS, /**MATOS*/MATOS, /**MASEI*/MASEI, /**DEVARIM*/DEVARIM, /**VAESCHANAN*/VAESCHANAN, /**EIKEV*/EIKEV, /**REEH*/REEH,
+		/**SHOFTIM*/SHOFTIM, /**KI_SEITZEI*/KI_SEITZEI, /**KI_SAVO*/KI_SAVO, /**NITZAVIM*/NITZAVIM, /**VAYEILECH*/VAYEILECH, /**HAAZINU*/HAAZINU,
+		/**VZOS_HABERACHA*/VZOS_HABERACHA, /**The double parsha of Vayakhel &amp; Peudei*/VAYAKHEL_PEKUDEI, /**The double <em>parsha</em> of Tazria
+		 * &amp; Metzora*/TAZRIA_METZORA,/**The double <em>parsha</em> of Achrei Mos &amp; Kedoshim*/ACHREI_MOS_KEDOSHIM,/**The double <em>parsha</em>
+		 * of Behar &amp; Bechukosai*/BEHAR_BECHUKOSAI,/**The double <em>parsha</em> of Chukas &amp; Balak*/CHUKAS_BALAK, /**The double
+		 * <em>parsha</em> of Matos &amp; Masei*/MATOS_MASEI,/**The double <em>parsha</em> of Nitzavim &amp; Vayelech*/NITZAVIM_VAYEILECH,
+		 /**The special <em>parsha</em> of Shekalim*/SHKALIM, /** The special <em>parsha</em> of Zachor*/ZACHOR, /**The special <em>parsha</em> of
+		  * Para*/PARA, /** The special <em>parsha</em> of Hachodesh*/HACHODESH
 	};
+	
+	/**
+	 * An array of <em>parshiyos</em> in the 17 possible combinations.
+	 */
 	public static final Parsha[][] parshalist = {
 		{Parsha.NONE, Parsha.VAYEILECH, Parsha.HAAZINU, Parsha.NONE, Parsha.BERESHIS, Parsha.NOACH, Parsha.LECH_LECHA, Parsha.VAYERA, Parsha.CHAYEI_SARA, Parsha.TOLDOS, Parsha.VAYETZEI, Parsha.VAYISHLACH, Parsha.VAYESHEV, Parsha.MIKETZ, Parsha.VAYIGASH, Parsha.VAYECHI, Parsha.SHEMOS, Parsha.VAERA, Parsha.BO, Parsha.BESHALACH, Parsha.YISRO, Parsha.MISHPATIM, Parsha.TERUMAH, Parsha.TETZAVEH, Parsha.KI_SISA, Parsha.VAYAKHEL_PEKUDEI, Parsha.VAYIKRA, Parsha.TZAV, Parsha.NONE, Parsha.SHMINI, Parsha.TAZRIA_METZORA, Parsha.ACHREI_MOS_KEDOSHIM, Parsha.EMOR, Parsha.BEHAR_BECHUKOSAI, Parsha.BAMIDBAR, Parsha.NASSO, Parsha.BEHAALOSCHA, Parsha.SHLACH, Parsha.KORACH, Parsha.CHUKAS, Parsha.BALAK, Parsha.PINCHAS, Parsha.MATOS_MASEI, Parsha.DEVARIM, Parsha.VAESCHANAN, Parsha.EIKEV, Parsha.REEH, Parsha.SHOFTIM, Parsha.KI_SEITZEI, Parsha.KI_SAVO, Parsha.NITZAVIM_VAYEILECH},
 		{Parsha.NONE, Parsha.VAYEILECH, Parsha.HAAZINU, Parsha.NONE, Parsha.BERESHIS, Parsha.NOACH, Parsha.LECH_LECHA, Parsha.VAYERA, Parsha.CHAYEI_SARA, Parsha.TOLDOS, Parsha.VAYETZEI, Parsha.VAYISHLACH, Parsha.VAYESHEV, Parsha.MIKETZ, Parsha.VAYIGASH, Parsha.VAYECHI, Parsha.SHEMOS, Parsha.VAERA, Parsha.BO, Parsha.BESHALACH, Parsha.YISRO, Parsha.MISHPATIM, Parsha.TERUMAH, Parsha.TETZAVEH, Parsha.KI_SISA, Parsha.VAYAKHEL_PEKUDEI, Parsha.VAYIKRA, Parsha.TZAV, Parsha.NONE, Parsha.SHMINI, Parsha.TAZRIA_METZORA, Parsha.ACHREI_MOS_KEDOSHIM, Parsha.EMOR, Parsha.BEHAR_BECHUKOSAI, Parsha.BAMIDBAR, Parsha.NONE, Parsha.NASSO, Parsha.BEHAALOSCHA, Parsha.SHLACH, Parsha.KORACH, Parsha.CHUKAS_BALAK, Parsha.PINCHAS, Parsha.MATOS_MASEI, Parsha.DEVARIM, Parsha.VAESCHANAN, Parsha.EIKEV, Parsha.REEH, Parsha.SHOFTIM, Parsha.KI_SEITZEI, Parsha.KI_SAVO, Parsha.NITZAVIM_VAYEILECH},

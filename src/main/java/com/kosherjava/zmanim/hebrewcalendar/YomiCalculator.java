@@ -31,12 +31,17 @@ public class YomiCalculator {
 	 * The start date of the first Daf Yomi Bavli cycle of September 11, 1923 / Rosh Hashana 5684.
 	 */
 	private static final Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
+	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for claculations.*/
 	private static final int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
 	/**
 	 * The date that the pagination for the Daf Yomi <em>Maseches Shekalim</em> changed to use the commonly used Vilna
 	 * Shas pagination from the no longer commonly available Zhitomir / Slavuta Shas used by Rabbi Meir Shapiro. 
 	 */
 	private static final Calendar shekalimChangeDay = new GregorianCalendar(1975, Calendar.JUNE, 24);
+	
+	/** The Julian date that the cycle for Shekalim changed.
+	 * @see #getDafYomiBavli(JewishCalendar) for details.
+	 */
 	private static final int shekalimJulianChangeDay = getJulianDay(shekalimChangeDay);
 
 	/**

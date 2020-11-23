@@ -35,20 +35,45 @@ import com.kosherjava.zmanim.AstronomicalCalendar;
  * @author &copy; Eliyahu Hershfeld 2004 - 2020
  */
 public class ZmanimFormatter {
+	/**
+	 * Setting to prepent a zero to single digit hours.
+	 * @see #setSettings(boolean, boolean, boolean)
+	 */
 	private boolean prependZeroHours = false;
 
+	/**
+	 * @see #setSettings(boolean, boolean, boolean)
+	 */
 	private boolean useSeconds = false;
 
+	/**
+	 * @see #setSettings(boolean, boolean, boolean)
+	 */
 	private boolean useMillis = false;
 
+	/**
+	 * the formatter for minutes as seconds.
+	 */
 	private static DecimalFormat minuteSecondNF = new DecimalFormat("00");
 
+	/**
+	 * the formatter for hours.
+	 */
 	private DecimalFormat hourNF;
 
+	/**
+	 * the formatter for minutes as milliseconds.
+	 */
 	private static DecimalFormat milliNF = new DecimalFormat("000");
 
+	/**
+	 * @see #setDateFormat(SimpleDateFormat)
+	 */
 	private SimpleDateFormat dateFormat;
 
+	/**
+	 * @see #setTimeZone(TimeZone)
+	 */
 	private TimeZone timeZone = null; // TimeZone.getTimeZone("UTC");
 
 	// private DecimalFormat decimalNF;
@@ -74,6 +99,10 @@ public class ZmanimFormatter {
 	 */
 	public static final int SEXAGESIMAL_XSD_FORMAT = 0;
 
+	/**
+	 * Defaults to {@link #SEXAGESIMAL_XSD_FORMAT}.
+	 * @see #setTimeFormat(int)
+	 */
 	private int timeFormat = SEXAGESIMAL_XSD_FORMAT;
 
 	/**
@@ -177,6 +206,12 @@ public class ZmanimFormatter {
 		return this.dateFormat;
 	}
 
+	/**
+	 * Sets various format settings.
+	 * @param prependZeroHours  if to prepend a zero for single digit hours (so that 1 'oclock is displayed as 01)
+	 * @param useSeconds should seconds be used in the time format
+	 * @param useMillis should milliseconds be used informatting time.
+	 */
 	private void setSettings(boolean prependZeroHours, boolean useSeconds, boolean useMillis) {
 		this.prependZeroHours = prependZeroHours;
 		this.useSeconds = useSeconds;

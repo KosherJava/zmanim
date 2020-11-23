@@ -109,8 +109,14 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	private Calendar calendar;
 
+	/**
+	 * the {@link GeoLocation} used for calculations.
+	 */
 	private GeoLocation geoLocation;
 
+	/**
+	 * the internal {@link AstronomicalCalculator} used for calculating solar based times.
+	 */
 	private AstronomicalCalculator astronomicalCalculator;
 
 	/**
@@ -601,7 +607,6 @@ public class AstronomicalCalendar implements Cloneable {
 				degrees = degrees.subtract(incrementor);
 			}
 			offsetByDegrees = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
-			//System.out.println("offsetByDegrees: " + offsetByDegrees);
 		}
 		return degrees.doubleValue();
 	}
@@ -633,6 +638,31 @@ public class AstronomicalCalendar implements Cloneable {
 		}
 		return degrees.doubleValue();
 	}
+	
+	/**
+	 * FIXME broken for czc.getRiseSetSolarDipFromOffset(-72, czc.getSunrise());
+	 * and boken in other was as well
+	 * @param minutes
+	 * @param riseSet
+	 * @return
+	 */
+	/*public double getRiseSetSolarDipFromOffset(double minutes, Date riseSet) {
+		Date offsetByDegrees = riseSet;
+		Date offsetByTime = getTimeOffset(riseSet, minutes * MINUTE_MILLIS);
+		BigDecimal degrees = new BigDecimal(0);
+		BigDecimal incrementor = new BigDecimal("0.001");
+		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
+				(minutes < 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
+			if(minutes > 0.0) {
+				degrees = degrees.add(incrementor);
+			} else {
+				degrees = degrees.subtract(incrementor);
+			}
+			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
+		}
+		return degrees.doubleValue();
+	}*/
+	
 	
 	/**
 	 * Adjusts the <code>Calendar</code> to deal with edge cases where the location crosses the antimeridian.

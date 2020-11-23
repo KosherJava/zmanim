@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2018 Eliyahu Hershfeld
+ * Copyright (C) 2004-2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -24,16 +24,56 @@ import java.util.TimeZone;
  * algorithm.
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2020
- * @version 1.1
  */
 public class GeoLocation implements Cloneable {
+	/**
+	 * @see #getLatitude()
+	 * @see #setLatitude(double)
+	 * @see #setLatitude(int, int, double, String)
+	 */
 	private double latitude;
+	
+	/**
+	 * @see #getLongitude()
+	 * @see #setLongitude(double)
+	 * @see #setLongitude(int, int, double, String)
+	 */
 	private double longitude;
+	
+	/**
+	 * @see #getLocationName()
+	 * @see #setLocationName(String)
+	 */
 	private String locationName;
+	
+	/**
+	 * @see #getTimeZone()
+	 * @see #setTimeZone(TimeZone)
+	 */
 	private TimeZone timeZone;
+	
+	/**
+	 * @see #getElevation()
+	 * @see #setElevation(double)
+	 */
 	private double elevation;
+	
+	/**
+	 * Constant for a distance type calculation.
+	 * @see #getGeodesicDistance(GeoLocation)
+	 */
 	private static final int DISTANCE = 0;
+	
+	/**
+	 * Constant for a initial bearing type calculation.
+	 * @see #getGeodesicInitialBearing(GeoLocation)
+	 */
 	private static final int INITIAL_BEARING = 1;
+	
+	/**
+	 * Constant for a final bearing type calculation.
+	 * @see #getGeodesicFinalBearing(GeoLocation)
+	 */
 	private static final int FINAL_BEARING = 2;
 
 	/** constant for milliseconds in a minute (60,000) */

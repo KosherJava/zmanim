@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2018 Eliyahu Hershfeld
+ * Copyright (C) 2004-2020 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -21,10 +21,26 @@ package com.kosherjava.zmanim.util;
  * <a href="http://www.fsf.org/licensing/licenses/lgpl.html">LGPL</a> Javascript Implementation
  *
  * @author &copy; Eliyahu Hershfeld 2009 - 2020
+ * @deprecated All methods in this call are available in the {@link GeoLocation} class, and this class that duplicates that
+ * code will be removed in release 3.0.
  */
 public class GeoLocationUtils {
+	/**
+	 * Constant for a distance type calculation.
+	 * @see #getGeodesicDistance(GeoLocation, GeoLocation)
+	 */
 	private static int DISTANCE = 0;
+	
+	/**
+	 * Constant for a initial bearing type calculation.
+	 * @see #getGeodesicInitialBearing(GeoLocation, GeoLocation)
+	 */
 	private static int INITIAL_BEARING = 1;
+	
+	/**
+	 * Constant for a final bearing type calculation.
+	 * @see #getGeodesicFinalBearing(GeoLocation, GeoLocation)
+	 */
 	private static int FINAL_BEARING = 2;
 
 	/**

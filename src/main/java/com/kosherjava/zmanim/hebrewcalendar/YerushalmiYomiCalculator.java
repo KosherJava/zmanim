@@ -20,7 +20,7 @@ import java.util.GregorianCalendar;
 
 
 /**
- * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> <a href=
+ * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
  * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
  * 
  * @author &copy; elihaidv
@@ -32,8 +32,11 @@ public class YerushalmiYomiCalculator {
 	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 18 Teves, 5740.
 	 */
 	private final static Calendar DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
+	/** The number of milliseconds in a day. */
 	private final static int DAY_MILIS = 1000 * 60 * 60 * 24;
+	/** The number of pages in the Talmud Yerushalmi.*/
 	private final static int WHOLE_SHAS_DAFS = 1554;
+	/** The number of pages per <em>masechta</em> (tractate).*/
 	private final static int[] BLATT_PER_MASSECTA = { 
 			68, 37, 34, 44, 31, 59, 26, 33, 28, 20, 13, 92, 65, 71, 22, 22, 42, 26, 26, 33, 34, 22,
 			19, 85, 72, 47, 40, 47, 54, 48, 44, 37, 34, 44, 9, 57, 37, 19, 13};

@@ -414,6 +414,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	private double ateretTorahSunsetOffset = 40;
 
+	/**
+	 * A constructor that takes a {@link GeoLocation} as a parameter.
+	 * 
+	 * @param location
+	 *            the location
+	 * 
+	 * @see ZmanimCalendar#ZmanimCalendar(GeoLocation)
+	 */
 	public ComplexZmanimCalendar(GeoLocation location) {
 		super(location);
 	}
