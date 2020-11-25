@@ -229,7 +229,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * 
 	 * @return The refraction in arc minutes.
 	 */
-	double getRefraction() {
+	public double getRefraction() {
 		return this.refraction;
 	}
 
