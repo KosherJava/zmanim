@@ -2047,7 +2047,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the beginning of <em>hain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
-	 * position 2.99&deg; above the horizon during the equinox (on March 16, about 4 days before the astronomical
+	 * position 3.05&deg; above the horizon during the equinox (on March 16, about 4 days before the astronomical
 	 * equinox, the day that a solar hour is 60 minutes) in Yerushalayim, its position 18 minutes or 3/4 of an 24
 	 * minute <em>Mil</em> before sunset. According to the Yereim, bain hashmashos starts 3/4 of a <em>Mil</em> before
 	 * sunset and <em>tzais</em> or nightfall starts at sunset. 
