@@ -171,7 +171,7 @@ public class Daf {
 
 	/**
 	 * Returns the masechta (tractate) of the Daf Yomi in Hebrew. The list is
-	 * <code dir="rtl" lang="he">["&#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA;",
+	 * <code>["&#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA;",
 	 * "&#x05E9;&#x05D1;&#x05EA;", "&#x05E2;&#x05D9;&#x05E8;&#x05D5;&#x05D1;&#x05D9;&#x05DF;",
 	 * "&#x05E4;&#x05E1;&#x05D7;&#x05D9;&#x05DD;", "&#x05E9;&#x05E7;&#x05DC;&#x05D9;&#x05DD;", "&#x05D9;&#x05D5;&#x05DE;&#x05D0;",
 	 * "&#x05E1;&#x05D5;&#x05DB;&#x05D4;", "&#x05D1;&#x05D9;&#x05E6;&#x05D4;", "&#x05E8;&#x05D0;&#x05E9; &#x05D4;&#x05E9;&#x05E0;&#x05D4;",
