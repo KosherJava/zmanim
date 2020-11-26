@@ -263,7 +263,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * 
 	 * @return The sun's radius in arc minutes.
 	 */
-	double getSolarRadius() {
+	public double getSolarRadius() {
 		return this.solarRadius;
 	}
 
