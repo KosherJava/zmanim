@@ -36,4 +36,4 @@
 
 
 ## Older Code
-See [GitHub Commits] (https://github.com/KosherJava/zmanim/commits/master) for more.
+See [GitHub Commits](https://github.com/KosherJava/zmanim/commits/master) for more.
