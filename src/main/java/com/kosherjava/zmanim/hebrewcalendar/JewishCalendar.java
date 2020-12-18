@@ -251,7 +251,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 * or 170D,0H,0C after rosh hashana year 1
 	 * tekufas tishrei was 182D,3H (365.25 / 2) before tekufas nissan
 	 * or 12D,15H before Rosh Hashana year 1
-	 * outside of EY we say תל ומטר in ברכת השנים from 60 days after tekufas tishrei.
+	 * outside of EY we say Tal Umatar in Birkas Hashanim from 60 days after tekufas tishrei.
 	 * 60 includes the day of the tekufah and the day we start.
 	 * 60 days from the tekufah == 47D,9H from Rosh Hashana year 1
 	 */
