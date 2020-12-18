@@ -982,14 +982,14 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 		return getJewishMonth() == 1 && getJewishDayOfMonth() == 15;
 	}
 
-	public boolean mashivHaruach() {
+	public boolean isMashivHaruach() {
 		JewishDate startDate = new JewishDate(getJewishYear(), 7, 22);
 		JewishDate endDate = new JewishDate(getJewishYear(), 1, 15);
 		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
 	}
 
-	public boolean moridHatal() {
-		return !mashivHaruach() || mashivHaruachStarts() || mashivHaruachEnds();
+	public boolean isMoridHatal() {
+		return !isMashivHaruach() || mashivHaruachStarts() || mashivHaruachEnds();
 	}
 
 	/**
