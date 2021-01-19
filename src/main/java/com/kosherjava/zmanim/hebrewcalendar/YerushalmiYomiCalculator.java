@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2017 - 2020 Eliyahu Hershfeld
+ * Copyright (C) 2017 - 2021 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -24,12 +24,12 @@ import java.util.GregorianCalendar;
  * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
  * 
  * @author &copy; elihaidv
- * @author &copy; Eliyahu Hershfeld 2017 - 2020
+ * @author &copy; Eliyahu Hershfeld 2017 - 2021
  */
 public class YerushalmiYomiCalculator {
 	
 	/**
-	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 18 Teves, 5740.
+	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 15 Shevat, 5740.
 	 */
 	private final static Calendar DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
 	/** The number of milliseconds in a day. */
@@ -44,15 +44,15 @@ public class YerushalmiYomiCalculator {
 	/**
 	 * Returns the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a>
 	 * <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> page ({@link Daf}) for a given date.
-	 * The first Daf Yomi cycle started on To Bishvat 5740 (February, 2, 1980) and calculations prior to this
-	 * date will result in an IllegalArgumentException thrown.
+	 * The first Daf Yomi cycle started on 15 Shevat (Tu Bishvat), 5740 (February, 2, 1980) and calculations
+	 * prior to this date will result in an IllegalArgumentException thrown.
 	 * 
 	 * @param calendar
 	 *            the calendar date for calculation
 	 * @return the {@link Daf}.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if the date is prior to the September 11, 1923 start date of the first Daf Yomi cycle
+	 *             if the date is prior to the February 2, 1980, the start of the first Daf Yomi Yerushalmi cycle
 	 */
 	public static Daf getDafYomiYerushalmi(JewishCalendar calendar) {
 		
@@ -70,7 +70,6 @@ public class YerushalmiYomiCalculator {
 		
 		
 		if (requested.before(DAF_YOMI_START_DAY)) {
-			// TODO: should we return a null or throw an IllegalArgumentException?
 			throw new IllegalArgumentException(requested + " is prior to organized Daf Yomi Yerushlmi cycles that started on "
 					+ DAF_YOMI_START_DAY);
 		}
