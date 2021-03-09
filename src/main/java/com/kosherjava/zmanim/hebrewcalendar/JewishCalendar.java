@@ -132,6 +132,9 @@ public class JewishCalendar extends JewishDate {
 	/** The holiday of Purim Katan on the 15th day of Adar I on a leap year when Purim is on Adar II, a minor holiday.*/
 	public static final int SHUSHAN_PURIM_KATAN = 34;
 
+	/** The fast of the first born sons, usually falls on the 14th day of Nissan, same as erev pesach. It is earlier on some years.*/
+	public static final int FAST_OF_THE_FIRSTBORNS = 35;
+
 	/**
 	 * Is the calendar set to Israel, where some holidays have different rules.
 	 * @see #getInIsrael()
@@ -495,8 +498,11 @@ public class JewishCalendar extends JewishDate {
 		// check by month (starting from Nissan)
 		switch (getJewishMonth()) {
 		case NISSAN:
+			if (day == 13 && dayOfWeek == 6) {
+					return FAST_OF_THE_FIRSTBORNS;
+			}
 			if (day == 14) {
-				return EREV_PESACH;
+				return EREV_PESACH;//TODO add Fast of firstborns with Erev Pesach
 			}
 			if (day == 15 || day == 21
 					|| (!inIsrael && (day == 16 || day == 22))) {

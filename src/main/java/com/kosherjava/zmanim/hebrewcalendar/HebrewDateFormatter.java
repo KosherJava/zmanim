@@ -356,7 +356,8 @@ public class HebrewDateFormatter {
 			"Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur", "Erev Succos", "Succos",
 			"Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah", "Erev Chanukah", "Chanukah",
 			"Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim", "Purim Katan", "Rosh Chodesh",
-			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim", "Lag B'Omer","Shushan Purim Katan"};
+			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim", "Lag B'Omer","Shushan Purim Katan",
+			"Fast of Firstborns"};
 
 	/**
 	 * Returns the list of holidays transliterated into Latin chars. This is used by the
@@ -449,7 +450,8 @@ public class HebrewDateFormatter {
 			"\u05D9\u05D5\u05DD \u05D4\u05E2\u05E6\u05DE\u05D0\u05D5\u05EA",
 			"\u05D9\u05D5\u05DD \u05D9\u05E8\u05D5\u05E9\u05DC\u05D9\u05DD",
 			"\u05DC\u05F4\u05D2 \u05D1\u05E2\u05D5\u05DE\u05E8",
-			"\u05E4\u05D5\u05E8\u05D9\u05DD \u05E9\u05D5\u05E9\u05DF \u05E7\u05D8\u05DF"};
+			"\u05E4\u05D5\u05E8\u05D9\u05DD \u05E9\u05D5\u05E9\u05DF \u05E7\u05D8\u05DF",
+			"\u05EA\u05E2\u05E0\u05D9\u05EA \u05D1\u05DB\u05D5\u05E8\u05D5\u05EA"};
 
 	/**
 	 * Formats the Yom Tov (holiday) in Hebrew or transliterated Latin characters.
