@@ -824,6 +824,20 @@ public class JewishCalendar extends JewishDate {
 		return holidayIndex == SEVENTEEN_OF_TAMMUZ || holidayIndex == TISHA_BEAV || holidayIndex == YOM_KIPPUR
 				|| holidayIndex == FAST_OF_GEDALYAH || holidayIndex == TENTH_OF_TEVES || holidayIndex == FAST_OF_ESTHER;
 	}
+	
+	/**
+	 * Return true if the day is Taanis Bechorim (on erev Pesach). It will return true for the 14th of Nissan if it is not
+	 * on Shabbos, or if the 12th of Nissan occurs on a Thursday
+	 * 
+	 * @return true if today is the fast of Bechorim
+	 */
+	public boolean isTaanisBechorim() {
+	    final int day = getJewishDayOfMonth();
+	    final int dayOfWeek = getDayOfWeek();
+	    // on 14 Nisan unless that is Shabbos where the fast is moved back to Thursday
+	    return getJewishMonth() == NISSAN && ((day == 14 && dayOfWeek != Calendar.SATURDAY) ||
+	    		(day == 12 && dayOfWeek == Calendar.THURSDAY ));
+	}
 
 	/**
 	 * Returns the day of <em>Chanukah</em> or -1 if it is not <em>Chanukah</em>.
