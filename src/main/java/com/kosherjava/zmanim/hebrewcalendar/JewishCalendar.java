@@ -826,12 +826,12 @@ public class JewishCalendar extends JewishDate {
 	}
 	
 	/**
-	 * Return true if the day is Taanis Bechorim (on erev Pesach). It will return true for the 14th of Nissan if it is not
+	 * Return true if the day is Taanis Bechoros (on erev Pesach). It will return true for the 14th of Nissan if it is not
 	 * on Shabbos, or if the 12th of Nissan occurs on a Thursday
 	 * 
-	 * @return true if today is the fast of Bechorim
+	 * @return true if today is the fast of Bechoros
 	 */
-	public boolean isTaanisBechorim() {
+	public boolean isTaanisBechoros() {
 	    final int day = getJewishDayOfMonth();
 	    final int dayOfWeek = getDayOfWeek();
 	    // on 14 Nisan unless that is Shabbos where the fast is moved back to Thursday
