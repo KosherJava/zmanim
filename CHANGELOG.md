@@ -1,3 +1,8 @@
+## [2.2.0] (2021-03-15)
+
+* Added JewishCalendar.isTaanisBechoros()
+* Updated Javadocs - document sources for getFixedLocalChatzos() and clarify Yerushamli Yomi Start Date
+
 ## [2.1.0] (2020-12-02)
 
 * Added six variants of the Yereim's bain hashmashos zmanim.
