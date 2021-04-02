@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2020 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2021 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -37,7 +37,7 @@ import java.util.EnumMap;
  * @see JewishDate
  * @see JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2020
+ * @author &copy; Eliyahu Hershfeld 2011 - 2021
  */
 public class HebrewDateFormatter {
 	
@@ -87,7 +87,7 @@ public class HebrewDateFormatter {
 	private EnumMap<JewishCalendar.Parsha, String> transliteratedParshaMap;
 	
 	/**
-	 * Unicode {@link EnumMap} of Hebrew parshiyos.&nbsp; the The list includes double and special parshiyos and contains
+	 * Unicode {@link EnumMap} of Hebrew parshiyos.&nbsp; The list includes double and special parshiyos and contains
 	 *  <code>"&#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA;, &#x05E0;&#x05D7;, &#x05DC;&#x05DA; &#x05DC;&#x05DA;,
 	 *  &#x05D5;&#x05D9;&#x05E8;&#x05D0;, &#x05D7;&#x05D9;&#x05D9; &#x05E9;&#x05E8;&#x05D4;,
 	 *  &#x05EA;&#x05D5;&#x05DC;&#x05D3;&#x05D5;&#x05EA;, &#x05D5;&#x05D9;&#x05E6;&#x05D0;, &#x05D5;&#x05D9;&#x05E9;&#x05DC;&#x05D7;,
@@ -104,13 +104,13 @@ public class HebrewDateFormatter {
 	 *  &#x05E4;&#x05D9;&#x05E0;&#x05D7;&#x05E1;, &#x05DE;&#x05D8;&#x05D5;&#x05EA;, &#x05DE;&#x05E1;&#x05E2;&#x05D9;,
 	 *  &#x05D3;&#x05D1;&#x05E8;&#x05D9;&#x05DD;, &#x05D5;&#x05D0;&#x05EA;&#x05D7;&#x05E0;&#x05DF;, &#x05E2;&#x05E7;&#x05D1;,
 	 *  &#x05E8;&#x05D0;&#x05D4;, &#x05E9;&#x05D5;&#x05E4;&#x05D8;&#x05D9;&#x05DD;, &#x05DB;&#x05D9; &#x05EA;&#x05E6;&#x05D0;,
-	 *  &#x05DB;&#x05D9; &#x05EA;&#x05D1;&#x05D5;&#x05D0;, &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD;, &#x05D5;&#x05D9;&#x05DC;&#x05DA;,
+	 *  &#x05DB;&#x05D9; &#x05EA;&#x05D1;&#x05D5;&#x05D0;, &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD;, &#x05D5;&#x05D9;&#x05DC;&#x05DA;,
 	 *  &#x05D4;&#x05D0;&#x05D6;&#x05D9;&#x05E0;&#x05D5;, &#x05D5;&#x05D6;&#x05D0;&#x05EA; &#x05D4;&#x05D1;&#x05E8;&#x05DB;&#x05D4;,
 	 *  &#x05D5;&#x05D9;&#x05E7;&#x05D4;&#x05DC; &#x05E4;&#x05E7;&#x05D5;&#x05D3;&#x05D9;, &#x05EA;&#x05D6;&#x05E8;&#x05D9;&#x05E2;
 	 *  &#x05DE;&#x05E6;&#x05E8;&#x05E2;, &#x05D0;&#x05D7;&#x05E8;&#x05D9; &#x05DE;&#x05D5;&#x05EA;
 	 *  &#x05E7;&#x05D3;&#x05D5;&#x05E9;&#x05D9;&#x05DD;, &#x05D1;&#x05D4;&#x05E8; &#x05D1;&#x05D7;&#x05E7;&#x05EA;&#x05D9;,
 	 *  &#x05D7;&#x05D5;&#x05E7;&#x05EA; &#x05D1;&#x05DC;&#x05E7;, &#x05DE;&#x05D8;&#x05D5;&#x05EA; &#x05DE;&#x05E1;&#x05E2;&#x05D9;,
-	 *  &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA;, &#x05E9;&#x05E7;&#x05DC;&#x05D9;&#x05DD;,
+	 *  &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA;, &#x05E9;&#x05E7;&#x05DC;&#x05D9;&#x05DD;,
 	 *  &#x05D6;&#x05DB;&#x05D5;&#x05E8;, &#x05E4;&#x05E8;&#x05D4;, &#x05D4;&#x05D7;&#x05D3;&#x05E9;"</code>
 	 */
 	private EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
@@ -239,7 +239,7 @@ public class HebrewDateFormatter {
 		hebrewParshaMap.put(JewishCalendar.Parsha.SHOFTIM, "\u05E9\u05D5\u05E4\u05D8\u05D9\u05DD");
 		hebrewParshaMap.put(JewishCalendar.Parsha.KI_SEITZEI, "\u05DB\u05D9 \u05EA\u05E6\u05D0");
 		hebrewParshaMap.put(JewishCalendar.Parsha.KI_SAVO, "\u05DB\u05D9 \u05EA\u05D1\u05D5\u05D0");
-		hebrewParshaMap.put(JewishCalendar.Parsha.NITZAVIM, "\u05E0\u05D9\u05E6\u05D1\u05D9\u05DD");
+		hebrewParshaMap.put(JewishCalendar.Parsha.NITZAVIM, "\u05E0\u05E6\u05D1\u05D9\u05DD");
 		hebrewParshaMap.put(JewishCalendar.Parsha.VAYEILECH, "\u05D5\u05D9\u05DC\u05DA");
 		hebrewParshaMap.put(JewishCalendar.Parsha.HAAZINU, "\u05D4\u05D0\u05D6\u05D9\u05E0\u05D5");
 		hebrewParshaMap.put(JewishCalendar.Parsha.VZOS_HABERACHA, "\u05D5\u05D6\u05D0\u05EA \u05D4\u05D1\u05E8\u05DB\u05D4 ");
@@ -249,7 +249,7 @@ public class HebrewDateFormatter {
 		hebrewParshaMap.put(JewishCalendar.Parsha.BEHAR_BECHUKOSAI, "\u05D1\u05D4\u05E8 \u05D1\u05D7\u05E7\u05EA\u05D9");
 		hebrewParshaMap.put(JewishCalendar.Parsha.CHUKAS_BALAK, "\u05D7\u05D5\u05E7\u05EA \u05D1\u05DC\u05E7");
 		hebrewParshaMap.put(JewishCalendar.Parsha.MATOS_MASEI, "\u05DE\u05D8\u05D5\u05EA \u05DE\u05E1\u05E2\u05D9");
-		hebrewParshaMap.put(JewishCalendar.Parsha.NITZAVIM_VAYEILECH, "\u05E0\u05D9\u05E6\u05D1\u05D9\u05DD \u05D5\u05D9\u05DC\u05DA");
+		hebrewParshaMap.put(JewishCalendar.Parsha.NITZAVIM_VAYEILECH, "\u05E0\u05E6\u05D1\u05D9\u05DD \u05D5\u05D9\u05DC\u05DA");
 		hebrewParshaMap.put(JewishCalendar.Parsha.SHKALIM, "\u05E9\u05E7\u05DC\u05D9\u05DD");
 		hebrewParshaMap.put(JewishCalendar.Parsha.ZACHOR, "\u05D6\u05DB\u05D5\u05E8");
 		hebrewParshaMap.put(JewishCalendar.Parsha.PARA, "\u05E4\u05E8\u05D4");
@@ -1018,7 +1018,7 @@ public class HebrewDateFormatter {
 	/**
 	 * Returns a String with the name of the current parsha(ios). If the formatter is set to format in Hebrew, returns
 	 * a string of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
-	 * &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if there
+	 * &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if there
 	 * are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin chars. The
 	 * default uses Ashkenazi pronunciation in typical American English spelling, for example Bereshis or
 	 * Nitzavim Vayeilech or an empty string if there are none.
@@ -1026,7 +1026,7 @@ public class HebrewDateFormatter {
 	 * @param jewishCalendar the JewishCalendar Object
 	 * @return today's parsha(ios) in Hebrew for example, if the formatter is set to format in Hebrew, returns a string
 	 *         of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
-	 *         &#x05E0;&#x05D9;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if
+	 *         &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if
 	 *         there are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin
 	 *         chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
 	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
