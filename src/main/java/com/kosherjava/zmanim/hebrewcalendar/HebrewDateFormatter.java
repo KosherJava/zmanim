@@ -81,7 +81,7 @@ public class HebrewDateFormatter {
 	 * Behar, Bechukosai, Bamidbar, Nasso, Beha'aloscha, Sh'lach, Korach, Chukas, Balak, Pinchas, Matos, Masei, Devarim,
 	 * Vaeschanan, Eikev, Re'eh, Shoftim, Ki Seitzei, Ki Savo, Nitzavim, Vayeilech, Ha'Azinu, Vezos Habracha,
 	 * Vayakhel Pekudei, Tazria Metzora, Achrei Mos Kedoshim, Behar Bechukosai, Chukas Balak, Matos Masei, Nitzavim Vayeilech,
-	 * Shekalim, Zachor, Parah, Hachodesh".
+	 * Shekalim, Zachor, Parah, Hachodesh</em>".
 	 * 
 	 * @see #formatParsha(JewishCalendar)
 	 */
