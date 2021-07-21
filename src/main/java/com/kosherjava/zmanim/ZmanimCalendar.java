@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2021 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -25,32 +25,35 @@ import com.kosherjava.zmanim.util.GeoLocation;
 /**
  * The ZmanimCalendar is a specialized calendar that can calculate sunrise and sunset and Jewish <em>zmanim</em>
  * (religious times) for prayers and other Jewish religious duties. This class contains the main functionality of the
- * Zmanim library. For a much more extensive list of zmanim use the {@link ComplexZmanimCalendar} that extends this
- * class. See documentation for the {@link ComplexZmanimCalendar} and {@link AstronomicalCalendar} for simple examples
- * on using the API. According to Rabbi Dovid Yehudah Bursztyn in his <a href="http://www.worldcat.org/oclc/659793988"
- * >Zmanim Kehilchasam (second edition published in 2007)</a> chapter 2 (pages 186-187) no zmanim besides sunrise and
- * sunset should use elevation. However Rabbi Yechiel Avrahom Zilber in the <a href="http://hebrewbooks.org/51654"
- * >Birur Halacha Vol. 6</a> Ch. 58 Pages <a href="http://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=42">34</a>
- * and <a href="http://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=50">42</a> is of the opinion that elevation
- * should be accounted for in zmanim calculations. Related to this, Rabbi Yaakov Karp in <a href=
+ * <em>Zmanim</em> library. For a much more extensive list of <em>zmanim</em>, use the {@link ComplexZmanimCalendar} that
+ * extends this class. See documentation for the {@link ComplexZmanimCalendar} and {@link AstronomicalCalendar} for
+ * simple examples on using the API. According to Rabbi Dovid Yehudah Bursztyn in his
+ * <a href="http://www.worldcat.org/oclc/659793988">Zmanim Kehilchasam (second edition published in 2007)</a> chapter 2
+ * (pages 186-187) no <em>zmanim</em> besides sunrise and sunset should use elevation. However, Rabbi Yechiel Avrahom
+ * Zilber in the <a href="http://hebrewbooks.org/51654">Birur Halacha Vol. 6</a> Ch. 58 Pages
+ * <a href="http://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=42">34</a> and
+ * <a href="http://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=50">42</a> is of the opinion that elevation should be
+ * accounted for in <em>zmanim</em> calculations. Related to this, Rabbi Yaakov Karp in <a href=
  * "http://www.worldcat.org/oclc/919472094">Shimush Zekeinim</a>, Ch. 1, page 17 states that obstructing horizons should
- * be factored into zmanim calculations. The setting defaults to false (elevation will not be used for zmanim calculations),
- * unless the setting is changed to true in {@link #setUseElevation(boolean)}. This will impact sunrise and sunset based
- * zmanim such as {@link #getSunrise()}, {@link #getSunset()}, {@link #getSofZmanShmaGRA()}, alos based zmanim such as
- * {@link #getSofZmanShmaMGA()} that are based on a fixed offset of sunrise or sunset and zmanim based on a percentage of
- * the day such as {@link ComplexZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset.
- * It will not impact zmanim that are a degree based offset of sunrise and sunset, such as
- * {@link ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()}.
+ * be factored into <em>zmanim</em> calculations. The setting defaults to false (elevation will not be used for
+ * <em>zmanim</em> calculations besides sunrise and sunset), unless the setting is changed to true in {@link
+ * #setUseElevation(boolean)}. This will impact sunrise and sunset-based <em>zmanim<em> such as {@link #getSunrise()},
+ * {@link #getSunset()}, {@link #getSofZmanShmaGRA()}, <em>alos</em>-based <em>zmanim</em> such as {@link #getSofZmanShmaMGA()}
+ * that are based on a fixed offset of sunrise or sunset and <em>zmanim</em> based on a percentage of the day such as
+ * {@link ComplexZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. Even when set to
+ * true it will not impact <em>zmanim</em> that are a degree-based offset of sunrise and sunset, such as {@link
+ * ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()}.
  * 
  * <p><b>Note:</b> It is important to read the technical notes on top of the {@link AstronomicalCalculator} documentation
  * before using this code.
- * <p>I would like to thank Rabbi Yaakov Shakow, the author of Luach Ikvei Hayom who spent a considerable amount of time
- * reviewing, correcting and making suggestions on the documentation in this library.
- * <h2>Disclaimer:</h2> I did my best to get accurate results, but please double-check before relying on these zmanim for
- * <em>halacha lemaaseh</em>.
+ * <p>I would like to thank <a href="https://www.worldcat.org/search?q=au%3AShakow%2C+Yaakov">Rabbi Yaakov Shakow</a>, the
+ * author of Luach Ikvei Hayom who spent a considerable amount of time reviewing, correcting and making suggestions on the
+ * documentation in this library.
+ * <h2>Disclaimer:</h2> I did my best to get accurate results, but please double-check before relying on these
+ * <em>zmanim</em> for <em>halacha lemaaseh</em>.
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2021
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
 	
