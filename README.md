@@ -57,6 +57,10 @@ There is a web api that returns json or xml and is based on the .NET port. It is
 
 Source code for the web api if you would like to self host is at https://github.com/greatjack1/dotnetcoreZmanim
 
+ZmanCode Desktop App
+------------------------
+The .NET port was used to create a desktop app that is available at https://github.com/NykUser/MyZman.
+
 Disclaimer:
 -----------
 __While I did my best to get accurate results, please double check before relying on these zmanim for <em>halacha lemaaseh</em>__.
