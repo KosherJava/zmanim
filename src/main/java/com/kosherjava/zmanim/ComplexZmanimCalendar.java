@@ -2891,7 +2891,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Returns the Date of the <em>molad</em> based time if it occurs on the current date.Since <em>Kiddush Levana</em>
+	 * Returns the Date of the <em>molad</em> based time if it occurs on the current date. Since <em>Kiddush Levana</em>
 	 * can only be said during the day, there are parameters to limit it to between <em>alos</em> and <em>tzais</em>. If
 	 * the time occurs between <em>alos</em> and <em>tzais</em>, <em>tzais</em> will be returned
 	 * 
