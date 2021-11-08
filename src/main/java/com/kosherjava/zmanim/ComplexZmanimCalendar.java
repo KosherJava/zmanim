@@ -2891,7 +2891,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Returns the Date of the <em>molad</em> based time if it occurs on the current date. Since <em>Kiddush Levana</em>
+	 * Returns the Date of the <em>molad</em> based time if it occurs on the current date.Since <em>Kiddush Levana</em>
 	 * can only be said during the day, there are parameters to limit it to between <em>alos</em> and <em>tzais</em>. If
 	 * the time occurs between <em>alos</em> and <em>tzais</em>, <em>tzais</em> will be returned
 	 * 
@@ -3606,5 +3606,232 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getTzaisBaalHatanya() {
 		return this.getSunsetOffsetByDegrees(ZENITH_6_DEGREES);
+	}
+	
+	/**
+	 * Calculate zmanim based on <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> as
+	 * calculated in <a href="https://en.wikipedia.org/wiki/Mesivtha_Tifereth_Jerusalem">MTJ</a>, <a href=
+	 * "https://en.wikipedia.org/wiki/Mesivtha_Tifereth_Jerusalem">Yeshiva of Staten Island</a>, and Camp Yeshiva
+	 * of Staten Island. The day is split in two, from <em>alos</em> / sunrise to fixed local chatzos, and and second
+	 * half of the day, from fixed local chatzos to sunset / <em>tzais</em>. Morning based times are calculated based
+	 * on the first  6 hours, and afternoon times based on the second half of the day.
+	 * 
+	 * @param startOfHalfDay
+	 *            The start of the half day. This would be <em>alos</em> or sunrise for morning based times and fixed
+	 *            local <em>chatzos</em> for the second half of the day.
+	 * @param endOfHalfDay
+	 *            The end of the half day. This would be fixed local <em>chatzos</em> for morning based times and sunset
+	 *            or <em>tzais</em> for afternoon based times.
+	 * @param hours
+	 *            the number of hours to offset the beginning of the first or second half of the day
+	 * 
+	 * @return the <code>Date</code> of the later of {@link #getMinchaGedolaBaalHatanya()} and {@link #getMinchaGedola30Minutes()}.
+	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
+	 *         where the sun does not rise, and one where it does not set, a null will be returned. See detailed
+	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *
+	 * @see ComplexZmanimCalendar#getFixedLocalChatzos()
+	 */
+	public Date getFixedLocalChatzosBasedZmanim(Date startOfHalfDay, Date endOfHalfDay, double hours) {
+		if (startOfHalfDay == null || endOfHalfDay == null) {
+			return null;
+		}
+		long shaahZmanis = (endOfHalfDay.getTime() - startOfHalfDay.getTime()) / 6;
+		return new Date((long)(startOfHalfDay.getTime() + shaahZmanis * hours));
+	}
+	
+	/**
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
+	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
+	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
+	 * at <em>alos</em> defined as {@link #getAlos18Degrees() 18&deg;} and ends at {@link #getFixedLocalChatzos() fixed local
+	 * chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after <em>alos</em> or half of this half-day.
+	 * 
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getAlos18Degrees()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getFixedLocalChatzosBasedZmanim(Date, Date, double)
+	 */
+	public Date getSofZmanShmaMGA18DegreesToFixedLocalChatzos() {
+		return getFixedLocalChatzosBasedZmanim(getAlos18Degrees(), getFixedLocalChatzos(), 3);
+	}
+	
+	/**
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
+	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
+	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
+	 * at <em>alos</em> defined as {@link #getAlos16Point1Degrees() 16.1&deg;} and ends at {@link #getFixedLocalChatzos() fixed local
+	 * chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or half of this half-day.
+	 * 
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getAlos16Point1Degrees()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getFixedLocalChatzosBasedZmanim(Date, Date, double)
+	 */
+	public Date getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos() {
+		return getFixedLocalChatzosBasedZmanim(getAlos16Point1Degrees(), getFixedLocalChatzos(), 3);
+	}
+	
+	/**
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
+	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
+	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
+	 * at <em>alos</em> defined as {@link #getAlos90() 90 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
+	 * fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or
+	 * half of this half-day.
+	 * 
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getAlos90()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getFixedLocalChatzosBasedZmanim(Date, Date, double)
+	 */
+	public Date getSofZmanShmaMGA90MinutesToFixedLocalChatzos() {
+		return getFixedLocalChatzosBasedZmanim(getAlos90(), getFixedLocalChatzos(), 3);
+	}
+	
+	/**
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
+	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
+	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
+	 * at <em>alos</em> defined as {@link #getAlos72() 72 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
+	 * fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or
+	 * half of this half-day.
+	 * 
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getAlos72()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getFixedLocalChatzosBasedZmanim(Date, Date, double)
+	 */
+	public Date getSofZmanShmaMGA72MinutesToFixedLocalChatzos() {
+		return getFixedLocalChatzosBasedZmanim(getAlos72(), getFixedLocalChatzos(), 3);
+	}
+		
+	/**
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
+	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em> that the day is calculated from
+	 * sunrise to sunset, but calculated using the first half of the day only. The half a day starts at {@link #getSunrise()
+	 * sunrise} and ends at {@link #getFixedLocalChatzos() fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos
+	 * zmaniyos</em> (solar hours) after sunrise or half of this half-day.
+	 * 
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getSunrise()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getFixedLocalChatzosBasedZmanim(Date, Date, double)
+	 */
+	public Date getSofZmanShmaGRASunriseToFixedLocalChatzos() {
+		return getFixedLocalChatzosBasedZmanim(getSunrise(), getFixedLocalChatzos(), 3);
+	}
+	
+	/**
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion of the
+	 * claculation of <em>sof zman tfila</em> (<em>zman tfilah</em> (the latest time to recite the morning prayers))
+	 * according to the opinion of the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em> that the day is
+	 * calculated from sunrise to sunset, but calculated using the first half of the day only. The half a day starts at
+	 * {@link #getSunrise() sunrise} and ends at {@link #getFixedLocalChatzos() fixed local chatzos}. <em>Sof zman tefila</em>
+	 * is 4 <em>shaos zmaniyos</em> (solar hours) after sunrise or 2/3 of this half-day.
+	 * 
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getSunrise()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getFixedLocalChatzosBasedZmanim(Date, Date, double)
+	 */
+	public Date getSofZmanTfilaGRASunriseToFixedLocalChatzos() {
+		return getFixedLocalChatzosBasedZmanim(getSunrise(), getFixedLocalChatzos(), 4);
+	}
+	
+	/**
+	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion
+	 * of the calculation of <em>mincha gedola</em>,the earliest time one can pray <em>mincha</em> <em><a href=
+	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>that is 30 minutes after{@link #getFixedLocalChatzos() fixed
+	 * local chatzos}.
+	 * 
+	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 *         
+	 * @see #getMinchaGedola()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getMinchaKetanaGRAFixedLocalChatzosToSunset
+	 */
+	public Date getMinchaGedolaGRAFixedLocalChatzos30Minutes() {
+		return getTimeOffset(getFixedLocalChatzos(), MINUTE_MILLIS * 30);
+	}
+	
+	/**
+	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion
+	 * of the calculation of <em>mincha ketana</em> (the preferred time to recite the mincha prayers according to the
+	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a></em> and others) calculated according
+	 * to the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>that is 3.5 <em>shaos zmaniyos</em> (solar
+	 * hours) after {@link #getFixedLocalChatzos() fixed local chatzos}.
+	 * 
+	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 *         
+	 * @see #getMinchaGedola()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getMinchaGedolaGRAFixedLocalChatzos30Minutes
+	 */
+	public Date getMinchaKetanaGRAFixedLocalChatzosToSunset() {
+		return getFixedLocalChatzosBasedZmanim(getFixedLocalChatzos(), getSunset(), 3.5);
+	}
+	
+	/**
+	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion
+	 * of the calculation of This method returns <em>plag hamincha</em> calculated according to the
+	 * <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>that is 4.75 <em>shaos zmaniyos</em> (solar
+	 * hours) after {@link #getFixedLocalChatzos() fixed local chatzos}.
+	 * 
+	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
+	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 *         
+	 * @see #getPlagHamincha()
+	 * @see #getFixedLocalChatzos()
+	 * @see #getMinchaKetanaGRAFixedLocalChatzosToSunset
+	 * @see #getMinchaGedolaGRAFixedLocalChatzos30Minutes
+	 */
+	public Date getPlagHaminchaGRAFixedLocalChatzosToSunset() {
+		return getFixedLocalChatzosBasedZmanim(getFixedLocalChatzos(), getSunset(), 4.75);
+	}
+	
+	/**
+	 * Method to return <em>tzais</em> (dusk) calculated as 50 minutes after sea level sunset. This method returns
+	 * <em>tzais</em> (nightfall) based on the opinion of Rabbi Moshe Feinstein for the New York area. This time should
+	 * not be used for latitudes different than the NY area.
+	 * 
+	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
+	 *         a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 */
+	public Date getTzais50() {
+		return getTimeOffset(getElevationAdjustedSunset(), 50 * MINUTE_MILLIS);
 	}
 }
