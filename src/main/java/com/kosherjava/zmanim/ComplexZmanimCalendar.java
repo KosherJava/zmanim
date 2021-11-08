@@ -2891,7 +2891,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Returns the Date of the <em>molad</em> based time if it occurs on the current date.Since <em>Kiddush Levana</em>
+	 * Returns the Date of the <em>molad</em> based time if it occurs on the current date. Since <em>Kiddush Levana</em>
 	 * can only be said during the day, there are parameters to limit it to between <em>alos</em> and <em>tzais</em>. If
 	 * the time occurs between <em>alos</em> and <em>tzais</em>, <em>tzais</em> will be returned
 	 * 
@@ -3609,12 +3609,12 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Calculate zmanim based on <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> as
+	 * Calculate zmanim based on <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein</a> as
 	 * calculated in <a href="https://en.wikipedia.org/wiki/Mesivtha_Tifereth_Jerusalem">MTJ</a>, <a href=
 	 * "https://en.wikipedia.org/wiki/Mesivtha_Tifereth_Jerusalem">Yeshiva of Staten Island</a>, and Camp Yeshiva
-	 * of Staten Island. The day is split in two, from <em>alos</em> / sunrise to fixed local chatzos, and and second
+	 * of Staten Island. The day is split in two, from <em>alos</em> / sunrise to fixed local chatzos, and the second
 	 * half of the day, from fixed local chatzos to sunset / <em>tzais</em>. Morning based times are calculated based
-	 * on the first  6 hours, and afternoon times based on the second half of the day.
+	 * on the first 6 hours, and afternoon times based on the second half of the day.
 	 * 
 	 * @param startOfHalfDay
 	 *            The start of the half day. This would be <em>alos</em> or sunrise for morning based times and fixed
@@ -3641,8 +3641,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
-	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
 	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
 	 * at <em>alos</em> defined as {@link #getAlos18Degrees() 18&deg;} and ends at {@link #getFixedLocalChatzos() fixed local
@@ -3661,8 +3661,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
-	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
 	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
 	 * at <em>alos</em> defined as {@link #getAlos16Point1Degrees() 16.1&deg;} and ends at {@link #getFixedLocalChatzos() fixed local
@@ -3681,8 +3681,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
-	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
 	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
 	 * at <em>alos</em> defined as {@link #getAlos90() 90 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
@@ -3702,8 +3702,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
-	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> that the
 	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
 	 * at <em>alos</em> defined as {@link #getAlos72() 72 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
@@ -3723,8 +3723,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 		
 	/**
-	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten</a> opinion of the
-	 * claculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em> that the day is calculated from
 	 * sunrise to sunset, but calculated using the first half of the day only. The half a day starts at {@link #getSunrise()
 	 * sunrise} and ends at {@link #getFixedLocalChatzos() fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos
@@ -3743,8 +3743,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion of the
-	 * claculation of <em>sof zman tfila</em> (<em>zman tfilah</em> (the latest time to recite the morning prayers))
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>sof zman tfila</em> (<em>zman tfilah</em> (the latest time to recite the morning prayers))
 	 * according to the opinion of the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em> that the day is
 	 * calculated from sunrise to sunset, but calculated using the first half of the day only. The half a day starts at
 	 * {@link #getSunrise() sunrise} and ends at {@link #getFixedLocalChatzos() fixed local chatzos}. <em>Sof zman tefila</em>
@@ -3763,8 +3763,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion
-	 * of the calculation of <em>mincha gedola</em>,the earliest time one can pray <em>mincha</em> <em><a href=
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
+	 * calculation of <em>mincha gedola</em>,the earliest time one can pray <em>mincha</em> <em><a href=
 	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>that is 30 minutes after{@link #getFixedLocalChatzos() fixed
 	 * local chatzos}.
 	 * 
@@ -3782,7 +3782,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion
+	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion
 	 * of the calculation of <em>mincha ketana</em> (the preferred time to recite the mincha prayers according to the
 	 * opinion of the <em><a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a></em> and others) calculated according
 	 * to the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>that is 3.5 <em>shaos zmaniyos</em> (solar
@@ -3802,7 +3802,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinsten's</a> opinion
+	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion
 	 * of the calculation of This method returns <em>plag hamincha</em> calculated according to the
 	 * <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>that is 4.75 <em>shaos zmaniyos</em> (solar
 	 * hours) after {@link #getFixedLocalChatzos() fixed local chatzos}.
