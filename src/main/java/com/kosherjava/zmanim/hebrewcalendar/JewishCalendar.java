@@ -255,7 +255,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 * 60 includes the day of the tekufah and the day we start.
 	 * 60 days from the tekufah == 47D,9H from Rosh Hashana year 1
 	 */
-	public int tekufasTishreiElapsedDays() {
+	private int tekufasTishreiElapsedDays() {
 		// days since Rosh Hashana year 1
 		// add 1/2 day as the first tekufas tishrei was 9 hours into the day
 		// this allows all 4 years of the secular leap year cycle to share 47 days
