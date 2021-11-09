@@ -1,7 +1,7 @@
 ## [2.2.0] (2021-03-15)
 
 * Added JewishCalendar.isTaanisBechoros()
-* Updated Javadocs - document sources for getFixedLocalChatzos() and clarify Yerushamli Yomi Start Date
+* Updated Javadocs - document sources for getFixedLocalChatzos() and clarify Yerushalmi Yomi Start Date
 
 ## [2.1.0] (2020-12-02)
 
@@ -13,7 +13,7 @@
 * Added Shushan Purim Katan.
 * Added Daf.setMasechtaTransliterated(String[] masechtosBavliTransliterated) and Daf.setYerushlmiMasechtaTransliterated(String[] masechtosYerushalmiTransliterated).
 * Simplify and reduce code duplication in ZmanimCalendar generic zmanim calculations.
-* Fix AstronomicalCalendar getSunriseSolarDipFromOffset() and getSunsetSolarDipFromOffset (they are still inefficient) to properly allow claculations  before and after sun rise/set.
+* Fix AstronomicalCalendar getSunriseSolarDipFromOffset() and getSunsetSolarDipFromOffset (they are still inefficient) to properly allow calculations before and after sun rise/set.
 * Change some Hebrew lists that are not expected to change to be final.
 
 ## [2.0.3] (2020-10-01)
