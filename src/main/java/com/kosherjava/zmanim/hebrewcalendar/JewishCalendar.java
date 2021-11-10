@@ -974,11 +974,11 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 
-	public boolean mashivHaruachStarts() {
+	public boolean isMashivHaruachStarts() {
 		return getJewishMonth() == 7 && getJewishDayOfMonth() == 22;
 	}
 
-	public boolean mashivHaruachEnds() {
+	public boolean isMashivHaruachEnds() {
 		return getJewishMonth() == 1 && getJewishDayOfMonth() == 15;
 	}
 
@@ -989,7 +989,7 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	}
 
 	public boolean isMoridHatal() {
-		return !isMashivHaruach() || mashivHaruachStarts() || mashivHaruachEnds();
+		return !isMashivHaruach() || isMashivHaruachStarts() || isMashivHaruachEnds();
 	}
 
 	/**
@@ -1000,24 +1000,24 @@ public class JewishCalendar extends com.kosherjava.zmanim.hebrewcalendar.JewishD
 	 * moved over time as the deviance from the Gregorian calendar increases.  The date of December 4/5 is to be used
 	 * for the 20th and 21st century.
 	 */
-	public boolean veseinTalUmatar() {
-		JewishDate startDate = gregorianVeseinTalUmatarStart();
+	public boolean isVeseinTalUmatar() {
+		JewishDate startDate = getGregorianVeseinTalUmatarStart();
 		JewishDate endDate = new JewishDate(getJewishYear(), 1, 15);
 		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
 	}
 
-	public boolean veseinTalUmatarStartsTonight() {
-		JewishDate startDate = gregorianVeseinTalUmatarStart();
-		JewishDate prevDate = gregorianVeseinTalUmatarStart();
+	public boolean isVeseinTalUmatarStartsTonight() {
+		JewishDate startDate = getGregorianVeseinTalUmatarStart();
+		JewishDate prevDate = getGregorianVeseinTalUmatarStart();
 		prevDate.back();
 		return (getDayOfWeek() == 7 && equals(startDate)) || (getDayOfWeek() != 6 || equals(prevDate));
 	}
 
-	public boolean veseinBeracha() {
-		return !veseinTalUmatar();
+	public boolean isVeseinBeracha() {
+		return !isVeseinTalUmatar();
 	}
 
-	public JewishDate gregorianVeseinTalUmatarStart() {
+	public JewishDate getGregorianVeseinTalUmatarStart() {
 		JewishDate startDate = new JewishDate(getJewishYear(), 8, 7);
 		if (inIsrael) {
 			startDate.setGregorianDate(startDate.getGregorianYear(), 12, isGregorianLeapYear(startDate.getGregorianYear()+1)?6:5);
