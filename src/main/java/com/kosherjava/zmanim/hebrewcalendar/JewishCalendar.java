@@ -357,12 +357,12 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if it is the day to start reciting <em>Sheailas Geshamim</em>. In Israel this is the 7th day of
-	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
+	 * Returns if it is the day to start reciting <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
+	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
 	 * 
-	 * @return true if it is the first day of reciting <em>Sheailas Geshamim</em>
+	 * @return true if it is the first day of reciting <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
 	 */
-	public boolean isSheailasGeshamimStartDate() {
+	public boolean isVesainTalUmatarLivrachaStartDate() {
 		if (inIsrael && getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == CHESHVAN) {
 			return true;
 		} else {
@@ -371,18 +371,18 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if <em>Vesain Beracha</em> is recited.
-	 * @return true if <em>Vesain Beracha</em> is recited.
+	 * Returns if <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 * @return true if <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
 	 */
-	public boolean isVesainBerachaRecited() {
-		if (getJewishMonth() == TISHREI && getJewishDayOfMonth() < 15) {
+	public boolean isVesainTalUmatarLivrachaRecited() {
+		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
 			return true;
 		}
 		if (getJewishMonth() < CHESHVAN) {
 			return false;
 		}
 		if (inIsrael) {
-			return getJewishMonth() != CHESHVAN || getJewishDayOfMonth() >= CHESHVAN;
+			return getJewishMonth() != CHESHVAN || getJewishDayOfMonth() >= 7;
 		} else {
 			return getTekufasTishreiElapsedDays() >= 47;
 		}
@@ -1118,22 +1118,44 @@ public class JewishCalendar extends JewishDate {
 	}
 
 
+	/**
+	 * Returns if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 22 <em>Tishrei</em>.
+	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>
+	 */
 	public boolean isMashivHaruachStartDate() {
 		return getJewishMonth() == TISHREI && getJewishDayOfMonth() == 22;
 	}
 
+	/**
+	 * Returns if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 15 <em>Nissan</em>.
+	 * @return true if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
+	 */
 	public boolean isMashivHaruachEndDate() {
 		return getJewishMonth() == NISSAN && getJewishDayOfMonth() == 15;
 	}
 
-	public boolean isMashivHaruach() {
+	/**
+	 * Returns if <em>Mashiv Haruach Umorid Hageshem</em> is recited. This period starts on 22 <em>Tishrei</em> and ends
+	 * on the 15th day of <em>Nissan</em>.
+	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
+	 * 
+	 * @return true if <em>Mashiv Haruach Umorid Hageshem</em> is recited.
+	 */
+	public boolean isMashivHaruachRecited() {
 		JewishDate startDate = new JewishDate(getJewishYear(), TISHREI, 22);
 		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
 		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
 	}
 
-	public boolean isMoridHatal() {
-		return !isMashivHaruach() || isMashivHaruachStartDate() || isMashivHaruachEndDate();
+	/**
+	 * Returns if <em>Morid Hatal</em> (or the lack of reciting <em>Mashiv Haruach</em> following <em>nussach Ashkenaz</em>) is recited.
+	 * This period starts on 22 <em>Tishrei</em> and ends on the 15th day of
+	 * <em>Nissan</em>.
+	 * 
+	 * @return true if <em>Morid Hatal</em> (or the lack of reciting <em>Mashiv Haruach</em> following <em>nussach Ashkenaz</em>) is recited.
+	 */
+	public boolean isMoridHatalRecited() {
+		return !isMashivHaruachRecited() || isMashivHaruachStartDate() || isMashivHaruachEndDate();
 	}
 
 	/**
@@ -1146,7 +1168,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return true if <em>Vesein Tal Umatar</em> is recited.
 	 */
-	public boolean isVeseinTalUmatar() {
+	public boolean isVeseinTalUmatarRecited() {
 		JewishDate startDate = getJewishVeseinTalUmatarStartDate();
 		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
 		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
@@ -1163,10 +1185,20 @@ public class JewishCalendar extends JewishDate {
 		return (getDayOfWeek() == 7 && equals(startDate)) || (getDayOfWeek() != 6 || equals(prevDate));
 	}
 
-	public boolean isVeseinBeracha() {
-		return !isVeseinTalUmatar();
+	/**
+	 * Returns if <em>Vesain Beracha</em> is recited.
+	 * 
+	 * @return true if <em>Vesain Beracha</em> is recited.
+	 * @see #isVesainTalUmatarLivrachaRecited()
+	 */
+	public boolean isVeseinBerachaRecited() {
+		return !isVeseinTalUmatarRecited();
 	}
 
+	/**
+	 * Returns the the JewishDate of the <em>Vesein Tal Umatar</em> start date.
+	 * @return the JewishDate of the <em>Vesein Tal Umatar</em> start date.
+	 */
 	public JewishDate getJewishVeseinTalUmatarStartDate() {
 		JewishDate startDate = new JewishDate(getJewishYear(), CHESHVAN, 7);
 		if (inIsrael) {
