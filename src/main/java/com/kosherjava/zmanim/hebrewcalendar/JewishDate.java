@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2020 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2021 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -52,7 +52,7 @@ import java.util.GregorianCalendar;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2020
+ * @author &copy; Eliyahu Hershfeld 2011 - 2021
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
@@ -301,6 +301,12 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		return getLastDayOfGregorianMonth(month, gregorianYear);
 	}
 
+	/**
+	 * Returns is the year passed in is a <a href=
+	 * "https://en.wikipedia.org/wiki/Leap_year#Gregorian_calendar">Gregorian leap year</a>.
+	 * @param year the Gregorian year
+	 * @return if the year in question is a leap year.
+	 */
 	boolean isGregorianLeapYear(int year) {
 		return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 	}
