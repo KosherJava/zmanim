@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2020 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2021 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  * Copyright (C) 2019 Y Paritcher
  *
@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * @see java.util.Calendar
  * @author &copy; Y. Paritcher 2019
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2020
+ * @author &copy; Eliyahu Hershfeld 2011 - 2021
  */
 public class JewishCalendar extends JewishDate {
 	/** The 14th day of Nisan, the day before of Pesach (Passover).*/
@@ -333,43 +333,58 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Tekufas Shmuel: a solar year is 365.25 days.
-	 * notation: days,hours,chalakim
-	 * molad BaHaRad was 2D,5H,204C
-	 * or 5H,204C from the start of rosh hashana year 1
-	 * molad nissan add 177D,4H,438C (6 * 29D,12H,793C)
-	 * or 177D,9H,642C after rosh hashana year 1
-	 * tekufas nissan was 7D,9H,642C before molad nissan ~rambam.
-	 * or 170D,0H,0C after rosh hashana year 1
-	 * tekufas tishrei was 182D,3H (365.25 / 2) before tekufas nissan
-	 * or 12D,15H before Rosh Hashana year 1
-	 * outside of EY we say Tal Umatar in Birkas Hashanim from 60 days after tekufas tishrei.
-	 * 60 includes the day of the tekufah and the day we start.
-	 * 60 days from the tekufah == 47D,9H from Rosh Hashana year 1
+	 * Returns the elapsed days since <em>Tekufas Tishrei</em>. This uses <em>Tekufas Shmuel</em> (identical to the <a href=
+	 * "https://en.wikipedia.org/wiki/Julian_year_(astronomy)">Julian Year</a> with a solar year length of 365.25 days.
+	 * The notation used below is D = days, H = hours and C = chalakim. <em><a href="https://en.wikipedia.org/wiki/Molad"
+	 * >Molad</a> BaHaRad</em> was 2D,5H,204C or 5H,204C from the start of <em>Rosh Hashana</em> year 1. For <em>molad
+	 * Nissan</em> add 177D, 4H and 438C (6 * 29D, 12H and 793C), or 177D,9H,642C after <em>Rosh Hashana</em> year 1.
+	 * <em>Tekufas Nissan</em> was 7D, 9H and 642C before <em>molad Nissan</em> according to the Rambam, or 170D, 0H and
+	 * 0C after <em>Rosh Hashana</em> year 1. <em>Tekufas Tishrei</em> was 182D and 3H (365.25 / 2) before <em>tekufas
+	 * Nissan</em>, or 12D and 15H before <em>Rosh Hashana</em> of year 1. Outside of Israel we start reciting <em>Tal
+	 * Umatar</em> in <em>Birkas Hashanim</em> from 60 days after <em>tekufas Tishrei</em>. The 60 days include the day of
+	 * the <em>tekufah</em> and the day we start reciting <em>Tal Umatar</em>. 60 days from the tekufah == 47D and 9H
+	 * from <em>Rosh Hashana</em> year 1.
+	 * 
+	 * @return the number of elapsed days since <em>tekufas Tishrei</em>
 	 */
-	private int tekufasTishreiElapsedDays() {
-		// days since Rosh Hashana year 1
-		// add 1/2 day as the first tekufas tishrei was 9 hours into the day
-		// this allows all 4 years of the secular leap year cycle to share 47 days
-		// make from 47D,9H to 47D for simplicity
-		double days = getJewishCalendarElapsedDays(getJewishYear()) + (getDaysSinceStartOfJewishYear()-1) + .5;
+	private int getTekufasTishreiElapsedDays() {
+		// Days since Rosh Hashana year 1. Add 1/2 day as the first tekufas tishrei was 9 hours into the day. This allows all
+		// 4 years of the secular leap year cycle to share 47 days. Truncate 47D and 9H to 47D for simplicity.
+		double days = getJewishCalendarElapsedDays(getJewishYear()) + (getDaysSinceStartOfJewishYear()-1) + 0.5;
 		// days of completed solar years
-		double solar = (getJewishYear()-1)*365.25;
+		double solar = (getJewishYear() - 1) * 365.25;
 		return (int) (days - solar);
 	}
 
-	public boolean isBirchasHashanimToday() {
-		if (inIsrael && getJewishMonth() == 7 && getJewishDayOfMonth() == 7) return true;
-		else return tekufasTishreiElapsedDays() == 47;
+	/**
+	 * Returns if it is the day to start reciting <em>Sheailas Geshamim</em>. In Israel this is the 7th day of
+	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
+	 * 
+	 * @return true if it is the first day of reciting <em>Sheailas Geshamim</em>
+	 */
+	public boolean isSheailasGeshamimStartDate() {
+		if (inIsrael && getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == CHESHVAN) {
+			return true;
+		} else {
+			return getTekufasTishreiElapsedDays() == 47;
+		}
 	}
 
-	public boolean getBirchasHashanim() {
-		if (getJewishMonth() == 1 && getJewishDayOfMonth() < 15) return true;
-		if (getJewishMonth() < 7) return false;
+	/**
+	 * Returns if <em>Vesain Beracha</em> is recited.
+	 * @return true if <em>Vesain Beracha</em> is recited.
+	 */
+	public boolean isVesainBerachaRecited() {
+		if (getJewishMonth() == TISHREI && getJewishDayOfMonth() < 15) {
+			return true;
+		}
+		if (getJewishMonth() < CHESHVAN) {
+			return false;
+		}
 		if (inIsrael) {
-			return getJewishMonth() != 7 || getJewishDayOfMonth() >= 7;
+			return getJewishMonth() != CHESHVAN || getJewishDayOfMonth() >= CHESHVAN;
 		} else {
-			return tekufasTishreiElapsedDays() >= 47;
+			return getTekufasTishreiElapsedDays() >= 47;
 		}
 	}
 
@@ -1103,41 +1118,47 @@ public class JewishCalendar extends JewishDate {
 	}
 
 
-	public boolean isMashivHaruachStarts() {
-		return getJewishMonth() == 7 && getJewishDayOfMonth() == 22;
+	public boolean isMashivHaruachStartDate() {
+		return getJewishMonth() == TISHREI && getJewishDayOfMonth() == 22;
 	}
 
-	public boolean isMashivHaruachEnds() {
-		return getJewishMonth() == 1 && getJewishDayOfMonth() == 15;
+	public boolean isMashivHaruachEndDate() {
+		return getJewishMonth() == NISSAN && getJewishDayOfMonth() == 15;
 	}
 
 	public boolean isMashivHaruach() {
-		JewishDate startDate = new JewishDate(getJewishYear(), 7, 22);
-		JewishDate endDate = new JewishDate(getJewishYear(), 1, 15);
+		JewishDate startDate = new JewishDate(getJewishYear(), TISHREI, 22);
+		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
 		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
 	}
 
 	public boolean isMoridHatal() {
-		return !isMashivHaruach() || isMashivHaruachStarts() || isMashivHaruachEnds();
+		return !isMashivHaruach() || isMashivHaruachStartDate() || isMashivHaruachEndDate();
 	}
 
 	/**
 	 * This presumes the evenings of December 4/5 are always the initial start date outside of Israel
-	 * Because the jewish date does not auto-increment in the evening, we use December 5/6 as the start date
-	 * and rely on the user to increment the jewish date after nightfall.
-	 * Note that according to many, the date for Vesein Tal Umatar is tied to the Julian calendar and has historically
-	 * moved over time as the deviance from the Gregorian calendar increases.  The date of December 4/5 is to be used
-	 * for the 20th and 21st century.
+	 * Because the Jewish date does not auto-increment in the evening, we use December 5/6 as the start date
+	 * and rely on the user to increment the jewish date after nightfall. Note that according to many, the date
+	 * for <em>Vesein Tal Umatar</em> is tied to the Julian calendar and has historically moved over time as
+	 * the deviance from the Gregorian calendar increases.  The date of December 4/5 is to be used for the 20th
+	 * and 21st century.
+	 * 
+	 * @return true if <em>Vesein Tal Umatar</em> is recited.
 	 */
 	public boolean isVeseinTalUmatar() {
-		JewishDate startDate = getGregorianVeseinTalUmatarStart();
-		JewishDate endDate = new JewishDate(getJewishYear(), 1, 15);
+		JewishDate startDate = getJewishVeseinTalUmatarStartDate();
+		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
 		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
 	}
 
+	/**
+	 * Returns if <em>Vesein Tal Umatar</em> starts tonight.
+	 * @return true if <em>Vesein Tal Umatar</em> starts tonight.
+	 */
 	public boolean isVeseinTalUmatarStartsTonight() {
-		JewishDate startDate = getGregorianVeseinTalUmatarStart();
-		JewishDate prevDate = getGregorianVeseinTalUmatarStart();
+		JewishDate startDate = getJewishVeseinTalUmatarStartDate();
+		JewishDate prevDate = getJewishVeseinTalUmatarStartDate();
 		prevDate.back();
 		return (getDayOfWeek() == 7 && equals(startDate)) || (getDayOfWeek() != 6 || equals(prevDate));
 	}
@@ -1146,10 +1167,10 @@ public class JewishCalendar extends JewishDate {
 		return !isVeseinTalUmatar();
 	}
 
-	public JewishDate getGregorianVeseinTalUmatarStart() {
-		JewishDate startDate = new JewishDate(getJewishYear(), 8, 7);
+	public JewishDate getJewishVeseinTalUmatarStartDate() {
+		JewishDate startDate = new JewishDate(getJewishYear(), CHESHVAN, 7);
 		if (inIsrael) {
-			startDate.setGregorianDate(startDate.getGregorianYear(), 12, isGregorianLeapYear(startDate.getGregorianYear()+1)?6:5);
+			startDate.setGregorianDate(startDate.getGregorianYear(), Calendar.DECEMBER, isGregorianLeapYear(startDate.getGregorianYear() + 1) ? 6 : 5);
 		}
 		return startDate;
 	}
