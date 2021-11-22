@@ -2,7 +2,7 @@
  * Zmanim Java API
  * Copyright (C) 2011 - 2021 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
- * Copyright (C) 2019 Y Paritcher
+ * Copyright (C) 2019 - 2021 Y Paritcher
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -41,7 +41,7 @@ import java.util.TimeZone;
  * 
  * @see java.util.Date
  * @see java.util.Calendar
- * @author &copy; Y. Paritcher 2019
+ * @author &copy; Y. Paritcher 2019 - 2021
  * @author &copy; Avrom Finkelstien 2002
  * @author &copy; Eliyahu Hershfeld 2011 - 2021
  */
@@ -330,62 +330,6 @@ public class JewishCalendar extends JewishDate {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns the elapsed days since <em>Tekufas Tishrei</em>. This uses <em>Tekufas Shmuel</em> (identical to the <a href=
-	 * "https://en.wikipedia.org/wiki/Julian_year_(astronomy)">Julian Year</a> with a solar year length of 365.25 days.
-	 * The notation used below is D = days, H = hours and C = chalakim. <em><a href="https://en.wikipedia.org/wiki/Molad"
-	 * >Molad</a> BaHaRad</em> was 2D,5H,204C or 5H,204C from the start of <em>Rosh Hashana</em> year 1. For <em>molad
-	 * Nissan</em> add 177D, 4H and 438C (6 * 29D, 12H and 793C), or 177D,9H,642C after <em>Rosh Hashana</em> year 1.
-	 * <em>Tekufas Nissan</em> was 7D, 9H and 642C before <em>molad Nissan</em> according to the Rambam, or 170D, 0H and
-	 * 0C after <em>Rosh Hashana</em> year 1. <em>Tekufas Tishrei</em> was 182D and 3H (365.25 / 2) before <em>tekufas
-	 * Nissan</em>, or 12D and 15H before <em>Rosh Hashana</em> of year 1. Outside of Israel we start reciting <em>Tal
-	 * Umatar</em> in <em>Birkas Hashanim</em> from 60 days after <em>tekufas Tishrei</em>. The 60 days include the day of
-	 * the <em>tekufah</em> and the day we start reciting <em>Tal Umatar</em>. 60 days from the tekufah == 47D and 9H
-	 * from <em>Rosh Hashana</em> year 1.
-	 * 
-	 * @return the number of elapsed days since <em>tekufas Tishrei</em>
-	 */
-	private int getTekufasTishreiElapsedDays() {
-		// Days since Rosh Hashana year 1. Add 1/2 day as the first tekufas tishrei was 9 hours into the day. This allows all
-		// 4 years of the secular leap year cycle to share 47 days. Truncate 47D and 9H to 47D for simplicity.
-		double days = getJewishCalendarElapsedDays(getJewishYear()) + (getDaysSinceStartOfJewishYear()-1) + 0.5;
-		// days of completed solar years
-		double solar = (getJewishYear() - 1) * 365.25;
-		return (int) (days - solar);
-	}
-
-	/**
-	 * Returns if it is the day to start reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
-	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
-	 * 
-	 * @return true if it is the first day of reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
-	 */
-	public boolean isVeseinTalUmatarStartDate() {
-		if (inIsrael && getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == CHESHVAN) {
-			return true;
-		} else {
-			return getTekufasTishreiElapsedDays() == 47;
-		}
-	}
-
-	/**
-	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
-	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
-	 */
-	public boolean isVeseinTalUmatarRecited() {
-		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
-			return true;
-		}
-		if (getJewishMonth() < CHESHVAN) {
-			return false;
-		}
-		if (inIsrael) {
-			return getJewishMonth() != CHESHVAN || getJewishDayOfMonth() >= 7;
-		} else {
-			return getTekufasTishreiElapsedDays() >= 47;
-		}
 	}
 
 	/**
@@ -1062,9 +1006,9 @@ public class JewishCalendar extends JewishDate {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(molad);
 		// add half the time between molad and molad (half of 29 days, 12 hours and 793 chalakim (44 minutes, 3.3
-		// seconds), or 14 days, 18 hours, 22 minutes and 666 milliseconds)
-		cal.add(Calendar.DAY_OF_MONTH, 14);
-		cal.add(Calendar.HOUR_OF_DAY, 18);
+		// seconds), or 14 days, 18 hours, 22 minutes and 666 milliseconds). Add it as hours, not days, to avoid
+		// DST/ST crossover issues.
+		cal.add(Calendar.HOUR, (24 * 14) + 18);
 		cal.add(Calendar.MINUTE, 22);
 		cal.add(Calendar.SECOND, 1);
 		cal.add(Calendar.MILLISECOND, 666);
@@ -1092,7 +1036,7 @@ public class JewishCalendar extends JewishDate {
 		Date molad = getMoladAsDate();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(molad);
-		cal.add(Calendar.DAY_OF_YEAR, 15); // 15 days after the molad
+		cal.add(Calendar.HOUR, 24 * 15); //15 days after the molad. Add it as hours, not days, to avoid DST/ST crossover issues.
 		return cal.getTime();
 	}
 
@@ -1115,6 +1059,63 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public Daf getDafYomiYerushalmi() {
 		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
+	}
+	
+
+	/**
+	 * Returns the elapsed days since <em>Tekufas Tishrei</em>. This uses <em>Tekufas Shmuel</em> (identical to the <a href=
+	 * "https://en.wikipedia.org/wiki/Julian_year_(astronomy)">Julian Year</a> with a solar year length of 365.25 days.
+	 * The notation used below is D = days, H = hours and C = chalakim. <em><a href="https://en.wikipedia.org/wiki/Molad"
+	 * >Molad</a> BaHaRad</em> was 2D,5H,204C or 5H,204C from the start of <em>Rosh Hashana</em> year 1. For <em>molad
+	 * Nissan</em> add 177D, 4H and 438C (6 * 29D, 12H and 793C), or 177D,9H,642C after <em>Rosh Hashana</em> year 1.
+	 * <em>Tekufas Nissan</em> was 7D, 9H and 642C before <em>molad Nissan</em> according to the Rambam, or 170D, 0H and
+	 * 0C after <em>Rosh Hashana</em> year 1. <em>Tekufas Tishrei</em> was 182D and 3H (365.25 / 2) before <em>tekufas
+	 * Nissan</em>, or 12D and 15H before <em>Rosh Hashana</em> of year 1. Outside of Israel we start reciting <em>Tal
+	 * Umatar</em> in <em>Birkas Hashanim</em> from 60 days after <em>tekufas Tishrei</em>. The 60 days include the day of
+	 * the <em>tekufah</em> and the day we start reciting <em>Tal Umatar</em>. 60 days from the tekufah == 47D and 9H
+	 * from <em>Rosh Hashana</em> year 1.
+	 * 
+	 * @return the number of elapsed days since <em>tekufas Tishrei</em>
+	 */
+	private int getTekufasTishreiElapsedDays() {
+		// Days since Rosh Hashana year 1. Add 1/2 day as the first tekufas tishrei was 9 hours into the day. This allows all
+		// 4 years of the secular leap year cycle to share 47 days. Truncate 47D and 9H to 47D for simplicity.
+		double days = getJewishCalendarElapsedDays(getJewishYear()) + (getDaysSinceStartOfJewishYear()-1) + 0.5;
+		// days of completed solar years
+		double solar = (getJewishYear() - 1) * 365.25;
+		return (int) (days - solar);
+	}
+
+	/**
+	 * Returns if it is the day to start reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
+	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
+	 * 
+	 * @return true if it is the first day of reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
+	 */
+	public boolean isVeseinTalUmatarStartDate() {
+		if (inIsrael && getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7) {
+			return true;
+		} else {
+			return getTekufasTishreiElapsedDays() == 47;
+		}
+	}
+
+	/**
+	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 */
+	public boolean isVeseinTalUmatarRecited() {
+		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
+			return true;
+		}
+		if (getJewishMonth() < CHESHVAN) {
+			return false;
+		}
+		if (inIsrael) {
+			return getJewishMonth() != CHESHVAN || getJewishDayOfMonth() >= 7;
+		} else {
+			return getTekufasTishreiElapsedDays() >= 47;
+		}
 	}
 
 	/**
@@ -1182,7 +1183,7 @@ public class JewishCalendar extends JewishDate {
 	 * Returns the the JewishDate of the <em>Vesein Tal Umatar</em> start date.
 	 * @return the JewishDate of the <em>Vesein Tal Umatar</em> start date.
 	 */
-	public JewishDate getJewishVeseinTalUmatarStartDate() {
+	private JewishDate getJewishVeseinTalUmatarStartDate() {
 		JewishDate startDate = new JewishDate(getJewishYear(), CHESHVAN, 7);
 		if (inIsrael) {
 			startDate.setGregorianDate(startDate.getGregorianYear(), Calendar.DECEMBER, isGregorianLeapYear(startDate.getGregorianYear() + 1) ? 6 : 5);
