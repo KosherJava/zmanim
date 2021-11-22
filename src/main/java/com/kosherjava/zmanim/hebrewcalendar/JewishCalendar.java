@@ -357,12 +357,12 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if it is the day to start reciting <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
+	 * Returns if it is the day to start reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
 	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
 	 * 
-	 * @return true if it is the first day of reciting <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
+	 * @return true if it is the first day of reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
 	 */
-	public boolean isVesainTalUmatarLivrachaStartDate() {
+	public boolean isVeseinTalUmatarStartDate() {
 		if (inIsrael && getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == CHESHVAN) {
 			return true;
 		} else {
@@ -371,10 +371,10 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
-	 * @return true if <em>Vesain Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
 	 */
-	public boolean isVesainTalUmatarLivrachaRecited() {
+	public boolean isVeseinTalUmatarRecited() {
 		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
 			return true;
 		}
@@ -1117,7 +1117,6 @@ public class JewishCalendar extends JewishDate {
 		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
 	}
 
-
 	/**
 	 * Returns if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 22 <em>Tishrei</em>.
 	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>
@@ -1159,22 +1158,6 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * This presumes the evenings of December 4/5 are always the initial start date outside of Israel
-	 * Because the Jewish date does not auto-increment in the evening, we use December 5/6 as the start date
-	 * and rely on the user to increment the jewish date after nightfall. Note that according to many, the date
-	 * for <em>Vesein Tal Umatar</em> is tied to the Julian calendar and has historically moved over time as
-	 * the deviance from the Gregorian calendar increases.  The date of December 4/5 is to be used for the 20th
-	 * and 21st century.
-	 * 
-	 * @return true if <em>Vesein Tal Umatar</em> is recited.
-	 */
-	public boolean isVeseinTalUmatarRecited() {
-		JewishDate startDate = getJewishVeseinTalUmatarStartDate();
-		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
-		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
-	}
-
-	/**
 	 * Returns if <em>Vesein Tal Umatar</em> starts tonight.
 	 * @return true if <em>Vesein Tal Umatar</em> starts tonight.
 	 */
@@ -1186,10 +1169,10 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if <em>Vesain Beracha</em> is recited.
+	 * Returns if <em>Vesein Beracha</em> is recited.
 	 * 
-	 * @return true if <em>Vesain Beracha</em> is recited.
-	 * @see #isVesainTalUmatarLivrachaRecited()
+	 * @return true if <em>Vesein Beracha</em> is recited.
+	 * @see #isVeseinTalUmatarRecited()
 	 */
 	public boolean isVeseinBerachaRecited() {
 		return !isVeseinTalUmatarRecited();
