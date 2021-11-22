@@ -1,7 +1,15 @@
+## [2.3.0] (Not yet released)
+
+* Fix an issue with sof zman kiddush levana being off by an hour when the molad is on one side of the DST change, and the sof zman on the other.
+* Add seasonal davening based zmanim including Vesein Tal Umatar/ Vesein Berachah / Mashiv Haruach.
+* Add Rav Moshe Feinstein's zmanim used in MTJ and Yeshiva of Staten Island.
+* Refactor code for alos and tzeis zmaniyos based time (ports to other languages can simplify things by doing the same).
+* Fix Hebrew spelling of Parshas Nitzavim.
+
 ## [2.2.0] (2021-03-15)
 
-* Added JewishCalendar.isTaanisBechoros()
-* Updated Javadocs - document sources for getFixedLocalChatzos() and clarify Yerushalmi Yomi Start Date
+* Added JewishCalendar.isTaanisBechoros().
+* Updated Javadocs - document sources for getFixedLocalChatzos() and clarify Yerushalmi Yomi Start Date.
 
 ## [2.1.0] (2020-12-02)
 
