@@ -1088,16 +1088,33 @@ public class JewishCalendar extends JewishDate {
 
 	/**
 	 * Returns if it is the day to start reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
-	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
+	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5 in
+	 * the 21st century and shifts a day forward after that.
 	 * 
 	 * @return true if it is the first day of reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
+	 *         If the start date occurs on a Friday when vesein tal is not recited, the start day will be delayed to the
+	 *         following day.
 	 */
 	public boolean isVeseinTalUmatarStartDate() {
-		if (inIsrael && getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7) {
-			return true;
-		} else {
-			return getTekufasTishreiElapsedDays() == 47;
+		if (getDayOfWeek() == 6) { //Not recited on Friday night
+			return false;
 		}
+		if (inIsrael) {
+			if (getJewishMonth() == CHESHVAN) {
+				 // if 7 Cheshvan occurs on Friday, return the following day
+				if (getJewishDayOfMonth() == 7 || (getDayOfWeek() == 7 && getJewishDayOfMonth() == 8)) {
+					return true;
+				}
+			}
+		} else {
+			if(getDayOfWeek() == 7) {
+				// if the start day occurs on Friday, return the following day
+				return getTekufasTishreiElapsedDays() == 47;
+			} else {
+				return getTekufasTishreiElapsedDays() == 46;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -1159,17 +1176,6 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if <em>Vesein Tal Umatar</em> starts tonight.
-	 * @return true if <em>Vesein Tal Umatar</em> starts tonight.
-	 */
-	public boolean isVeseinTalUmatarStartsTonight() {
-		JewishDate startDate = getJewishVeseinTalUmatarStartDate();
-		JewishDate prevDate = getJewishVeseinTalUmatarStartDate();
-		prevDate.back();
-		return (getDayOfWeek() == 7 && equals(startDate)) || (getDayOfWeek() != 6 || equals(prevDate));
-	}
-
-	/**
 	 * Returns if <em>Vesein Beracha</em> is recited.
 	 * 
 	 * @return true if <em>Vesein Beracha</em> is recited.
@@ -1178,19 +1184,6 @@ public class JewishCalendar extends JewishDate {
 	public boolean isVeseinBerachaRecited() {
 		return !isVeseinTalUmatarRecited();
 	}
-
-	/**
-	 * Returns the the JewishDate of the <em>Vesein Tal Umatar</em> start date.
-	 * @return the JewishDate of the <em>Vesein Tal Umatar</em> start date.
-	 */
-	private JewishDate getJewishVeseinTalUmatarStartDate() {
-		JewishDate startDate = new JewishDate(getJewishYear(), CHESHVAN, 7);
-		if (inIsrael) {
-			startDate.setGregorianDate(startDate.getGregorianYear(), Calendar.DECEMBER, isGregorianLeapYear(startDate.getGregorianYear() + 1) ? 6 : 5);
-		}
-		return startDate;
-	}
-
 
 	/**
 	 * Indicates whether some other object is "equal to" this one.
