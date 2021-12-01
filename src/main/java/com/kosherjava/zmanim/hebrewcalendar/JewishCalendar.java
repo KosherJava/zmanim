@@ -518,23 +518,23 @@ public class JewishCalendar extends JewishDate {
 				return CHOL_HAMOED_PESACH;
 			}
 			if (isUseModernHolidays()
-					&& ((day == 26 && dayOfWeek == 5)
-							|| (day == 28 && dayOfWeek == 2)
-							|| (day == 27 && dayOfWeek != 1 && dayOfWeek != 6))) {
+					&& ((day == 26 && dayOfWeek == Calendar.THURSDAY)
+							|| (day == 28 && dayOfWeek == Calendar.MONDAY)
+							|| (day == 27 && dayOfWeek != Calendar.SUNDAY && dayOfWeek != Calendar.FRIDAY))) {
 				return YOM_HASHOAH;
 			}
 			break;
 		case IYAR:
 			if (isUseModernHolidays()
-					&& ((day == 4 && dayOfWeek == 3)
-							|| ((day == 3 || day == 2) && dayOfWeek == 4) || (day == 5 && dayOfWeek == 2))) {
+					&& ((day == 4 && dayOfWeek == Calendar.TUESDAY)
+							|| ((day == 3 || day == 2) && dayOfWeek == Calendar.WEDNESDAY) || (day == 5 && dayOfWeek == Calendar.MONDAY))) {
 				return YOM_HAZIKARON;
 			}
 			// if 5 Iyar falls on Wed Yom Haatzmaut is that day. If it fal1s on Friday or Shabbos it is moved back to
 			// Thursday. If it falls on Monday it is moved to Tuesday
 			if (isUseModernHolidays()
-					&& ((day == 5 && dayOfWeek == 4)
-							|| ((day == 4 || day == 3) && dayOfWeek == 5) || (day == 6 && dayOfWeek == 3))) {
+					&& ((day == 5 && dayOfWeek == Calendar.WEDNESDAY)
+							|| ((day == 4 || day == 3) && dayOfWeek == Calendar.THURSDAY) || (day == 6 && dayOfWeek == Calendar.TUESDAY))) {
 				return YOM_HAATZMAUT;
 			}
 			if (day == 14) {
@@ -557,15 +557,15 @@ public class JewishCalendar extends JewishDate {
 			break;
 		case TAMMUZ:
 			// push off the fast day if it falls on Shabbos
-			if ((day == 17 && dayOfWeek != 7)
-					|| (day == 18 && dayOfWeek == 1)) {
+			if ((day == 17 && dayOfWeek != Calendar.SATURDAY)
+					|| (day == 18 && dayOfWeek == Calendar.SUNDAY)) {
 				return SEVENTEEN_OF_TAMMUZ;
 			}
 			break;
 		case AV:
 			// if Tisha B'av falls on Shabbos, push off until Sunday
-			if ((dayOfWeek == 1 && day == 10)
-					|| (dayOfWeek != 7 && day == 9)) {
+			if ((dayOfWeek == Calendar.SUNDAY && day == 10)
+					|| (dayOfWeek != Calendar.SATURDAY && day == 9)) {
 				return TISHA_BEAV;
 			}
 			if (day == 15) {
@@ -581,8 +581,7 @@ public class JewishCalendar extends JewishDate {
 			if (day == 1 || day == 2) {
 				return ROSH_HASHANA;
 			}
-			if ((day == 3 && dayOfWeek != 7)
-					|| (day == 4 && dayOfWeek == 1)) {
+			if ((day == 3 && dayOfWeek != Calendar.SATURDAY) || (day == 4 && dayOfWeek == Calendar.SUNDAY)) {
 				// push off Tzom Gedalia if it falls on Shabbos
 				return FAST_OF_GEDALYAH;
 			}
@@ -636,8 +635,8 @@ public class JewishCalendar extends JewishDate {
 		case ADAR:
 			if (!isJewishLeapYear()) {
 				// if 13th Adar falls on Friday or Shabbos, push back to Thursday
-				if (((day == 11 || day == 12) && dayOfWeek == 5)
-						|| (day == 13 && !(dayOfWeek == 6 || dayOfWeek == 7))) {
+				if (((day == 11 || day == 12) && dayOfWeek == Calendar.THURSDAY)
+						|| (day == 13 && !(dayOfWeek == Calendar.FRIDAY || dayOfWeek == Calendar.SATURDAY))) {
 					return FAST_OF_ESTHER;
 				}
 				if (day == 14) {
@@ -657,8 +656,8 @@ public class JewishCalendar extends JewishDate {
 			break;
 		case ADAR_II:
 			// if 13th Adar falls on Friday or Shabbos, push back to Thursday
-			if (((day == 11 || day == 12) && dayOfWeek == 5)
-					|| (day == 13 && !(dayOfWeek == 6 || dayOfWeek == 7))) {
+			if (((day == 11 || day == 12) && dayOfWeek == Calendar.THURSDAY)
+					|| (day == 13 && !(dayOfWeek == Calendar.FRIDAY || dayOfWeek == Calendar.SATURDAY))) {
 				return FAST_OF_ESTHER;
 			}
 			if (day == 14) {
@@ -1133,10 +1132,10 @@ public class JewishCalendar extends JewishDate {
 				return true;
 			}
 		} else {
-			if (getDayOfWeek() == 7) { //Not recited on Friday night
+			if (getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(getDayOfWeek() == 1) { // if the start day occurs on Shabbos, return the following day
+			if(getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
 				return getTekufasTishreiElapsedDays() == 48 || getTekufasTishreiElapsedDays() == 47;
 			} else {
 				return getTekufasTishreiElapsedDays() == 47;
@@ -1166,11 +1165,10 @@ public class JewishCalendar extends JewishDate {
 					return true;
 			}
 		} else {
-			if (getDayOfWeek() == 6) { //Not recited on Friday night
+			if (getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(getDayOfWeek() == 7) {
-				// if the start day occurs on Friday night, return the following night
+			if(getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
 				return getTekufasTishreiElapsedDays() == 47 || getTekufasTishreiElapsedDays() == 46;
 			} else {
 				return getTekufasTishreiElapsedDays() == 46;
