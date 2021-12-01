@@ -193,20 +193,24 @@ public class JewishCalendar extends JewishDate {
 
 	/**
 	 * Is this calendar set to return modern Israeli national holidays. By default this value is false. The holidays
-	 * are: "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut" and "Yom Yerushalayim"
+	 * are: <em>Yom HaShoah</em>, <em>Yom Hazikaron</em>, <em>Yom Ha'atzmaut</em> and <em>Yom Yerushalayim</em>.
 	 * 
 	 * @return the useModernHolidays true if set to return modern Israeli national holidays
+	 * 
+	 * @see #setUseModernHolidays(boolean)
 	 */
 	public boolean isUseModernHolidays() {
 		return useModernHolidays;
 	}
 
 	/**
-	 * Seth the calendar to return modern Israeli national holidays. By default this value is false. The holidays are:
-	 * "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut" and "Yom Yerushalayim"
+	 * Sets the calendar to return modern Israeli national holidays. By default this value is false. The holidays are:
+	 * <em>Yom HaShoah</em>, <em>Yom Hazikaron</em>, <em>Yom Ha'atzmaut</em> and <em>Yom Yerushalayim</em>.
 	 * 
 	 * @param useModernHolidays
 	 *            the useModernHolidays to set
+	 * 
+	 * @see #isUseModernHolidays()
 	 */
 	public void setUseModernHolidays(boolean useModernHolidays) {
 		this.useModernHolidays = useModernHolidays;
@@ -275,15 +279,15 @@ public class JewishCalendar extends JewishDate {
 	 * @param jewishYear
 	 *            the Jewish year
 	 * @param jewishMonth
-	 *            the Jewish month. The method expects a 1 for Nissan ... 12 for Adar and 13 for Adar II. Use the
-	 *            constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a leap year Adar II) to avoid any
-	 *            confusion.
+	 *            the Jewish month. The method expects a 1 for <em>Nissan</em> ... 12 for <em>Adar</em> and 13 for
+	 *            <em>Adar II</em>. Use the constants {@link #NISSAN} ... {@link #ADAR} (or {@link #ADAR_II} for a
+	 *            leap year Adar II) to avoid any confusion.
 	 * @param jewishDayOfMonth
 	 *            the Jewish day of month. If 30 is passed in for a month with only 29 days (for example {@link #IYAR},
 	 *            or {@link #KISLEV} in a year that {@link #isKislevShort()}), the 29th (last valid date of the month)
-	 *            will be set
+	 *            will be set.
 	 * @param inIsrael
-	 *            whether in Israel. This affects Yom Tov calculations
+	 *            whether in Israel. This affects <em>Yom Tov</em> calculations
 	 */
 	public JewishCalendar(int jewishYear, int jewishMonth, int jewishDayOfMonth, boolean inIsrael) {
 		super(jewishYear, jewishMonth, jewishDayOfMonth);
@@ -295,6 +299,8 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @param inIsrael
 	 *            set to true for calculations for Israel
+	 * 
+	 * @see #getInIsrael()
 	 */
 	public void setInIsrael(boolean inIsrael) {
 		this.inIsrael = inIsrael;
@@ -304,6 +310,8 @@ public class JewishCalendar extends JewishDate {
 	 * Gets whether Israel holiday scheme is used or not. The default (if not set) is false.
 	 * 
 	 * @return if the if the calendar is set to Israel
+	 * 
+	 * @see #setInIsrael(boolean)
 	 */
 	public boolean getInIsrael() {
 		return inIsrael;
@@ -426,9 +434,10 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns this week's {@link Parsha} if it is Shabbos.
-	 * returns Parsha.NONE if a weekday or if there is no parshah that week (for example Yomtov is on Shabbos)
-	 * @return the current parsha
+	 * Returns this week's {@link Parsha} if it is <em>Shabbos</em>.
+	 * returns Parsha.NONE if a weekday or if there is no <em>parsha</em> that week (for example <em>Yomtov</em> is on <em>Shabbos</em>).
+	 * 
+	 * @return the current <em>parsha</em>.
 	 */
 	public Parsha getParshah() {
 		if (getDayOfWeek() != Calendar.SATURDAY) {
@@ -446,9 +455,10 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns a parsha enum if the Shabbos is one of the four parshiyos of Parsha.SHKALIM, Parsha.ZACHOR, Parsha.PARA,
-	 * Parsha.HACHODESH or Parsha.NONE for a regular Shabbos (or any weekday).
-	 * @return one of the four parshiyos of Parsha.SHKALIM, Parsha.ZACHOR, Parsha.PARA, Parsha.HACHODESH or Parsha.NONE.
+	 * Returns a <em>parsha</em> enum if the <em>Shabbos</em> is one of the four <em>parshiyos</em> of Parsha.SHKALIM, Parsha.ZACHOR,
+	 * Parsha.PARA, Parsha.HACHODESH or Parsha.NONE for a regular <em>Shabbos</em> (or any weekday).
+	 * 
+	 * @return one of the four <em>parshiyos</em> of Parsha.SHKALIM, Parsha.ZACHOR, Parsha.PARA, Parsha.HACHODESH or Parsha.NONE.
 	 */
 	public Parsha getSpecialShabbos() {
 		if(getDayOfWeek() == Calendar.SATURDAY)	{
@@ -479,14 +489,15 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns an index of the Jewish holiday or fast day for the current day, or a -1 if there is no holiday for this
-	 * day. There are constants in this class representing each Yom Tov. Formatting of the Yomim tovim is done in the
-	 * ZmanimFormatter#
+	 * Returns an index of the Jewish holiday or fast day for the current day, or a -1 if there is no holiday for this day.
+	 * There are constants in this class representing each <em>Yom Tov</em>. Formatting of the <em>Yomim tovim</em> is done
+	 * in the {@link HebrewDateFormatter#formatYomTov(JewishCalendar)}.
 	 * 
-	 * @todo consider using enums instead of the constant ints.
+	 * @todo Consider using enums instead of the constant ints.
 	 * 
 	 * @return the index of the holiday such as the constant {@link #LAG_BAOMER} or {@link #YOM_KIPPUR} or a -1 if it is not a holiday.
-	 * @see HebrewDateFormatter
+	 * 
+	 * @see HebrewDateFormatter#formatYomTov(JewishCalendar)
 	 */
 	public int getYomTovIndex() {
 		final int day = getJewishDayOfMonth();
@@ -663,10 +674,10 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns true if the current day is Yom Tov. The method returns true even for holidays such as {@link #CHANUKAH} and minor
-	 * ones such as {@link #TU_BEAV} and {@link #PESACH_SHENI}. Erev Yom Tov (with the exception of {@link #HOSHANA_RABBA},
-	 * Erev the second days of Pesach) returns false, as do {@link #isTaanis() fast days} besides {@link #YOM_KIPPUR}. Use
-	 * {@link #isAssurBemelacha()} to find the days that have a prohibition of work. 
+	 * Returns true if the current day is <em>Yom Tov</em>. The method returns true even for holidays such as {@link #CHANUKAH}
+	 * and minor ones such as {@link #TU_BEAV} and {@link #PESACH_SHENI}. <em>Erev Yom Tov</em> (with the exception of
+	 * {@link #HOSHANA_RABBA}, <em>erev</em> the second days of <em>Pesach</em>) returns false, as do {@link #isTaanis() fast
+	 * days} besides {@link #YOM_KIPPUR}. Use {@link #isAssurBemelacha()} to find the days that have a prohibition of work. 
 	 * 
 	 * @return true if the current day is a Yom Tov
 	 * 
@@ -700,7 +711,7 @@ public class JewishCalendar extends JewishDate {
 	
 	/**
 	 * Returns true if it is <em>Shabbos</em> or if it is a <em>Yom Tov</em> day that has a <em>melacha</em> (work)  prohibition.
-	 * This method will return false for a.
+	 * 
 	 * @return if the day is a <em>Yom Tov</em> that is <em>assur bemlacha</em> or <em>Shabbos</em>
 	 */
 	public boolean isAssurBemelacha() {
@@ -712,17 +723,22 @@ public class JewishCalendar extends JewishDate {
 	 * first day of <em>Rosh Hashana</em> and the first days of <em>Yom Tov</em> out of Israel. It is identical
 	 * to calling {@link #isTomorrowShabbosOrYomTov()}.
 	 * 
-	 * @return if the day has candle lighting
+	 * @return if the day has candle lighting.
+	 * 
+	 * @see #isTomorrowShabbosOrYomTov()
 	 */
 	public boolean hasCandleLighting() {
 		return isTomorrowShabbosOrYomTov();
 	}
 	
 	/**
-	 * Returns true if tomorrow is <em>Shabbos</em> or <em>Yom Tov</em>. This will return true on erev <em>Shabbos</em>, erev
-	 * <em>Yom Tov</em>, the first day of <em>Rosh Hashana</em> and <em>erev</em> the first days of <em>Yom Tov</em> out of
-	 * Israel. It is identical to calling {@link #hasCandleLighting()}.
-	 * @return will return if the next day is <em>Shabbos</em> or <em>Yom Tov</em>
+	 * Returns true if tomorrow is <em>Shabbos</em> or <em>Yom Tov</em>. This will return true on erev <em>Shabbos</em>,
+	 * <em>erev Yom Tov</em>, the first day of <em>Rosh Hashana</em> and <em>erev</em> the first days of <em>Yom Tov</em>
+	 * out of Israel. It is identical to calling {@link #hasCandleLighting()}.
+	 * 
+	 * @return will return if the next day is <em>Shabbos</em> or <em>Yom Tov</em>.
+	 * 
+	 * @see #hasCandleLighting()
 	 */
 	public boolean isTomorrowShabbosOrYomTov() {
 		return getDayOfWeek() == Calendar.FRIDAY || isErevYomTov() || isErevYomTovSheni();
@@ -788,10 +804,11 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns true if the current day is erev Yom Tov. The method returns true for Erev - Pesach (first and last days),
-	 * Shavuos, Rosh Hashana, Yom Kippur and Succos and Hoshana Rabba.
+	 * Returns true if the current day is erev Yom Tov. The method returns true for <em>Erev</em> - <em>Pesach</em> (first and
+	 * last days), <em>Shavuos</em>, <em>Rosh Hashana</em>, <em>Yom Kippur</em>, <em>Succos</em> and <em>Hoshana Rabba</em>.
 	 * 
-	 * @return true if the current day is Erev - Pesach, Shavuos, Rosh Hashana, Yom Kippur and Succos
+	 * @return true if the current day is <em>Erev</em> - <em>Pesach</em>, <em>Shavuos</em>, <em>Rosh Hashana</em>, <em>Yom
+	 * Kippur</em>, <em>Succos</em> and <em>Hoshana Rabba</em>.
 	 * @see #isYomTov()
 	 * @see #isErevYomTovSheni()
 	 */
@@ -814,8 +831,8 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Return true if the day is a Taanis (fast day). Return true for 17 of Tammuz, Tisha B'Av, Yom Kippur, Fast of
-	 * Gedalyah, 10 of Teves and the Fast of Esther
+	 * Return true if the day is a Taanis (fast day). Return true for <em>17 of Tammuz</em>, <em>Tisha B'Av</em>,
+	 * <em>Yom Kippur</em>, <em>Fast of Gedalyah</em>, <em>10 of Teves</em> and the <em>Fast of Esther</em>.
 	 * 
 	 * @return true if today is a fast day
 	 */
@@ -826,10 +843,10 @@ public class JewishCalendar extends JewishDate {
 	}
 	
 	/**
-	 * Return true if the day is Taanis Bechoros (on erev Pesach). It will return true for the 14th of Nissan if it is not
-	 * on Shabbos, or if the 12th of Nissan occurs on a Thursday
+	 * Return true if the day is <em>Taanis Bechoros</em> (on <em>erev Pesach</em>). It will return true for the 14th
+	 * of <em>Nissan</em> if it is not on <em>Shabbos</em>, or if the 12th of <em>Nissan</em> occurs on a Thursday.
 	 * 
-	 * @return true if today is the fast of Bechoros
+	 * @return true if today is <em>Taanis Bechoros</em>.
 	 */
 	public boolean isTaanisBechoros() {
 	    final int day = getJewishDayOfMonth();
@@ -860,7 +877,9 @@ public class JewishCalendar extends JewishDate {
 
 	/**
 	 * Returns true if the current day is one of the 8 days of <em>Chanukah</em>.
+	 * 
 	 * @return if the current day is one of the 8 days of <em>Chanukah</em>.
+	 * 
 	 * @see #getDayOfChanukah()
 	 */
 	public boolean isChanukah() {
@@ -878,27 +897,28 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if the day is Shabbos and sunday is Rosh Chodesh.
+	 * Returns if the day is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em>.
 	 *
-	 * @return true if it is Shabbos and sunday is Rosh Chodesh.
+	 * @return true if it is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em>.
+	 * @todo There is more to tweak in this method (it does not cover all cases and opinions), and it may be removed.
 	 */
 	public boolean isMacharChodesh() {
 		return (getDayOfWeek() == Calendar.SATURDAY && (getJewishDayOfMonth() == 30 || getJewishDayOfMonth() == 29));
 	}
 
 	/**
-	 * Returns if the day is Shabbos Mevorchim.
+	 * Returns if the day is <em>Shabbos Mevorchim</em>.
 	 *
-	 * @return true if it is Shabbos Mevorchim.
+	 * @return true if it is <em>Shabbos Mevorchim</em>.
 	 */
 	public boolean isShabbosMevorchim() {
 		return (getDayOfWeek() == Calendar.SATURDAY && getJewishDayOfMonth() >= 23 && getJewishDayOfMonth() <= 29 && getJewishMonth() != ELUL);
 	}
 
 	/**
-	 * Returns the int value of the Omer day or -1 if the day is not in the omer
+	 * Returns the int value of the <em>Omer</em> day or -1 if the day is not in the <em>Omer</em>.
 	 * 
-	 * @return The Omer count as an int or -1 if it is not a day of the Omer.
+	 * @return The <em>Omer</em> count as an int or -1 if it is not a day of the <em>Omer</em>.
 	 */
 	public int getDayOfOmer() {
 		int omer = -1; // not a day of the Omer
@@ -997,6 +1017,7 @@ public class JewishCalendar extends JewishDate {
 	 * displaying <em>alos</em> before this time if the zman is between <em>alos</em> and <em>tzais</em>.
 	 * 
 	 * @return the Date representing the moment halfway between molad and molad.
+	 * 
 	 * @see #getSofZmanKidushLevana15Days()
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
@@ -1041,9 +1062,9 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the Daf Yomi (Bavli) for the date that the calendar is set to. See the
-	 * {@link HebrewDateFormatter#formatDafYomiBavli(Daf)} for the ability to format the daf in Hebrew or transliterated
-	 * masechta names.
+	 * Returns the <em>Daf Yomi (Bavli)</em> for the date that the calendar is set to. See the
+	 * {@link HebrewDateFormatter#formatDafYomiBavli(Daf)} for the ability to format the <em>daf</em> in
+	 * Hebrew or transliterated <em>masechta</em> names.
 	 * 
 	 * @return the daf as a {@link Daf}
 	 */
@@ -1051,9 +1072,9 @@ public class JewishCalendar extends JewishDate {
 		return YomiCalculator.getDafYomiBavli(this);
 	}
 	/**
-	 * Returns the Daf Yomi (Yerushalmi) for the date that the calendar is set to. See the
-	 * {@link HebrewDateFormatter#formatDafYomiYerushalmi(Daf)} for the ability to format the daf in Hebrew or transliterated
-	 * masechta names.
+	 * Returns the <em>Daf Yomi (Yerushalmi)</em> for the date that the calendar is set to. See the
+	 * {@link HebrewDateFormatter#formatDafYomiYerushalmi(Daf)} for the ability to format the <em>daf</em>
+	 * in Hebrew or transliterated <em>masechta</em> names.
 	 *
 	 * @return the daf as a {@link Daf}
 	 */
@@ -1061,7 +1082,6 @@ public class JewishCalendar extends JewishDate {
 		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
 	}
 	
-
 	/**
 	 * Returns the elapsed days since <em>Tekufas Tishrei</em>. This uses <em>Tekufas Shmuel</em> (identical to the <a href=
 	 * "https://en.wikipedia.org/wiki/Julian_year_(astronomy)">Julian Year</a> with a solar year length of 365.25 days.
@@ -1075,41 +1095,83 @@ public class JewishCalendar extends JewishDate {
 	 * the <em>tekufah</em> and the day we start reciting <em>Tal Umatar</em>. 60 days from the tekufah == 47D and 9H
 	 * from <em>Rosh Hashana</em> year 1.
 	 * 
-	 * @return the number of elapsed days since <em>tekufas Tishrei</em>
+	 * @return the number of elapsed days since <em>tekufas Tishrei</em>.
+	 * 
+	 * @see #isVeseinTalUmatarStartDate()
+	 * @see #isVeseinTalUmatarStartingTonight()
+	 * @see #isVeseinTalUmatarRecited()
 	 */
-	private int getTekufasTishreiElapsedDays() {
+	public int getTekufasTishreiElapsedDays() {
 		// Days since Rosh Hashana year 1. Add 1/2 day as the first tekufas tishrei was 9 hours into the day. This allows all
 		// 4 years of the secular leap year cycle to share 47 days. Truncate 47D and 9H to 47D for simplicity.
 		double days = getJewishCalendarElapsedDays(getJewishYear()) + (getDaysSinceStartOfJewishYear()-1) + 0.5;
 		// days of completed solar years
 		double solar = (getJewishYear() - 1) * 365.25;
-		return (int) (days - solar);
+		return (int) Math.floor(days - solar);
 	}
 
 	/**
-	 * Returns if it is the day to start reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
-	 * In Israel this is the 7th day of <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5 in
-	 * the 21st century and shifts a day forward after that.
+	 * Returns if it is the Jewish day (starting the evening before) to start reciting <em>Vesein Tal Umatar
+	 * Livracha</em> (<em>Sheailas Geshamim</em>). In Israel this is the 7th day of <em>Marcheshvan</em>. Outside
+	 * Israel recitation starts on the evening of December 4th (or 5th if it is the year before a civil leap year)
+	 * in the 21st century and shifts a day forward every century not evenly divisible by 400. This method will
+	 * return true if <em>vesein tal umatar</em> on the current Jewish date that starts on the previous night, so
+	 * Dec 5/6 will be returned by this method in the 21st century. <em>vesein tal umatar</em> is not recited on
+	 * <em>Shabbos</em> and the start date will be delayed a day when the start day is on a <em>Shabbos</em> (this
+	 * can only occur out of Israel).
 	 * 
-	 * @return true if it is the first day of reciting <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>).
-	 *         If the start date occurs on a Friday when vesein tal is not recited, the start day will be delayed to the
-	 *         following day.
+	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
+	 * Livracha</em> (<em>Sheailas Geshamim</em>).
+	 * 
+	 * @see #isVeseinTalUmatarStartingTonight()
+	 * @see #isVeseinTalUmatarRecited()
 	 */
 	public boolean isVeseinTalUmatarStartDate() {
-		if (getDayOfWeek() == 6) { //Not recited on Friday night
-			return false;
-		}
 		if (inIsrael) {
-			if (getJewishMonth() == CHESHVAN) {
-				 // if 7 Cheshvan occurs on Friday, return the following day
-				if (getJewishDayOfMonth() == 7 || (getDayOfWeek() == 7 && getJewishDayOfMonth() == 8)) {
-					return true;
-				}
+			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
+			if (getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7) {
+				return true;
 			}
 		} else {
-			if(getDayOfWeek() == 7) {
-				// if the start day occurs on Friday, return the following day
+			if (getDayOfWeek() == 7) { //Not recited on Friday night
+				return false;
+			}
+			if(getDayOfWeek() == 1) { // if the start day occurs on Shabbos, return the following day
+				return getTekufasTishreiElapsedDays() == 48 || getTekufasTishreiElapsedDays() == 47;
+			} else {
 				return getTekufasTishreiElapsedDays() == 47;
+			}
+		}
+		return false; // keep the compiler happy
+	}
+	
+	/**
+	 * Returns if true if tonight is the first night to start reciting <em>Vesein Tal Umatar Livracha</em> (
+	 * <em>Sheailas Geshamim</em>). In Israel this is the 7th day of <em>Marcheshvan</em> (so the 6th will return
+	 * true). Outside Israel recitation starts on the evening of December 4th (or 5th if it is the year before a
+	 * civil leap year) in the 21st century and shifts a day forward every century not evenly divisible by 400.
+	 * <em>Vesein tal umatar</em> is not recited on <em>Shabbos</em> and the start date will be delayed a day when
+	 * the start day is on a <em>Shabbos</em> (this can only occur out of Israel).
+	 * 
+	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
+	 * Livracha</em> (<em>Sheailas Geshamim</em>).
+	 * 
+	 * @see #isVeseinTalUmatarStartDate()
+	 * @see #isVeseinTalUmatarRecited()
+	 */
+	public boolean isVeseinTalUmatarStartingTonight() {
+		if (inIsrael) {
+			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
+			if (getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 6) {
+					return true;
+			}
+		} else {
+			if (getDayOfWeek() == 6) { //Not recited on Friday night
+				return false;
+			}
+			if(getDayOfWeek() == 7) {
+				// if the start day occurs on Friday night, return the following night
+				return getTekufasTishreiElapsedDays() == 47 || getTekufasTishreiElapsedDays() == 46;
 			} else {
 				return getTekufasTishreiElapsedDays() == 46;
 			}
@@ -1118,8 +1180,12 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return
+	 * true for the entire season, even on <em>Shabbos</em> when it is not recited.
 	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
+	 * 
+	 * @see #isVeseinTalUmatarStartDate()
+	 * @see #isVeseinTalUmatarStartingTonight()
 	 */
 	public boolean isVeseinTalUmatarRecited() {
 		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
@@ -1134,10 +1200,26 @@ public class JewishCalendar extends JewishDate {
 			return getTekufasTishreiElapsedDays() >= 47;
 		}
 	}
+	
+	/**
+	 * Returns if <em>Vesein Beracha</em> is recited. It is recited from 15 <em>Nissan</em> to the point that {@link
+	 * #isVeseinTalUmatarRecited() <em>vesein tal umatar</em> is recited}.
+	 * 
+	 * @return true if <em>Vesein Beracha</em> is recited.
+	 * 
+	 * @see #isVeseinTalUmatarRecited()
+	 */
+	public boolean isVeseinBerachaRecited() {
+		return !isVeseinTalUmatarRecited();
+	}
 
 	/**
 	 * Returns if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 22 <em>Tishrei</em>.
-	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>
+	 * 
+	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
+	 * 
+	 * @see #isMashivHaruachEndDate()
+	 * @see #isMashivHaruachRecited()
 	 */
 	public boolean isMashivHaruachStartDate() {
 		return getJewishMonth() == TISHREI && getJewishDayOfMonth() == 22;
@@ -1145,7 +1227,11 @@ public class JewishCalendar extends JewishDate {
 
 	/**
 	 * Returns if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 15 <em>Nissan</em>.
+	 * 
 	 * @return true if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
+	 * 
+	 * @see #isMashivHaruachStartDate()
+	 * @see #isMashivHaruachRecited()
 	 */
 	public boolean isMashivHaruachEndDate() {
 		return getJewishMonth() == NISSAN && getJewishDayOfMonth() == 15;
@@ -1157,6 +1243,9 @@ public class JewishCalendar extends JewishDate {
 	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
 	 * 
 	 * @return true if <em>Mashiv Haruach Umorid Hageshem</em> is recited.
+	 * 
+	 * @see #isMashivHaruachStartDate()
+	 * @see #isMashivHaruachEndDate()
 	 */
 	public boolean isMashivHaruachRecited() {
 		JewishDate startDate = new JewishDate(getJewishYear(), TISHREI, 22);
@@ -1173,16 +1262,6 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean isMoridHatalRecited() {
 		return !isMashivHaruachRecited() || isMashivHaruachStartDate() || isMashivHaruachEndDate();
-	}
-
-	/**
-	 * Returns if <em>Vesein Beracha</em> is recited.
-	 * 
-	 * @return true if <em>Vesein Beracha</em> is recited.
-	 * @see #isVeseinTalUmatarRecited()
-	 */
-	public boolean isVeseinBerachaRecited() {
-		return !isVeseinTalUmatarRecited();
 	}
 
 	/**
