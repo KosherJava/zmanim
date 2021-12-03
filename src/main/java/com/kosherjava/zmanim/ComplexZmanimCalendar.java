@@ -25,10 +25,10 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * <p>This class extends ZmanimCalendar and provides many more <em>zmanim</em> than available in the ZmanimCalendar. The basis
  * for most <em>zmanim</em> in this class are from the <em>sefer</em> <b><a href="http://hebrewbooks.org/9765">Yisroel
  * Vehazmanim</a></b> by <b><a href="https://en.wikipedia.org/wiki/Yisroel_Dovid_Harfenes">Rabbi Yisrael Dovid Harfenes</a></b>.
- * As an example of the number of different <em>zmanim</em> made available by this class, there are methods to return 14
- * different calculations for <em>alos</em> (dawn) and 25 for <em>tzais</em> available in this API. The real power of this
- * API is the ease in calculating <em>zmanim</em> that are not part of the library. The methods for <em>zmanim</em>
- * calculations not present in this class or it's superclass  {@link ZmanimCalendar} are contained in the
+ * As an example of the number of different <em>zmanim</em> made available by this class, there are methods to return 18
+ * different calculations for <em>alos</em> (dawn), 18 for <em>plag hamincha</em> and 29 for <em>tzais</em> available in this
+ * API. The real power of this API is the ease in calculating <em>zmanim</em> that are not part of the library. The methods for
+ * <em>zmanim</em> calculations not present in this class or it's superclass  {@link ZmanimCalendar} are contained in the
  * {@link AstronomicalCalendar}, the base class of the calendars in our API since they are generic methods for calculating
  * time based on degrees or time before or after {@link #getSunrise sunrise} and {@link #getSunset sunset} and are of interest
  * for calculation beyond <em>zmanim</em> calculations. Here are some examples.
