@@ -1338,7 +1338,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Rolls the date back by 1 day. It modifies both the Gregorian and Jewish dates accordingly. The API does not
-	 * currently offer the ability to forward more than one day t a time, or to forward by month or year. If such
+	 * currently offer the ability to forward more than one day at a time, or to forward by month or year. If such
 	 * manipulation is required use the {@link Calendar} class {@link Calendar#add(int, int)} or
 	 * {@link Calendar#roll(int, int)} methods in the following manner.
 	 * 
