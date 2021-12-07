@@ -1,4 +1,4 @@
-## [2.3.0] (Not yet released)
+## [2.3.0] (2021-12-07)
 
 * Fix an issue with sof zman kiddush levana being off by an hour when the molad is on one side of the DST change, and the sof zman on the other.
 * Add seasonal davening based zmanim including Vesein Tal Umatar/ Vesein Berachah / Mashiv Haruach.

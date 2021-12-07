@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.kosherjava</groupId>
     <artifactId>zmanim</artifactId>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
     <name>KosherJava Zmanim</name>
     <description>
         The Zmanim library is an API for a specialized calendar that can calculate different astronomical times
@@ -68,7 +68,7 @@
                         </tag>
                     </tags>
                     <links>
-                        <link>https://docs.oracle.com/en/java/javase/15/docs/api/</link>
+                        <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
                     </links>
                     <show>private</show>
                     <header><![CDATA[<a href="http://www.kosherjava.com" target="_top">KosherJava.com</a>]]></header>
