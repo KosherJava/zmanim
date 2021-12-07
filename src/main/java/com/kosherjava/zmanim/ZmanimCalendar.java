@@ -37,7 +37,7 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * "http://www.worldcat.org/oclc/919472094">Shimush Zekeinim</a>, Ch. 1, page 17 states that obstructing horizons should
  * be factored into <em>zmanim</em> calculations. The setting defaults to false (elevation will not be used for
  * <em>zmanim</em> calculations besides sunrise and sunset), unless the setting is changed to true in {@link
- * #setUseElevation(boolean)}. This will impact sunrise and sunset-based <em>zmanim<em> such as {@link #getSunrise()},
+ * #setUseElevation(boolean)}. This will impact sunrise and sunset-based <em>zmanim</em> such as {@link #getSunrise()},
  * {@link #getSunset()}, {@link #getSofZmanShmaGRA()}, <em>alos</em>-based <em>zmanim</em> such as {@link #getSofZmanShmaMGA()}
  * that are based on a fixed offset of sunrise or sunset and <em>zmanim</em> based on a percentage of the day such as
  * {@link ComplexZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. Even when set to
