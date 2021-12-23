@@ -48,5 +48,17 @@
 * Update formatter class for Enums in JewishCalendar.
 
 
-## Older Code
-See [GitHub Commits](https://github.com/KosherJava/zmanim/commits/master) for more.
+## Older Changes (since 1.3)
+
+* Default calculator changed from USNO to NOAA
+* Remove the redundant ZmanimCalculator class (backwards breaking if you used this calculator)
+* Support optional elevation adjustments for zmanim besides sunrise and sunset
+* Added multiple alternative zmanim 
+* Added Baal Hatanya zmanim
+* Replaced GPL parsha code with an LGPL kosher version.
+* Added JSON serialization / output (was previously limited to XML)
+* Add Daf Yomi Yerishalmi
+* Many JewishCalendar related tweaks and enhancements
+* Many minor bug fixes and enhancements
+
+See [GitHub Commits](https://github.com/KosherJava/zmanim/commits/master) for more details.
