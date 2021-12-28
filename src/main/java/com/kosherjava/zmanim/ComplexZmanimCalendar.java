@@ -2829,25 +2829,58 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * A method that returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) calculated as 3
-	 * hours before {@link #getFixedLocalChatzos()}.
+	 * clock hours before {@link #getFixedLocalChatzos()}. Note that there are opinions brought down in Yisrael Vehazmanim
+	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a> and Rav Yitzchal Silber's <a href=
+	 * "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Balalacha</a> that this calculation is a mistake and regular
+	 * <em>chatzos</em> shoud be used for clock-hour calculations as opposed to fixed local <em>chatzos</em>. According to
+	 * these opinions it should be 3 clock hours before regular <em>chatzos</em> as calculated in {@link
+	 * #getSofZmanShma3HoursBeforeChatzos()}.
 	 * 
-	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> calculated as 3 hours before
-	 *         {@link #getFixedLocalChatzos()}..
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> calculated as 3 clock hours before
+	 *         {@link #getFixedLocalChatzos()}.
 	 * @see #getFixedLocalChatzos()
+	 * @see #getSofZmanShma3HoursBeforeChatzos()
 	 * @see #getSofZmanTfilaFixedLocal()
+	 *         
+	 * @deprecated This method of calculating <em>sof zman Shma</em> is considered a mistaken understanding of the proper
+	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchal Silber's <a href=
+	 *         "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Balalacha</a>. On pages 316-318 he discusses Rav Yisrael
+	 *         Harfenes's calculations and points to his seeming agreement that using fixed local <em>chatzos</em> as the focal
+	 *         point is problematic. See Yisrael Vehazmanim <a href=
+	 *         "https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a>. While the Yisrael Vehazmanim mentions
+	 *         this issue in vol. 1, it was not corrected in the calculations in vol. 3 and other parts of the <em>sefer</em>.
+	 *         A competent rabbinical authority should be consulted before using this <em>zman</em>. Instead, the use of {@link
+	 *         #getSofZmanShma3HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using using 3 fixed
+	 *         clock hours.
 	 */
+	@Deprecated
 	public Date getSofZmanShmaFixedLocal() {
 		return getTimeOffset(getFixedLocalChatzos(), -180 * MINUTE_MILLIS);
 	}
 
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) calculated as 2 hours
-	 * before {@link #getFixedLocalChatzos()}.
+	 * before {@link #getFixedLocalChatzos()}. See the documentation on {@link #getSofZmanShmaFixedLocal()} showing
+	 * differeing opinions on how the <em>zman</em> is calculated. According to many opinions {@link
+	 * #getSofZmanTfila2HoursBeforeChatzos()} should be used as opposed to this <em>zman</em>.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman tfila</em>.
 	 * @see #getFixedLocalChatzos()
 	 * @see #getSofZmanShmaFixedLocal()
+	 * @see #getSofZmanTfila2HoursBeforeChatzos()
+	 *         
+	 * @deprecated This method of calculating <em>sof zman Tfila</em> is considered a mistaken understanding of the proper
+	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchal Silber's <a href=
+	 *         "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Balalacha</a>. On pages 316-318 he discusses Rav Yisrael
+	 *         Harfenes's calculations and points to his seeming agreement that using fixed local <em>chatzos</em> as the focal
+	 *         point is problematic. See Yisrael Vehazmanim <a href=
+	 *         "https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a>. While the Yisrael Vehazmanim mentions
+	 *         this issue in vol. 1, it was not corrected in the calculations in vol. 3 and other parts of the <em>sefer</em>.
+	 *         A competent rabbinical authority should be consulted before using this <em>zman</em>. Instead, the use of {@link
+	 *         #getSofZmanTfila2HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using using 2 fixed
+	 *         clock hours.
 	 */
+	@Deprecated
 	public Date getSofZmanTfilaFixedLocal() {
 		return getTimeOffset(getFixedLocalChatzos(), -120 * MINUTE_MILLIS);
 	}
