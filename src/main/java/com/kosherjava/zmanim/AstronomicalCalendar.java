@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2022 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -11,7 +11,7 @@
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
- * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or connect to: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim;
 
@@ -27,7 +27,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
 /**
  * A Java calendar that calculates astronomical times such as {@link #getSunrise() sunrise}, {@link #getSunset()
  * sunset} and twilight times. This class contains a {@link #getCalendar() Calendar} and can therefore use the standard
- * Calendar functionality to change dates etc... The calculation engine used to calculate the astronomical times can be
+ * Calendar functionality to change dates etc. The calculation engine used to calculate the astronomical times can be
  * changed to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it with
  * the {@link #setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine
  * implementations are included in the util package.
@@ -64,7 +64,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * </pre>
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2022
  */
 public class AstronomicalCalendar implements Cloneable {
 
@@ -77,18 +77,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public static final double GEOMETRIC_ZENITH = 90;
 
-	/**
-	 * Default value for Sun's zenith and true rise/set Zenith (used in this class and subclasses) is the angle that the
-	 * center of the Sun makes to a line perpendicular to the Earth's surface. If the Sun were a point and the Earth
-	 * were without an atmosphere, true sunset and sunrise would correspond to a 90&deg; zenith. Because the Sun is not
-	 * a point, and because the atmosphere refracts light, this 90&deg; zenith does not, in fact, correspond to true
-	 * sunset or sunrise, instead the center of the Sun's disk must lie just below the horizon for the upper edge to be
-	 * obscured. This means that a zenith of just above 90&deg; must be used. The Sun subtends an angle of 16 minutes of
-	 * arc (this can be changed via the {@link #setSunRadius(double)} method , and atmospheric refraction accounts for
-	 * 34 minutes or so (this can be changed via the {@link #setRefraction(double)} method), giving a total of 50
-	 * arcminutes. The total value for ZENITH is 90+(5/6) or 90.8333333&deg; for true sunrise/sunset.
-	 */
-	// public static double ZENITH = GEOMETRIC_ZENITH + 5.0 / 6.0;
 	/** Sun's zenith at civil twilight (96&deg;). */
 	public static final double CIVIL_ZENITH = 96;
 
@@ -167,7 +155,8 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the beginning of civil twilight (dawn) using a zenith of {@link #CIVIL_ZENITH 96&deg;}.
+	 * A method that returns the beginning of <a href="https://en.wikipedia.org/wiki/Twilight#Civil_twilight">civil twilight</a>
+	 * (dawn) using a zenith of {@link #CIVIL_ZENITH 96&deg;}.
 	 * 
 	 * @return The <code>Date</code> of the beginning of civil twilight using a zenith of 96&deg;. If the calculation
 	 *         can't be computed, null will be returned. See detailed explanation on top of the page.
@@ -178,7 +167,9 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the beginning of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102&deg;}.
+	 * A method that returns the beginning of <a href=
+	 * "https://en.wikipedia.org/wiki/Twilight#Nautical_twilight">nautical twilight</a> using a zenith of {@link
+	 * #NAUTICAL_ZENITH 102&deg;}.
 	 * 
 	 * @return The <code>Date</code> of the beginning of nautical twilight using a zenith of 102&deg;. If the
 	 *         calculation can't be computed null will be returned. See detailed explanation on top of the page.
@@ -189,8 +180,9 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the beginning of astronomical twilight using a zenith of {@link #ASTRONOMICAL_ZENITH
-	 * 108&deg;}.
+	 * A method that returns the beginning of <a href=
+	 * "https://en.wikipedia.org/wiki/Twilight#Astronomical_twilight">astronomical twilight</a> using a zenith of
+	 * {@link #ASTRONOMICAL_ZENITH 108&deg;}.
 	 * 
 	 * @return The <code>Date</code> of the beginning of astronomical twilight using a zenith of 108&deg;. If the
 	 *         calculation can't be computed, null will be returned. See detailed explanation on top of the page.
@@ -250,7 +242,8 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the end of civil twilight using a zenith of {@link #CIVIL_ZENITH 96&deg;}.
+	 * A method that returns the end of <a href="https://en.wikipedia.org/wiki/Twilight#Civil_twilight">civil twilight</a>
+	 * using a zenith of {@link #CIVIL_ZENITH 96&deg;}.
 	 * 
 	 * @return The <code>Date</code> of the end of civil twilight using a zenith of {@link #CIVIL_ZENITH 96&deg;}. If
 	 *         the calculation can't be computed, null will be returned. See detailed explanation on top of the page.
@@ -373,7 +366,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A constructor that takes in <a href="http://en.wikipedia.org/wiki/Geolocation">geolocation</a> information as a
+	 * A constructor that takes in <a href="https://en.wikipedia.org/wiki/Geolocation">geolocation</a> information as a
 	 * parameter. The default {@link AstronomicalCalculator#getDefault() AstronomicalCalculator} used for solar
 	 * calculations is the the {@link com.kosherjava.zmanim.util.NOAACalculator}.
 	 * 
@@ -497,8 +490,8 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
-	 * ="http://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a
-	 * href="http://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
+	 * ="https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a
+	 * href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
 	 * calculated as halfway between sea level sunrise and sea level sunset, which can be slightly off the real transit
 	 * time due to changes in declination (the lengthening or shortening day).
 	 * 
@@ -514,8 +507,8 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
-	 * ="http://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a
-	 * href="http://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
+	 * ="https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a
+	 * href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
 	 * calculated as halfway between the sunrise and sunset passed to this method. This time can be slightly off the
 	 * real transit time due to changes in declination (the lengthening or shortening day).
 	 * 
@@ -598,7 +591,6 @@ public class AstronomicalCalendar implements Cloneable {
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.0001");
 
-		
 		while (offsetByDegrees == null || ((minutes < 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
 				(minutes > 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
 			if(minutes > 0.0) {
@@ -638,31 +630,6 @@ public class AstronomicalCalendar implements Cloneable {
 		}
 		return degrees.doubleValue();
 	}
-	
-	/**
-	 * FIXME broken for czc.getRiseSetSolarDipFromOffset(-72, czc.getSunrise());
-	 * and boken in other was as well
-	 * @param minutes
-	 * @param riseSet
-	 * @return
-	 */
-	/*public double getRiseSetSolarDipFromOffset(double minutes, Date riseSet) {
-		Date offsetByDegrees = riseSet;
-		Date offsetByTime = getTimeOffset(riseSet, minutes * MINUTE_MILLIS);
-		BigDecimal degrees = new BigDecimal(0);
-		BigDecimal incrementor = new BigDecimal("0.001");
-		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
-				(minutes < 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
-			if(minutes > 0.0) {
-				degrees = degrees.add(incrementor);
-			} else {
-				degrees = degrees.subtract(incrementor);
-			}
-			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
-		}
-		return degrees.doubleValue();
-	}*/
-	
 	
 	/**
 	 * Adjusts the <code>Calendar</code> to deal with edge cases where the location crosses the antimeridian.
@@ -742,11 +709,12 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @param geoLocation
 	 *            The geoLocation to set.
+	 * @todo Possibly adjust for horizon elevation. It may be smart to just have the calculator check the GeoLocation
+	 *       though it doesn't really belong there.
 	 */
 	public void setGeoLocation(GeoLocation geoLocation) {
 		this.geoLocation = geoLocation;
-		getCalendar().setTimeZone(geoLocation.getTimeZone());
-		//FIXME posibly adjust for horizon elevation. It may be smart to just have the calculator check the GeoLocation though it doesn't really belong there
+		getCalendar().setTimeZone(geoLocation.getTimeZone()); 
 	}
 
 	/**
@@ -764,7 +732,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * with a number of different implementations of the <code>abstract</code> {@link AstronomicalCalculator} based on
 	 * different algorithms, including {@link com.kosherjava.zmanim.util.SunTimesCalculator one implementation} based
 	 * on the <a href = "http://aa.usno.navy.mil/">US Naval Observatory's</a> algorithm, and
-	 * {@link com.kosherjava.zmanim.util.NOAACalculator another} based on <a href="http://noaa.gov">NOAA's</a>
+	 * {@link com.kosherjava.zmanim.util.NOAACalculator another} based on <a href="https://noaa.gov">NOAA's</a>
 	 * algorithm. This allows easy runtime switching and comparison of different algorithms.
 	 * 
 	 * @param astronomicalCalculator
@@ -795,7 +763,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that creates a <a href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
+	 * A method that creates a <a href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * <b>Note:</b> If the {@link java.util.TimeZone} in the cloned {@link com.kosherjava.zmanim.util.GeoLocation} will
 	 * be changed from the original, it is critical that
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
@@ -803,7 +771,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 * AstronomicalCalendar to output times in the expected offset after being cloned.
 	 * 
 	 * @see java.lang.Object#clone()
-	 * @since 1.1
 	 */
 	public Object clone() {
 		AstronomicalCalendar clone = null;
