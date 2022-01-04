@@ -472,7 +472,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
-	 * A generic method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half
+	 * A generic method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half
 	 * an hour before {@link #getMinchaKetana(Date, Date)}  or 9 * <em>shaos zmaniyos</em> (temporal hours) after the
 	 * start of the day, calculated using the start and end of the day passed to this method.
 	 * The time from the start of day to the end of day are divided into 12 <em>shaos zmaniyos</em> (temporal hours), and
