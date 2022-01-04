@@ -2390,7 +2390,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated when the
-	 * sun's position {@link #ZENITH_7_POINT_083 7.083&deg; (or 7&deg; 5\u2032} below the western horizon. This is often
+	 * sun's position {@link #ZENITH_7_POINT_083 7.083&deg; (or 7&deg; 5\u2032}) below the western horizon. This is often
 	 * referred to as 7&deg;5' or 7&deg; and 5 minutes. This calculation is based on the observation of 3 medium sized
 	 * stars by Dr. Baruch (Berthold) Cohn in his <em>luach</em> <a href=
 	 * "https://sammlungen.ub.uni-frankfurt.de/freimann/content/titleinfo/983088">Tabellen enthaltend die Zeitangaben für
@@ -3975,5 +3975,62 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getTzais50() {
 		return getTimeOffset(getElevationAdjustedSunset(), 50 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half an hour before
+	 * {@link #getMinchaKetana()} or is 9 * {@link #getShaahZmanisGra() <em>shaos zmaniyos</em>} (solar hours) after {@link
+	 * #getSunrise() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()}
+	 * setting), calculated according to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> using a day starting at
+	 * sunrise and ending at sunset. This is the time that eating or other activity can't begin prior to praying <em>mincha</em>.
+	 * The calculation used is 9 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em>
+	 * 16.1&deg;}. See the <a href="https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah
+	 * 232</a> for details.
+	 * 
+	 * @see #getShaahZmanisGra()
+	 * @see #getSamuchLeMinchaKetana16Point1Degrees()
+	 * @return the <code>Date</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getSamuchLeMinchaKetanaGRA() {
+		return getSamuchLeMinchaKetana(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
+	}
+	
+	/**
+	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half an hour before
+	 * {@link #getMinchaGedola16Point1Degrees()}  or 9 * <em>shaos zmaniyos</em> (temporal hours) after the start of the day,
+	 * calculated using a day starting and ending 16.1&deg; below the horizon. This is the time that eating or other activity
+	 * can't begin prior to praying <em>mincha</em>. The calculation used is 9 * {@link #getShaahZmanis16Point1Degrees()} after
+	 * {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;}. See the <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a>.
+	 * 
+	 * @see #getShaahZmanis16Point1Degrees()
+	 * @return the <code>Date</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getSamuchLeMinchaKetana16Point1Degrees() {
+		return getSamuchLeMinchaKetana(getAlos16Point1Degrees(), getTzais16Point1Degrees());
+	}
+	
+	/**
+	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half an hour before
+	 * {@link #getMinchaKetana72Minutes()}  or 9 * <em>shaos zmaniyos</em> (temporal hours) after the start of the day,
+	 * calculated using a day starting 72 minutes before sunrise and ending 72 minutes after sunset. This is the time that eating
+	 * or other activity can't begin prior to praying <em>mincha</em>. The calculation used is 9 * {@link
+	 * #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;}. See the <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a>.
+	 * 
+	 * @see #getShaahZmanis16Point1Degrees()
+	 * @return the <code>Date</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
+	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
+	 *         where the sun may not reach low enough below the horizon for this calculation, a null will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getSamuchLeMinchaKetana72Minutes() {
+		return getSamuchLeMinchaKetana(getAlos72(), getTzais72());
 	}
 }
