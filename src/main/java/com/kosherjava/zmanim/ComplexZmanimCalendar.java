@@ -3978,7 +3978,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half an hour before
+	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
 	 * {@link #getMinchaKetana()} or is 9 * {@link #getShaahZmanisGra() <em>shaos zmaniyos</em>} (solar hours) after {@link
 	 * #getSunrise() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()}
 	 * setting), calculated according to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> using a day starting at
@@ -3999,7 +3999,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half an hour before
+	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
 	 * {@link #getMinchaGedola16Point1Degrees()}  or 9 * <em>shaos zmaniyos</em> (temporal hours) after the start of the day,
 	 * calculated using a day starting and ending 16.1&deg; below the horizon. This is the time that eating or other activity
 	 * can't begin prior to praying <em>mincha</em>. The calculation used is 9 * {@link #getShaahZmanis16Point1Degrees()} after
@@ -4017,7 +4017,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana<em> time that is half an hour before
+	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
 	 * {@link #getMinchaKetana72Minutes()}  or 9 * <em>shaos zmaniyos</em> (temporal hours) after the start of the day,
 	 * calculated using a day starting 72 minutes before sunrise and ending 72 minutes after sunset. This is the time that eating
 	 * or other activity can't begin prior to praying <em>mincha</em>. The calculation used is 9 * {@link
