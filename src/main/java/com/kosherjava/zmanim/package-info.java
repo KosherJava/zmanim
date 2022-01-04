@@ -9,6 +9,6 @@
  * <b>Note:</b> It is important to read the technical notes on top of the {@link com.kosherjava.zmanim.util.AstronomicalCalculator} documentation.
  * <h2>Disclaimer:</h2> I did my best to get accurate results using standardized astronomical calculations. Please use care when using the library
  * since people rely on the zmanim calculations for <em><a href="https://en.wikipedia.org/wiki/Halakha">halacha lemaaseh</a></em>.
- * @author &copy; Eliyahu Hershfeld 2004 - 2021
+ * @author &copy; Eliyahu Hershfeld 2004 - 2022
  */
 package com.kosherjava.zmanim;
