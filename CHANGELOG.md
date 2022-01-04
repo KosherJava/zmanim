@@ -1,3 +1,8 @@
+## [2.4.0] (future)
+
+* Add getSamuchLeMinchaKetana zman
+* Deprecate getSofZmanShmaFixedLocal() and getSofZmanTfilaFixedLocal()
+
 ## [2.3.0] (2021-12-07)
 
 * Fix an issue with sof zman kiddush levana being off by an hour when the molad is on one side of the DST change, and the sof zman on the other.
