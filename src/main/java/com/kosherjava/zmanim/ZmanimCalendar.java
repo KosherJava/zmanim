@@ -1,3 +1,4 @@
+/*
  * Zmanim Java API
  * Copyright (C) 2004-2022 Eliyahu Hershfeld
  *
