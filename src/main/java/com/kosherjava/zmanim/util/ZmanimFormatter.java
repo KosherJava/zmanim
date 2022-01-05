@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2022 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -11,7 +11,7 @@
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
- * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or connect to: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.util;
 
@@ -32,7 +32,7 @@ import com.kosherjava.zmanim.AstronomicalCalendar;
  * example the {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()} returns the length of the hour in
  * milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2022
  */
 public class ZmanimFormatter {
 	/**
@@ -251,7 +251,7 @@ public class ZmanimFormatter {
 		if (this.timeFormat == XSD_DURATION_FORMAT) {
 			return formatXSDDurationTime(time);
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(this.hourNF.format(time.getHours()));
 		sb.append(":");
 		sb.append(minuteSecondNF.format(time.getMinutes()));
@@ -308,7 +308,7 @@ public class ZmanimFormatter {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(xsdDateTimeFormat);
 		dateFormat.setTimeZone(getTimeZone());
 
-		StringBuffer sb = new StringBuffer(dateFormat.format(dateTime));
+		StringBuilder sb = new StringBuilder(dateFormat.format(dateTime));
 		// Must also include offset from UTF.
 		int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);// Get the offset (in milliseconds)
 		// If there is no offset, we have "Coordinated Universal Time"
@@ -356,7 +356,7 @@ public class ZmanimFormatter {
 	 * @return the xsd:duration formatted String
 	 */
 	public String formatXSDDurationTime(Time time) {
-		StringBuffer duration = new StringBuffer();
+		StringBuilder duration = new StringBuilder();
 		if (time.getHours() != 0 || time.getMinutes() != 0 || time.getSeconds() != 0 || time.getMilliseconds() != 0) {
 			duration.append("P");
 			duration.append("T");
@@ -421,7 +421,7 @@ public class ZmanimFormatter {
 		TimeZone tz = astronomicalCalendar.getGeoLocation().getTimeZone();
 		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
 
-		StringBuffer sb = new StringBuffer("<");
+		StringBuilder sb = new StringBuilder("<");
 		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
 			sb.append("AstronomicalTimes");
 			// TODO: use proper schema ref, and maybe build a real schema.
@@ -581,7 +581,7 @@ public class ZmanimFormatter {
 		TimeZone tz = astronomicalCalendar.getGeoLocation().getTimeZone();
 		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
 
-		StringBuffer sb = new StringBuffer("{\n\"metadata\":{\n");
+		StringBuilder sb = new StringBuilder("{\n\"metadata\":{\n");
 		sb.append("\t\"date\":\"").append(df.format(date)).append("\",\n");
 		sb.append("\t\"type\":\"").append(astronomicalCalendar.getClass().getName()).append("\",\n");
 		sb.append("\t\"algorithm\":\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\",\n");
