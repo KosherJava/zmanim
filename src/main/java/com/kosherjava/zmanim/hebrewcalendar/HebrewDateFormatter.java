@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2021 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2022 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -37,7 +37,7 @@ import java.util.EnumMap;
  * @see JewishDate
  * @see JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2021
+ * @author &copy; Eliyahu Hershfeld 2011 - 2022
  */
 public class HebrewDateFormatter {
 	
@@ -942,7 +942,7 @@ public class HebrewDateFormatter {
 		// next check for all possible single Hebrew digit years
 		boolean singleDigitNumber = (shortNumber < 11 || (shortNumber < 100 && shortNumber % 10 == 0) || (shortNumber <= 400 && shortNumber % 100 == 0));
 		int thousands = number / 1000; // get # thousands
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		// append thousands to String
 		if (number % 1000 == 0) { // in year is 5000, 4000 etc
 			sb.append(jOnes[thousands]);
