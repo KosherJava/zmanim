@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2022 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -11,7 +11,7 @@
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
- * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or connect to: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.util;
 
@@ -23,7 +23,7 @@ import java.util.Calendar;
  * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
  * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2022
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -33,7 +33,6 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @see #getRefraction()
 	 */
 	private double refraction = 34 / 60d;
-	// private double refraction = 34.478885263888294 / 60d;
 
 	/**
 	 * The commonly used average solar radius in minutes of a degree.
@@ -174,7 +173,6 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return the adjusted zenith
 	 */
 	double getElevationAdjustment(double elevation) {
-		// double elevationAdjustment = 0.0347 * Math.sqrt(elevation);
 		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
 		return elevationAdjustment;
 	}
@@ -222,9 +220,10 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/**
 	 * Method to get the refraction value to be used when calculating sunrise and sunset. The default value is 34 arc
-	 * minutes. The <a href="http://emr.cs.iit.edu/home/reingold/calendar-book/second-edition/errata.pdf">Errata and
-	 * Notes for Calendrical Calculations: The Millennium Edition</a> by Edward M. Reingold and Nachum Dershowitz lists
-	 * the actual average refraction value as 34.478885263888294 or approximately 34' 29". The refraction value as well
+	 * minutes. The <a href=
+	 * "https://web.archive.org/web/20150915094635/http://emr.cs.iit.edu/home/reingold/calendar-book/second-edition/errata.pdf"
+	 * >Errata and Notes for Calendrical Calculations: The Millennium Edition</a> by Edward M. Reingold and Nachum Dershowitz
+	 * lists the actual average refraction value as 34.478885263888294 or approximately 34' 29". The refraction value as well
 	 * as the solarRadius and elevation adjustment are added to the zenith used to calculate sunrise and sunset.
 	 * 
 	 * @return The refraction in arc minutes.
@@ -249,11 +248,11 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	/**
 	 * Method to get the sun's radius. The default value is 16 arc minutes. The sun's radius as it appears from earth is
 	 * almost universally given as 16 arc minutes but in fact it differs by the time of the year. At the <a
-	 * href="http://en.wikipedia.org/wiki/Perihelion">perihelion</a> it has an apparent radius of 16.293, while at the
-	 * <a href="http://en.wikipedia.org/wiki/Aphelion">aphelion</a> it has an apparent radius of 15.755. There is little
+	 * href="https://en.wikipedia.org/wiki/Perihelion">perihelion</a> it has an apparent radius of 16.293, while at the
+	 * <a href="https://en.wikipedia.org/wiki/Aphelion">aphelion</a> it has an apparent radius of 15.755. There is little
 	 * affect for most location, but at high and low latitudes the difference becomes more apparent. My Calculations for
-	 * the difference at the location of the <a href="http://www.rog.nmm.ac.uk">Royal Observatory, Greenwich </a> show
-	 * only a 4.494 second difference between the perihelion and aphelion radii, but moving into the arctic circle the
+	 * the difference at the location of the <a href="https://www.rmg.co.uk/royal-observatory">Royal Observatory, Greenwich</a>
+	 * shows only a 4.494 second difference between the perihelion and aphelion radii, but moving into the arctic circle the
 	 * difference becomes more noticeable. Tests for Tromso, Norway (latitude 69.672312, longitude 19.049787) show that
 	 * on May 17, the rise of the midnight sun, a 2 minute 23 second difference is observed between the perihelion and
 	 * aphelion radii using the USNO algorithm, but only 1 minute and 6 seconds difference using the NOAA algorithm.
