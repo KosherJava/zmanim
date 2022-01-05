@@ -12,6 +12,6 @@
  *   <li>{@link HebrewDateFormatter} defines the basics for taking a JewishCalendar and formatting the dates.
  *   <li>{@link YomiCalculator} calculates the {@link Daf} Yomi Bavli for a given JewishCalendar and {@link YerushalmiYomiCalculator}.
  * </ul>
- * @author &copy; Eliyahu Hershfeld 2011 - 2021
+ * @author &copy; Eliyahu Hershfeld 2011 - 2022
  */
 package com.kosherjava.zmanim.hebrewcalendar;
