@@ -106,9 +106,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * (dawn) and <em>tzais</em> (nightfall) in some opinions. It is based on the calculation that the time between dawn
 	 * and sunrise (and sunset to nightfall) is 72 minutes, the time that is takes to walk 4 <em>mil</em> at 18 minutes
 	 * a mil (<em><a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a></em> and others). The sun's position at
-	 * 72 minutes before {@link #getSunrise sunrise} in Jerusalem on the equilux (on March 16, about 4 days before the
-	 * astronomical equinox, the day that a solar hour is 60 minutes) is 16.1&deg; below
-	 * {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * 72 minutes before {@link #getSunrise sunrise} in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> is
+	 * 16.1&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * 
 	 * @see #getAlosHashachar()
 	 * @see ComplexZmanimCalendar#getAlos16Point1Degrees()
@@ -126,10 +126,11 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * The zenith of 8.5&deg; below geometric zenith (90&deg;). This calculation is used for calculating <em>alos</em>
 	 * (dawn) and <em>tzais</em> (nightfall) in some opinions. This calculation is based on the position of the sun 36
-	 * minutes after {@link #getSunset sunset} in Jerusalem on the equilux (March 16, about 4 days before the equinox,
-	 * the day that a solar hour is 60 minutes, which is 8.5&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. The
-	 * <em><a href="https://www.worldcat.org/oclc/29283612">Ohr Meir</a></em> considers this the time that 3 small stars
-	 * are visible, which is later than the required 3 medium stars.
+	 * minutes after {@link #getSunset sunset} in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
+	 * is 8.5&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. The <em><a href=
+	 * "https://www.worldcat.org/oclc/29283612">Ohr Meir</a></em> considers this the time that 3 small stars are visible,
+	 * which is later than the required 3 medium stars.
 	 * 
 	 * @see #getTzais()
 	 * @see ComplexZmanimCalendar#getTzaisGeonim8Point5Degrees()
@@ -199,8 +200,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * calculation that the time between dawn and sunrise (and sunset to nightfall) is 72 minutes, the time that is
 	 * takes to walk 4 <em>mil</em> at 18 minutes a mil (<em><a href="https://en.wikipedia.org/wiki/Maimonides"
 	 * >Rambam</a></em> and others). The sun's position at 72 minutes before {@link #getSunrise sunrise} in Jerusalem
-	 * on the equilux (on March 16, about 4 days before the astronomical equinox, the day that a solar hour is 60
-	 * minutes) is 16.1&deg; below. See the {@link #GEOMETRIC_ZENITH} constant.
+	 * on the <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox /
+	 * equilux</a> is 16.1&deg; below {@link #GEOMETRIC_ZENITH}.
 	 * 
 	 * @see #ZENITH_16_POINT_1
 	 * @see ComplexZmanimCalendar#getAlos16Point1Degrees()
