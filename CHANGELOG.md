@@ -4,7 +4,7 @@
 * Deprecate `getSofZmanShmaFixedLocal()` and `getSofZmanTfilaFixedLocal()` with future plans of removal.
 * Deprecate multiple "dangerous" _zmanim_ as an alert to developers, with plans on retaining them.
 
-## [2.3.0](https://github.com/KosherJava/zmanim/compare/2.1.0...2.3.0) (2021-12-07)
+## [2.3.0](https://github.com/KosherJava/zmanim/compare/98d704...2.3.0) (2021-12-07)
 
 * Fix an issue with sof _zman kiddush levana_ being off by an hour when the _molad_ is on one side of the DST change, and the _sof zman_ on the other.
 * Add seasonal _davening_ based _zmanim_ including _Vesein Tal Umatar/ Vesein Berachah / Mashiv Haruach_.
@@ -12,12 +12,12 @@
 * Refactor code for alos and _tzeis zmaniyos_ based time (ports to other languages can simplify things by doing the same).
 * Fix Hebrew spelling of _Parshas Nitzavim_.
 
-## [2.2.0] (2021-03-15)
+## [2.2.0](https://github.com/KosherJava/zmanim/compare/2.1.0...98d704) (2021-03-15)
 
 * Added JewishCalendar.isTaanisBechoros().
 * Updated Javadocs - document sources for `getFixedLocalChatzos()` and clarify _Yerushalmi Yomi_ Start Date.
 
-## [2.1.0] (2020-12-02)
+## [2.1.0](https://github.com/KosherJava/zmanim/compare/8ffa53b9a...2.1.0) (2020-12-02)
 
 * Added six variants of the Yereim's _bain hashmashos zmanim_.
 * `AstronomicalCalculator.getRefraction()` and `.getSolarRadius()` now have public access.
