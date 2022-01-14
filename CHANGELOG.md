@@ -1,10 +1,10 @@
-## [2.4.0] (future)
+## [2.4.0](https://github.com/KosherJava/zmanim/compare/2.3.0...master) (future)
 
 * Add `getSamuchLeMinchaKetana` _zman_.
 * Deprecate `getSofZmanShmaFixedLocal()` and `getSofZmanTfilaFixedLocal()` with future plans of removal.
 * Deprecate multiple "dangerous" _zmanim_ as an alert to developers, with plans on retaining them.
 
-## [2.3.0] (2021-12-07)
+## [2.3.0](https://github.com/KosherJava/zmanim/compare/2.1.0...2.3.0) (2021-12-07)
 
 * Fix an issue with sof _zman kiddush levana_ being off by an hour when the _molad_ is on one side of the DST change, and the _sof zman_ on the other.
 * Add seasonal _davening_ based _zmanim_ including _Vesein Tal Umatar/ Vesein Berachah / Mashiv Haruach_.
