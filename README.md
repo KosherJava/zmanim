@@ -7,7 +7,7 @@ Jewish religious duties.
 
 These classes extend GregorianCalendar and can therefore
 use the standard Calendar functionality to change dates etc. For non religious astronomical / solar
-calculations use the [AstronomicalCalendar](./src/net/sourceforge/zmanim/AstronomicalCalendar.java).
+calculations use the [AstronomicalCalendar](./src/main/java/com/kosherjava/zmanim/AstronomicalCalendar.java).
 
 The ZmanimCalendar contains the most common zmanim or religious time calculations. For a much more
 extensive list of _zmanim_ use the ComplexZmanimCalendar.
