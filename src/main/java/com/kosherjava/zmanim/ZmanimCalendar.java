@@ -23,14 +23,16 @@ import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
 
 /**
- * The ZmanimCalendar is a specialized calendar that can calculate sunrise and sunset and Jewish <em>zmanim</em>
+ * The ZmanimCalendar is a specialized calendar that can calculate sunrise, sunset and Jewish <em>zmanim</em>
  * (religious times) for prayers and other Jewish religious duties. This class contains the main functionality of the
  * <em>Zmanim</em> library. For a much more extensive list of <em>zmanim</em>, use the {@link ComplexZmanimCalendar} that
  * extends this class. See documentation for the {@link ComplexZmanimCalendar} and {@link AstronomicalCalendar} for
- * simple examples on using the API. According to Rabbi Dovid Yehudah Bursztyn in his
- * <a href="https://www.worldcat.org/oclc/659793988">Zmanim Kehilchasam (second edition published in 2007)</a> chapter 2
- * (pages 186-187) no <em>zmanim</em> besides sunrise and sunset should use elevation. However, Rabbi Yechiel Avrahom
- * Zilber in the <a href="https://hebrewbooks.org/51654">Birur Halacha Vol. 6</a> Ch. 58 Pages
+ * simple examples on using the API. 
+ * <strong>Elevation based <em>zmanim</em> (even sunrise and sunset) should not be used <em>lekula</em> without the guidance
+ * of a <em>posek</em></strong>. According to Rabbi Dovid Yehudah Bursztyn in his
+ * <a href="https://www.worldcat.org/oclc/1158574217">Zmanim Kehilchasam, 7th edition</a> chapter 2, section 7 (pages 181-182)
+ * and section 9 (pages 186-187), no <em>zmanim</em> besides sunrise and sunset should use elevation. However, Rabbi Yechiel
+ * Avrahom Zilber in the <a href="https://hebrewbooks.org/51654">Birur Halacha Vol. 6</a> Ch. 58 Pages
  * <a href="https://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=42">34</a> and
  * <a href="https://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=50">42</a> is of the opinion that elevation should be
  * accounted for in <em>zmanim</em> calculations. Related to this, Rabbi Yaakov Karp in <a href=
@@ -42,7 +44,19 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * that are based on a fixed offset of sunrise or sunset and <em>zmanim</em> based on a percentage of the day such as
  * {@link ComplexZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. Even when set to
  * true it will not impact <em>zmanim</em> that are a degree-based offset of sunrise and sunset, such as {@link
- * ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()}.
+ * ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()} since
+ * these <em>zmanim</em> are not linked to sunrise or sunset times (the calculations are based on the astronomical definition of
+ * sunrise and sunset calculated in a vacuum with the solar radius above the horizon), and are therefore not impacted by the use
+ * of elevation.
+ * For additional information on the <em>halachic</em> impact of elevation on <em>zmanim</em> see:
+ * <ul>
+ * <li><a href="https://www.nli.org.il/en/books/NNL_ALEPH002542826/NLI">Zmanei Halacha Lema'aseh</a> 4th edition by <a href=
+ * "http://beinenu.com/rabbis/%D7%94%D7%A8%D7%91-%D7%99%D7%93%D7%99%D7%93%D7%99%D7%94-%D7%9E%D7%A0%D7%AA">Rabbi Yedidya Manat</a>.
+ * See section 1, pages 11-12 for a very concise write-up, with details in section 2, pages 37 - 63 and 133 - 151.</li>
+ * <li><a href="https://www.worldcat.org/oclc/1158574217">Zmanim Kehilchasam</a> 7th edition, by Rabbi Dovid Yehuda Burstein,  vol 1,
+ * chapter 2, pages 95 - 188.</li>
+ * <li><a href="https://www.worldcat.org/oclc/36089452">Hazmanim Bahalacha</a> by Rabbi Chaim Banish , perek 7, pages 53 - 63.</li>
+ * </ul>
  * 
  * <p><b>Note:</b> It is important to read the technical notes on top of the {@link AstronomicalCalculator} documentation
  * before using this code.
