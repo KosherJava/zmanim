@@ -75,7 +75,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * <em>tzais</em> based <em>plag hamincha</em> as calculated in the Machzikei Hadass calendar in Manchester, England.
  * A number of this calendar's <em>zmanim</em> are calculated based on a day starting at <em>alos</em> of 12&deg; before
  * sunrise and ending at <em>tzais</em> of 7.083&deg; after sunset. Be aware that since the <em>alos</em> and <em>tzais</em>
- * do not use identical degree based offsets, this leads to <em>chatzos</em> being at a time other than the
+ * do not use identical degree-based offsets, this leads to <em>chatzos</em> being at a time other than the
  * {@link #getSunTransit() solar transit} (solar midday). To calculate this <em>zman</em>, use the following steps. Note
  * that <em>plag hamincha</em> is 10.75 hours after the start of the day, and the following steps are all that it takes.
  * <br>
@@ -249,7 +249,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * The zenith of 4.37&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) according to some opinions. This calculation is based on the position of
-	 * the sun {@link #getTzaisGeonim4Point37Degrees() 16 7/8 minutes} after sunset (3/4 of a 22.5 minute <em>mil</em>)
+	 * the sun {@link #getTzaisGeonim4Point37Degrees() 16 7/8 minutes} after sunset (3/4 of a 22.5-minute <em>Mil</em>)
 	 * in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
 	 * which calculates to 4.37&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
@@ -261,9 +261,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * The zenith of 4.61&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) according to some opinions. This calculation is based on the position of
-	 * the sun {@link #getTzaisGeonim4Point37Degrees() 18 minutes} after sunset (3/4 of a 24 minute Mil) in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
-	 * calculates to 4.61&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * the sun {@link #getTzaisGeonim4Point37Degrees() 18 minutes} after sunset (3/4 of a 24-minute <em>Mil</em>) in
+	 * Jerusalem <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox
+	 * / equilux</a>, which calculates to 4.61&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * @todo add documentation links
 	 * 
 	 * @see #getTzaisGeonim4Point61Degrees()
@@ -280,7 +280,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * The zenith of 3.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) according to some opinions. This calculation is based on the position of
-	 * the sun {@link #getTzaisGeonim3Point65Degrees() 13.5 minutes} after sunset (3/4 of an 18 minute <em>Mil</em>)
+	 * the sun {@link #getTzaisGeonim3Point65Degrees() 13.5 minutes} after sunset (3/4 of an 18-minute <em>Mil</em>)
 	 * in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> which
 	 * calculates to 3.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
@@ -778,9 +778,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>alos</em> (dawn) calculated as 60 minutes before sunrise. This is the time to walk the 
 	 * distance of 4 <em>Mil</em> at 15 minutes a <em>Mil</em>. This seems to be the opinion of the <a href=
 	 * "https://en.wikipedia.org/wiki/Yair_Bacharach">Chavas Yair</a> in the Mekor Chaim, Orach Chaim Ch.
-	 * 90, though  the Mekor chaim in Ch. 58 and in the <a href=
+	 * 90, though  the Mekor Chaim in Ch. 58 and in the <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=45193&pgnum=214">Chut Hashani Cha 97</a> states that
-	 * a a person walks 3 and a 1/3 <em>mil</em> in an hour, or an 18 minute <em>mil</em>. Also see the <a href=
+	 * a a person walks 3 and a 1/3 <em>mil</em> in an hour, or an 18-minute <em>mil</em>. Also see the <a href=
 	 * "https://he.wikipedia.org/wiki/%D7%9E%D7%9C%D7%9B%D7%99%D7%90%D7%9C_%D7%A6%D7%91%D7%99_%D7%98%D7%A0%D7%A0%D7%91%D7%95%D7%99%D7%9D"
 	 * >Divrei Malkiel</a> <a href="https://hebrewbooks.org/pdfpager.aspx?req=803&pgnum=33">Vol. 4, Ch. 20, page 34</a>) who
 	 * mentions the 15 minute <em>mil</em> lechumra by baking matzos. Also see the <a href=
@@ -789,11 +789,11 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * <a href="https://en.wikipedia.org/wiki/Eliezer_ben_Nathan">Ra'avan</a> is of the opinion that the time to walk a
 	 * <em>mil</em> is 15 minutes (5 <em>mil</em> in a little over an hour). There are many who believe that there is a
 	 * <em>ta'us sofer</em> (scribe's error) in the Ra'avan, and it should 4 <em>mil</em> in a little over an hour, or an
-	 * 18 minute <em>mil</em>. Time based offset calculations are based on the opinion of the
+	 * 18-minute <em>mil</em>. Time based offset calculations are based on the opinion of the
 	 * <em><a href="https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>neshef</em>
 	 * (time between dawn and sunrise) does not vary by the time of year or location but purely depends on the time it takes to
 	 * walk the distance of 4* <em>mil</em>. {@link #getTzaisGeonim9Point75Degrees()} is a related <em>zman</em> that is a
-	 * degree based calculation based on 60 minutes.
+	 * degree-based calculation based on 60 minutes.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -810,7 +810,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 72 minutes <em>zmaniyos</em> or 1/10th of the day before
-	 * sunrise. This is based on an 18 minute <em>Mil</em> so the time for 4 <em>Mil</em> is 72 minutes which is 1/10th
+	 * sunrise. This is based on an 18-minute <em>Mil</em> so the time for 4 <em>Mil</em> is 72 minutes which is 1/10th
 	 * of a day (12 * 60 = 720) based on the a day being from {@link #getSeaLevelSunrise() sea level sunrise} to
 	 * {@link #getSeaLevelSunrise sea level sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset}
 	 * (depending on the {@link #isUseElevation()} setting).
@@ -848,7 +848,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 90 minutes <em>zmaniyos</em> or 1/8th of the day before
 	 * {@link #getSunrise() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link
-	 * #isUseElevation()} setting). This is based on a 22.5 minute <em>Mil</em> so the time for 4 <em>Mil</em> is 90
+	 * #isUseElevation()} setting). This is based on a 22.5-minute <em>Mil</em> so the time for 4 <em>Mil</em> is 90
 	 * minutes which is 1/8th of a day (12 * 60) / 8 = 90
 	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
 	 * sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}.
@@ -867,7 +867,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns <em>alos</em> (dawn) calculated using 96 minutes <em>zmaniyos</em> or 1/7.5th of the day before
 	 * {@link #getSunrise() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link
-	 * #isUseElevation()} setting). This is based on a 24 minute <em>Mil</em> so the time for 4 <em>Mil</em> is 96
+	 * #isUseElevation()} setting). This is based on a 24-minute <em>Mil</em> so the time for 4 <em>Mil</em> is 96
 	 * minutes which is 1/7.5th of a day (12 * 60 / 7.5 = 96).
 	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
 	 * sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}.
@@ -932,7 +932,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method should be used <em>lechumra</em> only and  method returns <em>alos</em> (dawn) calculated using
 	 * 120 minutes <em>zmaniyos</em> or 1/6th of the day before {@link #getSunrise() sunrise} or {@link
 	 * #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting). This is based
-	 * on a 24 minute <em>Mil</em> so the time for 5 <em>Mil</em> is 120 minutes which is 1/6th of a day (12 * 60 /
+	 * on a 24-minute <em>Mil</em> so the time for 5 <em>Mil</em> is 120 minutes which is 1/6th of a day (12 * 60 /
 	 * 6 = 120). The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link
 	 * #getSeaLevelSunrise sea level sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending
 	 * on the {@link #isUseElevation()}. The actual calculation used is {@link #getSunrise()} - ({@link
@@ -960,7 +960,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method should be used <em>lechumra</em> only and returns <em>alos</em> (dawn) calculated when the sun is {@link
 	 * #ZENITH_26_DEGREES 26&deg;} below the eastern geometric horizon before sunrise. This calculation is based on the same
-	 * calculation of {@link #getAlos120() 120 minutes} but uses a degree based calculation instead of 120 exact minutes. This
+	 * calculation of {@link #getAlos120() 120 minutes} but uses a degree-based calculation instead of 120 exact minutes. This
 	 * calculation is based on the position of the sun 120 minutes before sunrise in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
 	 * calculates to 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. Since this time is extremely early, it should
@@ -1022,7 +1022,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_19_POINT_8 19.8&deg;} below the
 	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
-	 * {@link #getAlos90() 90 minutes} but uses a degree based calculation instead of 90 exact minutes. This calculation
+	 * {@link #getAlos90() 90 minutes} but uses a degree-based calculation instead of 90 exact minutes. This calculation
 	 * is based on the position of the sun 90 minutes before sunrise in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
 	 * calculates to 19.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
@@ -1041,7 +1041,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_16_POINT_1 16.1&deg;} below the
 	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
-	 * {@link #getAlos72() 72 minutes} but uses a degree based calculation instead of 72 exact minutes. This calculation
+	 * {@link #getAlos72() 72 minutes} but uses a degree-based calculation instead of 72 exact minutes. This calculation
 	 * is based on the position of the sun 72 minutes before sunrise in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
 	 * calculates to 16.1&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
@@ -1130,8 +1130,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Lakewood_Township,_New_Jersey">Lakewood</a> that is used in the <a href=
 	 * "https://en.wikipedia.org/wiki/Beth_Medrash_Govoha">Yeshiva</a>. This follows the opinion of <a href=
 	 * "https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a> who provided the time of 35/36 minutes,
-	 * but did not provide a degree based time. Since this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow
-	 * presented this degree based calculations to Rabbi Kamenetsky who agreed to them.
+	 * but did not provide a degree-based time. Since this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow
+	 * presented this degree-based calculations to Rabbi Kamenetsky who agreed to them.
 	 * 
 	 * @return the <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
@@ -1157,8 +1157,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Rabbi Edelstein who was given the 45 minute <em>zman</em> by Rabbi Bick. The calendars published by the <em><a href=
 	 * "https://en.wikipedia.org/wiki/Mizrahi_Jews">Edot Hamizrach</a></em> communities also use this <em>zman</em>. This also
 	 * follows the opinion of <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a> who provided
-	 * the time of 36 and 45 minutes, but did not provide a degree based time. Since this <em>zman</em> depends on the level of
-	 * light, Rabbi Yaakov Shakow presented these degree based times to Rabbi Shmuel Kamenetsky who agreed to them.
+	 * the time of 36 and 45 minutes, but did not provide a degree-based time. Since this <em>zman</em> depends on the level of
+	 * light, Rabbi Yaakov Shakow presented these degree-based times to Rabbi Shmuel Kamenetsky who agreed to them.
 	 * 
 	 * @return the <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
@@ -1940,7 +1940,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * occur after sunset, it should only be used <em>lechumra</em>.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time, and if used
-	 *         <em>lekula</em> can result in <em>chillul Shabbos</em> etc.There is no current plan to remove this
+	 *         <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this
 	 *         method from the API, and this deprecation is intended to alert developers of the danger of using it.
 	 * 
 	 * @return the <code>Date</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
@@ -2123,7 +2123,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Method to return the beginning of <em>bain hashmashos</em> of Rabbeinu Tam calculated when the sun is
 	 * {@link #ZENITH_13_POINT_24 13.24&deg;} below the western {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;)
 	 * after sunset. This calculation is based on the same calculation of {@link #getBainHasmashosRT58Point5Minutes()
-	 * <em>bain hashmashos</em> Rabbeinu Tam 58.5 minutes} but uses a degree based calculation instead of 58.5 exact
+	 * <em>bain hashmashos</em> Rabbeinu Tam 58.5 minutes} but uses a degree-based calculation instead of 58.5 exact
 	 * minutes. This calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
 	 * which calculates to 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
@@ -2164,7 +2164,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> based on the calculation of 13.5 minutes (3/4 of an
-	 * 18 minute <em>Mil</em>) before <em>shkiah</em> calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083&deg;}.
+	 * 18-minute <em>Mil</em>) before <em>shkiah</em> calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083&deg;}.
 	 * 
 	 * @return the <code>Date</code> of the <em>bain hashmashos</em> of Rabbeinu Tam in this calculation. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -2202,7 +2202,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 18 minutes
-	 * or 3/4 of a 24 minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4
+	 * or 3/4 of a 24-minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4
 	 * of a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset. 
 	 * 
 	 * @return the <code>Date</code> of 18 minutes before sunset. If the calculation can't be computed such as in the
@@ -2220,7 +2220,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
 	 * position 3.05&deg; above the horizon <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
-	 * its position 18 minutes or 3/4 of an 24 minute <em>mil</em> before sunset. According to the Yereim, <em>bain
+	 * its position 18 minutes or 3/4 of an 24-minute <em>mil</em> before sunset. According to the Yereim, <em>bain
 	 * hashmashos</em> starts 3/4 of a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset.
 	 * Note that <em>lechumra</em> (of about 14 seconds) a refraction value of 0.5166&deg; as opposed to the traditional
 	 * 0.566&deg; is used. This is more inline with the actual refraction in <em>Eretz Yisrael</em> and is brought down
@@ -2229,7 +2229,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Yedidya Manet</a> in his <a href="https://www.nli.org.il/en/books/NNL_ALEPH002542826/NLI">Zmanei Halacha
 	 * Lema’aseh</a> (p. 11). That is the first source that I am aware of that calculates degree-based Yereim
 	 * <em>zmanim</em>. The 0.5166&deg; refraction is also used by the <a href="https://zmanim.online/">Luach Itim
-	 * Lebinah</a>. Calculating the Yereim's <em>bain hashmashos</em> using 18 minute based degrees is also suggested
+	 * Lebinah</a>. Calculating the Yereim's <em>bain hashmashos</em> using 18-minute based degrees is also suggested
 	 * in the upcoming 8th edition of the zmanim Kehilchasam. For more details, see the article <a href=
 	 * "https://kosherjava.com/2020/12/07/the-yereims-bein-hashmashos/">The Yereim’s <em>Bein Hashmashos</em></a>.
 	 * 
@@ -2251,7 +2251,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 16.875
-	 * minutes or 3/4 of a 22.5 minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em>
+	 * minutes or 3/4 of a 22.5-minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em>
 	 * starts 3/4 of a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset. 
 	 * 
 	 * @return the <code>Date</code> of 16.875 minutes before sunset. If the calculation can't be computed such as in the
@@ -2270,7 +2270,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
 	 * position 2.8&deg; above the horizon <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
-	 * its position 16.875 minutes or 3/4 of an 18 minute <em>Mil</em> before sunset. According to the Yereim, <em>bain
+	 * its position 16.875 minutes or 3/4 of an 18-minute <em>Mil</em> before sunset. According to the Yereim, <em>bain
 	 * hashmashos</em> starts 3/4 of a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset.
 	 * Details, including how the degrees were calculated can be seen in the documentation of
 	 * {@link #getBainHasmashosYereim3Point05Degrees()}.
@@ -2292,8 +2292,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 13.5 minutes
-	 * or 3/4 of an 18 minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4 of
-	 * a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset. 
+	 * or 3/4 of an 18-minute <em>Mil</em> before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4 of
+	 * a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset.
 	 * 
 	 * @return the <code>Date</code> of 13.5 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
@@ -2311,7 +2311,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
 	 * position 2.1&deg; above the horizon <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> in
-	 * Yerushalayim, its position 13.5 minutes or 3/4 of an 18 minute <em>Mil</em> before sunset. According to the Yereim,
+	 * Yerushalayim, its position 13.5 minutes or 3/4 of an 18-minute <em>Mil</em> before sunset. According to the Yereim,
 	 * <em>bain hashmashos</em> starts 3/4 of a <em>mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset.
 	 * Details, including how the degrees were calculated can be seen in the documentation of
 	 * {@link #getBainHasmashosYereim3Point05Degrees()}.
@@ -2403,7 +2403,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
 	 * of a <em><a href= "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >mil</a></em> based
-	 * on a 24 minute Mil, or 18 minutes. It is the sun's position at {@link #ZENITH_4_POINT_61 4.61&deg;} below the
+	 * on a 24-minute Mil, or 18 minutes. It is the sun's position at {@link #ZENITH_4_POINT_61 4.61&deg;} below the
 	 * western horizon. This is a very early <em>zman</em> and should not be relied on without Rabbinical guidance.
 	 * 
 	 * @return the <code>Date</code> representing the time when the sun is 4.61&deg; below sea level. If the calculation
@@ -2434,7 +2434,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
-	 * of a 24 minute <em><a href= "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >Mil</a></em>,
+	 * of a 24-minute <em><a href= "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >Mil</a></em>,
 	 * based on a <em>Mil</em> being 24 minutes, and is calculated as 18 + 2 + 4 for a total of 24 minutes. It is the
 	 * sun's position at {@link #ZENITH_5_POINT_88 5.88&deg;} below the western horizon. This is a very early
 	 * <em>zman</em> and should not be relied on without Rabbinical guidance.
@@ -2531,7 +2531,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This <em>zman</em> is also listed in the <a href="https://hebrewbooks.org/pdfpager.aspx?req=1927&pgnum=90">Divrei
 	 * Shalom Vol. III, chapter 75</a>, and <a href="https://hebrewbooks.org/pdfpager.aspx?req=892&pgnum=431">Bais Av"i
 	 * Vol. III, chapter 117</a>. This <em>zman</em> is also listed in the Divrei Shalom etc. chapter 177 (FIXME - could not
-	 * be located). Since this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented this degree based
+	 * be located). Since this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented this degree-based
 	 * calculation to Rabbi <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a> who agreed
 	 * to it.
 	 * @todo add hyperlinks to source of Divrei Shalom.
@@ -2582,7 +2582,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * {@link #ZENITH_9_POINT_75 9.75&deg;} below the western horizon. This is the opinion of <a href=
 	 * "https://en.wikipedia.org/wiki/Yosef_Eliyahu_Henkin">Rabbi Eliyahu Henkin</a>.  This also follows the opinion of
 	 * <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a>. Rabbi Yaakov Shakow presented
-	 * these degree based times to Rabbi Shmuel Kamenetsky who agreed to them.
+	 * these degree-based times to Rabbi Shmuel Kamenetsky who agreed to them.
 	 * 
 	 * @todo recalculate based on equinox / equilux.
 	 * @return the <code>Date</code> representing the time when the sun is 9.75&deg; below sea level. If the calculation
@@ -2758,7 +2758,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedola()
 	 * @see #getMinchaKetana()
 	 * @return the <code>Date</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
-	 *         in theArctic Circle where there is at least one day a year where the sun does not rise, and one where it
+	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
@@ -2833,7 +2833,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * A utility method to return <em>alos</em> (dawn) or <em>tzais</em> (dusk) based on a fractional day offset. 
 	 * @param hours the number of <em>shaaos zmaniyos</em> (temporal hours) before sunrise or after sunset that defines dawn
-	 *        or dusk. If a negative number is passed in, it will return the time of <em>alos</em> (dawn) (subrtacting the
+	 *        or dusk. If a negative number is passed in, it will return the time of <em>alos</em> (dawn) (subtracting the
 	 *        time from sunrise) and if a positive number is passed in, it will return the time of <em>tzais</em> (dusk)
 	 *        (adding the time to sunset). If 0 is passed in, a null will be returned (since we can't tell if it is sunrise
 	 *        or sunset based).
@@ -3066,7 +3066,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * A method that returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) calculated as 3
 	 * clock hours before {@link #getFixedLocalChatzos()}. Note that there are opinions brought down in Yisrael Vehazmanim
-	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a> and Rav Yitzchal Silber's <a href=
+	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a> and Rav Yitzchak Silber's <a href=
 	 * "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Balalacha</a> that this calculation is a mistake and regular
 	 * <em>chatzos</em> shoud be used for clock-hour calculations as opposed to fixed local <em>chatzos</em>. According to
 	 * these opinions it should be 3 clock hours before regular <em>chatzos</em> as calculated in {@link
@@ -3079,15 +3079,15 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSofZmanTfilaFixedLocal()
 	 *         
 	 * @deprecated This method of calculating <em>sof zman Shma</em> is considered a mistaken understanding of the proper
-	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchal Silber's <a href=
+	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchak Silber's <a href=
 	 *         "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Balalacha</a>. On pages 316-318 he discusses Rav Yisrael
 	 *         Harfenes's calculations and points to his seeming agreement that using fixed local <em>chatzos</em> as the focal
 	 *         point is problematic. See Yisrael Vehazmanim <a href=
 	 *         "https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a>. While the Yisrael Vehazmanim mentions
 	 *         this issue in vol. 1, it was not corrected in the calculations in vol. 3 and other parts of the <em>sefer</em>.
 	 *         A competent rabbinical authority should be consulted before using this <em>zman</em>. Instead, the use of {@link
-	 *         #getSofZmanShma3HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using using 3 fixed
-	 *         clock hours. This will likely be removed in v3.0.
+	 *         #getSofZmanShma3HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using 3 fixed clock hours.
+	 *         This will likely be removed in v3.0.
 	 */
 	@Deprecated // (since="2.4.0", forRemoval=true) // add back once Java 9 is the minimum supported version
 	public Date getSofZmanShmaFixedLocal() {
@@ -3097,7 +3097,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) calculated as 2 hours
 	 * before {@link #getFixedLocalChatzos()}. See the documentation on {@link #getSofZmanShmaFixedLocal()} showing
-	 * differeing opinions on how the <em>zman</em> is calculated. According to many opinions {@link
+	 * differing opinions on how the <em>zman</em> is calculated. According to many opinions {@link
 	 * #getSofZmanTfila2HoursBeforeChatzos()} should be used as opposed to this <em>zman</em>.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman tfila</em>.
@@ -3106,14 +3106,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSofZmanTfila2HoursBeforeChatzos()
 	 *         
 	 * @deprecated This method of calculating <em>sof zman Tfila</em> is considered a mistaken understanding of the proper
-	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchal Silber's <a href=
+	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchak Silber's <a href=
 	 *         "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Balalacha</a>. On pages 316-318 he discusses Rav Yisrael
 	 *         Harfenes's calculations and points to his seeming agreement that using fixed local <em>chatzos</em> as the focal
 	 *         point is problematic. See Yisrael Vehazmanim <a href=
 	 *         "https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a>. While the Yisrael Vehazmanim mentions
 	 *         this issue in vol. 1, it was not corrected in the calculations in vol. 3 and other parts of the <em>sefer</em>.
 	 *         A competent rabbinical authority should be consulted before using this <em>zman</em>. Instead, the use of {@link
-	 *         #getSofZmanTfila2HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using using 2 fixed
+	 *         #getSofZmanTfila2HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using 2 fixed
 	 *         clock hours. This will likely be removed in v3.0.
 	 */
 	@Deprecated // (since="2.4.0", forRemoval=true) // add back once Java 9 is the minimum supported version
@@ -3474,7 +3474,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the latest time one is allowed eating <em>chametz</em> on <em>Erev Pesach</em> according to the
-	 * opinionof the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
+	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos72() 72} minutes before {@link #getSunrise() sunrise}. This time is identical to the
 	 * {@link #getSofZmanTfilaMGA72Minutes() <em>Sof zman tfilah</em> MGA 72 minutes}. This time is 4 {@link #getShaahZmanisMGA()
 	 * <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72() dawn} based on the opinion of the MGA that the day is
@@ -3525,7 +3525,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see ZmanimCalendar#getShaahZmanisGra()
 	 * @return the <code>Date</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
-	 *         the sun does not rise,and one where it does not set, a null will be returned. See detailed explanation on
+	 *         the sun does not rise, and one where it does not set, a null will be returned. See detailed explanation on
 	 *         top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getSofZmanBiurChametzGRA() {
@@ -3594,19 +3594,19 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
 	 * <em>netz amiti</em> (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double)
-	 * elevation adjustment}. This forms the base for the Baal Hatanya's dawn based calculations that are
+	 * elevation adjustment}. This forms the base for the Baal Hatanya's dawn-based calculations that are
 	 * calculated as a dip below the horizon before sunrise.
 	 *
 	 * According to the Baal Hatanya, <em>netz amiti</em>, or true (halachic) sunrise, is when the top of the sun's
 	 * disk is visible at an elevation similar to the mountains of Eretz Yisrael. The time is calculated as the point at which
-	 * the center of the sun's disk is 1.583&deg; below the horizon. This degree based calculation can be found in Rabbi Shalom
+	 * the center of the sun's disk is 1.583&deg; below the horizon. This degree-based calculation can be found in Rabbi Shalom
 	 * DovBer Levine's commentary on The <a href="https://www.chabadlibrary.org/books/pdf/Seder-Hachnosas-Shabbos.pdf">Baal
 	 * Hatanya's Seder Hachnasas Shabbos</a>. From an elevation of 546 meters, the top of <a href=
 	 * "https://en.wikipedia.org/wiki/Mount_Carmel">Har Hacarmel</a>, the sun disappears when it is 1&deg; 35' or 1.583&deg;
 	 * below the sea level horizon. This in turn is based on the Gemara <a href=
 	 * "https://hebrewbooks.org/shas.aspx?mesechta=2&daf=35">Shabbos 35a</a>. There are other opinions brought down by
 	 * Rabbi Levine, including Rabbi Yosef Yitzchok Feigelstock who calculates it as the degrees below the horizon 4 minutes after
-	 * sunset in Yerushalaym (on the equinox). That is brought down as 1.583&deg;. This is identical to the 1&deg; 35' <em>zman</em>
+	 * sunset in Yerushalayim (on the equinox). That is brought down as 1.583&deg;. This is identical to the 1&deg; 35' <em>zman</em>
 	 * and is probably a typo and should be 1.683&deg;. These calculations are used by most <a href=
 	 * "https://en.wikipedia.org/wiki/Chabad">Chabad</a> calendars that use the Baal Hatanya's <em>zmanim</em>. See
 	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
@@ -3632,7 +3632,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
 	 * <em>shkiah amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double)
-	 * elevation adjustment}. This forms the base for the Baal Hatanya's dusk based calculations that are calculated
+	 * elevation adjustment}. This forms the base for the Baal Hatanya's dusk-based calculations that are calculated
 	 * as a dip below the horizon after sunset.
 	 * 
 	 * According to the Baal Hatanya, <em>shkiah amiti</em>, true (<em>halachic</em>) sunset, is when the top of the 
@@ -3766,7 +3766,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @return the <code>Date</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If the calculation
-	 *         can't becomputed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
+	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
 	 *         and one where it does not set, a null will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
@@ -4044,7 +4044,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion
 	 * of the calculation of <em>mincha ketana</em> (the preferred time to recite the <em>mincha prayers</em> according to
 	 * the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others) calculated according
 	 * to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that is 3.5 <em>shaos zmaniyos</em> (solar
@@ -4064,7 +4064,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion
+	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion
 	 * of the calculation of <em>plag hamincha</em>. This method returns <em>plag hamincha</em> calculated according to the
 	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day ends at sunset and is 4.75 <em>shaos
 	 * zmaniyos</em> (solar hours) after {@link #getFixedLocalChatzos() fixed local chatzos}.
