@@ -101,6 +101,9 @@ public class GeoLocation implements Cloneable {
 		if (elevation < 0) {
 			throw new IllegalArgumentException("Elevation cannot be negative");
 		}
+		if (Double.isNaN(elevation) || Double.isInfinite(elevation)) {
+			throw new IllegalArgumentException("Elevation must not be NaN or infinite");
+		}
 		this.elevation = elevation;
 	}
 
