@@ -64,3 +64,5 @@ The .NET port was used to create a desktop app that is available at https://gith
 Disclaimer:
 -----------
 __While I did my best to get accurate results, please double check before relying on these zmanim for <em>halacha lemaaseh</em>__.
+
+[![CodeQL](https://github.com/KosherJava/zmanim/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/KosherJava/zmanim/actions/workflows/codeql-analysis.yml)
