@@ -938,7 +938,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns the molad in Standard Time in Yerushalayim as a Date. The traditional calculation uses local time. This
+	 * Returns the molad in Standard Time in Yerushalayim as a {@link Date}. The traditional calculation uses local time. This
 	 * method subtracts 20.94 minutes (20 minutes and 56.496 seconds) from the local time (Har Habayis with a longitude
 	 * of 35.2354&deg; is 5.2354&deg; away from the %15 timezone longitude) to get to standard time. This method
 	 * intentionally uses standard time and not dailight savings time. Java will implicitly format the time to the
@@ -967,6 +967,80 @@ public class JewishCalendar extends JewishDate {
 		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time
 		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
 		return cal.getTime();
+	}
+
+	/**
+	 * Returns the tekufa in Standard Time in Yerushalayim as a {@link Date}. There are 4 tekufas every solar year
+	 * (Tishrei, Tevet, Nissan, and Tammuz). This method will give you a {@link Date} object if one of these tekufas
+	 * falls on the current day, otherwise, it will return null. Note that the tekufa is based on the hebrew date,
+	 * not the gregorian date. This method intentionally uses standard time and not daylight savings time. Java will
+	 * implicitly format the time to the default (or set) Timezone.
+	 *
+	 * @return the Date representing the moment of the tekufa in Yerushalayim standard time (GMT +2) or null if the tekufa is not today.
+	 * @see #getTekufaHours()
+	 * @see #getTekufaType()
+	 */
+	public Date getTekufaAsDate() {
+		if (getTekufaHours() == null) {
+			return null;
+		}
+		double hours = getTekufaHours() - 6;// take away 6 hours since the getTekufa method gives the time based on the start of the jewish day (6:00pm)
+		int minutes = (int) ((hours - (int) hours) * 60);// take away the hours and get the minutes by multiplying the decimal by 60
+
+		// The tekufa Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will result in the time
+		// being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual time in DST will be done by the date
+		// formatter class used to display the Date.
+		TimeZone yerushalayimStandardTZ = TimeZone.getTimeZone("GMT+2");
+		Calendar cal = Calendar.getInstance(yerushalayimStandardTZ);
+		cal.clear();
+		cal.set(getGregorianYear(), getGregorianMonth(), getGregorianDayOfMonth(), 0, 0, 0);
+		cal.add(Calendar.HOUR_OF_DAY, (int) hours);
+		cal.add(Calendar.MINUTE, minutes);
+
+		return cal.getTime();
+	}
+
+	/**
+	 * Returns the hours of the tekufa if it falls on the current day, otherwise returns null. The tekufa is based on the
+	 * hebrew date, not the gregorian date. Therefore, these hours are based on the start of the jewish day (6:00pm),
+	 * which could be a day before the set gregorian date.
+	 * @return the hours of the tekufa if it falls on the current day, otherwise returns null.
+	 * @see #getTekufaAsDate()
+	 * @see #getTekufaType()
+	 */
+	public Double getTekufaHours() {
+		double INITIAL_TEKUFA_OFFSET = 12.625;// the number of days Tekufas Tishrei occurs before JEWISH_EPOCH
+		double days = getJewishCalendarElapsedDays(getJewishYear()) + getDaysSinceStartOfJewishYear() + INITIAL_TEKUFA_OFFSET - 1;// total days since first Tekufas Tishrei event
+
+		double solarDaysElapsed = days % 365.25;// total days elapsed since start of solar year
+		double tekufaDaysElapsed = solarDaysElapsed % 91.3125;// the number of days that have passed since a tekufa event
+		if (tekufaDaysElapsed > 0 && tekufaDaysElapsed <= 1){// if the tekufa happens in the upcoming 24 hours
+			return ((1.0 - tekufaDaysElapsed) * 24.0) % 24;// rationalize the tekufa event to number of hours since start of jewish day
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the type of the tekufa if it falls on the current day, otherwise returns -1. The tekufa is based on the
+	 * hebrew date, not the gregorian date. There are 4 tekufas every solar year (Tishrei, Tevet, Nissan, and Tammuz).
+	 * This method will return 0 for Tishrei, 1 for Tevet, 2 for Nissan, and 3 for Tammuz.
+	 * @return the type of the tekufa if it falls on the current day, otherwise returns -1.
+	 * @see #getTekufaAsDate()
+	 * @see #getTekufaHours()
+	 */
+	public int getTekufaType() {
+		double INITIAL_TEKUFA_OFFSET = 12.625;// the number of days Tekufas Tishrei occurs before JEWISH_EPOCH
+		double days = getJewishCalendarElapsedDays(getJewishYear()) + getDaysSinceStartOfJewishYear() + INITIAL_TEKUFA_OFFSET - 1;// total days since first Tekufas Tishrei event
+
+		double solarDaysElapsed = days % 365.25;// total days elapsed since start of solar year
+		int currentTekufaNumber = (int) (solarDaysElapsed / 91.3125);// the current quarter of the solar year
+		double tekufaDaysElapsed = solarDaysElapsed % 91.3125;// the number of days that have passed since a tekufa event
+		if (tekufaDaysElapsed > 0 && tekufaDaysElapsed <= 1){// if the tekufa happens in the upcoming 24 hours
+			return currentTekufaNumber;//0 for Tishrei, 1 for Tevet, 2, for Nissan, 3 for Tammuz
+		} else {
+			return -1;
+		}
 	}
 
 	/**
