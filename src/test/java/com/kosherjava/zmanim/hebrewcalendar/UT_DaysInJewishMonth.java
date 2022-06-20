@@ -14,7 +14,6 @@ public class UT_DaysInJewishMonth {
 
 	@Test
 	public void daysInMonthsInHaserYear() {
-
 		assertHaser(5773);
 		assertHaser(5777);
 		assertHaser(5781);
@@ -26,7 +25,6 @@ public class UT_DaysInJewishMonth {
 
 	@Test
 	public void daysInMonthsInQesidrahYear() {
-
 		assertQesidrah(5769);
 		assertQesidrah(5772);
 		assertQesidrah(5778);
@@ -40,7 +38,6 @@ public class UT_DaysInJewishMonth {
 
 	@Test
 	public void daysInMonthsInShalemYear() {
-
 		assertShalem(5770);
 		assertShalem(5780);
 		assertShalem(5783);
@@ -80,8 +77,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong(  ));
-		Assert.assertFalse(jewishDate.isKislevShort(  ));
+		Assert.assertFalse(jewishDate.isCheshvanLong());
+		Assert.assertFalse(jewishDate.isKislevShort());
 	}
 
 
@@ -90,7 +87,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertQesidrah(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		Assert.assertTrue(jewishDate.isJewishLeapYear());
 	}
 
 
@@ -98,8 +95,8 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertTrue(jewishDate.isCheshvanLong(  ));
-		Assert.assertFalse(jewishDate.isKislevShort(  ));
+		Assert.assertTrue(jewishDate.isCheshvanLong());
+		Assert.assertFalse(jewishDate.isKislevShort());
 	}
 
 
@@ -108,7 +105,7 @@ public class UT_DaysInJewishMonth {
 		jewishDate.setJewishYear(year);
 
 		assertShalem(year);
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		Assert.assertTrue(jewishDate.isJewishLeapYear());
 	}
 
 } // End of UT_DaysInJewishMonth class

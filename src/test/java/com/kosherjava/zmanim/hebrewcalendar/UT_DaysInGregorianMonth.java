@@ -4,6 +4,8 @@
 
 package com.kosherjava.zmanim.hebrewcalendar;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.*;
 
 import java.util.Calendar;
@@ -18,7 +20,6 @@ public class UT_DaysInGregorianMonth {
 
 	@Test
 	public void testDaysInMonth() {
-
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
@@ -33,7 +34,6 @@ public class UT_DaysInGregorianMonth {
 
 	@Test
 	public void testDaysInMonthLeapYear() {
-
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
@@ -47,7 +47,6 @@ public class UT_DaysInGregorianMonth {
 
 	@Test
 	public void testDaysInMonth100Year() {
-
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
@@ -61,7 +60,6 @@ public class UT_DaysInGregorianMonth {
 
 	@Test
 	public void testDaysInMonth400Year() {
-
 		JewishDate hebrewDate = new JewishDate();
 
 		Calendar cal = Calendar.getInstance();
@@ -77,19 +75,18 @@ public class UT_DaysInGregorianMonth {
 		boolean     febIsLeap,
 		JewishDate  hebrewDate
 	) {
-
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(1));
-		Assert.assertEquals(febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth(2));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(3));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(4));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(5));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(6));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(7));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(8));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(9));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(10));
-		Assert.assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(11));
-		Assert.assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(12));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.JANUARY));
+		assertEquals(febIsLeap ? 29 : 28, hebrewDate.getLastDayOfGregorianMonth(Calendar.FEBRUARY));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.MARCH));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.APRIL));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.MAY));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.JUNE));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.JULY));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.AUGUST));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.SEPTEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.OCTOBER));
+		assertEquals(30, hebrewDate.getLastDayOfGregorianMonth(Calendar.NOVEMBER));
+		assertEquals(31, hebrewDate.getLastDayOfGregorianMonth(Calendar.DECEMBER));
 	}
 
 
