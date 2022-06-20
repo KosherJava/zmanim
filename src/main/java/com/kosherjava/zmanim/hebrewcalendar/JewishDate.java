@@ -562,7 +562,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Converts the {@link JewishDate#NISSAN} based constants used by this class to numeric month starting from
-	 * {@link JewishDate#TISHREI}. This is required for Molad claculations.
+	 * {@link JewishDate#TISHREI}. This is required for Molad calculations.
 	 * 
 	 * @param year
 	 *            The Jewish year
@@ -599,7 +599,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            minutes and 1 chelek in the case of 793/TaShTzaG)
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
+	 *             if a Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
 	 *             leap year), the day of month is &lt; 1 or &gt; 30, an hour &lt; 0 or &gt; 23, a minute &lt; 0 or &gt; 59 or
 	 *             chalakim &lt; 0 or &gt; 17. For larger a larger number of chalakim such as 793 (TaShTzaG) break the chalakim
 	 *             into minutes (18 chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG).
@@ -698,7 +698,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private static void validateGregorianYear(int year) {
 		if (year < 1) {
-			throw new IllegalArgumentException("Years < 1 can't be claculated. " + year + " is invalid.");
+			throw new IllegalArgumentException("Years < 1 can't be calculated. " + year + " is invalid.");
 		}
 	}
 
@@ -994,7 +994,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Date Date} paremeter.
+	 * A constructor that initializes the date to the {@link java.util.Date Date} parameter.
 	 * 
 	 * @param date
 	 *            the <code>Date</code> to set the calendar to
@@ -1006,7 +1006,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} paremeter.
+	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
 	 * 
 	 * @param calendar
 	 *            the <code>Calendar</code> to set the calendar to
@@ -1018,7 +1018,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.time.LocalDate LocalDate} paremeter.
+	 * A constructor that initializes the date to the {@link java.time.LocalDate LocalDate} parameter.
 	 *
 	 * @param localDate
 	 *            the <code>LocalDate</code> to set the calendar to
@@ -1137,7 +1137,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish day of month. valid values are 1-30. If the day of month is set to 30 for a month that only
 	 *            has 29 days, the day will be set as 29.
 	 * @throws IllegalArgumentException
-	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
+	 *             if a Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
 	 *             leap year) or the day of month is &lt; 1 or &gt; 30 is passed in
 	 */
 	public void setJewishDate(int year, int month, int dayOfMonth) {
@@ -1166,7 +1166,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            used for larger numbers.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if a A Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
+	 *             if a Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a
 	 *             leap year), the day of month is &lt; 1 or &gt; 30, an hour &lt; 0 or &gt; 23, a minute &lt; 0 &gt; 59 or chalakim &lt; 0 &gt;
 	 *             17. For larger a larger number of chalakim such as 793 (TaShTzaG) break the chalakim into minutes (18
 	 *             chalakim per minutes, so it would be 44 minutes and 1 chelek in the case of 793 (TaShTzaG).
@@ -1434,7 +1434,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns the Gregotian year.
+	 * Returns the Gregorian year.
 	 * 
 	 * @return the Gregorian year
 	 */
@@ -1540,7 +1540,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish year
 	 * @throws IllegalArgumentException
 	 *             if a year of &lt; 3761 is passed in. The same will happen if the year is 3761 and the month and day
-	 *             previously set are &lt; 18 Teves (preior to Jan 1, 1 AD)
+	 *             previously set are &lt; 18 Teves (prior to Jan 1, 1 AD)
 	 */
 	public void setJewishYear(int year) {
 		setJewishDate(year, jewishMonth, jewishDay);

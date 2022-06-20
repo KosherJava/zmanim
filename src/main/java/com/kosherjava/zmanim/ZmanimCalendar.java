@@ -156,7 +156,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #setCandleLightingOffset(double)} and retrieved by the {@link #getCandleLightingOffset()}.
 	 */
 	private double candleLightingOffset = 18;
-	
+
 	/**
 	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false (the
 	 * default), or elevation adjusted {@link AstronomicalCalendar#getSunrise()} if it is true. This allows relevant <em>zmanim</em>
@@ -168,7 +168,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	protected Date getElevationAdjustedSunrise() {
 		if(isUseElevation()) {
-			return super.getSunrise();
+			return getSunrise();
 		}
 		return getSeaLevelSunrise();
 	}
@@ -184,7 +184,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	protected Date getElevationAdjustedSunset() {
 		if(isUseElevation()) {
-			return super.getSunset();
+			return getSunset();
 		}
 		return getSeaLevelSunset();
 	}
@@ -500,7 +500,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 
 	 * @param startOfDay
 	 *            the start of day for calculating <em>samuch lemincha ketana</em>. This can be sunrise or any <em>alos</em>
-	 *            passed to to this method.
+	 *            passed to this method.
 	 * @param endOfDay
 	 *            the end of day for calculating <em>samuch lemincha ketana</em>. This can be sunset or any <em>tzais</em>
 	 *            passed to this method.
@@ -615,7 +615,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * A method that returns a <em>shaah zmanis</em> ({@link #getTemporalHour(Date, Date) temporal hour}) according to
 	 * the opinion of the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>. This calculation divides
-	 * the day based on the opinion of the <em>GRA</em> that the day runs from from {@link #getSeaLevelSunrise() sea
+	 * the day based on the opinion of the <em>GRA</em> that the day runs from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunrise sea level sunset} or {@link #getSunrise() sunrise} to
 	 * {@link #getSunset() sunset} (depending on the {@link #isUseElevation()} setting). The day is split into 12 equal
 	 * parts with each one being a <em>shaah zmanis</em>. This method is similar to {@link #getTemporalHour}, but can

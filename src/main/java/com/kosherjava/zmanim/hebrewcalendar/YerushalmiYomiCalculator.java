@@ -21,7 +21,7 @@ import java.util.GregorianCalendar;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
- * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
+ * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the given date.
  * 
  * @author &copy; elihaidv
  * @author &copy; Eliyahu Hershfeld 2017 - 2021

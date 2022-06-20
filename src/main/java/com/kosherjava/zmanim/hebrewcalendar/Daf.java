@@ -159,7 +159,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Setter method to allow overriding of the default list of masechtos transliterated into into Latin chars. The default
+	 * Setter method to allow overriding of the default list of masechtos transliterated into Latin chars. The default
 	 * uses Ashkenazi American English transliteration.
 	 * 
 	 * @param masechtosBavliTransliterated the list of transliterated Bavli masechtos to set.
@@ -209,7 +209,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Setter method to allow overriding of the default list of Yerushalmi masechtos transliterated into into Latin chars.
+	 * Setter method to allow overriding of the default list of Yerushalmi masechtos transliterated into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @param masechtosYerushalmiTransliterated the list of transliterated Yerushalmi masechtos to set.
