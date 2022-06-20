@@ -325,8 +325,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunHourAngleAtSunrise(double lat, double solarDec, double zenith) {
 		double latRad = Math.toRadians(lat);
 		double sdRad = Math.toRadians(solarDec);
+		double zRad = Math.toRadians(zenith);
 
-		return (Math.acos(Math.cos(Math.toRadians(zenith)) / (Math.cos(latRad) * Math.cos(sdRad)) - Math.tan(latRad)
+		return (Math.acos(Math.cos(zRad) / (Math.cos(latRad) * Math.cos(sdRad)) - Math.tan(latRad)
 				* Math.tan(sdRad))); // in radians
 	}
 
