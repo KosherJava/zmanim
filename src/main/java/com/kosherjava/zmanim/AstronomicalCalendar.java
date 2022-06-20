@@ -17,7 +17,6 @@ package com.kosherjava.zmanim;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
@@ -92,6 +91,9 @@ public class AstronomicalCalendar implements Cloneable {
 	/** constant for milliseconds in an hour (3,600,000) */
 	static final long HOUR_MILLIS = MINUTE_MILLIS * 60;
 
+	/** Invalid date. */
+	public static final long NEVER = Long.MIN_VALUE;
+
 	/**
 	 * The Java Calendar encapsulated by this class to track the current date used by the class
 	 */
@@ -123,7 +125,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #getSeaLevelSunrise()
 	 * @see AstronomicalCalendar#getUTCSunrise
 	 */
-	public Date getSunrise() {
+	public Long getSunrise() {
 		double sunrise = getUTCSunrise(GEOMETRIC_ZENITH);
 		if (Double.isNaN(sunrise)) {
 			return null;
@@ -145,7 +147,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
 	 * @see #getSeaLevelSunset()
 	 */
-	public Date getSeaLevelSunrise() {
+	public Long getSeaLevelSunrise() {
 		double sunrise = getUTCSeaLevelSunrise(GEOMETRIC_ZENITH);
 		if (Double.isNaN(sunrise)) {
 			return null;
@@ -162,7 +164,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         can't be computed, null will be returned. See detailed explanation on top of the page.
 	 * @see #CIVIL_ZENITH
 	 */
-	public Date getBeginCivilTwilight() {
+	public Long getBeginCivilTwilight() {
 		return getSunriseOffsetByDegrees(CIVIL_ZENITH);
 	}
 
@@ -175,7 +177,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         calculation can't be computed null will be returned. See detailed explanation on top of the page.
 	 * @see #NAUTICAL_ZENITH
 	 */
-	public Date getBeginNauticalTwilight() {
+	public Long getBeginNauticalTwilight() {
 		return getSunriseOffsetByDegrees(NAUTICAL_ZENITH);
 	}
 
@@ -188,7 +190,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         calculation can't be computed, null will be returned. See detailed explanation on top of the page.
 	 * @see #ASTRONOMICAL_ZENITH
 	 */
-	public Date getBeginAstronomicalTwilight() {
+	public Long getBeginAstronomicalTwilight() {
 		return getSunriseOffsetByDegrees(ASTRONOMICAL_ZENITH);
 	}
 
@@ -211,7 +213,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #getSeaLevelSunset()
 	 * @see AstronomicalCalendar#getUTCSunset
 	 */
-	public Date getSunset() {
+	public Long getSunset() {
 		double sunset = getUTCSunset(GEOMETRIC_ZENITH);
 		if (Double.isNaN(sunset)) {
 			return null;
@@ -232,7 +234,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getSunset
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset 2see {@link #getSunset()}
 	 */
-	public Date getSeaLevelSunset() {
+	public Long getSeaLevelSunset() {
 		double sunset = getUTCSeaLevelSunset(GEOMETRIC_ZENITH);
 		if (Double.isNaN(sunset)) {
 			return null;
@@ -249,7 +251,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         the calculation can't be computed, null will be returned. See detailed explanation on top of the page.
 	 * @see #CIVIL_ZENITH
 	 */
-	public Date getEndCivilTwilight() {
+	public Long getEndCivilTwilight() {
 		return getSunsetOffsetByDegrees(CIVIL_ZENITH);
 	}
 
@@ -261,7 +263,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         page.
 	 * @see #NAUTICAL_ZENITH
 	 */
-	public Date getEndNauticalTwilight() {
+	public Long getEndNauticalTwilight() {
 		return getSunsetOffsetByDegrees(NAUTICAL_ZENITH);
 	}
 
@@ -273,13 +275,13 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         of the page.
 	 * @see #ASTRONOMICAL_ZENITH
 	 */
-	public Date getEndAstronomicalTwilight() {
+	public Long getEndAstronomicalTwilight() {
 		return getSunsetOffsetByDegrees(ASTRONOMICAL_ZENITH);
 	}
 
 	/**
 	 * A utility method that returns a date offset by the offset time passed in as a parameter. This method casts the
-	 * offset as a <code>long</code> and calls {@link #getTimeOffset(Date, long)}.
+	 * offset as a <code>long</code> and calls {@link #getTimeOffset(Long, long)}.
 	 * 
 	 * @param time
 	 *            the start time
@@ -287,7 +289,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            the offset in milliseconds to add to the time
 	 * @return the {@link java.util.Date}with the offset added to it
 	 */
-	public static Date getTimeOffset(Date time, double offset) {
+	public static Long getTimeOffset(Long time, double offset) {
 		return getTimeOffset(time, (long) offset);
 	}
 
@@ -303,11 +305,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            the offset in milliseconds to add to the time.
 	 * @return the {@link java.util.Date} with the offset in milliseconds added to it
 	 */
-	public static Date getTimeOffset(Date time, long offset) {
-		if (time == null || offset == Long.MIN_VALUE) {
+	public static Long getTimeOffset(Long time, long offset) {
+		if (time == null || offset == NEVER) {
 			return null;
 		}
-		return new Date(time.getTime() + offset);
+		return time + offset;
 	}
 
 	/**
@@ -325,7 +327,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         not rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
 	 *         page.
 	 */
-	public Date getSunriseOffsetByDegrees(double offsetZenith) {
+	public Long getSunriseOffsetByDegrees(double offsetZenith) {
 		double dawn = getUTCSunrise(offsetZenith);
 		if (Double.isNaN(dawn)) {
 			return null;
@@ -348,7 +350,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
 	 *         page.
 	 */
-	public Date getSunsetOffsetByDegrees(double offsetZenith) {
+	public Long getSunsetOffsetByDegrees(double offsetZenith) {
 		double sunset = getUTCSunset(offsetZenith);
 		if (Double.isNaN(sunset)) {
 			return null;
@@ -454,12 +456,12 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @see #getSunrise()
 	 * @see #getSunset()
-	 * @see #getTemporalHour(Date, Date)
+	 * @see #getTemporalHour(Long, Long)
 	 * 
 	 * @return the <code>long</code> millisecond length of a temporal hour. If the calculation can't be computed,
 	 *         {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the page.
 	 * 
-	 * @see #getTemporalHour(Date, Date)
+	 * @see #getTemporalHour(Long, Long)
 	 */
 	public long getTemporalHour() {
 		return getTemporalHour(getSeaLevelSunrise(), getSeaLevelSunset());
@@ -481,11 +483,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @see #getTemporalHour()
 	 */
-	public long getTemporalHour(Date startOfday, Date endOfDay) {
+	public long getTemporalHour(Long startOfday, Long endOfDay) {
 		if (startOfday == null || endOfDay == null) {
-			return Long.MIN_VALUE;
+			return NEVER;
 		}
-		return (endOfDay.getTime() - startOfday.getTime()) / 12;
+		return (endOfDay - startOfday) / 12;
 	}
 
 	/**
@@ -498,10 +500,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, null will be returned. See detailed explanation on top of the page.
-	 * @see #getSunTransit(Date, Date)
+	 * @see #getSunTransit(Long, Long)
 	 * @see #getTemporalHour()
 	 */
-	public Date getSunTransit() {
+	public Long getSunTransit() {
 		return getSunTransit(getSeaLevelSunrise(), getSeaLevelSunset());
 	}
 
@@ -523,7 +525,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, null will be returned. See detailed explanation on top of the page.
 	 */
-	public Date getSunTransit(Date startOfDay, Date endOfDay) {
+	public Long getSunTransit(Long startOfDay, Long endOfDay) {
 		long temporalHour = getTemporalHour(startOfDay, endOfDay);
 		return getTimeOffset(startOfDay, temporalHour * 6);
 	}
@@ -537,7 +539,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @param isSunrise true if the 
 	 * @return The Date.
 	 */
-	protected Date getDateFromTime(double time, boolean isSunrise) {
+	protected Long getDateFromTime(double time, boolean isSunrise) {
 		if (Double.isNaN(time)) {
 			return null;
 		}
@@ -570,7 +572,7 @@ public class AstronomicalCalendar implements Cloneable {
 		cal.set(Calendar.MINUTE, minutes);
 		cal.set(Calendar.SECOND, seconds);
 		cal.set(Calendar.MILLISECOND, (int) (calculatedTime * 1000));
-		return cal.getTime();
+		return cal.getTimeInMillis();
 	}
 
 	/**
@@ -585,14 +587,14 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #getSunsetSolarDipFromOffset(double)
 	 */
 	public double getSunriseSolarDipFromOffset(double minutes) {
-		Date offsetByDegrees = getSeaLevelSunrise();
-		Date offsetByTime = getTimeOffset(getSeaLevelSunrise(), -(minutes * MINUTE_MILLIS));
+		Long offsetByDegrees = getSeaLevelSunrise();
+		Long offsetByTime = getTimeOffset(getSeaLevelSunrise(), -(minutes * MINUTE_MILLIS));
 
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.0001");
 
-		while (offsetByDegrees == null || ((minutes < 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
-				(minutes > 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
+		while (offsetByDegrees == null || ((minutes < 0.0 && offsetByDegrees < offsetByTime) ||
+				(minutes > 0.0 && offsetByDegrees > offsetByTime))) {
 			if(minutes > 0.0) {
 				degrees = degrees.add(incrementor);
 			} else {
@@ -615,12 +617,12 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #getSunriseSolarDipFromOffset(double)
 	 */
 	public double getSunsetSolarDipFromOffset(double minutes) {
-		Date offsetByDegrees = getSeaLevelSunset();
-		Date offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
+		Long offsetByDegrees = getSeaLevelSunset();
+		Long offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.001");
-		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
-				(minutes < 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
+		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees < offsetByTime) ||
+				(minutes < 0.0 && offsetByDegrees > offsetByTime))) {
 			if(minutes > 0.0) {
 				degrees = degrees.add(incrementor);
 			} else {
