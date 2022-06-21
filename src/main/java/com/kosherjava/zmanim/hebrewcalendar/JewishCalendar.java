@@ -946,7 +946,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the Date representing the moment of the molad in Yerushalayim standard time (GMT + 2)
 	 */
-	public Date getMoladAsDate() {
+	public Long getMoladAsDate() {
 		JewishDate molad = getMolad();
 		String locationName = "Jerusalem, Israel";
 
@@ -966,7 +966,7 @@ public class JewishCalendar extends JewishDate {
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
 		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time
 		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
-		return cal.getTime();
+		return cal.getTimeInMillis();
 	}
 
 	/**
@@ -979,12 +979,12 @@ public class JewishCalendar extends JewishDate {
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana3Days()
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana3Days(Date, Date)
 	 */
-	public Date getTchilasZmanKidushLevana3Days() {
-		Date molad = getMoladAsDate();
+	public Long getTchilasZmanKidushLevana3Days() {
+		Long molad = getMoladAsDate();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
+		cal.setTimeInMillis(molad);
 		cal.add(Calendar.HOUR, 72); // 3 days after the molad
-		return cal.getTime();
+		return cal.getTimeInMillis();
 	}
 
 	/**
@@ -999,12 +999,12 @@ public class JewishCalendar extends JewishDate {
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana7Days()
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana7Days(Date, Date)
 	 */
-	public Date getTchilasZmanKidushLevana7Days() {
-		Date molad = getMoladAsDate();
+	public Long getTchilasZmanKidushLevana7Days() {
+		Long molad = getMoladAsDate();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
+		cal.setTimeInMillis(molad);
 		cal.add(Calendar.HOUR, 168); // 7 days after the molad
-		return cal.getTime();
+		return cal.getTimeInMillis();
 	}
 
 	/**
@@ -1021,10 +1021,10 @@ public class JewishCalendar extends JewishDate {
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
 	 */
-	public Date getSofZmanKidushLevanaBetweenMoldos() {
-		Date molad = getMoladAsDate();
+	public Long getSofZmanKidushLevanaBetweenMoldos() {
+		Long molad = getMoladAsDate();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
+		cal.setTimeInMillis(molad);
 		// add half the time between molad and molad (half of 29 days, 12 hours and 793 chalakim (44 minutes, 3.3
 		// seconds), or 14 days, 18 hours, 22 minutes and 666 milliseconds). Add it as hours, not days, to avoid
 		// DST/ST crossover issues.
@@ -1032,7 +1032,7 @@ public class JewishCalendar extends JewishDate {
 		cal.add(Calendar.MINUTE, 22);
 		cal.add(Calendar.SECOND, 1);
 		cal.add(Calendar.MILLISECOND, 666);
-		return cal.getTime();
+		return cal.getTimeInMillis();
 	}
 
 	/**
@@ -1052,12 +1052,12 @@ public class JewishCalendar extends JewishDate {
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevana15Days()
 	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevana15Days(Date, Date)
 	 */
-	public Date getSofZmanKidushLevana15Days() {
-		Date molad = getMoladAsDate();
+	public Long getSofZmanKidushLevana15Days() {
+		Long molad = getMoladAsDate();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
+		cal.setTimeInMillis(molad);
 		cal.add(Calendar.HOUR, 24 * 15); //15 days after the molad. Add it as hours, not days, to avoid DST/ST crossover issues.
-		return cal.getTime();
+		return cal.getTimeInMillis();
 	}
 
 	/**
