@@ -2843,7 +2843,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	private Long getZmanisBasedOffset(double hours) {
 		long shaahZmanis = getShaahZmanisGra();
-		if (shaahZmanis == Long.MIN_VALUE || hours == 0) {
+		if (shaahZmanis == NEVER || hours == 0) {
 			return null;
 		}
 

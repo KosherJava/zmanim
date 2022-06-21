@@ -15,6 +15,8 @@
  */
 package com.kosherjava.zmanim.util;
 
+import static com.kosherjava.zmanim.AstronomicalCalendar.NEVER;
+
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -471,13 +473,13 @@ public class ZmanimFormatter {
 						// otherList.add("<" + tagName + " xs:nil=\"true\" />");
 					} else if (value instanceof Date) {
 						dateList.add(new Zman((Date) value, tagName));
-					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
-						if (((Long) value).longValue() == Long.MIN_VALUE) {
+					} else if (value instanceof Number) {// shaah zmanis
+						if (((Number) value).longValue() == NEVER) {
 							otherList.add("<" + tagName + ">N/A</" + tagName + ">");
 							// TODO: instead of N/A, consider return proper xs:nil.
 							// otherList.add("<" + tagName + " xs:nil=\"true\" />");
 						} else {
-							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
+							durationList.add(new Zman(((Number) value).longValue(), tagName));
 						}
 					} else { // will probably never enter this block, but is present to be future proof
 						otherList.add("<" + tagName + ">" + value + "</" + tagName + ">");
@@ -621,11 +623,11 @@ public class ZmanimFormatter {
 						otherList.add("\"" + tagName + "\":\"N/A\",");
 					} else if (value instanceof Date) {
 						dateList.add(new Zman((Date) value, tagName));
-					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
-						if (((Long) value).longValue() == Long.MIN_VALUE) {
+					} else if (value instanceof Number) {// shaah zmanis
+						if (((Number) value).longValue() == NEVER) {
 							otherList.add("\"" + tagName + "\":\"N/A\"");
 						} else {
-							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
+							durationList.add(new Zman(((Number) value).longValue(), tagName));
 						}
 					} else { // will probably never enter this block, but is present to be future proof
 						otherList.add("\"" + tagName + "\":\"" + value + "\",");
