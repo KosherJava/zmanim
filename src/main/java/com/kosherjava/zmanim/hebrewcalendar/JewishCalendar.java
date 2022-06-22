@@ -941,7 +941,7 @@ public class JewishCalendar extends JewishDate {
 	 * Returns the molad in Standard Time in Yerushalayim as a Date. The traditional calculation uses local time. This
 	 * method subtracts 20.94 minutes (20 minutes and 56.496 seconds) from the local time (Har Habayis with a longitude
 	 * of 35.2354&deg; is 5.2354&deg; away from the %15 timezone longitude) to get to standard time. This method
-	 * intentionally uses standard time and not dailight savings time. Java will implicitly format the time to the
+	 * intentionally uses standard time and not daylight savings time. Java will implicitly format the time to the
 	 * default (or set) Timezone.
 	 * 
 	 * @return the Date representing the moment of the molad in Yerushalayim standard time (GMT + 2)

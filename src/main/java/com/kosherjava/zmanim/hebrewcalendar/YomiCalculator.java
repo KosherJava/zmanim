@@ -31,7 +31,7 @@ public class YomiCalculator {
 	 * The start date of the first Daf Yomi Bavli cycle of September 11, 1923 / Rosh Hashana 5684.
 	 */
 	private static final Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
-	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for claculations.*/
+	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for calculations.*/
 	private static final int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
 	/**
 	 * The date that the pagination for the Daf Yomi <em>Maseches Shekalim</em> changed to use the commonly used Vilna

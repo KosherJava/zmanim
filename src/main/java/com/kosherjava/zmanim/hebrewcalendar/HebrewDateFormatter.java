@@ -576,7 +576,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Setter method to allow overriding of the default list of months transliterated into into Latin chars. The default
+	 * Setter method to allow overriding of the default list of months transliterated into Latin chars. The default
 	 * uses Ashkenazi American English transliteration.
 	 * 
 	 * @param transliteratedMonths
@@ -1005,7 +1005,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Setter method to allow overriding of the default list of parshiyos transliterated into into Latin chars. The
+	 * Setter method to allow overriding of the default list of parshiyos transliterated into Latin chars. The
 	 * default uses Ashkenazi American English transliteration.
 	 * 
 	 * @param transliteratedParshaMap
