@@ -662,7 +662,11 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
 	public long getShaahZmanisAteretTorah() {
-		return getTemporalHour(getAlos72Zmanis(), getTzaisAteretTorah());
+		ShaahZmanis shaahZmanisTypePrevious = shaahZmanisType;
+		setShaahZmanisType(ShaahZmanis.GRA);
+		long result = getTemporalHour(getAlos72Zmanis(), getTzaisAteretTorah());
+		setShaahZmanisType(shaahZmanisTypePrevious);
+		return result;
 	}
 
 	/**
@@ -2843,7 +2847,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         or sunset based. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	private Date getZmanisBasedOffset(double hours) {
-		long shaahZmanis = getShaahZmanisGra();
+		long shaahZmanis = getShaahZmanis();
 		if (shaahZmanis == Long.MIN_VALUE || hours == 0) {
 			return null;
 		}
@@ -4152,5 +4156,35 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getSamuchLeMinchaKetana72Minutes() {
 		return getSamuchLeMinchaKetana(getAlos72(), getTzais72());
+	}
+
+	@Override
+	public long getShaahZmanis() {
+		switch (shaahZmanisType) {
+			case ATERET:
+				return getShaahZmanisAteretTorah();
+			case BAAL_HATANYA:
+				return getShaahZmanisBaalHatanya();
+			case MINUTES_120:
+				return getShaahZmanis120Minutes();
+			case DEGREES_16POINT1:
+				return getShaahZmanis16Point1Degrees();
+			case DEGREES_18:
+				return getShaahZmanis18Degrees();
+			case DEGREES_19POINT8:
+				return getShaahZmanis19Point8Degrees();
+			case DEGREES_26:
+				return getShaahZmanis26Degrees();
+			case MINUTES_60:
+				return getShaahZmanis60Minutes();
+			case MINUTES_72:
+				return getShaahZmanis72Minutes();
+			case MINUTES_90:
+				return getShaahZmanis90Minutes();
+			case MINUTES_96:
+				return getShaahZmanis96Minutes();
+			default:
+				return super.getShaahZmanis();
+		}
 	}
 }

@@ -157,6 +157,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	private double candleLightingOffset = 18;
 
+	protected ShaahZmanis shaahZmanisType = ShaahZmanis.GRA;
+
 	/**
 	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false (the
 	 * default), or elevation adjusted {@link AstronomicalCalendar#getSunrise()} if it is true. This allows relevant <em>zmanim</em>
@@ -760,5 +762,29 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public Date getShaahZmanisBasedZman(Date startOfDay, Date endOfDay, double hours) {
 		long shaahZmanis = getTemporalHour(startOfDay, endOfDay);
 		return getTimeOffset(startOfDay, shaahZmanis * hours);
+	}
+
+	/**
+	 * A method that returns a <em>shaah zmanis</em> ( {@link #getTemporalHour(Date, Date) temporal hour}).
+	 *
+	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>.
+	 * @see #getShaahZmanisGra()
+	 */
+	public long getShaahZmanis() {
+		switch (shaahZmanisType) {
+			case MGA:
+				return getShaahZmanisMGA();
+			case GRA:
+			default:
+				return getShaahZmanisGra();
+		}
+	}
+
+	/**
+	 * Set the type of <em>shaah zmanis</em>.
+	 * @param type the type.
+	 */
+	public void setShaahZmanisType(ShaahZmanis type) {
+		shaahZmanisType = type;
 	}
 }
