@@ -13,7 +13,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.kosherjava.zmanim.ComplexZmanimCalendar;
+import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
+import com.kosherjava.zmanim.util.NOAACalculator;
 import com.kosherjava.zmanim.util.SunTimesCalculator;
 
 public class ZmanimUnitTests {
@@ -74,12 +76,19 @@ public class ZmanimUnitTests {
 
     @Test
     public void dawn_NewYork() {
+        AstronomicalCalculator calculator = new SunTimesCalculator();
+        dawn_NewYork(calculator);
+        calculator = new NOAACalculator();
+        dawn_NewYork(calculator);
+    }
+
+    private void dawn_NewYork(AstronomicalCalculator calculator) {
         // New York, USA, 2021-June
         TimeZone tz = TimeZone.getTimeZone("America/New_York");
         Calendar cal = Calendar.getInstance(tz);
         GeoLocation location = new GeoLocation("test", 40.7, -74.0, 10.0, tz);
         ComplexZmanimCalendar zcal = new ComplexZmanimCalendar(location);
-        zcal.setAstronomicalCalculator(new SunTimesCalculator());
+        zcal.setAstronomicalCalculator(calculator);
         zcal.setUseElevation(true);
 
         Date date;
