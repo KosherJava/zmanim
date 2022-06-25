@@ -226,26 +226,22 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 */
 	private static double getTimeUTC(Calendar calendar, GeoLocation geoLocation, double zenith, boolean isSunrise) {
 		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
-		double sunMeanAnomaly = getMeanAnomaly(dayOfYear, geoLocation.getLongitude(), isSunrise);
-		double sunTrueLong = getSunTrueLongitude(sunMeanAnomaly);
-		double cosLocalHourAngle = getCosLocalHourAngle(sunTrueLong, geoLocation.getLatitude(), zenith);
+		double latitude = geoLocation.getLatitude();
+		double longitude = geoLocation.getLongitude();
 
-		double hourAngle;
-		if (isSunrise) {
-			hourAngle = 360.0 - acosDeg(cosLocalHourAngle);
-		} else { // sunset
-			hourAngle = acosDeg(cosLocalHourAngle);
-		}
+		double hourAngle = getHourAngle(dayOfYear, latitude, longitude, zenith, isSunrise);
 		if (Double.isNaN(hourAngle)) {
-			hourAngle = interpolateHourAngle(calendar, geoLocation, zenith, isSunrise);
+			hourAngle = interpolateHourAngle(dayOfYear, geoLocation, zenith, isSunrise);
 			if (Double.isNaN(hourAngle)) return Double.NaN;
 		}
 		double localHour = hourAngle / DEG_PER_HOUR;
 
+		double sunMeanAnomaly = getMeanAnomaly(dayOfYear, longitude, isSunrise);
+		double sunTrueLong = getSunTrueLongitude(sunMeanAnomaly);
 		double sunRightAscensionHours = getSunRightAscensionHours(sunTrueLong);
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
-				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
-		double processedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
+				getApproxTimeDays(dayOfYear, getHoursFromMeridian(longitude), isSunrise));
+		double processedTime = localMeanTime - getHoursFromMeridian(longitude);
 		while (processedTime < 0.0) {
 			processedTime += 24.0;
 		}
@@ -255,11 +251,17 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		return processedTime;
 	}
 
+	private static double getHourAngle(int dayOfYear, double latitude, double longitude, double zenith, boolean isSunrise) {
+		double sunMeanAnomaly = getMeanAnomaly(dayOfYear, longitude, isSunrise);
+		double sunTrueLong = getSunTrueLongitude(sunMeanAnomaly);
+		double cosLocalHourAngle = getCosLocalHourAngle(sunTrueLong, latitude, zenith);
+		return isSunrise ? (360.0 - acosDeg(cosLocalHourAngle)) : acosDeg(cosLocalHourAngle);
+	}
+
 	/**
 	 * Use linear interpolation to calculate a missing angle.
 	 */
-	private static double interpolateHourAngle(Calendar calendar, GeoLocation geoLocation, double zenith, boolean isSunrise) {
-		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+	private static double interpolateHourAngle(int dayOfYear, GeoLocation geoLocation, double zenith, boolean isSunrise) {
 		double latitude = geoLocation.getLatitude();
 		double longitude = geoLocation.getLongitude();
 		double hourAngle;
@@ -271,15 +273,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		int d = dayOfYear - 1;
 		while (d >= 1) {
-			double sunMeanAnomaly = getMeanAnomaly(d, longitude, isSunrise);
-			double sunTrueLong = getSunTrueLongitude(sunMeanAnomaly);
-			double cosLocalHourAngle = getCosLocalHourAngle(sunTrueLong, latitude, zenith);
-
-			if (isSunrise) {
-				hourAngle = 360.0 - acosDeg(cosLocalHourAngle);
-			} else { // sunset
-				hourAngle = acosDeg(cosLocalHourAngle);
-			}
+			hourAngle = getHourAngle(d, latitude, longitude, zenith, isSunrise);
 			if (!Double.isNaN(hourAngle)) {
 				if (isLastDayOfYear && (x2 == 0)) {
 					x2 = d;
@@ -296,15 +290,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		d = dayOfYear + 1;
 		while (d <= 366) {
-			double sunMeanAnomaly = getMeanAnomaly(d, longitude, isSunrise);
-			double sunTrueLong = getSunTrueLongitude(sunMeanAnomaly);
-			double cosLocalHourAngle = getCosLocalHourAngle(sunTrueLong, latitude, zenith);
-
-			if (isSunrise) {
-				hourAngle = 360.0 - acosDeg(cosLocalHourAngle);
-			} else { // sunset
-				hourAngle = acosDeg(cosLocalHourAngle);
-			}
+			hourAngle = getHourAngle(d, latitude, longitude, zenith, isSunrise);
 			if (!Double.isNaN(hourAngle)) {
 				if (x1 == 0) {
 					x1 = d;
