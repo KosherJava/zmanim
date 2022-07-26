@@ -20,119 +20,138 @@ import java.util.Calendar;
 
 /**
  * Tefila Rules is a utility class that covers the various <em>halachos</em> and <em>minhagim</em> regarding
- * changes to daily <em>tefila</em> / prayers, based on the Jewish calendar.
+ * changes to daily <em>tefila</em> / prayers, based on the Jewish calendar. This is mostly useful for use in
+ * developing <em></em>, but it is also valuble for <em>shul</em> calendars that set <em>tefila</em> time based
+ * on if <em>tachanun</em> is recited that day.
  * 
  * @author &copy; Y. Paritcher 2019 - 2021
  * @author &copy; Eliyahu Hershfeld 2019 - 2022
  * 
- * @todo The following items have to be implemented
+ * @todo The following items may be added.
  * <ol>
- * <li>Consider allowing setting arbitrary Jewish Calendar days where <em>tachanun</em> is not recited. What format should
- * 	be used, what about ADAR issue? (yahrzeit on a non-leap year that occurs on a leap, or the other
- *  direction), or cheshvan/Kislev chaseyra or yesaira issues</li>
+ * <li>Lamnatzaiach</li>
  * </ol>
  */
 public class TefilaRules {
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedEndOfTishrei()
 	 * @see #setTachanunRecitedEndOfTishrei(boolean)
 	 */
-	private boolean isTachanunRecitedEndOfTishrei = true;
+	private boolean tachanunRecitedEndOfTishrei = true;
 	
 	/**
+	 * The default value is <code>false</code>.
 	 * @see #isTachanunRecitedWeekAfterShavuos()
 	 * @see #setTachanunRecitedWeekAfterShavuos(boolean)
 	 */
-	private boolean isTachanunRecitedWeekAfterShavuos = false;
+	private boolean tachanunRecitedWeekAfterShavuos = false;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecited13SivanOutOfIsrael()
 	 * @see #setTachanunRecited13SivanOutOfIsrael(boolean)
 	 */
-	private boolean isTachanunRecited13SivanOutOfIsrael = true;
+	private boolean tachanunRecited13SivanOutOfIsrael = true;
 	
 	/**
+	 * The default value is <code>false</code>.
 	 * @see #isTachanunRecitedPesachSheni()
 	 * @see #setTachanunRecitedPesachSheni(boolean)
 	 */
-	private boolean isTachanunRecitedPesachSheni = false;
+	private boolean tachanunRecitedPesachSheni = false;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecited15IyarOutOfIsrael()
 	 * @see #setTachanunRecited15IyarOutOfIsrael(boolean)
 	 */
-	private boolean isTachanunRecited15IyarOutOfIsrael = true;
+	private boolean tachanunRecited15IyarOutOfIsrael = true;
 	
 	/**
+	 * The default value is <code>false</code>.
 	 * @see #isTachanunRecitedMinchaErevLagBaomer()
 	 * @see #setTachanunRecitedMinchaErevLagBaomer(boolean)
 	 */
-	private boolean isTachanunRecitedMinchaErevLagBaomer = false;
+	private boolean tachanunRecitedMinchaErevLagBaomer = false;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedShivasYemeiHamiluim()
 	 * @see #setTachanunRecitedShivasYemeiHamiluim(boolean)
 	 */
-	private boolean isTachanunRecitedShivasYemeiHamiluim = true;
+	private boolean tachanunRecitedShivasYemeiHamiluim = true;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedWeekOfHod()
 	 * @see #setTachanunRecitedWeekOfHod(boolean)
 	 */
-	private boolean isTachanunRecitedWeekOfHod = true;
+	private boolean tachanunRecitedWeekOfHod = true;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedWeekOfPurim()
 	 * @see #setTachanunRecitedWeekOfPurim(boolean)
 	 */
-	private boolean isTachanunRecitedWeekOfPurim = true;
+	private boolean tachanunRecitedWeekOfPurim = true;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedFridays()
 	 * @see #setTachanunRecitedFridays(boolean)
 	 */
-	private boolean isTachanunRecitedFridays = true;
+	private boolean tachanunRecitedFridays = true;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedSundays()
 	 * @see #setTachanunRecitedSundays(boolean)
 	 */
-	private boolean isTachanunRecitedSundays = true;
+	private boolean tachanunRecitedSundays = true;
 	
 	/**
+	 * The default value is <code>true</code>.
 	 * @see #isTachanunRecitedMincha()
 	 * @see #setTachanunRecitedMincha(boolean)
 	 */
-	private boolean isTachanunRecitedMincha = true;
+	private boolean tachatnunRecitedMincha = true;
 
 	/**
-	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em>.
+	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em> on the day in question. See the many
+	 * <em>minhag</em> based settings that are available in this class.
+	 * @param jewishCalendar the Jewish calendar day.
 	 * @return if <em>tachanun</em> is recited during <em>shacharis</em>.
 	 */
-	public boolean isTachanunShacharis(JewishCalendar jc) {
-		int holidayIndex = jc.getYomTovIndex();
-		int day = jc.getJewishDayOfMonth();
-		int month = jc.getJewishMonth();
+	public boolean isTachanunRecitedShacharis(JewishCalendar jewishCalendar) {
+		int holidayIndex = jewishCalendar.getYomTovIndex();
+		int day = jewishCalendar.getJewishDayOfMonth();
+		int month = jewishCalendar.getJewishMonth();
 
-		if (jc.getDayOfWeek() == Calendar.SATURDAY
-				|| (!isTachanunRecitedSundays && jc.getDayOfWeek() == Calendar.SUNDAY)
-				|| (!isTachanunRecitedFridays && jc.getDayOfWeek() == Calendar.FRIDAY)
+		if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY
+				|| (!tachanunRecitedSundays && jewishCalendar.getDayOfWeek() == Calendar.SUNDAY)
+				|| (!tachanunRecitedFridays && jewishCalendar.getDayOfWeek() == Calendar.FRIDAY)
 				|| month == JewishDate.NISSAN
-				|| (month == JewishDate.TISHREI && ((!isTachanunRecitedEndOfTishrei && day > 8)
-				|| (isTachanunRecitedEndOfTishrei && (day > 8 && day < 22))))
-				|| (month == JewishDate.SIVAN && (isTachanunRecitedWeekAfterShavuos && day < 7
-						|| !isTachanunRecitedWeekAfterShavuos && day < (!jc.getInIsrael() && !isTachanunRecited13SivanOutOfIsrael ? 14: 13)))
-				|| (jc.isYomTov() && (! jc.isTaanis()
-						|| (!isTachanunRecitedPesachSheni && holidayIndex == JewishCalendar.PESACH_SHENI))) // Erev YT is included in isYomTov()
-				|| (!jc.getInIsrael() && !isTachanunRecitedPesachSheni && !isTachanunRecited15IyarOutOfIsrael && jc.getJewishMonth() == JewishDate.IYAR && day == 15)
-				|| holidayIndex == JewishCalendar.TISHA_BEAV || jc.isIsruChag()
-				|| jc.isRoshChodesh()
-				|| (!isTachanunRecitedShivasYemeiHamiluim &&
-						((!jc.isJewishLeapYear() && month == JewishDate.ADAR) || (jc.isJewishLeapYear() && month == JewishDate.ADAR_II)) && day > 22)
-				|| (!isTachanunRecitedWeekOfPurim &&
-						((!jc.isJewishLeapYear() && month == JewishDate.ADAR) || (jc.isJewishLeapYear() && month == JewishDate.ADAR_II)) && day > 10 && day < 18)
-				|| (jc.isUseModernHolidays() && (holidayIndex == JewishCalendar.YOM_HAATZMAUT || holidayIndex == JewishCalendar.YOM_YERUSHALAYIM))
-				|| (!isTachanunRecitedWeekOfHod && month == JewishDate.IYAR && day > 13 && day < 21)) {
+				|| (month == JewishDate.TISHREI && ((!tachanunRecitedEndOfTishrei && day > 8)
+				|| (tachanunRecitedEndOfTishrei && (day > 8 && day < 22))))
+				|| (month == JewishDate.SIVAN && (tachanunRecitedWeekAfterShavuos && day < 7
+						|| !tachanunRecitedWeekAfterShavuos && day < (!jewishCalendar.getInIsrael()
+								&& !tachanunRecited13SivanOutOfIsrael ? 14: 13)))
+				|| (jewishCalendar.isYomTov() && (! jewishCalendar.isTaanis()
+						|| (!tachanunRecitedPesachSheni && holidayIndex == JewishCalendar.PESACH_SHENI))) // Erev YT is included in isYomTov()
+				|| (!jewishCalendar.getInIsrael() && !tachanunRecitedPesachSheni && !tachanunRecited15IyarOutOfIsrael
+						&& jewishCalendar.getJewishMonth() == JewishDate.IYAR && day == 15)
+				|| holidayIndex == JewishCalendar.TISHA_BEAV || jewishCalendar.isIsruChag()
+				|| jewishCalendar.isRoshChodesh()
+				|| (!tachanunRecitedShivasYemeiHamiluim &&
+						((!jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR)
+								|| (jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR_II)) && day > 22)
+				|| (!tachanunRecitedWeekOfPurim &&
+						((!jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR)
+								|| (jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR_II)) && day > 10 && day < 18)
+				|| (jewishCalendar.isUseModernHolidays()
+						&& (holidayIndex == JewishCalendar.YOM_HAATZMAUT || holidayIndex == JewishCalendar.YOM_YERUSHALAYIM))
+				|| (!tachanunRecitedWeekOfHod && month == JewishDate.IYAR && day > 13 && day < 21)) {
 			return false;
 		}
 		return true;
@@ -140,21 +159,24 @@ public class TefilaRules {
 
 	/**
 	 * Returns if <em>tachanun</em> is recited during <em>mincha</em>.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return if <em>tachanun</em> is recited during <em>mincha</em>.
 	 */
-	public boolean isTachanunMincha(JewishCalendar jc) {
+	public boolean isTachanunRecitedMincha(JewishCalendar jewishCalendar) {
 		JewishCalendar tomorrow = new JewishCalendar();
-		tomorrow = (JewishCalendar) jc.clone();
+		tomorrow = (JewishCalendar) jewishCalendar.clone();
 		tomorrow.forward(Calendar.DATE, 1);
 		
-		if (!isTachanunRecitedMincha
-					|| jc.getDayOfWeek() == Calendar.FRIDAY
-					|| ! isTachanunShacharis(jc) 
-					|| (! isTachanunShacharis(tomorrow) && 
+		if (!tachatnunRecitedMincha
+					|| jewishCalendar.getDayOfWeek() == Calendar.FRIDAY
+					|| ! isTachanunRecitedShacharis(jewishCalendar) 
+					|| (! isTachanunRecitedShacharis(tomorrow) && 
 							!(tomorrow.getYomTovIndex() == JewishCalendar.EREV_ROSH_HASHANA) &&
 							!(tomorrow.getYomTovIndex() == JewishCalendar.EREV_YOM_KIPPUR) &&
 							!(tomorrow.getYomTovIndex() == JewishCalendar.PESACH_SHENI))
-					|| ! isTachanunRecitedMinchaErevLagBaomer && tomorrow.getYomTovIndex() == JewishCalendar.LAG_BAOMER) {
+					|| ! tachanunRecitedMinchaErevLagBaomer && tomorrow.getYomTovIndex() == JewishCalendar.LAG_BAOMER) {
 			return false;
 		}
 		return true;
@@ -169,26 +191,28 @@ public class TefilaRules {
 	 * in the 21st century. <em>vesein tal umatar</em> is not recited on <em>Shabbos</em> and the start date will be
 	 * delayed a day when the start day is on a <em>Shabbos</em> (this can only occur out of Israel).
 	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar Livracha</em>
 	 *         (<em>Sheailas Geshamim</em>).
 	 * 
 	 * @see #isVeseinTalUmatarStartingTonight(JewishCalendar)
 	 * @see #isVeseinTalUmatarRecited(JewishCalendar)
 	 */
-	public boolean isVeseinTalUmatarStartDate(JewishCalendar jc) {
-		if (jc.getInIsrael()) {
+	public boolean isVeseinTalUmatarStartDate(JewishCalendar jewishCalendar) {
+		if (jewishCalendar.getInIsrael()) {
 			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
-			if (jc.getJewishMonth() == JewishDate.CHESHVAN && jc.getJewishDayOfMonth() == 7) {
+			if (jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 7) {
 				return true;
 			}
 		} else {
-			if (jc.getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
+			if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(jc.getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
-				return jc.getTekufasTishreiElapsedDays() == 48 || jc.getTekufasTishreiElapsedDays() == 47;
+			if(jewishCalendar.getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
+				return jewishCalendar.getTekufasTishreiElapsedDays() == 48 || jewishCalendar.getTekufasTishreiElapsedDays() == 47;
 			} else {
-				return jc.getTekufasTishreiElapsedDays() == 47;
+				return jewishCalendar.getTekufasTishreiElapsedDays() == 47;
 			}
 		}
 		return false; // keep the compiler happy
@@ -202,26 +226,28 @@ public class TefilaRules {
 	 * <em>Vesein tal umatar</em> is not recited on <em>Shabbos</em> and the start date will be delayed a day when
 	 * the start day is on a <em>Shabbos</em> (this can only occur out of Israel).
 	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
 	 * Livracha</em> (<em>Sheailas Geshamim</em>).
 	 * 
 	 * @see #isVeseinTalUmatarStartDate(JewishCalendar)
 	 * @see #isVeseinTalUmatarRecited(JewishCalendar)
 	 */
-	public boolean isVeseinTalUmatarStartingTonight(JewishCalendar jc) {
-		if (jc.getInIsrael()) {
+	public boolean isVeseinTalUmatarStartingTonight(JewishCalendar jewishCalendar) {
+		if (jewishCalendar.getInIsrael()) {
 			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
-			if (jc.getJewishMonth() == JewishDate.CHESHVAN && jc.getJewishDayOfMonth() == 6) {
+			if (jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 6) {
 					return true;
 			}
 		} else {
-			if (jc.getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
+			if (jewishCalendar.getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(jc.getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
-				return jc.getTekufasTishreiElapsedDays() == 47 || jc.getTekufasTishreiElapsedDays() == 46;
+			if(jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
+				return jewishCalendar.getTekufasTishreiElapsedDays() == 47 || jewishCalendar.getTekufasTishreiElapsedDays() == 46;
 			} else {
-				return jc.getTekufasTishreiElapsedDays() == 46;
+				return jewishCalendar.getTekufasTishreiElapsedDays() == 46;
 			}
 		}
 		return false;
@@ -230,22 +256,25 @@ public class TefilaRules {
 	/**
 	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return
 	 * true for the entire season, even on <em>Shabbos</em> when it is not recited.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
 	 * 
 	 * @see #isVeseinTalUmatarStartDate(JewishCalendar)
 	 * @see #isVeseinTalUmatarStartingTonight(JewishCalendar)
 	 */
-	public boolean isVeseinTalUmatarRecited(JewishCalendar jc) {
-		if (jc.getJewishMonth() == JewishDate.NISSAN && jc.getJewishDayOfMonth() < 15) {
+	public boolean isVeseinTalUmatarRecited(JewishCalendar jewishCalendar) {
+		if (jewishCalendar.getJewishMonth() == JewishDate.NISSAN && jewishCalendar.getJewishDayOfMonth() < 15) {
 			return true;
 		}
-		if (jc.getJewishMonth() < JewishDate.CHESHVAN) {
+		if (jewishCalendar.getJewishMonth() < JewishDate.CHESHVAN) {
 			return false;
 		}
-		if (jc.getInIsrael()) {
-			return jc.getJewishMonth() != JewishDate.CHESHVAN || jc.getJewishDayOfMonth() >= 7;
+		if (jewishCalendar.getInIsrael()) {
+			return jewishCalendar.getJewishMonth() != JewishDate.CHESHVAN || jewishCalendar.getJewishDayOfMonth() >= 7;
 		} else {
-			return jc.getTekufasTishreiElapsedDays() >= 47;
+			return jewishCalendar.getTekufasTishreiElapsedDays() >= 47;
 		}
 	}
 	
@@ -253,36 +282,42 @@ public class TefilaRules {
 	 * Returns if <em>Vesein Beracha</em> is recited. It is recited from 15 <em>Nissan</em> to the point that {@link
 	 * #isVeseinTalUmatarRecited(JewishCalendar) <em>vesein tal umatar</em> is recited}.
 	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return true if <em>Vesein Beracha</em> is recited.
 	 * 
 	 * @see #isVeseinTalUmatarRecited(JewishCalendar)
 	 */
-	public boolean isVeseinBerachaRecited(JewishCalendar jc) {
-		return ! isVeseinTalUmatarRecited(jc);
+	public boolean isVeseinBerachaRecited(JewishCalendar jewishCalendar) {
+		return ! isVeseinTalUmatarRecited(jewishCalendar);
 	}
 
 	/**
 	 * Returns if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 22 <em>Tishrei</em>.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
 	 * 
 	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
 	 * 
 	 * @see #isMashivHaruachEndDate(JewishCalendar)
 	 * @see #isMashivHaruachRecited(JewishCalendar)
 	 */
-	public boolean isMashivHaruachStartDate(JewishCalendar jc) {
-		return jc.getJewishMonth() == JewishDate.TISHREI && jc.getJewishDayOfMonth() == 22;
+	public boolean isMashivHaruachStartDate(JewishCalendar jewishCalendar) {
+		return jewishCalendar.getJewishMonth() == JewishDate.TISHREI && jewishCalendar.getJewishDayOfMonth() == 22;
 	}
 
 	/**
 	 * Returns if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 15 <em>Nissan</em>.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
 	 * 
 	 * @return true if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
 	 * 
 	 * @see #isMashivHaruachStartDate(JewishCalendar)
 	 * @see #isMashivHaruachRecited(JewishCalendar)
 	 */
-	public boolean isMashivHaruachEndDate(JewishCalendar jc) {
-		return jc.getJewishMonth() == JewishDate.NISSAN && jc.getJewishDayOfMonth() == 15;
+	public boolean isMashivHaruachEndDate(JewishCalendar jewishCalendar) {
+		return jewishCalendar.getJewishMonth() == JewishDate.NISSAN && jewishCalendar.getJewishDayOfMonth() == 15;
 	}
 
 	/**
@@ -290,15 +325,17 @@ public class TefilaRules {
 	 * on the 15th day of <em>Nissan</em>.
 	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
 	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return true if <em>Mashiv Haruach Umorid Hageshem</em> is recited.
 	 * 
 	 * @see #isMashivHaruachStartDate(JewishCalendar)
 	 * @see #isMashivHaruachEndDate(JewishCalendar)
 	 */
-	public boolean isMashivHaruachRecited(JewishCalendar jc) {
-		JewishDate startDate = new JewishDate(jc.getJewishYear(), JewishDate.TISHREI, 22);
-		JewishDate endDate = new JewishDate(jc.getJewishYear(), JewishDate.NISSAN, 15);
-		return jc.compareTo(startDate) > 0 && jc.compareTo(endDate) < 0;
+	public boolean isMashivHaruachRecited(JewishCalendar jewishCalendar) {
+		JewishDate startDate = new JewishDate(jewishCalendar.getJewishYear(), JewishDate.TISHREI, 22);
+		JewishDate endDate = new JewishDate(jewishCalendar.getJewishYear(), JewishDate.NISSAN, 15);
+		return jewishCalendar.compareTo(startDate) > 0 && jewishCalendar.compareTo(endDate) < 0;
 	}
 
 	/**
@@ -306,26 +343,30 @@ public class TefilaRules {
 	 * This period starts on 22 <em>Tishrei</em> and ends on the 15th day of
 	 * <em>Nissan</em>.
 	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * 
 	 * @return true if <em>Morid Hatal</em> (or the lack of reciting <em>Mashiv Haruach</em> following <em>nussach Ashkenaz</em>) is recited.
 	 */
-	public boolean isMoridHatalRecited(JewishCalendar jc) {
-		return !isMashivHaruachRecited(jc) || isMashivHaruachStartDate(jc) || isMashivHaruachEndDate(jc);
+	public boolean isMoridHatalRecited(JewishCalendar jewishCalendar) {
+		return !isMashivHaruachRecited(jewishCalendar) || isMashivHaruachStartDate(jewishCalendar) || isMashivHaruachEndDate(jewishCalendar);
 	}
 	
 	/**
 	 * @return If <em>tachanun</em> is set to be recited during the week of Purim from the 11th through the 17th of Adar
-	 *         (on a non-leap year, or Adar II on a leap year).
+	 *         (on a non-leap year, or Adar II on a leap year). Some <em>Chasidish</em> communities do not recite
+	 *         <em>tachanun</em> during this period.
 	 */
 	public boolean isTachanunRecitedWeekOfPurim() {
-		return isTachanunRecitedWeekOfPurim;
+		return tachanunRecitedWeekOfPurim;
 	}
 
 	/**
 	 * @param isTachanunRecitedWeekOfPurim Sets if tachanun is to recited during the week of Purim from the 11th through
-	 *         the 17th of Adar (on a non-leap year), or Adar II (on a leap year).
+	 *         the 17th of Adar (on a non-leap year), or Adar II (on a leap year). Some <em>Chasidish</em> communities do
+	 *         not recite<em>tachanun</em> during this period.
 	 */
 	public void setTachanunRecitedWeekOfPurim(boolean isTachanunRecitedWeekOfPurim) {
-		this.isTachanunRecitedWeekOfPurim = isTachanunRecitedWeekOfPurim;
+		this.tachanunRecitedWeekOfPurim = isTachanunRecitedWeekOfPurim;
 	}
 
 	/**
@@ -334,7 +375,7 @@ public class TefilaRules {
 	 * @see #setTachanunRecitedWeekOfHod(boolean)
 	 */
 	public boolean isTachanunRecitedWeekOfHod() {
-		return isTachanunRecitedWeekOfHod;
+		return tachanunRecitedWeekOfHod;
 	}
 
 	/**
@@ -342,7 +383,7 @@ public class TefilaRules {
 	 * @see #isTachanunRecitedWeekOfHod()
 	 */
 	public void setTachanunRecitedWeekOfHod(boolean isTachanunRecitedWeekOfHod) {
-		this.isTachanunRecitedWeekOfHod = isTachanunRecitedWeekOfHod;
+		this.tachanunRecitedWeekOfHod = isTachanunRecitedWeekOfHod;
 	}
 
 	/**
@@ -350,7 +391,7 @@ public class TefilaRules {
 	 * @see #setTachanunRecitedEndOfTishrei(isTachanunRecitedEndOfTishrei)
 	 */
 	public boolean isTachanunRecitedEndOfTishrei() {
-		return isTachanunRecitedEndOfTishrei;
+		return tachanunRecitedEndOfTishrei;
 	}
 
 	/**
@@ -359,7 +400,7 @@ public class TefilaRules {
 	 * @see #isTachanunRecitedEndOfTishrei()
 	 */
 	public void setTachanunRecitedEndOfTishrei(boolean isTachanunRecitedEndOfTishrei) {
-		this.isTachanunRecitedEndOfTishrei = isTachanunRecitedEndOfTishrei;
+		this.tachanunRecitedEndOfTishrei = isTachanunRecitedEndOfTishrei;
 	}
 	
 	/**
@@ -367,138 +408,146 @@ public class TefilaRules {
 	 * @see #setTachanunRecitedWeekAfterShavuos(isTachanunRecitedWeekAfterShavuos)
 	 */
 	public boolean isTachanunRecitedWeekAfterShavuos() {
-		return isTachanunRecitedWeekAfterShavuos;
+		return tachanunRecitedWeekAfterShavuos;
 	}
 
 	/**
-	 * Sets if <em>tachanun</em> is set to be recited at the end of Tishrei.
+	 * Sets if <em>tachanun</em> is set to be recited during the week after <em>Shavuos</em>.
 	 * @param isTachanunRecitedWeekAfterShavuos is <em>tachanun</em> recited during the week after Shavuos.
 	 * @see #isTachanunRecitedEndOfTishrei()
 	 */
 	public void setTachanunRecitedWeekAfterShavuos(boolean isTachanunRecitedWeekAfterShavuos) {
-		this.isTachanunRecitedWeekAfterShavuos = isTachanunRecitedWeekAfterShavuos;
+		this.tachanunRecitedWeekAfterShavuos = isTachanunRecitedWeekAfterShavuos;
 	}
 	
 	/**
-	 * Returns If <em>tachanun</em> is set to be recited on the 13th of Sivan
-	 * Outside Israel. {@link #isTachanunShacharis(JewishCalendar)}
-	 * {@link #isTachanunMincha(JewishCalendar)} only return false if the location
-	 * is not set to {@link JewishCalendar#getInIsrael() Israel} and
-	 * {@link #isTachanunRecitedWeekAfterShavuos} and
-	 * {@link #setTachanunRecited13SivanOutOfIsrael} are both set to false.
+	 * Returns If <em>tachanun</em> is set to be recited on the 13th of <em>Sivan</em> outside Israel. Both
+	 * {@link #isTachanunRecitedShacharis(JewishCalendar)} and {@link #isTachanunRecitedMincha(JewishCalendar)}
+	 * only return false if the location is not set to {@link JewishCalendar#getInIsrael() Israel} and both
+	 * {@link #tachanunRecitedWeekAfterShavuos} and {@link #setTachanunRecited13SivanOutOfIsrael} are set to false.
 	 * 
 	 * @return If <em>tachanun</em> is set to be recited on the 13th of Sivan out of Israel.
 	 * @see #setTachanunRecited13SivanOutOfIsrael(isTachanunRecitedThirteenSivanOutOfIsrael)
 	 */
 	public boolean isTachanunRecited13SivanOutOfIsrael() {
-		return isTachanunRecited13SivanOutOfIsrael;
+		return tachanunRecited13SivanOutOfIsrael;
 	}
 
 	/**
-	 * @param isTachanunRecitedThirteenSivanOutOfIsrael sets if <em>tachanun</em> should be recited on the 13th of Sivan out of Israel.
-	 * @see #isTachanunRecited13SivanOutOfIsrael
+	 * @param isTachanunRecitedThirteenSivanOutOfIsrael sets if <em>tachanun</em> should be recited on the 13th
+	 *          of <em>Sivan</em> out of Israel.
+	 * @see #tachanunRecited13SivanOutOfIsrael
 	 */
 	public void setTachanunRecited13SivanOutOfIsrael(boolean isTachanunRecitedThirteenSivanOutOfIsrael) {
-		this.isTachanunRecited13SivanOutOfIsrael = isTachanunRecitedThirteenSivanOutOfIsrael;
+		this.tachanunRecited13SivanOutOfIsrael = isTachanunRecitedThirteenSivanOutOfIsrael;
 	}
 	
 	/**
 	 * @return If <em>tachanun</em> is recited on {@link JewishCalendar#PESACH_SHENI Pesach Sheni}.
 	 */
 	public boolean isTachanunRecitedPesachSheni() {
-		return isTachanunRecitedPesachSheni;
+		return tachanunRecitedPesachSheni;
 	}
 
 	/**
 	 * @param isTachanunRecitedPesachSheni sets if <em>tachanun</em> should be recited on <em>Pesach Sheni</em>
 	 */
 	public void setTachanunRecitedPesachSheni(boolean isTachanunRecitedPesachSheni) {
-		this.isTachanunRecitedPesachSheni = isTachanunRecitedPesachSheni;
+		this.tachanunRecitedPesachSheni = isTachanunRecitedPesachSheni;
 	}
 	
 	/**
-	 * @return if <em>tachanun</em> is recited on 15 Iyar (sfaika deyoma of {@link JewishCalendar#PESACH_SHENI Pesach Sheni}) out of Israel.
+	 * @return if <em>tachanun</em> is recited on 15 Iyar (<em>sfaika deyoma</em> of {@link
+	 *          JewishCalendar#PESACH_SHENI Pesach Sheni}) out of Israel.
 	 */
 	public boolean isTachanunRecited15IyarOutOfIsrael() {
-		return isTachanunRecited15IyarOutOfIsrael;
+		return tachanunRecited15IyarOutOfIsrael;
 	}
 
 	/**
-	 * @param isTachanunRecited15IyarOutOfIsrael if <em>tachanun</em> should be recited on the 15th of Iyar out of Israel
+	 * @param isTachanunRecited15IyarOutOfIsrael if <em>tachanun</em> should be recited on the 15th of <em>Iyar</em>
+	 *          (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}) out of Israel.
 	 */
 	public void setTachanunRecited15IyarOutOfIsrael(boolean isTachanunRecited15IyarOutOfIsrael) {
-		this.isTachanunRecited15IyarOutOfIsrael = isTachanunRecited15IyarOutOfIsrael;
+		this.tachanunRecited15IyarOutOfIsrael = isTachanunRecited15IyarOutOfIsrael;
 	}
 	
 	/**
-	 * @return if <em>tachanun</em> is recited on <em>Lag Baomer</em>.
+	 * @return if <em>tachanun</em> is recited on {@link JewishCalendar#LAG_BAOMER <em>Lag Baomer</em>}.
 	 */
 	public boolean isTachanunRecitedMinchaErevLagBaomer() {
-		return isTachanunRecitedMinchaErevLagBaomer;
+		return tachanunRecitedMinchaErevLagBaomer;
 	}
 
 	/**
-	 * @param isTachanunRecitedMinchaErevLagBaomer sets if <em>tachanun</em> should be recited on <em>mincha</em> of <em>erev Lag Baomer</em>.
+	 * @param isTachanunRecitedMinchaErevLagBaomer sets if <em>tachanun</em> should be recited on <em>mincha</em>
+	 *          of <em>erev {@link JewishCalendar#LAG_BAOMER Lag Baomer}</em>.
 	 */
 	public void setTachanunRecitedMinchaErevLagBaomer(boolean isTachanunRecitedMinchaErevLagBaomer) {
-		this.isTachanunRecitedMinchaErevLagBaomer = isTachanunRecitedMinchaErevLagBaomer;
+		this.tachanunRecitedMinchaErevLagBaomer = isTachanunRecitedMinchaErevLagBaomer;
 	}
 	
 	/**
 	 * @return if <em>tachanun</em> is recited on <em>Shivas Yemei Hamiluim</em>.
 	 */
 	public boolean isTachanunRecitedShivasYemeiHamiluim() {
-		return isTachanunRecitedShivasYemeiHamiluim;
+		return tachanunRecitedShivasYemeiHamiluim;
 	}
 
 	/**
-	 * @param isTachanunRecitedShivasYemeiHamiluim sets if <em>tachanun</em> should be recited on <em>mincha</em> of <em>Shivas Yemei Hamiluim</em>.
+	 * @param isTachanunRecitedShivasYemeiHamiluim sets if <em>tachanun</em> should be recited during the
+	 *          <em>Shivas Yemei Hamiluim</em>.
 	 */
 	public void setTachanunRecitedShivasYemeiHamiluim(boolean isTachanunRecitedShivasYemeiHamiluim) {
-		this.isTachanunRecitedShivasYemeiHamiluim = isTachanunRecitedShivasYemeiHamiluim;
+		this.tachanunRecitedShivasYemeiHamiluim = isTachanunRecitedShivasYemeiHamiluim;
 	}
 
 	/**
-	 * @return
+	 * @return if <em>tachanun</em> is recited on Fridays Some <em>chasidish</em> communities do not
+	 *          recite <em>tachanun</em> on Fridays.
 	 */
 	public boolean isTachanunRecitedFridays() {
-		return isTachanunRecitedFridays;
+		return tachanunRecitedFridays;
 	}
 
 	/**
-	 * @param isTachanunRecitedFridays
+	 * @param isTachanunRecitedFridays sets if <em>tachanun</em> should be recited on Fridays. Some <em>chasidish</em>
+	 *          communities do not recite <em>tachanun</em> on Fridays.
 	 */
 	public void setTachanunRecitedFridays(boolean isTachanunRecitedFridays) {
-		this.isTachanunRecitedFridays = isTachanunRecitedFridays;
+		this.tachanunRecitedFridays = isTachanunRecitedFridays;
 	}
 
 	/**
-	 * @return
+	 * @return if <em>tachanun</em> is recited on Sundays.  Some <em>chasidish</em> communities do not recite
+	 *          <em>tachanun</em> on Fridays.
 	 */
 	public boolean isTachanunRecitedSundays() {
-		return isTachanunRecitedSundays;
+		return tachanunRecitedSundays;
 	}
 
 	/**
-	 * @param isTachanunRecitedSundays
+	 * @param isTachanunRecitedSundays sets if <em>tachanun</em> should be recited on Sundays. Some <em>chasidish</em>
+	 *          communities do not recite <em>tachanun</em> on Sundays.
 	 */
 	public void setTachanunRecitedSundays(boolean isTachanunRecitedSundays) {
-		this.isTachanunRecitedSundays = isTachanunRecitedSundays;
+		this.tachanunRecitedSundays = isTachanunRecitedSundays;
 	}
 	
 	/**
-	 * @return
+	 * @return if <em>tachanun</em> is recited on <em>Mincha</em> the entire year.  Some <em>chasidish</em>
+	 *          communities do not recite <em>tachanun</em> all year round by <em>Mincha</em>.
 	 */
 	public boolean isTachanunRecitedMincha() {
-		return isTachanunRecitedMincha;
+		return tachatnunRecitedMincha;
 	}
 
 	/**
 	 * @param isTachanunRecitedMincha sets if <em>tachanun</em> should be recited by <em>mincha</em>. If set to false, 
-	 *          {@link #isTachanunMincha(JewishCalendar)} will always return false. If set to true (the default), it
+	 *          {@link #isTachanunRecitedMincha(JewishCalendar)} will always return false. If set to true (the default), it
 	 *          will use the regular rules.
 	 */
 	public void setTachanunRecitedMincha(boolean isTachanunRecitedMincha) {
-		this.isTachanunRecitedMincha = isTachanunRecitedMincha;
+		this.tachatnunRecitedMincha = isTachanunRecitedMincha;
 	}
 }
