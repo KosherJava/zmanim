@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2021 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2022 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  * Copyright (C) 2019 - 2021 Y Paritcher
  *
@@ -35,7 +35,6 @@ import java.util.TimeZone;
  * 
  * @todo Some do not belong in this class, but here is a partial list of what should still be implemented in some form:
  * <ol>
- * <li>Add Isru Chag</li>
  * <li>Mishna yomis etc</li>
  * </ol>
  * 
@@ -43,7 +42,7 @@ import java.util.TimeZone;
  * @see java.util.Calendar
  * @author &copy; Y. Paritcher 2019 - 2021
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2021
+ * @author &copy; Eliyahu Hershfeld 2011 - 2022
  */
 public class JewishCalendar extends JewishDate {
 	/** The 14th day of Nisan, the day before of Pesach (Passover).*/
@@ -131,6 +130,9 @@ public class JewishCalendar extends JewishDate {
 	
 	/** The holiday of Purim Katan on the 15th day of Adar I on a leap year when Purim is on Adar II, a minor holiday.*/
 	public static final int SHUSHAN_PURIM_KATAN = 34;
+	
+	/** The day following the last day of Pesach, Shavuos and Sukkos.*/
+	public static final int ISRU_CHAG = 35;
 
 	/**
 	 * Is the calendar set to Israel, where some holidays have different rules.
@@ -517,6 +519,9 @@ public class JewishCalendar extends JewishDate {
 					|| (day == 16 && inIsrael)) {
 				return CHOL_HAMOED_PESACH;
 			}
+			if((day == 22 && inIsrael) || (day == 23 && !inIsrael)) {
+				return ISRU_CHAG;
+			}
 			if (isUseModernHolidays()
 					&& ((day == 26 && dayOfWeek == Calendar.THURSDAY)
 							|| (day == 28 && dayOfWeek == Calendar.MONDAY)
@@ -553,6 +558,9 @@ public class JewishCalendar extends JewishDate {
 			}
 			if (day == 6 || (day == 7 && !inIsrael)) {
 				return SHAVUOS;
+			}
+			if((day == 7 && inIsrael) || (day == 8 && !inIsrael)) {
+				return ISRU_CHAG;
 			}
 			break;
 		case TAMMUZ:
@@ -608,6 +616,9 @@ public class JewishCalendar extends JewishDate {
 			}
 			if (day == 23 && !inIsrael) {
 				return SIMCHAS_TORAH;
+			}
+			if((day == 23 && inIsrael) || (day == 24 && !inIsrael)) {
+				return ISRU_CHAG;
 			}
 			break;
 		case KISLEV: // no yomtov in CHESHVAN
@@ -690,7 +701,7 @@ public class JewishCalendar extends JewishDate {
 	public boolean isYomTov() {
 		int holidayIndex = getYomTovIndex();
 		if ((isErevYomTov() && (holidayIndex != HOSHANA_RABBA && (holidayIndex == CHOL_HAMOED_PESACH && getJewishDayOfMonth() != 20)))
-				|| (isTaanis() && holidayIndex != YOM_KIPPUR)) {
+				|| (isTaanis() && holidayIndex != YOM_KIPPUR) || holidayIndex == ISRU_CHAG) {
 			return false;
 		}
 		return getYomTovIndex() != -1;
@@ -1119,12 +1130,15 @@ public class JewishCalendar extends JewishDate {
 	 * <em>Shabbos</em> and the start date will be delayed a day when the start day is on a <em>Shabbos</em> (this
 	 * can only occur out of Israel).
 	 * 
+	 * @deprecated Use {@link TefilaRules#isVeseinTalUmatarStartDate(JewishCalendar)} instead.
+	 * 
 	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
 	 * Livracha</em> (<em>Sheailas Geshamim</em>).
 	 * 
 	 * @see #isVeseinTalUmatarStartingTonight()
 	 * @see #isVeseinTalUmatarRecited()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isVeseinTalUmatarStartDate() {
 		if (inIsrael) {
 			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
@@ -1152,12 +1166,15 @@ public class JewishCalendar extends JewishDate {
 	 * <em>Vesein tal umatar</em> is not recited on <em>Shabbos</em> and the start date will be delayed a day when
 	 * the start day is on a <em>Shabbos</em> (this can only occur out of Israel).
 	 * 
+	 * @deprecated Use {@link TefilaRules#isVeseinTalUmatarStartingTonight(JewishCalendar)} instead.
+	 * 
 	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
 	 * Livracha</em> (<em>Sheailas Geshamim</em>).
 	 * 
 	 * @see #isVeseinTalUmatarStartDate()
 	 * @see #isVeseinTalUmatarRecited()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isVeseinTalUmatarStartingTonight() {
 		if (inIsrael) {
 			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
@@ -1180,11 +1197,15 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return
 	 * true for the entire season, even on <em>Shabbos</em> when it is not recited.
+	 * 
+	 * @deprecated Use {@link TefilaRules#isVeseinTalUmatarRecited(JewishCalendar)} instead.
+	 * 
 	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
 	 * 
 	 * @see #isVeseinTalUmatarStartDate()
 	 * @see #isVeseinTalUmatarStartingTonight()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isVeseinTalUmatarRecited() {
 		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
 			return true;
@@ -1203,10 +1224,13 @@ public class JewishCalendar extends JewishDate {
 	 * Returns if <em>Vesein Beracha</em> is recited. It is recited from 15 <em>Nissan</em> to the point that {@link
 	 * #isVeseinTalUmatarRecited() <em>vesein tal umatar</em> is recited}.
 	 * 
+	 * @deprecated Use {@link TefilaRules#isVeseinBerachaRecited(JewishCalendar)} instead.
+	 * 
 	 * @return true if <em>Vesein Beracha</em> is recited.
 	 * 
 	 * @see #isVeseinTalUmatarRecited()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isVeseinBerachaRecited() {
 		return !isVeseinTalUmatarRecited();
 	}
@@ -1214,11 +1238,14 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 22 <em>Tishrei</em>.
 	 * 
+	 * @deprecated Use {@link TefilaRules#isMashivHaruachStartDate(JewishCalendar)} instead.
+	 * 
 	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
 	 * 
 	 * @see #isMashivHaruachEndDate()
 	 * @see #isMashivHaruachRecited()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isMashivHaruachStartDate() {
 		return getJewishMonth() == TISHREI && getJewishDayOfMonth() == 22;
 	}
@@ -1226,11 +1253,14 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 15 <em>Nissan</em>.
 	 * 
+	 * @deprecated Use {@link TefilaRules#isMashivHaruachEndDate(JewishCalendar)} instead.
+	 * 
 	 * @return true if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
 	 * 
 	 * @see #isMashivHaruachStartDate()
 	 * @see #isMashivHaruachRecited()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isMashivHaruachEndDate() {
 		return getJewishMonth() == NISSAN && getJewishDayOfMonth() == 15;
 	}
@@ -1240,11 +1270,14 @@ public class JewishCalendar extends JewishDate {
 	 * on the 15th day of <em>Nissan</em>.
 	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
 	 * 
+	 * @deprecated Use {@link TefilaRules#isMashivHaruachRecited(JewishCalendar)} instead.
+	 * 
 	 * @return true if <em>Mashiv Haruach Umorid Hageshem</em> is recited.
 	 * 
 	 * @see #isMashivHaruachStartDate()
 	 * @see #isMashivHaruachEndDate()
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isMashivHaruachRecited() {
 		JewishDate startDate = new JewishDate(getJewishYear(), TISHREI, 22);
 		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
@@ -1256,10 +1289,27 @@ public class JewishCalendar extends JewishDate {
 	 * This period starts on 22 <em>Tishrei</em> and ends on the 15th day of
 	 * <em>Nissan</em>.
 	 * 
+	 * @deprecated Use {@link TefilaRules#isMoridHatalRecited(JewishCalendar)} instead.
+	 * 
 	 * @return true if <em>Morid Hatal</em> (or the lack of reciting <em>Mashiv Haruach</em> following <em>nussach Ashkenaz</em>) is recited.
 	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isMoridHatalRecited() {
 		return !isMashivHaruachRecited() || isMashivHaruachStartDate() || isMashivHaruachEndDate();
+	}
+	
+	/**
+	 * Returns true if the current day is erev Yom Tov. The method returns true for <em>Erev</em> - <em>Pesach</em> (first and
+	 * last days), <em>Shavuos</em>, <em>Rosh Hashana</em>, <em>Yom Kippur</em>, <em>Succos</em> and <em>Hoshana Rabba</em>.
+	 * 
+	 * @return true if the current day is <em>Erev</em> - <em>Pesach</em>, <em>Shavuos</em>, <em>Rosh Hashana</em>, <em>Yom
+	 * Kippur</em>, <em>Succos</em> and <em>Hoshana Rabba</em>.
+	 * @see #isYomTov()
+	 * @see #isErevYomTovSheni()
+	 */
+	public boolean isIsruChag() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == ISRU_CHAG;
 	}
 
 	/**
