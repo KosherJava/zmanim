@@ -21,8 +21,13 @@ import java.util.Calendar;
 /**
  * Tefila Rules is a utility class that covers the various <em>halachos</em> and <em>minhagim</em> regarding
  * changes to daily <em>tefila</em> / prayers, based on the Jewish calendar. This is mostly useful for use in
- * developing <em></em>, but it is also valuble for <em>shul</em> calendars that set <em>tefila</em> time based
- * on if <em>tachanun</em> is recited that day.
+ * developing <em>siddur</em> type applications, but it is also valuable for <em>shul</em> calendars that set
+ * <em>tefila</em> times based on if <a href="https://en.wikipedia.org/wiki/Tachanun"><em>tachanun</em></a> is
+ * recited that day. There are many settings in this class to cover the vast majority of <em>minhagim</em>, but
+ * there are likely some not covered here. Dates used in specific communities such as specific <em>yahrzeits</em>
+ * or a holidays like Purim Mezhbizh (Medzhybizh) celebrated on 11 Teves or <a href=
+ * "https://en.wikipedia.org/wiki/Second_Purim#Purim_Saragossa_(18_Shevat)">Purim Saragossa</a> celebrated on
+ * the (17th or) 18th of <em>Shevat</em> are not (and likely will not be) supported by this class.
  * 
  * @author &copy; Y. Paritcher 2019 - 2021
  * @author &copy; Eliyahu Hershfeld 2019 - 2022
@@ -485,17 +490,22 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * <em>tachanun</em> is recited on 15 Iyar (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>})
-	 * out of Israel.
+	 * Is <em>tachanun</em> recited on 15 Iyar (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>})
+	 * out of Israel. If {@link #isTachanunRecitedPesachSheni()} is <code>true</code> this will be ignored even if <code>false</code>.
 	 * @return if <em>tachanun</em> is recited on 15 Iyar (<em>sfaika deyoma</em> of {@link
-	 *          JewishCalendar#PESACH_SHENI Pesach Sheni}) out of Israel.
+	 *          JewishCalendar#PESACH_SHENI Pesach Sheni}) out of Israel. If {@link #isTachanunRecitedPesachSheni()} is
+	 *          <code>true</code> this will be ignored even if <code>false</code>.
 	 * @see #setTachanunRecited15IyarOutOfIsrael(boolean)
+	 * @see #setTachanunRecitedPesachSheni(boolean)
+	 * @see #isTachanunRecitedPesachSheni()
 	 */
 	public boolean isTachanunRecited15IyarOutOfIsrael() {
 		return tachanunRecited15IyarOutOfIsrael;
 	}
 
 	/**
+	 * Sets if <em>tachanun</em> should be recited on the 15th of <em>Iyar</em> (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI
+	 * <em>Pesach Sheni</em>}) out of Israel. Ignored if {@link #isTachanunRecitedPesachSheni()} is <code>true</code>.
 	 * @param tachanunRecited15IyarOutOfIsrael if <em>tachanun</em> should be recited on the 15th of <em>Iyar</em>
 	 *          (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}) out of Israel.
 	 * @see #isTachanunRecited15IyarOutOfIsrael()
@@ -522,7 +532,12 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * @return if <em>tachanun</em> is recited during the <em>Shivas Yemei Hamiluim</em>.
+	 * Is if <em>tachanun</em> is recited during the <em>Shivas Yemei Hamiluim</em>, from the 23 of {@link
+	 * JewishDate#ADAR Adar} on a non-leap-year or {@link JewishDate#ADAR_II Adar II} on a leap year to the end of
+	 * the month.
+	 * @return if <em>tachanun</em> is recited during the <em>Shivas Yemei Hamiluim</em>, from the 23 of {@link
+	 * JewishDate#ADAR Adar} on a non-leap-year or {@link JewishDate#ADAR_II Adar II} on a leap year to the end of
+	 * the month.
 	 * @see #setTachanunRecitedShivasYemeiHamiluim(boolean)
 	 */
 	public boolean isTachanunRecitedShivasYemeiHamiluim() {
