@@ -2,7 +2,7 @@
  * Zmanim Java API
  * Copyright (C) 2011 - 2022 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
- * Copyright (C) 2019 - 2021 Y Paritcher
+ * Copyright (C) 2019 - 2022 Y Paritcher
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -1299,13 +1299,11 @@ public class JewishCalendar extends JewishDate {
 	}
 	
 	/**
-	 * Returns true if the current day is erev Yom Tov. The method returns true for <em>Erev</em> - <em>Pesach</em> (first and
-	 * last days), <em>Shavuos</em>, <em>Rosh Hashana</em>, <em>Yom Kippur</em>, <em>Succos</em> and <em>Hoshana Rabba</em>.
+	 * Returns true if the current day is <em>Isru Chag</em>. The method returns true for the day following <em>Pesach</em>
+	 * <em>Shavuos</em> and <em>Succos</em>. It utilizes {@see #getInIsrael()} to return the proper date.
 	 * 
-	 * @return true if the current day is <em>Erev</em> - <em>Pesach</em>, <em>Shavuos</em>, <em>Rosh Hashana</em>, <em>Yom
-	 * Kippur</em>, <em>Succos</em> and <em>Hoshana Rabba</em>.
-	 * @see #isYomTov()
-	 * @see #isErevYomTovSheni()
+	 * @return true if the current day is <em>Isru Chag</em>. The method returns true for the day following <em>Pesach</em>
+	 * <em>Shavuos</em> and <em>Succos</em>. It utilizes {@see #getInIsrael()} to return the proper date.
 	 */
 	public boolean isIsruChag() {
 		int holidayIndex = getYomTovIndex();
