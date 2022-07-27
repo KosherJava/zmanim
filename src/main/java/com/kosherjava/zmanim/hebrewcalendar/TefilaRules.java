@@ -112,10 +112,10 @@ public class TefilaRules {
 	
 	/**
 	 * The default value is <code>true</code>.
-	 * @see #isTachanunRecitedMincha()
-	 * @see #setTachanunRecitedMincha(boolean)
+	 * @see #isTachanunRecitedMinchaAllYear()
+	 * @see #setTachanunRecitedMinchaAllYear(boolean)
 	 */
-	private boolean tachatnunRecitedMincha = true;
+	private boolean tachanunRecitedMinchaAllYear = true;
 
 	/**
 	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em> on the day in question. See the many
@@ -169,7 +169,7 @@ public class TefilaRules {
 		tomorrow = (JewishCalendar) jewishCalendar.clone();
 		tomorrow.forward(Calendar.DATE, 1);
 		
-		if (!tachatnunRecitedMincha
+		if (!tachanunRecitedMinchaAllYear
 					|| jewishCalendar.getDayOfWeek() == Calendar.FRIDAY
 					|| ! isTachanunRecitedShacharis(jewishCalendar) 
 					|| (! isTachanunRecitedShacharis(tomorrow) && 
@@ -355,23 +355,26 @@ public class TefilaRules {
 	 * @return If <em>tachanun</em> is set to be recited during the week of Purim from the 11th through the 17th of Adar
 	 *         (on a non-leap year, or Adar II on a leap year). Some <em>Chasidish</em> communities do not recite
 	 *         <em>tachanun</em> during this period.
+	 * @see #setTachanunRecitedWeekOfPurim(boolean)
 	 */
 	public boolean isTachanunRecitedWeekOfPurim() {
 		return tachanunRecitedWeekOfPurim;
 	}
 
 	/**
-	 * @param isTachanunRecitedWeekOfPurim Sets if tachanun is to recited during the week of Purim from the 11th through
-	 *         the 17th of Adar (on a non-leap year), or Adar II (on a leap year). Some <em>Chasidish</em> communities do
-	 *         not recite<em>tachanun</em> during this period.
+	 * @param tachanunRecitedWeekOfPurim Sets if <em>tachanun</em> is to recited during the week of Purim from the 11th
+	 *         through the 17th of Adar (on a non-leap year), or Adar II (on a leap year). Some <em>Chasidish</em>
+	 *         communities do not recite <em>tachanun</em> during this period.
+	 * @see #isTachanunRecitedWeekOfPurim()
 	 */
-	public void setTachanunRecitedWeekOfPurim(boolean isTachanunRecitedWeekOfPurim) {
-		this.tachanunRecitedWeekOfPurim = isTachanunRecitedWeekOfPurim;
+	public void setTachanunRecitedWeekOfPurim(boolean tachanunRecitedWeekOfPurim) {
+		this.tachanunRecitedWeekOfPurim = tachanunRecitedWeekOfPurim;
 	}
 
 	/**
 	 * @return If <em>tachanun</em> is set to be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20 Iyar,
-	 *         or the 29th - 35th of the <em>Omer</em>).
+	 *         or the 29th - 35th of the <em>Omer</em>). Some <em>Chasidish</em> communities do not recite
+	 *         <em>tachanun</em> during this period.
 	 * @see #setTachanunRecitedWeekOfHod(boolean)
 	 */
 	public boolean isTachanunRecitedWeekOfHod() {
@@ -379,16 +382,24 @@ public class TefilaRules {
 	}
 
 	/**
-	 * @param isTachanunRecitedWeekOfHod Sets if <em>tachanun</em> should be recited during the <em>sefira</em> week of <em>Hod</em>.
+	 * @param tachanunRecitedWeekOfHod Sets if <em>tachanun</em> should be recited during the <em>sefira</em> week of
+	 * <em>Hod</em>.
 	 * @see #isTachanunRecitedWeekOfHod()
 	 */
-	public void setTachanunRecitedWeekOfHod(boolean isTachanunRecitedWeekOfHod) {
-		this.tachanunRecitedWeekOfHod = isTachanunRecitedWeekOfHod;
+	public void setTachanunRecitedWeekOfHod(boolean tachanunRecitedWeekOfHod) {
+		this.tachanunRecitedWeekOfHod = tachanunRecitedWeekOfHod;
 	}
 
 	/**
+	 * Is <em>tachanun</em> to be recited at the end Of Tishrei. The Magen Avraham 669:1 and the Pri Chadash 131:7 state that some
+	 * places to not recite <em>tachanun</em> during this period. The Sh"UT Chasam Sofer on Choshen Mishpat 77 writes that this is
+	 * the <em>minhag</em> in Ashkenaz. The Shaarei Teshuva 131:19 quotes the Sheyarie Kneses Hagdola who also states that it should
+	 * not be recited. The Aderes wanted to institute saying <em>tachanun</em> during this period, but was dissuaded from this by
+	 * Rav Shmuel Salant who did not want to change the <em>minhag</em> in Yerushalayim. The Aruch Hashulchan is of the opinion that
+	 * that this <em>minhag</em> is incorrect, and it should be recited, and The Chazon Ish also recited <em>tachanun</em> during this
+	 * period. See the Dirshu edition of the Mishna Berurah for details.
 	 * @return If <em>tachanun</em> is set to be recited at the end Of Tishrei.
-	 * @see #setTachanunRecitedEndOfTishrei(isTachanunRecitedEndOfTishrei)
+	 * @see #setTachanunRecitedEndOfTishrei(tachanunRecitedEndOfTishrei)
 	 */
 	public boolean isTachanunRecitedEndOfTishrei() {
 		return tachanunRecitedEndOfTishrei;
@@ -396,16 +407,21 @@ public class TefilaRules {
 
 	/**
 	 * Sets if <em>tachanun</em> should be recited at the end of Tishrei.
-	 * @param isTachanunRecitedEndOfTishrei is <em>tachanun</em> recited at the end of Tishrei.
+	 * @param tachanunRecitedEndOfTishrei is <em>tachanun</em> recited at the end of Tishrei.
 	 * @see #isTachanunRecitedEndOfTishrei()
 	 */
-	public void setTachanunRecitedEndOfTishrei(boolean isTachanunRecitedEndOfTishrei) {
-		this.tachanunRecitedEndOfTishrei = isTachanunRecitedEndOfTishrei;
+	public void setTachanunRecitedEndOfTishrei(boolean tachanunRecitedEndOfTishrei) {
+		this.tachanunRecitedEndOfTishrei = tachanunRecitedEndOfTishrei;
 	}
 	
 	/**
+	 * Is <em>tachanun</em> to be recited during the week after <em>Shavuos</em>. This is the opinion of the Pri Megadim
+	 * quoted by the Mishna Berurah. This is since <em>karbanos</em> of Shavuos have <em>tashlumim</em> for 7 days, it is
+	 * still considered like a Yom Tov. The Chazon Ish quoted in the Orchos Rabainu vol. 1 page 68 recited <em>tachanun</em>
+	 * this week.
+	 * 
 	 * @return If <em>tachanun</em> is set to be recited during the week after Shavuos.
-	 * @see #setTachanunRecitedWeekAfterShavuos(isTachanunRecitedWeekAfterShavuos)
+	 * @see #setTachanunRecitedWeekAfterShavuos(boolean)
 	 */
 	public boolean isTachanunRecitedWeekAfterShavuos() {
 		return tachanunRecitedWeekAfterShavuos;
@@ -413,141 +429,167 @@ public class TefilaRules {
 
 	/**
 	 * Sets if <em>tachanun</em> is set to be recited during the week after <em>Shavuos</em>.
-	 * @param isTachanunRecitedWeekAfterShavuos is <em>tachanun</em> recited during the week after Shavuos.
-	 * @see #isTachanunRecitedEndOfTishrei()
+	 * @param tachanunRecitedWeekAfterShavuos is <em>tachanun</em> recited during the week after Shavuos.
+	 * @see #isTachanunRecitedWeekAfterShavuos()
 	 */
-	public void setTachanunRecitedWeekAfterShavuos(boolean isTachanunRecitedWeekAfterShavuos) {
-		this.tachanunRecitedWeekAfterShavuos = isTachanunRecitedWeekAfterShavuos;
+	public void setTachanunRecitedWeekAfterShavuos(boolean tachanunRecitedWeekAfterShavuos) {
+		this.tachanunRecitedWeekAfterShavuos = tachanunRecitedWeekAfterShavuos;
 	}
 	
 	/**
-	 * Returns If <em>tachanun</em> is set to be recited on the 13th of <em>Sivan</em> outside Israel. Both
+	 * Returns If <em>tachanun</em> is set to be recited on the 13th of <em>Sivan</em> (<em>sfaika deyoma</em> of the
+	 * 7th day) outside Israel. This is brought down by the Shaarie Teshuva 131:19 quoting the Sheyarei Kneses Hagedola
+	 * that due to the <em>sfaika deyoma</em> it should not be said. Rav Shlomo Zalman Orbach in Halichos Shlomo on
+	 * Shavuos 12:16:25 that even in <em>chutz laaretz</em> it should be recited since the <em>yemei Tashlumin</em> are
+	 * counted as in Israel since that is where the <em>karbanos</em> are brought. Both
 	 * {@link #isTachanunRecitedShacharis(JewishCalendar)} and {@link #isTachanunRecitedMincha(JewishCalendar)}
 	 * only return false if the location is not set to {@link JewishCalendar#getInIsrael() Israel} and both
 	 * {@link #tachanunRecitedWeekAfterShavuos} and {@link #setTachanunRecited13SivanOutOfIsrael} are set to false.
 	 * 
 	 * @return If <em>tachanun</em> is set to be recited on the 13th of Sivan out of Israel.
 	 * @see #setTachanunRecited13SivanOutOfIsrael(isTachanunRecitedThirteenSivanOutOfIsrael)
+	 * @see #isTachanunRecitedWeekAfterShavuos()
 	 */
 	public boolean isTachanunRecited13SivanOutOfIsrael() {
 		return tachanunRecited13SivanOutOfIsrael;
 	}
 
 	/**
-	 * @param isTachanunRecitedThirteenSivanOutOfIsrael sets if <em>tachanun</em> should be recited on the 13th
+	 * @param tachanunRecitedThirteenSivanOutOfIsrael sets if <em>tachanun</em> should be recited on the 13th
 	 *          of <em>Sivan</em> out of Israel.
-	 * @see #tachanunRecited13SivanOutOfIsrael
+	 * @see #isTachanunRecited13SivanOutOfIsrael()
 	 */
-	public void setTachanunRecited13SivanOutOfIsrael(boolean isTachanunRecitedThirteenSivanOutOfIsrael) {
-		this.tachanunRecited13SivanOutOfIsrael = isTachanunRecitedThirteenSivanOutOfIsrael;
+	public void setTachanunRecited13SivanOutOfIsrael(boolean tachanunRecitedThirteenSivanOutOfIsrael) {
+		this.tachanunRecited13SivanOutOfIsrael = tachanunRecitedThirteenSivanOutOfIsrael;
 	}
 	
 	/**
+	 * Is <em>tachanun</em> recited on {@link JewishCalendar#PESACH_SHENI Pesach Sheni}. The Pri Chadash 131:7 states that
+	 * <em>tachanun</em> should not be recited. The Aruch Hashulchan states that this is the minhag of the <em>sephardim</em>.
+	 * the Shaarei Efraim 10:27 also mentions that it is not recited, as does the Siddur Yaavetz (Shaar Hayesod, Chodesh Iyar).
+	 * The Pri Megadim (Mishbetzes Hazahav 131:15) and the Chazon Ish (Erev Pesahc Shchal Beshabos, page 203 in Rav Sheraya
+	 * Deblitzky's comment).
 	 * @return If <em>tachanun</em> is recited on {@link JewishCalendar#PESACH_SHENI Pesach Sheni}.
+	 * @see #setTachanunRecitedPesachSheni(boolean)
 	 */
 	public boolean isTachanunRecitedPesachSheni() {
 		return tachanunRecitedPesachSheni;
 	}
 
 	/**
-	 * @param isTachanunRecitedPesachSheni sets if <em>tachanun</em> should be recited on <em>Pesach Sheni</em>
+	 * @param tachanunRecitedPesachSheni sets if <em>tachanun</em> should be recited on <em>Pesach Sheni</em>.
+	 * @see #isTachanunRecitedPesachSheni()
 	 */
-	public void setTachanunRecitedPesachSheni(boolean isTachanunRecitedPesachSheni) {
-		this.tachanunRecitedPesachSheni = isTachanunRecitedPesachSheni;
+	public void setTachanunRecitedPesachSheni(boolean tachanunRecitedPesachSheni) {
+		this.tachanunRecitedPesachSheni = tachanunRecitedPesachSheni;
 	}
 	
 	/**
+	 * <em>tachanun</em> is recited on 15 Iyar (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>})
+	 * out of Israel.
 	 * @return if <em>tachanun</em> is recited on 15 Iyar (<em>sfaika deyoma</em> of {@link
 	 *          JewishCalendar#PESACH_SHENI Pesach Sheni}) out of Israel.
+	 * @see #setTachanunRecited15IyarOutOfIsrael(boolean)
 	 */
 	public boolean isTachanunRecited15IyarOutOfIsrael() {
 		return tachanunRecited15IyarOutOfIsrael;
 	}
 
 	/**
-	 * @param isTachanunRecited15IyarOutOfIsrael if <em>tachanun</em> should be recited on the 15th of <em>Iyar</em>
+	 * @param tachanunRecited15IyarOutOfIsrael if <em>tachanun</em> should be recited on the 15th of <em>Iyar</em>
 	 *          (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}) out of Israel.
+	 * @see #isTachanunRecited15IyarOutOfIsrael()
 	 */
-	public void setTachanunRecited15IyarOutOfIsrael(boolean isTachanunRecited15IyarOutOfIsrael) {
-		this.tachanunRecited15IyarOutOfIsrael = isTachanunRecited15IyarOutOfIsrael;
+	public void setTachanunRecited15IyarOutOfIsrael(boolean tachanunRecited15IyarOutOfIsrael) {
+		this.tachanunRecited15IyarOutOfIsrael = tachanunRecited15IyarOutOfIsrael;
 	}
 	
 	/**
 	 * @return if <em>tachanun</em> is recited on {@link JewishCalendar#LAG_BAOMER <em>Lag Baomer</em>}.
+	 * @see #setTachanunRecitedMinchaErevLagBaomer(boolean)
 	 */
 	public boolean isTachanunRecitedMinchaErevLagBaomer() {
 		return tachanunRecitedMinchaErevLagBaomer;
 	}
 
 	/**
-	 * @param isTachanunRecitedMinchaErevLagBaomer sets if <em>tachanun</em> should be recited on <em>mincha</em>
+	 * @param tachanunRecitedMinchaErevLagBaomer sets if <em>tachanun</em> should be recited on <em>mincha</em>
 	 *          of <em>erev {@link JewishCalendar#LAG_BAOMER Lag Baomer}</em>.
+	 * @see #isTachanunRecitedMinchaErevLagBaomer()
 	 */
-	public void setTachanunRecitedMinchaErevLagBaomer(boolean isTachanunRecitedMinchaErevLagBaomer) {
-		this.tachanunRecitedMinchaErevLagBaomer = isTachanunRecitedMinchaErevLagBaomer;
+	public void setTachanunRecitedMinchaErevLagBaomer(boolean tachanunRecitedMinchaErevLagBaomer) {
+		this.tachanunRecitedMinchaErevLagBaomer = tachanunRecitedMinchaErevLagBaomer;
 	}
 	
 	/**
-	 * @return if <em>tachanun</em> is recited on <em>Shivas Yemei Hamiluim</em>.
+	 * @return if <em>tachanun</em> is recited during the <em>Shivas Yemei Hamiluim</em>.
+	 * @see #setTachanunRecitedShivasYemeiHamiluim(boolean)
 	 */
 	public boolean isTachanunRecitedShivasYemeiHamiluim() {
 		return tachanunRecitedShivasYemeiHamiluim;
 	}
 
 	/**
-	 * @param isTachanunRecitedShivasYemeiHamiluim sets if <em>tachanun</em> should be recited during the
+	 * @param tachanunRecitedShivasYemeiHamiluim sets if <em>tachanun</em> should be recited during the
 	 *          <em>Shivas Yemei Hamiluim</em>.
+	 * @see #isTachanunRecitedShivasYemeiHamiluim()
 	 */
-	public void setTachanunRecitedShivasYemeiHamiluim(boolean isTachanunRecitedShivasYemeiHamiluim) {
-		this.tachanunRecitedShivasYemeiHamiluim = isTachanunRecitedShivasYemeiHamiluim;
+	public void setTachanunRecitedShivasYemeiHamiluim(boolean tachanunRecitedShivasYemeiHamiluim) {
+		this.tachanunRecitedShivasYemeiHamiluim = tachanunRecitedShivasYemeiHamiluim;
 	}
 
 	/**
 	 * @return if <em>tachanun</em> is recited on Fridays Some <em>chasidish</em> communities do not
 	 *          recite <em>tachanun</em> on Fridays.
+	 * @see #setTachanunRecitedFridays(boolean)
 	 */
 	public boolean isTachanunRecitedFridays() {
 		return tachanunRecitedFridays;
 	}
 
 	/**
-	 * @param isTachanunRecitedFridays sets if <em>tachanun</em> should be recited on Fridays. Some <em>chasidish</em>
+	 * @param tachanunRecitedFridays sets if <em>tachanun</em> should be recited on Fridays. Some <em>chasidish</em>
 	 *          communities do not recite <em>tachanun</em> on Fridays.
+	 * @see #isTachanunRecitedFridays()
 	 */
-	public void setTachanunRecitedFridays(boolean isTachanunRecitedFridays) {
-		this.tachanunRecitedFridays = isTachanunRecitedFridays;
+	public void setTachanunRecitedFridays(boolean tachanunRecitedFridays) {
+		this.tachanunRecitedFridays = tachanunRecitedFridays;
 	}
 
 	/**
 	 * @return if <em>tachanun</em> is recited on Sundays.  Some <em>chasidish</em> communities do not recite
 	 *          <em>tachanun</em> on Fridays.
+	 * @see #isTachanunRecitedSundays()
 	 */
 	public boolean isTachanunRecitedSundays() {
 		return tachanunRecitedSundays;
 	}
 
 	/**
-	 * @param isTachanunRecitedSundays sets if <em>tachanun</em> should be recited on Sundays. Some <em>chasidish</em>
+	 * @param tachanunRecitedSundays sets if <em>tachanun</em> should be recited on Sundays. Some <em>chasidish</em>
 	 *          communities do not recite <em>tachanun</em> on Sundays.
+	 * @see #isTachanunRecitedSundays()
 	 */
-	public void setTachanunRecitedSundays(boolean isTachanunRecitedSundays) {
-		this.tachanunRecitedSundays = isTachanunRecitedSundays;
+	public void setTachanunRecitedSundays(boolean tachanunRecitedSundays) {
+		this.tachanunRecitedSundays = tachanunRecitedSundays;
 	}
 	
 	/**
 	 * @return if <em>tachanun</em> is recited on <em>Mincha</em> the entire year.  Some <em>chasidish</em>
 	 *          communities do not recite <em>tachanun</em> all year round by <em>Mincha</em>.
+	 * @see #setTachanunRecitedMinchaAllYear(boolean)
 	 */
-	public boolean isTachanunRecitedMincha() {
-		return tachatnunRecitedMincha;
+	public boolean isTachanunRecitedMinchaAllYear() {
+		return tachanunRecitedMinchaAllYear;
 	}
 
 	/**
-	 * @param isTachanunRecitedMincha sets if <em>tachanun</em> should be recited by <em>mincha</em>. If set to false, 
-	 *          {@link #isTachanunRecitedMincha(JewishCalendar)} will always return false. If set to true (the default), it
-	 *          will use the regular rules.
+	 * @param tachanunRecitedMinchaAllYear sets if <em>tachanun</em> should be recited by <em>mincha</em> all year. If set
+	 *          to false, {@link #isTachanunRecitedMincha(JewishCalendar)} will always return false. If set to true (the
+	 *          default), it will use the regular rules.
+	 * @see #isTachanunRecitedMinchaAllYear()
 	 */
-	public void setTachanunRecitedMincha(boolean isTachanunRecitedMincha) {
-		this.tachatnunRecitedMincha = isTachanunRecitedMincha;
+	public void setTachanunRecitedMinchaAllYear(boolean tachanunRecitedMinchaAllYear) {
+		this.tachanunRecitedMinchaAllYear = tachanunRecitedMinchaAllYear;
 	}
 }
