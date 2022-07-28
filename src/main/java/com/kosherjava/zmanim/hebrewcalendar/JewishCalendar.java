@@ -40,7 +40,7 @@ import java.util.TimeZone;
  * 
  * @see java.util.Date
  * @see java.util.Calendar
- * @author &copy; Y. Paritcher 2019 - 2021
+ * @author &copy; Y. Paritcher 2019 - 2022
  * @author &copy; Avrom Finkelstien 2002
  * @author &copy; Eliyahu Hershfeld 2011 - 2022
  */
@@ -1268,7 +1268,6 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns if <em>Mashiv Haruach Umorid Hageshem</em> is recited. This period starts on 22 <em>Tishrei</em> and ends
 	 * on the 15th day of <em>Nissan</em>.
-	 * <em>Marcheshvan</em>. Outside of Israel recitation starts on December 4/5.
 	 * 
 	 * @deprecated Use {@link TefilaRules#isMashivHaruachRecited(JewishCalendar)} instead.
 	 * 
