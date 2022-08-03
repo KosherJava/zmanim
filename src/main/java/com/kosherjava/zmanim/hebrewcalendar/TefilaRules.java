@@ -53,8 +53,6 @@ import java.util.Calendar;
  * <li><em>Mizmor Lesoda</em></li>
  * <li><em>Behab</em></li>
  * <li><em>Selichos</em></li>
- * <li><em>Yom Kippur Kattan</em></li>
- * <li><em>Hallel Shalem / Chatzi Hallel</em></li>
  * <li>...</li>
  * </ol>
  */
@@ -141,8 +139,8 @@ public class TefilaRules {
 	 * @see #isTachanunRecitedMinchaAllYear()
 	 * @see #setTachanunRecitedMinchaAllYear(boolean)
 	 */
-	private boolean tachanunRecitedMinchaAllYear = true;
-
+	private boolean tachanunRecitedMinchaAllYear = true;	
+	
 	/**
 	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em> on the day in question. See the many
 	 * <em>minhag</em> based settings that are available in this class.
@@ -371,6 +369,75 @@ public class TefilaRules {
 	 */
 	public boolean isMoridHatalRecited(JewishCalendar jewishCalendar) {
 		return !isMashivHaruachRecited(jewishCalendar) || isMashivHaruachStartDate(jewishCalendar) || isMashivHaruachEndDate(jewishCalendar);
+	}
+	
+	/**
+	 * Returns if <em>hallel</em> is recited on the day in question. This will return true for both <em>hallel shalem</em>
+	 * and <em>chatzi hallel</em>. See {@link #isHallelShalemRecited(JewishCalendar)} to know if the complete <em>hallel</em>
+	 * is recited.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * @return if <em>hallel</em> is recited.
+	 * @see #isHallelShalemRecited(JewishCalendar)
+	 */
+	public boolean isHallelRecited(JewishCalendar jewishCalendar) {
+		int day = jewishCalendar.getJewishDayOfMonth();
+		int month = jewishCalendar.getJewishMonth();
+		int holidayIndex = jewishCalendar.getYomTovIndex();
+		boolean inIsrael = jewishCalendar.getInIsrael();
+		
+		if(jewishCalendar.isRoshChodesh()) { //RH returns false for RC
+			return true;
+		}
+		if(jewishCalendar.isChanukah()) {
+			return true;
+		}
+		switch (month) {
+			case JewishDate.NISSAN:
+				if(day >= 15 && ((inIsrael && day <= 21) || (!inIsrael && day <= 22))){
+					return true;
+				}
+				break;
+			case JewishDate.IYAR: // modern holidays
+				if(jewishCalendar.isUseModernHolidays()  && (holidayIndex == JewishCalendar.YOM_HAATZMAUT
+						|| holidayIndex == JewishCalendar.YOM_YERUSHALAYIM)){
+					return true;
+				}
+				break;
+			case JewishDate.SIVAN:
+				if (day == 6 || (!inIsrael && (day == 7))){
+					return true;
+				}
+				break;
+			case JewishDate.TISHREI:
+				if (day >= 15 && (day <= 22 || (!inIsrael && (day <= 23)))){
+					return true;
+				}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns if <em>hallel shalem</em> is recited on the day in question. This will always return false if {@link
+	 * #isHallelRecited(JewishCalendar)} returns false.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * @return if <em>hallel shalem</em> is recited.
+	 * @see #isHallelRecited(JewishCalendar)
+	 */
+	public boolean isHallelShalemRecited(JewishCalendar jewishCalendar) {
+		int day = jewishCalendar.getJewishDayOfMonth();
+		int month = jewishCalendar.getJewishMonth();
+		boolean inIsrael = jewishCalendar.getInIsrael();
+		if(isHallelRecited(jewishCalendar)) {
+			if((jewishCalendar.isRoshChodesh() && ! jewishCalendar.isChanukah())
+					|| (month == JewishDate.NISSAN && ((inIsrael && day > 15) || (!inIsrael && day > 16)))) {
+				return false;
+			} else {
+				return true;
+			}
+		} 
+		return false;
 	}
 	
 	/**
