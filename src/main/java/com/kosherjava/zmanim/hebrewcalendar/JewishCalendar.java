@@ -867,7 +867,7 @@ public class JewishCalendar extends JewishDate {
 		int dayOfWeek = getDayOfWeek();
 		int month = getJewishMonth();
 		int day = getJewishDayOfMonth();
-		if(month == JewishDate.ELUL || month == JewishDate.TISHREI && month != JewishDate.KISLEV && month != JewishDate.NISSAN) {
+		if(month == JewishDate.ELUL || month == JewishDate.TISHREI || month == JewishDate.KISLEV || month == JewishDate.NISSAN) {
 			return false;
 		}
 
