@@ -133,6 +133,13 @@ public class JewishCalendar extends JewishDate {
 	
 	/** The day following the last day of Pesach, Shavuos and Sukkos.*/
 	public static final int ISRU_CHAG = 35;
+	
+	/**
+	 * The day before <em>Rosh Chodesh</em> (moved to Thursday if <em>Rosh Chodesh</em> is on a Friday or <em>Shabbos</em>) in most months.
+	 * This constant is not actively in use.
+	 * @see #isYomKippurKatan()
+	 */
+	public static final int YOM_KIPPUR_KATAN = 36;
 
 	/**
 	 * Is the calendar set to Israel, where some holidays have different rules.
@@ -845,6 +852,33 @@ public class JewishCalendar extends JewishDate {
 	public boolean isErevRoshChodesh() {
 		// Erev Rosh Hashana is not Erev Rosh Chodesh.
 		return (getJewishDayOfMonth() == 29 && getJewishMonth() != ELUL);
+	}
+	
+	
+	/**
+	 * Returns true if the current day is <em>Yom Kippur Katan</em>. Returns false for <em>Erev Rosh Hashana</em>,
+	 * <em>Erev Rosh Chodesh Cheshvan</em>, <em>Teves</em> and <em>Iyyar</em>. If <em>Erev Rosh Chodesh</em> occurs
+	 * on a Friday or <em>Shabbos</em>, <em>Yom Kippur Katan</em> is moved back to Thursday.
+	 * 
+	 * @return true if the current day is <em>Erev Rosh Chodesh</em>. Returns false for <em>Erev Rosh Hashana</em>.
+	 * @see #isRoshChodesh()
+	 */
+	public boolean isYomKippurKatan() {
+		int dayOfWeek = getDayOfWeek();
+		int month = getJewishMonth();
+		int day = getJewishDayOfMonth();
+		if(month == JewishDate.ELUL || month == JewishDate.TISHREI && month != JewishDate.KISLEV && month != JewishDate.NISSAN) {
+			return false;
+		}
+
+		if(day == 29 && dayOfWeek != Calendar.FRIDAY && dayOfWeek != Calendar.SATURDAY) {
+			return true;
+		}
+		
+		if((day == 27 || day == 28) && dayOfWeek == Calendar.THURSDAY ) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
