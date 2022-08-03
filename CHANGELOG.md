@@ -1,8 +1,11 @@
 ## [2.4.0](https://github.com/KosherJava/zmanim/compare/2.3.0...master) (future)
 
-* Add the `TefilaRules` class, a utility class for info like is _vesain tal umatar_ recited etc., is _tachanun_ recited by _shacharis_ or _mincha_.
+* Add _Yom Kippur Katan_ and _Isru Chag_ to the `JewishCalendar`class.
+* Add the `TefilaRules` class, a utility class for info like:
+  * is _vesain tal umatar_ recited etc.
+  * is _tachanun_ recited by _shacharis_ or _mincha_.
+  * Is _hallel_ or _hallel shalem_ recited
 * Deprecate the _tefila_ rules methods that existed in JewishCalendar class in favor of using the ones in the `TefilaRules` class.
-* Add _Isru Chag_ to the `JewishCalendar` class.
 * Add `getSamuchLeMinchaKetana` _zman_.
 * Deprecate `getSofZmanShmaFixedLocal()` and `getSofZmanTfilaFixedLocal()` with future plans of removal.
 * Deprecate multiple "dangerous" _zmanim_ as an alert to developers, with plans on retaining them.
