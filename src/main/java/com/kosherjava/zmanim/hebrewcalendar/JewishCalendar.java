@@ -140,6 +140,13 @@ public class JewishCalendar extends JewishDate {
 	 * @see #isYomKippurKatan()
 	 */
 	public static final int YOM_KIPPUR_KATAN = 36;
+	
+	/**
+	 * The Monday, Thursday and Monday after the first <em>Shabbos</em> after <em>Rosh Chodesh Cheshvan</em> and <em>Iyar</em>em>) are BeHab
+	 * days. This constant is not actively in use.
+	 * @see #isBeHaB()
+	 */
+	public static final int BEHAB = 37;
 
 	/**
 	 * Is the calendar set to Israel, where some holidays have different rules.
@@ -877,6 +884,29 @@ public class JewishCalendar extends JewishDate {
 		
 		if((day == 27 || day == 28) && dayOfWeek == Calendar.THURSDAY ) {
 			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * The Monday, Thursday and Monday after the first <em>Shabbos</em> after {@link #isRoshChodesh() <em>Rosh Chodesh</em>}
+	 * {@link JewishDate#CHESHVAN <em>Cheshvan</em>} and {@link JewishDate#IYAR <em>Iyar</em>} are <a href=
+	 * "https://outorah.org/p/41334/"> <em>BeHaB</em></a> days. If the last Monday of Iyar's BeHaB coincides with {@link
+	 * #PESACH_SHENI <em>Pesach Sheni</em>}, the method currently considers it both <em>Pesach Sheni</em> and <em>BeHaB</em>.
+	 * As seen in an Ohr Sameach  article on the subject <a href="https://ohr.edu/this_week/insights_into_halacha/9340">The
+	 * unknown Days: BeHaB Vs. Pesach Sheini?</a> there are some customs that delay the day to various points in the future.
+	 * @return true if the day is <em>BeHaB</em>.
+	 */
+	public boolean isBeHaB() {
+		int dayOfWeek = getDayOfWeek();
+		int month = getJewishMonth();
+		int day = getJewishDayOfMonth();
+		
+		if (month == JewishDate.CHESHVAN || month == JewishDate.IYAR) {
+			if((dayOfWeek == Calendar.MONDAY && day > 4 && day < 18)
+					|| (dayOfWeek == Calendar.THURSDAY && day > 7 && day < 14)) {
+				return true;
+			}
 		}
 		return false;
 	}
