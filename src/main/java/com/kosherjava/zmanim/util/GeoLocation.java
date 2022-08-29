@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2022 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -11,7 +11,7 @@
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
- * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or connect to: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.util;
 
@@ -23,7 +23,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2022
  */
 public class GeoLocation implements Cloneable {
 	/**
@@ -92,10 +92,10 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Method to set the elevation in Meters <b>above </b> sea level.
+	 * Method to set the elevation in Meters <b>above</b> sea level.
 	 * 
 	 * @param elevation
-	 *            The elevation to set in Meters. An IllegalArgumentException will be thrown if the value is a negative.
+	 *            The elevation to set in Meters. An IllegalArgumentException will be thrown if the value is a negative, NaN or infinite.
 	 */
 	public void setElevation(double elevation) {
 		if (elevation < 0) {
@@ -114,11 +114,11 @@ public class GeoLocation implements Cloneable {
 	 *            The location name for display use such as &quot;Lakewood, NJ&quot;
 	 * @param latitude
 	 *            the latitude in a double format such as 40.095965 for Lakewood, NJ.
-	 *            <b>Note: </b> For latitudes south of the equator, a negative value should be used.
+	 *            <b>Note:</b> For latitudes south of the equator, a negative value should be used.
 	 * @param longitude
 	 *            double the longitude in a double format such as -74.222130 for Lakewood, NJ.
-	 *            <b>Note: </b> For longitudes east of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime
-	 *            Meridian </a> (Greenwich), a negative value should be used.
+	 *            <b>Note:</b> For longitudes east of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime
+	 *            Meridian</a> (Greenwich), a negative value should be used.
 	 * @param timeZone
 	 *            the <code>TimeZone</code> for the location.
 	 */
@@ -133,11 +133,11 @@ public class GeoLocation implements Cloneable {
 	 *            The location name for display use such as &quot;Lakewood, NJ&quot;
 	 * @param latitude
 	 *            the latitude in a double format such as 40.095965 for Lakewood, NJ.
-	 *            <b>Note: </b> For latitudes south of the equator, a negative value should be used.
+	 *            <b>Note:</b> For latitudes south of the equator, a negative value should be used.
 	 * @param longitude
 	 *            double the longitude in a double format such as -74.222130 for Lakewood, NJ.
-	 *            <b>Note: </b> For longitudes east of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime
-	 *            Meridian </a> (Greenwich), a negative value should be used.
+	 *            <b>Note:</b> For longitudes east of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime
+	 *            Meridian</a> (Greenwich), a negative value should be used.
 	 * @param elevation
 	 *            the elevation above sea level in Meters. Elevation is not used in most algorithms used for calculating
 	 *            sunrise and set.
@@ -155,7 +155,7 @@ public class GeoLocation implements Cloneable {
 	/**
 	 * Default GeoLocation constructor will set location to the Prime Meridian at Greenwich, England and a TimeZone of
 	 * GMT. The longitude will be set to 0 and the latitude will be 51.4772 to match the location of the <a
-	 * href="http://www.rog.nmm.ac.uk">Royal Observatory, Greenwich </a>. No daylight savings time will be used.
+	 * href="https://www.rmg.co.uk/royal-observatory">Royal Observatory, Greenwich</a>. No daylight savings time will be used.
 	 */
 	public GeoLocation() {
 		setLocationName("Greenwich, England");
@@ -170,7 +170,7 @@ public class GeoLocation implements Cloneable {
 	 * @param latitude
 	 *            The degrees of latitude to set. The values should be between -90&deg; and 90&deg;. An
 	 *            IllegalArgumentException will be thrown if the value exceeds the limit. For example 40.095965 would be
-	 *            used for Lakewood, NJ. <b>Note: </b> For latitudes south of the equator, a negative value should be
+	 *            used for Lakewood, NJ. <b>Note:</b> For latitudes south of the equator, a negative value should be
 	 *            used.
 	 */
 	public void setLatitude(double latitude) {
@@ -187,9 +187,9 @@ public class GeoLocation implements Cloneable {
 	 *            The degrees of latitude to set between 0&deg; and 90&deg;. For example 40 would be used for Lakewood, NJ.
 	 *            An IllegalArgumentException will be thrown if the value exceeds the limit.
 	 * @param minutes
-	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
+	 *            <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
 	 * @param seconds
-	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>
+	 *            <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>
 	 * @param direction
 	 *            N for north and S for south. An IllegalArgumentException will be thrown if the value is not S or N.
 	 */
@@ -221,7 +221,7 @@ public class GeoLocation implements Cloneable {
 	 *            The degrees of longitude to set in a double format between -180&deg; and 180&deg;. An
 	 *            IllegalArgumentException will be thrown if the value exceeds the limit. For example -74.2094 would be
 	 *            used for Lakewood, NJ. Note: for longitudes east of the <a
-	 *            href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich) a negative value
+	 *            href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich) a negative value
 	 *            should be used.
 	 */
 	public void setLongitude(double longitude) {
@@ -238,11 +238,11 @@ public class GeoLocation implements Cloneable {
 	 *            The degrees of longitude to set between 0&deg; and 180&deg;. As an example 74 would be set for Lakewood, NJ.
 	 *            An IllegalArgumentException will be thrown if the value exceeds the limits.
 	 * @param minutes
-	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
+	 *            <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>
 	 * @param seconds
-	 *            <a href="http://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>
+	 *            <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>
 	 * @param direction
-	 *            E for east of the <a href="http://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian </a> or W for west of it.
+	 *            E for east of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> or W for west of it.
 	 *            An IllegalArgumentException will be thrown if
 	 *            the value is not E or W.
 	 */
@@ -305,15 +305,15 @@ public class GeoLocation implements Cloneable {
 
 	/**
 	 * A method that will return the location's local mean time offset in milliseconds from local <a
-	 * href="http://en.wikipedia.org/wiki/Standard_time">standard time</a>. The globe is split into 360&deg;, with
+	 * href="https://en.wikipedia.org/wiki/Standard_time">standard time</a>. The globe is split into 360&deg;, with
 	 * 15&deg; per hour of the day. For a local that is at a longitude that is evenly divisible by 15 (longitude % 15 ==
 	 * 0), at solar {@link com.kosherjava.zmanim.AstronomicalCalendar#getSunTransit() noon} (with adjustment for the <a
-	 * href="http://en.wikipedia.org/wiki/Equation_of_time">equation of time</a>) the sun should be directly overhead,
+	 * href="https://en.wikipedia.org/wiki/Equation_of_time">equation of time</a>) the sun should be directly overhead,
 	 * so a user who is 1&deg; west of this will have noon at 4 minutes after standard time noon, and conversely, a user
 	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM. Lakewood, N.J., whose longitude is
 	 * -74.2094, is 0.7906 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to yield 3 minutes
 	 * and 10 seconds earlier than standard time. The offset returned does not account for the <a
-	 * href="http://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> offset since this class is
+	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> offset since this class is
 	 * unaware of dates.
 	 * 
 	 * @return the offset in milliseconds not accounting for Daylight saving time. A positive value will be returned
@@ -355,10 +355,10 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Calculate the initial <a href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing between this
+	 * Calculate the initial <a href="https://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing between this
 	 * Object and a second Object passed to this method using <a
-	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
-	 * href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
+	 * href="https://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
+	 * href="https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
 	 * with application of nested equations</a>", Survey Review, vol XXII no 176, 1975
 	 * 
 	 * @param location
@@ -370,9 +370,9 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Calculate the final <a href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing between this Object
-	 * and a second Object passed to this method using <a href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus
-	 * Vincenty's</a> inverse formula See T Vincenty, "<a href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and
+	 * Calculate the final <a href="https://en.wikipedia.org/wiki/Great_circle">geodesic</a> bearing between this Object
+	 * and a second Object passed to this method using <a href="https://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus
+	 * Vincenty's</a> inverse formula See T Vincenty, "<a href="https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and
 	 * Inverse Solutions of Geodesics on the Ellipsoid with application of nested equations</a>", Survey Review, vol
 	 * XXII no 176, 1975
 	 * 
@@ -385,10 +385,10 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Calculate <a href="http://en.wikipedia.org/wiki/Great-circle_distance">geodesic distance</a> in Meters between
+	 * Calculate <a href="https://en.wikipedia.org/wiki/Great-circle_distance">geodesic distance</a> in Meters between
 	 * this Object and a second Object passed to this method using <a
-	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
-	 * href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
+	 * href="https://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
+	 * href="https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
 	 * with application of nested equations</a>", Survey Review, vol XXII no 176, 1975
 	 * 
 	 * @see #vincentyFormula(GeoLocation, int)
@@ -401,10 +401,10 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Calculate <a href="http://en.wikipedia.org/wiki/Great-circle_distance">geodesic distance</a> in Meters between
+	 * Calculate <a href="https://en.wikipedia.org/wiki/Great-circle_distance">geodesic distance</a> in Meters between
 	 * this Object and a second Object passed to this method using <a
-	 * href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
-	 * href="http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
+	 * href="https://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> inverse formula See T Vincenty, "<a
+	 * href="https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
 	 * with application of nested equations</a>", Survey Review, vol XXII no 176, 1975
 	 * 
 	 * @param location
@@ -485,7 +485,7 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Returns the <a href="http://en.wikipedia.org/wiki/Rhumb_line">rhumb line</a> bearing from the current location to
+	 * Returns the <a href="https://en.wikipedia.org/wiki/Rhumb_line">rhumb line</a> bearing from the current location to
 	 * the GeoLocation passed in.
 	 * 
 	 * @param location
@@ -502,7 +502,7 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Returns the <a href="http://en.wikipedia.org/wiki/Rhumb_line">rhumb line</a> distance from the current location
+	 * Returns the <a href="https://en.wikipedia.org/wiki/Rhumb_line">rhumb line</a> distance from the current location
 	 * to the GeoLocation passed in.
 	 * 
 	 * @param location
@@ -549,7 +549,7 @@ public class GeoLocation implements Cloneable {
 	 * @return The XML formatted <code>String</code>.
 	 */
 	public String toXML() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<GeoLocation>\n");
 		sb.append("\t<LocationName>").append(getLocationName()).append("</LocationName>\n");
 		sb.append("\t<Latitude>").append(getLatitude()).append("</Latitude>\n");
@@ -606,7 +606,7 @@ public class GeoLocation implements Cloneable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("\nLocation Name:\t\t\t").append(getLocationName());
 		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("\u00B0");
 		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("\u00B0");
@@ -621,7 +621,7 @@ public class GeoLocation implements Cloneable {
 
 	/**
 	 * An implementation of the {@link java.lang.Object#clone()} method that creates a <a
-	 * href="http://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
+	 * href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * <b>Note:</b> If the {@link java.util.TimeZone} in the clone will be changed from the original, it is critical
 	 * that {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
 	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} is called after cloning in order for the
