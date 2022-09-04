@@ -664,6 +664,50 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public long getShaahZmanisAteretTorah() {
 		return getTemporalHour(getAlos72Zmanis(), getTzaisAteretTorah());
 	}
+	
+	/**
+	 * Method to return a <em>shaah zmanis</em> (temporal hour) used by some <em>zmanim</em> according to the opinion of
+	 * <a href="https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in the
+	 * <em>luach</em> of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that is based on a day starting 72 minutes before
+	 * sunrise in degrees {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending 14 minutes after sunset in
+	 * degrees {@link #getTzaisGeonim3Point8Degrees() <em>tzais</em> 3.8&deg;}. This day is split into 12 equal parts with
+	 * each part being a <em>shaah zmanis</em>. Note that with this system, <em>chatzos</em> (mid-day) will not be the point
+	 * that the sun is {@link #getSunTransit() halfway across the sky}. These <em>shaos zmaniyos</em> are used for <em>Mincha
+	 * Ketana</em> and <em>Plag Hamincha</em>. The 14 minutes are based on 3/4 of an 18 minute <em>mil</em>, with half a minute
+	 * added for Rav Yosi.
+	 * 
+	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
+	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set, a {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #getMinchaKetanaAhavatShalom()
+	 * @see #getPlagAhavatShalom()
+	 */
+	public long getShaahZmanisAlos16Point1ToTzais3Point8() {
+		return getTemporalHour(getAlos16Point1Degrees(), getTzaisGeonim3Point8Degrees());
+	}
+	
+	/**
+	 * Method to return a <em>shaah zmanis</em> (temporal hour) used by some <em>zmanim</em> according to the opinion of
+	 * <a href="https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in the
+	 * <em>luach</em> of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that is based on a day starting 72 minutes before
+	 * sunrise in degrees {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending 13.5 minutes after sunset in
+	 * degrees {@link #getTzaisGeonim3Point7Degrees() <em>tzais</em> 3.7&deg;}. This day is split into 12 equal parts with
+	 * each part being a <em>shaah zmanis</em>. Note that with this system, <em>chatzos</em> (mid-day) will not be the point
+	 * that the sun is {@link #getSunTransit() halfway across the sky}. These <em>shaos zmaniyos</em> are used for <em>Mincha
+	 * Gedola</em> calculation.
+	 * 
+	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
+	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set, a {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #getMinchaGedolaAhavatShalom()
+	 */
+	public long getShaahZmanisAlos16Point1ToTzais3Point7() {
+		return getTemporalHour(getAlos16Point1Degrees(), getTzaisGeonim3Point7Degrees());
+	}
 
 	/**
 	 * Method to return a <em>shaah zmanis</em> (temporal hour) calculated using a dip of 96 minutes. This calculation
@@ -1766,6 +1810,37 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getMinchaGedola16Point1Degrees() {
 		return getMinchaGedola(getAlos16Point1Degrees(), getTzais16Point1Degrees());
 	}
+	
+	/**
+	 * This method returns the time of <em>mincha gedola</em> based on the opinion of <a href=
+	 * "https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in the <em>luach</em>
+	 * of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that <em>mincha gedola</em> is calculated as half a <em>shaah
+	 * zmanis</em> after <em>chatzos</em> with <em>shaos zmaniyos</em> calculated based on a day starting 72 minutes befoe sunrise
+	 * {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending 13.5 minutes after sunset {@link
+	 * #getTzaisGeonim3Point7Degrees() <em>tzais</em> 3.7&deg;}. <em>Mincha gedola</em> is the earliest time to pray <em>mincha</em>.
+	 * The later of this time or 30 clock minutes after <em>chatzos</em> is returned. See {@link #getMinchaGedolaGreaterThan30()}
+	 * (though that calculation is based on <em>mincha gedola</em> GRA).
+	 * For more information about <em>mincha gedola</em> see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}.
+	 * 
+	 * @return the <code>Date</code> of the <em>mincha gedola</em>. If the calculation can't be computed such as northern and
+	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
+	 *         reach low enough below the horizon for this calculation, a null will be returned. See detailed explanation
+	 *         on top of the {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #getAlos16Point1Degrees()
+	 * @see #getTzaisGeonim3Point7Degrees()
+	 * @see #getShaahZmanisAlos16Point1ToTzais3Point7()
+	 * @see #getMinchaGedolaGreaterThan30()
+	 */
+	public Date getMinchaGedolaAhavatShalom() {
+		
+		if (getMinchaGedola30Minutes() == null || getMinchaGedola() == null) {
+			return null;
+		} else {
+			return getMinchaGedola30Minutes().compareTo(getTimeOffset(getChatzos(), getShaahZmanisAlos16Point1ToTzais3Point7() / 2)) > 0 ?
+					getMinchaGedola30Minutes() : getTimeOffset(getChatzos(), getShaahZmanisAlos16Point1ToTzais3Point7() / 2);
+		}
+	}
 
 	/**
 	 * This is a convenience method that returns the later of {@link #getMinchaGedola()} and
@@ -1805,6 +1880,29 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getMinchaKetana16Point1Degrees() {
 		return getMinchaKetana(getAlos16Point1Degrees(), getTzais16Point1Degrees());
+	}
+	
+	/**
+	 * This method returns the time of <em>mincha ketana</em> based on the opinion of <a href=
+	 * "https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in the <em>luach</em>
+	 * of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that <em>mincha ketana</em> is calculated as 2.5 <em>shaos
+	 * zmaniyos</em> before {@link #getTzaisGeonim3Point8Degrees() <em>tzais</em> 3.8&deg;} with <em>shaos zmaniyos</em>
+	 * calculated based on a day starting at {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending at
+	 * <em>tzais</em> 3.8&deg;. <em>Mincha ketana</em> is the preferred earliest time to pray <em>mincha</em> according to
+	 * the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others. For more information
+	 * on this see the documentation on {@link #getMinchaKetana() <em>mincha ketana</em>}. 
+	 * 
+	 * @return the the <code>Date</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as northern
+	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
+	 *         reach low enough below the horizon for this calculation, a null will be returned. See detailed explanation
+	 *         on top of the {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #getShaahZmanisAlos16Point1ToTzais3Point8()
+	 * @see #getMinchaGedolaAhavatShalom()
+	 * @see #getPlagAhavatShalom()
+	 */
+	public Date getMinchaKetanaAhavatShalom() {
+		return getTimeOffset(getTzaisGeonim3Point8Degrees(), -getShaahZmanisAlos16Point1ToTzais3Point8() * 2.5);
 	}
 
 	/**
@@ -2117,6 +2215,27 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getPlagAlos16Point1ToTzaisGeonim7Point083Degrees() {
 		return getPlagHamincha(getAlos16Point1Degrees(), getTzaisGeonim7Point083Degrees());
+	}
+	
+	/**
+	 * This method returns the time of <em>plag hamincha</em> (the earliest time that Shabbos can be started) based on the
+	 * opinion of <a href="https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in
+	 * the <em>luach</em> of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that that <em>plag hamincha</em> is calculated
+	 * as 1.25 <em>shaos zmaniyos</em> before {@link #getTzaisGeonim3Point8Degrees() <em>tzais</em> 3.8&deg;} with <em>shaos
+	 * zmaniyos</em> calculated based on a day starting at {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and
+	 * ending at <em>tzais</em> 3.8&deg;.
+	 * 
+	 * @return the <code>Date</code> of the <em>plag</em>. If the calculation can't be computed such as northern and
+	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
+	 *         reach low enough below the horizon for this calculation, a null will be returned. See detailed explanation
+	 *         on top of the {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #getShaahZmanisAlos16Point1ToTzais3Point8()
+	 * @see #getMinchaGedolaAhavatShalom()
+	 * @see #getMinchaKetanaAhavatShalom()
+	 */
+	public Date getPlagAhavatShalom() {
+		return getTimeOffset(getTzaisGeonim3Point8Degrees(), -getShaahZmanisAlos16Point1ToTzais3Point8() * 1.25);
 	}
 
 	/**
@@ -2848,7 +2967,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 			return null;
 		}
 
-		if(hours > 0) {
+		if (hours > 0) {
 			return getTimeOffset(getElevationAdjustedSunset(), (long) (shaahZmanis * hours));
 		} else {
 			return getTimeOffset(getElevationAdjustedSunrise(), (long) (shaahZmanis * hours));
@@ -3153,7 +3272,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		// Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush Levana
 		// will be on the 12th of the Teves. In the case of Anadyr, Russia on Jan, 2071, sof zman Kiddush Levana between the
 		// moldos will occur is on the night of 17th of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
-		if(jewishCalendar.getJewishDayOfMonth() < 11 || jewishCalendar.getJewishDayOfMonth() > 16) { 
+		if (jewishCalendar.getJewishDayOfMonth() < 11 || jewishCalendar.getJewishDayOfMonth() > 16) { 
 			return null;
 		}
 		return getMoladBasedTime(jewishCalendar.getSofZmanKidushLevanaBetweenMoldos(), alos, tzais, false);
@@ -3181,9 +3300,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	private Date getMoladBasedTime(Date moladBasedTime, Date alos, Date tzais, boolean techila) {
 		Date lastMidnight = getMidnightLastNight();
 		Date midnightTonigh = getMidnightTonight();
-		if(!(moladBasedTime.before(lastMidnight) || moladBasedTime.after(midnightTonigh))){
-			if(alos != null || tzais != null) {
-				if(techila && !(moladBasedTime.before(tzais) || moladBasedTime.after(alos))){
+		if (!(moladBasedTime.before(lastMidnight) || moladBasedTime.after(midnightTonigh))){
+			if (alos != null || tzais != null) {
+				if (techila && !(moladBasedTime.before(tzais) || moladBasedTime.after(alos))){
 					return tzais;
 				} else {
 					return alos;
@@ -3247,7 +3366,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		// French Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush
 		// Levana will be on the 12th of the Teves. in the case of Anadyr, Russia on Jan, 2071, sof zman kiddush levana will
 		// occur after midnight on the 17th of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
-		if(jewishCalendar.getJewishDayOfMonth() < 11 || jewishCalendar.getJewishDayOfMonth() > 17) {
+		if (jewishCalendar.getJewishDayOfMonth() < 11 || jewishCalendar.getJewishDayOfMonth() > 17) {
 			return null;
 		}
 		return getMoladBasedTime(jewishCalendar.getSofZmanKidushLevana15Days(), alos, tzais, false);
@@ -3323,7 +3442,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		// of the 30th, the second night of Rosh Chodesh. The 3rd day after the <em>molad</em> will be on the 4th of the month.
 		// In the case of Anadyr, Russia on Jan, 2071, when sof zman kiddush levana is on the 17th of the month, the 3rd day
 		// from the molad will be on the 5th day of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
-		if(jewishCalendar.getJewishDayOfMonth() > 5 && jewishCalendar.getJewishDayOfMonth() < 30) {
+		if (jewishCalendar.getJewishDayOfMonth() > 5 && jewishCalendar.getJewishDayOfMonth() < 30) {
 			return null;
 		}
 		
@@ -3331,7 +3450,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		
 		//Get the following month's zman kiddush Levana for the extreme case of Rapa Iti in French Polynesia on Dec 2027 when
 		// kiddush Levana can be said on Rosh Chodesh (the evening of the 30th). See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (page 32)
-		if(zman == null && jewishCalendar.getJewishDayOfMonth() == 30) {
+		if (zman == null && jewishCalendar.getJewishDayOfMonth() == 30) {
 			jewishCalendar.forward(Calendar.MONTH, 1);
 			zman = getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), null, null, true);
 		}
@@ -3358,13 +3477,13 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		// Optimize to not calculate for impossible dates, but account for extreme cases. The molad in the extreme case of Rapa
 		// Iti in French Polynesia on Dec 2027 occurs on the night of the 27th of Kislev. In the case of Anadyr, Russia on
 		// Jan 2071, the molad will be on the 2nd day of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
-		if(jewishCalendar.getJewishDayOfMonth() > 2 && jewishCalendar.getJewishDayOfMonth() < 27) {
+		if (jewishCalendar.getJewishDayOfMonth() > 2 && jewishCalendar.getJewishDayOfMonth() < 27) {
 			return null;
 		}
 		Date molad = getMoladBasedTime(jewishCalendar.getMoladAsDate(), null, null, true);
 
 		// deal with molad that happens on the end of the previous month
-		if(molad == null && jewishCalendar.getJewishDayOfMonth() > 26) {
+		if (molad == null && jewishCalendar.getJewishDayOfMonth() > 26) {
 			jewishCalendar.forward(Calendar.MONTH, 1);
 			molad = getMoladBasedTime(jewishCalendar.getMoladAsDate(), null, null, true);
 		}
@@ -3432,7 +3551,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 		// of the 30th, the second night of Rosh Chodesh), the 7th day after the molad will be on the 4th of the month.
 		// In the case of Anadyr, Russia on Jan, 2071, when sof zman kiddush levana is on the 17th of the month, the 7th day
 		// from the molad will be on the 9th day of Shevat. See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (pages 28 and 32).
-		if(jewishCalendar.getJewishDayOfMonth() < 4 || jewishCalendar.getJewishDayOfMonth() > 9) { 
+		if (jewishCalendar.getJewishDayOfMonth() < 4 || jewishCalendar.getJewishDayOfMonth() > 9) { 
 			return null;
 		}
 		
