@@ -45,12 +45,13 @@ public class YerushalmiYomiCalculator {
 	 * Returns the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a>
 	 * <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> page ({@link Daf}) for a given date.
 	 * The first Daf Yomi cycle started on 15 Shevat (Tu Bishvat), 5740 (February, 2, 1980) and calculations
-	 * prior to this date will result in an IllegalArgumentException thrown.
-	 * 
+	 * prior to this date will result in an IllegalArgumentException thrown. A null will be returned on Tisha B'Av or
+	 * Yom Kippur.
+	 *
 	 * @param calendar
 	 *            the calendar date for calculation
-	 * @return the {@link Daf}.
-	 * 
+	 * @return the {@link Daf} or null if the date is on Tisha B'Av or Yom Kippur.
+	 *
 	 * @throws IllegalArgumentException
 	 *             if the date is prior to the February 2, 1980, the start of the first Daf Yomi Yerushalmi cycle
 	 */
@@ -61,11 +62,11 @@ public class YerushalmiYomiCalculator {
 		Calendar requested = calendar.getGregorianCalendar();
 		int masechta = 0;
 		Daf dafYomi = null;
-		
-		// There isn't Daf Yomi in Yom Kippur and Tisha Beav.
+
+		// There isn't Daf Yomi on Yom Kippur or Tisha B'Av.
 		if ( calendar.getYomTovIndex() == JewishCalendar.YOM_KIPPUR ||
-			 calendar.getYomTovIndex() == JewishCalendar.TISHA_BEAV ) {
-			return new Daf(39,0);
+				calendar.getYomTovIndex() == JewishCalendar.TISHA_BEAV ) {
+			return null;
 		}
 		
 		
