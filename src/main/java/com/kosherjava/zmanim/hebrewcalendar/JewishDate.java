@@ -153,7 +153,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/** The number  of <em>chalakim</em> (1080) in an hour.*/
 	private static final int CHALAKIM_PER_HOUR = 1080;
 	/** The number of <em>chalakim</em> (25,920) in a 24 hour day .*/
-	private static final int CHALAKIM_PER_DAY = 25920; // 24 * 1080
+	private static final long CHALAKIM_PER_DAY = 25920; // 24 * 1080
 	/** The number  of <em>chalakim</em> in an average Jewish month. A month has 29 days, 12 hours and 793
 	 * <em>chalakim</em> (44 minutes and 3.3 seconds) for a total of 765,433 <em>chalakim</em>*/
 	private static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
@@ -336,23 +336,23 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Returns the number of days in a given month in a given month and year.
 	 * 
 	 * @param month
-	 *            the month. As with other cases in this class, this is 1-based, not zero-based.
+	 *            the month.
 	 * @param year
 	 *            the year (only impacts February)
 	 * @return the number of days in the month in the given year
 	 */
 	private static int getLastDayOfGregorianMonth(int month, int year) {
 		switch (month) {
-		case 2:
+		case Calendar.FEBRUARY:
 			if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
 				return 29;
 			} else {
 				return 28;
 			}
-		case 4:
-		case 6:
-		case 9:
-		case 11:
+		case Calendar.APRIL:
+		case Calendar.JUNE:
+		case Calendar.SEPTEMBER:
+		case Calendar.NOVEMBER:
 			return 30;
 		default:
 			return 31;
@@ -365,11 +365,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private void absDateToDate(int absDate) {
 		int year = absDate / 366; // Search forward year by year from approximate year
-		while (absDate >= gregorianDateToAbsDate(year + 1, 1, 1)) {
+		while (absDate >= gregorianDateToAbsDate(year + 1, Calendar.JANUARY, 1)) {
 			year++;
 		}
 
-		int month = 1; // Search forward month by month from January
+		int month = Calendar.JANUARY; // Search forward month by month from January
 		while (absDate > gregorianDateToAbsDate(year, month, getLastDayOfGregorianMonth(month, year))) {
 			month++;
 		}
@@ -401,14 +401,15 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private static int gregorianDateToAbsDate(int year, int month, int dayOfMonth) {
 		int absDate = dayOfMonth;
-		for (int m = month - 1; m > 0; m--) {
+		for (int m = Calendar.JANUARY; m < month; m++) {
 			absDate += getLastDayOfGregorianMonth(m, year); // days in prior months of the year
 		}
+		int yearPrevious = year - 1;
 		return (absDate // days this year
-				+ 365 * (year - 1) // days in previous years ignoring leap days
-				+ (year - 1) / 4 // Julian leap days before this year
-				- (year - 1) / 100 // minus prior century years
-		+ (year - 1) / 400); // plus prior years divisible by 400
+				+ 365 * yearPrevious // days in previous years ignoring leap days
+				+ yearPrevious / 4 // Julian leap days before this year
+				- yearPrevious / 100 // minus prior century years
+		+ yearPrevious / 400); // plus prior years divisible by 400
 	}
 
 	/**
@@ -460,8 +461,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
 		long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);
-		int moladDay = (int) (chalakimSince / (long) CHALAKIM_PER_DAY);
-		int moladParts = (int) (chalakimSince - moladDay * (long) CHALAKIM_PER_DAY);
+		int moladDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
+		int moladParts = (int) (chalakimSince - moladDay * CHALAKIM_PER_DAY);
 		// delay Rosh Hashana for the 4 dechiyos
 		return addDechiyos(year, moladDay, moladParts);
 	}
@@ -670,7 +671,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            {@link GregorianCalendar}, where {@link Calendar#JANUARY} has a value of 0.
 	 */
 	private static void validateGregorianMonth(int month) {
-		if (month > 11 || month < 0) {
+		if (month > Calendar.DECEMBER || month < Calendar.JANUARY) {
 			throw new IllegalArgumentException("The Gregorian month has to be between 0 - 11. " + month
 					+ " is invalid.");
 		}
@@ -908,8 +909,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
 		// long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);// tishrei
-		int conjunctionDay = (int) (molad / (long) CHALAKIM_PER_DAY);
-		int conjunctionParts = (int) (molad - conjunctionDay * (long) CHALAKIM_PER_DAY);
+		long conjunctionDay = molad / CHALAKIM_PER_DAY;
+		int conjunctionParts = (int) (molad - conjunctionDay * CHALAKIM_PER_DAY);
 		setMoladTime(conjunctionParts);
 	}
 
@@ -1042,13 +1043,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			throw new IllegalArgumentException("Calendars with a BC era are not supported. The year "
 					+ calendar.get(Calendar.YEAR) + " BC is invalid.");
 		}
-		gregorianMonth = calendar.get(Calendar.MONTH) + 1;
-		gregorianDayOfMonth = calendar.get(Calendar.DATE);
-		gregorianYear = calendar.get(Calendar.YEAR);
-		gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth); // init the date
-		absDateToJewishDate();
-
-		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // set day of week
+		int month = calendar.get(Calendar.MONTH);
+		int dayOfMonth = calendar.get(Calendar.DATE);
+		int year = calendar.get(Calendar.YEAR);
+		setInternalGregorianDate(year, month, dayOfMonth);
 	}
 
 	/**
@@ -1095,7 +1093,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public void setGregorianDate(int year, int month, int dayOfMonth) {
 		validateGregorianDate(year, month, dayOfMonth);
-		setInternalGregorianDate(year, month + 1, dayOfMonth);
+		setInternalGregorianDate(year, month, dayOfMonth);
 	}
 
 	/**
@@ -1110,15 +1108,16 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	private void setInternalGregorianDate(int year, int month, int dayOfMonth) {
 		// make sure date is a valid date for the given month, if not, set to last day of month
-		if (dayOfMonth > getLastDayOfGregorianMonth(month, year)) {
-			dayOfMonth = getLastDayOfGregorianMonth(month, year);
+		int lastDayOfMonth = getLastDayOfGregorianMonth(month, year);
+		if (dayOfMonth > lastDayOfMonth) {
+			dayOfMonth = lastDayOfMonth;
 		}
 		// init month, date, year
 		gregorianMonth = month;
 		gregorianDayOfMonth = dayOfMonth;
 		gregorianYear = year;
 
-		gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth); // init date
+		gregorianAbsDate = gregorianDateToAbsDate(year, month, dayOfMonth); // init date
 		absDateToJewishDate();
 
 		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // set day of week
@@ -1267,9 +1266,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 				if (gregorianDayOfMonth == getLastDayOfGregorianMonth(gregorianMonth, gregorianYear)) {
 					gregorianDayOfMonth = 1;
 					// if last day of year
-					if (gregorianMonth == 12) {
+					if (gregorianMonth == Calendar.DECEMBER) {
 						gregorianYear++;
-						gregorianMonth = 1;
+						gregorianMonth = Calendar.JANUARY;
 					} else {
 						gregorianMonth++;
 					}
@@ -1357,8 +1356,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public void back() {
 		// Change Gregorian date
 		if (gregorianDayOfMonth == 1) { // if first day of month
-			if (gregorianMonth == 1) { // if first day of year
-				gregorianMonth = 12;
+			if (gregorianMonth == Calendar.JANUARY) { // if first day of year
+				gregorianMonth = Calendar.DECEMBER;
 				gregorianYear--;
 			} else {
 				gregorianMonth--;
@@ -1421,7 +1420,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the Gregorian month (between 0-11). Like the java.util.Calendar, months are 0 based.
 	 */
 	public int getGregorianMonth() {
-		return gregorianMonth - 1;
+		return gregorianMonth;
 	}
 
 	/**
@@ -1491,7 +1490,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public void setGregorianMonth(int month) {
 		validateGregorianMonth(month);
-		setInternalGregorianDate(gregorianYear, month + 1, gregorianDayOfMonth);
+		setInternalGregorianDate(gregorianYear, month, gregorianDayOfMonth);
 	}
 
 	/**

@@ -15,7 +15,6 @@ public class UT_JewishLeapYear {
 
 	@Test
 	public void isLeapYear() {
-
 		shouldBeLeapYear(5160);
 		shouldNotBeLeapYear(5536);
 
@@ -52,7 +51,7 @@ public class UT_JewishLeapYear {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+		Assert.assertTrue(jewishDate.isJewishLeapYear());
 	}
 
 
@@ -60,7 +59,7 @@ public class UT_JewishLeapYear {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isJewishLeapYear(  ));
+		Assert.assertFalse(jewishDate.isJewishLeapYear());
 	}
 
 } // End of UT_JewishLeapYear class
