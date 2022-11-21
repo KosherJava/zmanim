@@ -1,5 +1,9 @@
 ## [2.4.0](https://github.com/KosherJava/zmanim/compare/2.3.0...master) (future)
 
+* JewishCalendar.getUpcomingParshah() that will return the upcoming _Parsha_ regardless of the day of week.
+* Change YerushalmiYomiCalculator to return null on Yom Kippur and Tisha Be'Av when there is no Daf.
+* Add some Luach Ahavat Shalom Zmanim
+* Add _BeHaB_ to the `JewishCalendar`class
 * Add _Yom Kippur Katan_ and _Isru Chag_ to the `JewishCalendar`class.
 * Add the `TefilaRules` class, a utility class for info like:
   * is _vesain tal umatar_ recited etc.
