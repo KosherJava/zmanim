@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.kosherjava.zmanim.ComplexZmanimCalendar;
+
 /**
  * The JewishDate is the base calendar class, that supports maintenance of a {@link java.util.GregorianCalendar}
  * instance along with the corresponding Jewish date. This class can use the standard Java Date and Calendar
@@ -992,6 +994,17 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public JewishDate() {
 		resetDate();
 	}
+	
+	/**
+	 * A constructor that initializes the date to the current system date while taking into account sunset.
+	 */
+	public JewishDate(ComplexZmanimCalendar czc) {
+		if (Calendar.getInstance().after(czc.getSunset())) {
+		    resetDateWithSunset();
+		} else {
+		    resetDate();
+		}
+    	}
 
 	/**
 	 * A constructor that initializes the date to the {@link java.util.Date Date} paremeter.
@@ -1220,6 +1233,15 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		Calendar calendar = Calendar.getInstance();
 		setDate(calendar);
 	}
+	
+	/**
+	 * Resets this date to the current system date plus one (after sunset).
+	 */
+	public void resetDateWithSunset() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_MONTH, 1);
+		setDate(calendar);
+    	}
 
 	/**
 	 * Returns a string containing the Jewish date in the form, "day Month, year" e.g. "21 Shevat, 5729". For more
