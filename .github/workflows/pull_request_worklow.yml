@@ -1,4 +1,4 @@
-name: pull request workflow
+name: Run unit tests
 on: [pull_request]
 jobs:
   test:
