@@ -4,9 +4,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out Repository
+        uses: actions/checkout@v3
+
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
       - name: Run tests
         run: mvn test
