@@ -217,6 +217,25 @@ public class Daf {
 	public void setYerushlmiMasechtaTransliterated(String[] masechtosYerushalmiTransliterated) {
 		Daf.masechtosYerushalmiTransliterated = masechtosYerushalmiTransliterated;
 	}
+	
+	/**
+	 * Getter method to allow retrieving the list of Yerushalmi masechtos transliterated into into Latin chars.
+	 * The default uses Ashkenazi American English transliteration.
+	 * 
+	 * @return the array of transliterated masechta (tractate) names of the Daf Yomi Yerushalmi.
+	 */
+	public static String[] getYerushlmiMasechtosTransliterated() {
+		return masechtosYerushalmiTransliterated;
+	}
+	
+	/**
+	 * Getter method to allow retrieving the list of Yerushalmi masechtos.
+	 * 
+	 * @return the array of Hebrew masechta (tractate) names of the Daf Yomi Yerushalmi.
+	 */
+	public static String[] getYerushlmiMasechtos() {
+		return masechtosYerushlmi;
+	}
 
 	/**
 	 * Returns the Yerushlmi masechta (tractate) of the Daf Yomi in Hebrew, It will return
