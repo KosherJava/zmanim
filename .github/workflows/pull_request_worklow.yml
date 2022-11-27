@@ -1,0 +1,17 @@
+name: Run unit tests
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8.0.232
+          distribution: adopt
+
+      - name: Run tests
+        run: mvn test
