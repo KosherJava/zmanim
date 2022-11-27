@@ -41,11 +41,11 @@ public class UT_YerushalmiTest {
 		Assert.assertNull(jewishCalendar.getDafYomiYerushalmi());
 		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiYerushalmi()));
 		
-		JewishCalendar jewishCalendar = new JewishCalendar(5783,JewishCalendar.AV,9);
+		jewishCalendar = new JewishCalendar(5783,JewishCalendar.AV,9);
 		Assert.assertNull(jewishCalendar.getDafYomiYerushalmi());
 		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiYerushalmi()));
 		
-		JewishCalendar jewishCalendar = new JewishCalendar(5775,JewishCalendar.AV,10);// 9 Av delayed to Sunday 10 Av
+		jewishCalendar = new JewishCalendar(5775,JewishCalendar.AV,10);// 9 Av delayed to Sunday 10 Av
 		Assert.assertNull(jewishCalendar.getDafYomiYerushalmi());
 		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiYerushalmi()));
 	}
