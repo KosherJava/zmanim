@@ -158,7 +158,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @todo Hyperlink the proper sources.
 	 * 
 	 * @see #getTzaisGeonim7Point083Degrees()
-	 * @see #getBainHasmashosRT13Point5MinutesBefore7Point083Degrees()
+	 * @see #getBainHashmashosRT13Point5MinutesBefore7Point083Degrees()
 	 */
 	protected static final double ZENITH_7_POINT_083 = GEOMETRIC_ZENITH + 7 + (5.0 / 60);
 
@@ -198,9 +198,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * The zenith of 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating Rabbeinu Tam's <em>bain hashmashos</em> according to some opinions.
-	 * NOTE: See comments on {@link #getBainHasmashosRT13Point24Degrees} for additional details about the degrees.
+	 * NOTE: See comments on {@link #getBainHashmashosRT13Point24Degrees} for additional details about the degrees.
 	 * 
-	 * @see #getBainHasmashosRT13Point24Degrees
+	 * @see #getBainHashmashosRT13Point24Degrees
 	 * 
 	 */
 	protected static final double ZENITH_13_POINT_24 = GEOMETRIC_ZENITH + 13.24;
@@ -396,7 +396,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * according to the Yereim. As is traditional with degrees below the horizon, this is calculated without refraction
 	 * and from the center of the sun. It would be 0.833&deg; less without this. 
 	 * 
-	 * @see #getBainHasmashosYereim2Point1Degrees()
+	 * @see #getBainHashmashosYereim2Point1Degrees()
 	 */
 	protected static final double ZENITH_MINUS_2_POINT_1 = GEOMETRIC_ZENITH - 2.1;
 	
@@ -406,7 +406,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * according to the Yereim. As is traditional with degrees below the horizon, this is calculated without refraction
 	 * and from the center of the sun. It would be 0.833&deg; less without this.
 	 * 
-	 * @see #getBainHasmashosYereim2Point8Degrees()
+	 * @see #getBainHashmashosYereim2Point8Degrees()
 	 */
 	protected static final double ZENITH_MINUS_2_POINT_8 = GEOMETRIC_ZENITH - 2.8;
 	
@@ -416,7 +416,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * according to the Yereim. As is traditional with degrees below the horizon, this is calculated without refraction
 	 * and from the center of the sun. It would be 0.833&deg; less without this.
 	 * 
-	 * @see #getBainHasmashosYereim3Point05Degrees()
+	 * @see #getBainHashmashosYereim3Point05Degrees()
 	 */
 	protected static final double ZENITH_MINUS_3_POINT_05 = GEOMETRIC_ZENITH - 3.05;
 
@@ -1847,7 +1847,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is
 	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedola()}
 	 * will be returned.
-	 * 
+	 *
 	 * @return the <code>Date</code> of the later of {@link #getMinchaGedola()} and {@link #getMinchaGedola30Minutes()}.
 	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
 	 *         where the sun does not rise, and one where it does not set, a null will be returned. See detailed
@@ -2241,7 +2241,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Method to return the beginning of <em>bain hashmashos</em> of Rabbeinu Tam calculated when the sun is
 	 * {@link #ZENITH_13_POINT_24 13.24&deg;} below the western {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;)
-	 * after sunset. This calculation is based on the same calculation of {@link #getBainHasmashosRT58Point5Minutes()
+	 * after sunset. This calculation is based on the same calculation of {@link #getBainHashmashosRT58Point5Minutes()
 	 * <em>bain hashmashos</em> Rabbeinu Tam 58.5 minutes} but uses a degree-based calculation instead of 58.5 exact
 	 * minutes. This calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
@@ -2260,10 +2260,20 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #ZENITH_13_POINT_24
-	 * @see #getBainHasmashosRT58Point5Minutes()
+	 * @see #getBainHashmashosRT58Point5Minutes()
 	 */
-	public Date getBainHasmashosRT13Point24Degrees() {
+	public Date getBainHashmashosRT13Point24Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_13_POINT_24);
+	}
+	
+
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosRT13Point24Degrees()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosRT13Point24Degrees() {
+		return getBainHashmashosRT13Point24Degrees();
 	}
 
 	/**
@@ -2277,8 +2287,17 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 * 
 	 */
-	public Date getBainHasmashosRT58Point5Minutes() {
+	public Date getBainHashmashosRT58Point5Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), 58.5 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosRT58Point5Minutes()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosRT58Point5Minutes() {
+		return getBainHashmashosRT58Point5Minutes();
 	}
 
 	/**
@@ -2292,8 +2311,17 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 * @see #getTzaisGeonim7Point083Degrees()
 	 */
-	public Date getBainHasmashosRT13Point5MinutesBefore7Point083Degrees() {
+	public Date getBainHashmashosRT13Point5MinutesBefore7Point083Degrees() {
 		return getTimeOffset(getSunsetOffsetByDegrees(ZENITH_7_POINT_083), -13.5 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosRT13Point5MinutesBefore7Point083Degrees()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosRT13Point5MinutesBefore7Point083Degrees() {
+		return getBainHashmashosRT13Point5MinutesBefore7Point083Degrees();
 	}
 
 	/**
@@ -2308,14 +2336,22 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         calculation, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
-	public Date getBainHasmashosRT2Stars() {
+	public Date getBainHashmashosRT2Stars() {
 		Date alos19Point8 = getAlos19Point8Degrees();
 		Date sunrise = getElevationAdjustedSunrise();
 		if (alos19Point8 == null || sunrise == null) {
 			return null;
 		}
-
 		return getTimeOffset(getElevationAdjustedSunset(), (sunrise.getTime() - alos19Point8.getTime()) * (5 / 18d));
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosRT2Stars()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosRT2Stars() {
+		return getBainHashmashosRT2Stars();
 	}
 	
 	/**
@@ -2328,10 +2364,19 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #getBainHasmashosYereim3Point05Degrees()
+	 * @see #getBainHashmashosYereim3Point05Degrees()
 	 */
-	public Date getBainHasmashosYereim18Minutes() {
+	public Date getBainHashmashosYereim18Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), -18 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosYereim18Minutes()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosYereim18Minutes() {
+		return getBainHashmashosYereim18Minutes();
 	}
 	
 	/**
@@ -2359,13 +2404,23 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #ZENITH_MINUS_3_POINT_05
-	 * @see #getBainHasmashosYereim18Minutes()
-	 * @see #getBainHasmashosYereim2Point8Degrees()
-	 * @see #getBainHasmashosYereim2Point1Degrees()
+	 * @see #getBainHashmashosYereim18Minutes()
+	 * @see #getBainHashmashosYereim2Point8Degrees()
+	 * @see #getBainHashmashosYereim2Point1Degrees()
 	 */
-	public Date getBainHasmashosYereim3Point05Degrees() {
+	public Date getBainHashmashosYereim3Point05Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_MINUS_3_POINT_05);
 	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosYereim3Point05Degrees()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosYereim3Point05Degrees() {
+		return getBainHashmashosYereim3Point05Degrees();
+	}
+	
 	
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
@@ -2378,10 +2433,19 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * 
-	 * @see #getBainHasmashosYereim2Point8Degrees()
+	 * @see #getBainHashmashosYereim2Point8Degrees()
 	 */
-	public Date getBainHasmashosYereim16Point875Minutes() {
+	public Date getBainHashmashosYereim16Point875Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), -16.875 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosYereim16Point875Minutes()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosYereim16Point875Minutes() {
+		return getBainHashmashosYereim16Point875Minutes();
 	}
 	
 	/**
@@ -2392,7 +2456,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * its position 16.875 minutes or 3/4 of an 18-minute <em>Mil</em> before sunset. According to the Yereim, <em>bain
 	 * hashmashos</em> starts 3/4 of a <em>Mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset.
 	 * Details, including how the degrees were calculated can be seen in the documentation of
-	 * {@link #getBainHasmashosYereim3Point05Degrees()}.
+	 * {@link #getBainHashmashosYereim3Point05Degrees()}.
 	 * 
 	 * @return the <code>Date</code> of the sun's position 2.8&deg; minutes before sunset. If the calculation can't
 	 *         be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
@@ -2400,13 +2464,23 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #ZENITH_MINUS_2_POINT_8
-	 * @see #getBainHasmashosYereim16Point875Minutes()
-	 * @see #getBainHasmashosYereim3Point05Degrees()
-	 * @see #getBainHasmashosYereim2Point1Degrees()
+	 * @see #getBainHashmashosYereim16Point875Minutes()
+	 * @see #getBainHashmashosYereim3Point05Degrees()
+	 * @see #getBainHashmashosYereim2Point1Degrees()
 	 */
-	public Date getBainHasmashosYereim2Point8Degrees() {
+	public Date getBainHashmashosYereim2Point8Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_8);
 	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosYereim2Point8Degrees()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosYereim2Point8Degrees() {
+		return getBainHashmashosYereim2Point8Degrees();
+	}
+	
 	
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
@@ -2419,10 +2493,19 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * 
-	 * @see #getBainHasmashosYereim2Point1Degrees()
+	 * @see #getBainHashmashosYereim2Point1Degrees()
 	 */
-	public Date getBainHasmashosYereim13Point5Minutes() {
+	public Date getBainHashmashosYereim13Point5Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), -13.5 * MINUTE_MILLIS);
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosYereim13Point5Minutes()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosYereim13Point5Minutes() {
+		return getBainHashmashosYereim13Point5Minutes();
 	}
 	
 	/**
@@ -2433,7 +2516,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Yerushalayim, its position 13.5 minutes or 3/4 of an 18-minute <em>Mil</em> before sunset. According to the Yereim,
 	 * <em>bain hashmashos</em> starts 3/4 of a <em>mil</em> before sunset and <em>tzais</em> or nightfall starts at sunset.
 	 * Details, including how the degrees were calculated can be seen in the documentation of
-	 * {@link #getBainHasmashosYereim3Point05Degrees()}.
+	 * {@link #getBainHashmashosYereim3Point05Degrees()}.
 	 * 
 	 * @return the <code>Date</code> of the sun's position 2.1&deg; minutes before sunset. If the calculation can't
 	 *         be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
@@ -2441,12 +2524,21 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #ZENITH_MINUS_2_POINT_1
-	 * @see #getBainHasmashosYereim13Point5Minutes()
-	 * @see #getBainHasmashosYereim2Point8Degrees()
-	 * @see #getBainHasmashosYereim3Point05Degrees()
+	 * @see #getBainHashmashosYereim13Point5Minutes()
+	 * @see #getBainHashmashosYereim2Point8Degrees()
+	 * @see #getBainHashmashosYereim3Point05Degrees()
 	 */
-	public Date getBainHasmashosYereim2Point1Degrees() {
+	public Date getBainHashmashosYereim2Point1Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_1);
+	}
+	
+	/**
+	 * Misspelled method name that should be {@link #getBainHashmashosYereim2Point1Degrees()}.
+	 * @return the properly spelled version.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
+	public Date getBainHasmashosYereim2Point1Degrees() {
+		return getBainHashmashosYereim2Point1Degrees();
 	}
 	
 	/**
@@ -3904,7 +3996,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * sea level solar hours} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. This calculation is based
 	 * on the opinion of the Baal Hatanya that the day is calculated from sunrise to sunset. This returns the time 6.5
 	 * * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> ("real" sunrise)}.
-	 * 
 	 * @see #getMinchaGedola(Date, Date)
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @see #getMinchaKetanaBaalHatanya()
@@ -4153,7 +4244,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a null will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 *         
+	 * 
 	 * @see #getMinchaGedola()
 	 * @see #getFixedLocalChatzos()
 	 * @see #getMinchaKetanaGRAFixedLocalChatzosToSunset
