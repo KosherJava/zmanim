@@ -372,12 +372,12 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Returns if <em>hallel</em> is recited on the day in question. This will return true for both <em>hallel shalem</em>
-	 * and <em>chatzi hallel</em>. See {@link #isHallelShalemRecited(JewishCalendar)} to know if the complete <em>hallel</em>
+	 * Returns if <em>Hallel</em> is recited on the day in question. This will return true for both <em>Hallel shalem</em>
+	 * and <em>Chatzi Hallel</em>. See {@link #isHallelShalemRecited(JewishCalendar)} to know if the complete <em>Hallel</em>
 	 * is recited.
 	 * 
 	 * @param jewishCalendar the Jewish calendar day.
-	 * @return if <em>hallel</em> is recited.
+	 * @return if <em>Hallel</em> is recited.
 	 * @see #isHallelShalemRecited(JewishCalendar)
 	 */
 	public boolean isHallelRecited(JewishCalendar jewishCalendar) {
@@ -438,6 +438,39 @@ public class TefilaRules {
 			}
 		} 
 		return false;
+	}
+	
+	/**
+	 * Returns if <a href="https://en.wikipedia.org/wiki/Al_HaNissim"><em>Al HaNissim</em></a> is recited on the day in question.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * @return if <em>al hanissim</em> is recited.
+	 * @see JewishCalendar#isChanukah()
+	 * @see JewishCalendar#isPurim()
+	 * @see JewishCalendar#getIsMukafChoma()
+	 */
+	public boolean isAlHanissimRecited(JewishCalendar jewishCalendar) {
+	    return jewishCalendar.isPurim() || jewishCalendar.isChanukah();
+	}
+	
+	/**
+	 * Returns if <em>Yaaleh Veyavo</em> is recited on the day in question.
+	 * 
+	 * @param jewishCalendar the Jewish calendar day.
+	 * @return if <em>Yaaleh Veyavo</em> is recited.
+	 * @see JewishCalendar#isPesach()
+	 * @see JewishCalendar#isShavuos()
+	 * @see JewishCalendar#isRoshHashana()
+	 * @see JewishCalendar#isYomKippur()
+	 * @see JewishCalendar#isSuccos()
+	 * @see JewishCalendar#isShminiAtzeres()
+	 * @see JewishCalendar#isSimchasTorah()
+	 * @see JewishCalendar#isRoshChodesh()
+	 */
+	public boolean isYaalehVeyavoRecited(JewishCalendar jewishCalendar) {
+	    return jewishCalendar.isPesach() || jewishCalendar.isShavuos() ||jewishCalendar.isRoshHashana() || jewishCalendar.isYomKippur()
+	    		|| jewishCalendar.isSuccos() || jewishCalendar.isShminiAtzeres() || jewishCalendar.isSimchasTorah()
+	    		|| jewishCalendar.isRoshChodesh();
 	}
 	
 	/**
