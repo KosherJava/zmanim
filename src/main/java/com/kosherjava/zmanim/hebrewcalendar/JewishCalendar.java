@@ -156,6 +156,13 @@ public class JewishCalendar extends JewishDate {
 	private boolean inIsrael = false;
 	
 	/**
+	 * Is the calendar set to have Purim <em>demukafim</em>, where Purim is celebrated on Shushan Purim.
+	 * @see #getIsMukafChoma()
+	 * @see #setIsMukafChoma(boolean)
+	 */
+	private boolean isMukafChoma = false;
+
+	/**
 	 * Is the calendar set to use modern Israeli holidays such as Yom Haatzmaut.
 	 * @see #isUseModernHolidays()
 	 * @see #setUseModernHolidays(boolean)
@@ -336,6 +343,28 @@ public class JewishCalendar extends JewishDate {
 	}
 	
 	/**
+	 * Returns if the city is set as a city surrounded by a wall from the time of Yehoshua, and Shushan Purim
+	 * should be celebrated as opposed to regular Purim.
+	 * @return if the city is set as a city surrounded by a wall from the time of Yehoshua, and Shushan Purim
+	 *         should be celebrated as opposed to regular Purim.
+	 * @see #setIsMukafChoma(boolean)
+	 */
+	public boolean getIsMukafChoma() {
+		return isMukafChoma;
+	}
+
+	/**
+	 * Sets if the location is surrounded by a wall from the time of Yehoshua, and Shushan Purim should be
+	 * celebrated as opposed to regular Purim. This should be set for Yerushalayim, Shushan and other cities.
+	 * @param isMukafChoma is the city surrounded by a wall from the time of Yehoshua.
+	 * 
+	 * @see #getIsMukafChoma()
+	 */
+	public void setIsMukafChoma(boolean isMukafChoma) {
+		this.isMukafChoma = isMukafChoma;
+	}
+	
+	/**
 	 * <a href="https://en.wikipedia.org/wiki/Birkat_Hachama">Birkas Hachamah</a> is recited every 28 years based on
 	 * <em>Tekufas Shmuel</em> (Julian years) that a year is 365.25 days. The <a href="https://en.wikipedia.org/wiki/Maimonides"
 	 * >Rambam</a> in <a href="http://hebrewbooks.org/pdfpager.aspx?req=14278&amp;st=&amp;pgnum=323">Hilchos Kiddush Hachodesh 9:3</a>
@@ -495,7 +524,6 @@ public class JewishCalendar extends JewishDate {
 		return clone.getParshah();
 	}
 	
-
 	/**
 	 * Returns a {@link Parsha <em>Parsha</em>} enum if the <em>Shabbos</em> is one of the four <em>parshiyos</em> of {@link
 	 * Parsha#SHKALIM <em>Shkalim</em>}, {@link Parsha#ZACHOR <em>Zachor</em>}, {@link Parsha#PARA <em>Para</em>}, {@link
@@ -819,7 +847,136 @@ public class JewishCalendar extends JewishDate {
 	public boolean isAseresYemeiTeshuva() {
 		return getJewishMonth() == TISHREI && getJewishDayOfMonth() <= 10;
 	}
-
+	
+	/**
+	 * Returns true if the current day is <em>Pesach</em> (either  the <em>Yom Tov</em> of <em>Pesach</em> or<em>Chol Hamoed Pesach</em>).
+	 * 
+	 * @return true if the current day is <em>Pesach</em> (either  the <em>Yom Tov</em> of <em>Pesach</em> or<em>Chol Hamoed Pesach</em>).
+	 * @see #isYomTov()
+	 * @see #isCholHamoedPesach()
+	 * @see #PESACH
+	 * @see #CHOL_HAMOED_PESACH
+	 */
+	public boolean isPesach() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == PESACH || holidayIndex == CHOL_HAMOED_PESACH;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em>.
+	 *
+	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em>
+	 * @see #isYomTov()
+	 * @see #isPesach()
+	 * @see #CHOL_HAMOED_PESACH
+	 */
+	public boolean isCholHamoedPesach() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == CHOL_HAMOED_PESACH;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Shavuos</em>.
+	 *
+	 * @return true if the current day is <em>Shavuos</em>.
+	 * @see #isYomTov()
+	 * @see #SHAVUOS
+	 */
+	public boolean isShavuos() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == SHAVUOS;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Rosh Hashana</em>.
+	 *
+	 * @return true if the current day is <em>Rosh Hashana</em>.
+	 * @see #isYomTov()
+	 * @see #ROSH_HASHANA
+	 */
+	public boolean isRoshHashana() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == ROSH_HASHANA;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Yom Kippur</em>.
+	 *
+	 * @return true if the current day is <em>Yom Kippur</em>.
+	 * @see #isYomTov()
+	 * @see #YOM_KIPPUR
+	 */
+	public boolean isYomKippur() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == YOM_KIPPUR;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Succos</em> (either  the <em>Yom Tov</em> of <em>Succos</em> or<em>Chol Hamoed Succos</em>).
+	 * It will return false for {@link #isShminiAtzeres() Shmini Atzeres} and {@link #isSimchasTorah() Simchas Torah}.
+	 * 
+	 * @return true if the current day is <em>Succos</em> (either  the <em>Yom Tov</em> of <em>Succos</em> or<em>Chol Hamoed Succos</em>.
+	 * @see #isYomTov()
+	 * @see #isCholHamoedSuccos()
+	 * @see #isHoshanaRabba()
+	 * @see #SUCCOS
+	 * @see #CHOL_HAMOED_SUCCOS
+	 * @see #HOSHANA_RABBA
+	 */
+	public boolean isSuccos() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == SUCCOS || holidayIndex == CHOL_HAMOED_SUCCOS || holidayIndex == HOSHANA_RABBA;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Hoshana Rabba</em>.
+	 *
+	 * @return true true if the current day is <em>Hoshana Rabba</em>.
+	 * @see #isYomTov()
+	 * @see #HOSHANA_RABBA
+	 */
+	public boolean isHoshanaRabba() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == HOSHANA_RABBA;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Shmini Atzeres</em>.
+	 *
+	 * @return true if the current day is <em>Shmini Atzeres</em>.
+	 * @see #isYomTov()
+	 * @see #SHEMINI_ATZERES
+	 */
+	public boolean isShminiAtzeres() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == SHEMINI_ATZERES;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Simchas Torah</em>. This will always return false if {@link #getInIsrael() in Israel}
+	 *
+	 * @return true if the current day is <em>Shmini Atzeres</em>.
+	 * @see #isYomTov()
+	 * @see #SIMCHAS_TORAH
+	 */
+	public boolean isSimchasTorah() {
+		int holidayIndex = getYomTovIndex();
+		//if in Israel, Holiday index of SIMCHAS_TORAH will not be returned by getYomTovIndex()
+		return holidayIndex == SIMCHAS_TORAH;
+	}
+	
+	/**
+	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Succos</em>.
+	 *
+	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Succos</em>
+	 * @see #isYomTov()
+	 * @see #CHOL_HAMOED_SUCCOS
+	 */
+	public boolean isCholHamoedSuccos() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == CHOL_HAMOED_SUCCOS || holidayIndex == HOSHANA_RABBA;
+	}
+	
 	/**
 	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em> or <em>Succos</em>.
 	 * 
@@ -830,30 +987,6 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean isCholHamoed() {
 		return isCholHamoedPesach() || isCholHamoedSuccos();
-	}
-
-	/**
-	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em>.
-	 *
-	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Pesach</em>
-	 * @see #isYomTov()
-	 * @see #CHOL_HAMOED_PESACH
-	 */
-	public boolean isCholHamoedPesach() {
-		int holidayIndex = getYomTovIndex();
-		return holidayIndex == CHOL_HAMOED_PESACH;
-	}
-
-	/**
-	 * Returns true if the current day is <em>Chol Hamoed</em> of <em>Succos</em>.
-	 *
-	 * @return true if the current day is <em>Chol Hamoed</em> of <em>Succos</em>
-	 * @see #isYomTov()
-	 * @see #CHOL_HAMOED_SUCCOS
-	 */
-	public boolean isCholHamoedSuccos() {
-		int holidayIndex = getYomTovIndex();
-		return holidayIndex == CHOL_HAMOED_SUCCOS;
 	}
 
 	/**
@@ -989,6 +1122,22 @@ public class JewishCalendar extends JewishDate {
 	public boolean isChanukah() {
 		return getYomTovIndex() == CHANUKAH;
 	}
+	
+	/**
+	 * Returns if the day is Purim (<a href="https://en.wikipedia.org/wiki/Purim#Shushan_Purim">Shushan Purim</a>
+	 * in a mukaf choma and regular Purim in a non-mukaf choma). 
+	 * @return if the day is Purim (Shushan Purim in a mukaf choma and regular Purin in a non-mukaf choma)
+	 * 
+	 * @see #getIsMukafChoma()
+	 * @see #setIsMukafChoma(boolean)
+	 */
+	public boolean isPurim() {
+		if(isMukafChoma) {
+			return getYomTovIndex() == SHUSHAN_PURIM;
+		} else {
+			return getYomTovIndex() == PURIM;
+		}
+	}
 
 	/**
 	 * Returns if the day is Rosh Chodesh. Rosh Hashana will return false
@@ -1040,6 +1189,15 @@ public class JewishCalendar extends JewishDate {
 			omer = day + 44;
 		}
 		return omer;
+	}
+	
+	/**
+	 * Returns if the day is Tisha Be'Av (the 9th of Av).
+	 * @return if the day is Tisha Be'Av (the 9th of Av).
+	 */
+	public boolean isTishaBav() {
+	    int holidayIndex = getYomTovIndex();
+	    return holidayIndex == TISHA_BEAV;
 	}
 
 	/**
