@@ -1,4 +1,10 @@
-## [2.4.0](https://github.com/KosherJava/zmanim/compare/2.3.0...master) (2022-11-27)
+## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
+
+* Correct spelling of Bein Hashmashos methods the the `ComplexZmanimCalendar` (was missing the second H).
+* Added  number of IS methods such as is `isYomKippur()`, `isSuccos()`, `isPesach()` etc. to the `JewishCalendar` class.
+* Add `isAlHanissimRecited(JewishCalendar)` and `isYaalehVeyavoRecited(JewishCalendar)` to the `TefilaRules` class.
+
+## [2.4.0](https://github.com/KosherJava/zmanim/compare/2.3.0...2.4.0) (2022-11-27)
 
 * JewishCalendar.getUpcomingParshah() that will return the upcoming _Parsha_ regardless of the day of week.
 * Change YerushalmiYomiCalculator to return null on Yom Kippur and Tisha Be'Av when there is no Daf.
