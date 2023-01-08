@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2018 Eliyahu Hershfeld
+ * Copyright (C) 2004-2023 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -11,7 +11,7 @@
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
- * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or connect to: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.util;
 
@@ -19,14 +19,14 @@ import java.util.Calendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
- * written by <a href="http://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
- * Boone</a> that is based on the <a href = "http://aa.usno.navy.mil/">US Naval Observatory's</a><a
- * href="http://aa.usno.navy.mil/publications/docs/asa.php">Almanac</a> for Computer algorithm ( <a
- * href="http://www.amazon.com/exec/obidos/tg/detail/-/0160515106/">Amazon</a>, <a
- * href="http://search.barnesandnoble.com/booksearch/isbnInquiry.asp?isbn=0160515106">Barnes &amp; Noble</a>) and is
- * used with his permission. Added to Kevin's code is adjustment of the zenith to account for elevation.
+ * written by <a href="htts://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
+ * Boone</a> that is based on the <a href = "https://aa.usno.navy.mil/">US Naval Observatory's</a><a
+ * href="https://aa.usno.navy.mil/publications/asa">Astronomical Almanac</a> and used with his permission. Added to Kevin's
+ * code is adjustment of the zenith to account for elevation. This algorithm returns the same time every year and does not
+ * account for leap years. It is not as accurate as the Jean Meeus based {@link NOAACalculator} that is the default calculator
+ * use by the KosherJava <em>zmanim</em> library.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2023
  * @author &copy; Kevin Boone 2000
  */
 public class SunTimesCalculator extends AstronomicalCalculator {
@@ -251,5 +251,27 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 			pocessedTime -= 24.0;
 		}
 		return pocessedTime;
+	}
+	
+	/**
+	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
+	 * of <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
+	 * on earth. This implementation returns solar noon as the time halfway between sunrise and sunset.
+	 * Other calculators may return true solar noon. See <a href=
+	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on solar
+	 * noon calculations.
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see NOAACalculator
+	 * 
+	 * @param calendar
+	 *            The Calendar representing the date to calculate solar noon for
+	 * @param geoLocation
+	 *            The location information used for astronomical calculating sun times.
+	 * @return the time in minutes from zero UTC
+	 */
+	public double getUTCNoon(Calendar calendar, GeoLocation geoLocation) {
+		double sunrise = getUTCSunrise(calendar, geoLocation, 90, true);
+		double sunset = getUTCSunset(calendar, geoLocation, 90, true);
+		return (sunrise + ((sunset - sunrise) / 2));
 	}
 }
