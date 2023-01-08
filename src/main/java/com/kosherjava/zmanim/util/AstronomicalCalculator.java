@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2022 Eliyahu Hershfeld
+ * Copyright (C) 2004-2023 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -23,7 +23,7 @@ import java.util.Calendar;
  * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
  * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2022
+ * @author &copy; Eliyahu Hershfeld 2004 - 2023
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -146,6 +146,22 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	public abstract double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
+	
+	
+	/**
+	 * Return <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> (UTC) for the given day at the
+	 * given location on earth. The the {@link com.kosherjava.zmanim.util.NOAACalculator} implementation calculates
+	 * true solar noon, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
+	 * the time as halfway between sunrise and sunset.
+	 * 
+	 * @param calendar
+	 *            Used to calculate day of year.
+	 * @param geoLocation
+	 *            The location information used for astronomical calculating sun times.         
+	 * 
+	 * @return the time in minutes from zero UTC
+	 */
+	public abstract double getUTCNoon(Calendar calendar, GeoLocation geoLocation);
 
 	/**
 	 * Method to return the adjustment to the zenith required to account for the elevation. Since a person at a higher
