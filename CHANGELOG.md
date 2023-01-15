@@ -1,5 +1,6 @@
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
 
+* isYomTov() should return false on Erev Shavuos.
 * Correct spelling of Bein Hashmashos methods the the `ComplexZmanimCalendar` (was missing the second H).
 * Added  number of IS methods such as is `isYomKippur()`, `isSuccos()`, `isPesach()` etc. to the `JewishCalendar` class.
 * Add `isAlHanissimRecited(JewishCalendar)` and `isYaalehVeyavoRecited(JewishCalendar)` to the `TefilaRules` class.
