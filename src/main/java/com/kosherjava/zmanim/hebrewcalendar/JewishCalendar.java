@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2022 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2023 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  * Copyright (C) 2019 - 2022 Y Paritcher
  *
@@ -42,7 +42,7 @@ import java.util.TimeZone;
  * @see java.util.Calendar
  * @author &copy; Y. Paritcher 2019 - 2022
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2022
+ * @author &copy; Eliyahu Hershfeld 2011 - 2023
  */
 public class JewishCalendar extends JewishDate {
 	/** The 14th day of Nissan, the day before of Pesach (Passover).*/
@@ -771,7 +771,7 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean isYomTov() {
 		int holidayIndex = getYomTovIndex();
-		if ((isErevYomTov() && (holidayIndex != HOSHANA_RABBA && (holidayIndex == CHOL_HAMOED_PESACH && getJewishDayOfMonth() != 20)))
+		if ((isErevYomTov() && (holidayIndex != HOSHANA_RABBA || (holidayIndex == CHOL_HAMOED_PESACH && getJewishDayOfMonth() != 20)))
 				|| (isTaanis() && holidayIndex != YOM_KIPPUR) || holidayIndex == ISRU_CHAG) {
 			return false;
 		}
