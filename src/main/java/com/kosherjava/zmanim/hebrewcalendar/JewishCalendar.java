@@ -170,8 +170,12 @@ public class JewishCalendar extends JewishDate {
 	private boolean useModernHolidays = false;
 
 	/**
-	 * List of <em>parshiyos</em>. {@link #NONE} indicates a week without a <em>parsha</em>, while the enum for the <em>parsha</em> of
-	 * {@link #VZOS_HABERACHA} exists for consistency, but is not currently used.
+	 * List of <em>parshiyos</em> or special <em>Shabasos</em>. {@link #NONE} indicates a week without a <em>parsha</em>, while the enum for
+	 * the <em>parsha</em> of {@link #VZOS_HABERACHA} exists for consistency, but is not currently used. The special <em>Shabasos</em> of
+	 * Shekalim, Zachor, Para, Hachodesh, as well as Shabbos Shuva, Shira, Hagadol, Chazon and Nachamu are also represented in this collection
+	 * of <em>parshiyos</em>.
+	 * @see #getSpecialShabbos()
+	 * @see #getParshah()
 	 */
 	public static enum Parsha {
 		/**NONE A week without any <em>parsha</em> such as <em>Shabbos Chol Hamoed</em> */NONE,
@@ -188,7 +192,8 @@ public class JewishCalendar extends JewishDate {
 		 * of Behar &amp; Bechukosai*/BEHAR_BECHUKOSAI,/**The double <em>parsha</em> of Chukas &amp; Balak*/CHUKAS_BALAK, /**The double
 		 * <em>parsha</em> of Matos &amp; Masei*/MATOS_MASEI,/**The double <em>parsha</em> of Nitzavim &amp; Vayelech*/NITZAVIM_VAYEILECH,
 		 /**The special <em>parsha</em> of Shekalim*/SHKALIM, /** The special <em>parsha</em> of Zachor*/ZACHOR, /**The special <em>parsha</em> of
-		  * Para*/PARA, /** The special <em>parsha</em> of Hachodesh*/HACHODESH
+		  * Para*/PARA, /** The special <em>parsha</em> of Hachodesh*/HACHODESH, /**<em>Shabbos</em> Shuva*/SHUVA, /**<em>Shabbos</em> Shira*/SHIRA, 
+		  /**<em>Shabbos</em> Hagadol*/HAGADOL, /**<em>Shabbos</em> Chazon*/CHAZON, /**<em>Shabbos</em> Nachamu*/NACHAMU
 	};
 	
 	/**
@@ -534,7 +539,7 @@ public class JewishCalendar extends JewishDate {
 	 *         Parsha#NONE Parsha.NONE}.
 	 */
 	public Parsha getSpecialShabbos() {
-		if (getDayOfWeek() == Calendar.SATURDAY)	{
+		if (getDayOfWeek() == Calendar.SATURDAY) {
 			if ((getJewishMonth() == SHEVAT && !isJewishLeapYear()) || (getJewishMonth() == ADAR && isJewishLeapYear())) {
 				if (getJewishDayOfMonth() == 25 || getJewishDayOfMonth() == 27 || getJewishDayOfMonth() == 29) {
 					return Parsha.SHKALIM;
@@ -554,8 +559,30 @@ public class JewishCalendar extends JewishDate {
 					return Parsha.HACHODESH;
 				}
 			}
-			if (getJewishMonth() == NISSAN && getJewishDayOfMonth() == 1) {
-				return Parsha.HACHODESH;
+			if (getJewishMonth() == NISSAN) {
+				if(getJewishDayOfMonth() == 1) {
+					return Parsha.HACHODESH;
+				}
+				if(getJewishDayOfMonth() >= 8 && getJewishDayOfMonth() <= 14) {
+					return Parsha.HAGADOL;
+				}
+			}
+			if (getJewishMonth() == AV) {
+				if(getJewishDayOfMonth() >= 4 && getJewishDayOfMonth() <= 9) {
+					return Parsha.CHAZON;
+				}
+				if(getJewishDayOfMonth() >= 10 && getJewishDayOfMonth() <= 16) {
+					return Parsha.NACHAMU;
+				}
+			}
+			if (getJewishMonth() == TISHREI) {
+				if(getJewishDayOfMonth() >= 3 && getJewishDayOfMonth() <= 8) {
+					return Parsha.SHUVA;
+				}
+				
+			}
+			if(getParshah() == Parsha.BESHALACH) {
+				return Parsha.SHIRA;
 			}
 		}
 		return Parsha.NONE;
