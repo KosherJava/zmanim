@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2022 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2023 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -37,7 +37,7 @@ import java.util.EnumMap;
  * @see JewishDate
  * @see JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2022
+ * @author &copy; Eliyahu Hershfeld 2011 - 2023
  */
 public class HebrewDateFormatter {
 	
@@ -81,7 +81,7 @@ public class HebrewDateFormatter {
 	 * Behar, Bechukosai, Bamidbar, Nasso, Beha'aloscha, Sh'lach, Korach, Chukas, Balak, Pinchas, Matos, Masei, Devarim,
 	 * Vaeschanan, Eikev, Re'eh, Shoftim, Ki Seitzei, Ki Savo, Nitzavim, Vayeilech, Ha'Azinu, Vezos Habracha,
 	 * Vayakhel Pekudei, Tazria Metzora, Achrei Mos Kedoshim, Behar Bechukosai, Chukas Balak, Matos Masei, Nitzavim Vayeilech,
-	 * Shekalim, Zachor, Parah, Hachodesh</em>".
+	 * Shekalim, Zachor, Parah, Hachodesh,Shuva, Shira, Hagadol, Chazon, Nachamu</em>".
 	 * 
 	 * @see #formatParsha(JewishCalendar)
 	 */
@@ -112,7 +112,9 @@ public class HebrewDateFormatter {
 	 *  &#x05E7;&#x05D3;&#x05D5;&#x05E9;&#x05D9;&#x05DD;, &#x05D1;&#x05D4;&#x05E8; &#x05D1;&#x05D7;&#x05E7;&#x05EA;&#x05D9;,
 	 *  &#x05D7;&#x05D5;&#x05E7;&#x05EA; &#x05D1;&#x05DC;&#x05E7;, &#x05DE;&#x05D8;&#x05D5;&#x05EA; &#x05DE;&#x05E1;&#x05E2;&#x05D9;,
 	 *  &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA;, &#x05E9;&#x05E7;&#x05DC;&#x05D9;&#x05DD;,
-	 *  &#x05D6;&#x05DB;&#x05D5;&#x05E8;, &#x05E4;&#x05E8;&#x05D4;, &#x05D4;&#x05D7;&#x05D3;&#x05E9;"</code>
+	 *  &#x05D6;&#x05DB;&#x05D5;&#x05E8;, &#x05E4;&#x05E8;&#x05D4;, &#x05D4;&#x05D7;&#x05D3;&#x05E9;,
+	 *  &#x05E9;&#x05D5;&#x05D1;&#x05D4;,&#x05E9;&#x05D9;&#x05E8;&#x05D4;,&#x05D4;&#x05D2;&#x05D3;&#x05D5;&#x05DC;,
+	 *  &#x05D7;&#x05D6;&#x05D5;&#x05DF;,&#x05E0;&#x05D7;&#x05DE;&#x05D5;"</code>
 	 */
 	private EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
 	
@@ -187,6 +189,11 @@ public class HebrewDateFormatter {
 		transliteratedParshaMap.put(JewishCalendar.Parsha.ZACHOR, "Zachor");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.PARA, "Parah");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.HACHODESH, "Hachodesh");
+		transliteratedParshaMap.put(JewishCalendar.Parsha.SHUVA, "Shuva");
+		transliteratedParshaMap.put(JewishCalendar.Parsha.SHIRA, "Shira");
+		transliteratedParshaMap.put(JewishCalendar.Parsha.HAGADOL, "Hagadol");
+		transliteratedParshaMap.put(JewishCalendar.Parsha.CHAZON, "Chazon");
+		transliteratedParshaMap.put(JewishCalendar.Parsha.NACHAMU, "Nachamu");
 		
 		hebrewParshaMap = new EnumMap<JewishCalendar.Parsha, String>(JewishCalendar.Parsha.class);
 		hebrewParshaMap.put(JewishCalendar.Parsha.NONE, "");
@@ -255,6 +262,11 @@ public class HebrewDateFormatter {
 		hebrewParshaMap.put(JewishCalendar.Parsha.ZACHOR, "\u05D6\u05DB\u05D5\u05E8");
 		hebrewParshaMap.put(JewishCalendar.Parsha.PARA, "\u05E4\u05E8\u05D4");
 		hebrewParshaMap.put(JewishCalendar.Parsha.HACHODESH, "\u05D4\u05D7\u05D3\u05E9");
+		hebrewParshaMap.put(JewishCalendar.Parsha.SHUVA, "\u05E9\u05D5\u05D1\u05D4");
+		hebrewParshaMap.put(JewishCalendar.Parsha.SHIRA, "\u05E9\u05D9\u05E8\u05D4");
+		hebrewParshaMap.put(JewishCalendar.Parsha.HAGADOL, "\u05D4\u05D2\u05D3\u05D5\u05DC");
+		hebrewParshaMap.put(JewishCalendar.Parsha.CHAZON, "\u05D7\u05D6\u05D5\u05DF");
+		hebrewParshaMap.put(JewishCalendar.Parsha.NACHAMU, "\u05E0\u05D7\u05DE\u05D5");
 	}
 
 	/**
