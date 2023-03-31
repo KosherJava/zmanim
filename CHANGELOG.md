@@ -1,5 +1,6 @@
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
 
+* Update `ComplexZmanimCalendar.getSolarMidnight()` to support astronomocal midnight that works even in the Arctic/Antarctic.
 * Add special Shabbasos/Parshiyos Shuva, Shira, Hagadol, Chazon and Nachamu
 * isYomTov() should return false on Erev Shavuos.
 * Correct spelling of Bein Hashmashos methods the the `ComplexZmanimCalendar` (was missing the second H).
