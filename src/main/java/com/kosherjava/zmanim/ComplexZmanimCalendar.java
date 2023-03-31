@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2022 Eliyahu Hershfeld
+ * Copyright (C) 2004-2023 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -10,7 +10,7 @@
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
  * or connect to: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim;
@@ -106,7 +106,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * <h2>Documentation from the {@link ZmanimCalendar} parent class</h2>
  * {@inheritDoc}
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2022
+ * @author &copy; Eliyahu Hershfeld 2004 - 2023
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
@@ -3797,9 +3797,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getSolarMidnight() {
 		ZmanimCalendar clonedCal = (ZmanimCalendar) clone();
 		clonedCal.getCalendar().add(Calendar.DAY_OF_MONTH, 1);
-		Date sunset = getSeaLevelSunset();
-		Date sunrise = clonedCal.getSeaLevelSunrise();
-		return getTimeOffset(sunset, getTemporalHour(sunset, sunrise) * 6);
+		return getTimeOffset(getChatzos(), clonedCal.getChatzos().getTime() - getChatzos().getTime());
 	}
 	
 	/**
@@ -3996,6 +3994,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * sea level solar hours} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. This calculation is based
 	 * on the opinion of the Baal Hatanya that the day is calculated from sunrise to sunset. This returns the time 6.5
 	 * * {@link #getShaahZmanisBaalHatanya()} after {@link #getSunriseBaalHatanya() <em>netz amiti</em> ("real" sunrise)}.
+	 * 
 	 * @see #getMinchaGedola(Date, Date)
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @see #getMinchaKetanaBaalHatanya()
