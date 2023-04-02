@@ -3797,7 +3797,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getSolarMidnight() {
 		ZmanimCalendar clonedCal = (ZmanimCalendar) clone();
 		clonedCal.getCalendar().add(Calendar.DAY_OF_MONTH, 1);
-		return getTimeOffset(getChatzos(), clonedCal.getChatzos().getTime() - getChatzos().getTime());
+		return getTimeOffset(getChatzos(), (clonedCal.getChatzos().getTime() - getChatzos().getTime()) / 2);
 	}
 	
 	/**
