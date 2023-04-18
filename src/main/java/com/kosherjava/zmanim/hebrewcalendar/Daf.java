@@ -7,10 +7,10 @@
  * any later version.
  *
  * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA,
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
  * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 
@@ -69,7 +69,7 @@ public class Daf {
 			"Terumos", "Ma'asros", "Ma'aser Sheni", "Chalah", "Orlah", "Bikurim", "Shabbos", "Eruvin", "Pesachim",
 			"Beitzah", "Rosh Hashanah", "Yoma", "Sukah", "Ta'anis", "Shekalim", "Megilah", "Chagigah", "Moed Katan",
 			"Yevamos", "Kesuvos", "Sotah", "Nedarim", "Nazir", "Gitin", "Kidushin", "Bava Kama", "Bava Metzia",
-			"Bava Basra", "Sanhedrin", "Makos", "Shevuos", "Avodah Zarah", "Horayos", "Nidah", "No Daf Today" };
+			"Bava Basra", "Shevuos", "Makos", "Sanhedrin", "Avodah Zarah", "Horayos", "Nidah", "No Daf Today" };
 	
 	/**
 	 * See {@link #getYerushalmiMasechta()}.
@@ -90,7 +90,7 @@ public class Daf {
 			"\u05d0\u05d9\u05df \u05d3\u05e3 \u05d4\u05d9\u05d5\u05dd" };
 
 	/**
-	 * gets the masechta number of the currently set Daf. The sequence is: Berachos, Shabbos, Eruvin, Pesachim,
+	 * Gets the masechta number of the currently set Daf. The sequence is: Berachos, Shabbos, Eruvin, Pesachim,
 	 * Shekalim, Yoma, Sukkah, Beitzah, Rosh Hashana, Taanis, Megillah, Moed Katan, Chagigah, Yevamos, Kesubos, Nedarim,
 	 * Nazir, Sotah, Gitin, Kiddushin, Bava Kamma, Bava Metzia, Bava Basra, Sanhedrin, Makkos, Shevuos, Avodah Zarah,
 	 * Horiyos, Zevachim, Menachos, Chullin, Bechoros, Arachin, Temurah, Kerisos, Meilah, Kinnim, Tamid, Midos and
@@ -197,10 +197,10 @@ public class Daf {
 
 	/**
 	 * Returns the transliterated name of the masechta (tractate) of the Daf Yomi in Yerushalmi. The list of mashechtos is: 
-	 * Berachos, Pe'ah,  Demai,  Kilayim,  Shevi'is,  Terumos,  Ma'asros,  Ma'aser Sheni,  Chalah,  Orlah,  Bikurim, 
-	 * Shabbos, Eruvin,  Pesachim,  Beitzah,  Rosh Hashanah,  Yoma,  Sukah,  Ta'anis,  Shekalim,  Megilah,  Chagigah, 
-	 * Moed Katan,  Yevamos,  Kesuvos,  Sotah,  Nedarim,  Nazir,  Gitin,  Kidushin,  Bava Kama,  Bava Metzia,
-	 * Bava Basra,  Sanhedrin,  Makos,  Shevuos,  Avodah Zarah,  Horayos,  Nidah and No Daf Today.
+	 * Berachos, Pe'ah, Demai, Kilayim, Shevi'is, Terumos, Ma'asros, Ma'aser Sheni, Chalah, Orlah, Bikurim, 
+	 * Shabbos, Eruvin, Pesachim, Beitzah, Rosh Hashanah, Yoma, Sukah, Ta'anis, Shekalim, Megilah, Chagigah, 
+	 * Moed Katan, Yevamos, Kesuvos, Sotah, Nedarim, Nazir, Gitin, Kidushin, Bava Kama, Bava Metzia,
+	 * Bava Basra, Shevuos, Makos, Sanhedrin, Avodah Zarah, Horayos, Nidah and No Daf Today.
 	 * 
 	 * @return the transliterated name of the masechta (tractate) of the Daf Yomi such as Berachos.
 	 */
