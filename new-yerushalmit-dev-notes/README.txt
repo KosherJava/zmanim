@@ -13,3 +13,7 @@ however I discoved to other things
 1) The Original scedual skips Yom Kippur and TiSha-BaAv - the new one does not
 2) The order of the Mesactas in the scedual differs
 
+
+
+I opened a spreadsheet and pasted the website csv and Artscroll pdf csv side by side  on same spreadsheet
+and confirmed that the mesechtos and pages and dates all lined up so using the website csv as source
