@@ -15,7 +15,7 @@ for x in oztab:
 		year = x[1].strip()
 		ndy = md + " " + year
 		d = parser.parse(ndy).strftime("%Y-%m-%d")
-		out = '{ "' + d + '", "' +  kzname + '", "' + '"' + str(page) + '"},'
+		out = '{ "' + d + '", "' +  kzname + '", "'  + str(page) + '"},'
 		print (out )
 
 
