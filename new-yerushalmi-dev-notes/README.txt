@@ -4,6 +4,7 @@ to help convert yerushalmi daf yomi tables to usable code
 
 README.txt - this file 
 ArtScrollPdf - original attempt to extract data from Artscroll PDF
+hebcal.com   - more files from website of same name - not used at this time
 DafYomiCoIlWebSite - cut and paste html tables from this site and pasted to spread sheet and saved as csv
 		     Work went on from there
 
