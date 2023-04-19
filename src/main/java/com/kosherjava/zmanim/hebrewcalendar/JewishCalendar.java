@@ -1371,6 +1371,10 @@ public class JewishCalendar extends JewishDate {
 	public Daf getDafYomiYerushalmi() {
 		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
 	}
+
+	public Daf getDafYomiYerushalmiNew() {
+		return YerushalmiYomiCalculator.getDafYomiYerushalmiNew(this);
+	}
 	
 	/**
 	 * Returns the elapsed days since <em>Tekufas Tishrei</em>. This uses <em>Tekufas Shmuel</em> (identical to the <a href=

@@ -35,4 +35,10 @@ public class YomiCalculatorTest {
 		Assert.assertEquals(47, daf.getDaf());
 		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiBavli()));
 	}
+
+	@Test
+	public void elazartest(){
+
+		System.out.println(YerushalmiNewCycle11.newtable[0][1]);
+	}
 }
