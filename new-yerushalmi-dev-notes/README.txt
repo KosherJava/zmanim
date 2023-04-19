@@ -2,6 +2,12 @@ Contact:  Elazar Rosenthal - elazar@panix.com  or elazarrosenthal@gmail.com
 This directory contains scripts and files
 to help convert yerushalmi daf yomi tables to usable code
 
+I am not sure what names to use for the new scedual
+I have used NEW and in some places ORIG
+hebcal.com apparently went with vilna and shottenstien
+please pick better namming if you think appropreate (orig/vilnam    new/shottenstien/artscroll/oxvihadar)
+
+
 README.txt - this file 
 ArtScrollPdf - original attempt to extract data from Artscroll PDF
 hebcal.com   - more files from website of same name - not used at this time

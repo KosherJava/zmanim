@@ -41,7 +41,7 @@ public class YerushalmiYomiCalculator {
 			68, 37, 34, 44, 31, 59, 26, 33, 28, 20, 13, 92, 65, 71, 22, 22, 42, 26, 26, 33, 34, 22,
 			19, 85, 72, 47, 40, 47, 54, 48, 44, 37, 34, 44, 9, 57, 37, 19, 13};
 
-	private final static Calendar New_DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
+	private final static Calendar New_DAF_YOMI_START_DAY = new GregorianCalendar(2022, Calendar.NOVEMBER, 14);
 
 	private final static int[] NEW_BLATT_PER_MASSECTA = {
 			94 , //  Berachos
@@ -144,17 +144,22 @@ public class YerushalmiYomiCalculator {
 		// Finally find the daf.
 		for (int j = 0; j < BLATT_PER_MASSECTA.length; j++) {
 			
-			if (total <= BLATT_PER_MASSECTA[j]) {
+			if (total < BLATT_PER_MASSECTA[j]) {
 				dafYomi = new Daf(masechta, total + 1);
 				break;
 			}
-			total -= BLATT_PER_MASSECTA[j];
+			total -= BLATT_PER_MASSECTA[j] ;
 			masechta++;
 		}
 
 		return dafYomi;
 	}
 
+	/**
+	 * @param calendar
+	 *            the calendar date for calculation
+	 *
+	 */
 	public static Daf getDafYomiYerushalmiNew(JewishCalendar calendar) {
 
 		Calendar nextCycle = new GregorianCalendar();
@@ -162,7 +167,6 @@ public class YerushalmiYomiCalculator {
 		Calendar requested = calendar.getGregorianCalendar();
 		int masechta = 0;
 		Daf dafYomi = null;
-
 
 		if (requested.before(New_DAF_YOMI_START_DAY)) {
 			return getDafYomiYerushalmi(calendar);
@@ -174,19 +178,21 @@ public class YerushalmiYomiCalculator {
 		// Go cycle by cycle, until we get the next cycle
 		while (requested.after(nextCycle)) {
 			prevCycle.setTime(nextCycle.getTime());
-
 			// Adds the number of whole shas dafs. and the number of days that not have daf.
 			nextCycle.add(Calendar.DAY_OF_MONTH, NEW_WHOLE_SHAS_DAFS);
 		}
 
 		// Get the number of days from cycle start until request.
 		int dafNo = (int)(getDiffBetweenDays(prevCycle, requested));
-		int total = dafNo;
+
+		// Get the number of special day to subtract
+		int specialDays = 0;// getNumOfSpecialDays(prevCycle, requested);
+		int total = dafNo - specialDays;
 
 		// Finally find the daf.
 		for (int j = 0; j < NEW_BLATT_PER_MASSECTA.length; j++) {
 
-			if (total <= NEW_BLATT_PER_MASSECTA[j]) {
+			if (total < NEW_BLATT_PER_MASSECTA[j]) {
 				dafYomi = new Daf(NewMessechtaMap[masechta], total + 1);
 				break;
 			}
@@ -196,6 +202,7 @@ public class YerushalmiYomiCalculator {
 
 		return dafYomi;
 	}
+
 	/**
 	 * Return the number of special days (Yom Kippur and Tisha Beav) That there is no Daf in this days.
 	 * From the last given number of days until given date
