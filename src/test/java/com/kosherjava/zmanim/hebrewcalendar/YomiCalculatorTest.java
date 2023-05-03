@@ -15,7 +15,7 @@ public class YomiCalculatorTest {
 		Daf daf = YomiCalculator.getDafYomiBavli(jewishCalendar);
 		Assert.assertEquals(5, daf.getMasechtaNumber());
 		Assert.assertEquals(2, daf.getDaf());
-		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiBavli()));
+		System.out.println(hdf.formatDafYomiBavli(jewishCalendar.getDafYomiBavli()));
 	}
 
 	@Test
@@ -24,7 +24,7 @@ public class YomiCalculatorTest {
 		Daf daf = YomiCalculator.getDafYomiBavli(jewishCalendar);
 		Assert.assertEquals(4, daf.getMasechtaNumber());
 		Assert.assertEquals(14, daf.getDaf());
-		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiBavli()));
+		System.out.println(hdf.formatDafYomiBavli(jewishCalendar.getDafYomiBavli()));
 	}
 	
 	@Test
@@ -33,6 +33,6 @@ public class YomiCalculatorTest {
 		Daf daf = YomiCalculator.getDafYomiBavli(jewishCalendar);
 		Assert.assertEquals(23, daf.getMasechtaNumber());
 		Assert.assertEquals(47, daf.getDaf());
-		System.out.println(hdf.formatDafYomiYerushalmi(jewishCalendar.getDafYomiBavli()));
+		System.out.println(hdf.formatDafYomiBavli(jewishCalendar.getDafYomiBavli()));
 	}
 }
