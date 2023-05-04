@@ -27,7 +27,7 @@ import java.util.GregorianCalendar;
  * @author &copy; Eliyahu Hershfeld 2017 - 2023
  */
 public class YerushalmiYomiCalculator {
-	
+
 	/**
 	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 15 Shevat, 5740.
 	 */
@@ -37,9 +37,57 @@ public class YerushalmiYomiCalculator {
 	/** The number of pages in the Talmud Yerushalmi.*/
 	private final static int WHOLE_SHAS_DAFS = 1554;
 	/** The number of pages per <em>masechta</em> (tractate).*/
-	private final static int[] BLATT_PER_MASSECTA = { 
+	private final static int[] BLATT_PER_MASSECTA = {
 			68, 37, 34, 44, 31, 59, 26, 33, 28, 20, 13, 92, 65, 71, 22, 22, 42, 26, 26, 33, 34, 22,
 			19, 85, 72, 47, 40, 47, 54, 48, 44, 37, 34, 44, 9, 57, 37, 19, 13};
+
+	private final static Calendar New_DAF_YOMI_START_DAY = new GregorianCalendar(2022, Calendar.NOVEMBER, 14);
+
+	private final static int[] NEW_BLATT_PER_MASSECTA = {
+			94 , //  Berachos
+			73 , //  Pe'ah
+			77 , //  Demai
+			84 , //  Kil'ayim
+			87 , //  Shevi'is
+			107 , //  Terumos
+			46 , //  Ma'asros
+			59 , //  Ma'aser Sheni
+			49 , //  Chalah
+			42 , //  Orlah
+			26 , //  Bikurim
+			113 , //  Shabbos
+			71 , //  Eruvin
+			86 , //  Pesachim
+			61 , //  Shekalim
+			57 , //  Yoma
+			33 , //  Sukah
+			49 , //  Beitzah
+			27 , //  Rosh Hashanah
+			31 , //  Ta'anis
+			41 , //  Megilah
+			28 , //  Chagigah
+			23 , //  Moed Katan
+			88 , //  Yevamos
+			77 , //  Kesuvos
+			42 , //  Nedarim
+			53 , //  Nazir
+			52 , //  Sotah
+			53 , //  Gitin
+			53 , //  Kidushin
+			40 , //  Bava Kama
+			35 , //  Bava Metzia
+			39 , //  Bava Basra
+			75 , //  Sanhedrin
+			49 , //  Shevuos
+			34 , //  Avodah Zarah
+			11 , //  Makos
+			18 , //  Horayos
+			11 //  Nidah
+	};
+	private final static int NEW_WHOLE_SHAS_DAFS =  2094 ;
+
+	private final static int[] NewMessechtaMap = {0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 11 , 12 , 13 , 19 , 16 , 17 , 14 , 15 , 18 , 20 , 21 , 22 , 23 , 24 , 26 , 27 , 25 , 28 , 29 , 30 , 31 , 32 , 35 , 33 , 36 , 34 , 37 , 38 , };
+
 
 	/**
 	 * Returns the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a>
@@ -101,13 +149,61 @@ public class YerushalmiYomiCalculator {
 				dafYomi = new Daf(masechta, total + 1);
 				break;
 			}
-			total -= BLATT_PER_MASSECTA[j];
+			total -= BLATT_PER_MASSECTA[j] ;
 			masechta++;
 		}
 
 		return dafYomi;
 	}
-	
+
+	/**
+	 * @param calendar
+	 *            the calendar date for calculation
+	 *
+	 */
+	public static Daf getDafYomiYerushalmiNew(JewishCalendar calendar) {
+
+		Calendar nextCycle = new GregorianCalendar();
+		Calendar prevCycle = new GregorianCalendar();
+		Calendar requested = calendar.getGregorianCalendar();
+		int masechta = 0;
+		Daf dafYomi = null;
+
+		if (requested.before(New_DAF_YOMI_START_DAY)) {
+			return getDafYomiYerushalmi(calendar);
+		}
+
+		// Start to calculate current cycle. init the start day
+		nextCycle.setTime(New_DAF_YOMI_START_DAY.getTime());
+
+		// Go cycle by cycle, until we get the next cycle
+		while (requested.after(nextCycle)) {
+			prevCycle.setTime(nextCycle.getTime());
+			// Adds the number of whole shas dafs. and the number of days that not have daf.
+			nextCycle.add(Calendar.DAY_OF_MONTH, NEW_WHOLE_SHAS_DAFS);
+		}
+
+		// Get the number of days from cycle start until request.
+		int dafNo = (int)(getDiffBetweenDays(prevCycle, requested));
+
+		// Get the number of special day to subtract
+		int specialDays = 0;// getNumOfSpecialDays(prevCycle, requested);
+		int total = dafNo - specialDays;
+
+		// Finally find the daf.
+		for (int j = 0; j < NEW_BLATT_PER_MASSECTA.length; j++) {
+
+			if (total < NEW_BLATT_PER_MASSECTA[j]) {
+				dafYomi = new Daf(NewMessechtaMap[masechta], total + 1);
+				break;
+			}
+			total -= NEW_BLATT_PER_MASSECTA[j];
+			masechta++;
+		}
+
+		return dafYomi;
+	}
+
 	/**
 	 * Return the number of special days (Yom Kippur and Tisha Beav) That there is no Daf in this days.
 	 * From the last given number of days until given date
