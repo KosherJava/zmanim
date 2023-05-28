@@ -37,7 +37,7 @@ public class YerushalmiYomiCalculator {
 	/** The number of pages in the Talmud Yerushalmi.*/
 	private final static int WHOLE_SHAS_DAFS = 1554;
 	/** The number of pages per <em>masechta</em> (tractate).*/
-	private final static int[] BLATT_PER_MASSECTA = { 
+	private final static int[] BLATT_PER_MASECHTA = { 
 			68, 37, 34, 44, 31, 59, 26, 33, 28, 20, 13, 92, 65, 71, 22, 22, 42, 26, 26, 33, 34, 22,
 			19, 85, 72, 47, 40, 47, 54, 48, 44, 37, 34, 44, 9, 57, 37, 19, 13};
 
@@ -71,7 +71,7 @@ public class YerushalmiYomiCalculator {
 		
 		
 		if (requested.before(DAF_YOMI_START_DAY)) {
-			throw new IllegalArgumentException(requested + " is prior to organized Daf Yomi Yerushlmi cycles that started on "
+			throw new IllegalArgumentException(requested + " is prior to organized Daf Yomi Yerushalmi cycles that started on "
 					+ DAF_YOMI_START_DAY);
 		}
 		
@@ -95,13 +95,13 @@ public class YerushalmiYomiCalculator {
 		int total = dafNo - specialDays;
 				
 		// Finally find the daf.
-		for (int j = 0; j < BLATT_PER_MASSECTA.length; j++) {
+		for (int j = 0; j < BLATT_PER_MASECHTA.length; j++) {
 			
-			if (total < BLATT_PER_MASSECTA[j]) {
+			if (total < BLATT_PER_MASECHTA[j]) {
 				dafYomi = new Daf(masechta, total + 1);
 				break;
 			}
-			total -= BLATT_PER_MASSECTA[j];
+			total -= BLATT_PER_MASECHTA[j];
 			masechta++;
 		}
 
