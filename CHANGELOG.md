@@ -1,5 +1,9 @@
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
 
+* Various Daf Yomi Yerushalmi fixes including:
+  * Correct calculation of the _daf_ number.
+  * Correct the order of transliterated Yerushalmi _masechtos_.
+  * Correct the Hebrew spelling of the _masechta_ Kilayim.
 * Update `ComplexZmanimCalendar.getSolarMidnight()` to support astronomocal midnight that works even in the Arctic/Antarctic.
 * Add special Shabbasos/Parshiyos Shuva, Shira, Hagadol, Chazon and Nachamu
 * isYomTov() should return false on Erev Shavuos.
