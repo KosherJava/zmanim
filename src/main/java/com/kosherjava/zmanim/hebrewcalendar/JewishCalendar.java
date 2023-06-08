@@ -1177,9 +1177,9 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if the day is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em>.
+	 * Returns if the day is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em> and the <em>haftorah</em> of Machar Chodesh is read.
 	 *
-	 * @return true if it is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em>.
+	 * @return true if it is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em> and the <em>haftorah</em> of Machar Chodesh is read.
 	 * @todo There is more to tweak in this method (it does not cover all cases and opinions), and it may be removed.
 	 */
 	public boolean isMacharChodesh() {
