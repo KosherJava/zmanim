@@ -1,3 +1,11 @@
+## 3.0.0 (future)
+### Includes breaking changes
+* Remove deprecated methods flagged for removal.
+* Remove deprecated classes such as the redundant [GeoLocationUtils](https://github.com/KosherJava/zmanim/blob/master/src/main/java/com/kosherjava/zmanim/util/GeoLocationUtils.java).
+* Possibly rename some classes such as the confusingly named [ComplexZmanimCalendar](https://github.com/KosherJava/zmanim/blob/master/src/main/java/com/kosherjava/zmanim/ComplexZmanimCalendar.java).
+* Possibly increase the minimum supported JRE version from version 8 (the code currently almost certainly works on 6 today).
+* ...
+
 ## [2.6.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
 
 
