@@ -1,15 +1,19 @@
-## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
+## [2.6.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
 
+
+## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...2.5.0) (2023-06-09)
+
+* Update `ComplexZmanimCalendar.getSolarMidnight()` to support astronomocal midnight that works even in the Arctic/Antarctic.
+* Add special Shabbasos/Parshiyos Shuva, Shira, Hagadol, Chazon and Nachamu
+* Fix isYomTov() should return false on Erev Shavuos.
+* Correct spelling of Bein Hashmashos methods the the `ComplexZmanimCalendar` (was missing the second H).
 * Various Daf Yomi Yerushalmi fixes including:
   * Correct calculation of the _daf_ number.
   * Correct the order of transliterated Yerushalmi _masechtos_.
   * Correct the Hebrew spelling of the _masechta_ Kilayim.
-* Update `ComplexZmanimCalendar.getSolarMidnight()` to support astronomocal midnight that works even in the Arctic/Antarctic.
-* Add special Shabbasos/Parshiyos Shuva, Shira, Hagadol, Chazon and Nachamu
-* isYomTov() should return false on Erev Shavuos.
-* Correct spelling of Bein Hashmashos methods the the `ComplexZmanimCalendar` (was missing the second H).
-* Added  number of IS methods such as is `isYomKippur()`, `isSuccos()`, `isPesach()` etc. to the `JewishCalendar` class.
+* * Added  number of IS methods such as is `isYomKippur()`, `isSuccos()`, `isPesach()` etc. to the `JewishCalendar` class.
 * Add `isAlHanissimRecited(JewishCalendar)` and `isYaalehVeyavoRecited(JewishCalendar)` to the `TefilaRules` class.
+* Clarify documentation to explain that isMacharChodesh() Refers to the Haftorah
 
 ## [2.4.0](https://github.com/KosherJava/zmanim/compare/2.3.0...2.4.0) (2022-11-27)
 
