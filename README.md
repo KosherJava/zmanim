@@ -24,14 +24,14 @@ Add the following to your `pom.xml` file:
 <dependency>
   <groupId>com.kosherjava</groupId>
   <artifactId>zmanim</artifactId>
-  <version>2.4.0</version>
+  <version>2.5.0</version>
 </dependency>
 ```
 
 #### Gradle
 Add the following to your `build.gradle` file:
 ```groovy
-implementation group: 'com.kosherjava', name: 'zmanim', version: '2.4.0'
+implementation group: 'com.kosherjava', name: 'zmanim', version: '2.5.0'
 ```
 
 License
