@@ -31,8 +31,12 @@ Add the following to your `pom.xml` file:
 #### Gradle
 Add the following to your `build.gradle` file:
 ```groovy
-implementation group: 'com.kosherjava', name: 'zmanim', version: '2.5.0'
+implementation group: 'com.kosherjava', name: 'zmanim', version: '2.5.0' // Groovy
 ```
+```kotlin
+implementation("com.kosherjava:zmanim:2.5.0") // Kotlin
+```
+
 
 License
 -------
