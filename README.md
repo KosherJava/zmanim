@@ -33,6 +33,12 @@ Add the following to your `build.gradle` file:
 ```groovy
 implementation group: 'com.kosherjava', name: 'zmanim', version: '2.5.0'
 ```
+Or if you have `build.gradle.kts` file:
+
+```kotlin
+implementation("com.kosherjava:zmanim:2.5.0")
+```
+
 
 License
 -------
