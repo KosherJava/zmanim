@@ -2918,7 +2918,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanisAteretTorah()
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
-	public Date getSofZmanTfilahAteretTorah() {
+	public Date getSofZmanTfilaAteretTorah() {
 		return getSofZmanTfila(getAlos72Zmanis(), getTzaisAteretTorah());
 	}
 
