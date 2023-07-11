@@ -2918,6 +2918,19 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanisAteretTorah()
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
+	public Date getSofZmanTfilaAteretTorah() {
+		return getSofZmanTfila(getAlos72Zmanis(), getTzaisAteretTorah());
+	}
+	
+	/**
+	 * @see #getSofZmanTfilaAteretTorah()
+	 * @deprecated misspelled method name (all other methods spell tfila witout an H) to be removed in 3.0.0.
+	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> based on this calculation. If the
+	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
+	 *         the sun does not rise, and one where it does not set, a null will be returned. See detailed explanation
+	 *         on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public Date getSofZmanTfilahAteretTorah() {
 		return getSofZmanTfila(getAlos72Zmanis(), getTzaisAteretTorah());
 	}
@@ -3786,8 +3799,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * A method that returns "solar" midnight, or the time when the sun is at its <a
-	 * href="https://en.wikipedia.org/wiki/Nadir">nadir</a>.
-	 * <b>Note:</b> this method is experimental and might be removed.
+	 * href="https://en.wikipedia.org/wiki/Nadir">nadir</a>. The current calculation is hallfway between today's
+	 * <em>chatzos hayom</em> and tomorrow's <em>chatzos hayom</em>.
 	 * 
 	 * @return the <code>Date</code> of Solar Midnight (chatzos layla). If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
