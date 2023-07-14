@@ -510,7 +510,7 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns the upcoming {@link Parsha <em>Parsha</em>} regardless of if it is the weekday or <em>Shabbos</em> (where next
 	 * Shabbos's <em>Parsha</em> will be returned. This is unlike {@link #getParshah()} that returns {@link Parsha#NONE} if
-	 * the date is not <em>Shabbos</em>. If the upcoming Shabbos is a <em>Yom Tov</em> and has no <em>Parsha</em>, the
+	 * the date is not <em>Shabbos</em>. If the upcoming <em>Shabbos</em> is a <em>Yom Tov</em> and has no <em>Parsha</em>, the
 	 * following week's <em>Parsha</em> will be returned.
 	 * 
 	 * @return the upcoming <em>parsha</em>.
@@ -532,11 +532,15 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * Returns a {@link Parsha <em>Parsha</em>} enum if the <em>Shabbos</em> is one of the four <em>parshiyos</em> of {@link
 	 * Parsha#SHKALIM <em>Shkalim</em>}, {@link Parsha#ZACHOR <em>Zachor</em>}, {@link Parsha#PARA <em>Para</em>}, {@link
-	 * Parsha#HACHODESH <em>Hachdesh</em>} or {@link Parsha#NONE Parsha.NONE} for a regular <em>Shabbos</em> (or any weekday).
+	 * Parsha#HACHODESH <em>Hachdesh</em>}, or five other special <em>Shabbasos</em> of {@link Parsha#HAGADOL <em>Hagadol</em>},
+	 * {@link Parsha#CHAZON <em>Chazon</em>}, {@link Parsha#NACHAMU <em>Nachamu</em>}, {@link Parsha#SHUVA <em>Shuva</em>},
+	 * {@link Parsha#SHIRA <em>Shira</em>}, or {@link Parsha#NONE Parsha.NONE} for a regular <em>Shabbos</em> (or any weekday).
 	 * 
-	 * @return one of the four <em>parshiyos</em> of {@link Parsha#SHKALIM <em>Shkalim</em>} {@link Parsha#ZACHOR 
-	 *         <em>Zachor</em>}, {@link Parsha#PARA <em>Para</em>}, {@link Parsha#HACHODESH <em>Hachdesh</em>} or {@link
-	 *         Parsha#NONE Parsha.NONE}.
+	 * @return one of the four <em>parshiyos</em> of {@link	Parsha#SHKALIM <em>Shkalim</em>}, {@link Parsha#ZACHOR <em>Zachor</em>},
+	 * 		{@link Parsha#PARA <em>Para</em>}, {@link Parsha#HACHODESH <em>Hachdesh</em>}, or five other special <em>Shabbasos</em>
+	 * 		of {@link Parsha#HAGADOL <em>Hagadol</em>}, {@link Parsha#CHAZON <em>Chazon</em>}, {@link Parsha#NACHAMU <em>Nachamu</em>},
+	 * 		{@link Parsha#SHUVA <em>Shuva</em>}, {@link Parsha#SHIRA <em>Shira</em>}, or {@link Parsha#NONE Parsha.NONE} for a regular
+	 * 		<em>Shabbos</em> (or any weekday).
 	 */
 	public Parsha getSpecialShabbos() {
 		if (getDayOfWeek() == Calendar.SATURDAY) {
@@ -1177,9 +1181,9 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * Returns if the day is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em> and the <em>haftorah</em> of Machar Chodesh is read.
+	 * Returns if the day is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em>.
 	 *
-	 * @return true if it is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em> and the <em>haftorah</em> of Machar Chodesh is read.
+	 * @return true if it is <em>Shabbos</em> and Sunday is <em>Rosh Chodesh</em>.
 	 * @todo There is more to tweak in this method (it does not cover all cases and opinions), and it may be removed.
 	 */
 	public boolean isMacharChodesh() {
