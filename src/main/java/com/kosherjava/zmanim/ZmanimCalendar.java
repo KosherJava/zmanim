@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2022 Eliyahu Hershfeld
+ * Copyright (C) 2004-2023 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -67,12 +67,12 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * <em>zmanim</em> for <em>halacha lema'aseh</em>.
  * 
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2022
+ * @author &copy; Eliyahu Hershfeld 2004 - 2023
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
-	 * Is elevation factored in for some zmanim (see {@link #isUseElevation()} for additional information).
+	 * Is elevation factored in for some <em>zmanim</em> (see {@link #isUseElevation()} for additional information).
 	 * @see #isUseElevation()
 	 * @see #setUseElevation(boolean)
 	 */
@@ -247,11 +247,15 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 
 	/**
-	 * This method returns <em>chatzos</em> (midday) following most opinions that <em>chatzos</em> is the midpoint
-	 * between {@link #getSeaLevelSunrise sea level sunrise} and {@link #getSeaLevelSunset sea level sunset}. A day
-	 * starting at <em>alos</em> and ending at <em>tzais</em> using the same time or degree offset will also return
-	 * the same time. The returned value is identical to {@link #getSunTransit()}. In reality due to lengthening or
-	 * shortening of day, this is not necessarily the exact midpoint of the day, but it is very close.
+	 * This method returns Astronomical <em>chatzos</em> if the {@link com.kosherjava.zmanim.util.AstronomicalCalculator
+	 * calculator} class used supports it, and the halfway point between sunrise and sunset if it does not support it.
+	 * There are currently two {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculators} available in the API,
+	 * the default {@link com.kosherjava.zmanim.util.NOAACalculator} and the {@link
+	 * com.kosherjava.zmanim.util.SunTimesCalculator}. The SunTimesCalculator calculates <em>chatzos</em> as halfway between
+	 * sunrise and sunset (identical to six <em>shaaos zmaniyos</em> after sunrise), while the NOAACalculator calculates it
+	 * more accurately as {@link #getSunTransit() astronomical <em>chatzos</em>}. See <a href=
+	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for a detailed
+	 * explanation of the ways to calculate <em>Chatzos</em>.
 	 * 
 	 * @see AstronomicalCalendar#getSunTransit()
 	 * @return the <code>Date</code> of chatzos. If the calculation can't be computed such as in the Arctic Circle
@@ -760,5 +764,45 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public Date getShaahZmanisBasedZman(Date startOfDay, Date endOfDay, double hours) {
 		long shaahZmanis = getTemporalHour(startOfDay, endOfDay);
 		return getTimeOffset(startOfDay, shaahZmanis * hours);
+	}
+	
+	/**
+	 * A utility method that returns the percentage of a <em>shaah zmanis</em> after sunset (or before sunrise) for a given degree
+	 * offset. For the <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">equilux</a> where there
+	 * is a 720-minute day, passing 16.1&deg; for the location of Jerusalem will return about 1.2. This will work for any location
+	 * or date, but will typically only be of interest at the equinox/equilux to calculate the percentage of a <em>shaah zmanis</em>
+	 * for those who want to use the <a href="https://en.wikipedia.org/wiki/Abraham_Cohen_Pimentel">Minchas Cohen</a> in Ma'amar 2:4
+	 * and the <a href="https://en.wikipedia.org/wiki/Hezekiah_da_Silva">Pri Chadash</a> who calculate <em>tzais</em> as a percentage
+	 * of the day after sunset. While the Minchas Cohen only applies this to 72 minutes or a 1/10 of the day around the world (based
+	 * on the equinox / equilux in Israel, this method allows calculations for any degrees level for any location.
+	 * 
+	 * @param degrees
+	 *            the number of degrees below the horizon after sunset.
+	 * @param sunset
+	 *            if <code>true</code> the calculation should be degrees after sunset, or if <code>false</code>, degrees before sunrise.
+	 * @return the <code>double</code> percentage of a <em>sha'ah zmanis</em> for a given set of degrees below the astronomical horizon
+	 *         for the current calendar.  If the calculation can't be computed a {@link Double#MIN_VALUE} will be returned. See detailed
+	 *         explanation on top of the page.
+	 */
+	public double getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset) {
+		Date seaLevelSunrise = getSeaLevelSunrise();
+		Date seaLevelSunset = getSeaLevelSunset();
+		Date twilight = null;
+		if(sunset) {
+			twilight = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
+		} else {
+			twilight = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
+		}
+		if(seaLevelSunrise == null || seaLevelSunset == null || twilight == null) {
+			return Double.MIN_VALUE;
+		}
+		double shaahZmanis = (seaLevelSunset.getTime() - seaLevelSunrise.getTime()) / 12.0;
+		long riseSetToTwilight;
+		if(sunset) {
+			riseSetToTwilight = twilight.getTime() - seaLevelSunset.getTime();
+		} else {
+			riseSetToTwilight = seaLevelSunrise.getTime() - twilight.getTime();
+		}
+		return riseSetToTwilight / shaahZmanis;
 	}
 }
