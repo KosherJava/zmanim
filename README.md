@@ -50,6 +50,7 @@ The KosherJava Zmanim API has been ported to:
 * Objective-C / Swift - https://github.com/MosheBerman/KosherCocoa
 * .NET - https://github.com/Yitzchok/Zmanim
 * JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim and https://github.com/yparitcher/zmanJS
+* Kotlin - https://github.com/Sternbach-Software/KosherKotlin
 * Ruby - https://github.com/pinnymz/ruby-zmanim
 * Scala - https://github.com/nafg/jewish-date
 * C - https://github.com/yparitcher/libzmanim
@@ -57,12 +58,6 @@ The KosherJava Zmanim API has been ported to:
 * PHP - https://github.com/zachweix/PhpZmanim/
 * Dart / Flutter - https://github.com/yakir8/kosher_dart
 * Go - https://github.com/vlipovetskii/go-zmanim
-
-Web Api
-------------------------
-There is a web api that returns json or xml and is based on the .NET port. It is available at https://wyrezmanim.herokuapp.com
-
-Source code for the web api if you would like to self host is at https://github.com/greatjack1/dotnetcoreZmanim
 
 ZmanCode Desktop App
 ------------------------
