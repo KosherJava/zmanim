@@ -511,6 +511,23 @@ public class AstronomicalCalendar implements Cloneable {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedCalendar(), getGeoLocation());
 		return getDateFromTime(noon, false); 
 	}
+	
+	/**
+	 * A method that returns "solar" midnight, or the time when the sun is at its <a
+	 * href="https://en.wikipedia.org/wiki/Nadir">nadir</a>. The current calculation is halfway between today and
+	 * tomorrow's {@link #getSunTransit() sun transit}.
+	 * 
+	 * @return the <code>Date</code> of astronomical solar midnight. If the calculation can't be computed such as
+	 *         when using the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does not
+	 *         support getting solar noon for the Arctic Circle (where there is at least one day a year where the
+	 *         sun does not rise, and one where it does not set), a null will be returned. See detailed explanation
+	 *         on top of the page.
+	 */
+	public Date getSolarMidnight() {
+		AstronomicalCalendar clonedCal = (AstronomicalCalendar) clone();
+		clonedCal.getCalendar().add(Calendar.DATE, 1);
+		return getTimeOffset(getSunTransit(), (clonedCal.getSunTransit().getTime() - getSunTransit().getTime()) / 2);
+	}
 
 	/**
 	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
