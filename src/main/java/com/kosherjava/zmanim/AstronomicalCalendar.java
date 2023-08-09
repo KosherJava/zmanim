@@ -35,7 +35,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * is usually caused by trying to calculate times for areas either very far North or South, where sunrise / sunset never
  * happen on that date. This is common when calculating twilight with a deep dip below the horizon for locations as far
  * south of the North Pole as London, in the northern hemisphere. The sun never reaches this dip at certain times of the
- * year. When the calculations encounter this condition a null will be returned when a
+ * year. When the calculations encounter this condition a <code>null</code> will be returned when a
  * <code>{@link java.util.Date}</code> is expected and {@link Long#MIN_VALUE} when a <code>long</code> is expected. The
  * reason that <code>Exception</code>s are not thrown in these cases is because the lack of a rise/set or twilight is
  * not an exception, but an expected condition in many parts of the world.
@@ -62,7 +62,6 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * ac.getCalendar().set(Calendar.DAY_OF_MONTH, 8);
  * Date sunrise = ac.getSunrise();
  * </pre>
- * 
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2023
  */
@@ -118,7 +117,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return the <code>Date</code> representing the exact sunrise time. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
-	 *         does not set, a null will be returned. See detailed explanation on top of the page.
+	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see AstronomicalCalculator#adjustZenith
 	 * @see #getSeaLevelSunrise()
 	 * @see AstronomicalCalendar#getUTCSunrise
@@ -140,7 +139,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return the <code>Date</code> representing the exact sea-level sunrise time. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a null will be returned. See detailed explanation on top of the page.
+	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see AstronomicalCalendar#getSunrise
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
 	 * @see #getSeaLevelSunset()
@@ -159,7 +158,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * (dawn) using a zenith of {@link #CIVIL_ZENITH 96&deg;}.
 	 * 
 	 * @return The <code>Date</code> of the beginning of civil twilight using a zenith of 96&deg;. If the calculation
-	 *         can't be computed, null will be returned. See detailed explanation on top of the page.
+	 *         can't be computed, <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see #CIVIL_ZENITH
 	 */
 	public Date getBeginCivilTwilight() {
@@ -171,8 +170,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * "https://en.wikipedia.org/wiki/Twilight#Nautical_twilight">nautical twilight</a> using a zenith of {@link
 	 * #NAUTICAL_ZENITH 102&deg;}.
 	 * 
-	 * @return The <code>Date</code> of the beginning of nautical twilight using a zenith of 102&deg;. If the
-	 *         calculation can't be computed null will be returned. See detailed explanation on top of the page.
+	 * @return The <code>Date</code> of the beginning of nautical twilight using a zenith of 102&deg;. If the calculation
+	 *         can't be computed <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see #NAUTICAL_ZENITH
 	 */
 	public Date getBeginNauticalTwilight() {
@@ -184,8 +183,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * "https://en.wikipedia.org/wiki/Twilight#Astronomical_twilight">astronomical twilight</a> using a zenith of
 	 * {@link #ASTRONOMICAL_ZENITH 108&deg;}.
 	 * 
-	 * @return The <code>Date</code> of the beginning of astronomical twilight using a zenith of 108&deg;. If the
-	 *         calculation can't be computed, null will be returned. See detailed explanation on top of the page.
+	 * @return The <code>Date</code> of the beginning of astronomical twilight using a zenith of 108&deg;. If the calculation
+	 *         can't be computed, <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see #ASTRONOMICAL_ZENITH
 	 */
 	public Date getBeginAstronomicalTwilight() {
@@ -206,7 +205,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return the <code>Date</code> representing the exact sunset time. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
-	 *         does not set, a null will be returned. See detailed explanation on top of the page.
+	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see AstronomicalCalculator#adjustZenith
 	 * @see #getSeaLevelSunset()
 	 * @see AstronomicalCalendar#getUTCSunset
@@ -228,7 +227,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return the <code>Date</code> representing the exact sea-level sunset time. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a null will be returned. See detailed explanation on top of the page.
+	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see AstronomicalCalendar#getSunset
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset 2see {@link #getSunset()}
 	 */
@@ -245,8 +244,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * A method that returns the end of <a href="https://en.wikipedia.org/wiki/Twilight#Civil_twilight">civil twilight</a>
 	 * using a zenith of {@link #CIVIL_ZENITH 96&deg;}.
 	 * 
-	 * @return The <code>Date</code> of the end of civil twilight using a zenith of {@link #CIVIL_ZENITH 96&deg;}. If
-	 *         the calculation can't be computed, null will be returned. See detailed explanation on top of the page.
+	 * @return The <code>Date</code> of the end of civil twilight using a zenith of {@link #CIVIL_ZENITH 96&deg;}. If the
+	 *         calculation can't be computed, <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see #CIVIL_ZENITH
 	 */
 	public Date getEndCivilTwilight() {
@@ -256,8 +255,8 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * A method that returns the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102&deg;}.
 	 * 
-	 * @return The <code>Date</code> of the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102&deg;}
-	 *         . If the calculation can't be computed, null will be returned. See detailed explanation on top of the
+	 * @return The <code>Date</code> of the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102&deg;}. If
+	 *         the calculation can't be computed, <code>null</code> will be returned. See detailed explanation on top of the
 	 *         page.
 	 * @see #NAUTICAL_ZENITH
 	 */
@@ -269,8 +268,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * A method that returns the end of astronomical twilight using a zenith of {@link #ASTRONOMICAL_ZENITH 108&deg;}.
 	 * 
 	 * @return the <code>Date</code> of the end of astronomical twilight using a zenith of {@link #ASTRONOMICAL_ZENITH
-	 *         108&deg;}. If the calculation can't be computed, null will be returned. See detailed explanation on top
-	 *         of the page.
+	 *         108&deg;}. If the calculation can't be computed, <code>null</code> will be returned. See detailed
+	 *         explanation on top of the page.
 	 * @see #ASTRONOMICAL_ZENITH
 	 */
 	public Date getEndAstronomicalTwilight() {
@@ -322,8 +321,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            parameter.
 	 * @return The {@link java.util.Date} of the offset after (or before) {@link #getSunrise()}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
-	 *         not rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
-	 *         page.
+	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation
+	 *         on top of the page.
 	 */
 	public Date getSunriseOffsetByDegrees(double offsetZenith) {
 		double dawn = getUTCSunrise(offsetZenith);
@@ -345,8 +344,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *            sunset, an offset of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * @return The {@link java.util.Date}of the offset after (or before) {@link #getSunset()}. If the calculation can't
 	 *         be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
-	 *         rise, and one where it does not set, a null will be returned. See detailed explanation on top of the
-	 *         page.
+	 *         rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on
+	 *         top of the page.
 	 */
 	public Date getSunsetOffsetByDegrees(double offsetZenith) {
 		double sunset = getUTCSunset(offsetZenith);
@@ -501,11 +500,14 @@ public class AstronomicalCalendar implements Cloneable {
 	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on the proper
 	 * definition of solar noon / midday.
 	 * 
-	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as in the
-	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
-	 *         not set, null will be returned. See detailed explanation on top of the page.
+	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as when using
+	 *         the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does not support getting solar
+	 *         noon for the Arctic Circle (where there is at least one day a year where the sun does not rise, and one where
+	 *         it does not set), a <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see #getSunTransit(Date, Date)
 	 * @see #getTemporalHour()
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
 	 */
 	public Date getSunTransit() {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedCalendar(), getGeoLocation());
@@ -520,10 +522,13 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the <code>Date</code> of astronomical solar midnight. If the calculation can't be computed such as
 	 *         when using the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does not
 	 *         support getting solar noon for the Arctic Circle (where there is at least one day a year where the
-	 *         sun does not rise, and one where it does not set), a null will be returned. See detailed explanation
-	 *         on top of the page.
+	 *         sun does not rise, and one where it does not set), a <code>null</code> will be returned. See
+	 *         detailed explanation on top of the page.
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
 	 */
 	public Date getSolarMidnight() {
+		System.out.println("getSolarMidnight()");
 		AstronomicalCalendar clonedCal = (AstronomicalCalendar) clone();
 		clonedCal.getCalendar().add(Calendar.DATE, 1);
 		return getTimeOffset(getSunTransit(), (clonedCal.getSunTransit().getTime() - getSunTransit().getTime()) / 2);
@@ -545,7 +550,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return the <code>Date</code> representing Sun's transit. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
-	 *         not set, null will be returned. See detailed explanation on top of the page.
+	 *         not set, <code>null</code> will be returned. See detailed explanation on top of the page.
 	 */
 	public Date getSunTransit(Date startOfDay, Date endOfDay) {
 		long temporalHour = getTemporalHour(startOfDay, endOfDay);
@@ -600,8 +605,8 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * Returns the dip below the horizon before sunrise that matches the offset minutes on passed in as a parameter. For
 	 * example passing in 72 minutes for a calendar set to the equinox in Jerusalem returns a value close to 16.1&deg;
-	 * Please note that this method is very slow and inefficient and should NEVER be used in a loop. TODO: Improve
-	 * efficiency.
+	 * Please note that this method is very slow and inefficient and should NEVER be used in a loop.
+	 * @todo Improve efficiency of this method by not brute forcing the calculation.
 	 * 
 	 * @param minutes
 	 *            offset
@@ -630,8 +635,8 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * Returns the dip below the horizon after sunset that matches the offset minutes on passed in as a parameter. For
 	 * example passing in 72 minutes for a calendar set to the equinox in Jerusalem returns a value close to 16.1&deg;
-	 * Please note that this method is very slow and inefficient and should NEVER be used in a loop. TODO: Improve
-	 * efficiency.
+	 * Please note that this method is very slow and inefficient and should NEVER be used in a loop.
+	 * @todo Improve efficiency of this method by not brute forcing the calculation.
 	 * 
 	 * @param minutes
 	 *            offset
