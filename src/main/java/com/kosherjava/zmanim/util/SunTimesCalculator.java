@@ -257,7 +257,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
 	 * of <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
 	 * on earth. This implementation returns solar noon as the time halfway between sunrise and sunset.
-	 * Other calculators may return true solar noon. See <a href=
+	 * {@link NOAACalculator}, the default calculator, returns true solar noon. See <a href=
 	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on solar
 	 * noon calculations.
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
@@ -267,11 +267,19 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 *            The Calendar representing the date to calculate solar noon for
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
-	 * @return the time in minutes from zero UTC
+	 * @return the time in minutes from zero UTC. If an error was encountered in the calculation (expected behavior for
+	 *         some locations such as near the poles, {@link Double#NaN} will be returned.
 	 */
 	public double getUTCNoon(Calendar calendar, GeoLocation geoLocation) {
-		double sunrise = getUTCSunrise(calendar, geoLocation, 90, true);
-		double sunset = getUTCSunset(calendar, geoLocation, 90, true);
-		return (sunrise + ((sunset - sunrise) / 2));
+		double sunrise = getUTCSunrise(calendar, geoLocation, 90, false);
+		double sunset = getUTCSunset(calendar, geoLocation, 90, false);
+		double noon = sunrise + ((sunset - sunrise) / 2);
+		if(noon < 0) {
+			noon += 12;
+		}
+		if(noon < sunrise) {
+			noon -= 12;
+		} 
+		return noon;
 	}
 }
