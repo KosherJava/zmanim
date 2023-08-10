@@ -982,7 +982,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * second half of the day, from <em>chatzos</em> to sunset / <em>tzais</em>. Morning based times are calculated. based on the first
 	 * 6 hours of the day, and afternoon times based on the second half of the day. As an example, passing 0.5, a start of
 	 * <em>chatzos</em> and an end of day as sunset will return the time of <em>mincha gedola</em> GRA as half an hour <em>zmanis</em>
-	 * based on the second half of the day.
+	 * based on the second half of the day. Some <em>zmanim</em> calculations can be based on subtracting <em>sha'os zmaniyos</em>
+	 * from the end of the day, and that is supported by passing a negative hour to this method.
 	 * 
 	 * @param startOfHalfDay
 	 *            The start of the half day. This would be <em>alos</em> or sunrise for morning based times such as <em>sof zman krias
@@ -993,7 +994,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @param hours
 	 *            The number of <em>sha'os zmaniyos</em> (hours) to offset the beginning of the first or second half of the day. For example,
 	 *            3 for <em>sof zman Shma</em>, 0.5 for <em>mincha gedola</em> (half an hour after <em>chatzos</em>) and 4.75 for <em>plag
-	 *            hamincha</em>.
+	 *            hamincha</em>. If the number of hours is negative, it will subtract the number of <em>sha'os zmaniyos</em> from the end
+	 *            of the day.
 	 * 
 	 * @return the <code>Date</code> of <em>zman</em> based on calculation of the first or second half of the day. If the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where the
@@ -1006,7 +1008,34 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 		if (startOfHalfDay == null || endOfHalfDay == null) {
 			return null;
 		}
-		long shaahZmanis = (endOfHalfDay.getTime() - startOfHalfDay.getTime()) / 6;
-		return new Date((long)(startOfHalfDay.getTime() + shaahZmanis * hours));
+		long shaahZmanis = getHalfDayBasedShaahZmanis(startOfHalfDay, endOfHalfDay);
+		if(shaahZmanis == Long.MIN_VALUE) { //defensive, should not be needed
+			return null;
+		}
+		if(hours >= 0) { // forward from start a day
+			return getTimeOffset(startOfHalfDay, shaahZmanis * hours);
+		} else { // subtract from end of day
+			return getTimeOffset(endOfHalfDay, shaahZmanis * hours);
+		}
+	}
+	
+	/**
+	 * A utility method to calculate the length of a <em>sha'ah zmanis</em> based on 1/6 of a 6 hour day.
+	 * @param startOfHalfDay The start of the half-day. This would be <em>alos</em> or sunrise for the first half of the day,
+	 *            or <em>chatzos</em> for the second half of the day.
+	 * @param endOfHalfDay The end of the half-day. This would be <em>chatzos</em> for the first half of the day, or sunset or
+	 *            <em>tzais</em> for the second half of the day.
+	 * @return The <code>long</code> millisecond length of a <em>shaah zmanis</em> based on 1/6 of a half-day. If the calculation
+	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
+	 *         and one where it does not set, {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the
+	 *         {@link AstronomicalCalendar} documentation.
+	 * @see #getHalfDayBasedZman(Date, Date, double)
+	 * @see #isUseAstronomicalChatzosForOtherZmanim()
+	 */
+	public long getHalfDayBasedShaahZmanis(Date startOfHalfDay, Date endOfHalfDay) {
+		if (startOfHalfDay == null || endOfHalfDay == null) {
+			return Long.MIN_VALUE;
+		}
+		return (endOfHalfDay.getTime() - startOfHalfDay.getTime()) / 6;
 	}
 }
