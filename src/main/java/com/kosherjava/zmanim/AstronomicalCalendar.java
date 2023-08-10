@@ -528,7 +528,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
 	 */
 	public Date getSolarMidnight() {
-		System.out.println("getSolarMidnight()");
 		AstronomicalCalendar clonedCal = (AstronomicalCalendar) clone();
 		clonedCal.getCalendar().add(Calendar.DATE, 1);
 		return getTimeOffset(getSunTransit(), (clonedCal.getSunTransit().getTime() - getSunTransit().getTime()) / 2);
