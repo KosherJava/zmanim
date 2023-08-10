@@ -622,7 +622,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Date getMinchaGedola(Date startOfDay, Date endOfDay) {
 		if(isUseAstronomicalChatzosForOtherZmanim()) {
-			return getHalfDayBasedZman(getChatzos(), endOfDay, 0.5);
+			return getHalfDayBasedZman(getSunTransit(), endOfDay, 0.5);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 6.5);
 		}
@@ -654,7 +654,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Date getMinchaGedola() {
 		if(isUseAstronomicalChatzosForOtherZmanim()) {
-			return getHalfDayBasedZman(getChatzos(), getSunset(), 0.5);
+			return getHalfDayBasedZman(getSunTransit(), getSunset(), 0.5);
 		} else {
 			return getMinchaGedola(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
 		}
