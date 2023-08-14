@@ -50,8 +50,6 @@ import java.util.Calendar;
  * @todo The following items may be added at a future date.
  * <ol>
  * <li><em>Lamnatzaiach</em></li>
- * <li><em>Mizmor Lesoda</em></li>
- * <li><em>Behab</em></li>
  * <li><em>Selichos</em></li>
  * <li>...</li>
  * </ol>
@@ -142,12 +140,30 @@ public class TefilaRules {
 	private boolean tachanunRecitedMinchaAllYear = true;
 	
 	/**
-	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em> on the day in question. See the many
-	 * <em>minhag</em> based settings that are available in this class.
+	 * The default value is <code>false</code>.
+	 * @see #isMizmorLesodaRecited(JewishCalendar)
+	 * @see #setMizmorLesodaRecitedErevYomKippurAndPesach(boolean)
+	 */
+	private boolean mizmorLesodaRecitedErevYomKippurAndPesach = false;
+	
+	/**
+	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em> on the day in question. There are the many
+	 * <em>minhagim</em> based settings that are available in this class that control what days are set for
+	 * <em>tachanun</em> recital.
 	 * 
 	 * @param jewishCalendar the Jewish calendar day.
 	 * @return if <em>tachanun</em> is recited during <em>shacharis</em>.
 	 * @see #isTachanunRecitedMincha(JewishCalendar)
+	 * @see #isTachanunRecitedSundays()
+	 * @see #isTachanunRecitedFridays()
+	 * @see #isTachanunRecitedEndOfTishrei()
+	 * @see #isTachanunRecitedWeekAfterShavuos()
+	 * @see #isTachanunRecited13SivanOutOfIsrael()
+	 * @see #isTachanunRecitedPesachSheni()
+	 * @see #isTachanunRecited15IyarOutOfIsrael()
+	 * @see #isTachanunRecitedShivasYemeiHamiluim()
+	 * @see #isTachanunRecitedWeekOfPurim()
+	 * @see #isTachanunRecitedWeekOfHod()
 	 */
 	public boolean isTachanunRecitedShacharis(JewishCalendar jewishCalendar) {
 		int holidayIndex = jewishCalendar.getYomTovIndex();
@@ -474,7 +490,30 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited during the week of Purim, from the 11th through the 17th of {@link
+	 * Returns if Is <em>Mizmor Lesoda</em> is recited on the day in question. 
+	 * @param jewishCalendar  the Jewish calendar day.
+	 * @return if <em>Mizmor Lesoda</em> is recited.
+	 * 
+	 * @see #isMizmorLesodaRecitedErevYomKippurAndPesach()
+	 * 
+	 */
+	public boolean isMizmorLesodaRecited(JewishCalendar jewishCalendar) {
+		if(jewishCalendar.isAssurBemelacha()) {
+			return false;
+		}
+		
+		int holidayIndex = jewishCalendar.getYomTovIndex();
+		if(! isMizmorLesodaRecitedErevYomKippurAndPesach()
+				&& (holidayIndex == JewishCalendar.EREV_YOM_KIPPUR
+						|| holidayIndex == JewishCalendar.EREV_PESACH
+						|| jewishCalendar.isCholHamoedPesach())) {
+			return false;
+		}
+	    return true;
+	}
+	
+	/**
+	 * Is <em>tachanun</em> set to be recited during the week of Purim, from the 11th through the 17th of {@link
 	 * JewishDate#ADAR <em>Adar</em>} (on a non-leap year, or {@link JewishDate#ADAR_II <em>Adar II</em>} on a leap year). Some
 	 * <em>chasidishe</em> communities do not recite <em>tachanun</em> during this period. See the <a href=
 	 * "https://www.nli.org.il/he/books/NNL_ALEPH001141272/NLI">Minhag Yisrael Torah</a> 131 and <a href=
@@ -504,9 +543,9 @@ public class TefilaRules {
 	}
 
 	/**
-	 * Is <em>tachanun</em> recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20 {@link JewishDate#IYAR <em>Iyar</em>},
-	 * or the 29th - 35th of the {@link JewishCalendar#getDayOfOmer() <em>Omer</em>}). Some <em>chasidishe</em> communities
-	 * do not recite <em>tachanun</em> during this week. See Minhag Yisrael Torah 131:Iyar.
+	 * Is <em>tachanun</em> set to be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20 {@link
+	 * JewishDate#IYAR <em>Iyar</em>}, or the 29th - 35th of the {@link JewishCalendar#getDayOfOmer() <em>Omer</em>}). Some
+	 * <em>chasidishe</em> communities do not recite <em>tachanun</em> during this week. See Minhag Yisrael Torah 131:Iyar.
 	 * @return If <em>tachanun</em> is set to be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20 {@link
 	 *         JewishDate#IYAR <em>Iyar</em>}, or the 29th - 35th of the {@link JewishCalendar#getDayOfOmer() <em>Omer</em>}).
 	 * @see #setTachanunRecitedWeekOfHod(boolean)
@@ -516,8 +555,8 @@ public class TefilaRules {
 	}
 
 	/**
-	 * Sets if <em>tachanun</em> should be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20 {@link JewishDate#IYAR
-	 * <em>Iyar</em>}, or the 29th - 35th of the {@link JewishCalendar#getDayOfOmer() <em>Omer</em>}).
+	 * Sets if <em>tachanun</em> should should be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20
+	 * {@link JewishDate#IYAR <em>Iyar</em>}, or the 29th - 35th of the {@link JewishCalendar#getDayOfOmer() <em>Omer</em>}).
 	 * @param tachanunRecitedWeekOfHod Sets if <em>tachanun</em> should be recited during the <em>sefira</em> week of
 	 * <em>Hod</em>.
 	 * @see #isTachanunRecitedWeekOfHod()
@@ -527,9 +566,9 @@ public class TefilaRules {
 	}
 
 	/**
-	 * Is <em>tachanun</em> recited at the end Of {@link JewishDate#TISHREI <em>Tishrei</em>}.The Magen Avraham 669:1 and the Pri
-	 * Chadash 131:7 state that some places to not recite <em>tachanun</em> during this period. The Sh"UT Chasam Sofer on Choshen
-	 * Mishpat 77 writes that this is the <em>minhag</em> in Ashkenaz. The Shaarei Teshuva 131:19 quotes the Sheyarie Kneses
+	 * Is <em>tachanun</em> set to be recited at the end Of {@link JewishDate#TISHREI <em>Tishrei</em>}.The Magen Avraham 669:1 and
+	 * the Pri Chadash 131:7 state that some places to not recite <em>tachanun</em> during this period. The Sh"UT Chasam Sofer on
+	 * Choshen Mishpat 77 writes that this is the <em>minhag</em> in Ashkenaz. The Shaarei Teshuva 131:19 quotes the Sheyarie Kneses
 	 * Hagdola who also states that it should not be recited. The Aderes wanted to institute saying <em>tachanun</em> during this
 	 * period, but was dissuaded from this by Rav Shmuel Salant who did not want to change the <em>minhag</em> in Yerushalayim.
 	 * The Aruch Hashulchan is of the opinion that that this <em>minhag</em> is incorrect, and it should be recited, and The Chazon
@@ -551,10 +590,10 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited during the week after <em>Shavuos</em>. This is the opinion of the Pri Megadim
-	 * quoted by the Mishna Berurah. This is since <em>karbanos</em> of <em>Shavuos</em> have <em>tashlumim</em> for
-	 * 7 days, it is still considered like a Yom Tov. The Chazon Ish quoted in the Orchos Rabainu vol. 1 page 68
-	 * recited <em>tachanun</em> during this week.
+	 * Is <em>tachanun</em> set to be recited during the week after <em>Shavuos</em>. This is the opinion of the Pri
+	 * Megadim quoted by the Mishna Berurah. This is since <em>karbanos</em> of <em>Shavuos</em> have <em>tashlumim</em>
+	 * for 7 days, it is still considered like a <em>Yom Tov</em>. The Chazon Ish quoted in the Orchos Rabainu vol. 1
+	 * page 68 recited <em>tachanun</em> during this week.
 	 * 
 	 * @return If <em>tachanun</em> is set to be recited during the week after Shavuos.
 	 * @see #setTachanunRecitedWeekAfterShavuos(boolean)
@@ -573,7 +612,7 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> is recited on the 13th of {@link JewishDate#SIVAN <em>Sivan</em>} (<a href=
+	 * Is <em>tachanun</em> is set to be recited on the 13th of {@link JewishDate#SIVAN <em>Sivan</em>} (<a href=
 	 * "https://en.wikipedia.org/wiki/Yom_tov_sheni_shel_galuyot"><em>Yom Tov Sheni shel Galuyos</em></a> of the 7th
 	 * day) outside Israel. This is brought down by the Shaarie Teshuva 131:19 quoting the <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=41295&st=&pgnum=39">Sheyarei Kneses Hagedola 131:12</a>that
@@ -608,14 +647,14 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited on {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}. The Pri Chadash 131:7 states
-	 * that <em>tachanun</em> should not be recited. The Aruch Hashulchan states that this is the minhag of the <em>sephardim</em>.
-	 * the Shaarei Efraim 10:27 also mentions that it is not recited, as does the Siddur Yaavetz (Shaar Hayesod, Chodesh Iyar).
-	 * The Pri Megadim (Mishbetzes Hazahav 131:15) and the Chazon Ish (Erev Pesahc Shchal Beshabos, page 203 in <a href=
-	 * "https://he.wikipedia.org/wiki/%D7%A9%D7%A8%D7%99%D7%94_%D7%93%D7%91%D7%9C%D7%99%D7%A6%D7%A7%D7%99">Rav Sheraya
+	 * Is <em>tachanun</em> set to be recited on {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}. The Pri Chadash 131:7
+	 * states that <em>tachanun</em> should not be recited. The Aruch Hashulchan states that this is the minhag of the
+	 * <em>sephardim</em>. The Shaarei Efraim 10:27 also mentions that it is not recited, as does the Siddur Yaavetz (Shaar Hayesod,
+	 * Chodesh Iyar). The Pri Megadim (Mishbetzes Hazahav 131:15) and the Chazon Ish (Erev Pesahc Shchal Beshabos, page 203 in
+	 * <a href="https://he.wikipedia.org/wiki/%D7%A9%D7%A8%D7%99%D7%94_%D7%93%D7%91%D7%9C%D7%99%D7%A6%D7%A7%D7%99">Rav Sheraya
 	 * Devlitzky's</a> comments).
 	 * 
-	 * @return If <em>tachanun</em> is recited on {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}.
+	 * @return If <em>tachanun</em> is set to be recited on {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}.
 	 * @see #setTachanunRecitedPesachSheni(boolean)
 	 */
 	public boolean isTachanunRecitedPesachSheni() {
@@ -632,13 +671,13 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited on 15 {@link JewishDate#IYAR <em>Iyar</em>} (<em>sfaika deyoma</em> of {@link JewishCalendar#PESACH_SHENI
-	 * <em>Pesach Sheni</em>}) out of Israel. If {@link #isTachanunRecitedPesachSheni()} is <code>true</code> this will be
-	 * ignored even if <code>false</code>.
+	 * Is <em>tachanun</em> set to be recited on 15 {@link JewishDate#IYAR <em>Iyar</em>} (<em>sfaika deyoma</em> of {@link
+	 * JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}) out of Israel. If {@link #isTachanunRecitedPesachSheni()} is
+	 * <code>true</code> this will be ignored even if <code>false</code>.
 	 * 
-	 * @return if <em>tachanun</em> is recited on 15 {@link JewishDate#IYAR <em>Iyar</em>}  (<em>sfaika deyoma</em> of {@link
-	 *          JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>} out of Israel. If {@link #isTachanunRecitedPesachSheni()}
-	 *          is <code>true</code> this will be ignored even if <code>false</code>.
+	 * @return if <em>tachanun</em> is set to be recited on 15 {@link JewishDate#IYAR <em>Iyar</em>}  (<em>sfaika deyoma</em>
+	 *          of {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>} out of Israel. If
+	 *          {@link #isTachanunRecitedPesachSheni()} is <code>true</code> this will be ignored even if <code>false</code>.
 	 * @see #setTachanunRecited15IyarOutOfIsrael(boolean)
 	 * @see #setTachanunRecitedPesachSheni(boolean)
 	 * @see #isTachanunRecitedPesachSheni()
@@ -662,8 +701,9 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited on <em>mincha</em> on <em>erev {@link JewishCalendar#LAG_BAOMER Lag Baomer}</em>.
-	 * @return if <em>tachanun</em> is recited in <em>mincha</em> on <em>erev</em>
+	 * Is <em>tachanun</em> set to be recited on <em>mincha</em> on <em>erev {@link JewishCalendar#LAG_BAOMER Lag
+	 * Baomer}</em>.
+	 * @return if <em>tachanun</em> is set to be recited in <em>mincha</em> on <em>erev</em>
 	 *          {@link JewishCalendar#LAG_BAOMER <em>Lag Baomer</em>}.
 	 * @see #setTachanunRecitedMinchaErevLagBaomer(boolean)
 	 */
@@ -682,14 +722,14 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited during the <em>Shivas Yemei Hamiluim</em>, from the 23 of {@link
+	 * Is <em>tachanun</em> set to be recited during the <em>Shivas Yemei Hamiluim</em>, from the 23 of {@link
 	 * JewishDate#ADAR <em>Adar</em>} on a non-leap-year or {@link JewishDate#ADAR_II <em>Adar II</em>} on a
 	 * leap year to the end of the month. Some <em>chasidishe</em> communities do not say <em>tachanun</em>
 	 * during this week. See <a href="https://hebrewbooks.org/pdfpager.aspx?req=4692&st=&pgnum=70">Darkei
 	 * Chaim Veshalom 191</a>.
-	 * @return if <em>tachanun</em> is recited during the <em>Shivas Yemei Hamiluim</em>, from the 23 of {@link
-	 *          JewishDate#ADAR <em>Adar</em>} on a non-leap-year or {@link JewishDate#ADAR_II <em>Adar II</em>}
-	 *          on a leap year to the end of the month.
+	 * @return if <em>tachanun</em> is set to be recited during the <em>Shivas Yemei Hamiluim</em>, from the 23
+	 *           of {@link JewishDate#ADAR <em>Adar</em>} on a non-leap-year or {@link JewishDate#ADAR_II
+	 *           <em>Adar II</em>} on a leap year to the end of the month.
 	 * @see #setTachanunRecitedShivasYemeiHamiluim(boolean)
 	 */
 	public boolean isTachanunRecitedShivasYemeiHamiluim() {
@@ -709,10 +749,10 @@ public class TefilaRules {
 	}
 
 	/**
-	 * Is <em>tachanun</em> recited on Fridays. Some <em>chasidishe</em> communities do not recite
+	 * Is <em>tachanun</em> set to be recited on Fridays. Some <em>chasidishe</em> communities do not recite
 	 * <em>tachanun</em> on Fridays. See <a href="https://hebrewbooks.org/pdfpager.aspx?req=41190&st=&pgnum=10">Likutei
 	 * Maharich Vol 2 Seder Hanhagos Erev Shabbos</a>. This is also the <em>minhag</em> in Satmar.
-	 * @return if <em>tachanun</em> is recited on Fridays.
+	 * @return if <em>tachanun</em> is set to be recited on Fridays.
 	 * @see #setTachanunRecitedFridays(boolean)
 	 */
 	public boolean isTachanunRecitedFridays() {
@@ -730,10 +770,10 @@ public class TefilaRules {
 	}
 
 	/**
-	 * Is <em>tachanun</em> recited on Sundays. Some <em>chasidishe</em> communities do not recite
+	 * Is <em>tachanun</em> set to be recited on Sundays. Some <em>chasidishe</em> communities do not recite
 	 * <em>tachanun</em> on Sundays. See <a href="https://hebrewbooks.org/pdfpager.aspx?req=41190&st=&pgnum=10">Likutei
 	 * Maharich Vol 2 Seder Hanhagos Erev Shabbos</a>. 
-	 * @return if <em>tachanun</em> is recited on Sundays.
+	 * @return if <em>tachanun</em> is set to be recited on Sundays.
 	 * @see #setTachanunRecitedSundays(boolean)
 	 */
 	public boolean isTachanunRecitedSundays() {
@@ -751,10 +791,10 @@ public class TefilaRules {
 	}
 	
 	/**
-	 * Is <em>tachanun</em> recited in <em>Mincha</em> the entire year. Some <em>chasidishe</em> communities do not recite
-	 * <em>tachanun</em> by <em>Mincha</em> all year round. See<a href=
+	 * Is <em>tachanun</em> set to be recited in <em>Mincha</em> the entire year. Some <em>chasidishe</em> communities do
+	 * not recite <em>tachanun</em> by <em>Mincha</em> all year round. See <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=4751&st=&pgnum=105">Nemukei Orach Chaim 131:3</a>.
-	 * @return if <em>tachanun</em> is recited in <em>Mincha</em> the entire year.
+	 * @return if <em>tachanun</em> is set to be recited in <em>Mincha</em> the entire year.
 	 * @see #setTachanunRecitedMinchaAllYear(boolean)
 	 */
 	public boolean isTachanunRecitedMinchaAllYear() {
@@ -771,4 +811,30 @@ public class TefilaRules {
 	public void setTachanunRecitedMinchaAllYear(boolean tachanunRecitedMinchaAllYear) {
 		this.tachanunRecitedMinchaAllYear = tachanunRecitedMinchaAllYear;
 	}
+
+	/**
+	 * Sets if <em>Mizmor Lesoda</em> should be recited on <em>Erev Yom Kippur</em>, <em>Erev Pesach</em> and <em>Chol
+	 * Hamoed Pesach</em>. Ashkenazi congregations do not recite it on these days, while Sephardi congregations do. The
+	 * default value is <code>false</code>.
+	 * @param mizmorLesodaRecitedErevYomKippurAndPesach Sets if <em>Mizmor Lesoda</em> should be recited on <em>Erev Yom
+	 *          Kippur</em>, <em>Erev Pesach</em> and <em>Chol Hamoed Pesach</em>. If set to true (the default value is
+	 *          <code>false</code>).
+	 * @see #isTachanunRecitedMinchaAllYear()
+	 */
+	public void setMizmorLesodaRecitedErevYomKippurAndPesach(boolean mizmorLesodaRecitedErevYomKippurAndPesach) {
+		this.mizmorLesodaRecitedErevYomKippurAndPesach = mizmorLesodaRecitedErevYomKippurAndPesach;
+	}
+	
+	/**
+	 * Is <em>Mizmor Lesoda</em> set to be recited on <em>Erev Yom Kippur</em>, <em>Erev Pesach</em> and <em>Chol
+	 * Hamoed Pesach</em>. Ashkenazi congregations do not recite it on these days, while Sephardi congregations do.
+	 * The default value is <code>false</code>.
+	 * @return if <em>Mizmor Lesoda</em> is set to be recited on <em>Erev Yom Kippur</em>, <em>Erev Pesach</em> and
+	 *          <em>Chol Hamoed Pesach</em>. If set to true (the default value is <code>false</code>).
+	 * @see #isMizmorLesodaRecited(JewishCalendar)
+	 */
+	public boolean isMizmorLesodaRecitedErevYomKippurAndPesach() {
+		return mizmorLesodaRecitedErevYomKippurAndPesach;
+	}
+
 }
