@@ -513,6 +513,49 @@ public class TefilaRules {
 	}
 	
 	/**
+	 * Returns if <em>Selichos</em> is recited on the day in question. 
+	 * @param jewishCalendar  the Jewish calendar day.
+	 * @param isSefardi  whether this is the Sefardi or Ashkenazi minhag.
+	 * @return if <em>Selichos</em> is recited.
+	 * 
+	 */
+	public boolean isSelichosRecited(JewishCalendar jewishCalendar, boolean isSefardi) {
+		int holidayIndex = getYomTovIndex();
+
+		// All fast days except Tisha B'Av say Selichos even if they fall out on Shabbos (only Yom Kippur can)
+		if (holidayIndex == JewishCalendar.SEVENTEEN_OF_TAMMUZ || holidayIndex == JewishCalendar.YOM_KIPPUR
+				|| holidayIndex == JewishCalendar.FAST_OF_GEDALYAH || holidayIndex == JewishCalendar.TENTH_OF_TEVES || holidayIndex == JewishCalendar.FAST_OF_ESTHER) {
+			return true;
+		}
+
+		// We don't say Selichos on Shabbos
+		if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) {
+			return false;
+		}
+
+		// We've already covered Tzom Gedaliah and Yom Kippur, let's check if it's Aseres Yemei Teshuvah
+		if (jewishCalendar.getJewishMonth() == JewishCalenday.TISHREI && jewishCalendar.getJewishDay() > 3 && jewishCalendar.getJewishDay() < 10) {
+			return true;
+		}
+
+		// Let's check if it's Elul Selichos
+		if (jewishCalendar.getJewishMonth() == JewishCalendar.ELUL) {
+			if (isSefardi) {
+				return true;
+			}
+
+			// The last 4 days always have Selichos. The 24th and 25th have when they are Sunday thru Wednesday. The 22nd and 23rd have when they are Sunday or Monday
+			if (jewishCalendar.getJewishDay() >= 26
+				|| (jewishCalendar.getJewishDay() >= 24 &&  jewishCalendar.getDayOfWeek() <= Calendar.WEDNESDAY)
+				|| (jewishCalendar.getJewishDay() >= 22 &&  jewishCalendar.getDayOfWeek() <= Calendar.MONDAY)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	/**
 	 * Is <em>tachanun</em> set to be recited during the week of Purim, from the 11th through the 17th of {@link
 	 * JewishDate#ADAR <em>Adar</em>} (on a non-leap year, or {@link JewishDate#ADAR_II <em>Adar II</em>} on a leap year). Some
 	 * <em>chasidishe</em> communities do not recite <em>tachanun</em> during this period. See the <a href=
