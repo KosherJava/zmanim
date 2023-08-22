@@ -540,7 +540,7 @@ public class TefilaRules {
 
 		// Let's check if it's Elul Selichos
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.ELUL) {
-			if (isSefardi) {
+			if (isSefardi && jewishCalendar.getJewishDay() > 1) { // Not said on Rosh Chodesh
 				return true;
 			}
 
