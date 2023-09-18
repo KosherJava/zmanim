@@ -1053,6 +1053,23 @@ public class HebrewDateFormatter {
 	 */
 	public String formatParsha(JewishCalendar jewishCalendar) {
 		JewishCalendar.Parsha parsha =  jewishCalendar.getParshah();
+		return formatParsha(parsha);
+	}
+
+	/**
+	 * This method overloads {@link HebrewDateFormatter#formatParsha(JewishCalendar)} method and accepts any {@link JewishCalendar.Parsha} as a param.
+	 *
+	 * @param parsha a JewishCalendar.Parsha object
+	 * @return today's parsha(ios) in Hebrew for example, if the formatter is set to format in Hebrew, returns a string
+	 * 	of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
+	 * 	&#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if
+	 * 	there are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin
+	 * 	chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
+	 * 	Bereshis or Nitzavim Vayeilech or an empty string if there are none.
+	 *
+	 * */
+
+	public String formatParsha(JewishCalendar.Parsha parsha) {
 		return hebrewFormat ? hebrewParshaMap.get(parsha) : transliteratedParshaMap.get(parsha);
 	}
 	
