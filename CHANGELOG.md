@@ -9,13 +9,27 @@
 
 ## [2.6.0](https://github.com/KosherJava/zmanim/compare/2.5.0...master) (future)
 
-* Add method [HebrewdateFormatter.formatParsha(JewishCalendar.Parsha parsha)](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from JewishCalendar.getUpcomingParshah().
+* [Astronomical Chatzos based changes](https://github.com/KosherJava/zmanim/commit/c523424b327f173d70f024bdf207ccae0413d487):
+  * Add setting useAstronomicalChatzos (defaulted to true) to keep the mistaken compat break introduced in the v2.5.0 release.
+  * Add setting useAstronomicalChatzosForOtherZmanim (defaulted to false).
+  * Add getChatzosAsHalfDay() to retain the old behavior of chatzos being halfway between sunrise and sunset.
+  * Use useAstronomicalChatzos to control if getChatzos() returns getSunTransit() (astronomical chatzos) or getChatzosAsHalfDay().
+  * Add getHalfDayBasedZman(Date startOfHalfDay, Date endOfHalfDay, double hours) to allow other zmanim to be impacted by chatzos.
+  * Use useAstronomicalChatzosForOtherZmanim.
+* [Significant updates to `ComplexZmanimCalendar`](https://github.com/KosherJava/zmanim/commit/46800aa750ac56c2da9bc55fbf976ea1a092221d)
+  * Deprecate `getTzaisGeonim3Point65Degrees()` and `getTzaisGeonim3Point676Degrees()`, very early tzais geonim time that are earlier than 13.5 minutes in Yerushalayim at the equinox / equilux.
+  * Started coding some zmanim to use the half-day zmanim config.
+  * Deprecate `getFixedLocalChatzosBasedZmanim()` in favor of `getHalfDayBasedZman()` in the parent ZmanimCalendar class. 
+  * `getFixedLocalChatzos()` now just calls the new getLocalMeanTime(12.0) in the grandparent AstronomicalCalendar class.
+  * Remove `getSolarMidnight()` that was added to the AstronomicalCalendar grandparent class.
+  * Undeprecate `getPlagAlosToSunset()` since it is not a zman that can be too late.
+* Add method [`HebrewdateFormatter.formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParshah()`.
 * Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
-* Add [AstronomicalCalendar.getLocalMeanTime()](https://github.com/KosherJava/zmanim/commit/14bcdc085011ccce327f69d6a001772c0581fcc2).
-* Add utility method [ZmanimCalendar.getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
-* [Move getSolarMidnight](https://github.com/KosherJava/zmanim/commit/a4535717353eb77da10b6951e4a627b10258ac9e) to the AstronomicalCalendar parent class where it belongs.
+* Add [`AstronomicalCalendar.getLocalMeanTime()`](https://github.com/KosherJava/zmanim/commit/14bcdc085011ccce327f69d6a001772c0581fcc2).
+* Add utility method [`ZmanimCalendar.getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)`](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
+* [Move `getSolarMidnight()`](https://github.com/KosherJava/zmanim/commit/a4535717353eb77da10b6951e4a627b10258ac9e) to the AstronomicalCalendar parent class where it belongs.
 * [Correct USNO noon calculation](https://github.com/KosherJava/zmanim/commit/3735c92289a66039b24d7e2b470955b5297f0ca5) in some locations where it was sometimes 12 hours off.
-* ...
+* Add [`TefilaRules.isMizmorLesodaRecited()`](https://github.com/KosherJava/zmanim/commit/2cde42644dc72a49b3e4228244bc79cc276e138e)
 
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...2.5.0) (2023-06-09)
 
@@ -27,7 +41,7 @@
   * Correct calculation of the _daf_ number.
   * Correct the order of transliterated Yerushalmi _masechtos_.
   * Correct the Hebrew spelling of the _masechta_ Kilayim.
-* * Added  number of IS methods such as is `isYomKippur()`, `isSuccos()`, `isPesach()` etc. to the `JewishCalendar` class.
+* Added  number of IS methods such as is `isYomKippur()`, `isSuccos()`, `isPesach()` etc. to the `JewishCalendar` class.
 * Add `isAlHanissimRecited(JewishCalendar)` and `isYaalehVeyavoRecited(JewishCalendar)` to the `TefilaRules` class.
 * Clarify documentation to explain that isMacharChodesh() Refers to the Haftorah
 
