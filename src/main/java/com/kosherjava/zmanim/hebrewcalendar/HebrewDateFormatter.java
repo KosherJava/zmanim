@@ -899,15 +899,15 @@ public class HebrewDateFormatter {
 	public String formatDafYomiYerushalmi(Daf daf) {
 		if(daf == null) {
 			if (hebrewFormat) {
-				return Daf.getYerushlmiMasechtos()[39];
+				return Daf.getYerushalmiMasechtos()[39];
 			} else {
-				return Daf.getYerushlmiMasechtosTransliterated()[39];
+				return Daf.getYerushalmiMasechtosTransliterated()[39];
 			}
 		}
 		if (hebrewFormat) {			
 			return daf.getYerushalmiMasechta() + " " + formatHebrewNumber(daf.getDaf());
 		} else {
-			return daf.getYerushlmiMasechtaTransliterated() + " " + daf.getDaf();
+			return daf.getYerushalmiMasechtaTransliterated() + " " + daf.getDaf();
 		}
 	}
 
@@ -1036,8 +1036,11 @@ public class HebrewDateFormatter {
 	}
 	
 	/**
-	 * Returns a String with the name of the current parsha(ios). If the formatter is set to format in Hebrew, returns
-	 * a string of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
+	 * Returns a String with the name of the current parsha(ios). This method gets the current <em>parsha</em> by
+	 * calling {@link JewishCalendar#getParshah()} that does not return a <em>parsha</em> for any non-<em>Shabbos</em>
+	 * or a <em>Shabbos</em> that occurs on a <em>Yom Tov</em>, and will return an empty <code>String</code> in those
+	 * cases. If the class {@link #isHebrewFormat() is set to format in Hebrew} it will return a <code>String</code>
+	 * of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
 	 * &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if there
 	 * are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin chars. The
 	 * default uses Ashkenazi pronunciation in typical American English spelling, for example Bereshis or
@@ -1050,9 +1053,32 @@ public class HebrewDateFormatter {
 	 *         there are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin
 	 *         chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
 	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
+	 * @see #formatParsha(JewishCalendar)
+	 * @see #isHebrewFormat()
+	 * @see JewishCalendar#getParshah()
 	 */
 	public String formatParsha(JewishCalendar jewishCalendar) {
 		JewishCalendar.Parsha parsha =  jewishCalendar.getParshah();
+		return formatParsha(parsha);
+	}
+
+	/**
+	 * Returns a String with the name of the current parsha(ios). This method overloads {@link
+	 * HebrewDateFormatter#formatParsha(JewishCalendar)} and unlike that method, it will format the <em>parsha</em> passed
+	 * to this method regardless of the day of week. This is the way to format a <em>parsha</em> retrieved from calling
+	 * {@link JewishCalendar#getUpcomingParshah()}.
+	 *
+	 * @param parsha a JewishCalendar.Parsha object
+	 * @return today's parsha(ios) in Hebrew for example, if the formatter is set to format in Hebrew, returns a string
+	 *         of the current parsha(ios) in Hebrew for example &#x05D1;&#x05E8;&#x05D0;&#x05E9;&#x05D9;&#x05EA; or
+	 *         &#x05E0;&#x05E6;&#x05D1;&#x05D9;&#x05DD; &#x05D5;&#x05D9;&#x05DC;&#x05DA; or an empty string if
+	 *         there are none. If not set to Hebrew, it returns a string of the parsha(ios) transliterated into Latin
+	 *         chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
+	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
+	 * @see #formatParsha(JewishCalendar)
+	 *
+	 */
+	public String formatParsha(JewishCalendar.Parsha parsha) {
 		return hebrewFormat ? hebrewParshaMap.get(parsha) : transliteratedParshaMap.get(parsha);
 	}
 	
