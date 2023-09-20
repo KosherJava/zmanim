@@ -7,8 +7,15 @@
 * Possibly increase the minimum supported JRE version from version 8 (the code currently almost certainly works on 6 today).
 * ...
 
-## [2.6.0](https://github.com/KosherJava/zmanim/compare/2.4.0...master) (future)
+## [2.6.0](https://github.com/KosherJava/zmanim/compare/2.5.0...master) (future)
 
+* Add method [HebrewdateFormatter.formatParsha(JewishCalendar.Parsha parsha)](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from JewishCalendar.getUpcomingParshah().
+* Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
+* Add [AstronomicalCalendar.getLocalMeanTime()](https://github.com/KosherJava/zmanim/commit/14bcdc085011ccce327f69d6a001772c0581fcc2).
+* Add utility method [ZmanimCalendar.getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
+* [Move getSolarMidnight](https://github.com/KosherJava/zmanim/commit/a4535717353eb77da10b6951e4a627b10258ac9e) to the AstronomicalCalendar parent class where it belongs.
+* [Correct USNO noon calculation](https://github.com/KosherJava/zmanim/commit/3735c92289a66039b24d7e2b470955b5297f0ca5) in some locations where it was sometimes 12 hours off.
+* ...
 
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...2.5.0) (2023-06-09)
 
