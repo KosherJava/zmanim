@@ -15,16 +15,14 @@ public class RegressionTestFileWriter {
         LocalDate end = LocalDate.of(9999, 1, 1);
         LocalDate current = start;
         JewishCalendar cal = new JewishCalendar(current);
+        GregorianCalendar gregorian = new GregorianCalendar(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth());
         JewishDate date = new JewishDate(current);
         ComplexZmanimCalendar zcal = new ComplexZmanimCalendar(new GeoLocation("Lakewood, NJ", 40.096, -74.222, 29.02, TimeZone.getTimeZone("America/New_York")));
         List<FullCalendar> calendars = new ArrayList<>();
         List<FullZmanim> zmanim = new ArrayList<>();
 
-//            cal.isUseModernHolidays();
 //            cal.setUseModernHolidays();
 //            cal.setInIsrael();
-//            cal.getInIsrael();
-//            cal.getIsMukafChoma();
 //            cal.setIsMukafChoma();
         while (current.isBefore(end)) {
             //TODO work in progress:
@@ -41,13 +39,14 @@ public class RegressionTestFileWriter {
             cal.isMoridHatalRecited();*/
 
             current = current.plusDays(1L);
-            cal.setDate(current);
+            gregorian.roll(Calendar.DATE, true);
             date.forward(Calendar.DATE, 1);
-            zcal.setCalendar(new GregorianCalendar(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth()));
+            cal.setDate(current);
+            zcal.setCalendar(gregorian);
         }
         //write calendars to file:
 
-        File calendarOutput = new File("calendar.csv");
+        File calendarOutput = new File("lakewood_calendar.csv");
         BufferedWriter calendarWriter = new BufferedWriter(new FileWriter(calendarOutput));
         calendarWriter.write(FullCalendar.fields);
         calendarWriter.newLine();
@@ -55,7 +54,9 @@ public class RegressionTestFileWriter {
             calendarWriter.write(calendar.toString());
             calendarWriter.newLine();
         }
-        File zmanimOutput = new File("zmanim.csv");
+        calendarWriter.close();
+        
+        File zmanimOutput = new File("lakewood_zmanim.csv");
         BufferedWriter zmanimWriter = new BufferedWriter(new FileWriter(zmanimOutput));
         zmanimWriter.write(FullZmanim.fields);
         zmanimWriter.newLine();
@@ -63,6 +64,7 @@ public class RegressionTestFileWriter {
             zmanimWriter.write(zman.toString());
             zmanimWriter.newLine();
         }
+        zmanimWriter.close();
     }
 
     static class FullZmanim {
