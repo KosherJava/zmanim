@@ -784,7 +784,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see ComplexZmanimCalendar#getSamuchLeMinchaKetana72Minutes()
 	 */
 	public Date getSamuchLeMinchaKetana(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim()) {
+		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(getChatzos(), endOfDay, 3);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 9);
@@ -845,7 +845,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaKetana(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim()) {
+		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(getChatzos(), endOfDay, 3.5);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 9.5);
