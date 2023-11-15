@@ -73,4 +73,3 @@ __While I did my best to get accurate results, please double check before relyin
 [![GitHub last commit](https://img.shields.io/github/last-commit/KosherJava/zmanim?logo=github)](https://github.com/KosherJava/zmanim/commits/master)
 [![CodeQL](https://github.com/KosherJava/zmanim/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/KosherJava/zmanim/actions/workflows/codeql-analysis.yml)
 [![Run unit tests](https://github.com/KosherJava/zmanim/actions/workflows/pull_request_worklow.yml/badge.svg)](https://github.com/KosherJava/zmanim/actions/workflows/pull_request_worklow.yml)
-[![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/KosherJava/zmanim?logo=snyk)](https://security.snyk.io/vuln/maven?search=KosherJava)
