@@ -47,7 +47,8 @@ The library is released under the [LGPL 2.1 license](https://kosherjava.com/2011
 Ports to Other Languages
 ------------------------
 The KosherJava Zmanim API has been ported to:
-* Objective-C / Swift - https://github.com/MosheBerman/KosherCocoa
+* Swift - https://github.com/Elyahu41/KosherSwift
+* Objective-C - https://github.com/MosheBerman/KosherCocoa
 * .NET - https://github.com/Yitzchok/Zmanim
 * JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim and https://github.com/yparitcher/zmanJS
 * Kotlin - https://github.com/Sternbach-Software/KosherKotlin
