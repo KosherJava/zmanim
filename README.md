@@ -50,7 +50,8 @@ The KosherJava Zmanim API has been ported to:
 * Swift - https://github.com/Elyahu41/KosherSwift
 * Objective-C - https://github.com/MosheBerman/KosherCocoa
 * .NET - https://github.com/Yitzchok/Zmanim
-* JavaScript / TypeScript -  https://github.com/BehindTheMath/KosherZmanim and https://github.com/yparitcher/zmanJS
+* TypeScript - https://github.com/BehindTheMath/KosherZmanim
+* JavaScript - https://github.com/yparitcher/zmanJS
 * Kotlin - https://github.com/Sternbach-Software/KosherKotlin
 * Ruby - https://github.com/pinnymz/ruby-zmanim
 * Scala - https://github.com/nafg/jewish-date
