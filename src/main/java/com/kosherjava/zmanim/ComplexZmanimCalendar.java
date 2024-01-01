@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2023 Eliyahu Hershfeld
+ * Copyright (C) 2004-2024 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -106,7 +106,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * <h2>Documentation from the {@link ZmanimCalendar} parent class</h2>
  * {@inheritDoc}
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2023
+ * @author &copy; Eliyahu Hershfeld 2004 - 2024
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
@@ -1877,7 +1877,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedolaGreaterThan30()
 	 */
 	public Date getMinchaGedolaAhavatShalom() {
-		if (getMinchaGedola30Minutes() == null || getMinchaGedola() == null) {
+		if (getChatzos() == null || getMinchaGedola30Minutes() == null || getShaahZmanisAlos16Point1ToTzais3Point7() == Long.MIN_VALUE) {
 			return null;
 		} else {
 			return getMinchaGedola30Minutes().compareTo(getTimeOffset(getChatzos(), getShaahZmanisAlos16Point1ToTzais3Point7() / 2)) > 0 ?
@@ -4454,7 +4454,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * sunrise and ending at sunset. This is the time that eating or other activity can't begin prior to praying <em>mincha</em>.
 	 * The calculation used is 9 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em>
 	 * 16.1&deg;}. See the <a href="https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah
-	 * 232</a> for details.
+	 * 232</a> and <a href="https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
 	 * 
 	 * @see #getShaahZmanisGra()
 	 * @see #getSamuchLeMinchaKetana16Point1Degrees()
@@ -4474,7 +4474,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * the day, calculated using a day starting and ending 16.1&deg; below the horizon. This is the time that eating or other
 	 * activity can't begin prior to praying <em>mincha</em>. The calculation used is 9 * {@link
 	 * #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;}. See the <a href=
-	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a>.
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a> and <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @return the <code>Date</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
@@ -4492,7 +4493,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * calculated using a day starting 72 minutes before sunrise and ending 72 minutes after sunset. This is the time that eating
 	 * or other activity can't begin prior to praying <em>mincha</em>. The calculation used is 9 * {@link
 	 * #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;}. See the <a href=
-	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a>.
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a> and <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @return the <code>Date</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
