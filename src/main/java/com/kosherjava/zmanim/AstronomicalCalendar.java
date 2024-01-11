@@ -111,8 +111,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunrise time. The zenith used
 	 * for the calculation uses {@link #GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is adjusted by the
-	 * {@link AstronomicalCalculator} to add approximately 50/60 of a degree to account for 34 arch minutes of refraction
-	 * and 16 arch minutes for the sun's radius for a total of {@link AstronomicalCalculator#adjustZenith 90.83333&deg;}.
+	 * {@link AstronomicalCalculator} to add approximately 50/60 of a degree to account for 34 archminutes of refraction
+	 * and 16 archminutes for the sun's radius for a total of {@link AstronomicalCalculator#adjustZenith 90.83333&deg;}.
 	 * See documentation for the specific implementation of the {@link AstronomicalCalculator} that you are using.
 	 * 
 	 * @return the <code>Date</code> representing the exact sunrise time. If the calculation can't be computed such as
@@ -196,8 +196,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunset time. The zenith used for
 	 * the calculation uses {@link #GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is adjusted by the
-	 * {@link AstronomicalCalculator} to add approximately 50/60 of a degree to account for 34 arch minutes of refraction
-	 * and 16 arch minutes for the sun's radius for a total of {@link AstronomicalCalculator#adjustZenith 90.83333&deg;}.
+	 * {@link AstronomicalCalculator} to add approximately 50/60 of a degree to account for 34 archminutes of refraction
+	 * and 16 archminutes for the sun's radius for a total of {@link AstronomicalCalculator#adjustZenith 90.83333&deg;}.
 	 * See documentation for the specific implementation of the {@link AstronomicalCalculator} that you are using. Note:
 	 * In certain cases the calculates sunset will occur before sunrise. This will typically happen when a timezone
 	 * other than the local timezone is used (calculating Los Angeles sunset using a GMT timezone for example). In this
