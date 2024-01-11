@@ -196,7 +196,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * to be obscured. This means that a zenith of just above 90&deg; must be used. The Sun subtends an angle of 16
 	 * minutes of arc (this can be changed via the {@link #setSolarRadius(double)} method , and atmospheric refraction
 	 * accounts for 34 minutes or so (this can be changed via the {@link #setRefraction(double)} method), giving a total
-	 * of 50 arc minutes. The total value for ZENITH is 90+(5/6) or 90.8333333&deg; for true sunrise/sunset. Since a
+	 * of 50 arcminutes. The total value for ZENITH is 90+(5/6) or 90.8333333&deg; for true sunrise/sunset. Since a
 	 * person at an elevation can see below the horizon of a person at sea level, this will also adjust the zenith to
 	 * account for elevation if available. Note that this will only adjust the value if the zenith is exactly 90 degrees.
 	 * For values below and above this no correction is done. As an example, astronomical twilight is when the sun is
@@ -235,7 +235,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * lists the actual average refraction value as 34.478885263888294 or approximately 34' 29". The refraction value as well
 	 * as the solarRadius and elevation adjustment are added to the zenith used to calculate sunrise and sunset.
 	 * 
-	 * @return The refraction in arc minutes.
+	 * @return The refraction in arcminutes.
 	 */
 	public double getRefraction() {
 		return this.refraction;
@@ -247,7 +247,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * locations might be used for increased accuracy.
 	 * 
 	 * @param refraction
-	 *            The refraction in arc minutes.
+	 *            The refraction in arcminutes.
 	 * @see #getRefraction()
 	 */
 	public void setRefraction(double refraction) {
@@ -255,8 +255,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * Method to get the sun's radius. The default value is 16 arc minutes. The sun's radius as it appears from earth is
-	 * almost universally given as 16 arc minutes but in fact it differs by the time of the year. At the <a
+	 * Method to get the sun's radius. The default value is 16 arcminutes. The sun's radius as it appears from earth is
+	 * almost universally given as 16 arcminutes but in fact it differs by the time of the year. At the <a
 	 * href="https://en.wikipedia.org/wiki/Perihelion">perihelion</a> it has an apparent radius of 16.293, while at the
 	 * <a href="https://en.wikipedia.org/wiki/Aphelion">aphelion</a> it has an apparent radius of 15.755. There is little
 	 * affect for most location, but at high and low latitudes the difference becomes more apparent. My Calculations for
@@ -269,7 +269,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * they show the extreme difference on days that are not the perihelion or aphelion, but are shown for illustrative
 	 * purposes only.
 	 * 
-	 * @return The sun's radius in arc minutes.
+	 * @return The sun's radius in arcminutes.
 	 */
 	public double getSolarRadius() {
 		return this.solarRadius;
@@ -279,7 +279,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * Method to set the sun's radius.
 	 * 
 	 * @param solarRadius
-	 *            The sun's radius in arc minutes.
+	 *            The sun's radius in arcminutes.
 	 * @see #getSolarRadius()
 	 */
 	public void setSolarRadius(double solarRadius) {
