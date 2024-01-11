@@ -1602,6 +1602,18 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
+	 * Returns true if the current year is a <em>Shmita</em> (Jubilee) year. The method returns true for years that are
+	 * divisible by 7. However, Rashi and other rishonim hold that the year before what this method returns true for is
+	 * the actual year of Shmita.
+	 *
+	 * @return true if the current year is a <em>Shmikta</em> (Jubilee) year.
+	 */
+	public boolean isShmitaYear() {
+		int holidayIndex = getYomTovIndex();
+		return holidayIndex == ISRU_CHAG;
+	}
+
+	/**
 	 * Indicates whether some other object is "equal to" this one.
 	 * @see Object#equals(Object)
 	 */
