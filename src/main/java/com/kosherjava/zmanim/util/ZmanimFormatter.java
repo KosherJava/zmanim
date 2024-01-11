@@ -147,7 +147,7 @@ public class ZmanimFormatter {
 	 * ZmanimFormatter constructor using a formatter
 	 * 
 	 * @param format
-	 *            int The formatting style to use. Using ZmanimFormatter.SEXAGESIMAL_SECONDS_FORMAT will format the time
+	 *            int The formatting style to use. Using ZmanimFormatter.SEXAGESIMAL_SECONDS_FORMAT will format the
 	 *            time of 90*60*1000 + 1 as 1:30:00
 	 * @param dateFormat the SimpleDateFormat Object
 	 * @param timeZone the TimeZone Object
@@ -208,9 +208,9 @@ public class ZmanimFormatter {
 
 	/**
 	 * Sets various format settings.
-	 * @param prependZeroHours  if to prepend a zero for single digit hours (so that 1 'oclock is displayed as 01)
+	 * @param prependZeroHours  if to prepend a zero for single digit hours (so that 1 o'clock is displayed as 01)
 	 * @param useSeconds should seconds be used in the time format
-	 * @param useMillis should milliseconds be used informatting time.
+	 * @param useMillis should milliseconds be used in formatting time.
 	 */
 	private void setSettings(boolean prependZeroHours, boolean useSeconds, boolean useMillis) {
 		this.prependZeroHours = prependZeroHours;
@@ -267,7 +267,7 @@ public class ZmanimFormatter {
 	}
 
 	/**
-	 * Formats a date using this classe's {@link #getDateFormat() date format}.
+	 * Formats a date using this class's {@link #getDateFormat() date format}.
 	 * 
 	 * @param dateTime
 	 *            the date to format
@@ -479,7 +479,7 @@ public class ZmanimFormatter {
 						} else {
 							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
 						}
-					} else { // will probably never enter this block, but is present to be future proof
+					} else { // will probably never enter this block, but is present to be future-proof
 						otherList.add("<" + tagName + ">" + value + "</" + tagName + ">");
 					}
 				} catch (Exception e) {
@@ -627,7 +627,7 @@ public class ZmanimFormatter {
 						} else {
 							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
 						}
-					} else { // will probably never enter this block, but is present to be future proof
+					} else { // will probably never enter this block, but is present to be future-proof
 						otherList.add("\"" + tagName + "\":\"" + value + "\",");
 					}
 				} catch (Exception e) {

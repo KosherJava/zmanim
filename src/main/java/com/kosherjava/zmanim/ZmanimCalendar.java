@@ -80,7 +80,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * Is elevation above sea level calculated for times besides sunrise and sunset. According to Rabbi Dovid Yehuda
 	 * Bursztyn in his <a href="https://www.worldcat.org/oclc/659793988">Zmanim Kehilchasam (second edition published
-	 * in 2007)</a> chapter 2 (pages 186-187) no <em>zmanim</em> besides sunrise and sunset should use elevation. However
+	 * in 2007)</a> chapter 2 (pages 186-187) no <em>zmanim</em> besides sunrise and sunset should use elevation. However,
 	 * Rabbi Yechiel Avrahom Zilber in the <a href="https://hebrewbooks.org/51654">Birur Halacha Vol. 6</a> Ch. 58 Pages
 	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=42">34</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=51654&amp;pgnum=50">42</a> is of the opinion that elevation should be
@@ -129,17 +129,17 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * Is {@link #getSunTransit() astronomical <em>chatzos</em>} used for {@link #getChatzos()} for enhanced accuracy. For
-	 * example as the day is lengthens, the second half of the day is longer than the first and astronomical <em>chatzos</em>
+	 * example as the day is lengthening, the second half of the day is longer than the first and astronomical <em>chatzos</em>
 	 * would be a drop earlier than half of the time between sunrise and sunset.
 	 * 
 	 * @todo In the future, if this is set to true, the following may change to enhance accuracy. {@link #getSofZmanShmaGRA()
-	 * <em>Sof zman Shma</em> GRA} would be calculated as 3 <em>shaaos zmaniyos</em> after sunrise, but the <em>shaaos
+	 * <em>Sof zman Shma</em> GRA} would be calculated as 3 <em>shaos zmaniyos</em> after sunrise, but the <em>shaos
 	 * zmaniyos</em> would be calculated a a 6th of the time between sunrise and <em>chatzos</em>, as opposed to a 12th of the
 	 * time between sunrise and sunset. {@link #getMinchaGedola() <em>mincha gedola</em>} will be calculated as half a
 	 * <em>shaah zmanis</em> of afternoon hours (a 6th of the time between <em>chatzos</em> and sunset after astronomical
-	 * <em>chatzos</em> as opposed to 6.5 <em>shaaos zmaniyos</em> after sunrise. {@link #getPlagHamincha() <em>Plag
-	 * hamincha</em>} would be calculated as 4.75 <em>shaaos zmaniyos</em> after astronomical <em>chatzos</em> as opposed to 10.75
-	 * <em>shaaos zmaniyos</em> after sunrise. Etc.
+	 * <em>chatzos</em> as opposed to 6.5 <em>shaos zmaniyos</em> after sunrise. {@link #getPlagHamincha() <em>Plag
+	 * hamincha</em>} would be calculated as 4.75 <em>shaos zmaniyos</em> after astronomical <em>chatzos</em> as opposed to 10.75
+	 * <em>shaos zmaniyos</em> after sunrise. Etc.
 	 * 
 	 * @return if the use of astronomical <em>chatzos</em> is active.
 	 * @see #useAstronomicalChatzos
@@ -183,16 +183,16 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * Is astronomical <em>chatzos</em> used for <em>zmanim</em> calculations besides <em>chatzos</em> itself for enhanced
 	 * accuracy. For example as the day is lengthening (as we approach spring season), the second half of the day is longer than
 	 * the first and astronomical <em>chatzos</em> would be a drop earlier than half of the time between sunrise and sunset.
-	 * Conversely, the second half of the day would be shorter in the fall season as the days start getting shorter.
+	 * Conversely, the second half of the day would be shorter in the season of fall as the days start getting shorter.
 	 * 
 	 * @todo In the future, if this is set to true, the following may change to enhance accuracy. {@link #getSofZmanShmaGRA()
-	 * <em>Sof zman Shma</em> GRA} would be calculated as 3 <em>shaaos zmaniyos</em> after sunrise, but the <em>shaaos
+	 * <em>Sof zman Shma</em> GRA} would be calculated as 3 <em>shaos zmaniyos</em> after sunrise, but the <em>shaos
 	 * zmaniyos</em> would be calculated a a 6th of the time between sunrise and <em>chatzos</em>, as opposed to a 12th of the
 	 * time between sunrise and sunset. {@link #getMinchaGedola() <em>mincha gedola</em>} will be calculated as half a
 	 * <em>shaah zmanis</em> of afternoon hours (a 6th of the time between <em>chatzos</em> and sunset after astronomical
-	 * <em>chatzos</em> as opposed to 6.5 <em>shaaos zmaniyos</em> after sunrise. {@link #getPlagHamincha() <em>Plag
-	 * hamincha</em>} would be calculated as 4.75 <em>shaaos zmaniyos</em> after astronomical <em>chatzos</em> as opposed to 10.75
-	 * <em>shaaos zmaniyos</em> after sunrise. Etc.
+	 * <em>chatzos</em> as opposed to 6.5 <em>shaos zmaniyos</em> after sunrise. {@link #getPlagHamincha() <em>Plag
+	 * hamincha</em>} would be calculated as 4.75 <em>shaos zmaniyos</em> after astronomical <em>chatzos</em> as opposed to 10.75
+	 * <em>shaos zmaniyos</em> after sunrise. Etc.
 	 * 
 	 * @return if the use of astronomical <em>chatzos</em> is active.
 	 * @see #useAstronomicalChatzosForOtherZmanim
@@ -331,7 +331,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 72 minutes before {@link #getSunrise() sunrise} or
 	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting). This time
-	 * is based on the time to walk the distance of 4 <em>Mil</em> at 18 minutes a <em>Mil</em>. The 72 minute time (but
+	 * is based on the time to walk the distance of 4 <em>Mil</em> at 18 minutes a <em>Mil</em>. The 72-minute time (but
 	 * not the concept of fixed minutes) is based on the opinion that the time of the <em>Neshef</em> (twilight between
 	 * dawn and sunrise) does not vary by the time of year or location but depends on the time it takes to walk the
 	 * distance of 4 <em>Mil</em>.
@@ -349,10 +349,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * This method returns {@link #getSunTransit() Astronomical <em>chatzos</em>} if the
 	 * {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculator} class used supports it and
 	 * {@link #isUseAstronomicalChatzos() isUseAstronomicalChatzos()} is set to <em>true</em> or the {@link #getChatzosAsHalfDay()
-	 * halfway point between sunrise and sunset} if it does not support it or it is not configured to use it. There are currently
+	 * halfway point between sunrise and sunset} if it does not support it, or it is not configured to use it. There are currently
 	 * two {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculators} available in the API, the default {@link
 	 * com.kosherjava.zmanim.util.NOAACalculator NOAA calculator} and the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO
-	 * calculator}. The USNO calculator calculates <em>chatzos</em> as halfway between sunrise and sunset (identical to six <em>shaaos
+	 * calculator}. The USNO calculator calculates <em>chatzos</em> as halfway between sunrise and sunset (identical to six <em>shaos
 	 * zmaniyos</em> after sunrise), while the NOAACalculator calculates it more accurately as {@link #getSunTransit() astronomical
 	 * <em>chatzos</em>}. See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a>
 	 * for a detailed explanation of the ways to calculate <em>Chatzos</em>. Since half-day <em>chatzos</em> can be <code>null</code> in
@@ -383,18 +383,18 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
-	 * Returns <em>chatzos</em> calculated as halfway between sunrise and sunset. Many are of the opinion opinion that
-	 * <em>chatzos</em> is calculated as the the midpoint between {@link #getSeaLevelSunrise sea level sunrise} and
+	 * Returns <em>chatzos</em> calculated as halfway between sunrise and sunset. Many are of the opinion that
+	 * <em>chatzos</em> is calculated as the midpoint between {@link #getSeaLevelSunrise sea level sunrise} and
 	 * {@link #getSeaLevelSunset sea level sunset}, despite it not being the most accurate way to calculate it. A day
 	 * starting at <em>alos</em> and ending at <em>tzais</em> using the same time or degree offset will also return
 	 * the same time. In reality due to lengthening or shortening of day, this is not necessarily the exact midpoint of
 	 * the day, but it is very close. This method allows you to use the NOAACalculator and still calculate <em>chatzos
-	 * </em> as six <em>shaaos zmaniyos</em> after sunrise. There are currently two {@link
+	 * </em> as six <em>shaos zmaniyos</em> after sunrise. There are currently two {@link
 	 * com.kosherjava.zmanim.util.AstronomicalCalculator calculators} available in the API, the {@link
 	 * com.kosherjava.zmanim.util.NOAACalculator} and the {@link com.kosherjava.zmanim.util.SunTimesCalculator}.
-	 * The SunTimesCalculator calculates <em>chatzos</em> as halfway between sunrise and sunset (and of six <em>shaaos
+	 * The SunTimesCalculator calculates <em>chatzos</em> as halfway between sunrise and sunset (and of six <em>shaos
 	 * zmaniyos</em>), while the NOAACalculator calculates it as astronomical <em>chatzos</em> that is slightly more
-	 * accurate. This method allows you to use the NOAACalculator and still calculate <em>chatzos</em> as six <em>shaaos
+	 * accurate. This method allows you to use the NOAACalculator and still calculate <em>chatzos</em> as six <em>shaos
 	 * zmaniyos</em> after sunrise. See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition
 	 * of <em>Chatzos</em></a> for a detailed explanation of the ways to calculate <em>Chatzos</em>.
 	 *
@@ -456,7 +456,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A generic method for calculating the latest <em>zman krias shema</em> that calls {@link #getSofZmanShma(Date, Date, boolean)}
-	 * passing <code>false</code> to the synchronous parameter since there is now way to know if the start and end of the day are 
+	 * passing <code>false</code> to the synchronous parameter since there is no way to know if the start and end of the day are 
 	 * synchronous. Passing true when they are not synchronous is too much of a risk. See information on that method for more details.
 	 * @param startOfDay
 	 *            the start of day for calculating <em>zman krias shema</em>. This can be sunrise or any <em>alos</em> passed
@@ -479,8 +479,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #getShaahZmanisGra() <em>shaos zmaniyos</em>} (solar hours) after {@link #getSunrise() sunrise} or
 	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting), according
 	 * to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. 
-	 *  The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
-	 *  sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
+	 *  The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level
+	 *  sunset} or from {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
 	 *  setting).
 	 * 
 	 * @see #getSofZmanShma(Date, Date)
@@ -501,7 +501,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #getShaahZmanisMGA() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos72()}, according to the
 	 * <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a>. The day is calculated
 	 * from 72 minutes before {@link #getSeaLevelSunrise() sea level sunrise} to 72 minutes after {@link
-	 * #getSeaLevelSunrise sea level sunset} or from 72 minutes before {@link #getSunrise() sunrise} to {@link #getSunset()
+	 * #getSeaLevelSunset() sea level sunset} or from 72 minutes before {@link #getSunrise() sunrise} to {@link #getSunset()
 	 * sunset} (depending on the {@link #isUseElevation()} setting).
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman shema</em>. If the calculation can't be computed such as in
@@ -523,8 +523,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * a <em>Mil</em>. According to the <a href="https://en.wikipedia.org/wiki/Samuel_Loew">Machtzis Hashekel</a> in
 	 * Orach Chaim 235:3, the <a href="https://en.wikipedia.org/wiki/Joseph_ben_Meir_Teomim">Pri Megadim</a> in Orach
 	 * Chaim 261:2 (see the Biur Halacha) and others (see Hazmanim Bahalacha 17:3 and 17:5) the 72 minutes are standard
-	 * clock minutes any time of the year in any location. Depending on the {@link #isUseElevation()} setting) a 72
-	 * minute offset from  either {@link #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} is used.
+	 * clock minutes any time of the year in any location. Depending on the {@link #isUseElevation()} setting, a 
+	 * 72-minute offset from  either {@link #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} is used.
 	 * 
 	 * @see ComplexZmanimCalendar#getTzais16Point1Degrees()
 	 * @return the <code>Date</code> representing 72 minutes after sunset. If the calculation can't be
@@ -567,7 +567,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>. This method's synchronous parameter indicates if the start
 	 * and end of day for the calculation are synchronous, having the same offset. This is typically the case, but some
 	 * <em>zmanim</em> calculations are based on a start and end at different offsets from the real start and end of the day,
-	 * such as starting the day at <em>alos</em> and an ending it at <em>tzais genoim</em> or some other variant. If the day
+	 * such as starting the day at <em>alos</em> and an ending it at <em>tzais geonim</em> or some other variant. If the day
 	 * is not synchronous a {@link #getHalfDayBasedZman(Date, Date, double) half-day based calculations} will be bypassed.
 	 * It would be illogical to use a half-day based calculation that start/end at <em>chatzos</em> when the two "halves" of
 	 * the day are not equal, and the halfway point between them is not at <em>chatzos</em>.
@@ -597,7 +597,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A generic method for calculating the latest <em>zman tfila</em> that calls {@link #getSofZmanTfila(Date, Date, boolean)}
-	 * passing <code>false</code> to the synchronous parameter since there is now way to know if the start and end of the day are 
+	 * passing <code>false</code> to the synchronous parameter since there is no way to know if the start and end of the day are 
 	 * synchronous. Passing true when they are not synchronous is too much of a risk. See information on that method for more details.
 	 * @param startOfDay
 	 *            the start of day for calculating <em>zman tfilah</em>. This can be sunrise or any <em>alos</em> passed
@@ -620,8 +620,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #getShaahZmanisGra() <em>shaos zmaniyos</em> }(solar hours) after {@link #getSunrise() sunrise} or
 	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting), according
 	 * to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. 
-	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
-	 * sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
+	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level
+	 * sunset} or from {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
 	 * setting).
 	 * 
 	 * @see #getSofZmanTfila(Date, Date)
@@ -641,12 +641,12 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #getShaahZmanisMGA() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos72()}, according to the
 	 * <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em>. The day is calculated
 	 * from 72 minutes before {@link #getSeaLevelSunrise() sea level sunrise} to 72 minutes after {@link
-	 * #getSeaLevelSunrise sea level sunset} or from 72 minutes before {@link #getSunrise() sunrise} to {@link #getSunset()
+	 * #getSeaLevelSunset() sea level sunset} or from 72 minutes before {@link #getSunrise() sunrise} to {@link #getSunset()
 	 * sunset} (depending on the {@link #isUseElevation()} setting).
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
-	 *         does not set), a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getSofZmanTfila(Date, Date)
 	 * @see #getShaahZmanisMGA()
@@ -665,13 +665,13 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * #getSeaLevelSunrise() sea level sunrise} and {@link #getSeaLevelSunset() sea level sunset} (depending on the {@link
 	 * #isUseElevation()} elevation setting) to this method will return <em>mincha gedola</em> according to the opinion of the
 	 * <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>. Alternatively, this method uses {@link
-	 * #isUseAstronomicalChatzosForOtherZmanim()} to control if the time is based on 6.5 <em>sha'os zmaniyos</em> into the day
+	 * #isUseAstronomicalChatzosForOtherZmanim()} to control if the time is based on 6.5 <em>shaos zmaniyos</em> into the day
 	 * mentioned above, or as half an hour <em>zmaniyos</em> based on the second half of the day after <em>chatzos</em> ({@link
 	 * #getSunTransit() astronomical <em>chatzos</em>} if supported by the {@link AstronomicalCalculator calculator} and {@link
 	 * #isUseAstronomicalChatzos() configured} or {@link #getChatzosAsHalfDay() <em>chatzos</em> as half a day} if not. This
 	 * method's synchronous parameter indicates if the start and end of day for the calculation are synchronous, having the same
 	 * offset. This is typically the case, but some <em>zmanim</em> calculations are based on a start and end at different offsets
-	 * from the real start and end of the day, such as starting the day at <em>alos</em> and an ending it at <em>tzais genoim</em>
+	 * from the real start and end of the day, such as starting the day at <em>alos</em> and an ending it at <em>tzais geonim</em>
 	 * or some other variant. If the day is not synchronous a {@link #getHalfDayBasedZman(Date, Date, double) half-day based
 	 * calculations} will be bypassed. It would be illogical to use a half-day based calculation that start/end at <em>chatzos</em>
 	 * when the two "halves" of the day are not equal, and the halfway point between them is not at <em>chatzos</em>.
@@ -706,7 +706,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A generic method for calculating <em>mincha gedola</em> that calls {@link #getMinchaGedola(Date, Date, boolean)} passing
-	 * <code>false</code> to the synchronous parameter since there is now way to know if the start and end of the day are
+	 * <code>false</code> to the synchronous parameter since there is no way to know if the start and end of the day are
 	 * synchronous. Passing true when they are not synchronous is too much of a risk. See information on that method for more
 	 * details.
 	 * @param startOfDay
@@ -733,7 +733,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * time one can pray <em>mincha</em>. The Ramba"m is of the opinion that it is better to delay <em>mincha</em> until
 	 * {@link #getMinchaKetana() <em>mincha ketana</em>} while the <em>Ra"sh, Tur, GRA</em> and others are of the
 	 * opinion that <em>mincha</em> can be prayed <em>lechatchila</em> starting at <em>mincha gedola</em>.
-	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
+	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level
 	 * sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
 	 * setting).
 	 * @todo Consider adjusting this to calculate the time as half an hour <em>zmaniyos</em> after either {@link
@@ -766,7 +766,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 
 	 * @param startOfDay
 	 *            the start of day for calculating <em>samuch lemincha ketana</em>. This can be sunrise or any <em>alos</em>
-	 *            passed to to this method.
+	 *            passed to this method.
 	 * @param endOfDay
 	 *            the end of day for calculating <em>samuch lemincha ketana</em>. This can be sunset or any <em>tzais</em>
 	 *            passed to this method.
@@ -793,11 +793,11 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A generic method for calculating <em>samuch lemincha ketana</em> that calls {@link #getSamuchLeMinchaKetana(Date, Date, boolean)}
-	 * passing <code>false</code> to the synchronous parameter since there is now way to know if the start and end of the day are 
+	 * passing <code>false</code> to the synchronous parameter since there is no way to know if the start and end of the day are 
 	 * synchronous. Passing true when they are not synchronous is too much of a risk. See information on that method for more details.
 	 * @param startOfDay
 	 *            the start of day for calculating <em>samuch lemincha ketana</em>. This can be sunrise or any <em>alos</em>
-	 *            passed to to this method.
+	 *            passed to this method.
 	 * @param endOfDay
 	 *            the end of day for calculating <em>samuch lemincha ketana</em>. This can be sunset or any <em>tzais</em>
 	 *            passed to this method.
@@ -821,10 +821,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * example, passing {@link #getSunrise() sunrise} and {@link #getSunset sunset} or {@link #getSeaLevelSunrise() sea
 	 * level sunrise} and {@link #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()}
 	 * elevation setting) to this method will return <em>mincha ketana</em> according to the opinion of the
-	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This method's synchronous parameter indicates ifthe start
+	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This method's synchronous parameter indicates if the start
 	 * and end of day for the calculation are synchronous, having the same offset. This is typically the case, but some
 	 * <em>zmanim</em> calculations are based on a start and end at different offsets from the real start and end of the day,
-	 * such as starting the day at <em>alos</em> and an ending it at <em>tzais genoim</em> or some other variant. If the day
+	 * such as starting the day at <em>alos</em> and an ending it at <em>tzais geonim</em> or some other variant. If the day
 	 * is not synchronous a {@link #getHalfDayBasedZman(Date, Date, double) half-day based calculations} will be bypassed.
 	 * It would be illogical to use a half-day based calculation that start/end at <em>chatzos</em> when the two "halves" of
 	 * the day are not equal, and the halfway point between them is not at <em>chatzos</em>.
@@ -854,7 +854,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A generic method for calculating <em>mincha ketana</em> that calls {@link #getMinchaKetana(Date, Date, boolean)} passing
-	 * <code>false</code> to the synchronous parameter since there is now way to know if the start and end of the day are synchronous.
+	 * <code>false</code> to the synchronous parameter since there is no way to know if the start and end of the day are synchronous.
 	 * Passing true when they are not synchronous is too much of a risk. See information on that method for more details.
 	 * @param startOfDay
 	 *            the start of day for calculating <em>Mincha ketana</em>. This can be sunrise or any <em>alos</em> passed
@@ -879,8 +879,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting), according
 	 * to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. For more information on this see the
 	 * documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}.
-	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
-	 * sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
+	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level
+	 * sunset} or from {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
 	 * setting.
 	 * 
 	 * @see #getMinchaKetana(Date, Date)
@@ -908,7 +908,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>. This method's synchronous parameter indicates if
 	 * the start and end of day for the calculation are synchronous, having the same offset. This is typically the case, but
 	 * some <em>zmanim</em> calculations are based on a start and end at different offsets from the real start and end of the
-	 * day, such as starting the day at <em>alos</em> and an ending it at <em>tzais genoim</em> or some other variant. If the
+	 * day, such as starting the day at <em>alos</em> and an ending it at <em>tzais geonim</em> or some other variant. If the
 	 * day is not synchronous a {@link #getHalfDayBasedZman(Date, Date, double) half-day based calculations} will be bypassed.
 	 * It would be illogical to use a half-day based calculation that start/end at <em>chatzos</em> when the two "halves" of
 	 * the day are not equal, and the halfway point between them is not at <em>chatzos</em>.
@@ -936,7 +936,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A generic method for calculating <em>plag hamincha</em> that calls {@link #getPlagHamincha(Date, Date, boolean)} passing
-	 * <code>false</code> to the synchronous parameter since there is now way to know if the start and end of the day are synchronous.
+	 * <code>false</code> to the synchronous parameter since there is no way to know if the start and end of the day are synchronous.
 	 * Passing true when they are not synchronous is too much of a risk. See information on that method for more details.
 	 * @param startOfDay
 	 *            the start of day for calculating plag. This can be sunrise or any <em>alos</em> passed to this method.
@@ -957,7 +957,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * (solar hours) after {@link #getSunrise() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on
 	 * the {@link #isUseElevation()} setting), according to the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon"
 	 * >GRA</a></em>. Plag hamincha is the earliest time that <em>Shabbos</em> can be started.
-	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunrise sea level
+	 * The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level
 	 * sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}
 	 * 
 	 * @see #getPlagHamincha(Date, Date, boolean)
@@ -975,7 +975,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * A method that returns a <em>shaah zmanis</em> ({@link #getTemporalHour(Date, Date) temporal hour}) according to
 	 * the opinion of the <em><a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a></em>. This calculation divides
-	 * the day based on the opinion of the <em>GRA</em> that the day runs from from {@link #getSeaLevelSunrise() sea
+	 * the day based on the opinion of the <em>GRA</em> that the day runs from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunrise sea level sunset} or {@link #getSunrise() sunrise} to
 	 * {@link #getSunset() sunset} (depending on the {@link #isUseElevation()} setting). The day is split into 12 equal
 	 * parts with each one being a <em>shaah zmanis</em>. This method is similar to {@link #getTemporalHour}, but can
@@ -996,7 +996,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 
 	/**
 	 * A method that returns a <em>shaah zmanis</em> (temporal hour) according to the opinion of the <em><a href=
-	 * "https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> based on a 72 minutes <em>alos</em>
+	 * "https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> based on 72 minutes <em>alos</em>
 	 * and <em>tzais</em>. This calculation divides the day that runs from dawn to dusk (for <em>sof zman krias shema</em> and
 	 * <em>tfila</em>). Dawn for this calculation is 72 minutes before {@link #getSunrise() sunrise} or {@link #getSeaLevelSunrise()
 	 * sea level sunrise} (depending on the {@link #isUseElevation()} elevation setting) and dusk is 72 minutes after {@link
@@ -1036,7 +1036,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * A method to get the offset in minutes before {@link AstronomicalCalendar#getSeaLevelSunset() sea level sunset} which
 	 * is used in calculating candle lighting time. The default time used is 18 minutes before sea level sunset. Some
-	 * calendars use 15 minutes, while the custom in Jerusalem is to use a 40 minute offset. Please check the local custom
+	 * calendars use 15 minutes, while the custom in Jerusalem is to use a 40-minute offset. Please check the local custom
 	 * for candle lighting time.
 	 * 
 	 * @return Returns the currently set candle lighting offset in minutes.
@@ -1050,7 +1050,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * A method to set the offset in minutes before {@link AstronomicalCalendar#getSeaLevelSunset() sea level sunset} that is
 	 * used in calculating candle lighting time. The default time used is 18 minutes before sunset. Some calendars use 15
-	 * minutes, while the custom in Jerusalem is to use a 40 minute offset.
+	 * minutes, while the custom in Jerusalem is to use a 40-minute offset.
 	 * 
 	 * @param candleLightingOffset
 	 *            The candle lighting offset to set in minutes.
@@ -1096,7 +1096,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 
 	/**
 	 * A generic utility method for calculating any <em>shaah zmanis</em> (temporal hour) based <em>zman</em> with the
-	 * day defined as the start and end of day (or night) and the number of <em>shaahos zmaniyos</em> passed to the
+	 * day defined as the start and end of day (or night) and the number of <em>shaos zmaniyos</em> passed to the
 	 * method. This simplifies the code in other methods such as {@link #getPlagHamincha(Date, Date)} and cuts down on
 	 * code replication. As an example, passing {@link #getSunrise() sunrise} and {@link #getSunset sunset} or {@link
 	 * #getSeaLevelSunrise() sea level sunrise} and {@link #getSeaLevelSunset() sea level sunset} (depending on the
@@ -1110,8 +1110,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *            the end of day for calculating the <em>zman</em>. This can be sunset or any <em>tzais</em> passed to
 	 *            this method.
 	 * @param hours
-	 *            the number of <em>shaahos zmaniyos</em> (temporal hours) to offset from the start of day
-	 * @return the <code>Date</code> of the time of <em>zman</em> with the <em>shaahos zmaniyos</em> (temporal hours)
+	 *            the number of <em>shaos zmaniyos</em> (temporal hours) to offset from the start of day
+	 * @return the <code>Date</code> of the time of <em>zman</em> with the <em>shaos zmaniyos</em> (temporal hours)
 	 *         in the day offset from the start of day passed to this method. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
 	 *         where it does not set, a <code>null</code> will be  returned. See detailed explanation on top of the
@@ -1170,7 +1170,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * second half of the day, from <em>chatzos</em> to sunset / <em>tzais</em>. Morning based times are calculated. based on the first
 	 * 6 hours of the day, and afternoon times based on the second half of the day. As an example, passing 0.5, a start of
 	 * <em>chatzos</em> and an end of day as sunset will return the time of <em>mincha gedola</em> GRA as half an hour <em>zmanis</em>
-	 * based on the second half of the day. Some <em>zmanim</em> calculations can be based on subtracting <em>sha'os zmaniyos</em>
+	 * based on the second half of the day. Some <em>zmanim</em> calculations can be based on subtracting <em>shaos zmaniyos</em>
 	 * from the end of the day, and that is supported by passing a negative hour to this method.
 	 * 
 	 * @param startOfHalfDay
@@ -1180,9 +1180,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *            The end of the half day. This would be <em>chatzos</em> for morning based times  such as <em>sof zman krias shema</em>
 	 *            and sunset or <em>tzais</em> for afternoon based times such as <em>mincha gedola</em>.
 	 * @param hours
-	 *            The number of <em>sha'os zmaniyos</em> (hours) to offset the beginning of the first or second half of the day. For example,
+	 *            The number of <em>shaos zmaniyos</em> (hours) to offset the beginning of the first or second half of the day. For example,
 	 *            3 for <em>sof zman Shma</em>, 0.5 for <em>mincha gedola</em> (half an hour after <em>chatzos</em>) and 4.75 for <em>plag
-	 *            hamincha</em>. If the number of hours is negative, it will subtract the number of <em>sha'os zmaniyos</em> from the end
+	 *            hamincha</em>. If the number of hours is negative, it will subtract the number of <em>shaos zmaniyos</em> from the end
 	 *            of the day.
 	 * 
 	 * @return the <code>Date</code> of <em>zman</em> based on calculation of the first or second half of the day. If the
@@ -1208,7 +1208,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
-	 * A utility method to calculate the length of a <em>sha'ah zmanis</em> based on 1/6 of a 6 hour day.
+	 * A utility method to calculate the length of a <em>sha'ah zmanis</em> based on 1/6 of a 6-hour day.
 	 * @param startOfHalfDay The start of the half-day. This would be <em>alos</em> or sunrise for the first half of the day,
 	 *            or <em>chatzos</em> for the second half of the day.
 	 * @param endOfHalfDay The end of the half-day. This would be <em>chatzos</em> for the first half of the day, or sunset or

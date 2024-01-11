@@ -516,7 +516,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of of <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
+	 * of <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
 	 * on earth.
 	 * 
 	 * @param julianCenturies
