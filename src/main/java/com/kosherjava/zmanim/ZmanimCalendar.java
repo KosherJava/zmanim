@@ -657,7 +657,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 
 	/**
-	 * A generic method for calculating <em>mincha gedola</em> (the earliest time to recite the <em>mincha1</em> prayers) that
+	 * A generic method for calculating <em>mincha gedola</em> (the earliest time to recite the <em>mincha</em> prayers) that
 	 * is 6.5 * <em>shaos zmaniyos</em> (temporal hours) after the start of the day, calculated using the start and end of the
 	 * day passed to this method. The time from the start of day to the end of day are divided into 12 <em>shaos zmaniyos</em>
 	 * (temporal hours), and <em>mincha gedola</em> is calculated as 6.5 of those <em>shaos zmaniyos</em> after the beginning
