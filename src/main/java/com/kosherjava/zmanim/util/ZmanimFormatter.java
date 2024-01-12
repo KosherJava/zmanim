@@ -54,17 +54,17 @@ public class ZmanimFormatter {
 	/**
 	 * the formatter for minutes as seconds.
 	 */
-	private static DecimalFormat minuteSecondNF = new DecimalFormat("00");
+	private static final DecimalFormat minuteSecondNF = new DecimalFormat("00");
 
 	/**
 	 * the formatter for hours.
 	 */
-	private DecimalFormat hourNF;
+	private final DecimalFormat hourNF;
 
 	/**
 	 * the formatter for minutes as milliseconds.
 	 */
-	private static DecimalFormat milliNF = new DecimalFormat("000");
+	private static final DecimalFormat milliNF = new DecimalFormat("000");
 
 	/**
 	 * @see #setDateFormat(SimpleDateFormat)
@@ -320,7 +320,7 @@ public class ZmanimFormatter {
 			// In a few cases, the time zone may be +/-hh:30.
 			int min = offset % (60 * 60 * 1000);
 			char posneg = hrs < 0 ? '-' : '+';
-			sb.append(posneg + formatDigits(hrs) + ':' + formatDigits(min));
+			sb.append(posneg).append(formatDigits(hrs)).append(':').append(formatDigits(min));
 		}
 		return sb.toString();
 	}
@@ -362,13 +362,13 @@ public class ZmanimFormatter {
 			duration.append("T");
 
 			if (time.getHours() != 0)
-				duration.append(time.getHours() + "H");
+				duration.append(time.getHours()).append("H");
 
 			if (time.getMinutes() != 0)
-				duration.append(time.getMinutes() + "M");
+				duration.append(time.getMinutes()).append("M");
 
 			if (time.getSeconds() != 0 || time.getMilliseconds() != 0) {
-				duration.append(time.getSeconds() + "." + milliNF.format(time.getMilliseconds()));
+				duration.append(time.getSeconds()).append(".").append(milliNF.format(time.getMilliseconds()));
 				duration.append("S");
 			}
 			if (duration.length() == 1) // zero seconds
@@ -422,22 +422,26 @@ public class ZmanimFormatter {
 		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
 
 		StringBuilder sb = new StringBuilder("<");
-		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
-			sb.append("AstronomicalTimes");
-			// TODO: use proper schema ref, and maybe build a real schema.
-			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
-			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim astronomical.xsd"
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
-			sb.append("Zmanim");
-			// TODO: use proper schema ref, and maybe build a real schema.
-			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
-			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim zmanim.xsd"
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
-			sb.append("BasicZmanim");
-			// TODO: use proper schema ref, and maybe build a real schema.
-			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
-			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
-		}
+        switch (astronomicalCalendar.getClass().getName()) {
+            case "com.kosherjava.zmanim.AstronomicalCalendar":
+                sb.append("AstronomicalTimes");
+                // TODO: use proper schema ref, and maybe build a real schema.
+                // output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+                // output += xsi:schemaLocation="http://www.kosherjava.com/zmanim astronomical.xsd"
+                break;
+            case "com.kosherjava.zmanim.ComplexZmanimCalendar":
+                sb.append("Zmanim");
+                // TODO: use proper schema ref, and maybe build a real schema.
+                // output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+                // output += xsi:schemaLocation="http://www.kosherjava.com/zmanim zmanim.xsd"
+                break;
+            case "com.kosherjava.zmanim.ZmanimCalendar":
+                sb.append("BasicZmanim");
+                // TODO: use proper schema ref, and maybe build a real schema.
+                // output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+                // output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
+                break;
+        }
 		sb.append(" date=\"").append(df.format(date)).append("\"");
 		sb.append(" type=\"").append(astronomicalCalendar.getClass().getName()).append("\"");
 		sb.append(" algorithm=\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\"");
@@ -454,67 +458,68 @@ public class ZmanimFormatter {
 		sb.append(">\n");
 
 		Method[] theMethods = astronomicalCalendar.getClass().getMethods();
-		String tagName = "";
-		Object value = null;
-		List<Zman> dateList = new ArrayList<Zman>();
-		List<Zman> durationList = new ArrayList<Zman>();
-		List<String> otherList = new ArrayList<String>();
-		for (int i = 0; i < theMethods.length; i++) {
-			if (includeMethod(theMethods[i])) {
-				tagName = theMethods[i].getName().substring(3);
-				// String returnType = theMethods[i].getReturnType().getName();
-				try {
-					value = theMethods[i].invoke(astronomicalCalendar, (Object[]) null);
-					if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
-						otherList.add("<" + tagName + ">N/A</" + tagName + ">");
-						// TODO: instead of N/A, consider return proper xs:nil.
-						// otherList.add("<" + tagName + " xs:nil=\"true\" />");
-					} else if (value instanceof Date) {
-						dateList.add(new Zman((Date) value, tagName));
-					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
-						if (((Long) value).longValue() == Long.MIN_VALUE) {
-							otherList.add("<" + tagName + ">N/A</" + tagName + ">");
-							// TODO: instead of N/A, consider return proper xs:nil.
-							// otherList.add("<" + tagName + " xs:nil=\"true\" />");
-						} else {
-							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
-						}
-					} else { // will probably never enter this block, but is present to be future proof
-						otherList.add("<" + tagName + ">" + value + "</" + tagName + ">");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		Zman zman;
-		Collections.sort(dateList, Zman.DATE_ORDER);
+		String tagName;
+		Object value;
+		List<Zman> dateList = new ArrayList<>();
+		List<Zman> durationList = new ArrayList<>();
+		List<String> otherList = new ArrayList<>();
+        for (Method theMethod : theMethods) {
+            if (includeMethod(theMethod)) {
+                tagName = theMethod.getName().substring(3);
+                // String returnType = theMethods[i].getReturnType().getName();
+                try {
+                    value = theMethod.invoke(astronomicalCalendar, (Object[]) null);
+                    if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
+                        otherList.add("<" + tagName + ">N/A</" + tagName + ">");
+                        // TODO: instead of N/A, consider return proper xs:nil.
+                        // otherList.add("<" + tagName + " xs:nil=\"true\" />");
+                    } else if (value instanceof Date) {
+                        dateList.add(new Zman((Date) value, tagName));
+                    } else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
+                        if (((Long) value).longValue() == Long.MIN_VALUE) {
+                            otherList.add("<" + tagName + ">N/A</" + tagName + ">");
+                            // TODO: instead of N/A, consider return proper xs:nil.
+                            // otherList.add("<" + tagName + " xs:nil=\"true\" />");
+                        } else {
+                            durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
+                        }
+                    } else { // will probably never enter this block, but is present to be future proof
+                        otherList.add("<" + tagName + ">" + value + "</" + tagName + ">");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+		dateList.sort(Zman.DATE_ORDER);
 
-		for (int i = 0; i < dateList.size(); i++) {
-			zman = (Zman) dateList.get(i);
-			sb.append("\t<").append(zman.getLabel()).append(">");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
-			sb.append("</").append(zman.getLabel()).append(">\n");
-		}
-		Collections.sort(durationList, Zman.DURATION_ORDER);
-		for (int i = 0; i < durationList.size(); i++) {
-			zman = (Zman) durationList.get(i);
-			sb.append("\t<" + zman.getLabel()).append(">");
-			sb.append(formatter.format((int) zman.getDuration())).append("</").append(zman.getLabel())
-					.append(">\n");
-		}
+        for (Zman zman : dateList) {
+            sb.append("\t<").append(zman.getLabel()).append(">");
+            sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
+            sb.append("</").append(zman.getLabel()).append(">\n");
+        }
+		durationList.sort(Zman.DURATION_ORDER);
+        for (Zman zman : durationList) {
+            sb.append("\t<").append(zman.getLabel()).append(">");
+            sb.append(formatter.format((int) zman.getDuration())).append("</").append(zman.getLabel())
+                    .append(">\n");
+        }
 
-		for (int i = 0; i < otherList.size(); i++) {// will probably never enter this block
-			sb.append("\t").append(otherList.get(i)).append("\n");
-		}
+        for (String s : otherList) {// will probably never enter this block
+            sb.append("\t").append(s).append("\n");
+        }
 
-		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
-			sb.append("</AstronomicalTimes>");
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
-			sb.append("</Zmanim>");
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
-			sb.append("</BasicZmanim>");
-		}
+        switch (astronomicalCalendar.getClass().getName()) {
+            case "com.kosherjava.zmanim.AstronomicalCalendar":
+                sb.append("</AstronomicalTimes>");
+                break;
+            case "com.kosherjava.zmanim.ComplexZmanimCalendar":
+                sb.append("</Zmanim>");
+                break;
+            case "com.kosherjava.zmanim.ZmanimCalendar":
+                sb.append("</BasicZmanim>");
+                break;
+        }
 		return sb.toString();
 	}
 	
@@ -596,63 +601,64 @@ public class ZmanimFormatter {
 				.append("\"");
 
 		sb.append("},\n\"");
-		
-		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
-			sb.append("AstronomicalTimes");
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
-			sb.append("Zmanim");
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
-			sb.append("BasicZmanim");
-		}
+
+        switch (astronomicalCalendar.getClass().getName()) {
+            case "com.kosherjava.zmanim.AstronomicalCalendar":
+                sb.append("AstronomicalTimes");
+                break;
+            case "com.kosherjava.zmanim.ComplexZmanimCalendar":
+                sb.append("Zmanim");
+                break;
+            case "com.kosherjava.zmanim.ZmanimCalendar":
+                sb.append("BasicZmanim");
+                break;
+        }
 		sb.append("\":{\n");
 		Method[] theMethods = astronomicalCalendar.getClass().getMethods();
-		String tagName = "";
-		Object value = null;
-		List<Zman> dateList = new ArrayList<Zman>();
-		List<Zman> durationList = new ArrayList<Zman>();
-		List<String> otherList = new ArrayList<String>();
-		for (int i = 0; i < theMethods.length; i++) {
-			if (includeMethod(theMethods[i])) {
-				tagName = theMethods[i].getName().substring(3);
-				// String returnType = theMethods[i].getReturnType().getName();
-				try {
-					value = theMethods[i].invoke(astronomicalCalendar, (Object[]) null);
-					if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
-						otherList.add("\"" + tagName + "\":\"N/A\",");
-					} else if (value instanceof Date) {
-						dateList.add(new Zman((Date) value, tagName));
-					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
-						if (((Long) value).longValue() == Long.MIN_VALUE) {
-							otherList.add("\"" + tagName + "\":\"N/A\"");
-						} else {
-							durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
-						}
-					} else { // will probably never enter this block, but is present to be future proof
-						otherList.add("\"" + tagName + "\":\"" + value + "\",");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		Zman zman;
-		Collections.sort(dateList, Zman.DATE_ORDER);
-		for (int i = 0; i < dateList.size(); i++) {
-			zman = (Zman) dateList.get(i);
-			sb.append("\t\"").append(zman.getLabel()).append("\":\"");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
-			sb.append("\",\n");
-		}
-		Collections.sort(durationList, Zman.DURATION_ORDER);
-		for (int i = 0; i < durationList.size(); i++) {
-			zman = (Zman) durationList.get(i);
-			sb.append("\t\"" + zman.getLabel()).append("\":\"");
-			sb.append(formatter.format((int) zman.getDuration())).append("\",\n");
-		}
+		String tagName;
+		Object value;
+		List<Zman> dateList = new ArrayList<>();
+		List<Zman> durationList = new ArrayList<>();
+		List<String> otherList = new ArrayList<>();
+        for (Method theMethod : theMethods) {
+            if (includeMethod(theMethod)) {
+                tagName = theMethod.getName().substring(3);
+                // String returnType = theMethods[i].getReturnType().getName();
+                try {
+                    value = theMethod.invoke(astronomicalCalendar, (Object[]) null);
+                    if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
+                        otherList.add("\"" + tagName + "\":\"N/A\",");
+                    } else if (value instanceof Date) {
+                        dateList.add(new Zman((Date) value, tagName));
+                    } else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
+                        if (((Long) value).longValue() == Long.MIN_VALUE) {
+                            otherList.add("\"" + tagName + "\":\"N/A\"");
+                        } else {
+                            durationList.add(new Zman((int) ((Long) value).longValue(), tagName));
+                        }
+                    } else { // will probably never enter this block, but is present to be future proof
+                        otherList.add("\"" + tagName + "\":\"" + value + "\",");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+		dateList.sort(Zman.DATE_ORDER);
+        for (Zman zman : dateList) {
+            sb.append("\t\"").append(zman.getLabel()).append("\":\"");
+            sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
+            sb.append("\",\n");
+        }
+		durationList.sort(Zman.DURATION_ORDER);
+        for (Zman zman : durationList) {
+            sb.append("\t\"").append(zman.getLabel()).append("\":\"");
+            sb.append(formatter.format((int) zman.getDuration())).append("\",\n");
+        }
 
-		for (int i = 0; i < otherList.size(); i++) {// will probably never enter this block
-			sb.append("\t").append(otherList.get(i)).append("\n");
-		}
+        for (String s : otherList) {// will probably never enter this block
+            sb.append("\t").append(s).append("\n");
+        }
 		sb.setLength(sb.length() - 2);
 		sb.append("}\n}");
 		return sb.toString();
@@ -665,10 +671,10 @@ public class ZmanimFormatter {
 	 * @return if the method should be included in serialization
 	 */
 	private static boolean includeMethod(Method method) {
-		List<String> methodWhiteList = new ArrayList<String>();
+		List<String> methodWhiteList = new ArrayList<>();
 		// methodWhiteList.add("getName");
 
-		List<String> methodBlackList = new ArrayList<String>();
+		List<String> methodBlackList = new ArrayList<>();
 		// methodBlackList.add("getGregorianChange");
 
 		if (methodWhiteList.contains(method.getName()))
@@ -681,9 +687,6 @@ public class ZmanimFormatter {
 		if (!method.getName().startsWith("get"))
 			return false;
 
-		if (method.getReturnType().getName().endsWith("Date") || method.getReturnType().getName().endsWith("long")) {
-			return true;
-		}
-		return false;
-	}
+        return method.getReturnType().getName().endsWith("Date") || method.getReturnType().getName().endsWith("long");
+    }
 }

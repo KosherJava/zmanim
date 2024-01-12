@@ -15,6 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -432,7 +433,7 @@ public class GeoLocation implements Cloneable {
 		double sinSigma = 0;
 		double cosSigma = 0;
 		double sigma = 0;
-		double sinAlpha = 0;
+		double sinAlpha;
 		double cosSqAlpha = 0;
 		double cos2SigmaM = 0;
 		double C;
@@ -549,20 +550,18 @@ public class GeoLocation implements Cloneable {
 	 * @return The XML formatted <code>String</code>.
 	 */
 	public String toXML() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<GeoLocation>\n");
-		sb.append("\t<LocationName>").append(getLocationName()).append("</LocationName>\n");
-		sb.append("\t<Latitude>").append(getLatitude()).append("</Latitude>\n");
-		sb.append("\t<Longitude>").append(getLongitude()).append("</Longitude>\n");
-		sb.append("\t<Elevation>").append(getElevation()).append(" Meters").append("</Elevation>\n");
-		sb.append("\t<TimezoneName>").append(getTimeZone().getID()).append("</TimezoneName>\n");
-		sb.append("\t<TimeZoneDisplayName>").append(getTimeZone().getDisplayName()).append("</TimeZoneDisplayName>\n");
-		sb.append("\t<TimezoneGMTOffset>").append(getTimeZone().getRawOffset() / HOUR_MILLIS)
-				.append("</TimezoneGMTOffset>\n");
-		sb.append("\t<TimezoneDSTOffset>").append(getTimeZone().getDSTSavings() / HOUR_MILLIS)
-				.append("</TimezoneDSTOffset>\n");
-		sb.append("</GeoLocation>");
-		return sb.toString();
+        return "<GeoLocation>\n" +
+                "\t<LocationName>" + getLocationName() + "</LocationName>\n" +
+                "\t<Latitude>" + getLatitude() + "</Latitude>\n" +
+                "\t<Longitude>" + getLongitude() + "</Longitude>\n" +
+                "\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
+                "\t<TimezoneName>" + getTimeZone().getID() + "</TimezoneName>\n" +
+                "\t<TimeZoneDisplayName>" + getTimeZone().getDisplayName() + "</TimeZoneDisplayName>\n" +
+                "\t<TimezoneGMTOffset>" + getTimeZone().getRawOffset() / HOUR_MILLIS +
+                "</TimezoneGMTOffset>\n" +
+                "\t<TimezoneDSTOffset>" + getTimeZone().getDSTSavings() / HOUR_MILLIS +
+                "</TimezoneDSTOffset>\n" +
+                "</GeoLocation>";
 	}
 
 	/**
@@ -577,8 +576,8 @@ public class GeoLocation implements Cloneable {
 		return Double.doubleToLongBits(this.latitude) == Double.doubleToLongBits(geo.latitude)
 				&& Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(geo.longitude)
 				&& this.elevation == geo.elevation
-				&& (this.locationName == null ? geo.locationName == null : this.locationName.equals(geo.locationName))
-				&& (this.timeZone == null ? geo.timeZone == null : this.timeZone.equals(geo.timeZone));
+				&& (Objects.equals(this.locationName, geo.locationName))
+				&& (Objects.equals(this.timeZone, geo.timeZone));
 	}
 
 	/**
@@ -606,17 +605,15 @@ public class GeoLocation implements Cloneable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\nLocation Name:\t\t\t").append(getLocationName());
-		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("\u00B0");
-		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("\u00B0");
-		sb.append("\nElevation:\t\t\t").append(getElevation()).append(" Meters");
-		sb.append("\nTimezone ID:\t\t\t").append(getTimeZone().getID());
-		sb.append("\nTimezone Display Name:\t\t").append(getTimeZone().getDisplayName())
-				.append(" (").append(getTimeZone().getDisplayName(false, TimeZone.SHORT)).append(")");
-		sb.append("\nTimezone GMT Offset:\t\t").append(getTimeZone().getRawOffset() / HOUR_MILLIS);
-		sb.append("\nTimezone DST Offset:\t\t").append(getTimeZone().getDSTSavings() / HOUR_MILLIS);
-		return sb.toString();
+        return "\nLocation Name:\t\t\t" + getLocationName() +
+                "\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
+                "\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
+                "\nElevation:\t\t\t" + getElevation() + " Meters" +
+                "\nTimezone ID:\t\t\t" + getTimeZone().getID() +
+                "\nTimezone Display Name:\t\t" + getTimeZone().getDisplayName() +
+                " (" + getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")" +
+                "\nTimezone GMT Offset:\t\t" + getTimeZone().getRawOffset() / HOUR_MILLIS +
+                "\nTimezone DST Offset:\t\t" + getTimeZone().getDSTSavings() / HOUR_MILLIS;
 	}
 
 	/**
@@ -637,8 +634,10 @@ public class GeoLocation implements Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			//Required by the compiler. Should never be reached since we implement clone()
 		}
-		clone.timeZone = (TimeZone) getTimeZone().clone();
-		clone.locationName = getLocationName();
+        if (clone != null) {
+			clone.timeZone = (TimeZone) getTimeZone().clone();
+			clone.locationName = getLocationName();
+		}
 		return clone;
 	}
 }

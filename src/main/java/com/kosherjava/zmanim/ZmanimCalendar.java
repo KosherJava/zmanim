@@ -266,7 +266,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see com.kosherjava.zmanim.AstronomicalCalendar#getSunrise()
 	 */
 	protected Date getElevationAdjustedSunrise() {
-		if(isUseElevation()) {
+		if (isUseElevation()) {
 			return super.getSunrise();
 		}
 		return getSeaLevelSunrise();
@@ -282,7 +282,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see com.kosherjava.zmanim.AstronomicalCalendar#getSunset()
 	 */
 	protected Date getElevationAdjustedSunset() {
-		if(isUseElevation()) {
+		if (isUseElevation()) {
 			return super.getSunset();
 		}
 		return getSeaLevelSunset();
@@ -370,11 +370,11 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getChatzos() {
-		if(useAstronomicalChatzos) {
+		if (useAstronomicalChatzos) {
 			return getSunTransit(); // can be null of the calculator does not support astronomical chatzos
 		} else {
 			Date halfDayChatzos = getChatzosAsHalfDay();
-			if(halfDayChatzos == null) {
+			if (halfDayChatzos == null) {
 				return getSunTransit(); // can be null if the calculator does not support astronomical chatzos
 			} else {
 				return halfDayChatzos;
@@ -447,7 +447,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getSofZmanShma(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(startOfDay, getChatzos(), 3);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 3);
@@ -588,7 +588,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getSofZmanTfila(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(startOfDay, getChatzos(), 4);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 4);
@@ -697,7 +697,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
 	 */
 	public Date getMinchaGedola(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(getChatzos(), endOfDay, 0.5);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 6.5);
@@ -784,7 +784,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see ComplexZmanimCalendar#getSamuchLeMinchaKetana72Minutes()
 	 */
 	public Date getSamuchLeMinchaKetana(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(getChatzos(), endOfDay, 3);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 9);
@@ -845,7 +845,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaKetana(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(getChatzos(), endOfDay, 3.5);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 9.5);
@@ -927,7 +927,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getPlagHamincha(Date startOfDay, Date endOfDay, boolean synchronous) {
-		if(isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
 			return getHalfDayBasedZman(getChatzos(), endOfDay, 4.75);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 10.75);
@@ -1083,16 +1083,12 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 				getCalendar().get(Calendar.DAY_OF_MONTH));
 		jewishCalendar.setInIsrael(inIsrael);
 		
-		if(jewishCalendar.hasCandleLighting() && currentTime.compareTo(getElevationAdjustedSunset()) >= 0) { //erev shabbos, YT or YT sheni and after shkiah
+		if (jewishCalendar.hasCandleLighting() && currentTime.compareTo(getElevationAdjustedSunset()) >= 0) { //erev shabbos, YT or YT sheni and after shkiah
 			return true;
 		}
-		
-		if(jewishCalendar.isAssurBemelacha()  && currentTime.compareTo(tzais) <= 0) { //is shabbos or YT and it is before tzais
-			return true;
-		}
-		
-		return false;
-	}
+        //is shabbos or YT and it is before tzais
+        return jewishCalendar.isAssurBemelacha() && currentTime.compareTo(tzais) <= 0;
+    }
 
 	/**
 	 * A generic utility method for calculating any <em>shaah zmanis</em> (temporal hour) based <em>zman</em> with the
@@ -1143,18 +1139,18 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public double getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset) {
 		Date seaLevelSunrise = getSeaLevelSunrise();
 		Date seaLevelSunset = getSeaLevelSunset();
-		Date twilight = null;
-		if(sunset) {
+		Date twilight;
+		if (sunset) {
 			twilight = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
 		} else {
 			twilight = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
 		}
-		if(seaLevelSunrise == null || seaLevelSunset == null || twilight == null) {
+		if (seaLevelSunrise == null || seaLevelSunset == null || twilight == null) {
 			return Double.MIN_VALUE;
 		}
 		double shaahZmanis = (seaLevelSunset.getTime() - seaLevelSunrise.getTime()) / 12.0;
 		long riseSetToTwilight;
-		if(sunset) {
+		if (sunset) {
 			riseSetToTwilight = twilight.getTime() - seaLevelSunset.getTime();
 		} else {
 			riseSetToTwilight = seaLevelSunrise.getTime() - twilight.getTime();
@@ -1197,10 +1193,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 			return null;
 		}
 		long shaahZmanis = getHalfDayBasedShaahZmanis(startOfHalfDay, endOfHalfDay);
-		if(shaahZmanis == Long.MIN_VALUE) { //defensive, should not be needed
+		if (shaahZmanis == Long.MIN_VALUE) { //defensive, should not be needed
 			return null;
 		}
-		if(hours >= 0) { // forward from start a day
+		if (hours >= 0) { // forward from start a day
 			return getTimeOffset(startOfHalfDay, shaahZmanis * hours);
 		} else { // subtract from end of day
 			return getTimeOffset(endOfHalfDay, shaahZmanis * hours);

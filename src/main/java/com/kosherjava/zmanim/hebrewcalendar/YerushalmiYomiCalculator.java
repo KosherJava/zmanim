@@ -95,15 +95,15 @@ public class YerushalmiYomiCalculator {
 		int total = dafNo - specialDays;
 				
 		// Finally find the daf.
-		for (int j = 0; j < BLATT_PER_MASECHTA.length; j++) {
-			
-			if (total < BLATT_PER_MASECHTA[j]) {
-				dafYomi = new Daf(masechta, total + 1);
-				break;
-			}
-			total -= BLATT_PER_MASECHTA[j];
-			masechta++;
-		}
+        for (int i : BLATT_PER_MASECHTA) {
+
+            if (total < i) {
+                dafYomi = new Daf(masechta, total + 1);
+                break;
+            }
+            total -= i;
+            masechta++;
+        }
 
 		return dafYomi;
 	}

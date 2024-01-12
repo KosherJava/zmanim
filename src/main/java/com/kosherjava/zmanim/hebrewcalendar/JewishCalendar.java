@@ -177,7 +177,7 @@ public class JewishCalendar extends JewishDate {
 	 * @see #getSpecialShabbos()
 	 * @see #getParshah()
 	 */
-	public static enum Parsha {
+	public enum Parsha {
 		/**NONE A week without any <em>parsha</em> such as <em>Shabbos Chol Hamoed</em> */NONE,
 		/**BERESHIS*/BERESHIS, /**NOACH*/NOACH, /**LECH_LECHA*/LECH_LECHA, /**VAYERA*/VAYERA, /**CHAYEI_SARA*/CHAYEI_SARA, /**TOLDOS*/TOLDOS, 
 		/**VAYETZEI*/VAYETZEI, /**VAYISHLACH*/VAYISHLACH, /**VAYESHEV*/VAYESHEV, /**MIKETZ*/MIKETZ, /**VAYIGASH*/VAYIGASH, /**VAYECHI*/VAYECHI,
@@ -194,7 +194,7 @@ public class JewishCalendar extends JewishDate {
 		 /**The special <em>parsha</em> of Shekalim*/SHKALIM, /** The special <em>parsha</em> of Zachor*/ZACHOR, /**The special <em>parsha</em> of
 		  * Para*/PARA, /** The special <em>parsha</em> of Hachodesh*/HACHODESH, /**<em>Shabbos</em> Shuva*/SHUVA, /**<em>Shabbos</em> Shira*/SHIRA, 
 		  /**<em>Shabbos</em> Hagadol*/HAGADOL, /**<em>Shabbos</em> Chazon*/CHAZON, /**<em>Shabbos</em> Nachamu*/NACHAMU
-	};
+	}
 	
 	/**
 	 * An array of <em>parshiyos</em> in the 17 possible combinations.
@@ -387,11 +387,9 @@ public class JewishCalendar extends JewishDate {
 		 * Rosh Hashana as 1, we have to add 1 day for a total of 171. To this add a day since the tekufah is on a Tuesday
 		 * night and we push off the bracha to Wednesday AM resulting in the 172 used in the calculation.
 		 */
-		if (elapsedDays % (28 * 365.25) == 172) { // 28 years of 365.25 days + the offset from molad tohu mentioned above
-			return true;
-		}
-		return false;
-	}
+        // 28 years of 365.25 days + the offset from molad tohu mentioned above
+        return elapsedDays % (28 * 365.25) == 172;
+    }
 
 	/**
 	 * Return the type of year for <em>parsha</em> calculations. The algorithm follows the
@@ -564,28 +562,28 @@ public class JewishCalendar extends JewishDate {
 				}
 			}
 			if (getJewishMonth() == NISSAN) {
-				if(getJewishDayOfMonth() == 1) {
+				if (getJewishDayOfMonth() == 1) {
 					return Parsha.HACHODESH;
 				}
-				if(getJewishDayOfMonth() >= 8 && getJewishDayOfMonth() <= 14) {
+				if (getJewishDayOfMonth() >= 8 && getJewishDayOfMonth() <= 14) {
 					return Parsha.HAGADOL;
 				}
 			}
 			if (getJewishMonth() == AV) {
-				if(getJewishDayOfMonth() >= 4 && getJewishDayOfMonth() <= 9) {
+				if (getJewishDayOfMonth() >= 4 && getJewishDayOfMonth() <= 9) {
 					return Parsha.CHAZON;
 				}
-				if(getJewishDayOfMonth() >= 10 && getJewishDayOfMonth() <= 16) {
+				if (getJewishDayOfMonth() >= 10 && getJewishDayOfMonth() <= 16) {
 					return Parsha.NACHAMU;
 				}
 			}
 			if (getJewishMonth() == TISHREI) {
-				if(getJewishDayOfMonth() >= 3 && getJewishDayOfMonth() <= 8) {
+				if (getJewishDayOfMonth() >= 3 && getJewishDayOfMonth() <= 8) {
 					return Parsha.SHUVA;
 				}
 				
 			}
-			if(getParshah() == Parsha.BESHALACH) {
+			if (getParshah() == Parsha.BESHALACH) {
 				return Parsha.SHIRA;
 			}
 		}
@@ -607,6 +605,9 @@ public class JewishCalendar extends JewishDate {
 		final int day = getJewishDayOfMonth();
 		final int dayOfWeek = getDayOfWeek();
 
+		boolean fastOfEsther = ((day == 11 || day == 12) && dayOfWeek == Calendar.THURSDAY)
+				|| (day == 13 && !(dayOfWeek == Calendar.FRIDAY || dayOfWeek == Calendar.SATURDAY));
+
 		// check by month (starting from Nissan)
 		switch (getJewishMonth()) {
 		case NISSAN:
@@ -617,11 +618,10 @@ public class JewishCalendar extends JewishDate {
 					|| (!inIsrael && (day == 16 || day == 22))) {
 				return PESACH;
 			}
-			if (day >= 17 && day <= 20
-					|| (day == 16 && inIsrael)) {
+			if (day >= 17 && day <= 20 || day == 16) {
 				return CHOL_HAMOED_PESACH;
 			}
-			if ((day == 22 && inIsrael) || (day == 23 && !inIsrael)) {
+			if (day == 22 || day == 23 && !inIsrael) {
 				return ISRU_CHAG;
 			}
 			if (isUseModernHolidays()
@@ -661,7 +661,7 @@ public class JewishCalendar extends JewishDate {
 			if (day == 6 || (day == 7 && !inIsrael)) {
 				return SHAVUOS;
 			}
-			if ((day == 7 && inIsrael) || (day == 8 && !inIsrael)) {
+			if (day == 7 || day == 8 && !inIsrael) {
 				return ISRU_CHAG;
 			}
 			break;
@@ -707,7 +707,7 @@ public class JewishCalendar extends JewishDate {
 			if (day == 15 || (day == 16 && !inIsrael)) {
 				return SUCCOS;
 			}
-			if (day >= 17 && day <= 20 || (day == 16 && inIsrael)) {
+			if (day >= 17 && day <= 20 || day == 16) {
 				return CHOL_HAMOED_SUCCOS;
 			}
 			if (day == 21) {
@@ -719,7 +719,7 @@ public class JewishCalendar extends JewishDate {
 			if (day == 23 && !inIsrael) {
 				return SIMCHAS_TORAH;
 			}
-			if ((day == 23 && inIsrael) || (day == 24 && !inIsrael)) {
+			if (day == 23 || day == 24 && !inIsrael) {
 				return ISRU_CHAG;
 			}
 			break;
@@ -748,8 +748,7 @@ public class JewishCalendar extends JewishDate {
 		case ADAR:
 			if (!isJewishLeapYear()) {
 				// if 13th Adar falls on Friday or Shabbos, push back to Thursday
-				if (((day == 11 || day == 12) && dayOfWeek == Calendar.THURSDAY)
-						|| (day == 13 && !(dayOfWeek == Calendar.FRIDAY || dayOfWeek == Calendar.SATURDAY))) {
+				if (fastOfEsther) {
 					return FAST_OF_ESTHER;
 				}
 				if (day == 14) {
@@ -769,8 +768,7 @@ public class JewishCalendar extends JewishDate {
 			break;
 		case ADAR_II:
 			// if 13th Adar falls on Friday or Shabbos, push back to Thursday
-			if (((day == 11 || day == 12) && dayOfWeek == Calendar.THURSDAY)
-					|| (day == 13 && !(dayOfWeek == Calendar.FRIDAY || dayOfWeek == Calendar.SATURDAY))) {
+			if (fastOfEsther) {
 				return FAST_OF_ESTHER;
 			}
 			if (day == 14) {
@@ -1061,19 +1059,16 @@ public class JewishCalendar extends JewishDate {
 		int dayOfWeek = getDayOfWeek();
 		int month = getJewishMonth();
 		int day = getJewishDayOfMonth();
-		if(month == JewishDate.ELUL || month == JewishDate.TISHREI || month == JewishDate.KISLEV || month == JewishDate.NISSAN) {
+		if (month == JewishDate.ELUL || month == JewishDate.TISHREI || month == JewishDate.KISLEV || month == JewishDate.NISSAN) {
 			return false;
 		}
 
-		if(day == 29 && dayOfWeek != Calendar.FRIDAY && dayOfWeek != Calendar.SATURDAY) {
+		if (day == 29 && dayOfWeek != Calendar.FRIDAY && dayOfWeek != Calendar.SATURDAY) {
 			return true;
 		}
-		
-		if((day == 27 || day == 28) && dayOfWeek == Calendar.THURSDAY ) {
-			return true;
-		}
-		return false;
-	}
+
+        return (day == 27 || day == 28) && dayOfWeek == Calendar.THURSDAY;
+    }
 	
 	/**
 	 * The Monday, Thursday and Monday after the first <em>Shabbos</em> after {@link #isRoshChodesh() <em>Rosh Chodesh</em>}
@@ -1090,10 +1085,8 @@ public class JewishCalendar extends JewishDate {
 		int day = getJewishDayOfMonth();
 		
 		if (month == JewishDate.CHESHVAN || month == JewishDate.IYAR) {
-			if((dayOfWeek == Calendar.MONDAY && day > 4 && day < 18)
-					|| (dayOfWeek == Calendar.THURSDAY && day > 7 && day < 14)) {
-				return true;
-			}
+            return (dayOfWeek == Calendar.MONDAY && day > 4 && day < 18)
+                    || (dayOfWeek == Calendar.THURSDAY && day > 7 && day < 14);
 		}
 		return false;
 	}
@@ -1163,7 +1156,7 @@ public class JewishCalendar extends JewishDate {
 	 * @see #setIsMukafChoma(boolean)
 	 */
 	public boolean isPurim() {
-		if(isMukafChoma) {
+		if (isMukafChoma) {
 			return getYomTovIndex() == SHUSHAN_PURIM;
 		} else {
 			return getYomTovIndex() == PURIM;
@@ -1427,9 +1420,7 @@ public class JewishCalendar extends JewishDate {
 	public boolean isVeseinTalUmatarStartDate() {
 		if (inIsrael) {
 			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
-			if (getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7) {
-				return true;
-			}
+            return getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7;
 		} else {
 			if (getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
 				return false;
@@ -1439,9 +1430,8 @@ public class JewishCalendar extends JewishDate {
 			} else {
 				return getTekufasTishreiElapsedDays() == 47;
 			}
-		}
-		return false; // keep the compiler happy
-	}
+		}// keep the compiler happy
+    }
 	
 	/**
 	 * Returns true if tonight is the first night to start reciting <em>Vesein Tal Umatar Livracha</em> (
@@ -1464,9 +1454,7 @@ public class JewishCalendar extends JewishDate {
 	public boolean isVeseinTalUmatarStartingTonight() {
 		if (inIsrael) {
 			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
-			if (getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 6) {
-					return true;
-			}
+            return getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 6;
 		} else {
 			if (getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
 				return false;
@@ -1477,8 +1465,7 @@ public class JewishCalendar extends JewishDate {
 				return getTekufasTishreiElapsedDays() == 46;
 			}
 		}
-		return false;
-	}
+    }
 
 	/**
 	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return

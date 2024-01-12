@@ -116,13 +116,13 @@ public class HebrewDateFormatter {
 	 *  &#x05E9;&#x05D5;&#x05D1;&#x05D4;,&#x05E9;&#x05D9;&#x05E8;&#x05D4;,&#x05D4;&#x05D2;&#x05D3;&#x05D5;&#x05DC;,
 	 *  &#x05D7;&#x05D6;&#x05D5;&#x05DF;,&#x05E0;&#x05D7;&#x05DE;&#x05D5;"</code>
 	 */
-	private EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
+	private final EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
 	
 	/**
 	 * Default constructor sets the {@link EnumMap}s of Hebrew and default transliterated parshiyos.
 	 */
 	public HebrewDateFormatter() {
-		transliteratedParshaMap = new EnumMap<JewishCalendar.Parsha, String>(JewishCalendar.Parsha.class);
+		transliteratedParshaMap = new EnumMap<>(JewishCalendar.Parsha.class);
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NONE, "");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.BERESHIS, "Bereshis");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NOACH, "Noach");
@@ -195,7 +195,7 @@ public class HebrewDateFormatter {
 		transliteratedParshaMap.put(JewishCalendar.Parsha.CHAZON, "Chazon");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NACHAMU, "Nachamu");
 		
-		hebrewParshaMap = new EnumMap<JewishCalendar.Parsha, String>(JewishCalendar.Parsha.class);
+		hebrewParshaMap = new EnumMap<>(JewishCalendar.Parsha.class);
 		hebrewParshaMap.put(JewishCalendar.Parsha.NONE, "");
 		hebrewParshaMap.put(JewishCalendar.Parsha.BERESHIS, "\u05D1\u05E8\u05D0\u05E9\u05D9\u05EA");
 		hebrewParshaMap.put(JewishCalendar.Parsha.NOACH, "\u05E0\u05D7");
@@ -292,7 +292,7 @@ public class HebrewDateFormatter {
 	 */
 	public void setLongWeekFormat(boolean longWeekFormat) {
 		this.longWeekFormat = longWeekFormat;
-		if(longWeekFormat) {
+		if (longWeekFormat) {
 			weekFormat = new SimpleDateFormat("EEEE");
 		} else {
 			weekFormat = new SimpleDateFormat("EEE");
@@ -496,7 +496,7 @@ public class HebrewDateFormatter {
 		if (!jewishCalendar.isRoshChodesh()) {
 			return "";
 		}
-		String formattedRoshChodesh = "";
+
 		int month = jewishCalendar.getJewishMonth();
 		if (jewishCalendar.getJewishDayOfMonth() == 30) {
 			if (month < JewishCalendar.ADAR || (month == JewishCalendar.ADAR && jewishCalendar.isJewishLeapYear())) {
@@ -509,7 +509,7 @@ public class HebrewDateFormatter {
 		// This method is only about formatting, so we shouldn't make any changes to the params passed in...
 		jewishCalendar = (JewishCalendar) jewishCalendar.clone();
 		jewishCalendar.setJewishMonth(month);
-		formattedRoshChodesh = hebrewFormat ? hebrewHolidays[JewishCalendar.ROSH_CHODESH]
+		String formattedRoshChodesh = hebrewFormat ? hebrewHolidays[JewishCalendar.ROSH_CHODESH]
 				: transliteratedHolidays[JewishCalendar.ROSH_CHODESH];
 		formattedRoshChodesh += " " + formatMonth(jewishCalendar);
 		return formattedRoshChodesh;
@@ -637,18 +637,18 @@ public class HebrewDateFormatter {
 	 */
 	public String formatDayOfWeek(JewishDate jewishDate) {
 		if (hebrewFormat) {
-			if(isLongWeekFormat()) {
+			if (isLongWeekFormat()) {
 				return hebrewDaysOfWeek[jewishDate.getDayOfWeek() - 1];
 			} else {
-				if(jewishDate.getDayOfWeek() == 7) {
+				if (jewishDate.getDayOfWeek() == 7) {
 					return formatHebrewNumber(300);
 				} else {
 					return formatHebrewNumber(jewishDate.getDayOfWeek());
 				}
 			}
 		} else {
-			if(jewishDate.getDayOfWeek() == 7) {
-				if(isLongWeekFormat()) {
+			if (jewishDate.getDayOfWeek() == 7) {
+				if (isLongWeekFormat()) {
 					return getTransliteratedShabbosDayOfWeek();
 				} else {
 					return getTransliteratedShabbosDayOfWeek().substring(0,3);
@@ -897,7 +897,7 @@ public class HebrewDateFormatter {
 	 * @return the formatted daf.
 	 */
 	public String formatDafYomiYerushalmi(Daf daf) {
-		if(daf == null) {
+		if (daf == null) {
 			if (hebrewFormat) {
 				return Daf.getYerushalmiMasechtos()[39];
 			} else {
@@ -990,7 +990,7 @@ public class HebrewDateFormatter {
 			int tens = number / 10;
 			if (number % 10 == 0) { // if evenly divisable by 10
 				if (!singleDigitNumber) {
-					if(isUseFinalFormLetters()) {
+					if (isUseFinalFormLetters()) {
 						sb.append(jTenEnds[tens]); // years like 5780 will end with a final form &#x05E3;
 					} else {
 						sb.append(jTens[tens]); // years like 5780 will end with a regular &#x05E4;
