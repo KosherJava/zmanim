@@ -19,13 +19,13 @@ import java.util.Calendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
- * written by <a href="htts://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
+ * written by <a href="https://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
  * Boone</a> that is based on the <a href = "https://aa.usno.navy.mil/">US Naval Observatory's</a><a
  * href="https://aa.usno.navy.mil/publications/asa">Astronomical Almanac</a> and used with his permission. Added to Kevin's
  * code is adjustment of the zenith to account for elevation. This algorithm returns the same time every year and does not
  * account for leap years. It is not as accurate as the Jean Meeus based {@link NOAACalculator} that is the default calculator
  * use by the KosherJava <em>zmanim</em> library.
- * 
+ *
  * @author &copy; Eliyahu Hershfeld 2004 - 2023
  * @author &copy; Kevin Boone 2000
  */
@@ -61,7 +61,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * The number of degrees of longitude that corresponds to one hour time difference.
+	 * The number of degrees of longitude that corresponds to one-hour time difference.
 	 */
 	private static final double DEG_PER_HOUR = 360.0 / 24.0;
 
@@ -201,7 +201,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * the longitude. We can't do anything with this time directly; we must convert it to UTC and then to a local time.
 	 * 
 	 * @param localHour the local hour
-	 * @param sunRightAscensionHours the sun's right ascention in hours
+	 * @param sunRightAscensionHours the sun's right ascension in hours
 	 * @param approxTimeDays approximate time days
 	 * 
 	 * @return the fractional number of hours since midnight as a double
@@ -243,14 +243,14 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
 				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
-		double pocessedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
-		while (pocessedTime < 0.0) {
-			pocessedTime += 24.0;
+		double processedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
+		while (processedTime < 0.0) {
+			processedTime += 24.0;
 		}
-		while (pocessedTime >= 24.0) {
-			pocessedTime -= 24.0;
+		while (processedTime >= 24.0) {
+			processedTime -= 24.0;
 		}
-		return pocessedTime;
+		return processedTime;
 	}
 	
 	/**

@@ -61,7 +61,7 @@ public class Time {
 	private boolean isNegative = false;
 
 	/**
-	 * Constructor with parameters for the hours, minutes, seconds and millisecods.
+	 * Constructor with parameters for the hours, minutes, seconds and milliseconds.
 	 * 
 	 * @param hours the hours to set
 	 * @param minutes the minutes to set

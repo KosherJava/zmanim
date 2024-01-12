@@ -39,7 +39,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * <code>{@link java.util.Date}</code> is expected and {@link Long#MIN_VALUE} when a <code>long</code> is expected. The
  * reason that <code>Exception</code>s are not thrown in these cases is because the lack of a rise/set or twilight is
  * not an exception, but an expected condition in many parts of the world.
- * 
+ * <p>
  * Here is a simple example of how to use the API to calculate sunrise.
  * First create the Calendar for the location you would like to calculate sunrise or sunset times for:
  * 
@@ -107,7 +107,7 @@ public class AstronomicalCalendar implements Cloneable {
 	private AstronomicalCalculator astronomicalCalculator;
 
 	/**
-	 * The getSunrise method Returns a <code>Date</code> representing the
+	 * The getSunrise method returns a <code>Date</code> representing the
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunrise time. The zenith used
 	 * for the calculation uses {@link #GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is adjusted by the
@@ -192,7 +192,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * The getSunset method Returns a <code>Date</code> representing the
+	 * The getSunset method returns a <code>Date</code> representing the
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunset time. The zenith used for
 	 * the calculation uses {@link #GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is adjusted by the
@@ -367,8 +367,8 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * A constructor that takes in <a href="https://en.wikipedia.org/wiki/Geolocation">geolocation</a> information as a
 	 * parameter. The default {@link AstronomicalCalculator#getDefault() AstronomicalCalculator} used for solar
-	 * calculations is the the {@link com.kosherjava.zmanim.util.NOAACalculator}.
-	 * 
+	 * calculations is the more accurate {@link com.kosherjava.zmanim.util.NOAACalculator}.
+	 *
 	 * @param geoLocation
 	 *            The location information used for calculating astronomical sun times.
 	 *
@@ -470,7 +470,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * non-elevation adjusted temporal hour by passing in {@link #getSeaLevelSunrise() sea level sunrise} and
 	 * {@link #getSeaLevelSunset() sea level sunset} as parameters.
 	 * 
-	 * @param startOfday
+	 * @param startOfDay
 	 *            The start of the day.
 	 * @param endOfDay
 	 *            The end of the day.
@@ -480,11 +480,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @see #getTemporalHour()
 	 */
-	public long getTemporalHour(Date startOfday, Date endOfDay) {
-		if (startOfday == null || endOfDay == null) {
+	public long getTemporalHour(Date startOfDay, Date endOfDay) {
+		if (startOfDay == null || endOfDay == null) {
 			return Long.MIN_VALUE;
 		}
-		return (endOfDay.getTime() - startOfday.getTime()) / 12;
+		return (endOfDay.getTime() - startOfDay.getTime()) / 12;
 	}
 
 	/**
@@ -562,8 +562,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @param time
 	 *            The time to be set as the time for the <code>Date</code>. The time expected is in the format: 18.75
 	 *            for 6:45:00 PM.time is sunrise and false if it is sunset
-	 * @param isSunrise true if the 
-	 * @return The Date.
+	 * @param isSunrise true if this time is for sunrise
+	 * @return The Date object representation of the time double
 	 */
 	protected Date getDateFromTime(double time, boolean isSunrise) {
 		if (Double.isNaN(time)) {
@@ -786,7 +786,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * different algorithms, including the default {@link com.kosherjava.zmanim.util.NOAACalculator} based on <a href=
 	 * "https://noaa.gov">NOAA's</a> implementation of Jean Meeus's algorithms as well as {@link
 	 * com.kosherjava.zmanim.util.SunTimesCalculator} based on the <a href = "https://www.cnmoc.usff.navy.mil/usno/">US
-	 * Naval Observatory's</a> algorithm,. This allows easy runtime switching and comparison of different algorithms.
+	 * Naval Observatory's</a> algorithm. This allows easy runtime switching and comparison of different algorithms.
 	 * 
 	 * @param astronomicalCalculator
 	 *            The astronomicalCalculator to set.

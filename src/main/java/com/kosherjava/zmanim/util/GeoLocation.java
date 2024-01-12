@@ -65,7 +65,7 @@ public class GeoLocation implements Cloneable {
 	private static final int DISTANCE = 0;
 	
 	/**
-	 * Constant for a initial bearing type calculation.
+	 * Constant for an initial bearing type calculation.
 	 * @see #getGeodesicInitialBearing(GeoLocation)
 	 */
 	private static final int INITIAL_BEARING = 1;
@@ -328,12 +328,12 @@ public class GeoLocation implements Cloneable {
 	 * Adjust the date for <a href="https://en.wikipedia.org/wiki/180th_meridian">antimeridian</a> crossover. This is
 	 * needed to deal with edge cases such as Samoa that use a different calendar date than expected based on their
 	 * geographic location.
-	 *
+	 * <p>
 	 * The actual Time Zone offset may deviate from the expected offset based on the longitude. Since the 'absolute time'
 	 * calculations are always based on longitudinal offset from UTC for a given date, the date is presumed to only
 	 * increase East of the Prime Meridian, and to only decrease West of it. For Time Zones that cross the antimeridian,
 	 * the date will be artificially adjusted before calculation to conform with this presumption.
-	 *
+	 * <p>
 	 * For example, Apia, Samoa with a longitude of -171.75 uses a local offset of +14:00.  When calculating sunrise for
 	 * 2018-02-03, the calculator should operate using 2018-02-02 since the expected zone is -11.  After determining the
 	 * UTC time, the local DST offset of <a href="https://en.wikipedia.org/wiki/UTC%2B14:00">UTC+14:00</a> should be applied
@@ -345,7 +345,7 @@ public class GeoLocation implements Cloneable {
 		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
 		
 		if (localHoursOffset >= 20){// if the offset is 20 hours or more in the future (never expected anywhere other
-									// than a location using a timezone across the anti meridian to the east such as Samoa)
+									// than a location using a timezone across the antimeridian to the east such as Samoa)
 			return 1; // roll the date forward a day
 		} else if (localHoursOffset <= -20) {	// if the offset is 20 hours or more in the past (no current location is known
 												//that crosses the antimeridian to the west, but better safe than sorry)
@@ -417,7 +417,7 @@ public class GeoLocation implements Cloneable {
 	private double vincentyFormula(GeoLocation location, int formula) {
 		double a = 6378137;
 		double b = 6356752.3142;
-		double f = 1 / 298.257223563; // WGS-84 ellipsiod
+		double f = 1 / 298.257223563; // WGS-84 ellipsoid
 		double L = Math.toRadians(location.getLongitude() - getLongitude());
 		double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(getLatitude())));
 		double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(location.getLatitude())));

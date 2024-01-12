@@ -21,7 +21,7 @@ import java.util.GregorianCalendar;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
- * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
+ * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the given date.
  * 
  * @author &copy; elihaidv
  * @author &copy; Eliyahu Hershfeld 2017 - 2023
@@ -109,12 +109,12 @@ public class YerushalmiYomiCalculator {
 	}
 	
 	/**
-	 * Return the number of special days (Yom Kippur and Tisha Beav) That there is no Daf in this days.
-	 * From the last given number of days until given date
+	 * Return the number of special days (Yom Kippur and Tisha Beav, where there are no dafim on these days),
+	 * from the start date (as a <code>Calendar</code>) given until the end date (also as a <code>Calendar</code>).
 	 * 
-	 * @param start start date to calculate
-	 * @param end end date to calculate
-	 * @return the number of special days
+	 * @param start date to start calculating from
+	 * @param end date to finish calculating at
+	 * @return the number of special days between the start time and end time
 	 */
 	private static int getNumOfSpecialDays(Calendar start, Calendar end) {
 		
@@ -153,7 +153,7 @@ public class YerushalmiYomiCalculator {
 	 * @param end the end date
 	 * @return if the date is between the start and end dates
 	 */
-	private static boolean isBetween( Calendar start, Calendar date, Calendar end ) {
+	private static boolean isBetween(Calendar start, Calendar date, Calendar end) {
 		return start.before(date) && end.after(date);
 	}
 	
@@ -164,6 +164,6 @@ public class YerushalmiYomiCalculator {
 	 * @return the number of days between the start and end dates
 	 */
 	private static long getDiffBetweenDays(Calendar start, Calendar end) {
-		return  ( end.getTimeInMillis() - start.getTimeInMillis()) / DAY_MILIS;
+		return  (end.getTimeInMillis() - start.getTimeInMillis()) / DAY_MILIS;
 	}
 }
