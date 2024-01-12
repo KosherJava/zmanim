@@ -325,13 +325,13 @@ public class GeoLocation implements Cloneable {
 	}
 	
 	/**
-	 * Adjust the date for <a href="https://en.wikipedia.org/wiki/180th_meridian">anti meridian</a> crossover. This is
+	 * Adjust the date for <a href="https://en.wikipedia.org/wiki/180th_meridian">antimeridian</a> crossover. This is
 	 * needed to deal with edge cases such as Samoa that use a different calendar date than expected based on their
 	 * geographic location.
 	 * <p>
 	 * The actual Time Zone offset may deviate from the expected offset based on the longitude. Since the 'absolute time'
 	 * calculations are always based on longitudinal offset from UTC for a given date, the date is presumed to only
-	 * increase East of the Prime Meridian, and to only decrease West of it. For Time Zones that cross the anti meridian,
+	 * increase East of the Prime Meridian, and to only decrease West of it. For Time Zones that cross the antimeridian,
 	 * the date will be artificially adjusted before calculation to conform with this presumption.
 	 * <p>
 	 * For example, Apia, Samoa with a longitude of -171.75 uses a local offset of +14:00.  When calculating sunrise for
@@ -339,16 +339,16 @@ public class GeoLocation implements Cloneable {
 	 * UTC time, the local DST offset of <a href="https://en.wikipedia.org/wiki/UTC%2B14:00">UTC+14:00</a> should be applied
 	 * to bring the date back to 2018-02-03.
 	 * 
-	 * @return the number of days to adjust the date This will typically be 0 unless the date crosses the anti meridian
+	 * @return the number of days to adjust the date This will typically be 0 unless the date crosses the antimeridian
 	 */
 	public int getAntimeridianAdjustment() {
 		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
 		
 		if (localHoursOffset >= 20){// if the offset is 20 hours or more in the future (never expected anywhere other
-									// than a location using a timezone across the anti meridian to the east such as Samoa)
+									// than a location using a timezone across the antimeridian to the east such as Samoa)
 			return 1; // roll the date forward a day
 		} else if (localHoursOffset <= -20) {	// if the offset is 20 hours or more in the past (no current location is known
-												//that crosses the anti meridian to the west, but better safe than sorry)
+												//that crosses the antimeridian to the west, but better safe than sorry)
 			return -1; // roll the date back a day
 		}
 		return 0; //99.999% of the world will have no adjustment
@@ -530,7 +530,7 @@ public class GeoLocation implements Cloneable {
 	
 	/**
 	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very
-	 * similar to the toString method but the return value is a xml format. The format currently used (subject to
+	 * similar to the toString method but the return value is in an xml format. The format currently used (subject to
 	 * change) is:
 	 * 
 	 * <pre>

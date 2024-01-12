@@ -312,8 +312,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * The month, where 1 == January, 2 == February, etc... Note that this is different from the Java's Calendar class
-	 * where January ==0
+	 * The month, where 1 == January, 2 == February, etc... Note that this is different from Java's Calendar class
+	 * where January == 0
 	 */
 	private int gregorianMonth;
 

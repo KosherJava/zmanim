@@ -129,7 +129,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * Is {@link #getSunTransit() astronomical <em>chatzos</em>} used for {@link #getChatzos()} for enhanced accuracy. For
-	 * example as the day is lengthening, the second half of the day is longer than the first and astronomical <em>chatzos</em>
+	 * example as the day lengthens, the second half of the day is longer than the first and astronomical <em>chatzos</em>
 	 * would be a drop earlier than half of the time between sunrise and sunset.
 	 * 
 	 * @todo In the future, if this is set to true, the following may change to enhance accuracy. {@link #getSofZmanShmaGRA()
@@ -183,7 +183,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * Is astronomical <em>chatzos</em> used for <em>zmanim</em> calculations besides <em>chatzos</em> itself for enhanced
 	 * accuracy. For example as the day is lengthening (as we approach spring season), the second half of the day is longer than
 	 * the first and astronomical <em>chatzos</em> would be a drop earlier than half of the time between sunrise and sunset.
-	 * Conversely, the second half of the day would be shorter in the season of fall as the days start getting shorter.
+	 * Conversely, the second half of the day would be shorter in the 'fall' season as the days start getting shorter.
 	 * 
 	 * @todo In the future, if this is set to true, the following may change to enhance accuracy. {@link #getSofZmanShmaGRA()
 	 * <em>Sof zman Shma</em> GRA} would be calculated as 3 <em>shaos zmaniyos</em> after sunrise, but the <em>shaos

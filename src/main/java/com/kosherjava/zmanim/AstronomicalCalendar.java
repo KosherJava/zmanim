@@ -685,7 +685,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 	
 	/**
-	 * Adjusts the <code>Calendar</code> to deal with edge cases where the location crosses the anti meridian.
+	 * Adjusts the <code>Calendar</code> to deal with edge cases where the location crosses the antimeridian.
 	 * 
 	 * @see GeoLocation#getAntimeridianAdjustment()
 	 * @return the adjusted Calendar
