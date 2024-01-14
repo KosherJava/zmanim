@@ -1306,7 +1306,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			}
 		} else if (field == Calendar.MONTH) {
 			forwardJewishMonth(amount);
-		} else if (field == Calendar.YEAR) {
+		} else {
 			setJewishYear(getJewishYear() + amount);
 		}
 	}
@@ -1324,7 +1324,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			throw new IllegalArgumentException("the amount of months to forward has to be greater than zero.");
 		}
 		for (int i = 0; i < amount; i++) {
-			if(getJewishMonth() == ELUL) {
+			if (getJewishMonth() == ELUL) {
 				setJewishMonth(TISHREI);
 				setJewishYear(getJewishYear() + 1);
 			} else if ((! isJewishLeapYear() && getJewishMonth() == ADAR)
@@ -1570,8 +1570,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			// Required by the compiler. Should never be reached since we implement clone()
 		}
-		clone.setInternalGregorianDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
-		return clone;
+        if (clone != null) {
+            clone.setInternalGregorianDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+        }
+        return clone;
 	}
 
 	/**

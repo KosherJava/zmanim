@@ -1821,7 +1821,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaGedola72Minutes() {
-		if(isUseAstronomicalChatzosForOtherZmanim()) {
+		if (isUseAstronomicalChatzosForOtherZmanim()) {
 			return getHalfDayBasedZman(getChatzos(), getTzais72(), 0.5);
 		} else {
 			return getMinchaGedola(getAlos72(), getTzais72(), true);
@@ -1846,7 +1846,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaGedola16Point1Degrees() {
-		if(isUseAstronomicalChatzosForOtherZmanim()) {
+		if (isUseAstronomicalChatzosForOtherZmanim()) {
 			return getHalfDayBasedZman(getChatzos(), getTzais16Point1Degrees(), 0.5);
 		} else {
 			return getMinchaGedola(getAlos16Point1Degrees(), getTzais16Point1Degrees(), true);

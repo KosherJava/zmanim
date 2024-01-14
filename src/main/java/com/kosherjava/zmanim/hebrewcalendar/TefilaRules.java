@@ -207,8 +207,7 @@ public class TefilaRules {
 	 * @see #isTachanunRecitedShacharis(JewishCalendar)
 	 */
 	public boolean isTachanunRecitedMincha(JewishCalendar jewishCalendar) {
-		JewishCalendar tomorrow = new JewishCalendar();
-		tomorrow = (JewishCalendar) jewishCalendar.clone();
+		JewishCalendar tomorrow = (JewishCalendar) jewishCalendar.clone();
 		tomorrow.forward(Calendar.DATE, 1);
 		
 		if (!tachanunRecitedMinchaAllYear
@@ -244,21 +243,18 @@ public class TefilaRules {
 	public boolean isVeseinTalUmatarStartDate(JewishCalendar jewishCalendar) {
 		if (jewishCalendar.getInIsrael()) {
 			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
-			if (jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 7) {
-				return true;
-			}
+            return jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 7;
 		} else {
 			if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(jewishCalendar.getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
+			if (jewishCalendar.getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 48 || jewishCalendar.getTekufasTishreiElapsedDays() == 47;
 			} else {
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 47;
 			}
 		}
-		return false; // keep the compiler happy
-	}
+    }
 	
 	/**
 	 * Returns true if tonight is the first night to start reciting <em>Vesein Tal Umatar Livracha</em> (
@@ -280,21 +276,18 @@ public class TefilaRules {
 	public boolean isVeseinTalUmatarStartingTonight(JewishCalendar jewishCalendar) {
 		if (jewishCalendar.getInIsrael()) {
 			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
-			if (jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 6) {
-					return true;
-			}
+            return jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 6;
 		} else {
 			if (jewishCalendar.getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
+			if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 47 || jewishCalendar.getTekufasTishreiElapsedDays() == 46;
 			} else {
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 46;
 			}
 		}
-		return false;
-	}
+    }
 
 	/**
 	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return
@@ -330,7 +323,7 @@ public class TefilaRules {
 	 * @see #isVeseinTalUmatarRecited(JewishCalendar)
 	 */
 	public boolean isVeseinBerachaRecited(JewishCalendar jewishCalendar) {
-		return ! isVeseinTalUmatarRecited(jewishCalendar);
+		return !isVeseinTalUmatarRecited(jewishCalendar);
 	}
 
 	/**
@@ -402,20 +395,20 @@ public class TefilaRules {
 		int holidayIndex = jewishCalendar.getYomTovIndex();
 		boolean inIsrael = jewishCalendar.getInIsrael();
 		
-		if(jewishCalendar.isRoshChodesh()) { //RH returns false for RC
+		if (jewishCalendar.isRoshChodesh()) { //RH returns false for RC
 			return true;
 		}
-		if(jewishCalendar.isChanukah()) {
+		if (jewishCalendar.isChanukah()) {
 			return true;
 		}
 		switch (month) {
 			case JewishDate.NISSAN:
-				if(day >= 15 && ((inIsrael && day <= 21) || (!inIsrael && day <= 22))){
+				if (day >= 15 && ((inIsrael && day <= 21) || (!inIsrael && day <= 22))){
 					return true;
 				}
 				break;
 			case JewishDate.IYAR: // modern holidays
-				if(jewishCalendar.isUseModernHolidays()  && (holidayIndex == JewishCalendar.YOM_HAATZMAUT
+				if (jewishCalendar.isUseModernHolidays()  && (holidayIndex == JewishCalendar.YOM_HAATZMAUT
 						|| holidayIndex == JewishCalendar.YOM_YERUSHALAYIM)){
 					return true;
 				}
@@ -445,8 +438,8 @@ public class TefilaRules {
 		int day = jewishCalendar.getJewishDayOfMonth();
 		int month = jewishCalendar.getJewishMonth();
 		boolean inIsrael = jewishCalendar.getInIsrael();
-		if(isHallelRecited(jewishCalendar)) {
-			if((jewishCalendar.isRoshChodesh() && ! jewishCalendar.isChanukah())
+		if (isHallelRecited(jewishCalendar)) {
+			if ((jewishCalendar.isRoshChodesh() && ! jewishCalendar.isChanukah())
 					|| (month == JewishDate.NISSAN && ((inIsrael && day > 15) || (!inIsrael && day > 16)))) {
 				return false;
 			} else {
@@ -498,12 +491,12 @@ public class TefilaRules {
 	 * 
 	 */
 	public boolean isMizmorLesodaRecited(JewishCalendar jewishCalendar) {
-		if(jewishCalendar.isAssurBemelacha()) {
+		if (jewishCalendar.isAssurBemelacha()) {
 			return false;
 		}
 		
 		int holidayIndex = jewishCalendar.getYomTovIndex();
-		if(! isMizmorLesodaRecitedErevYomKippurAndPesach()
+		if (! isMizmorLesodaRecitedErevYomKippurAndPesach()
 				&& (holidayIndex == JewishCalendar.EREV_YOM_KIPPUR
 						|| holidayIndex == JewishCalendar.EREV_PESACH
 						|| jewishCalendar.isCholHamoedPesach())) {
