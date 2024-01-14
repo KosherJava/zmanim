@@ -170,34 +170,31 @@ public class TefilaRules {
 		int day = jewishCalendar.getJewishDayOfMonth();
 		int month = jewishCalendar.getJewishMonth();
 
-		if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY
-				|| (!tachanunRecitedSundays && jewishCalendar.getDayOfWeek() == Calendar.SUNDAY)
-				|| (!tachanunRecitedFridays && jewishCalendar.getDayOfWeek() == Calendar.FRIDAY)
-				|| month == JewishDate.NISSAN
-				|| (month == JewishDate.TISHREI && ((!tachanunRecitedEndOfTishrei && day > 8)
-				|| (tachanunRecitedEndOfTishrei && (day > 8 && day < 22))))
-				|| (month == JewishDate.SIVAN && (tachanunRecitedWeekAfterShavuos && day < 7
-						|| !tachanunRecitedWeekAfterShavuos && day < (!jewishCalendar.getInIsrael()
-								&& !tachanunRecited13SivanOutOfIsrael ? 14: 13)))
-				|| (jewishCalendar.isYomTov() && (! jewishCalendar.isTaanis()
-						|| (!tachanunRecitedPesachSheni && holidayIndex == JewishCalendar.PESACH_SHENI))) // Erev YT is included in isYomTov()
-				|| (!jewishCalendar.getInIsrael() && !tachanunRecitedPesachSheni && !tachanunRecited15IyarOutOfIsrael
-						&& jewishCalendar.getJewishMonth() == JewishDate.IYAR && day == 15)
-				|| holidayIndex == JewishCalendar.TISHA_BEAV || jewishCalendar.isIsruChag()
-				|| jewishCalendar.isRoshChodesh()
-				|| (!tachanunRecitedShivasYemeiHamiluim &&
-						((!jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR)
-								|| (jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR_II)) && day > 22)
-				|| (!tachanunRecitedWeekOfPurim &&
-						((!jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR)
-								|| (jewishCalendar.isJewishLeapYear() && month == JewishDate.ADAR_II)) && day > 10 && day < 18)
-				|| (jewishCalendar.isUseModernHolidays()
-						&& (holidayIndex == JewishCalendar.YOM_HAATZMAUT || holidayIndex == JewishCalendar.YOM_YERUSHALAYIM))
-				|| (!tachanunRecitedWeekOfHod && month == JewishDate.IYAR && day > 13 && day < 21)) {
-			return false;
-		}
-		return true;
-	}
+        return jewishCalendar.getDayOfWeek() != Calendar.SATURDAY
+                && (tachanunRecitedSundays || jewishCalendar.getDayOfWeek() != Calendar.SUNDAY)
+                && (tachanunRecitedFridays || jewishCalendar.getDayOfWeek() != Calendar.FRIDAY)
+                && month != JewishDate.NISSAN
+                && (month != JewishDate.TISHREI || ((tachanunRecitedEndOfTishrei || day <= 8)
+                && (!tachanunRecitedEndOfTishrei || (day <= 8 || day >= 22))))
+                && (month != JewishDate.SIVAN || ((!tachanunRecitedWeekAfterShavuos || day >= 7)
+                && (tachanunRecitedWeekAfterShavuos || day >= (!jewishCalendar.getInIsrael()
+                && !tachanunRecited13SivanOutOfIsrael ? 14 : 13))))
+                && (!jewishCalendar.isYomTov() || (jewishCalendar.isTaanis()
+                && (tachanunRecitedPesachSheni || holidayIndex != JewishCalendar.PESACH_SHENI))) // Erev YT is included in isYomTov()
+                && (jewishCalendar.getInIsrael() || tachanunRecitedPesachSheni || tachanunRecited15IyarOutOfIsrael
+                || jewishCalendar.getJewishMonth() != JewishDate.IYAR || day != 15)
+                && holidayIndex != JewishCalendar.TISHA_BEAV && !jewishCalendar.isIsruChag()
+                && !jewishCalendar.isRoshChodesh()
+                && (tachanunRecitedShivasYemeiHamiluim ||
+                ((jewishCalendar.isJewishLeapYear() || month != JewishDate.ADAR)
+                        && (!jewishCalendar.isJewishLeapYear() || month != JewishDate.ADAR_II)) || day <= 22)
+                && (tachanunRecitedWeekOfPurim ||
+                ((jewishCalendar.isJewishLeapYear() || month != JewishDate.ADAR)
+                        && (!jewishCalendar.isJewishLeapYear() || month != JewishDate.ADAR_II)) || day <= 10 || day >= 18)
+                && (!jewishCalendar.isUseModernHolidays()
+                || (holidayIndex != JewishCalendar.YOM_HAATZMAUT && holidayIndex != JewishCalendar.YOM_YERUSHALAYIM))
+                && (tachanunRecitedWeekOfHod || month != JewishDate.IYAR || day <= 13 || day >= 21);
+    }
 
 	/**
 	 * Returns if <em>tachanun</em> is recited during <em>mincha</em> on the day in question.
@@ -210,19 +207,16 @@ public class TefilaRules {
 		JewishCalendar tomorrow = new JewishCalendar();
 		tomorrow = (JewishCalendar) jewishCalendar.clone();
 		tomorrow.forward(Calendar.DATE, 1);
-		
-		if (!tachanunRecitedMinchaAllYear
-					|| jewishCalendar.getDayOfWeek() == Calendar.FRIDAY
-					|| ! isTachanunRecitedShacharis(jewishCalendar) 
-					|| (! isTachanunRecitedShacharis(tomorrow) && 
-							!(tomorrow.getYomTovIndex() == JewishCalendar.EREV_ROSH_HASHANA) &&
-							!(tomorrow.getYomTovIndex() == JewishCalendar.EREV_YOM_KIPPUR) &&
-							!(tomorrow.getYomTovIndex() == JewishCalendar.PESACH_SHENI))
-					|| ! tachanunRecitedMinchaErevLagBaomer && tomorrow.getYomTovIndex() == JewishCalendar.LAG_BAOMER) {
-			return false;
-		}
-		return true;
-	}
+
+        return tachanunRecitedMinchaAllYear
+                && jewishCalendar.getDayOfWeek() != Calendar.FRIDAY
+                && isTachanunRecitedShacharis(jewishCalendar)
+                && (isTachanunRecitedShacharis(tomorrow) ||
+                tomorrow.getYomTovIndex() == JewishCalendar.EREV_ROSH_HASHANA ||
+                tomorrow.getYomTovIndex() == JewishCalendar.EREV_YOM_KIPPUR ||
+                tomorrow.getYomTovIndex() == JewishCalendar.PESACH_SHENI)
+                && (tachanunRecitedMinchaErevLagBaomer || tomorrow.getYomTovIndex() != JewishCalendar.LAG_BAOMER);
+    }
 	
 	/**
 	 * Returns if it is the Jewish day (starting the evening before) to start reciting <em>Vesein Tal Umatar Livracha</em>
@@ -446,12 +440,8 @@ public class TefilaRules {
 		int month = jewishCalendar.getJewishMonth();
 		boolean inIsrael = jewishCalendar.getInIsrael();
 		if(isHallelRecited(jewishCalendar)) {
-			if((jewishCalendar.isRoshChodesh() && ! jewishCalendar.isChanukah())
-					|| (month == JewishDate.NISSAN && ((inIsrael && day > 15) || (!inIsrael && day > 16)))) {
-				return false;
-			} else {
-				return true;
-			}
+            return (!jewishCalendar.isRoshChodesh() || jewishCalendar.isChanukah())
+                    && (month != JewishDate.NISSAN || ((!inIsrael || day <= 15) && (inIsrael || day <= 16)));
 		} 
 		return false;
 	}
@@ -503,14 +493,11 @@ public class TefilaRules {
 		}
 		
 		int holidayIndex = jewishCalendar.getYomTovIndex();
-		if(! isMizmorLesodaRecitedErevYomKippurAndPesach()
-				&& (holidayIndex == JewishCalendar.EREV_YOM_KIPPUR
-						|| holidayIndex == JewishCalendar.EREV_PESACH
-						|| jewishCalendar.isCholHamoedPesach())) {
-			return false;
-		}
-	    return true;
-	}
+        return isMizmorLesodaRecitedErevYomKippurAndPesach()
+                || (holidayIndex != JewishCalendar.EREV_YOM_KIPPUR
+                && holidayIndex != JewishCalendar.EREV_PESACH
+                && !jewishCalendar.isCholHamoedPesach());
+    }
 	
 	/**
 	 * Is <em>tachanun</em> set to be recited during the week of Purim, from the 11th through the 17th of {@link
