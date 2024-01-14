@@ -80,8 +80,8 @@ public class YomiCalculator {
 
 		Daf dafYomi = null;
 		int julianDay = getJulianDay(calendar);
-		int cycleNo = 0;
-		int dafNo = 0;
+		int cycleNo;
+		int dafNo;
 		if (calendar.before(dafYomiStartDay)) {
 			// TODO: should we return a null or throw an IllegalArgumentException?
 			throw new IllegalArgumentException(calendar + " is prior to organized Daf Yomi Bavli cycles that started on "
@@ -97,32 +97,30 @@ public class YomiCalculator {
 
 		int total = 0;
 		int masechta = -1;
-		int blatt = 0;
+		int blatt;
 
 		// Fix Shekalim for old cycles.
 		if (cycleNo <= 7) {
 			blattPerMasechta[4] = 13;
-		} else {
-			blattPerMasechta[4] = 22; // correct any change that may have been changed from a prior calculation
 		}
 		// Finally find the daf.
-		for (int j = 0; j < blattPerMasechta.length; j++) {
-			masechta++;
-			total = total + blattPerMasechta[j] - 1;
-			if (dafNo < total) {
-				blatt = 1 + blattPerMasechta[j] - (total - dafNo);
-				// Fiddle with the weird ones near the end.
-				if (masechta == 36) {
-					blatt += 21;
-				} else if (masechta == 37) {
-					blatt += 24;
-				} else if (masechta == 38) {
-					blatt += 32;
-				}
-				dafYomi = new Daf(masechta, blatt);
-				break;
-			}
-		}
+        for (int i : blattPerMasechta) {
+            masechta++;
+            total = total + i - 1;
+            if (dafNo < total) {
+                blatt = 1 + i - (total - dafNo);
+                // Fiddle with the weird ones near the end.
+                if (masechta == 36) {
+                    blatt += 21;
+                } else if (masechta == 37) {
+                    blatt += 24;
+                } else if (masechta == 38) {
+                    blatt += 32;
+                }
+                dafYomi = new Daf(masechta, blatt);
+                break;
+            }
+        }
 
 		return dafYomi;
 	}

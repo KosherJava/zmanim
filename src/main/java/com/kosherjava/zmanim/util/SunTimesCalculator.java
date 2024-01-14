@@ -42,22 +42,18 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double doubleTime = Double.NaN;
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		doubleTime = getTimeUTC(calendar, geoLocation, adjustedZenith, true);
-		return doubleTime;
+		return getTimeUTC(calendar, geoLocation, adjustedZenith, true);
 	}
 
 	/**
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double doubleTime = Double.NaN;
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		doubleTime = getTimeUTC(calendar, geoLocation, adjustedZenith, false);
-		return doubleTime;
+		return getTimeUTC(calendar, geoLocation, adjustedZenith, false);
 	}
 
 	/**
@@ -233,7 +229,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double sunRightAscensionHours = getSunRightAscensionHours(sunTrueLong);
 		double cosLocalHourAngle = getCosLocalHourAngle(sunTrueLong, geoLocation.getLatitude(), zenith);
 
-		double localHourAngle = 0;
+		double localHourAngle;
 		if (isSunrise) {
 			localHourAngle = 360.0 - acosDeg(cosLocalHourAngle);
 		} else { // sunset
@@ -274,10 +270,10 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double sunrise = getUTCSunrise(calendar, geoLocation, 90, false);
 		double sunset = getUTCSunset(calendar, geoLocation, 90, false);
 		double noon = sunrise + ((sunset - sunrise) / 2);
-		if(noon < 0) {
+		if (noon < 0) {
 			noon += 12;
 		}
-		if(noon < sunrise) {
+		if (noon < sunrise) {
 			noon -= 12;
 		} 
 		return noon;

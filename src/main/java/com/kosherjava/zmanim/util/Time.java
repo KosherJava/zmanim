@@ -37,22 +37,22 @@ public class Time {
 	/**
 	 * @see #getHours()
 	 */
-	private int hours = 0;
+	private int hours;
 
 	/**
 	 * @see #getMinutes()
 	 */
-	private int minutes = 0;
+	private int minutes;
 
 	/**
 	 * @see #getSeconds()
 	 */
-	private int seconds = 0;
+	private int seconds;
 
 	/**
 	 * @see #getMilliseconds()
 	 */
-	private int milliseconds = 0;
+	private int milliseconds;
 
 	/**
 	 * @see #isNegative()
