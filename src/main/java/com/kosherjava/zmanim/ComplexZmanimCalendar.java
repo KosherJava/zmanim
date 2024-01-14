@@ -3820,15 +3820,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSofZmanTfilaMGA72MinutesZmanis()
 	 */
 	public Date getSofZmanAchilasChametzMGA72MinutesZmanis() {
-		/*JewishCalendar jewishCalendar = new JewishCalendar();
+		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA72Minutes();
+			return getSofZmanTfilaMGA72MinutesZmanis();
 		} else {
 			return null;
-		}*/
-		return getSofZmanTfilaMGA72MinutesZmanis();
+		}
 	}
 
 	/**
@@ -3934,15 +3933,14 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos72Zmanis()
 	 */
 	public Date getSofZmanBiurChametzMGA72MinutesZmanis() {
-		/*JewishCalendar jewishCalendar = new JewishCalendar();
+		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
 				getCalendar().get(Calendar.DAY_OF_MONTH));
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos72(), getShaahZmanisMGA() * 5);
+			return getTimeOffset(getAlos72Zmanis(), getShaahZmanis72MinutesZmanis() * 5);
 		} else {
 			return null;
-		}*/
-		return getTimeOffset(getAlos72Zmanis(), getShaahZmanis72MinutesZmanis() * 5);
+		}
 	}
 
 	/**
