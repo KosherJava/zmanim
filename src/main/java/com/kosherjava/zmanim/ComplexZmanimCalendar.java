@@ -3802,6 +3802,36 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the latest time one is allowed eating <em>chametz</em> on <em>Erev Pesach</em> according to the
+	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
+	 * being {@link #getAlos72Zmanis() 72 zmaniyos} minutes before {@link #getSunrise() sunrise}. This time is identical to the
+	 * {@link #getSofZmanTfilaMGA72MinutesZmanis() <em>Sof zman tfilah</em> MGA 72 minutes zmanis}. This time is 4 {@link #getShaahZmanis72MinutesZmanis()
+	 * <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72() dawn} based on the opinion of the MGA that the day is
+	 * calculated from a {@link #getAlos72Zmanis() dawn} of 72 minutes zmanis before sunrise to {@link #getTzais72Zmanis() nightfall} of 72 minutes zmanis
+	 * after sunset. This returns the time of 4 * {@link #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}. If it is not
+	 * <em>erev Pesach</em>, a null will be returned.
+	 *
+	 * @return the <code>Date</code> of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
+	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
+	 *         not rise, and one where it does not set), a <code>null</code> will be returned. See detailed explanation on top of
+	 *         the {@link AstronomicalCalendar} documentation.
+	 * @todo in v 3.0.0 enable the calendar check for erev pesach and return <code>null</code> in all other cases.
+	 * @see #getShaahZmanis72MinutesZmanis()
+	 * @see #getAlos72Zmanis()
+	 * @see #getSofZmanTfilaMGA72MinutesZmanis()
+	 */
+	public Date getSofZmanAchilasChametzMGA72MinutesZmanis() {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
+			return getSofZmanTfilaMGA72MinutesZmanis();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * This method returns the latest time one is allowed eating <em>chametz</em> on <em>Erev Pesach</em> according to the
 	 * opinion of the<a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos16Point1Degrees() 16.1&deg;} before {@link #getSunrise() sunrise}. This time is 4 {@link
 	 * #getShaahZmanis16Point1Degrees() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos16Point1Degrees() dawn}
@@ -3886,7 +3916,35 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * FIXME adjust for synchronous
+	 * FIXME adjust for syncronous
+	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion of
+	 * the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
+	 * being {@link #getAlos72Zmanis() 72} minutes zmanis before {@link #getSunrise() sunrise}. This time is 5 {@link
+	 * #getShaahZmanis72MinutesZmanis() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Zmanis() dawn} based on the opinion of
+	 * the MGA that the day is calculated from a {@link #getAlos72Zmanis() dawn} of 72 minutes zmanis before sunrise to {@link
+	 * #getTzais72Zmanis() nightfall} of 72 minutes zmanis after sunset. This returns the time of 5 * {@link #getShaahZmanis72MinutesZmanis()} after
+	 * {@link #getAlos72Zmanis() dawn}. If it is not  <em>erev Pesach</em>, a null will be returned.
+	 * @todo in v 3.0.0 enable the calendar check for erev pesach and return <code>null</code> in all other cases.
+	 * @return the <code>Date</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
+	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at
+	 *         least one day a year where the sun does not rise, and one where it does not set), a <code>null</code> will be
+	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getShaahZmanis72MinutesZmanis()
+	 * @see #getAlos72Zmanis()
+	 */
+	public Date getSofZmanBiurChametzMGA72MinutesZmanis() {
+		JewishCalendar jewishCalendar = new JewishCalendar();
+		jewishCalendar.setGregorianDate(getCalendar().get(Calendar.YEAR), getCalendar().get(Calendar.MONTH),
+				getCalendar().get(Calendar.DAY_OF_MONTH));
+		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
+			return getTimeOffset(getAlos72Zmanis(), getShaahZmanis72MinutesZmanis() * 5);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * FIXME adjust for syncronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos16Point1Degrees() 16.1&deg;} before {@link #getSunrise() sunrise}. This time is 5
