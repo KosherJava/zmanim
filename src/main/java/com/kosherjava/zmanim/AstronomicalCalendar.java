@@ -621,7 +621,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 		while (offsetByDegrees == null || ((minutes < 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
 				(minutes > 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
-			if(minutes > 0.0) {
+			if (minutes > 0.0) {
 				degrees = degrees.add(incrementor);
 			} else {
 				degrees = degrees.subtract(incrementor);
@@ -649,7 +649,7 @@ public class AstronomicalCalendar implements Cloneable {
 		BigDecimal incrementor = new BigDecimal("0.001");
 		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.getTime() < offsetByTime.getTime()) ||
 				(minutes < 0.0 && offsetByDegrees.getTime() > offsetByTime.getTime()))) {
-			if(minutes > 0.0) {
+			if (minutes > 0.0) {
 				degrees = degrees.add(incrementor);
 			} else {
 				degrees = degrees.subtract(incrementor);
@@ -677,7 +677,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see GeoLocation#getLocalMeanTimeOffset()
 	 */
 	public Date getLocalMeanTime(double hours) {
-		if(hours < 0 || hours >= 24) {
+		if (hours < 0 || hours >= 24) {
 			throw new IllegalArgumentException("Hours must between 0 and 23.9999...");
 		}
 		return getTimeOffset(getDateFromTime(hours - getGeoLocation().getTimeZone().getRawOffset()
@@ -832,9 +832,11 @@ public class AstronomicalCalendar implements Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			// Required by the compiler. Should never be reached since we implement clone()
 		}
-		clone.setGeoLocation((GeoLocation) getGeoLocation().clone());
-		clone.setCalendar((Calendar) getCalendar().clone());
-		clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone());
+        if (clone != null) {
+			clone.setGeoLocation((GeoLocation) getGeoLocation().clone());
+			clone.setCalendar((Calendar) getCalendar().clone());
+			clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone());
+		}
 		return clone;
 	}
 }
