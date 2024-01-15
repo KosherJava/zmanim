@@ -243,8 +243,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double sunTrueLongitude = getSunTrueLongitude(julianCenturies);
 
 		double omega = 125.04 - 1934.136 * julianCenturies;
-		double lambda = sunTrueLongitude - 0.00569 - 0.00478 * Math.sin(Math.toRadians(omega));
-		return lambda; // in degrees
+        return sunTrueLongitude - 0.00569 - 0.00478 * Math.sin(Math.toRadians(omega)); // in degrees
 	}
 
 	/**
@@ -291,8 +290,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double lambda = getSunApparentLongitude(julianCenturies);
 
 		double sint = Math.sin(Math.toRadians(obliquityCorrection)) * Math.sin(Math.toRadians(lambda));
-		double theta = Math.toDegrees(Math.asin(sint));
-		return theta; // in degrees
+        return Math.toDegrees(Math.asin(sint)); // in degrees
 	}
 
 	/**
@@ -385,7 +383,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double julianDay = getJulianDay(cal);
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
-		Double eot = getEquationOfTime(julianCenturies);
+		double eot = getEquationOfTime(julianCenturies);
 
 		double longitude = (cal.get(Calendar.HOUR_OF_DAY) + 12.0)
 				+ (cal.get(Calendar.MINUTE) + eot + cal.get(Calendar.SECOND) / 60.0) / 60.0;
@@ -418,7 +416,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double julianDay = getJulianDay(cal);
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
-		Double eot = getEquationOfTime(julianCenturies);
+		double eot = getEquationOfTime(julianCenturies);
 
 		double longitude = (cal.get(Calendar.HOUR_OF_DAY) + 12.0)
 				+ (cal.get(Calendar.MINUTE) + eot + cal.get(Calendar.SECOND) / 60.0) / 60.0;
@@ -516,7 +514,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of of <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
+	 * of <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
 	 * on earth.
 	 * 
 	 * @param julianCenturies

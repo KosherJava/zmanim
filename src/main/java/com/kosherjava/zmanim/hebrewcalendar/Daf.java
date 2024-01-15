@@ -23,7 +23,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
  */
 public class Daf {
 	/**
-	 * {@link #getMasechtaNumber()} and {@link #setMasechtaNumber(int)}.
+	 * See {@link #getMasechtaNumber()} and {@link #setMasechtaNumber(int)}.
 	 */
 	private int masechtaNumber;
 	
@@ -210,7 +210,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Setter method to allow overriding of the default list of <em>masechtos</em> transliterated into into Latin chars.
+	 * Setter method to allow overriding of the default list of <em>masechtos</em> transliterated into Latin chars.
 	 * The default values use Ashkenazi American English transliteration.
 	 * 
 	 * @param masechtosBavliTransliterated the list of transliterated Bavli <em>masechtos</em> to set.
@@ -271,7 +271,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Setter method to allow overriding of the default list of Yerushalmi <em>masechtos</em> transliterated into into Latin chars.
+	 * Setter method to allow overriding of the default list of Yerushalmi <em>masechtos</em> transliterated into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @param masechtosYerushalmiTransliterated the list of transliterated Yerushalmi <em>masechtos</em> to set.
@@ -291,7 +291,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Getter method to allow retrieving the list of Yerushalmi <em>masechtos</em> transliterated into into Latin chars.
+	 * Getter method to allow retrieving the list of Yerushalmi <em>masechtos</em> transliterated into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @return the array of transliterated <em>masechta</em> (tractate) names of the Daf Yomi Yerushalmi.

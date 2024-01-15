@@ -15,6 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -65,7 +66,7 @@ public class GeoLocation implements Cloneable {
 	private static final int DISTANCE = 0;
 	
 	/**
-	 * Constant for a initial bearing type calculation.
+	 * Constant for an initial bearing type calculation.
 	 * @see #getGeodesicInitialBearing(GeoLocation)
 	 */
 	private static final int INITIAL_BEARING = 1;
@@ -328,12 +329,12 @@ public class GeoLocation implements Cloneable {
 	 * Adjust the date for <a href="https://en.wikipedia.org/wiki/180th_meridian">antimeridian</a> crossover. This is
 	 * needed to deal with edge cases such as Samoa that use a different calendar date than expected based on their
 	 * geographic location.
-	 *
+	 * <p>
 	 * The actual Time Zone offset may deviate from the expected offset based on the longitude. Since the 'absolute time'
 	 * calculations are always based on longitudinal offset from UTC for a given date, the date is presumed to only
 	 * increase East of the Prime Meridian, and to only decrease West of it. For Time Zones that cross the antimeridian,
 	 * the date will be artificially adjusted before calculation to conform with this presumption.
-	 *
+	 * <p>
 	 * For example, Apia, Samoa with a longitude of -171.75 uses a local offset of +14:00.  When calculating sunrise for
 	 * 2018-02-03, the calculator should operate using 2018-02-02 since the expected zone is -11.  After determining the
 	 * UTC time, the local DST offset of <a href="https://en.wikipedia.org/wiki/UTC%2B14:00">UTC+14:00</a> should be applied
@@ -345,7 +346,7 @@ public class GeoLocation implements Cloneable {
 		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
 		
 		if (localHoursOffset >= 20){// if the offset is 20 hours or more in the future (never expected anywhere other
-									// than a location using a timezone across the anti meridian to the east such as Samoa)
+									// than a location using a timezone across the antimeridian to the east such as Samoa)
 			return 1; // roll the date forward a day
 		} else if (localHoursOffset <= -20) {	// if the offset is 20 hours or more in the past (no current location is known
 												//that crosses the antimeridian to the west, but better safe than sorry)
@@ -417,7 +418,7 @@ public class GeoLocation implements Cloneable {
 	private double vincentyFormula(GeoLocation location, int formula) {
 		double a = 6378137;
 		double b = 6356752.3142;
-		double f = 1 / 298.257223563; // WGS-84 ellipsiod
+		double f = 1 / 298.257223563; // WGS-84 ellipsoid
 		double L = Math.toRadians(location.getLongitude() - getLongitude());
 		double U1 = Math.atan((1 - f) * Math.tan(Math.toRadians(getLatitude())));
 		double U2 = Math.atan((1 - f) * Math.tan(Math.toRadians(location.getLatitude())));
@@ -549,20 +550,18 @@ public class GeoLocation implements Cloneable {
 	 * @return The XML formatted <code>String</code>.
 	 */
 	public String toXML() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<GeoLocation>\n");
-		sb.append("\t<LocationName>").append(getLocationName()).append("</LocationName>\n");
-		sb.append("\t<Latitude>").append(getLatitude()).append("</Latitude>\n");
-		sb.append("\t<Longitude>").append(getLongitude()).append("</Longitude>\n");
-		sb.append("\t<Elevation>").append(getElevation()).append(" Meters").append("</Elevation>\n");
-		sb.append("\t<TimezoneName>").append(getTimeZone().getID()).append("</TimezoneName>\n");
-		sb.append("\t<TimeZoneDisplayName>").append(getTimeZone().getDisplayName()).append("</TimeZoneDisplayName>\n");
-		sb.append("\t<TimezoneGMTOffset>").append(getTimeZone().getRawOffset() / HOUR_MILLIS)
-				.append("</TimezoneGMTOffset>\n");
-		sb.append("\t<TimezoneDSTOffset>").append(getTimeZone().getDSTSavings() / HOUR_MILLIS)
-				.append("</TimezoneDSTOffset>\n");
-		sb.append("</GeoLocation>");
-		return sb.toString();
+        return "<GeoLocation>\n" +
+                "\t<LocationName>" + getLocationName() + "</LocationName>\n" +
+                "\t<Latitude>" + getLatitude() + "</Latitude>\n" +
+                "\t<Longitude>" + getLongitude() + "</Longitude>\n" +
+                "\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
+                "\t<TimezoneName>" + getTimeZone().getID() + "</TimezoneName>\n" +
+                "\t<TimeZoneDisplayName>" + getTimeZone().getDisplayName() + "</TimeZoneDisplayName>\n" +
+                "\t<TimezoneGMTOffset>" + getTimeZone().getRawOffset() / HOUR_MILLIS +
+                "</TimezoneGMTOffset>\n" +
+                "\t<TimezoneDSTOffset>" + getTimeZone().getDSTSavings() / HOUR_MILLIS +
+                "</TimezoneDSTOffset>\n" +
+                "</GeoLocation>";
 	}
 
 	/**
@@ -577,8 +576,8 @@ public class GeoLocation implements Cloneable {
 		return Double.doubleToLongBits(this.latitude) == Double.doubleToLongBits(geo.latitude)
 				&& Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(geo.longitude)
 				&& this.elevation == geo.elevation
-				&& (this.locationName == null ? geo.locationName == null : this.locationName.equals(geo.locationName))
-				&& (this.timeZone == null ? geo.timeZone == null : this.timeZone.equals(geo.timeZone));
+				&& (Objects.equals(this.locationName, geo.locationName))
+				&& (Objects.equals(this.timeZone, geo.timeZone));
 	}
 
 	/**
@@ -606,17 +605,15 @@ public class GeoLocation implements Cloneable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\nLocation Name:\t\t\t").append(getLocationName());
-		sb.append("\nLatitude:\t\t\t").append(getLatitude()).append("\u00B0");
-		sb.append("\nLongitude:\t\t\t").append(getLongitude()).append("\u00B0");
-		sb.append("\nElevation:\t\t\t").append(getElevation()).append(" Meters");
-		sb.append("\nTimezone ID:\t\t\t").append(getTimeZone().getID());
-		sb.append("\nTimezone Display Name:\t\t").append(getTimeZone().getDisplayName())
-				.append(" (").append(getTimeZone().getDisplayName(false, TimeZone.SHORT)).append(")");
-		sb.append("\nTimezone GMT Offset:\t\t").append(getTimeZone().getRawOffset() / HOUR_MILLIS);
-		sb.append("\nTimezone DST Offset:\t\t").append(getTimeZone().getDSTSavings() / HOUR_MILLIS);
-		return sb.toString();
+        return "\nLocation Name:\t\t\t" + getLocationName() +
+                "\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
+                "\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
+                "\nElevation:\t\t\t" + getElevation() + " Meters" +
+                "\nTimezone ID:\t\t\t" + getTimeZone().getID() +
+                "\nTimezone Display Name:\t\t" + getTimeZone().getDisplayName() +
+                " (" + getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")" +
+                "\nTimezone GMT Offset:\t\t" + getTimeZone().getRawOffset() / HOUR_MILLIS +
+                "\nTimezone DST Offset:\t\t" + getTimeZone().getDSTSavings() / HOUR_MILLIS;
 	}
 
 	/**
@@ -637,8 +634,10 @@ public class GeoLocation implements Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			//Required by the compiler. Should never be reached since we implement clone()
 		}
-		clone.timeZone = (TimeZone) getTimeZone().clone();
-		clone.locationName = getLocationName();
+        if (clone != null) {
+			clone.timeZone = (TimeZone) getTimeZone().clone();
+			clone.locationName = getLocationName();
+		}
 		return clone;
 	}
 }

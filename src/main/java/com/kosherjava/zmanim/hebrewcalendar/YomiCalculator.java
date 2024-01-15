@@ -31,7 +31,7 @@ public class YomiCalculator {
 	 * The start date of the first Daf Yomi Bavli cycle of September 11, 1923 / Rosh Hashana 5684.
 	 */
 	private static final Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
-	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for claculations.*/
+	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for calculations.*/
 	private static final int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
 	/**
 	 * The date that the pagination for the Daf Yomi <em>Maseches Shekalim</em> changed to use the commonly used Vilna
@@ -52,12 +52,12 @@ public class YomiCalculator {
 	 * that a change in length of the cycle was instituted starting in the eighth Daf Yomi cycle beginning on June 24,
 	 * 1975. The Daf Yomi Bavli cycle has a single masechta of the Talmud Yerushalmi - Shekalim as part of the cycle.
 	 * Unlike the Bavli where the number of daf per masechta was standardized since the original <a
-	 * href="http://en.wikipedia.org/wiki/Daniel_Bomberg">Bomberg Edition</a> published from 1520 - 1523, there is no
+	 * href="http://en.wikipedia.org/wiki/Daniel_Bomberg">Bomberg Edition</a> published from 1520 to 1523, there is no
 	 * uniform page length in the Yerushalmi. The early cycles had the Yerushalmi Shekalim length of 13 days following the
 	 * <a href=
 	 * "https://he.wikipedia.org/wiki/%D7%93%D7%A4%D7%95%D7%A1_%D7%A1%D7%9C%D7%90%D7%95%D7%95%D7%99%D7%98%D7%90">Slavuta/Zhytomyr</a>
 	 * Shas used by <a href="http://en.wikipedia.org/wiki/Meir_Shapiro">Rabbi Meir Shapiro</a>. With the start of the eighth Daf Yomi
-	 * cycle beginning on June 24, 1975 the length of the Yerushalmi Shekalim was changed from 13 to 22 daf to follow
+	 * cycle beginning on June 24, 1975, the length of the Yerushalmi Shekalim was changed from 13 to 22 daf to follow
 	 * the <a href="https://en.wikipedia.org/wiki/Vilna_Edition_Shas">Vilna Shas</a> that is in common use today.
 	 * 
 	 * @param jewishCalendar
@@ -66,12 +66,12 @@ public class YomiCalculator {
 	 * @return the {@link Daf}.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if the date is prior to the September 11, 1923 start date of the first Daf Yomi cycle
+	 *             if the date is prior to the September 11, 1923, start date of the first Daf Yomi cycle
 	 */
 	public static Daf getDafYomiBavli(JewishCalendar jewishCalendar) {
 		/*
 		 * The number of daf per masechta. Since the number of blatt in Shekalim changed on the 8th Daf Yomi cycle
-		 * beginning on June 24, 1975 from 13 to 22, the actual calculation for blattPerMasechta[4] will later be
+		 * beginning on June 24, 1975, from 13 to 22, the actual calculation for blattPerMasechta[4] will later be
 		 * adjusted based on the cycle.
 		 */
 		int[] blattPerMasechta = { 64, 157, 105, 121, 22, 88, 56, 40, 35, 31, 32, 29, 27, 122, 112, 91, 66, 49, 90, 82,
@@ -80,8 +80,8 @@ public class YomiCalculator {
 
 		Daf dafYomi = null;
 		int julianDay = getJulianDay(calendar);
-		int cycleNo = 0;
-		int dafNo = 0;
+		int cycleNo;
+		int dafNo;
 		if (calendar.before(dafYomiStartDay)) {
 			// TODO: should we return a null or throw an IllegalArgumentException?
 			throw new IllegalArgumentException(calendar + " is prior to organized Daf Yomi Bavli cycles that started on "
@@ -97,32 +97,30 @@ public class YomiCalculator {
 
 		int total = 0;
 		int masechta = -1;
-		int blatt = 0;
+		int blatt;
 
 		// Fix Shekalim for old cycles.
 		if (cycleNo <= 7) {
 			blattPerMasechta[4] = 13;
-		} else {
-			blattPerMasechta[4] = 22; // correct any change that may have been changed from a prior calculation
 		}
 		// Finally find the daf.
-		for (int j = 0; j < blattPerMasechta.length; j++) {
-			masechta++;
-			total = total + blattPerMasechta[j] - 1;
-			if (dafNo < total) {
-				blatt = 1 + blattPerMasechta[j] - (total - dafNo);
-				// Fiddle with the weird ones near the end.
-				if (masechta == 36) {
-					blatt += 21;
-				} else if (masechta == 37) {
-					blatt += 24;
-				} else if (masechta == 38) {
-					blatt += 32;
-				}
-				dafYomi = new Daf(masechta, blatt);
-				break;
-			}
-		}
+        for (int i : blattPerMasechta) {
+            masechta++;
+            total = total + i - 1;
+            if (dafNo < total) {
+                blatt = 1 + i - (total - dafNo);
+                // Fiddle with the weird ones near the end.
+                if (masechta == 36) {
+                    blatt += 21;
+                } else if (masechta == 37) {
+                    blatt += 24;
+                } else if (masechta == 38) {
+                    blatt += 32;
+                }
+                dafYomi = new Daf(masechta, blatt);
+                break;
+            }
+        }
 
 		return dafYomi;
 	}

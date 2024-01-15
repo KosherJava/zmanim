@@ -207,8 +207,7 @@ public class TefilaRules {
 	 * @see #isTachanunRecitedShacharis(JewishCalendar)
 	 */
 	public boolean isTachanunRecitedMincha(JewishCalendar jewishCalendar) {
-		JewishCalendar tomorrow = new JewishCalendar();
-		tomorrow = (JewishCalendar) jewishCalendar.clone();
+		JewishCalendar tomorrow = (JewishCalendar) jewishCalendar.clone();
 		tomorrow.forward(Calendar.DATE, 1);
 		
 		if (!tachanunRecitedMinchaAllYear
@@ -244,24 +243,21 @@ public class TefilaRules {
 	public boolean isVeseinTalUmatarStartDate(JewishCalendar jewishCalendar) {
 		if (jewishCalendar.getInIsrael()) {
 			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
-			if (jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 7) {
-				return true;
-			}
+            return jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 7;
 		} else {
 			if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(jewishCalendar.getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
+			if (jewishCalendar.getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 48 || jewishCalendar.getTekufasTishreiElapsedDays() == 47;
 			} else {
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 47;
 			}
 		}
-		return false; // keep the compiler happy
-	}
+    }
 	
 	/**
-	 * Returns if true if tonight is the first night to start reciting <em>Vesein Tal Umatar Livracha</em> (
+	 * Returns true if tonight is the first night to start reciting <em>Vesein Tal Umatar Livracha</em> (
 	 * <em>Sheailas Geshamim</em>). In Israel this is the 7th day of {@link JewishDate#CHESHVAN
 	 * <em>Marcheshvan</em>} (so the 6th will return true). Outside Israel recitation starts on the evening
 	 * of December 4th (or 5th if it is the year before a civil leap year) in the 21st century and shifts a
@@ -280,21 +276,18 @@ public class TefilaRules {
 	public boolean isVeseinTalUmatarStartingTonight(JewishCalendar jewishCalendar) {
 		if (jewishCalendar.getInIsrael()) {
 			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
-			if (jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 6) {
-					return true;
-			}
+            return jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 6;
 		} else {
 			if (jewishCalendar.getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
 				return false;
 			}
-			if(jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
+			if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 47 || jewishCalendar.getTekufasTishreiElapsedDays() == 46;
 			} else {
 				return jewishCalendar.getTekufasTishreiElapsedDays() == 46;
 			}
 		}
-		return false;
-	}
+    }
 
 	/**
 	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return
@@ -330,7 +323,7 @@ public class TefilaRules {
 	 * @see #isVeseinTalUmatarRecited(JewishCalendar)
 	 */
 	public boolean isVeseinBerachaRecited(JewishCalendar jewishCalendar) {
-		return ! isVeseinTalUmatarRecited(jewishCalendar);
+		return !isVeseinTalUmatarRecited(jewishCalendar);
 	}
 
 	/**
@@ -402,20 +395,20 @@ public class TefilaRules {
 		int holidayIndex = jewishCalendar.getYomTovIndex();
 		boolean inIsrael = jewishCalendar.getInIsrael();
 		
-		if(jewishCalendar.isRoshChodesh()) { //RH returns false for RC
+		if (jewishCalendar.isRoshChodesh()) { //RH returns false for RC
 			return true;
 		}
-		if(jewishCalendar.isChanukah()) {
+		if (jewishCalendar.isChanukah()) {
 			return true;
 		}
 		switch (month) {
 			case JewishDate.NISSAN:
-				if(day >= 15 && ((inIsrael && day <= 21) || (!inIsrael && day <= 22))){
+				if (day >= 15 && ((inIsrael && day <= 21) || (!inIsrael && day <= 22))){
 					return true;
 				}
 				break;
 			case JewishDate.IYAR: // modern holidays
-				if(jewishCalendar.isUseModernHolidays()  && (holidayIndex == JewishCalendar.YOM_HAATZMAUT
+				if (jewishCalendar.isUseModernHolidays()  && (holidayIndex == JewishCalendar.YOM_HAATZMAUT
 						|| holidayIndex == JewishCalendar.YOM_YERUSHALAYIM)){
 					return true;
 				}
@@ -445,8 +438,8 @@ public class TefilaRules {
 		int day = jewishCalendar.getJewishDayOfMonth();
 		int month = jewishCalendar.getJewishMonth();
 		boolean inIsrael = jewishCalendar.getInIsrael();
-		if(isHallelRecited(jewishCalendar)) {
-			if((jewishCalendar.isRoshChodesh() && ! jewishCalendar.isChanukah())
+		if (isHallelRecited(jewishCalendar)) {
+			if ((jewishCalendar.isRoshChodesh() && ! jewishCalendar.isChanukah())
 					|| (month == JewishDate.NISSAN && ((inIsrael && day > 15) || (!inIsrael && day > 16)))) {
 				return false;
 			} else {
@@ -498,12 +491,12 @@ public class TefilaRules {
 	 * 
 	 */
 	public boolean isMizmorLesodaRecited(JewishCalendar jewishCalendar) {
-		if(jewishCalendar.isAssurBemelacha()) {
+		if (jewishCalendar.isAssurBemelacha()) {
 			return false;
 		}
 		
 		int holidayIndex = jewishCalendar.getYomTovIndex();
-		if(! isMizmorLesodaRecitedErevYomKippurAndPesach()
+		if (! isMizmorLesodaRecitedErevYomKippurAndPesach()
 				&& (holidayIndex == JewishCalendar.EREV_YOM_KIPPUR
 						|| holidayIndex == JewishCalendar.EREV_PESACH
 						|| jewishCalendar.isCholHamoedPesach())) {
@@ -555,7 +548,7 @@ public class TefilaRules {
 	}
 
 	/**
-	 * Sets if <em>tachanun</em> should should be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20
+	 * Sets if <em>tachanun</em> should be recited during the <em>sefira</em> week of <em>Hod</em> (14 - 20
 	 * {@link JewishDate#IYAR <em>Iyar</em>}, or the 29th - 35th of the {@link JewishCalendar#getDayOfOmer() <em>Omer</em>}).
 	 * @param tachanunRecitedWeekOfHod Sets if <em>tachanun</em> should be recited during the <em>sefira</em> week of
 	 * <em>Hod</em>.
@@ -571,10 +564,10 @@ public class TefilaRules {
 	 * Choshen Mishpat 77 writes that this is the <em>minhag</em> in Ashkenaz. The Shaarei Teshuva 131:19 quotes the Sheyarie Kneses
 	 * Hagdola who also states that it should not be recited. The Aderes wanted to institute saying <em>tachanun</em> during this
 	 * period, but was dissuaded from this by Rav Shmuel Salant who did not want to change the <em>minhag</em> in Yerushalayim.
-	 * The Aruch Hashulchan is of the opinion that that this <em>minhag</em> is incorrect, and it should be recited, and The Chazon
+	 * The Aruch Hashulchan is of the opinion that this <em>minhag</em> is incorrect, and it should be recited, and The Chazon
 	 * Ish also recited <em>tachanun</em> during this period. See the Dirshu edition of the Mishna Berurah for details.
 	 * @return If <em>tachanun</em> is set to be recited at the end of {@link JewishDate#TISHREI <em>Tishrei</em>}.
-	 * @see #setTachanunRecitedEndOfTishrei(tachanunRecitedEndOfTishrei)
+	 * @see #setTachanunRecitedEndOfTishrei(boolean)
 	 */
 	public boolean isTachanunRecitedEndOfTishrei() {
 		return tachanunRecitedEndOfTishrei;
@@ -624,7 +617,7 @@ public class TefilaRules {
 	 * {@link #tachanunRecitedWeekAfterShavuos} and {@link #setTachanunRecited13SivanOutOfIsrael} are set to false.
 	 * 
 	 * @return If <em>tachanun</em> is set to be recited on the 13th of {@link JewishDate#SIVAN <em>Sivan</em>} out of Israel.
-	 * @see #setTachanunRecited13SivanOutOfIsrael(isTachanunRecitedThirteenSivanOutOfIsrael)
+	 * @see #setTachanunRecited13SivanOutOfIsrael(boolean)
 	 * @see #isTachanunRecitedWeekAfterShavuos()
 	 */
 	public boolean isTachanunRecited13SivanOutOfIsrael() {
@@ -650,7 +643,7 @@ public class TefilaRules {
 	 * Is <em>tachanun</em> set to be recited on {@link JewishCalendar#PESACH_SHENI <em>Pesach Sheni</em>}. The Pri Chadash 131:7
 	 * states that <em>tachanun</em> should not be recited. The Aruch Hashulchan states that this is the minhag of the
 	 * <em>sephardim</em>. The Shaarei Efraim 10:27 also mentions that it is not recited, as does the Siddur Yaavetz (Shaar Hayesod,
-	 * Chodesh Iyar). The Pri Megadim (Mishbetzes Hazahav 131:15) and the Chazon Ish (Erev Pesahc Shchal Beshabos, page 203 in
+	 * Chodesh Iyar). The Pri Megadim (Mishbetzes Hazahav 131:15) and the Chazon Ish (Erev Pesach Shechal Beshabbos, page 203 in
 	 * <a href="https://he.wikipedia.org/wiki/%D7%A9%D7%A8%D7%99%D7%94_%D7%93%D7%91%D7%9C%D7%99%D7%A6%D7%A7%D7%99">Rav Sheraya
 	 * Devlitzky's</a> comments).
 	 * 

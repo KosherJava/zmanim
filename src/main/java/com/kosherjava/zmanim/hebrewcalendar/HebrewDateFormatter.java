@@ -20,7 +20,7 @@ import java.util.EnumMap;
 
 /**
  * The HebrewDateFormatter class formats a {@link JewishDate}.
- * 
+ * <p>
  * The class formats Jewish dates, numbers, <em>Daf Yomi</em> (<em>Bavli</em> and <em>Yerushalmi</em>), the <em>Omer</em>,
  * <em>Parshas Hashavua</em> (including the special <em>parshiyos</em> of <em>Shekalim</em>, <em>Zachor</em>, <em>Parah</em>
  * and <em>Hachodesh</em>), Yomim Tovim and the Molad (experimental) in Hebrew or Latin chars, and has various settings.
@@ -116,13 +116,13 @@ public class HebrewDateFormatter {
 	 *  &#x05E9;&#x05D5;&#x05D1;&#x05D4;,&#x05E9;&#x05D9;&#x05E8;&#x05D4;,&#x05D4;&#x05D2;&#x05D3;&#x05D5;&#x05DC;,
 	 *  &#x05D7;&#x05D6;&#x05D5;&#x05DF;,&#x05E0;&#x05D7;&#x05DE;&#x05D5;"</code>
 	 */
-	private EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
+	private final EnumMap<JewishCalendar.Parsha, String> hebrewParshaMap;
 	
 	/**
 	 * Default constructor sets the {@link EnumMap}s of Hebrew and default transliterated parshiyos.
 	 */
 	public HebrewDateFormatter() {
-		transliteratedParshaMap = new EnumMap<JewishCalendar.Parsha, String>(JewishCalendar.Parsha.class);
+		transliteratedParshaMap = new EnumMap<>(JewishCalendar.Parsha.class);
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NONE, "");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.BERESHIS, "Bereshis");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NOACH, "Noach");
@@ -195,7 +195,7 @@ public class HebrewDateFormatter {
 		transliteratedParshaMap.put(JewishCalendar.Parsha.CHAZON, "Chazon");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NACHAMU, "Nachamu");
 		
-		hebrewParshaMap = new EnumMap<JewishCalendar.Parsha, String>(JewishCalendar.Parsha.class);
+		hebrewParshaMap = new EnumMap<>(JewishCalendar.Parsha.class);
 		hebrewParshaMap.put(JewishCalendar.Parsha.NONE, "");
 		hebrewParshaMap.put(JewishCalendar.Parsha.BERESHIS, "בראשית");
 		hebrewParshaMap.put(JewishCalendar.Parsha.NOACH, "נח");
@@ -292,7 +292,7 @@ public class HebrewDateFormatter {
 	 */
 	public void setLongWeekFormat(boolean longWeekFormat) {
 		this.longWeekFormat = longWeekFormat;
-		if(longWeekFormat) {
+		if (longWeekFormat) {
 			weekFormat = new SimpleDateFormat("EEEE");
 		} else {
 			weekFormat = new SimpleDateFormat("EEE");
@@ -333,7 +333,7 @@ public class HebrewDateFormatter {
 	 * @see #getTransliteratedShabbosDayOfWeek()
 	 * @see #setTransliteratedShabbosDayOfWeek(String)
 	 */
-	private String transliteratedShabbosDayOfweek = "Shabbos";
+	private String transliteratedShabbosDayOfWeek = "Shabbos";
 
 	/**
 	 * Returns the day of Shabbos transliterated into Latin chars. The default uses Ashkenazi pronunciation "Shabbos".
@@ -344,7 +344,7 @@ public class HebrewDateFormatter {
 	 * @see #formatDayOfWeek(JewishDate)
 	 */
 	public String getTransliteratedShabbosDayOfWeek() {
-		return transliteratedShabbosDayOfweek;
+		return transliteratedShabbosDayOfWeek;
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class HebrewDateFormatter {
 	 * @see #formatDayOfWeek(JewishDate)
 	 */
 	public void setTransliteratedShabbosDayOfWeek(String transliteratedShabbos) {
-		this.transliteratedShabbosDayOfweek = transliteratedShabbos;
+		this.transliteratedShabbosDayOfWeek = transliteratedShabbos;
 	}
 
 	/**
@@ -377,7 +377,7 @@ public class HebrewDateFormatter {
 	 * {@link #formatYomTov(JewishCalendar)} when formatting the Yom Tov String. The default list of months uses
 	 * Ashkenazi pronunciation in typical American English spelling.
 	 * 
-	 * @return the list of transliterated holidays. The default list is currently ["Erev Pesach", "Pesach",
+	 * @return the array of transliterated holidays. The default list is currently ["Erev Pesach", "Pesach",
 	 *         "Chol Hamoed Pesach", "Pesach Sheni", "Erev Shavuos", "Shavuos", "Seventeenth of Tammuz", "Tishah B'Av",
 	 *         "Tu B'Av", "Erev Rosh Hashana", "Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur",
 	 *         "Erev Succos", "Succos", "Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah",
@@ -507,7 +507,6 @@ public class HebrewDateFormatter {
 		if (!jewishCalendar.isRoshChodesh()) {
 			return "";
 		}
-		String formattedRoshChodesh = "";
 		int month = jewishCalendar.getJewishMonth();
 		if (jewishCalendar.getJewishDayOfMonth() == 30) {
 			if (month < JewishCalendar.ADAR || (month == JewishCalendar.ADAR && jewishCalendar.isJewishLeapYear())) {
@@ -520,7 +519,7 @@ public class HebrewDateFormatter {
 		// This method is only about formatting, so we shouldn't make any changes to the params passed in...
 		jewishCalendar = (JewishCalendar) jewishCalendar.clone();
 		jewishCalendar.setJewishMonth(month);
-		formattedRoshChodesh = hebrewFormat ? hebrewHolidays[JewishCalendar.ROSH_CHODESH]
+		String formattedRoshChodesh = hebrewFormat ? hebrewHolidays[JewishCalendar.ROSH_CHODESH]
 				: transliteratedHolidays[JewishCalendar.ROSH_CHODESH];
 		formattedRoshChodesh += " " + formatMonth(jewishCalendar);
 		return formattedRoshChodesh;
@@ -591,7 +590,7 @@ public class HebrewDateFormatter {
 	 * pronunciation in typical American English spelling. This list has a length of 14 with 3 variations for Adar -
 	 * "Adar", "Adar II", "Adar I"
 	 * 
-	 * @return the list of months beginning in Nissan and ending in in "Adar", "Adar II", "Adar I". The default list is
+	 * @return the array of months beginning in Nissan and ending in "Adar", "Adar II", "Adar I". The default list is
 	 *         currently ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Teves",
 	 *         "Shevat", "Adar", "Adar II", "Adar I"].
 	 * @see #setTransliteratedMonthList(String[])
@@ -601,7 +600,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Setter method to allow overriding of the default list of months transliterated into into Latin chars. The default
+	 * Setter method to allow overriding of the default list of months transliterated into Latin chars. The default
 	 * uses Ashkenazi American English transliteration.
 	 * 
 	 * @param transliteratedMonths
@@ -663,18 +662,18 @@ public class HebrewDateFormatter {
 	 */
 	public String formatDayOfWeek(JewishDate jewishDate) {
 		if (hebrewFormat) {
-			if(isLongWeekFormat()) {
+			if (isLongWeekFormat()) {
 				return hebrewDaysOfWeek[jewishDate.getDayOfWeek() - 1];
 			} else {
-				if(jewishDate.getDayOfWeek() == 7) {
+				if (jewishDate.getDayOfWeek() == 7) {
 					return formatHebrewNumber(300);
 				} else {
 					return formatHebrewNumber(jewishDate.getDayOfWeek());
 				}
 			}
 		} else {
-			if(jewishDate.getDayOfWeek() == 7) {
-				if(isLongWeekFormat()) {
+			if (jewishDate.getDayOfWeek() == 7) {
+				if (isLongWeekFormat()) {
 					return getTransliteratedShabbosDayOfWeek();
 				} else {
 					return getTransliteratedShabbosDayOfWeek().substring(0,3);
@@ -706,7 +705,7 @@ public class HebrewDateFormatter {
 	 * &#x05E9;&#x05D1;&#x05D8; &#x05D5;&#x05F3; &#x05D0;&#x05DC;&#x05E4;&#x05D9;&#x05DD; show the use of the Geresh.
 	 * 
 	 * @param useGershGershayim
-	 *            set to false to omit the Geresh &#x5F3; and Gershayim &#x5F4; in formatting
+	 *            set this to false to omit the Geresh &#x5F3; and Gershayim &#x5F4; in formatting
 	 */
 	public void setUseGershGershayim(boolean useGershGershayim) {
 		this.useGershGershayim = useGershGershayim;
@@ -715,7 +714,7 @@ public class HebrewDateFormatter {
 	/**
 	 * Returns whether the class is set to use the &#x05DE;&#x05E0;&#x05E6;&#x05E4;&#x05F4;&#x05DA; letters when
 	 * formatting years ending in 20, 40, 50, 80 and 90 to produce &#x05EA;&#x05E9;&#x05F4;&#x05E4; if false or
-	 * or &#x05EA;&#x05E9;&#x05F4;&#x05E3; if true. Traditionally non-final form letters are used, so the year
+	 *  &#x05EA;&#x05E9;&#x05F4;&#x05E3; if true. Traditionally non-final form letters are used, so the year
 	 * 5780 would be formatted as &#x05EA;&#x05E9;&#x05F4;&#x05E4; if the default false is used here. If this returns
 	 * true, the format &#x05EA;&#x05E9;&#x05F4;&#x05E3; would be used.
 	 * 
@@ -885,17 +884,17 @@ public class HebrewDateFormatter {
 	public String getFormattedKviah(int jewishYear) {
 		JewishDate jewishDate = new JewishDate(jewishYear, JewishDate.TISHREI, 1); // set date to Rosh Hashana
 		int kviah = jewishDate.getCheshvanKislevKviah();
-		int roshHashanaDayOfweek = jewishDate.getDayOfWeek();
-		String returnValue = formatHebrewNumber(roshHashanaDayOfweek);
+		int roshHashanaDayOfWeek = jewishDate.getDayOfWeek();
+		String returnValue = formatHebrewNumber(roshHashanaDayOfWeek);
 		returnValue += (kviah == JewishDate.CHASERIM ? "ח" : kviah == JewishDate.SHELAIMIM ? "ש" : "כ");
 		jewishDate.setJewishDate(jewishYear, JewishDate.NISSAN, 15); // set to Pesach of the given year
-		int pesachDayOfweek = jewishDate.getDayOfWeek();
-		returnValue += formatHebrewNumber(pesachDayOfweek);
+		int pesachDayOfWeek = jewishDate.getDayOfWeek();
+		returnValue += formatHebrewNumber(pesachDayOfWeek);
 		returnValue = returnValue.replaceAll(GERESH, "");// geresh is never used in the kviah format
 		// boolean isLeapYear = JewishDate.isJewishLeapYear(jewishYear);
 		// for efficiency we can avoid the expensive recalculation of the pesach day of week by adding 1 day to Rosh
-		// Hashana for a 353 day year, 2 for a 354 day year, 3 for a 355 or 383 day year, 4 for a 384 day year and 5 for
-		// a 385 day year
+		// Hashana for a 353-day year, 2 for a 354-day year, 3 for a 355 or 383 day year, 4 for a 384-day year and 5 for
+		// a 385-day year
 		return returnValue;
 	}
 
@@ -923,7 +922,7 @@ public class HebrewDateFormatter {
 	 * @return the formatted daf.
 	 */
 	public String formatDafYomiYerushalmi(Daf daf) {
-		if(daf == null) {
+		if (daf == null) {
 			if (hebrewFormat) {
 				return Daf.getYerushalmiMasechtos()[39];
 			} else {
@@ -938,7 +937,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 - 9999.
+	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 to 9999.
 	 * <ul>
 	 * <li>Single digit numbers such as 3, 30 and 100 will be returned with a &#x5F3; (<a
 	 * href="http://en.wikipedia.org/wiki/Geresh">Geresh</a>) appended as at the end. For example &#x5D2;&#x5F3;,
@@ -991,7 +990,7 @@ public class HebrewDateFormatter {
 				sb.append(GERESH);
 			}
 			sb.append(" ");
-			sb.append(ALAFIM); // add # of thousands plus word thousand (overide alafim boolean)
+			sb.append(ALAFIM); // add # of thousands plus the word "thousand" (override alafim boolean)
 			return sb.toString();
 		} else if (useLonghebrewYears && number >= 1000) { // if alafim boolean display thousands
 			sb.append(jOnes[thousands]);
@@ -1010,9 +1009,9 @@ public class HebrewDateFormatter {
 			sb.append(tavTaz[1]);
 		} else {
 			int tens = number / 10;
-			if (number % 10 == 0) { // if evenly divisable by 10
+			if (number % 10 == 0) { // if evenly divisible by 10
 				if (!singleDigitNumber) {
-					if(isUseFinalFormLetters()) {
+					if (isUseFinalFormLetters()) {
 						sb.append(jTenEnds[tens]); // years like 5780 will end with a final form &#x05E3;
 					} else {
 						sb.append(jTens[tens]); // years like 5780 will end with a regular &#x05E4;
@@ -1037,16 +1036,16 @@ public class HebrewDateFormatter {
 	}	
 
 	/**
-	 * Retruns the list of transliterated parshiyos used by this formatter.
+	 * Returns the map of transliterated parshiyos used by this formatter.
 	 * 
-	 * @return the list of transliterated Parshios
+	 * @return the map of transliterated Parshios
 	 */
 	public EnumMap<JewishCalendar.Parsha, String> getTransliteratedParshiosList() {
 		return transliteratedParshaMap;
 	}
 
 	/**
-	 * Setter method to allow overriding of the default list of parshiyos transliterated into into Latin chars. The
+	 * Setter method to allow overriding of the default list of parshiyos transliterated into Latin chars. The
 	 * default uses Ashkenazi American English transliteration.
 	 * 
 	 * @param transliteratedParshaMap
