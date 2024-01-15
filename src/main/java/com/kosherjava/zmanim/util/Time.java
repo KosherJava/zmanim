@@ -37,22 +37,22 @@ public class Time {
 	/**
 	 * @see #getHours()
 	 */
-	private int hours = 0;
+	private int hours;
 
 	/**
 	 * @see #getMinutes()
 	 */
-	private int minutes = 0;
+	private int minutes;
 
 	/**
 	 * @see #getSeconds()
 	 */
-	private int seconds = 0;
+	private int seconds;
 
 	/**
 	 * @see #getMilliseconds()
 	 */
-	private int milliseconds = 0;
+	private int milliseconds;
 
 	/**
 	 * @see #isNegative()
@@ -61,7 +61,7 @@ public class Time {
 	private boolean isNegative = false;
 
 	/**
-	 * Constructor with parameters for the hours, minutes, seconds and millisecods.
+	 * Constructor with parameters for the hours, minutes, seconds and milliseconds.
 	 * 
 	 * @param hours the hours to set
 	 * @param minutes the minutes to set

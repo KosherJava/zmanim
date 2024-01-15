@@ -19,13 +19,13 @@ import java.util.Calendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
- * written by <a href="htts://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
+ * written by <a href="https://web.archive.org/web/20090531215353/http://www.kevinboone.com/suntimes.html">Kevin
  * Boone</a> that is based on the <a href = "https://aa.usno.navy.mil/">US Naval Observatory's</a><a
  * href="https://aa.usno.navy.mil/publications/asa">Astronomical Almanac</a> and used with his permission. Added to Kevin's
  * code is adjustment of the zenith to account for elevation. This algorithm returns the same time every year and does not
  * account for leap years. It is not as accurate as the Jean Meeus based {@link NOAACalculator} that is the default calculator
  * use by the KosherJava <em>zmanim</em> library.
- * 
+ *
  * @author &copy; Eliyahu Hershfeld 2004 - 2023
  * @author &copy; Kevin Boone 2000
  */
@@ -42,26 +42,22 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double doubleTime = Double.NaN;
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		doubleTime = getTimeUTC(calendar, geoLocation, adjustedZenith, true);
-		return doubleTime;
+		return getTimeUTC(calendar, geoLocation, adjustedZenith, true);
 	}
 
 	/**
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double doubleTime = Double.NaN;
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		doubleTime = getTimeUTC(calendar, geoLocation, adjustedZenith, false);
-		return doubleTime;
+		return getTimeUTC(calendar, geoLocation, adjustedZenith, false);
 	}
 
 	/**
-	 * The number of degrees of longitude that corresponds to one hour time difference.
+	 * The number of degrees of longitude that corresponds to one-hour time difference.
 	 */
 	private static final double DEG_PER_HOUR = 360.0 / 24.0;
 
@@ -201,7 +197,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * the longitude. We can't do anything with this time directly; we must convert it to UTC and then to a local time.
 	 * 
 	 * @param localHour the local hour
-	 * @param sunRightAscensionHours the sun's right ascention in hours
+	 * @param sunRightAscensionHours the sun's right ascension in hours
 	 * @param approxTimeDays approximate time days
 	 * 
 	 * @return the fractional number of hours since midnight as a double
@@ -233,7 +229,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double sunRightAscensionHours = getSunRightAscensionHours(sunTrueLong);
 		double cosLocalHourAngle = getCosLocalHourAngle(sunTrueLong, geoLocation.getLatitude(), zenith);
 
-		double localHourAngle = 0;
+		double localHourAngle;
 		if (isSunrise) {
 			localHourAngle = 360.0 - acosDeg(cosLocalHourAngle);
 		} else { // sunset
@@ -243,14 +239,14 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
 				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
-		double pocessedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
-		while (pocessedTime < 0.0) {
-			pocessedTime += 24.0;
+		double processedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
+		while (processedTime < 0.0) {
+			processedTime += 24.0;
 		}
-		while (pocessedTime >= 24.0) {
-			pocessedTime -= 24.0;
+		while (processedTime >= 24.0) {
+			processedTime -= 24.0;
 		}
-		return pocessedTime;
+		return processedTime;
 	}
 	
 	/**
@@ -274,10 +270,10 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double sunrise = getUTCSunrise(calendar, geoLocation, 90, false);
 		double sunset = getUTCSunset(calendar, geoLocation, 90, false);
 		double noon = sunrise + ((sunset - sunrise) / 2);
-		if(noon < 0) {
+		if (noon < 0) {
 			noon += 12;
 		}
-		if(noon < sunrise) {
+		if (noon < sunrise) {
 			noon -= 12;
 		} 
 		return noon;
