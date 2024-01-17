@@ -1609,8 +1609,7 @@ public class JewishCalendar extends JewishDate {
 	 * @return true if the current year is a <em>Shmikta</em> (Jubilee) year.
 	 */
 	public boolean isShmitaYear() {
-		int holidayIndex = getYomTovIndex();
-		return holidayIndex == ISRU_CHAG;
+		return getJewishYear() % 7 == 0;
 	}
 
 	/**
