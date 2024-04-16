@@ -524,7 +524,6 @@ public class AstronomicalCalendar implements Cloneable {
 			cal.add(Calendar.DAY_OF_MONTH, -1);
 		}
 		lowerGeoLocation.setLongitude(lowerMeridian);
-		lowerGeoLocation.setLatitude(-lowerGeoLocation.getLongitude());
 		double noon = getAstronomicalCalculator().getUTCNoon(cal, lowerGeoLocation);
 		return getDateFromTime(noon, SolarEvent.MIDNIGHT);
 	}
