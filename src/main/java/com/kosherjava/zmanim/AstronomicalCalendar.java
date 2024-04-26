@@ -700,7 +700,7 @@ public class AstronomicalCalendar implements Cloneable {
 			throw new IllegalArgumentException("Hours must between 0 and 23.9999...");
 		}
 		return getTimeOffset(getDateFromTime(hours - getGeoLocation().getTimeZone().getRawOffset()
-				/ (double) HOUR_MILLIS, true), -getGeoLocation().getLocalMeanTimeOffset());
+				/ (double) HOUR_MILLIS, SolarEvent.SUNRISE), -getGeoLocation().getLocalMeanTimeOffset());
 	}
 	
 	/**
