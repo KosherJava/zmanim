@@ -127,7 +127,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunrise)) {
 			return null;
 		} else {
-			return getDateFromTime(sunrise, true);
+			return getDateFromTime(sunrise, SolarEvent.SUNRISE);
 		}
 	}
 
@@ -149,7 +149,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunrise)) {
 			return null;
 		} else {
-			return getDateFromTime(sunrise, true);
+			return getDateFromTime(sunrise, SolarEvent.SUNRISE);
 		}
 	}
 
@@ -215,7 +215,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
-			return getDateFromTime(sunset, false);
+			return getDateFromTime(sunset, SolarEvent.SUNSET);
 		}
 	}
 
@@ -236,7 +236,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
-			return getDateFromTime(sunset, false);
+			return getDateFromTime(sunset, SolarEvent.SUNSET);
 		}
 	}
 
@@ -329,7 +329,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(dawn)) {
 			return null;
 		} else {
-			return getDateFromTime(dawn, true);
+			return getDateFromTime(dawn, SolarEvent.SUNRISE);
 		}
 	}
 
@@ -352,7 +352,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
-			return getDateFromTime(sunset, false);
+			return getDateFromTime(sunset, SolarEvent.SUNSET);
 		}
 	}
 
@@ -511,7 +511,21 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Date getSunTransit() {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedCalendar(), getGeoLocation());
-		return getDateFromTime(noon, false); 
+		return getDateFromTime(noon, SolarEvent.NOON);
+	}
+
+	public Date getSunLowerTransit() {
+		Calendar cal = getAdjustedCalendar();
+		GeoLocation lowerGeoLocation = (GeoLocation) getGeoLocation().clone();
+		double meridian = lowerGeoLocation.getLongitude();
+		double lowerMeridian = meridian + 180;
+		if (lowerMeridian > 180){
+			lowerMeridian = lowerMeridian - 360;
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+		}
+		lowerGeoLocation.setLongitude(lowerMeridian);
+		double noon = getAstronomicalCalculator().getUTCNoon(cal, lowerGeoLocation);
+		return getDateFromTime(noon, SolarEvent.MIDNIGHT);
 	}
 	
 	/**
@@ -556,6 +570,9 @@ public class AstronomicalCalendar implements Cloneable {
 		return getTimeOffset(startOfDay, temporalHour * 6);
 	}
 
+	protected enum SolarEvent {
+		SUNRISE, SUNSET, NOON, MIDNIGHT
+	}
 	/**
 	 * A method that returns a <code>Date</code> from the time passed in as a parameter.
 	 * 
@@ -565,7 +582,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @param isSunrise true if this time is for sunrise
 	 * @return The Date object representation of the time double
 	 */
-	protected Date getDateFromTime(double time, boolean isSunrise) {
+	protected Date getDateFromTime(double time, SolarEvent solarEvent) {
 		if (Double.isNaN(time)) {
 			return null;
 		}
@@ -588,10 +605,12 @@ public class AstronomicalCalendar implements Cloneable {
 		// Check if a date transition has occurred, or is about to occur - this indicates the date of the event is
 		// actually not the target date, but the day prior or after
 		int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
-		if (isSunrise && localTimeHours + hours > 18) {
+		if (solarEvent == SolarEvent.SUNRISE && localTimeHours + hours > 18) {
 			cal.add(Calendar.DAY_OF_MONTH, -1);
-		} else if (!isSunrise && localTimeHours + hours < 6) {
+		} else if (solarEvent == SolarEvent.SUNSET && localTimeHours + hours < 6) {
 			cal.add(Calendar.DAY_OF_MONTH, 1);
+		} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours > 12) {
+			cal.add(Calendar.DAY_OF_MONTH, -1);
 		}
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
