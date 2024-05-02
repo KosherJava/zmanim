@@ -61,6 +61,7 @@ The KosherJava Zmanim API has been ported to:
 * Dart / Flutter - https://github.com/yakir8/kosher_dart
 * Go - https://github.com/vlipovetskii/go-zmanim
 * SQL - https://github.com/BehindTheMath/zmanim-sql (alpha quality).
+* VB6/VBA (Visual Basic) - https://github.com/diaphone1/vbzmanim
 
 ZmanCode Desktop App
 ------------------------
