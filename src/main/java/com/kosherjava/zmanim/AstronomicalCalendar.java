@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2023 Eliyahu Hershfeld
+ * Copyright (C) 2004-2024 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -63,7 +63,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * Date sunrise = ac.getSunrise();
  * </pre>
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2023
+ * @author &copy; Eliyahu Hershfeld 2004 - 2024
  */
 public class AstronomicalCalendar implements Cloneable {
 
@@ -514,6 +514,29 @@ public class AstronomicalCalendar implements Cloneable {
 		return getDateFromTime(noon, SolarEvent.NOON);
 	}
 
+	/**
+	 * A method that returns solar midnight. It occurs when the Sun is <a href=
+	 * "https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the lower <a
+	 * href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>, or when the sun is at it's
+	 * <a href="https://en.wikipedia.org/wiki/Nadir">nadir</a>. The calculations used by this class depend on the {@link
+	 * AstronomicalCalculator} used. If this calendar instance is {@link #setAstronomicalCalculator(AstronomicalCalculator)
+	 * set} to use the {@link com.kosherjava.zmanim.util.NOAACalculator} (the default) it will calculate astronomical
+	 * midnight. If the calendar instance is to use the {@link com.kosherjava.zmanim.util.SunTimesCalculator}, that does not
+	 * have code to calculate astronomical noon, midnight is calculated as halfway between sea level sunrise and sea level
+	 * sunset on the other side of the world (180&deg; awa)y, which can be slightly off the real transit time due to changes
+	 * in declination (the lengthening or shortening day). See <a href=
+	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on the proper
+	 * definition of solar noon / midday.
+	 * 
+	 * @return the <code>Date</code> representing Sun's lower transit. If the calculation can't be computed such as when using
+	 *         the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does not support getting solar
+	 *         midnight for the Arctic Circle (where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set), a <code>null</code> will be returned. See detailed explanation on top of the page.
+	 * 
+	 * @see #getSunTransit()
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
+	 */
 	public Date getSunLowerTransit() {
 		Calendar cal = getAdjustedCalendar();
 		GeoLocation lowerGeoLocation = (GeoLocation) getGeoLocation().clone();
@@ -570,8 +593,12 @@ public class AstronomicalCalendar implements Cloneable {
 		return getTimeOffset(startOfDay, temporalHour * 6);
 	}
 
+	/**
+	 * An enum to indicate what type of solar event is being calculated.
+	 */
 	protected enum SolarEvent {
-		SUNRISE, SUNSET, NOON, MIDNIGHT
+		/**SUNRISE A solar event related to sunrise*/SUNRISE, /**SUNSET A solar event related to sunset*/SUNSET,
+		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT
 	}
 	/**
 	 * A method that returns a <code>Date</code> from the time passed in as a parameter.
@@ -579,7 +606,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @param time
 	 *            The time to be set as the time for the <code>Date</code>. The time expected is in the format: 18.75
 	 *            for 6:45:00 PM.time is sunrise and false if it is sunset
-	 * @param isSunrise true if this time is for sunrise
+	 * @param solarEvent the type of {@link SolarEvent}
 	 * @return The Date object representation of the time double
 	 */
 	protected Date getDateFromTime(double time, SolarEvent solarEvent) {
