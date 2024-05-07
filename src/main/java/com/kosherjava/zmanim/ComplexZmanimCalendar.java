@@ -39,7 +39,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * double latitude = 40.0828; // Lakewood, NJ
  * double longitude = -74.222; // Lakewood, NJ
  * double elevation = 20; // optional elevation correction in Meters
- * // the String parameter in getTimeZone() has to be a valid timezone listed in
+ * // the String parameter in getTimeZone() has to be a valid time zone listed in
  * // {@link java.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
@@ -50,7 +50,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * <p>
  * <b>Note:</b> For locations such as Israel where the beginning and end of daylight savings time can fluctuate from
  * year to year, if your version of Java does not have an <a href=
- * "https://www.oracle.com/java/technologies/tzdata-versions.html">up to date timezone database</a>, create a
+ * "https://www.oracle.com/java/technologies/tzdata-versions.html">up to date time zone database</a>, create a
  * {@link java.util.SimpleTimeZone} with the known start and end of DST.
  * To get <em>alos</em> calculated as 14&deg; below the horizon (as calculated in the calendars published in Montreal),
  * add {@link AstronomicalCalendar#GEOMETRIC_ZENITH} (90) to the 14&deg; offset to get the desired time:
@@ -1982,7 +1982,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaKetana()
 	 * @return the <code>Date</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
-	 *         does not set, a<code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Date getMinchaKetana72Minutes() {
@@ -2348,8 +2348,8 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns the beginning of <em>Bain hashmashos</em> of Rabbeinu Tam calculated as a 58.5
-	 * minute offset after sunset. <em>bain hashmashos</em> is 3/4 of a <a href=
+	 * This method returns the beginning of <em>Bain hashmashos</em> of Rabbeinu Tam calculated as a 58.5-minute offset
+	 * after sunset. <em>bain hashmashos</em> is 3/4 of a <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> before <em>tzais</em> or 3 1/4
 	 * mil after sunset. With a mil calculated as 18 minutes, 3.25 * 18 = 58.5 minutes.
 	 * 
@@ -2961,7 +2961,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Allows setting the offset in minutes after sunset for the Ateret Torah <em>zmanim</em>. The default if unset is
 	 * 40 minutes. <em>Chacham</em> Yosef Harari-Raful of Yeshivat Ateret Torah uses 40 minutes globally with the exception
-	 * of Israel where a 25-minute offset is used. This 40 minute (or any other) offset can be overridden by this method.
+	 * of Israel where a 25-minute offset is used. This 40-minute (or any other) offset can be overridden by this method.
 	 * This offset impacts all Ateret Torah <em>zmanim</em>.
 	 * 
 	 * @param ateretTorahSunsetOffset
@@ -3265,7 +3265,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://www.worldcat.org/oclc/956316270">Ohr Meir</a> of the opinion that the equilux should be used. See
 	 * Yisrael Vehazmanim vol I, 34:1:4. Rabbi Yedidya Manet in his <a href=
 	 * "https://www.nli.org.il/en/books/NNL_ALEPH002542826/NLI">Zmanei Halacha Lema'aseh</a> (4th edition part 2, pages
-	 * and 22 and 24) and Rabbi Yonah Metzbuch (in a letter published by Rabbi Manet) are of the opinion that the
+	 * and 22 and 24) and Rabbi Yonah Mertzbuch (in a letter published by Rabbi Manet) are of the opinion that the
 	 * astronomical equinox should be used. The difference adds up to about 9 seconds, too trivial to make much of a
 	 * difference. For information on how this is calculated see the comments on {@link #getAlos16Point1Degrees()}.
 	 * 
@@ -3282,7 +3282,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method should be used <em>lechumra</em> only and returns <em>tzais</em> based on when the sun is 26&deg;
-	 * below the horizon.For information on how this is calculated see the comments on {@link #getAlos26Degrees()}.
+	 * below the horizon. For information on how this is calculated see the comments on {@link #getAlos26Degrees()}.
 	 * Since the <em>zman</em> is extremely late and at a point when it is long past the 18&deg; point where the
 	 * darkest point is reached, it should only be used <em>lechumra</em> such as delaying the start of nighttime
 	 * <em>mitzvos</em>.
@@ -3356,7 +3356,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=14675&pgnum=191">2:20</a>.
 	 * Lakewood, N.J., with a longitude of -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This
 	 * is multiplied by 4 to yield 3 minutes and 7 seconds for a <em>chatzos</em> of 11:56:53. This method is not tied
-	 * to the theoretical 15&deg; timezones, but will adjust to the actual timezone and <a
+	 * to the theoretical 15&deg; time zones, but will adjust to the actual time zone and <a
 	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a>.
 	 * 
 	 * @return the Date representing the local <em>chatzos</em>
@@ -3478,7 +3478,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *            optional end of day to limit <em>molad</em> times to the end of the night before or beginning of the next night.
 	 *            Ignored if either <em>tzais</em> or <em>alos</em> are null
 	 * @param techila
-	 *            is it the start of <em>Kiddush Levana</em> time or the end? If it is start roll it to the next <em>tzais</em>, and
+	 *            is it the start of <em>Kiddush Levana</em> time or the end? If it is start roll it to the next <em>tzais</em>,
 	 *            and if it is the end, return the end of the previous night (<em>alos</em> passed in). Ignored if either
 	 *            <em>alos</em> or <em>tzais</em> are null.
 	 * @return the <em>molad</em> based time. If the <em>zman</em> does not occur during the current date, <code>null</code> will be
@@ -3769,7 +3769,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the latest time one is allowed eating <em>chametz</em> on <em>Erev Pesach</em> according to
-	 * the opinion of the<a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This time is identical to the {@link
+	 * the opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This time is identical to the {@link
 	 * #getSofZmanTfilaGRA() <em>Sof zman tfilah</em> GRA} and is provided as a convenience method for those who are
 	 * unaware how this <em>zman</em> is calculated. This time is 4 hours into the day based on the opinion of the
 	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from sunrise to sunset.
@@ -3859,7 +3859,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the latest time one is allowed eating <em>chametz</em> on <em>Erev Pesach</em> according to the
-	 * opinion of the<a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
+	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos16Point1Degrees() 16.1&deg;} before {@link #getSunrise() sunrise}. This time is 4 {@link
 	 * #getShaahZmanis16Point1Degrees() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos16Point1Degrees() dawn}
 	 * based on the opinion of the MGA that the day is calculated from dawn to nightfall with both being 16.1&deg;
@@ -4459,7 +4459,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of
 	 * the calculation of <em>mincha gedola</em>, the earliest time one can pray <em>mincha</em> <a href=
-	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>that is 30 minutes after {@link #getFixedLocalChatzos() fixed
+	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that is 30 minutes after {@link #getFixedLocalChatzos() fixed
 	 * local chatzos}.
 	 * 
 	 * @return the <code>Date</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
