@@ -843,7 +843,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * Also see the <a href=
 	 * "https://he.wikipedia.org/wiki/%D7%9E%D7%9C%D7%9B%D7%99%D7%90%D7%9C_%D7%A6%D7%91%D7%99_%D7%98%D7%A0%D7%A0%D7%91%D7%95%D7%99%D7%9D"
 	 * >Divrei Malkiel</a> <a href="https://hebrewbooks.org/pdfpager.aspx?req=803&pgnum=33">Vol. 4, Ch. 20, page 34</a>) who
-	 * mentions the 15 minute mil <em>lechumra</a> by baking matzos. Also see the <a href=
+	 * mentions the 15 minute mil <em>lechumra</em> by baking matzos. Also see the <a href=
 	 * "https://en.wikipedia.org/wiki/Joseph_Colon_Trabotto">Maharik</a> <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=1142&pgnum=216">Ch. 173</a> where the questioner quoting the
 	 * <a href="https://en.wikipedia.org/wiki/Eliezer_ben_Nathan">Ra'avan</a> is of the opinion that the time to walk a
@@ -2459,7 +2459,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * position 3.05&deg; above the horizon <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
 	 * its position 18 minutes or 3/4 of an 24-minute <a href=
-	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement" >mil</a>< before sunset. According to
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> before sunset. According to
 	 * the Yereim, <em>bain hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at
 	 * sunset. Note that <em>lechumra</em> (of about 14 seconds) a refraction value of 0.5166&deg; as opposed to the
 	 * traditional 0.566&deg; is used. This is more inline with the actual refraction in <em>Eretz Yisrael</em> and is
@@ -2758,7 +2758,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
 	 * of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> based on the
 	 * sun's position at {@link #ZENITH_4_POINT_8 4.8&deg;} below the western horizon. This is based on Rabbi Leo Levi's
-	 * calculations. This is the This is a very early <em>zman</em> and should not be relied on without Rabbinical guidance.
+	 * calculations. This is a very early <em>zman</em> and should not be relied on without Rabbinical guidance.
 	 * @todo Additional documentation needed.
 	 * 
 	 * @return the <code>Date</code> representing the time when the sun is 4.8&deg; below sea level. If the calculation
