@@ -1241,6 +1241,39 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
+	 * This method returns <em>misheyakir</em> based on 6 zmaniyos minutes after {@link #getAlos72Zmanis() alos}. This is
+	 * based on the Yalkut Yosef (Halachot Tzitzit, year 5764, page 333, and in year 5766, page 266). This is also how
+	 * the Luach Ohr Hachaim calculates the time for misheyakir (or the time for Talit and Tefilin). However, this time
+	 * should only be used for people who need to get up early to go to work or travel. If possible, they recommend a
+	 * person to wait until 60 or 50 minutes before sunrise (depending on whether it is summer or winter).
+	 *
+	 * @return the <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as
+	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
+	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getMisheyakir66MinutesZmanis() {
+		long shaahZmanit = getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
+		long dakahZmanit = shaahZmanit / 60;
+		return getTimeOffset(getAlos72Zmanis(), (6 * dakahZmanit));
+	}
+
+	/**
+	 * This method returns <em>misheyakir</em> based on 12 zmaniyos minutes after {@link #getAlos72Zmanis() alos}, or
+	 * 60 zmaniyos minutes before {@link #getSunrise()}.
+	 *
+	 * @return the <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as
+	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
+	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Date getMisheyakir60MinutesZmanis() {
+		long shaahZmanit = getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
+		long dakahZmanit = shaahZmanit / 60;
+		return getTimeOffset(getAlos72Zmanis(), (12 * dakahZmanit));
+	}
+
+	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a> based on
 	 * <em>alos</em> being {@link #getAlos19Point8Degrees() 19.8&deg;} before {@link #getSunrise() sunrise}. This
