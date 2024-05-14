@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2023 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2024 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -20,7 +20,7 @@ import java.util.EnumMap;
 
 /**
  * The HebrewDateFormatter class formats a {@link JewishDate}.
- * <p>
+ * 
  * The class formats Jewish dates, numbers, <em>Daf Yomi</em> (<em>Bavli</em> and <em>Yerushalmi</em>), the <em>Omer</em>,
  * <em>Parshas Hashavua</em> (including the special <em>parshiyos</em> of <em>Shekalim</em>, <em>Zachor</em>, <em>Parah</em>
  * and <em>Hachodesh</em>), Yomim Tovim and the Molad (experimental) in Hebrew or Latin chars, and has various settings.
@@ -37,7 +37,7 @@ import java.util.EnumMap;
  * @see JewishDate
  * @see JewishCalendar
  * 
- * @author &copy; Eliyahu Hershfeld 2011 - 2023
+ * @author &copy; Eliyahu Hershfeld 2011 - 2024
  */
 public class HebrewDateFormatter {
 	
@@ -122,6 +122,7 @@ public class HebrewDateFormatter {
 	 * Default constructor sets the {@link EnumMap}s of Hebrew and default transliterated parshiyos.
 	 */
 	public HebrewDateFormatter() {
+		weekFormat = new SimpleDateFormat("EEEE");
 		transliteratedParshaMap = new EnumMap<>(JewishCalendar.Parsha.class);
 		transliteratedParshaMap.put(JewishCalendar.Parsha.NONE, "");
 		transliteratedParshaMap.put(JewishCalendar.Parsha.BERESHIS, "Bereshis");
@@ -373,7 +374,7 @@ public class HebrewDateFormatter {
 			"Isru Chag"};
 
 	/**
-	 * Returns the list of holidays transliterated into Latin chars. This is used by the
+	 * Returns the array of holidays transliterated into Latin chars. This is used by the
 	 * {@link #formatYomTov(JewishCalendar)} when formatting the Yom Tov String. The default list of months uses
 	 * Ashkenazi pronunciation in typical American English spelling.
 	 * 
@@ -394,7 +395,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Sets the list of holidays transliterated into Latin chars. This is used by the
+	 * Sets the array of holidays transliterated into Latin chars. This is used by the
 	 * {@link #formatYomTov(JewishCalendar)} when formatting the Yom Tov String.
 	 * 
 	 * @param transliteratedHolidays
@@ -575,7 +576,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Returns the list of months transliterated into Latin chars. The default list of months uses Ashkenazi
+	 * Returns the array of months transliterated into Latin chars. The default list of months uses Ashkenazi
 	 * pronunciation in typical American English spelling. This list has a length of 14 with 3 variations for Adar -
 	 * "Adar", "Adar II", "Adar I"
 	 * 
@@ -688,7 +689,7 @@ public class HebrewDateFormatter {
 	/**
 	 * Returns whether the class is set to use the &#x05DE;&#x05E0;&#x05E6;&#x05E4;&#x05F4;&#x05DA; letters when
 	 * formatting years ending in 20, 40, 50, 80 and 90 to produce &#x05EA;&#x05E9;&#x05F4;&#x05E4; if false or
-	 *  &#x05EA;&#x05E9;&#x05F4;&#x05E3; if true. Traditionally non-final form letters are used, so the year
+	 * &#x05EA;&#x05E9;&#x05F4;&#x05E3; if true. Traditionally non-final form letters are used, so the year
 	 * 5780 would be formatted as &#x05EA;&#x05E9;&#x05F4;&#x05E4; if the default false is used here. If this returns
 	 * true, the format &#x05EA;&#x05E9;&#x05F4;&#x05E3; would be used.
 	 * 
@@ -867,7 +868,7 @@ public class HebrewDateFormatter {
 		returnValue = returnValue.replaceAll(GERESH, "");// geresh is never used in the kviah format
 		// boolean isLeapYear = JewishDate.isJewishLeapYear(jewishYear);
 		// for efficiency we can avoid the expensive recalculation of the pesach day of week by adding 1 day to Rosh
-		// Hashana for a 353-day year, 2 for a 354-day year, 3 for a 355 or 383 day year, 4 for a 384-day year and 5 for
+		// Hashana for a 353-day year, 2 for a 354-day year, 3 for a 355 or 383-day year, 4 for a 384-day year and 5 for
 		// a 385-day year
 		return returnValue;
 	}
@@ -1075,7 +1076,7 @@ public class HebrewDateFormatter {
 	 *         chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example
 	 *         Bereshis or Nitzavim Vayeilech or an empty string if there are none.
 	 * @see #formatParsha(JewishCalendar)
-	 *
+	 * @see JewishCalendar#getUpcomingParshah()
 	 */
 	public String formatParsha(JewishCalendar.Parsha parsha) {
 		return hebrewFormat ? hebrewParshaMap.get(parsha) : transliteratedParshaMap.get(parsha);
