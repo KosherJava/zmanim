@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2024 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -54,7 +54,7 @@ import java.util.Date;
  * // will sort shaah 1.6, shaah GRA, sunrise, sunset
  * </pre>
  * 
- * @author &copy; Eliyahu Hershfeld 2007-2020
+ * @author &copy; Eliyahu Hershfeld 2007-2024
  * @todo Add secondary sorting. As of now the {@code Comparator}s in this class do not sort by secondary order. This means that when sorting a
  * {@link java.util.Collection} of <em>zmanim</em> and using the {@link #DATE_ORDER} {@code Comparator} will have the duration based <em>zmanim</em>
  * at the end, but they will not be sorted by duration. This should be N/A for label based sorting.
@@ -230,12 +230,39 @@ public class Zman {
 			return firstDuration == secondDuration ? 0 	: firstDuration > secondDuration ? 1 : -1;
 		}
 	};
+
+	/**
+	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very
+	 * similar to the toString method but the return value is in an xml format. The format currently used (subject to
+	 * change) is:
+	 * 
+	 * <pre>
+	 * &lt;Zman&gt;
+	 * 	&lt;Label&gt;Sof Zman Krias Shema GRA&lt;/Label&gt;
+	 * 	&lt;Zman&gt;1969-02-08T09:37:56.820&lt;/Zman&gt;
+	 * 	&lt;Duration&gt;0&lt;/Duration&gt;
+	 * 	&lt;Description&gt;Sof Zman Krias Shema GRA is 3 sha'os zmaniyos calculated from sunrise to sunset.&lt;/Description&gt;
+	 * &lt;/Zman&gt;
+	 * </pre>
+	 * @return The XML formatted <code>String</code>.
+	 */
+	public String toXML() {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		StringBuilder sb = new StringBuilder();
+		sb.append("<Zman>\n");
+		sb.append("\t<Label>").append(getLabel()).append("</Label>\n");
+		sb.append("\t<Zman>").append(getZman() == null ? "": formatter.format(getZman())).append("</Zman>\n");
+		sb.append("\n\t<Duration>").append(getDuration()).append("</Duration>\n");
+		sb.append("\t<Description>").append(getDescription()).append("</Description>\n");
+		sb.append("</Zman>");
+		return sb.toString();
+	}
 	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("\nLabel:\t\t\t").append(this.getLabel());
 		sb.append("\nZman:\t\t\t").append(getZman());
 		sb.append("\nDuration:\t\t\t").append(getDuration());
