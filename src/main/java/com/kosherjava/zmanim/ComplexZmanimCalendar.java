@@ -2620,6 +2620,22 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getBainHasmashosYereim2Point1Degrees() {
 		return getBainHashmashosYereim2Point1Degrees();
 	}
+
+	/**
+	 * This method returns the time for tzait hacochavim (nightfall) calculated according to the opinion of the
+	 * Geonim. This is calculated as 13.5 zmaniyot minutes after elevated sunset. This is a very early zman, and it
+	 * should not be used without halachic guidance! It certainly should not be used for ending Shabbat, even unintentionally!
+	 *
+	 * @return the <code>Date</code> of the time of <em>tzais</em>. If the calculation can't be computed such as
+	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
+	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	private Date getTzaisGeonim13AndAHalfMinutesZmanis() {
+		long shaahZmanit = getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
+		long dakahZmanit = shaahZmanit / 60;
+		return getTimeOffset(getElevationAdjustedSunset(),(13 * dakahZmanit) + (dakahZmanit / 2));
+	}
 	
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
@@ -3108,6 +3124,25 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getPlagHaminchaAteretTorah() {
 		return getPlagHamincha(getAlos72Zmanis(), getTzaisAteretTorah(), false);
+	}
+
+	/**
+	 * This method returns the time of <em>plag hamincha</em> based on the calculation of the Yalkut Yosef, that the
+	 * day starts {@link #getSunrise() at sunrise} and is calculated as ending at {@link #getSunset() sunset}.
+	 * <em>shaos zmaniyos</em> are calculated based on this day and
+	 * removed from {@link #getTzaisGeonim13AndAHalfMinutesZmanis() <em>tzais</em>} to reach this time. This time is 1.25
+	 * {@link #getShaahZmanisGra() <em>shaos zmaniyos</em>} (temporal hours) before {@link #getTzaisGeonim13AndAHalfMinutesZmanis() <em>tzais</em>}
+	 *
+	 * @return the <code>Date</code> of the <em>plag</em>. If the calculation can't be computed such as in the Arctic Circle
+	 *         where there is at least one day a year where the sun does not rise, and one where it does not set, a null
+	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getTzaisGeonim13AndAHalfMinutesZmanis()
+	 * @see #getShaahZmanisGra()
+	 */
+	public Date getPlagHaminchaYalkutYosef() {
+		long shaahZmanit = getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
+		long dakahZmanit = shaahZmanit / 60;
+		return getTimeOffset(getTzaisGeonim13AndAHalfMinutesZmanis(), -(shaahZmanit + (15 * dakahZmanit)));
 	}
 
 	/**
