@@ -309,7 +309,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      *            the month. As with other cases in this class, this is 1-based, not zero-based.
      * @return the number of days in the month in the given year
      */
-    private static int getLastDayOfGregorianMonth(int year, int month) {
+    // @VisibleForTesting
+	protected static int getLastDayOfGregorianMonth(int year, int month) {
         return YearMonth.of(year, month).lengthOfMonth();
     }
 
@@ -1280,12 +1281,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         return clone;
     }
 
-    /**
-     * Overrides {@link Object#hashCode()}.
-     * @see Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(gregorianAbsDate);
-    }
+	@Override
+	public int hashCode() {
+		return gregorianAbsDate;
+	}
 }
