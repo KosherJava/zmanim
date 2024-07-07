@@ -154,7 +154,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /** The number  of <em>chalakim</em> (1080) in an hour.*/
     private static final int CHALAKIM_PER_HOUR = 1080;
     /** The number of <em>chalakim</em> (25,920) in a 24-hour day .*/
-    private static final int CHALAKIM_PER_DAY = 25920; // 24 * 1080
+    private static final long CHALAKIM_PER_DAY = 25920; // 24 * 1080
     /** The number  of <em>chalakim</em> in an average Jewish month. A month has 29 days, 12 hours and 793
      * <em>chalakim</em> (44 minutes and 3.3 seconds) for a total of 765,433 <em>chalakim</em>*/
     private static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
@@ -415,8 +415,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public static int getJewishCalendarElapsedDays(int year) {
         long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);
-        int moladDay = (int) (chalakimSince / (long) CHALAKIM_PER_DAY);
-        int moladParts = (int) (chalakimSince - moladDay * (long) CHALAKIM_PER_DAY);
+        int moladDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
+        int moladParts = (int) (chalakimSince - moladDay * CHALAKIM_PER_DAY);
         // delay Rosh Hashana for the 4 dechiyos
         return addDechiyos(year, moladDay, moladParts);
     }
@@ -788,8 +788,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public JewishDate(long molad) {
         setAbsDate(moladToAbsDate(molad));
-        int conjunctionDay = (int) (molad / (long) CHALAKIM_PER_DAY);
-        int chalakim = (int) (molad - conjunctionDay * (long) CHALAKIM_PER_DAY);
+        int conjunctionDay = (int) (molad / CHALAKIM_PER_DAY);
+        int chalakim = (int) (molad - conjunctionDay * CHALAKIM_PER_DAY);
         setMoladHours(chalakim / CHALAKIM_PER_HOUR);
         chalakim = chalakim - (getMoladHours() * CHALAKIM_PER_HOUR);
         setMoladMinutes(chalakim / CHALAKIM_PER_MINUTE);
@@ -901,7 +901,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      *             if the date would fall prior to the year 1 AD
      */
     public void setGregorianDate(LocalDate localDate) {
-        int absDate = gregorianDateToAbsDate(localDate.getYear(),  localDate.getMonth().getValue(), localDate.getDayOfMonth()); 
+        int absDate = gregorianDateToAbsDate(localDate.getYear(),  localDate.getMonth().getValue(), localDate.getDayOfMonth());
         setAbsDate(absDate); // convert to Jewish date
     }
 
@@ -993,7 +993,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * Setter for the Jewish year of the passed in that will <a href="https://en.wikipedia.org/wiki/Clamp_(function)"
      * >clamp</a> the day to the month to the lesser of the current day and the max number of days in the month (if set
      * to the 30th).
-     * 
+     *
      * Note that if you are using this for a yahrzeit (or any other reason)on the 30th of the month that will not always have
      * 30 days, such as {@link #CHESHVAN} or {@link #KISLEV} or {@link #ADAR ADAR I} on a leap year and the next year is a
      * non-leap year, you must clone your date or once it is set to the 29th, the next time you forward it to a year that has
@@ -1036,11 +1036,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         setAbsDate(getAbsDate() - days);
 
     }
-    
+
     /**
      * Add the number of days passed in to the currently set date.
      * @param days the number of days to add.
-     * 
+     *
      * @see minusDays(int)
      */
     public void plusDays(int days){
@@ -1049,7 +1049,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         }
         setAbsDate(getAbsDate() + days);
     }
-    
+
     /**
      * Add the number of months passed in to the currently set date. If the day of the month prior to addition is the 30th, and
      * the target month only has 29 days, the date will be clamped to the 29th.
@@ -1076,7 +1076,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
         setJewishDate(year, month, day);
     }
-    
+
     /**
      * Subtracts the number of months passed in to the currently set date. If the day of the month prior to subtraction
      * is the 30th, and the target month only has 29 days, the date will be clamped to the 29th.
@@ -1104,7 +1104,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
         setJewishDate(year, month, day);
     }
-    
+
     /**
      * Add the number of years passed in to the currently set date. If the current month is Adar on a non-leap year,
      * and the year after the addition will be a leap year, passing <code>true</code> to the useAdarAlephForLeapYear
