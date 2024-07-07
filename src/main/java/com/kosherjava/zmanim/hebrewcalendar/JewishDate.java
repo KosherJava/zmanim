@@ -153,7 +153,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/** The number  of <em>chalakim</em> (1080) in an hour.*/
 	private static final int CHALAKIM_PER_HOUR = 1080;
 	/** The number of <em>chalakim</em> (25,920) in a 24-hour day .*/
-	private static final int CHALAKIM_PER_DAY = 25920; // 24 * 1080
+	private static final long CHALAKIM_PER_DAY = 25920; // 24 * 1080
 	/** The number  of <em>chalakim</em> in an average Jewish month. A month has 29 days, 12 hours and 793
 	 * <em>chalakim</em> (44 minutes and 3.3 seconds) for a total of 765,433 <em>chalakim</em>*/
 	private static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
@@ -460,8 +460,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
 		long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);
-		int moladDay = (int) (chalakimSince / (long) CHALAKIM_PER_DAY);
-		int moladParts = (int) (chalakimSince - moladDay * (long) CHALAKIM_PER_DAY);
+		int moladDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
+		int moladParts = (int) (chalakimSince - moladDay * CHALAKIM_PER_DAY);
 		// delay Rosh Hashana for the 4 dechiyos
 		return addDechiyos(year, moladDay, moladParts);
 	}
@@ -908,8 +908,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
 		// long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);// tishrei
-		int conjunctionDay = (int) (molad / (long) CHALAKIM_PER_DAY);
-		int conjunctionParts = (int) (molad - conjunctionDay * (long) CHALAKIM_PER_DAY);
+		int conjunctionDay = (int) (molad / CHALAKIM_PER_DAY);
+		int conjunctionParts = (int) (molad - conjunctionDay * CHALAKIM_PER_DAY);
 		setMoladTime(conjunctionParts);
 	}
 
