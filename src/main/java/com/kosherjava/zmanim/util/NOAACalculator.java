@@ -65,10 +65,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunrise = getSunriseUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
-				adjustedZenith);
+		double sunrise = getSunRiseSetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+				adjustedZenith, SolarEvent.SUNRISE);
 		sunrise = sunrise / 60;
-
 		return sunrise > 0  ? sunrise % 24 : sunrise % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
 
@@ -78,8 +77,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunset = getSunsetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
-				adjustedZenith);
+		double sunset = getSunRiseSetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+				adjustedZenith, SolarEvent.SUNSET);
 		sunset = sunset / 60;
 		return sunset > 0  ? sunset % 24 : sunset % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
@@ -388,48 +387,6 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of sunrise for the given day at the given location on earth.
-	 * 
-	 * @param julianDay
-	 *            the Julian day
-	 * @param latitude
-	 *            the latitude of observer in degrees
-	 * @param longitude
-	 *            the longitude of observer in degrees
-	 * @param zenith
-	 *            the zenith
-	 * @return the time in minutes from zero UTC
-	 */
-	private static double getSunriseUTC(double julianDay, double latitude, double longitude, double zenith) {
-		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
-
-		// Find the time of solar noon at the location, and use that declination. This is better than start of the
-		// Julian day
-		double noonmin = getSolarNoonUTC(julianCenturies, longitude);
-		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
-
-		// First pass to approximate sunrise (using solar noon)
-		double equationOfTime = getEquationOfTime(tnoon);
-		double solarDeclination = getSunDeclination(tnoon);
-		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, SolarEvent.SUNRISE);
-		double delta = longitude - Math.toDegrees(hourAngle);
-		double timeDiff = 4 * delta; // in minutes of time
-		double timeUTC = 720 + timeDiff - equationOfTime; // in minutes
-
-		// Second pass includes fractional Julian Day in gamma calc
-		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + timeUTC
-				/ 1440.0);
-		equationOfTime = getEquationOfTime(newt);
-		solarDeclination = getSunDeclination(newt);
-		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, SolarEvent.SUNRISE);
-		delta = longitude - Math.toDegrees(hourAngle);
-		timeDiff = 4 * delta;
-		timeUTC = 720 + timeDiff - equationOfTime; // in minutes
-		return timeUTC;
-	}
-	
-	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
 	 * of <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
 	 * on earth. This implementation returns true solar noon as opposed to the time halfway between sunrise and sunset.
 	 * Other calculators may return a more simplified calculation of halfway between sunrise and sunset. See <a href=
@@ -470,7 +427,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @see #getUTCNoon(Calendar, GeoLocation)
 	 */
 	private static double getSolarNoonUTC(double julianCenturies, double longitude) {
-		// First pass uses approximate solar noon to calculate equation of time
+		// Only 1 pass for approximate solar noon to calculate equation of time
 		double tnoon = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + longitude
 				/ 360.0);
 		double equationOfTime = getEquationOfTime(tnoon);
@@ -480,10 +437,10 @@ public class NOAACalculator extends AstronomicalCalculator {
 		equationOfTime = getEquationOfTime(newt);
 		return 720 + (longitude * 4) - equationOfTime; // minutes
 	}
-
+	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of sunset for the given day at the given location on earth.
+	 * of sunrise or sunset for the given day at the given location on earth.
 	 * 
 	 * @param julianDay
 	 *            the Julian day
@@ -493,20 +450,23 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            longitude of observer in degrees
 	 * @param zenith
 	 *            zenith
+	 * @param solarEvent
+	 *             Is the calculation for sunrise or sunset
 	 * @return the time in minutes from zero Universal Coordinated Time (UTC)
 	 */
-	private static double getSunsetUTC(double julianDay, double latitude, double longitude, double zenith) {
+	private static double getSunRiseSetUTC(double julianDay, double latitude, double longitude, double zenith,
+			SolarEvent solarEvent) {
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
 
-		// Find the time of solar noon at the location, and use that declination. This is better than start of the
-		// Julian day
+		// Find the time of solar noon at the location, and use that declination.
+		// This is better than start of the Julian day
 		double noonmin = getSolarNoonUTC(julianCenturies, longitude);
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
 
 		// First calculates sunrise and approx length of day
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solarDeclination = getSunDeclination(tnoon);
-		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, SolarEvent.SUNSET);
+		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta;
 		double timeUTC = 720 + timeDiff - equationOfTime;
@@ -516,7 +476,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 				/ 1440.0);
 		equationOfTime = getEquationOfTime(newt);
 		solarDeclination = getSunDeclination(newt);
-		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, SolarEvent.SUNSET);
+		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
 		timeUTC = 720 + timeDiff - equationOfTime; // in minutes
