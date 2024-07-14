@@ -65,7 +65,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunrise = getSunRiseSetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+		double sunrise = getSunRiseSetUTC(calendar, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, SolarEvent.SUNRISE);
 		sunrise = sunrise / 60;
 		return sunrise > 0  ? sunrise % 24 : sunrise % 24 + 24; // ensure that the time is >= 0 and < 24
@@ -77,7 +77,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunset = getSunRiseSetUTC(getJulianDay(calendar), geoLocation.getLatitude(), -geoLocation.getLongitude(),
+		double sunset = getSunRiseSetUTC(calendar, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, SolarEvent.SUNSET);
 		sunset = sunset / 60;
 		return sunset > 0  ? sunset % 24 : sunset % 24 + 24; // ensure that the time is >= 0 and < 24
@@ -117,19 +117,6 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Convert centuries since <a href="https://en.wikipedia.org/wiki/Epoch_(astronomy)#J2000">J2000.0</a> to
-	 * <a href="https://en.wikipedia.org/wiki/Julian_day">Julian day</a>.
-	 * 
-	 * @param julianCenturies
-	 *            the number of Julian centuries since <a href=
-	 *            "https://en.wikipedia.org/wiki/Epoch_(astronomy)#J2000">J2000.0</a>.
-	 * @return the Julian Day corresponding to the Julian centuries passed in
-	 */
-	private static double getJulianDayFromJulianCenturies(double julianCenturies) {
-		return julianCenturies * JULIAN_DAYS_PER_CENTURY + JULIAN_DAY_JAN_1_2000;
-	}
-
-	/**
 	 * Returns the Geometric <a href="https://en.wikipedia.org/wiki/Mean_longitude">Mean Longitude</a> of the Sun.
 	 * 
 	 * @param julianCenturies
@@ -143,7 +130,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Returns the Geometric <a href="https://en.wikipedia.org/wiki/Mean_anomaly">Mean Anomaly</a> of the Sun.
+	 * Returns the Geometric <a href="https://en.wikipedia.org/wiki/Mean_anomaly">Mean Anomaly</a> of the Sun in degrees.
 	 * 
 	 * @param julianCenturies
 	 *            the number of Julian centuries since <a href=
@@ -151,11 +138,11 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @return the Geometric Mean Anomaly of the Sun in degrees
 	 */
 	private static double getSunGeometricMeanAnomaly(double julianCenturies) {
-		return 357.52911 + julianCenturies * (35999.05029 - 0.0001537 * julianCenturies); // in degrees
+		return 357.52911 + julianCenturies * (35999.05029 - 0.0001537 * julianCenturies);
 	}
 
 	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Eccentricity_%28orbit%29">eccentricity of earth's orbit</a>.
+	 * Return the unitless <a href="https://en.wikipedia.org/wiki/Eccentricity_%28orbit%29">eccentricity of earth's orbit</a>.
 	 * 
 	 * @param julianCenturies
 	 *            the number of Julian centuries since <a href=
@@ -163,11 +150,11 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @return the unitless eccentricity
 	 */
 	private static double getEarthOrbitEccentricity(double julianCenturies) {
-		return 0.016708634 - julianCenturies * (0.000042037 + 0.0000001267 * julianCenturies); // unitless
+		return 0.016708634 - julianCenturies * (0.000042037 + 0.0000001267 * julianCenturies);
 	}
 
 	/**
-	 * Returns the <a href="https://en.wikipedia.org/wiki/Equation_of_the_center">equation of center</a> for the sun.
+	 * Returns the <a href="https://en.wikipedia.org/wiki/Equation_of_the_center">equation of center</a> for the sun in degrees.
 	 * 
 	 * @param julianCenturies
 	 *            the number of Julian centuries since <a href=
@@ -181,7 +168,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double sin2m = Math.sin(mrad + mrad);
 		double sin3m = Math.sin(mrad + mrad + mrad);
 		return sinm * (1.914602 - julianCenturies * (0.004817 + 0.000014 * julianCenturies)) + sin2m
-				* (0.019993 - 0.000101 * julianCenturies) + sin3m * 0.000289; // in degrees
+				* (0.019993 - 0.000101 * julianCenturies) + sin3m * 0.000289;
 	}
 
 	/**
@@ -195,7 +182,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunTrueLongitude(double julianCenturies) {
 		double sunLongitude = getSunGeometricMeanLongitude(julianCenturies);
 		double center = getSunEquationOfCenter(julianCenturies); 
-		return sunLongitude + center; // in degrees
+		return sunLongitude + center;
 	}
 
 	// /**
@@ -209,7 +196,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	// double meanAnomaly = getSunGeometricMeanAnomaly(julianCenturies);
 	// double equationOfCenter = getSunEquationOfCenter(julianCenturies);
 	//
-	// return meanAnomaly + equationOfCenter; // in degrees
+	// return meanAnomaly + equationOfCenter;
 	// }
 
 	/**
@@ -224,7 +211,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double sunTrueLongitude = getSunTrueLongitude(julianCenturies);
 		double omega = 125.04 - 1934.136 * julianCenturies;
 		double lambda = sunTrueLongitude - 0.00569 - 0.00478 * Math.sin(Math.toRadians(omega));
-		return lambda; // in degrees
+		return lambda;
 	}
 
 	/**
@@ -238,7 +225,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getMeanObliquityOfEcliptic(double julianCenturies) {
 		double seconds = 21.448 - julianCenturies
 				* (46.8150 + julianCenturies * (0.00059 - julianCenturies * (0.001813)));
-		return 23.0 + (26.0 + (seconds / 60.0)) / 60.0; // in degrees
+		return 23.0 + (26.0 + (seconds / 60.0)) / 60.0;
 	}
 
 	/**
@@ -253,7 +240,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getObliquityCorrection(double julianCenturies) {
 		double obliquityOfEcliptic = getMeanObliquityOfEcliptic(julianCenturies);
 		double omega = 125.04 - 1934.136 * julianCenturies;
-		return obliquityOfEcliptic + 0.00256 * Math.cos(Math.toRadians(omega)); // in degrees
+		return obliquityOfEcliptic + 0.00256 * Math.cos(Math.toRadians(omega));
 	}
 
 	/**
@@ -270,7 +257,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double lambda = getSunApparentLongitude(julianCenturies);
 		double sint = Math.sin(Math.toRadians(obliquityCorrection)) * Math.sin(Math.toRadians(lambda));
 		double theta = Math.toDegrees(Math.asin(sint));
-		return theta; // in degrees
+		return theta;
 	}
 
 	/**
@@ -296,7 +283,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double sin2m = Math.sin(2.0 * Math.toRadians(geomMeanAnomalySun));
 		double equationOfTime = y * sin2l0 - 2.0 * eccentricityEarthOrbit * sinm + 4.0 * eccentricityEarthOrbit * y
 				* sinm * cos2l0 - 0.5 * y * y * sin4l0 - 1.25 * eccentricityEarthOrbit * eccentricityEarthOrbit * sin2m;
-		return Math.toDegrees(equationOfTime) * 4.0; // in minutes of time
+		return Math.toDegrees(equationOfTime) * 4.0;
 	}
 	
 	/**
@@ -403,20 +390,19 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @return the time in minutes from zero UTC
 	 */
 	public double getUTCNoon(Calendar calendar, GeoLocation geoLocation) {
-		double julianDay = getJulianDay(calendar);
-		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
-		double noon = getSolarNoonUTC(julianCenturies, -geoLocation.getLongitude());
+		double noon = getSolarNoonUTC(getJulianDay(calendar), -geoLocation.getLongitude());
 		noon = noon / 60;
 		return noon > 0  ? noon % 24 : noon % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
 
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of of <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
+	 * of <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
 	 * on earth.
+	 * @todo Refactor to possibly use the getSunRiseSetUTC (to be renamed) and remove the need for this method. 
 	 * 
-	 * @param julianCenturies
-	 *            the number of Julian centuries since <a href=
+	 * @param julianDay
+	 *            the Julian day since <a href=
 	 *            "https://en.wikipedia.org/wiki/Epoch_(astronomy)#J2000">J2000.0</a>.
 	 * @param longitude
 	 *            the longitude of observer in degrees
@@ -426,24 +412,26 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
 	 * @see #getUTCNoon(Calendar, GeoLocation)
 	 */
-	private static double getSolarNoonUTC(double julianCenturies, double longitude) {
-		// Only 1 pass for approximate solar noon to calculate equation of time
-		double tnoon = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + longitude
-				/ 360.0);
+	private static double getSolarNoonUTC(double julianDay, double longitude) {
+		// First pass for approximate solar noon to calculate equation of time
+		double tnoon = getJulianCenturiesFromJulianDay(julianDay + longitude / 360.0);
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solNoonUTC = 720 + (longitude * 4) - equationOfTime; // minutes
-		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) - 0.5
-				+ solNoonUTC / 1440.0);
+		
+		// second pass
+		double newt = getJulianCenturiesFromJulianDay(julianDay - 0.5 + solNoonUTC / 1440.0);
 		equationOfTime = getEquationOfTime(newt);
-		return 720 + (longitude * 4) - equationOfTime; // minutes
+		return 720 + (longitude * 4) - equationOfTime;
 	}
 	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of sunrise or sunset for the given day at the given location on earth.
+	 * of sunrise or sunset in minutes for the given day at the given location on earth.
+	 * @todo support solar noon and possibly increase the number of passes in the Arctic areas.
+	 *            This would remove the need for getSolarNoonUTC.
 	 * 
-	 * @param julianDay
-	 *            the Julian day
+	 * @param calendar
+	 *            the calendar
 	 * @param latitude
 	 *            the latitude of observer in degrees
 	 * @param longitude
@@ -454,16 +442,16 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *             Is the calculation for sunrise or sunset
 	 * @return the time in minutes from zero Universal Coordinated Time (UTC)
 	 */
-	private static double getSunRiseSetUTC(double julianDay, double latitude, double longitude, double zenith,
+	private static double getSunRiseSetUTC(Calendar calendar, double latitude, double longitude, double zenith,
 			SolarEvent solarEvent) {
-		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
+		double julianDay = getJulianDay(calendar);
 
 		// Find the time of solar noon at the location, and use that declination.
 		// This is better than start of the Julian day
-		double noonmin = getSolarNoonUTC(julianCenturies, longitude);
+		double noonmin = getSolarNoonUTC(julianDay, longitude);
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
 
-		// First calculates sunrise and approx length of day
+		// First calculates sunrise and approximate length of day
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solarDeclination = getSunDeclination(tnoon);
 		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
@@ -472,14 +460,14 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double timeUTC = 720 + timeDiff - equationOfTime;
 
 		// Second pass includes fractional Julian Day in gamma calc
-		double newt = getJulianCenturiesFromJulianDay(getJulianDayFromJulianCenturies(julianCenturies) + timeUTC
-				/ 1440.0);
+		double newt = getJulianCenturiesFromJulianDay(julianDay + timeUTC / 1440.0);
 		equationOfTime = getEquationOfTime(newt);
+		
 		solarDeclination = getSunDeclination(newt);
 		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
-		timeUTC = 720 + timeDiff - equationOfTime; // in minutes
+		timeUTC = 720 + timeDiff - equationOfTime;
 		return timeUTC;
 	}
 }
