@@ -582,7 +582,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *             if a Jewish date earlier than 18 Teves, 3761 (1/1/1 Gregorian), a month &lt; 1 or &gt; 12 (or 13 on a leap year),
 	 *             the day of month is &lt; 1 or &gt; 30, an hour &lt; 0 or &gt; 23, a minute &lt; 0 or &gt; 59 or <em>chalakim</em>
 	 *             &lt; 0 or &gt; 17. For larger a larger number of <em>chalakim</em> such as 793 (<em>TaShTzaG</em>) break the
-	 *             </em>chalakim</em> into minutes (18 <em>chalakim</em> per minutes, so it would be 44 minutes and 1 <em>chelek</em>
+	 *             <em>chalakim</em> into minutes (18 <em>chalakim</em> per minutes, so it would be 44 minutes and 1 <em>chelek</em>
 	 *             in the case of 793 (<em>TaShTzaG</em>).
 	 */
 	private static void validateJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
@@ -834,8 +834,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param year
 	 *            the Jewish year. The year can't be negative
 	 * @param month
-	 *            the Jewish month starting with Nissan. Nissan expects a value of 1 etc till Adar with a value of 12. For
-	 *            a leap year, 13 will be the expected value for Adar II. Use the constants {@link JewishDate#NISSAN}
+	 *            the Jewish month starting with Nissan. Nissan expects a value of 1 etc. until Adar with a value of 12.
+	 *            For a leap year, 13 will be the expected value for Adar II. Use the constants {@link JewishDate#NISSAN}
 	 *            etc.
 	 * @param dayOfMonth
 	 *            the Jewish day of month. valid values are 1-30. If the day of month is set to 30 for a month that only
@@ -884,7 +884,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Monday, <em>Ha</em> = 5 hours and <em>RaD</em> = 204 <em>chalakim</em> / parts) - prior to the start of the Jewish
 	 * calendar. <em>BeHaRaD</em> is 23:11:20 on Sunday night(5 hours 204/1080 <em>chalakim</em> after sunset on Sunday evening).
 	 * 
-	 * @param <em>molad</em> the number of <em>chalakim</em> since the beginning of Sunday prior to BaHaRaD
+	 * @param molad the number of <em>chalakim</em> since the beginning of Sunday prior to BaHaRaD
 	 */
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
