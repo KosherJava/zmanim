@@ -798,7 +798,7 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public boolean isYomTov() {
 		int holidayIndex = getYomTovIndex();
-		if ((isErevYomTov() && (holidayIndex != HOSHANA_RABBA && holidayIndex != CHOL_HAMOED_PESACH))
+		if ((isErevYomTov() && ! ( holidayIndex == HOSHANA_RABBA || holidayIndex == CHOL_HAMOED_PESACH))
 				|| (isTaanis() && holidayIndex != YOM_KIPPUR) || holidayIndex == ISRU_CHAG) {
 			return false;
 		}
