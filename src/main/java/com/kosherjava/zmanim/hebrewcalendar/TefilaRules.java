@@ -242,7 +242,7 @@ public class TefilaRules {
 	 */
 	public boolean isVeseinTalUmatarStartDate(JewishCalendar jewishCalendar) {
 		if (jewishCalendar.getInIsrael()) {
-			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
+			 // The 7th Marcheshvan can't occur on Shabbos, so always return true for 7 Marcheshvan
 			return jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 7;
 		} else {
 			if (jewishCalendar.getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
@@ -275,7 +275,7 @@ public class TefilaRules {
 	 */
 	public boolean isVeseinTalUmatarStartingTonight(JewishCalendar jewishCalendar) {
 		if (jewishCalendar.getInIsrael()) {
-			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
+			// The 7th Marcheshvan can't occur on Shabbos, so always return true for 6 Marcheshvan
 			return jewishCalendar.getJewishMonth() == JewishDate.CHESHVAN && jewishCalendar.getJewishDayOfMonth() == 6;
 		} else {
 			if (jewishCalendar.getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
