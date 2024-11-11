@@ -104,7 +104,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	public static final int TISHREI = 7;
 
 	/**
-	 * Value of the month field indicating Cheshvan/marcheshvan, the eighth numeric month of the year in the Jewish
+	 * Value of the month field indicating Marcheshvan/marcheshvan, the eighth numeric month of the year in the Jewish
 	 * calendar. With the year starting at {@link #TISHREI}, it would actually be the 2nd month of the year.
 	 */
 	public static final int CHESHVAN = 8;
@@ -166,7 +166,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * A short year where both {@link #CHESHVAN} and {@link #KISLEV} are 29 days.
 	 * 
-	 * @see #getCheshvanKislevKviah()
+	 * @see #getMarcheshvanKislevKviah()
 	 * @see HebrewDateFormatter#getFormattedKviah(int)
 	 */
 	public static final int CHASERIM = 0;
@@ -174,7 +174,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * An ordered year where {@link #CHESHVAN} is 29 days and {@link #KISLEV} is 30 days.
 	 * 
-	 * @see #getCheshvanKislevKviah()
+	 * @see #getMarcheshvanKislevKviah()
 	 * @see HebrewDateFormatter#getFormattedKviah(int)
 	 */
 	public static final int KESIDRAN = 1;
@@ -182,7 +182,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * A long year where both {@link #CHESHVAN} and {@link #KISLEV} are 30 days.
 	 * 
-	 * @see #getCheshvanKislevKviah()
+	 * @see #getMarcheshvanKislevKviah()
 	 * @see HebrewDateFormatter#getFormattedKviah(int)
 	 */
 	public static final int SHELAIMIM = 2;
@@ -689,7 +689,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param year
 	 *            the Jewish year
 	 * @return the number of days for a given Jewish year.
-	 * @see #isCheshvanLong()
+	 * @see #isMarcheshvanLong()
 	 * @see #isKislevShort()
 	 */
 	public static int getDaysInJewishYear(int year) {
@@ -700,7 +700,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Returns the number of days for the current year that the calendar is set to.
 	 * 
 	 * @return the number of days for the Object's current Jewish year.
-	 * @see #isCheshvanLong()
+	 * @see #isMarcheshvanLong()
 	 * @see #isKislevShort()
 	 * @see #isJewishLeapYear()
 	 */
@@ -709,28 +709,28 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns if Cheshvan is long in a given Jewish year. The method name isLong is done since in a Kesidran (ordered)
-	 * year Cheshvan is short. ND+ER
+	 * Returns if Marcheshvan is long in a given Jewish year. The method name isLong is done since in a Kesidran (ordered)
+	 * year Marcheshvan is short. ND+ER
 	 * 
 	 * @param year
 	 *            the year
-	 * @return true if Cheshvan is long in Jewish year.
-	 * @see #isCheshvanLong()
-	 * @see #getCheshvanKislevKviah()
+	 * @return true if Marcheshvan is long in Jewish year.
+	 * @see #isMarcheshvanLong()
+	 * @see #getMarcheshvanKislevKviah()
 	 */
-	private static boolean isCheshvanLong(int year) {
+	private static boolean isMarcheshvanLong(int year) {
 		return getDaysInJewishYear(year) % 10 == 5;
 	}
 
 	/**
-	 * Returns if Cheshvan is long (30 days VS 29 days) for the current year that the calendar is set to. The method
-	 * name isLong is done since in a Kesidran (ordered) year Cheshvan is short.
+	 * Returns if Marcheshvan is long (30 days VS 29 days) for the current year that the calendar is set to. The method
+	 * name isLong is done since in a Kesidran (ordered) year Marcheshvan is short.
 	 * 
-	 * @return true if Cheshvan is long for the current year that the calendar is set to
-	 * @see #isCheshvanLong()
+	 * @return true if Marcheshvan is long for the current year that the calendar is set to
+	 * @see #isMarcheshvanLong()
 	 */
-	public boolean isCheshvanLong() {
-		return isCheshvanLong(getJewishYear());
+	public boolean isMarcheshvanLong() {
+		return isMarcheshvanLong(getJewishYear());
 	}
 
 	/**
@@ -741,7 +741,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            the Jewish year
 	 * @return true if Kislev is short for the given Jewish year.
 	 * @see #isKislevShort()
-	 * @see #getCheshvanKislevKviah()
+	 * @see #getMarcheshvanKislevKviah()
 	 */
 	private static boolean isKislevShort(int year) {
 		return getDaysInJewishYear(year) % 10 == 3;
@@ -758,19 +758,19 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns the Cheshvan and Kislev kviah (whether a Jewish year is short, regular or long). It will return
-	 * {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Cheshvan is 29 days and Kislev
+	 * Returns the Marcheshvan and Kislev kviah (whether a Jewish year is short, regular or long). It will return
+	 * {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Marcheshvan is 29 days and Kislev
 	 * is 30 days and {@link #CHASERIM} if both are 29 days.
 	 * 
-	 * @return {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Cheshvan is 29 days and
+	 * @return {@link #SHELAIMIM} if both cheshvan and kislev are 30 days, {@link #KESIDRAN} if Marcheshvan is 29 days and
 	 *         Kislev is 30 days and {@link #CHASERIM} if both are 29 days.
-	 * @see #isCheshvanLong()
+	 * @see #isMarcheshvanLong()
 	 * @see #isKislevShort()
 	 */
-	public int getCheshvanKislevKviah() {
-		if (isCheshvanLong() && !isKislevShort()) {
+	public int getMarcheshvanKislevKviah() {
+		if (isMarcheshvanLong() && !isKislevShort()) {
 			return SHELAIMIM;
-		} else if (!isCheshvanLong() && isKislevShort()) {
+		} else if (!isMarcheshvanLong() && isKislevShort()) {
 			return CHASERIM;
 		} else {
 			return KESIDRAN;
@@ -787,7 +787,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the number of days for a given Jewish month
 	 */
 	private static int getDaysInJewishMonth(int month, int year) {
-		if ((month == IYAR) || (month == TAMMUZ) || (month == ELUL) || ((month == CHESHVAN) && !(isCheshvanLong(year)))
+		if ((month == IYAR) || (month == TAMMUZ) || (month == ELUL) || ((month == CHESHVAN) && !(isMarcheshvanLong(year)))
 				|| ((month == KISLEV) && isKislevShort(year)) || (month == TEVES)
 				|| ((month == ADAR) && !(isJewishLeapYear(year))) || (month == ADAR_II)) {
 			return 29;

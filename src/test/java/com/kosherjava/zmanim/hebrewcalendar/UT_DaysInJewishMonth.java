@@ -62,7 +62,7 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong());
+		Assert.assertFalse(jewishDate.isMarcheshvanLong());
 		Assert.assertTrue(jewishDate.isKislevShort());
 	}
 
@@ -80,7 +80,7 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertFalse(jewishDate.isCheshvanLong(  ));
+		Assert.assertFalse(jewishDate.isMarcheshvanLong(  ));
 		Assert.assertFalse(jewishDate.isKislevShort(  ));
 	}
 
@@ -98,7 +98,7 @@ public class UT_DaysInJewishMonth {
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishYear(year);
 
-		Assert.assertTrue(jewishDate.isCheshvanLong(  ));
+		Assert.assertTrue(jewishDate.isMarcheshvanLong(  ));
 		Assert.assertFalse(jewishDate.isKislevShort(  ));
 	}
 
