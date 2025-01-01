@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2017 - 2023 Eliyahu Hershfeld
+ * Copyright (C) 2017 - 2025 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -21,10 +21,10 @@ import java.util.GregorianCalendar;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
- * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the given date.
+ * "https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a> page ({@link Daf}) for the a given date.
  * 
  * @author &copy; elihaidv
- * @author &copy; Eliyahu Hershfeld 2017 - 2023
+ * @author &copy; Eliyahu Hershfeld 2017 - 2025
  */
 public class YerushalmiYomiCalculator {
 	
@@ -41,6 +41,13 @@ public class YerushalmiYomiCalculator {
 			68, 37, 34, 44, 31, 59, 26, 33, 28, 20, 13, 92, 65, 71, 22, 22, 42, 26, 26, 33, 34, 22,
 			19, 85, 72, 47, 40, 47, 54, 48, 44, 37, 34, 44, 9, 57, 37, 19, 13};
 
+	/**
+	 * Default constructor.
+	 */
+	public YerushalmiYomiCalculator() {
+		// nothing here
+	}
+	
 	/**
 	 * Returns the <a href="https://en.wikipedia.org/wiki/Daf_Yomi">Daf Yomi</a>
 	 * <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Yerusalmi</a> page ({@link Daf}) for a given date.
@@ -95,26 +102,25 @@ public class YerushalmiYomiCalculator {
 		int total = dafNo - specialDays;
 				
 		// Finally find the daf.
-        for (int i : BLATT_PER_MASECHTA) {
-
-            if (total < i) {
-                dafYomi = new Daf(masechta, total + 1);
-                break;
-            }
-            total -= i;
-            masechta++;
-        }
+		for (int i : BLATT_PER_MASECHTA) {
+			if (total < i) {
+				dafYomi = new Daf(masechta, total + 1);
+				break;
+			}
+			total -= i;
+			masechta++;
+		}
 
 		return dafYomi;
 	}
 	
 	/**
-	 * Return the number of special days (Yom Kippur and Tisha Beav, where there are no dafim on these days),
-	 * from the start date (as a <code>Calendar</code>) given until the end date (also as a <code>Calendar</code>).
+	 * Return the number of special days (Yom Kippur and Tisha Beav, where there are no dafim), between the start date
+	 * (as a <code>Calendar</code>) and end date (also as a <code>Calendar</code>).
 	 * 
 	 * @param start date to start calculating from
 	 * @param end date to finish calculating at
-	 * @return the number of special days between the start time and end time
+	 * @return the number of special days between the start and end dates
 	 */
 	private static int getNumOfSpecialDays(Calendar start, Calendar end) {
 		
@@ -153,7 +159,7 @@ public class YerushalmiYomiCalculator {
 	 * @param end the end date
 	 * @return if the date is between the start and end dates
 	 */
-	private static boolean isBetween(Calendar start, Calendar date, Calendar end) {
+	private static boolean isBetween(Calendar start, Calendar date, Calendar end ) {
 		return start.before(date) && end.after(date);
 	}
 	
