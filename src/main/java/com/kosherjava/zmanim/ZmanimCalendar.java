@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2024 Eliyahu Hershfeld
+ * Copyright (C) 2004-2025 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -66,7 +66,7 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * <h2>Disclaimer:</h2> I did my best to get accurate results, but please double-check before relying on these
  * <em>zmanim</em> for <em>halacha lema'aseh</em>.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2024
+ * @author &copy; Eliyahu Hershfeld 2004 - 2025
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
 	
@@ -502,7 +502,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite shema in the morning) that is 3 *
 	 * {@link #getShaahZmanisMGA() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos72()}, according to the
-	 * <a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a>. The day is calculated
+	 * <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a>. The day is calculated
 	 * from 72 minutes before {@link #getSeaLevelSunrise() sea level sunrise} to 72 minutes after {@link
 	 * #getSeaLevelSunset() sea level sunset} or from 72 minutes before {@link #getSunrise() sunrise} to {@link #getSunset()
 	 * sunset} (depending on the {@link #isUseElevation()} setting).
@@ -643,7 +643,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite shema in the morning) that is 4 *
 	 * {@link #getShaahZmanisMGA() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos72()}, according to the
-	 * <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em>. The day is calculated
+	 * <em><a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a></em>. The day is calculated
 	 * from 72 minutes before {@link #getSeaLevelSunrise() sea level sunrise} to 72 minutes after {@link
 	 * #getSeaLevelSunset() sea level sunset} or from 72 minutes before {@link #getSunrise() sunrise} to {@link #getSunset()
 	 * sunset} (depending on the {@link #isUseElevation()} setting).
@@ -1003,7 +1003,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 
 	/**
 	 * A method that returns a <em>shaah zmanis</em> (temporal hour) according to the opinion of the <em><a href=
-	 * "https://en.wikipedia.org/wiki/Avraham_Gombinern">Magen Avraham (MGA)</a></em> based on a 72-minute <em>alos</em>
+	 * "https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a></em> based on a 72-minute <em>alos</em>
 	 * and <em>tzais</em>. This calculation divides the day that runs from dawn to dusk (for <em>sof zman krias shema</em> and
 	 * <em>tfila</em>). Dawn for this calculation is 72 minutes before {@link #getSunrise() sunrise} or {@link #getSeaLevelSunrise()
 	 * sea level sunrise} (depending on the {@link #isUseElevation()} elevation setting) and dusk is 72 minutes after {@link
