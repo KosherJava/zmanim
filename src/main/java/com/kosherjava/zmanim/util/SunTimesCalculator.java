@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2023 Eliyahu Hershfeld
+ * Copyright (C) 2004-2025 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -26,10 +26,17 @@ import java.util.Calendar;
  * account for leap years. It is not as accurate as the Jean Meeus based {@link NOAACalculator} that is the default calculator
  * use by the KosherJava <em>zmanim</em> library.
  *
- * @author &copy; Eliyahu Hershfeld 2004 - 2023
+ * @author &copy; Eliyahu Hershfeld 2004 - 2025
  * @author &copy; Kevin Boone 2000
  */
 public class SunTimesCalculator extends AstronomicalCalculator {
+	
+	/**
+	 * Default constructor of the SunTimesCalculator.
+	 */
+	public SunTimesCalculator() {
+		super();
+	}
 
 	/**
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getCalculatorName()
@@ -57,11 +64,12 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * The number of degrees of longitude that corresponds to one-hour time difference.
+	 * The number of degrees of longitude that corresponds to one hour of time difference.
 	 */
 	private static final double DEG_PER_HOUR = 360.0 / 24.0;
 
 	/**
+	 * The sine in degrees.
 	 * @param deg the degrees
 	 * @return sin of the angle in degrees
 	 */
@@ -70,6 +78,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
+	 * Return the arc cosine in degrees.
 	 * @param x angle
 	 * @return acos of the angle in degrees
 	 */
@@ -78,6 +87,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
+	 * Return the arc sine in degrees.
 	 * @param x angle
 	 * @return asin of the angle in degrees
 	 */
@@ -86,6 +96,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
+	 * Return the tangent in degrees.
 	 * @param deg degrees
 	 * @return tan of the angle in degrees
 	 */
@@ -145,6 +156,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
+	 * Returns the Sun's true longitude in degrees. 
 	 * @param sunMeanAnomaly the Sun's mean anomaly in degrees
 	 * @return the Sun's true longitude in degrees. The result is an angle &gt;= 0 and &lt;= 360.
 	 */
@@ -239,14 +251,8 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
 				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
-		double processedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
-		while (processedTime < 0.0) {
-			processedTime += 24.0;
-		}
-		while (processedTime >= 24.0) {
-			processedTime -= 24.0;
-		}
-		return processedTime;
+		double pocessedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
+		return pocessedTime > 0  ? pocessedTime % 24 : pocessedTime % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
 	
 	/**
@@ -277,5 +283,26 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 			noon -= 12;
 		} 
 		return noon;
+	}
+	
+	/**
+	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
+	 * of midnight for the given day at the given location on earth. This implementation returns solar midnight as 12 hours
+	 * after utc noon that is  halfway between sunrise and sunset.
+	 * {@link NOAACalculator}, the default calculator, returns true solar noon. See <a href=
+	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on solar
+	 * noon calculations.
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see NOAACalculator
+	 * 
+	 * @param calendar
+	 *            The Calendar representing the date to calculate solar noon for
+	 * @param geoLocation
+	 *            The location information used for astronomical calculating sun times.
+	 * @return the time in minutes from zero UTC. If an error was encountered in the calculation (expected behavior for
+	 *         some locations such as near the poles, {@link Double#NaN} will be returned.
+	 */
+	public double getUTCMidnight(Calendar calendar, GeoLocation geoLocation) {
+		return (getUTCNoon(calendar, geoLocation) + 12);
 	}
 }
