@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2019 - 2024 Eliyahu Hershfeld
+ * Copyright (C) 2019 - 2025 Eliyahu Hershfeld
  * Copyright (C) 2019 - 2021 Y Paritcher
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -45,7 +45,7 @@ import java.util.Calendar;
  * System.out.println(hdf.format(jewishCalendar) + ": " + tr.isTachanunRecitedShacharis(jewishCalendar));</pre>
  * 
  * @author &copy; Y. Paritcher 2019 - 2021
- * @author &copy; Eliyahu Hershfeld 2019 - 2024
+ * @author &copy; Eliyahu Hershfeld 2019 - 2025
  * 
  * @todo The following items may be added at a future date.
  * <ol>
@@ -145,6 +145,13 @@ public class TefilaRules {
 	 * @see #setMizmorLesodaRecitedErevYomKippurAndPesach(boolean)
 	 */
 	private boolean mizmorLesodaRecitedErevYomKippurAndPesach = false;
+	
+	/**
+	 * Default constructor of the TefilaRules. It currently does not have any parameters.
+	 */
+	public TefilaRules() {
+		// nothing here
+	}
 	
 	/**
 	 * Returns if <em>tachanun</em> is recited during <em>shacharis</em> on the day in question. There are the many
