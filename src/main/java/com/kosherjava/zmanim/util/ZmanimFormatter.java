@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2022 Eliyahu Hershfeld
+ * Copyright (C) 2004-2025 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,21 +32,23 @@ import com.kosherjava.zmanim.AstronomicalCalendar;
  * example the {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()} returns the length of the hour in
  * milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2022
+ * @author &copy; Eliyahu Hershfeld 2004 - 2025
  */
 public class ZmanimFormatter {
 	/**
-	 * Setting to prepent a zero to single digit hours.
+	 * Setting to prepend a zero to single digit hours.
 	 * @see #setSettings(boolean, boolean, boolean)
 	 */
 	private boolean prependZeroHours = false;
 
 	/**
+	 * Should seconds be used in formatting time.
 	 * @see #setSettings(boolean, boolean, boolean)
 	 */
 	private boolean useSeconds = false;
 
 	/**
+	 * Should milliseconds be used in formatting time.
 	 * @see #setSettings(boolean, boolean, boolean)
 	 */
 	private boolean useMillis = false;
@@ -67,18 +69,20 @@ public class ZmanimFormatter {
 	private static DecimalFormat milliNF = new DecimalFormat("000");
 
 	/**
+	 * The SimpleDateFormat class.
 	 * @see #setDateFormat(SimpleDateFormat)
 	 */
 	private SimpleDateFormat dateFormat;
 
 	/**
+	 * The TimeZone class.
 	 * @see #setTimeZone(TimeZone)
 	 */
-	private TimeZone timeZone = null; // TimeZone.getTimeZone("UTC");
+	private TimeZone timeZone = null;
 
-	// private DecimalFormat decimalNF;
 
 	/**
+	 * Method to return the TimeZone.
 	 * @return the timeZone
 	 */
 	public TimeZone getTimeZone() {
@@ -86,6 +90,7 @@ public class ZmanimFormatter {
 	}
 
 	/**
+	 * Method to set the TimeZone.
 	 * @param timeZone
 	 *            the timeZone to set
 	 */
@@ -132,16 +137,12 @@ public class ZmanimFormatter {
 	public static final int XSD_DURATION_FORMAT = 5;
 
 	/**
-	 * constructor that defaults to this will use the format "h:mm:ss" for dates and 00.00.00.0 for {@link Time}.
+	 * Constructor that defaults to this will use the format "h:mm:ss" for dates and 00.00.00.0 for {@link Time}.
 	 * @param timeZone the TimeZone Object
 	 */
 	public ZmanimFormatter(TimeZone timeZone) {
 		this(0, new SimpleDateFormat("h:mm:ss"), timeZone);
 	}
-
-	// public ZmanimFormatter() {
-	// this(0, new SimpleDateFormat("h:mm:ss"), TimeZone.getTimeZone("UTC"));
-	// }
 
 	/**
 	 * ZmanimFormatter constructor using a formatter
@@ -241,7 +242,7 @@ public class ZmanimFormatter {
 	}
 
 	/**
-	 * A method that formats {@link Time}objects.
+	 * A method that formats {@link Time} objects.
 	 * 
 	 * @param time
 	 *            The time <code>Object</code> to be formatted.
@@ -279,7 +280,7 @@ public class ZmanimFormatter {
 	public String formatDateTime(Date dateTime, Calendar calendar) {
 		this.dateFormat.setCalendar(calendar);
 		if (this.dateFormat.toPattern().equals("yyyy-MM-dd'T'HH:mm:ss")) {
-			return getXSDateTime(dateTime, calendar);
+			return getXSDateTime(dateTime);
 		} else {
 			return this.dateFormat.format(dateTime);
 		}
@@ -296,33 +297,25 @@ public class ZmanimFormatter {
 	 * href="http://www.iso.ch/markete/8601.pdf">[ISO 8601]</a> for details. The date/time string format must include a
 	 * time zone, either a Z to indicate Coordinated Universal Time or a + or - followed by the difference between the
 	 * difference from UTC represented as hh:mm.
-	 * @param dateTime the Date Object
-	 * @param calendar Calendar Object
+	 * @param date Date Object
+	 * @param calendar Calendar Object that is now ignored.
 	 * @return the XSD dateTime
+	 * @deprecated This method will be removed in v3.0
 	 */
-	public String getXSDateTime(Date dateTime, Calendar calendar) {
-		String xsdDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
-		/*
-		 * if (xmlDateFormat == null || xmlDateFormat.trim().equals("")) { xmlDateFormat = xsdDateTimeFormat; }
-		 */
-		SimpleDateFormat dateFormat = new SimpleDateFormat(xsdDateTimeFormat);
+	@Deprecated (since="2.5", forRemoval=true)
+	public String getXSDateTime(Date date, Calendar calendar) {
+		return getXSDateTime(date);
+	}
+	
+	/**
+	 * Format the Date using the format "yyyy-MM-dd'T'HH:mm:ssXXX"
+	 * @param date the Date to format.
+	 * @return the Date formatted using the format "yyyy-MM-dd'T'HH:mm:ssXXX
+	 */
+	public String getXSDateTime(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		dateFormat.setTimeZone(getTimeZone());
-
-		StringBuilder sb = new StringBuilder(dateFormat.format(dateTime));
-		// Must also include offset from UTF.
-		int offset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET);// Get the offset (in milliseconds)
-		// If there is no offset, we have "Coordinated Universal Time"
-		if (offset == 0)
-			sb.append("Z");
-		else {
-			// Convert milliseconds to hours and minutes
-			int hrs = offset / (60 * 60 * 1000);
-			// In a few cases, the time zone may be +/-hh:30.
-			int min = offset % (60 * 60 * 1000);
-			char posneg = hrs < 0 ? '-' : '+';
-			sb.append(posneg + formatDigits(hrs) + ':' + formatDigits(min));
-		}
-		return sb.toString();
+		return new StringBuilder(dateFormat.format(date)).toString();
 	}
 
 	/**
@@ -450,6 +443,7 @@ public class ZmanimFormatter {
 		sb.append(" timeZoneOffset=\"")
 				.append((tz.getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
 				.append("\"");
+		// sb.append(" useElevationAllZmanim=\"").append(astronomicalCalendar.useElevationAllZmanim).append("\""); //TODO likely using reflection
 
 		sb.append(">\n");
 
