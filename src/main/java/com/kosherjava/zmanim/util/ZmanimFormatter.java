@@ -302,7 +302,7 @@ public class ZmanimFormatter {
 	 * @return the XSD dateTime
 	 * @deprecated This method will be removed in v3.0
 	 */
-	@Deprecated (since="2.5", forRemoval=true)
+	@Deprecated // (since="2.5", forRemoval=true)// add back once Java 9 is the minimum supported version
 	public String getXSDateTime(Date date, Calendar calendar) {
 		return getXSDateTime(date);
 	}
@@ -316,18 +316,6 @@ public class ZmanimFormatter {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		dateFormat.setTimeZone(getTimeZone());
 		return new StringBuilder(dateFormat.format(date)).toString();
-	}
-
-	/**
-	 * Represent the hours and minutes with two-digit strings.
-	 * 
-	 * @param digits
-	 *            hours or minutes.
-	 * @return two-digit String representation of hrs or minutes.
-	 */
-	private static String formatDigits(int digits) {
-		String dd = String.valueOf(Math.abs(digits));
-		return dd.length() == 1 ? '0' + dd : dd;
 	}
 
 	/**
