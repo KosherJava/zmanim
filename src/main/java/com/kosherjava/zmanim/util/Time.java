@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2025 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -22,7 +22,7 @@ import java.util.TimeZone;
  * this API. The time class is used to represent numeric time such as the time in hours, minutes, seconds and
  * milliseconds of a {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2020
+ * @author &copy; Eliyahu Hershfeld 2004 - 2025
  */
 public class Time {
 	/** milliseconds in a second. */
@@ -35,26 +35,31 @@ public class Time {
 	private static final int HOUR_MILLIS = MINUTE_MILLIS * 60;
 
 	/**
+	 * The hour.
 	 * @see #getHours()
 	 */
 	private int hours;
 
 	/**
+	 * The minutes.
 	 * @see #getMinutes()
 	 */
 	private int minutes;
 
 	/**
+	 * The seconds.
 	 * @see #getSeconds()
 	 */
 	private int seconds;
 
 	/**
+	 * The milliseconds.
 	 * @see #getMilliseconds()
 	 */
 	private int milliseconds;
 
 	/**
+	 * Is the time negative
 	 * @see #isNegative()
 	 * @see #setIsNegative(boolean)
 	 */
@@ -85,8 +90,8 @@ public class Time {
 	}
 
 	/**
-	 * A constructor that sets the time by milliseconds. The milliseconds are converted to hours, minutes, seconds
-	 * and milliseconds. If the milliseconds are negative it will call {@link #setIsNegative(boolean)}.
+	 * A constructor that sets the time from milliseconds. The milliseconds are converted to hours, minutes,
+	 * seconds and milliseconds. If the milliseconds are negative it will call {@link#setIsNegative(boolean)}.
 	 * @param millis the milliseconds to set.
 	 */
 	public Time(int millis) {
@@ -108,7 +113,7 @@ public class Time {
 	}
 
 	/**
-	 * Does the time represent a negative time 9such as using this to subtract time from another Time.
+	 * Does the time represent a negative time, such as using this to subtract time from another Time.
 	 * @return if the time is negative.
 	 */
 	public boolean isNegative() {
@@ -124,6 +129,7 @@ public class Time {
 	}
 
 	/**
+	 * Get the hour.
 	 * @return Returns the hour.
 	 */
 	public int getHours() {
@@ -131,6 +137,7 @@ public class Time {
 	}
 
 	/**
+	 * Set the hour.
 	 * @param hours
 	 *            The hours to set.
 	 */
@@ -139,6 +146,7 @@ public class Time {
 	}
 
 	/**
+	 * Get the minutes.
 	 * @return Returns the minutes.
 	 */
 	public int getMinutes() {
@@ -146,6 +154,7 @@ public class Time {
 	}
 
 	/**
+	 * Set the minutes.
 	 * @param minutes
 	 *            The minutes to set.
 	 */
@@ -154,6 +163,7 @@ public class Time {
 	}
 
 	/**
+	 * Get the seconds.
 	 * @return Returns the seconds.
 	 */
 	public int getSeconds() {
@@ -161,6 +171,7 @@ public class Time {
 	}
 
 	/**
+	 * Set the seconds.
 	 * @param seconds
 	 *            The seconds to set.
 	 */
@@ -169,6 +180,7 @@ public class Time {
 	}
 
 	/**
+	 * Get the milliseconds.
 	 * @return Returns the milliseconds.
 	 */
 	public int getMilliseconds() {
@@ -176,6 +188,7 @@ public class Time {
 	}
 
 	/**
+	 * Set the milliseconds.
 	 * @param milliseconds
 	 *            The milliseconds to set.
 	 */
