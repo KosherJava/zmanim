@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2024 Eliyahu Hershfeld
+ * Copyright (C) 2004-2025 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -55,7 +55,7 @@ import java.util.Date;
  * // will sort shaah 1.6, shaah GRA, sunrise, sunset
  * </pre>
  * 
- * @author &copy; Eliyahu Hershfeld 2007-2024
+ * @author &copy; Eliyahu Hershfeld 2007-2025
  * @todo Add secondary sorting. As of now the {@code Comparator}s in this class do not sort by secondary order. This means that when sorting a
  * {@link java.util.Collection} of <em>zmanim</em> and using the {@link #DATE_ORDER} {@code Comparator} will have the duration based <em>zmanim</em>
  * at the end, but they will not be sorted by duration. This should be N/A for label based sorting.
@@ -82,16 +82,34 @@ public class Zman {
 	 * A longer description or explanation of a <em>zman</em>.
 	 */
 	private String description;
+	
+	/**
+	 * The location information of the <em>zman</em>.
+	 */
+	private GeoLocation geoLocation;
 
 	/**
-	 * The constructor setting a {@link Date} based <em>zman</em> and a label.
+	 * The constructor setting a {@link Date} based <em>zman</em> and a label. In most cases you will likely want to call
+	 * {@link #Zman(Date, GeoLocation, String)} that also sets the location.
 	 * @param date the Date of the <em>zman</em>.
 	 * @param label the label of the  <em>zman</em> such as "<em>Sof Zman Krias Shema GRA</em>".
-	 * @see #Zman(long, String)
+	 * @see #Zman(Date, GeoLocation, String)
 	 */
 	public Zman(Date date, String label) {
-		this.label = label;
+		this(date, null, label);
+	}
+	
+	/**
+	 * The constructor setting a {@link Date} based <em>zman</em> and a label. In most cases you will likely want to call
+	 * {@link #Zman(Date, GeoLocation, String)} that also sets the geo location.
+	 * @param date the Date of the <em>zman</em>.
+	 * @param geoLocation the {@link GeoLocation} of the <em>zman</em>.
+	 * @param label the label of the  <em>zman</em> such as "<em>Sof Zman Krias Shema GRA</em>".
+	 */
+	public Zman(Date date, GeoLocation geoLocation, String label) {
 		this.zman = date;
+		this.geoLocation = geoLocation;
+		this.label = label;
 	}
 
 	/**
@@ -124,6 +142,22 @@ public class Zman {
 	 */
 	public void setZman(Date date) {
 		this.zman = date;
+	}
+	
+	/**
+	 * Returns the {link TimeZone} of the <em>zman</em>.
+	 * @return the time zone
+	 */
+	public GeoLocation getGeoLocation() {
+		return geoLocation;
+	}
+
+	/**
+	 * Sets the {@code GeoLocation} of the <em>zman</em>.
+	 * @param geoLocation the {@code GeoLocation}  of the <em>zman</em>.
+	 */
+	public void setGeoLocation(GeoLocation geoLocation) {
+		this.geoLocation = geoLocation;
 	}
 
 	/**
@@ -241,6 +275,12 @@ public class Zman {
 	 * &lt;Zman&gt;
 	 * 	&lt;Label&gt;Sof Zman Krias Shema GRA&lt;/Label&gt;
 	 * 	&lt;Zman&gt;1969-02-08T09:37:56.820&lt;/Zman&gt;
+	 * 	&lt;TimeZone&gt;
+	 * 		&lt;TimezoneName&gt;America/Montreal&lt;/TimezoneName&gt;
+	 * 		&lt;TimeZoneDisplayName&gt;Eastern Standard Time&lt;/TimeZoneDisplayName&gt;
+	 * 		&lt;TimezoneGMTOffset&gt;-5&lt;/TimezoneGMTOffset&gt;
+	 * 		&lt;TimezoneDSTOffset&gt;1&lt;/TimezoneDSTOffset&gt;
+	 * 	&lt;/TimeZone&gt;
 	 * 	&lt;Duration&gt;0&lt;/Duration&gt;
 	 * 	&lt;Description&gt;Sof Zman Krias Shema GRA is 3 sha'os zmaniyos calculated from sunrise to sunset.&lt;/Description&gt;
 	 * &lt;/Zman&gt;
@@ -253,6 +293,7 @@ public class Zman {
 		sb.append("<Zman>\n");
 		sb.append("\t<Label>").append(getLabel()).append("</Label>\n");
 		sb.append("\t<Zman>").append(getZman() == null ? "": formatter.format(getZman())).append("</Zman>\n");
+		sb.append("\t" + getGeoLocation().toXML().replaceAll("\n", "\n\t"));
 		sb.append("\n\t<Duration>").append(getDuration()).append("</Duration>\n");
 		sb.append("\t<Description>").append(getDescription()).append("</Description>\n");
 		sb.append("</Zman>");
@@ -264,10 +305,11 @@ public class Zman {
 	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\nLabel:\t\t\t").append(this.getLabel());
-		sb.append("\nZman:\t\t\t").append(getZman());
-		sb.append("\nDuration:\t\t\t").append(getDuration());
-		sb.append("\nDescription:\t\t\t").append(getDescription());
+		sb.append("\nLabel:\t").append(this.getLabel());
+		sb.append("\nZman:\t").append(getZman());
+		sb.append("\nGeoLocation:\t").append(getGeoLocation().toString().replaceAll("\n", "\n\t"));
+		sb.append("\nDuration:\t").append(getDuration());
+		sb.append("\nDescription:\t").append(getDescription());
 		return sb.toString();
 	}
 }
