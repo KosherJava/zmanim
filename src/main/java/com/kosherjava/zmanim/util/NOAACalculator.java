@@ -76,11 +76,11 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCSunset(LocalDate dt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		return getUTCSunRiseSet(dt, geoLocation, zenith, adjustForElevation,SolarEvent.SUNSET);
 	}
-	
+
 	/**
 	 * A method that calculates UTC sunrise or sunset as well as any time based on an angle above or below sunset and
 	 * returns it as a <code>double</code> in 24-hour format. 5:45:00 AM will return 5.75.
-	 * 
+	 *
 	 * @param localDate
 	 *            Used to calculate day of year.
 	 * @param geoLocation
@@ -98,7 +98,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *         calculation (expected behavior for some locations such as near the poles, {@link Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation, 
+	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation,
 			SolarEvent solarEvent) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
@@ -287,11 +287,13 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double geomMeanAnomalySun = getSunGeometricMeanAnomaly(julianCenturies);
 		double y = Math.tan(Math.toRadians(epsilon) / 2.0);
 		y *= y;
-		double sin2l0 = Math.sin(2.0 * Math.toRadians(geomMeanLongSun));
-		double sinm = Math.sin(Math.toRadians(geomMeanAnomalySun));
-		double cos2l0 = Math.cos(2.0 * Math.toRadians(geomMeanLongSun));
-		double sin4l0 = Math.sin(4.0 * Math.toRadians(geomMeanLongSun));
-		double sin2m = Math.sin(2.0 * Math.toRadians(geomMeanAnomalySun));
+		double geomMeanLongSunRad = Math.toRadians(geomMeanLongSun);
+		double geomMeanAnomalySunRad = Math.toRadians(geomMeanAnomalySun);
+		double sin2l0 = Math.sin(2.0 * geomMeanLongSunRad);
+		double sinm = Math.sin(geomMeanAnomalySunRad);
+		double cos2l0 = Math.cos(2.0 * geomMeanLongSunRad);
+		double sin4l0 = Math.sin(4.0 * geomMeanLongSunRad);
+		double sin2m = Math.sin(2.0 * geomMeanAnomalySunRad);
 		double equationOfTime = y * sin2l0 - 2.0 * eccentricityEarthOrbit * sinm + 4.0 * eccentricityEarthOrbit * y
 				* sinm * cos2l0 - 0.5 * y * y * sin4l0 - 1.25 * eccentricityEarthOrbit * eccentricityEarthOrbit * sin2m;
 		return Math.toDegrees(equationOfTime) * 4.0;
@@ -314,7 +316,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunHourAngle(double latitude, double solarDeclination, double zenith, SolarEvent solarEvent) {
 		double latRad = Math.toRadians(latitude);
 		double sdRad = Math.toRadians(solarDeclination);
-		double hourAngle = (Math.acos(Math.cos(Math.toRadians(zenith)) / (Math.cos(latRad) * Math.cos(sdRad))
+		double zRad = Math.toRadians(zenith);
+		double hourAngle = (Math.acos(Math.cos(zRad) / (Math.cos(latRad) * Math.cos(sdRad))
 				- Math.tan(latRad) * Math.tan(sdRad)));
 		
 		if (solarEvent == SolarEvent.SUNSET) {
@@ -346,7 +349,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @param isAzimuth
 	 *            true for azimuth, false for elevation
 	 * @return solar elevation or azimuth in degrees.
-	 * 
+	 *
 	 * @see #getSolarElevation(ZonedDateTime, GeoLocation)
 	 * @see #getSolarAzimuth(ZonedDateTime, GeoLocation)
 	 */
@@ -363,7 +366,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	    double trueSolarTime = ((fractionalDay + eot / 1440.0 + lon / 360.0) + 2) % 1;
 	    double hourAngle = trueSolarTime * 2 * Math.PI - Math.PI;
 	    double cosZenith = Math.sin(lat) * Math.sin(decl) + Math.cos(lat) * Math.cos(decl) * Math.cos(hourAngle);
-	    double zenith = Math.acos(Math.max(-1, Math.min(1, cosZenith)));	    
+	    double zenith = Math.acos(Math.max(-1, Math.min(1, cosZenith)));
 	    double zenithDeg = Math.toDegrees(zenith);
 	    double elevation = 90.0 - zenithDeg;
 	    elevation = 90.0 - (zenithDeg - adjustElevationForRefraction(elevation));
@@ -378,9 +381,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	    }
 	    return isAzimuth ? (azimuth + 360) % 360 : elevation;
 	}
-	
+
 	/**
-	 * Apply refraction adjustment to solar elevation. 
+	 * Apply refraction adjustment to solar elevation.
 	 * @param elevation the elevation to adjust.
 	 * @return the adjusted elevation.
 	 */
@@ -401,7 +404,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	    }
 	    return correction / 3600.0;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see #getSolarNoonMidnightUTC(double, double, SolarEvent)
@@ -477,6 +480,11 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	private static double getSunRiseSetUTC(LocalDate localDate, double latitude, double longitude, double zenith,
 			SolarEvent solarEvent) {
+		return getSunRiseSetUTC(localDate, latitude, longitude, zenith, solarEvent, true);
+	}
+
+	private static double getSunRiseSetUTC(LocalDate localDate, double latitude, double longitude, double zenith,
+										   SolarEvent solarEvent, boolean interpolate) {
 		double julianDay = getJulianDay(localDate);
 
 		// Find the time of solar noon at the location, and use that declination.
@@ -485,29 +493,99 @@ public class NOAACalculator extends AstronomicalCalculator {
 		// efficient but would likely cause a very minor discrepancy in the calculated times (likely not reducing
 		// accuracy, just slightly different, thus potentially breaking test cases). Regardless, it would be within
 		// milliseconds.
-		double noonmin = getSolarNoonMidnightUTC(julianDay, longitude, SolarEvent.NOON);																		
+		double noonmin = getSolarNoonMidnightUTC(julianDay, longitude, SolarEvent.NOON);
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
+
 		// First calculates sunrise and approximate length of day
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solarDeclination = getSunDeclination(tnoon);
 		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		if (Double.isNaN(hourAngle)) {
+			if (interpolate) {
+				return interpolateSunRiseSetUTC(localDate, latitude, longitude, zenith, solarEvent);
+			}
+			return Double.NaN;
+		}
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta;
 		double timeUTC = 720 + timeDiff - equationOfTime;
+
 		// Second pass includes fractional Julian Day in gamma calc
 		double newt = getJulianCenturiesFromJulianDay(julianDay + timeUTC / 1440.0);
 		equationOfTime = getEquationOfTime(newt);
+
 		solarDeclination = getSunDeclination(newt);
 		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		if (Double.isNaN(hourAngle)) {
+			if (interpolate) {
+				return interpolateSunRiseSetUTC(localDate, latitude, longitude, zenith, solarEvent);
+			}
+			return Double.NaN;
+		}
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
 		timeUTC = 720 + timeDiff - equationOfTime;
 		return timeUTC;
 	}
-	
+
+	// Use linear interpolation to calculate a missing time.
+	private static double interpolateSunRiseSetUTC(LocalDate localDate, double latitude, double longitude, double zenith, SolarEvent solarEvent) {
+		final int dayOfYear = localDate.getDayOfYear();
+		double x1 = 0;
+		double y1 = 0;
+		double x2 = 0;
+		double y2 = 0;
+		double dd1 = Double.MAX_VALUE;
+		double dd2 = Double.MAX_VALUE;
+
+		final int d1 = Math.max(dayOfYear - 180, 1);
+		final int d2 = Math.min(dayOfYear + 180, 365);
+		for (int d = d1; d < dayOfYear; d++) {
+			double time = getSunRiseSetUTC(localDate.withDayOfYear(d), latitude, longitude, zenith, solarEvent, false);
+			if (!Double.isNaN(time)) {
+				int dd = Math.abs(dayOfYear - d);
+				if (dd < dd1) {
+					x2 = x1;
+					y2 = y1;
+					dd2 = dd1;
+
+					x1 = d;
+					y1 = time;
+					dd1 = dd;
+				}
+			}
+		}
+		for (int d = dayOfYear + 1; d <= d2; d++) {
+			double time = getSunRiseSetUTC(localDate.withDayOfYear(d), latitude, longitude, zenith, solarEvent, false);
+			if (!Double.isNaN(time)) {
+				if ((x2 > 0) && (x2 < dayOfYear)) {
+					x2 = 0;
+					y2 = 0;
+					dd2 = Integer.MAX_VALUE;
+				}
+				int dd = Math.abs(dayOfYear - d);
+				if (dd <= dd2) {
+					x2 = d;
+					y2 = time;
+					dd2 = dd;
+				}
+			}
+		}
+
+		if ((x1 == 0) || (x2 == 0)) {
+			return Double.NaN;
+		}
+		double dx = x2 - x1;
+		if (dx == 0) {
+			return Double.NaN;
+		}
+		double dy = y2 - y1;
+		return y1 + (((dayOfYear - x1) * dy) / dx);
+	}
+
 	/**
 	 * {@inheritDoc}
-	 * @todo This is very much a work in progress. It works in some but not all cases. 
+	 * @todo This is very much a work in progress. It works in some but not all cases.
 	 * There will be edge cases where the azimuth will occur more than once a day when based on the equation of time,
 	 * the day is shorter than 24 hours. In that case, the time for the first one will be returned.
 	 * <br>FIXME:

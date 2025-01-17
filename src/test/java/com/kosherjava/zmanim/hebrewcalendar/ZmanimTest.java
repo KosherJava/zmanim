@@ -4,6 +4,7 @@ import static com.kosherjava.zmanim.AstronomicalCalendar.GEOMETRIC_ZENITH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.kosherjava.zmanim.ComprehensiveZmanimCalendar;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
@@ -125,12 +126,51 @@ public class ZmanimTest {
                 if (date != null) {
                     System.out.println(deg + "," + day + "," + date.toEpochMilli());
                 }
-                //FIXME assertNotNull("deg=" + deg + " day=" + day, date);
+                assertNotNull("deg=" + deg + " day=" + day, date);
                 dateExpected = m.get(day);
                 if (dateExpected != null) {
                     assertEquals("deg=" + deg + " day=" + day, dateExpected.longValue(), date.toEpochMilli());
                 }
             }
         }
+    }
+
+    @Test
+    public void dawn_Israel() {
+        ZoneId tz = TimeZone.getTimeZone("Asia/Jerusalem").toZoneId();
+        GeoLocation location = new GeoLocation("Israel", 31.7, 35.0, 10.0, tz);
+        dawn_at(location, new SunTimesCalculator());
+        dawn_at(location, new NOAACalculator());
+    }
+
+    @Test
+    public void dawn_London() {
+        ZoneId tz = TimeZone.getTimeZone("GMT").toZoneId();
+        GeoLocation location = new GeoLocation("England", 51.5, 0.0, 10.0, tz);
+        //FIXME dawn_at(location, new SunTimesCalculator());
+        //FIXME dawn_at(location, new NOAACalculator());
+    }
+
+    private void dawn_at(GeoLocation location, AstronomicalCalculator calculator) {
+        ComprehensiveZmanimCalendar zcal = new ComprehensiveZmanimCalendar(location);
+        zcal.setUseElevation(true);
+        zcal.setAstronomicalCalculator(calculator);
+
+        zcal.setLocalDate(LocalDate.of(2026, Month.JUNE, 21));
+        Instant alos161 = zcal.getAlos16Point1Degrees();
+        System.out.println("alos 16.1 = " + alos161);
+        Instant alos18 = zcal.getAlos18Degrees();
+        System.out.println("alos 18   = " + alos18);
+        Instant alos19 = zcal.getAlos19Degrees();
+        System.out.println("alos 19   = " + alos19);
+        Instant alos198 = zcal.getAlos19Point8Degrees();
+        System.out.println("alos 19.8 = " + alos198);
+        Instant alos26 = zcal.getAlos26Degrees();
+        System.out.println("alos 26   = " + alos26);
+
+        assertTrue(alos26.compareTo(alos198) < 0);
+        assertTrue(alos198.compareTo(alos19) < 0);
+        assertTrue(alos19.compareTo(alos18) < 0);
+        assertTrue(alos18.compareTo(alos161) < 0);
     }
 }
