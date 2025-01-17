@@ -88,6 +88,9 @@ public class GeoLocation implements Cloneable {
 	/** constant for milliseconds in an hour (3,600,000) */
 	private static final long HOUR_MILLIS = MINUTE_MILLIS * 60;
 
+	private static final double PI2 = Math.PI * 2;
+	private static final double PI_4 = Math.PI / 4;
+
 	/**
 	 * Method to return the elevation in Meters <b>above</b> sea level.
 	 * 
@@ -441,7 +444,7 @@ public class GeoLocation implements Cloneable {
 		double sinU2 = Math.sin(U2), cosU2 = Math.cos(U2);
 
 		double lambda = L;
-		double lambdaP = 2 * Math.PI;
+		double lambdaP = PI2;
 		double iterLimit = 20;
 		double sinLambda = 0;
 		double cosLambda = 0;
@@ -510,10 +513,10 @@ public class GeoLocation implements Cloneable {
 	 */
 	public double getRhumbLineBearing(GeoLocation location) {
 		double dLon = Math.toRadians(location.getLongitude() - getLongitude());
-		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4)
-				/ Math.tan(Math.toRadians(getLatitude()) / 2 + Math.PI / 4));
+		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + PI_4)
+				/ Math.tan(Math.toRadians(getLatitude()) / 2 + PI_4));
 		if (Math.abs(dLon) > Math.PI)
-			dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
+			dLon = dLon > 0 ? -(PI2 - dLon) : (PI2 + dLon);
 		return Math.toDegrees(Math.atan2(dLon, dPhi));
 	}
 
@@ -529,8 +532,8 @@ public class GeoLocation implements Cloneable {
 		double earthRadius = 6378137; // Earth's radius in meters (WGS-84)
 		double dLat = Math.toRadians(location.getLatitude()) - Math.toRadians(getLatitude());
 		double dLon = Math.abs(Math.toRadians(location.getLongitude()) - Math.toRadians(getLongitude()));
-		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4)
-				/ Math.tan(Math.toRadians(getLatitude()) / 2 + Math.PI / 4));
+		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + PI_4)
+				/ Math.tan(Math.toRadians(getLatitude()) / 2 + PI_4));
 		double q = dLat / dPhi;
 
 		if (!(Math.abs(q) <= Double.MAX_VALUE)) {
@@ -538,7 +541,7 @@ public class GeoLocation implements Cloneable {
 		}
 		// if dLon over 180° take shorter rhumb across 180° meridian:
 		if (dLon > Math.PI) {
-			dLon = 2 * Math.PI - dLon;
+			dLon = PI2 - dLon;
 		}
 		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);
 		return d * earthRadius;

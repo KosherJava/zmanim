@@ -130,7 +130,7 @@ public class ZmanimTest {
                 if (date != null) {
                     System.out.println(deg + "," + day + "," + date.getTime());
                 }
-                //FIXME assertNotNull("deg=" + deg + " day=" + day, date);
+                assertNotNull("deg=" + deg + " day=" + day, date);
                 dateExpected = m.get(day);
                 if (dateExpected != null) {
                     assertEquals("deg=" + deg + " day=" + day, dateExpected.longValue(), date.getTime());

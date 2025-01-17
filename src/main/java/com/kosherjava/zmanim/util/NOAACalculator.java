@@ -284,11 +284,13 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double geomMeanAnomalySun = getSunGeometricMeanAnomaly(julianCenturies);
 		double y = Math.tan(Math.toRadians(epsilon) / 2.0);
 		y *= y;
-		double sin2l0 = Math.sin(2.0 * Math.toRadians(geomMeanLongSun));
-		double sinm = Math.sin(Math.toRadians(geomMeanAnomalySun));
-		double cos2l0 = Math.cos(2.0 * Math.toRadians(geomMeanLongSun));
-		double sin4l0 = Math.sin(4.0 * Math.toRadians(geomMeanLongSun));
-		double sin2m = Math.sin(2.0 * Math.toRadians(geomMeanAnomalySun));
+		double geomMeanLongSunRad = Math.toRadians(geomMeanLongSun);
+		double geomMeanAnomalySunRad = Math.toRadians(geomMeanAnomalySun);
+		double sin2l0 = Math.sin(2.0 * geomMeanLongSunRad);
+		double sinm = Math.sin(geomMeanAnomalySunRad);
+		double cos2l0 = Math.cos(2.0 * geomMeanLongSunRad);
+		double sin4l0 = Math.sin(4.0 * geomMeanLongSunRad);
+		double sin2m = Math.sin(2.0 * geomMeanAnomalySunRad);
 		double equationOfTime = y * sin2l0 - 2.0 * eccentricityEarthOrbit * sinm + 4.0 * eccentricityEarthOrbit * y
 				* sinm * cos2l0 - 0.5 * y * y * sin4l0 - 1.25 * eccentricityEarthOrbit * eccentricityEarthOrbit * sin2m;
 		return Math.toDegrees(equationOfTime) * 4.0;
@@ -311,7 +313,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunHourAngle(double latitude, double solarDeclination, double zenith, SolarEvent solarEvent) {
 		double latRad = Math.toRadians(latitude);
 		double sdRad = Math.toRadians(solarDeclination);
-		double hourAngle = (Math.acos(Math.cos(Math.toRadians(zenith)) / (Math.cos(latRad) * Math.cos(sdRad))
+		double zRad = Math.toRadians(zenith);
+		double hourAngle = (Math.acos(Math.cos(zRad) / (Math.cos(latRad) * Math.cos(sdRad))
 				- Math.tan(latRad) * Math.tan(sdRad)));
 		
 		if (solarEvent == SolarEvent.SUNSET) {
@@ -493,6 +496,12 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solarDeclination = getSunDeclination(tnoon);
 		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		if (Double.isNaN(hourAngle)) {
+			hourAngle = interpolateHourAngle1(julianDay, latitude, longitude, zenith, solarEvent);
+			if (Double.isNaN(hourAngle)) {
+				return Double.NaN;
+			}
+		}
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta;
 		double timeUTC = 720 + timeDiff - equationOfTime;
@@ -500,12 +509,153 @@ public class NOAACalculator extends AstronomicalCalculator {
 		// Second pass includes fractional Julian Day in gamma calc
 		double newt = getJulianCenturiesFromJulianDay(julianDay + timeUTC / 1440.0);
 		equationOfTime = getEquationOfTime(newt);
-		
+
 		solarDeclination = getSunDeclination(newt);
 		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		if (Double.isNaN(hourAngle)) {
+			hourAngle = interpolateHourAngle2(julianDay, latitude, longitude, zenith, solarEvent);
+			if (Double.isNaN(hourAngle)) {
+				return Double.NaN;
+			}
+		}
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
 		timeUTC = 720 + timeDiff - equationOfTime;
 		return timeUTC;
+	}
+
+	private static double getSunHourAngle1(double julianDay, double latitude, double longitude, double zenith, SolarEvent solarEvent) {
+		double noonmin = getSolarNoonMidnightUTC(julianDay, longitude, SolarEvent.NOON);
+		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
+		double solarDeclination = getSunDeclination(tnoon);
+		return getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+	}
+
+	private static double getSunHourAngle2(double julianDay, double latitude, double longitude, double zenith, SolarEvent solarEvent) {
+		double noonmin = getSolarNoonMidnightUTC(julianDay, longitude, SolarEvent.NOON);
+		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
+
+		// First calculates sunrise and approximate length of day
+		double equationOfTime = getEquationOfTime(tnoon);
+		double solarDeclination = getSunDeclination(tnoon);
+		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		if (Double.isNaN(hourAngle)) {
+			return Double.NaN;
+		}
+		double delta = longitude - Math.toDegrees(hourAngle);
+		double timeDiff = 4 * delta;
+		double timeUTC = 720 + timeDiff - equationOfTime;
+
+		// Second pass includes fractional Julian Day in gamma calc
+		double newt = getJulianCenturiesFromJulianDay(julianDay + timeUTC / 1440.0);
+
+		solarDeclination = getSunDeclination(newt);
+		return getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+	}
+
+	/**
+	 * Use linear interpolation to calculate a missing angle.
+	 */
+	private static double interpolateHourAngle1(double julianDay, double latitude, double longitude, double zenith, SolarEvent solarEvent) {
+		double hourAngle;
+		double x1 = 0;
+		double y1 = 0;
+		double x2 = 0;
+		double y2 = 0;
+
+		double d = julianDay - 1;
+		final double dayFirst = Math.max(julianDay - 366, 1);
+		while (d >= dayFirst) {
+			hourAngle = getSunHourAngle1(d, latitude, longitude, zenith, solarEvent);
+
+			if (!Double.isNaN(hourAngle)) {
+				x1 = d;
+				y1 = hourAngle;
+				break;
+			}
+			d--;
+		}
+
+		d = julianDay + 1;
+		final double dayLast = julianDay + 366;
+		while (d <= dayLast) {
+			hourAngle = getSunHourAngle1(d, latitude, longitude, zenith, solarEvent);
+
+			if (!Double.isNaN(hourAngle)) {
+				if (x1 == 0) {
+					x1 = d;
+					y1 = hourAngle;
+					d++;
+					continue;
+				}
+				x2 = d;
+				y2 = hourAngle;
+				break;
+			}
+			d++;
+		}
+
+		if ((x1 == 0) || (x2 == 0)) {
+			return Double.NaN;
+		}
+		double dx = x2 - x1;
+		if (dx == 0) {
+			return Double.NaN;
+		}
+		double dy = y2 - y1;
+		return y1 + ((julianDay - x1) * dy / dx);
+	}
+
+	/**
+	 * Use linear interpolation to calculate a missing angle.
+	 */
+	private static double interpolateHourAngle2(double julianDay, double latitude, double longitude, double zenith, SolarEvent solarEvent) {
+		double hourAngle;
+		double x1 = 0;
+		double y1 = 0;
+		double x2 = 0;
+		double y2 = 0;
+
+		double d = julianDay - 1;
+		final double dayFirst = Math.max(julianDay - 366, 1);
+		while (d >= dayFirst) {
+			hourAngle = getSunHourAngle2(d, latitude, longitude, zenith, solarEvent);
+
+			if (!Double.isNaN(hourAngle)) {
+				x1 = d;
+				y1 = hourAngle;
+				break;
+			}
+			d--;
+		}
+
+		d = julianDay + 1;
+		final double dayLast = julianDay + 366;
+		while (d <= dayLast) {
+			hourAngle = getSunHourAngle2(d, latitude, longitude, zenith, solarEvent);
+
+			if (!Double.isNaN(hourAngle)) {
+				if (x1 == 0) {
+					x1 = d;
+					y1 = hourAngle;
+					d++;
+					continue;
+				}
+				x2 = d;
+				y2 = hourAngle;
+				break;
+			}
+			d++;
+		}
+
+		if ((x1 == 0) || (x2 == 0)) {
+			return Double.NaN;
+		}
+		double dx = x2 - x1;
+		if (dx == 0) {
+			return Double.NaN;
+		}
+		double dy = y2 - y1;
+		return y1 + ((julianDay - x1) * dy / dx);
 	}
 }

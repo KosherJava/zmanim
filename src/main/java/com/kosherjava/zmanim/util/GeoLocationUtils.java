@@ -43,6 +43,9 @@ public class GeoLocationUtils {
 	 */
 	private static int FINAL_BEARING = 2;
 
+	private static final double PI2 = Math.PI * 2;
+	private static final double PI_4 = Math.PI / 4;
+
 	/**
 	 * Calculate the <a href="http://en.wikipedia.org/wiki/Great_circle">geodesic</a> initial bearing between this Object and
 	 * a second Object passed to this method using <a href="http://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus
@@ -127,7 +130,7 @@ public class GeoLocationUtils {
 		double sinU2 = Math.sin(U2), cosU2 = Math.cos(U2);
 
 		double lambda = L;
-		double lambdaP = 2 * Math.PI;
+		double lambdaP = PI2;
 		double iterLimit = 20;
 		double sinLambda = 0;
 		double cosLambda = 0;
@@ -211,10 +214,10 @@ public class GeoLocationUtils {
 	public static double getRhumbLineBearing(GeoLocation location, GeoLocation destination) {
 		double dLon = Math.toRadians(destination.getLongitude() - location.getLongitude());
 		double dPhi = Math.log(Math.tan(Math.toRadians(destination.getLatitude())
-				/ 2 + Math.PI / 4)
-				/ Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4));
+				/ 2 + PI_4)
+				/ Math.tan(Math.toRadians(location.getLatitude()) / 2 + PI_4));
 		if (Math.abs(dLon) > Math.PI)
-			dLon = dLon > 0 ? -(2 * Math.PI - dLon) : (2 * Math.PI + dLon);
+			dLon = dLon > 0 ? -(PI2 - dLon) : (PI2 + dLon);
 		return Math.toDegrees(Math.atan2(dLon, dPhi));
 	}
 
@@ -232,8 +235,8 @@ public class GeoLocationUtils {
 		double earthRadius = 6378137; // Earth's radius in meters (WGS-84)
 		double dLat = Math.toRadians(location.getLatitude()) - Math.toRadians(destination.getLatitude());
 		double dLon = Math.abs(Math.toRadians(location.getLongitude()) - Math.toRadians(destination.getLongitude()));
-		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + Math.PI / 4)
-				/ Math.tan(Math.toRadians(destination.getLatitude()) / 2 + Math.PI / 4));
+		double dPhi = Math.log(Math.tan(Math.toRadians(location.getLatitude()) / 2 + PI_4)
+				/ Math.tan(Math.toRadians(destination.getLatitude()) / 2 + PI_4));
 		double q = dLat / dPhi;
 
 		if (!(Math.abs(q) <= Double.MAX_VALUE)) {
@@ -241,7 +244,7 @@ public class GeoLocationUtils {
 		}
 		// if dLon over 180° take shorter rhumb across 180° meridian:
 		if (dLon > Math.PI) {
-			dLon = 2 * Math.PI - dLon;
+			dLon = PI2 - dLon;
 		}
 		double d = Math.sqrt(dLat * dLat + q * q * dLon * dLon);
 		return d * earthRadius;
