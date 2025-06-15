@@ -179,6 +179,36 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return the time in minutes from zero UTC
 	 */
 	public abstract double getUTCMidnight(Calendar calendar, GeoLocation geoLocation);
+	
+	/**
+	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
+	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
+	 * horizon. Not corrected for altitude.
+	 * 
+	 * @param calendar
+	 *            time of calculation
+	 * @param geoLocation
+	 *            The location information
+	 * @return solar elevation in degrees. The horizon (calculated in a vacuum using the solar radius as the point)
+	 *            is 090&deg;, civil twilight is -690&deg; etc. This means that sunrise and sunset that do use
+	 *            refraction and are calculated from the upper limb of the sun will return about 0.83390&deg;.
+	 */
+	public abstract double getSolarElevation(Calendar calendar, GeoLocation geoLocation);
+	
+	/**
+	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> for the
+	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 180
+	 * degrees.
+	 * 
+	 * @param calendar
+	 *            time of calculation
+	 * @param geoLocation
+	 *            The location information
+	 * @return the solar azimuth in degrees. Astronomical midday would be 180 in the norther hemosphere and 0 in the
+	 *            southern hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about
+	 *            90&deg; and sunset about 27090&deg;.
+	 */
+	public abstract double getSolarAzimuth(Calendar calendar, GeoLocation geoLocation);
 
 	/**
 	 * Method to return the adjustment to the zenith required to account for the elevation. Since a person at a higher
