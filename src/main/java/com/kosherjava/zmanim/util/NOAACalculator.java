@@ -96,8 +96,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * 
 	 * @param calendar
 	 *            The Java Calendar
-	 * @return the Julian day corresponding to the date Note: Number is returned for start of day. Fractional days
-	 *         should be added later.
+	 * @return the Julian day corresponding to the date Note: Number is returned for the start of the Julian
+	 *         day. Fractional days / time should be added later.
 	 */
 	private static double getJulianDay(Calendar calendar) {
 		int year = calendar.get(Calendar.YEAR);
@@ -192,20 +192,6 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double center = getSunEquationOfCenter(julianCenturies); 
 		return sunLongitude + center;
 	}
-
-	// /**
-	// * Returns the <a href="https://en.wikipedia.org/wiki/True_anomaly">true anamoly</a> of the sun.
-	// *
-	// * @param julianCenturies
-	// * the number of Julian centuries since J2000.0
-	// * @return the sun's true anamoly in degrees
-	// */
-	// private static double getSunTrueAnomaly(double julianCenturies) {
-	// double meanAnomaly = getSunGeometricMeanAnomaly(julianCenturies);
-	// double equationOfCenter = getSunEquationOfCenter(julianCenturies);
-	//
-	// return meanAnomaly + equationOfCenter;
-	// }
 
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Apparent_longitude">apparent longitude</a> of the sun.
@@ -319,65 +305,90 @@ public class NOAACalculator extends AstronomicalCalculator {
 		}
 		return hourAngle;
 	}
-
+	
 	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
-	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
-	 * horizon. Not corrected for altitude.
-	 * 
-	 * @param calendar
-	 *            time of calculation
-	 * @param latitude
-	 *            latitude of location for calculation
-	 * @param longitude
-	 *            longitude of location for calculation
-	 * @return solar elevation in degrees - horizon is 0 degrees, civil twilight is -6 degrees
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
 	 */
+	public double getSolarElevation(Calendar calendar, GeoLocation geoLocation) {
+		return getSolarElevationAzimuth(calendar, geoLocation, false);
 
-	public static double getSolarElevation(Calendar calendar, double latitude, double longitude) {
-		double julianDay = getJulianDay(calendar);
-		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
-		Double eot = getEquationOfTime(julianCenturies);
-		double adjustedLongitude = (calendar.get(Calendar.HOUR_OF_DAY) + 12.0)
-				+ (calendar.get(Calendar.MINUTE) + eot + calendar.get(Calendar.SECOND) / 60.0) / 60.0;
-		adjustedLongitude = -(adjustedLongitude * 360.0 / 24.0) % 360.0;
-		double hourAngle_rad = Math.toRadians(longitude - adjustedLongitude);
-		double declination = getSunDeclination(julianCenturies);
-		double dec_rad = Math.toRadians(declination);
-		double lat_rad = Math.toRadians(latitude);
-		return Math.toDegrees(Math.asin((Math.sin(lat_rad) * Math.sin(dec_rad))
-				+ (Math.cos(lat_rad) * Math.cos(dec_rad) * Math.cos(hourAngle_rad))));
-
+	}
+	
+	/**
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarAzimuth(Calendar, GeoLocation)
+	 */
+	public double getSolarAzimuth(Calendar calendar, GeoLocation geoLocation) {
+		return getSolarElevationAzimuth(calendar, geoLocation, true);
 	}
 
 	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> for the
-	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 0
-	 * degrees.
+	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> or
+	 * <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> at the given location
+	 * and time. Can be negative if the sun is below the horizon. Elevation is based on sea-level and is not
+	 * adjusted for altitude.
 	 * 
 	 * @param calendar
 	 *            time of calculation
-	 * @param latitude
-	 *            latitude of location for calculation
-	 * @param longitude
-	 *            longitude of location for calculation
-	 * @return the solar azimuth
+	 * @param geoLocation
+	 *            The location for calculating the elevation or azimuth.
+	 * @param isAzimuth
+	 *            true for azimuth, false for elevation
+	 * @return solar elevation or azimuth in degrees.
+	 * 
+	 * @see #getSolarElevation(Calendar, GeoLocation)
+	 * @see #getSolarAzimuth(Calendar, GeoLocation)
 	 */
-
-	public static double getSolarAzimuth(Calendar calendar, double latitude, double longitude) {
-		double julianDay = getJulianDay(calendar);
+	private double getSolarElevationAzimuth(Calendar calendar, GeoLocation geoLocation, boolean isAzimuth) {
+		double latitude = geoLocation.getLatitude();
+		double longitude = geoLocation.getLongitude();
+		
+		Calendar cloned = (Calendar) calendar.clone();
+		int offset = - adjustHourForTimeZone(cloned);
+		cloned.add(Calendar.MILLISECOND, offset);
+		int minute = cloned.get(Calendar.MINUTE);
+		int second = cloned.get(Calendar.SECOND);
+		int hour = cloned.get(Calendar.HOUR_OF_DAY);
+		int milli = cloned.get(Calendar.MILLISECOND);
+		
+		double time = (hour + (minute + (second + (milli / 1000.0)) / 60.0) / 60.0 ) / 24.0;
+		double julianDay = getJulianDay(cloned) + time;
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
-		Double eot = getEquationOfTime(julianCenturies);
-		double adjustedLongitude = (calendar.get(Calendar.HOUR_OF_DAY) + 12.0)
-				+ (calendar.get(Calendar.MINUTE) + eot + calendar.get(Calendar.SECOND) / 60.0) / 60.0;
-		adjustedLongitude = -(adjustedLongitude * 360.0 / 24.0) % 360.0;
-		double hourAngle_rad = Math.toRadians(longitude - adjustedLongitude);
-		double declination = getSunDeclination(julianCenturies);
-		double dec_rad = Math.toRadians(declination);
-		double lat_rad = Math.toRadians(latitude);
-		return Math.toDegrees(Math.atan(Math.sin(hourAngle_rad)
-				/ ((Math.cos(hourAngle_rad) * Math.sin(lat_rad)) - (Math.tan(dec_rad) * Math.cos(lat_rad)))))+180;
-
+		double eot = getEquationOfTime(julianCenturies);
+		double theta = getSunDeclination(julianCenturies);
+		
+		double adjustment = time + eot / 1440;
+		double trueSolarTime = ((adjustment + longitude / 360) + 2) % 1; // adding 2 to ensure that it never ends up negative
+		double hourAngelRad = trueSolarTime * Math.PI * 2 - Math.PI;
+		double cosZenith = Math.sin(Math.toRadians(latitude)) * Math.sin(Math.toRadians(theta))
+				+  Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(theta)) * Math.cos(hourAngelRad);
+		double zenith = Math.toDegrees(Math.acos(cosZenith > 1 ? 1 : cosZenith < -1 ? -1 : cosZenith));
+		double azDenom = Math.cos(Math.toRadians(latitude)) * Math.sin(Math.toRadians(zenith));
+		double refractionAdjustment = 0;
+		double elevation = 90.0 - (zenith - refractionAdjustment);
+		double azimuth = 0;
+		double azRad = (Math.sin(Math.toRadians(latitude)) * Math.cos(Math.toRadians(zenith))
+				- Math.sin(Math.toRadians(theta))) / azDenom;
+		if(Math.abs(azDenom) > 0.001) {
+			azimuth = 180 - Math.toDegrees(Math.acos(azRad > 1 ? 1 : azRad < -1? -1 : azRad)) * (hourAngelRad > 0 ? -1 : 1) ;
+		} else {
+			azimuth = latitude > 0 ? 180 : 0;
+		}
+		return isAzimuth ? azimuth % 360 : elevation;
+	}
+	
+	/**
+	 * Returns the hour of day adjusted for the timezone and DST. This is needed for the azimuth and elevation
+	 * calculations.
+	 * @param calendar the Calendar to extract the hour from. This must have the timezone set to the proper timezone.
+	 * @return the adjusted hour corrected for timezone and DST offset.
+	 */
+	private int adjustHourForTimeZone(Calendar calendar) {
+		int offset = calendar.getTimeZone().getRawOffset();
+		int dstOffset = calendar.getTimeZone().getDSTSavings();
+		if(calendar.getTimeZone().inDaylightTime(calendar.getTime())) {
+			offset = offset + dstOffset;
+		}
+		return offset;
 	}
 
 	/**
