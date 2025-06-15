@@ -305,4 +305,18 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	public double getUTCMidnight(Calendar calendar, GeoLocation geoLocation) {
 		return (getUTCNoon(calendar, geoLocation) + 12);
 	}
+	
+	/**
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarAzimuth(Calendar, GeoLocation)
+	 */
+	public double getSolarAzimuth(Calendar calendar, GeoLocation geoLocation) {
+		throw new UnsupportedOperationException("The SunTimesCalculator class does not implement the getSolarAzimuth method. Use the NOAACalculator instead.");
+	}
+	
+	/**
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
+	 */
+	public double getSolarElevation(Calendar calendar, GeoLocation geoLocation) {
+		throw new UnsupportedOperationException("The SunTimesCalculator class does not implement the getSolarElevation method. Use the NOAACalculator instead.");
+	}
 }
