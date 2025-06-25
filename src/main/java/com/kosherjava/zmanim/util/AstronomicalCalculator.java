@@ -206,7 +206,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            The location information
 	 * @return the solar azimuth in degrees. Astronomical midday would be 180 in the norther hemosphere and 0 in the
 	 *            southern hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about
-	 *            90&deg; and sunset about 27090&deg;.
+	 *            90&deg; and sunset about 270&deg;.
 	 */
 	public abstract double getSolarAzimuth(Calendar calendar, GeoLocation geoLocation);
 
