@@ -47,20 +47,21 @@ The library is released under the [LGPL 2.1 license](https://kosherjava.com/2011
 Ports to Other Languages
 ------------------------
 The KosherJava Zmanim API has been ported to:
-* Swift - https://github.com/Elyahu41/KosherSwift & https://github.com/DanielSmith1239/KosherSwift
-* Objective-C - https://github.com/MosheBerman/KosherCocoa
 * .NET - https://github.com/Yitzchok/Zmanim
-* TypeScript - https://github.com/BehindTheMath/KosherZmanim
-* JavaScript - https://github.com/yparitcher/zmanJS
-* Kotlin - https://github.com/Sternbach-Software/KosherKotlin
-* Ruby - https://github.com/pinnymz/ruby-zmanim
-* Scala - https://github.com/nafg/jewish-date
 * C - https://github.com/yparitcher/libzmanim
-* Python - https://github.com/pinnymz/python-zmanim & https://pypi.org/project/zmanim/
-* PHP - https://github.com/zachweix/PhpZmanim/
 * Dart / Flutter - https://github.com/yakir8/kosher_dart
 * Go - https://github.com/vlipovetskii/go-zmanim
+* JavaScript - https://github.com/yparitcher/zmanJS
+* Kotlin - https://github.com/Sternbach-Software/KosherKotlin
+* Objective-C - https://github.com/MosheBerman/KosherCocoa
+* PHP - https://github.com/zachweix/PhpZmanim/
+* Python - https://github.com/pinnymz/python-zmanim & https://pypi.org/project/zmanim/
+* Ruby - https://github.com/pinnymz/ruby-zmanim
+* Rust - https://github.com/YSCohen/rust-zmanim (WIP)
+* Scala - https://github.com/nafg/jewish-date
 * SQL - https://github.com/BehindTheMath/zmanim-sql (alpha quality).
+* Swift - https://github.com/Elyahu41/KosherSwift & https://github.com/DanielSmith1239/KosherSwift
+* TypeScript - https://github.com/BehindTheMath/KosherZmanim
 * VB6/VBA (Visual Basic) - https://github.com/diaphone1/vbzmanim
 
 ZmanCode Desktop App
