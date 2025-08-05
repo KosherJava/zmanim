@@ -598,6 +598,9 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Date getSunTransit(Date startOfDay, Date endOfDay) {
 		long temporalHour = getTemporalHour(startOfDay, endOfDay);
+		if (temporalHour == Long.MIN_VALUE) {
+			return null;
+		}
 		return getTimeOffset(startOfDay, temporalHour * 6);
 	}
 
