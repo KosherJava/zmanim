@@ -660,18 +660,27 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * Returns the dip below the horizon before sunrise that matches the offset minutes on passed in as a parameter. For
-	 * example passing in 72 minutes for a calendar set to the equinox in Jerusalem returns a value close to 16.1&deg;
-	 * Please note that this method is very slow and inefficient and should NEVER be used in a loop.
-	 * @todo Improve efficiency of this method by not brute forcing the calculation.
+	 * Returns the sun's elevation (number of degrees) below the horizon before sunrise that matches the offset minutes
+	 * on passed in as a parameter. For example passing in 72 minutes for a calendar set to the equinox in Jerusalem
+	 * returns a value close to 16.1&deg;.
 	 * 
 	 * @param minutes
-	 *            offset
-	 * @return the degrees below the horizon before sunrise that match the offset in minutes passed it as a parameter.
+	 *            minutes before sunrise
+	 * @return the degrees below the horizon before sunrise that match the offset in minutes passed it as a parameter. If
+	 *            the calculation can't be computed (no sunrise occurs on this day) a {@link Double#NaN} will be returned.
+	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced
+	 *            by calls to {@link AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)}. That method will
+	 *            efficiently return the the solar elevation (the sun's position in degrees below (or above) the horizon)
+	 *            at the given time even in the arctic when there is no sunrise.
+	 * @see AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
 	 * @see #getSunsetSolarDipFromOffset(double)
 	 */
+	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
 	public double getSunriseSolarDipFromOffset(double minutes) {
 		Date offsetByDegrees = getSeaLevelSunrise();
+		if(offsetByDegrees == null) {
+			return Double.NaN;
+		}
 		Date offsetByTime = getTimeOffset(getSeaLevelSunrise(), -(minutes * MINUTE_MILLIS));
 
 		BigDecimal degrees = new BigDecimal(0);
@@ -690,18 +699,27 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * Returns the dip below the horizon after sunset that matches the offset minutes on passed in as a parameter. For
-	 * example passing in 72 minutes for a calendar set to the equinox in Jerusalem returns a value close to 16.1&deg;
-	 * Please note that this method is very slow and inefficient and should NEVER be used in a loop.
-	 * @todo Improve efficiency of this method by not brute forcing the calculation.
+	 * Returns the sun's elevation (number of degrees) below the horizon after sunset that matches the offset minutes
+	 * passed in as a parameter. For example passing in 72 minutes for a calendar set to the equinox in Jerusalem
+	 * returns a value close to 16.1&deg;.
 	 * 
 	 * @param minutes
-	 *            offset
-	 * @return the degrees below the horizon after sunset that match the offset in minutes passed it as a parameter.
+	 *            minutes after sunset
+	 * @return the degrees below the horizon after sunset that match the offset in minutes passed it as a parameter. If
+	 *            the calculation can't be computed (no sunset occurs on this day) a {@link Double#NaN} will be returned.
+	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced
+	 *            by calls to {@link AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)}. That method will
+	 *            efficiently return the the solar elevation (the sun's position in degrees below (or above) the horizon)
+	 *            at the given time even in the arctic when there is no sunrise.
+	 * @see AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
 	 * @see #getSunriseSolarDipFromOffset(double)
 	 */
+	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
 	public double getSunsetSolarDipFromOffset(double minutes) {
 		Date offsetByDegrees = getSeaLevelSunset();
+		if(offsetByDegrees == null) {
+			return Double.NaN;
+		}
 		Date offsetByTime = getTimeOffset(getSeaLevelSunset(), minutes * MINUTE_MILLIS);
 		BigDecimal degrees = new BigDecimal(0);
 		BigDecimal incrementor = new BigDecimal("0.001");
