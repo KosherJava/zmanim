@@ -53,6 +53,7 @@ The KosherJava Zmanim API has been ported to:
 * Go - https://github.com/vlipovetskii/go-zmanim
 * JavaScript - https://github.com/yparitcher/zmanJS
 * Kotlin - https://github.com/Sternbach-Software/KosherKotlin
+* Monkey C - https://github.com/5E7EN/Garmin-ZmanIQ/tree/rebuild-zmaniq/source/utils/zmanim
 * Objective-C - https://github.com/MosheBerman/KosherCocoa
 * PHP - https://github.com/zachweix/PhpZmanim/
 * Python - https://github.com/pinnymz/python-zmanim & https://pypi.org/project/zmanim/
