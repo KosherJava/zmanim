@@ -106,6 +106,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	private AstronomicalCalculator astronomicalCalculator;
 
+	private final TimeZone timeZoneUTC = TimeZone.getTimeZone("UTC");
+
 	/**
 	 * The getSunrise method returns a <code>Date</code> representing the
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunrise time. The zenith used
@@ -628,7 +630,7 @@ public class AstronomicalCalendar implements Cloneable {
 		double calculatedTime = time;
 		
 		Calendar adjustedCalendar = getAdjustedCalendar();
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar cal = Calendar.getInstance(timeZoneUTC);
 		cal.clear();// clear all fields
 		cal.set(Calendar.YEAR, adjustedCalendar.get(Calendar.YEAR));
 		cal.set(Calendar.MONTH, adjustedCalendar.get(Calendar.MONTH));
