@@ -58,7 +58,7 @@ The KosherJava Zmanim API has been ported to:
 * PHP - https://github.com/zachweix/PhpZmanim/
 * Python - https://github.com/pinnymz/python-zmanim & https://pypi.org/project/zmanim/
 * Ruby - https://github.com/pinnymz/ruby-zmanim
-* Rust - https://github.com/YSCohen/rust-zmanim (WIP)
+* Rust - https://github.com/dickermoshe/zmanim-core & https://github.com/YSCohen/rust-zmanim (WIP)
 * Scala - https://github.com/nafg/jewish-date
 * SQL - https://github.com/BehindTheMath/zmanim-sql (alpha quality).
 * Swift - https://github.com/Elyahu41/KosherSwift & https://github.com/DanielSmith1239/KosherSwift
