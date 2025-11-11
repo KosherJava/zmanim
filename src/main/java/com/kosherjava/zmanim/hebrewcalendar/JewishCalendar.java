@@ -1249,7 +1249,7 @@ public class JewishCalendar extends JewishDate {
 				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
 		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time
-		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
+		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset(cal));
 		return cal.getTime();
 	}
 
@@ -1290,7 +1290,7 @@ public class JewishCalendar extends JewishDate {
 		cal.add(Calendar.HOUR, 168); // 7 days after the molad
 		return cal.getTime();
 	}
-
+	
 	/**
 	 * Returns the latest time of Kiddush Levana according to the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as

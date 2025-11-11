@@ -16,12 +16,15 @@
 package com.kosherjava.zmanim;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
+import com.kosherjava.zmanim.util.TimeZoneUtils;
 import com.kosherjava.zmanim.util.ZmanimFormatter;
 
 /**
@@ -626,21 +629,26 @@ public class AstronomicalCalendar implements Cloneable {
 			return null;
 		}
 		double calculatedTime = time;
-		
+
 		Calendar adjustedCalendar = getAdjustedCalendar();
+
+		// Convert Calendar to java.time for accurate date extraction, especially for distant future dates
+		ZoneId zoneId = adjustedCalendar.getTimeZone().toZoneId();
+		ZonedDateTime adjustedZdt = adjustedCalendar.toInstant().atZone(zoneId);
+
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();// clear all fields
-		cal.set(Calendar.YEAR, adjustedCalendar.get(Calendar.YEAR));
-		cal.set(Calendar.MONTH, adjustedCalendar.get(Calendar.MONTH));
-		cal.set(Calendar.DAY_OF_MONTH, adjustedCalendar.get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.YEAR, adjustedZdt.getYear());
+		cal.set(Calendar.MONTH, adjustedZdt.getMonthValue() - 1); // Calendar months are 0-based
+		cal.set(Calendar.DAY_OF_MONTH, adjustedZdt.getDayOfMonth());
 
 		int hours = (int) calculatedTime; // retain only the hours
 		calculatedTime -= hours;
 		int minutes = (int) (calculatedTime *= 60); // retain only the minutes
-		calculatedTime -= minutes;
+        calculatedTime -= minutes;
 		int seconds = (int) (calculatedTime *= 60); // retain only the seconds
 		calculatedTime -= seconds; // remaining milliseconds
-		
+
 		// Check if a date transition has occurred, or is about to occur - this indicates the date of the event is
 		// actually not the target date, but the day prior or after
 		int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
@@ -758,8 +766,9 @@ public class AstronomicalCalendar implements Cloneable {
 		if (hours < 0 || hours >= 24) {
 			throw new IllegalArgumentException("Hours must between 0 and 23.9999...");
 		}
-		return getTimeOffset(getDateFromTime(hours - getGeoLocation().getTimeZone().getRawOffset()
-				/ (double) HOUR_MILLIS, SolarEvent.SUNRISE), -getGeoLocation().getLocalMeanTimeOffset());
+		long timezoneOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(getCalendar());		
+		return getTimeOffset(getDateFromTime(hours - timezoneOffsetMillis
+				/ (double) HOUR_MILLIS, SolarEvent.SUNRISE), -getGeoLocation().getLocalMeanTimeOffset(calendar));
 	}
 	
 	/**
@@ -769,7 +778,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the adjusted Calendar
 	 */
 	private Calendar getAdjustedCalendar(){
-		int offset = getGeoLocation().getAntimeridianAdjustment();
+		int offset = getGeoLocation().getAntimeridianAdjustment(getCalendar());
 		if (offset == 0) {
 			return getCalendar();
 		}
