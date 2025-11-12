@@ -18,6 +18,7 @@ package com.kosherjava.zmanim;
 import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -353,6 +354,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Date getSunsetOffsetByDegrees(double offsetZenith) {
 		double sunset = getUTCSunset(offsetZenith);
+		// System.out.println("Jsunset: " + sunset);
 		if (Double.isNaN(sunset)) {
 			return null;
 		} else {
@@ -633,8 +635,11 @@ public class AstronomicalCalendar implements Cloneable {
 		Calendar adjustedCalendar = getAdjustedCalendar();
 
 		// Convert Calendar to java.time for accurate date extraction, especially for distant future dates
-		ZoneId zoneId = adjustedCalendar.getTimeZone().toZoneId();
-		ZonedDateTime adjustedZdt = adjustedCalendar.toInstant().atZone(zoneId);
+		long milliseconds = adjustedCalendar.getTimeInMillis();
+		Instant instant = Instant.ofEpochMilli(milliseconds);
+		TimeZone timeZone = adjustedCalendar.getTimeZone();
+		ZoneId zoneId = timeZone.toZoneId();
+		ZonedDateTime adjustedZdt = instant.atZone(zoneId);
 
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();// clear all fields
@@ -782,8 +787,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (offset == 0) {
 			return getCalendar();
 		}
-		Calendar adjustedCalendar = (Calendar) getCalendar().clone();
-		adjustedCalendar.add(Calendar.DAY_OF_MONTH, offset);
+		Calendar adjustedCalendar = TimeZoneUtils.addDay(getCalendar());
 		return adjustedCalendar;
 	}
 

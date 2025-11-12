@@ -44,5 +44,26 @@ public class TimeZoneUtils {
 		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
 		return zonedDateTime.getOffset().getTotalSeconds() * 1000;
 	}
+	
+	/**
+	 * Adds one day to the given Calendar by converting it to a ZonedDateTime,
+	 * adding a day, and converting it back to a Calendar.
+	 * The returned Calendar will have the same TimeZone as the input Calendar.
+	 * 
+	 * @param calendar the Calendar to add a day to
+	 * @return a new Calendar with one day added, preserving the original TimeZone
+	 */
+	public static Calendar addDay(Calendar calendar) {
+		TimeZone timeZone = calendar.getTimeZone();
+		long unixTimestampMillis = calendar.getTimeInMillis();
+		ZoneId zoneId = timeZone.toZoneId();
+		Instant instant = Instant.ofEpochMilli(unixTimestampMillis);
+		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
+		ZonedDateTime nextDay = zonedDateTime.plusDays(1);
+		Instant nextDayInstant = nextDay.toInstant();
+		Calendar result = Calendar.getInstance(timeZone);
+		result.setTimeInMillis(nextDayInstant.toEpochMilli());
+		return result;
+	}
 }
 
