@@ -567,8 +567,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param month
 	 *            the Jewish month to validate. It will reject a month &lt; 1 or &gt; 12 (or 13 on a leap year) .
 	 * @param dayOfMonth
-	 *            the day of the Jewish month to validate. It will reject any value &lt; 1 or &gt; 30 TODO: check calling
-	 *            methods to see if there is any reason that the class can validate that 30 is invalid for some months.
+	 *            the day of the Jewish month to validate. It will reject any value &lt; 1 or &gt; the number of days in the month
+	 *            for that year.
 	 * @param hours
 	 *            the hours (for <em>molad</em> calculations). It will reject an hour &lt; 0 or &gt; 23
 	 * @param minutes
@@ -590,9 +590,12 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
 					+ month + " is invalid for the year " + year + ".");
 		}
-		if (dayOfMonth < 1 || dayOfMonth > 30) {
-			throw new IllegalArgumentException("The Jewish day of month can't be < 1 or > 30.  " + dayOfMonth
-					+ " is invalid.");
+
+		int maxDaysInMonth = getDaysInJewishMonth(month, year);
+
+		if (dayOfMonth < 1 || dayOfMonth > maxDaysInMonth) {
+			throw new IllegalArgumentException("The Jewish day of month can't be < 1 or > " + maxDaysInMonth + ".  " + dayOfMonth
+					+ " is invalid for the month " + month + " of the year " + year + ".");
 		}
 		// reject dates prior to 18 Teves, 3761 (1/1/1 AD). This restriction can be relaxed if the date coding is
 		// changed/corrected
