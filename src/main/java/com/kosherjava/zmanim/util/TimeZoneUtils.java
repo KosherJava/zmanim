@@ -53,13 +53,13 @@ public class TimeZoneUtils {
 	 * @param calendar the Calendar to add a day to
 	 * @return a new Calendar with one day added, preserving the original TimeZone
 	 */
-	public static Calendar addDay(Calendar calendar) {
+	public static Calendar addDay(Calendar calendar, int days) {
 		TimeZone timeZone = calendar.getTimeZone();
 		long unixTimestampMillis = calendar.getTimeInMillis();
 		ZoneId zoneId = timeZone.toZoneId();
 		Instant instant = Instant.ofEpochMilli(unixTimestampMillis);
 		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
-		ZonedDateTime nextDay = zonedDateTime.plusDays(1);
+		ZonedDateTime nextDay = zonedDateTime.plusDays(days);
 		Instant nextDayInstant = nextDay.toInstant();
 		Calendar result = Calendar.getInstance(timeZone);
 		result.setTimeInMillis(nextDayInstant.toEpochMilli());

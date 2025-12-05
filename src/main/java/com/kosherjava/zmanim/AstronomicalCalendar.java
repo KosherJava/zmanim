@@ -787,7 +787,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (offset == 0) {
 			return getCalendar();
 		}
-		Calendar adjustedCalendar = TimeZoneUtils.addDay(getCalendar());
+		Calendar adjustedCalendar = TimeZoneUtils.addDay(getCalendar(), offset);
 		return adjustedCalendar;
 	}
 
