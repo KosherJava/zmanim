@@ -1290,7 +1290,7 @@ public class JewishCalendar extends JewishDate {
 		cal.add(Calendar.HOUR, 168); // 7 days after the molad
 		return cal.getTime();
 	}
-	
+
 	/**
 	 * Returns the latest time of Kiddush Levana according to the <a
 	 * href="http://en.wikipedia.org/wiki/Yaakov_ben_Moshe_Levi_Moelin">Maharil's</a> opinion that it is calculated as
