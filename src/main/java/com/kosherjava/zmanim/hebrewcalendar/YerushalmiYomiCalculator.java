@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import com.kosherjava.zmanim.util.TimeZoneUtils;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
@@ -34,9 +35,8 @@ public class YerushalmiYomiCalculator {
 	 */
 	private final static Calendar DAF_YOMI_START_DAY;
 	static {
-		DAF_YOMI_START_DAY = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-		DAF_YOMI_START_DAY.set(1980, Calendar.FEBRUARY, 2, 0, 0, 0);
-		DAF_YOMI_START_DAY.set(Calendar.MILLISECOND, 0);
+		DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
+		DAF_YOMI_START_DAY.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 	/** The number of milliseconds in a day. */
 	private final static int DAY_MILIS = 1000 * 60 * 60 * 24;
@@ -90,16 +90,16 @@ public class YerushalmiYomiCalculator {
 		
 		// Start to calculate current cycle. init the start day
 		nextCycle.setTime(DAF_YOMI_START_DAY.getTime());
-		
+
 		// Go cycle by cycle, until we get the next cycle
 		while (requested.after(nextCycle)) {
 			prevCycle.setTime(nextCycle.getTime());
 			
 			// Adds the number of whole shas dafs. and the number of days that not have daf.
-			nextCycle.add(Calendar.DAY_OF_MONTH, WHOLE_SHAS_DAFS);
-			nextCycle.add(Calendar.DAY_OF_MONTH, getNumOfSpecialDays(prevCycle, nextCycle));		
+			nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS);
+			nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
 		}
-		
+
 		// Get the number of days from cycle start until request.
 		int dafNo = (int)(getDiffBetweenDays(prevCycle, requested));
 		

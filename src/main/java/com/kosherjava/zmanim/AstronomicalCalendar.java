@@ -658,13 +658,13 @@ public class AstronomicalCalendar implements Cloneable {
 		// actually not the target date, but the day prior or after
 		int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
 		if (solarEvent == SolarEvent.SUNRISE && localTimeHours + hours > 18) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
+			cal = TimeZoneUtils.addDay(cal, -1);
 		} else if (solarEvent == SolarEvent.SUNSET && localTimeHours + hours < 6) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
+			cal = TimeZoneUtils.addDay(cal, 1);
 		} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours < 12) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
+			cal = TimeZoneUtils.addDay(cal, 1);
 		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours > 24) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
+			cal = TimeZoneUtils.addDay(cal, -1);
 		}
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
