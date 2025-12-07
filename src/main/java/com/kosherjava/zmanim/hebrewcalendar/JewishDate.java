@@ -1183,6 +1183,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public Calendar getGregorianCalendar() {
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
 		calendar.set(getGregorianYear(), getGregorianMonth(), getGregorianDayOfMonth());
 		return calendar;
 	}

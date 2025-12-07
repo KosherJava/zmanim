@@ -17,6 +17,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 
 /**
@@ -31,7 +32,12 @@ public class YerushalmiYomiCalculator {
 	/**
 	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 15 Shevat, 5740.
 	 */
-	private final static Calendar DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
+	private final static Calendar DAF_YOMI_START_DAY;
+	static {
+		DAF_YOMI_START_DAY = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		DAF_YOMI_START_DAY.set(1980, Calendar.FEBRUARY, 2, 0, 0, 0);
+		DAF_YOMI_START_DAY.set(Calendar.MILLISECOND, 0);
+	}
 	/** The number of milliseconds in a day. */
 	private final static int DAY_MILIS = 1000 * 60 * 60 * 24;
 	/** The number of pages in the Talmud Yerushalmi.*/
@@ -64,8 +70,8 @@ public class YerushalmiYomiCalculator {
 	 */
 	public static Daf getDafYomiYerushalmi(JewishCalendar calendar) {
 		
-		Calendar nextCycle = new GregorianCalendar();
-		Calendar prevCycle = new GregorianCalendar();
+		Calendar nextCycle = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		Calendar prevCycle = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
 		Calendar requested = calendar.getGregorianCalendar();
 		int masechta = 0;
 		Daf dafYomi = null;
