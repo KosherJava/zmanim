@@ -3486,18 +3486,22 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	private Date getMoladBasedTime(Date moladBasedTime, Date alos, Date tzais, boolean techila) {
 		Date lastMidnight = getMidnightLastNight();
-		Date midnightTonight = getMidnightTonight();
-		if (!(moladBasedTime.before(lastMidnight) || moladBasedTime.after(midnightTonight))){
-			if (alos != null || tzais != null) {
-				if (techila && !(moladBasedTime.before(tzais) || moladBasedTime.after(alos))){
+	    Date midnightTonight = getMidnightTonight();
+		if(moladBasedTime.before(lastMidnight) || moladBasedTime.after(midnightTonight)){ // Invalid time, bailout
+			return null;
+		} else if (alos == null || tzais == null){ // Not enough info to adjust
+		   return moladBasedTime;
+		} else { // It's the daytime, get the next/prev night
+			if (moladBasedTime.after(alos) && moladBasedTime.before(tzais)) {
+				if (techila) {
 					return tzais;
 				} else {
 					return alos;
 				}
-			}
-			return moladBasedTime;
-		}
-		return null;
+		    } else { // It's the night, the provided time is valid
+                return moladBasedTime;
+            }
+	   }
 	}
 
 	/**
