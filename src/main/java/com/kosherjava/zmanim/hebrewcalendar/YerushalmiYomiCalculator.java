@@ -89,13 +89,19 @@ public class YerushalmiYomiCalculator {
 		}
 		
 		// Start to calculate current cycle. init the start day
+		prevCycle.setTime(DAF_YOMI_START_DAY.getTime());
 		nextCycle.setTime(DAF_YOMI_START_DAY.getTime());
+		// Move the nextCycle to the last day of the current cycle
+		nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS - 1);
+		nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
 
 		// Go cycle by cycle, until we get the next cycle
 		while (requested.after(nextCycle)) {
+			// Move the prevCycle from the 1st day of the current cycle to the 1st day of the next cycle
 			prevCycle.setTime(nextCycle.getTime());
-			
-			// Adds the number of whole shas dafs. and the number of days that not have daf.
+			prevCycle = TimeZoneUtils.addDay(prevCycle, 1);
+
+			// Move the nextCycle from the last day of the current cycle to the last day of the next cycle
 			nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS);
 			nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
 		}
@@ -116,6 +122,7 @@ public class YerushalmiYomiCalculator {
 			total -= i;
 			masechta++;
 		}
+		 
 
 		return dafYomi;
 	}
