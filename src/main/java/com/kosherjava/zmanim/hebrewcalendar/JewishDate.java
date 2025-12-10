@@ -1301,28 +1301,36 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 	
 	/**
-	 * Forward the Jewish date by the number of months passed in.
-	 * FIXME: Deal with forwarding a date such as 30 Nissan by a month. 30 Iyar does not exist. This should be dealt with similar to 
-	 * the way that the Java Calendar behaves (not that simple since there is a difference between add() or roll().
+	 * Advances the Jewish date forward by the specified number of months.
+	 * If the day doesn't exist in the target month (e.g., 30 Iyar), it adjusts to the last day of that month (29 Iyar).
 	 * 
 	 * @throws IllegalArgumentException if the amount is less than 1
-	 * @param amount the number of months to roll the month forward
+	 * @param amount the number of months to advance (must be at least 1)
 	 */
 	private void forwardJewishMonth(int amount) {
 		if (amount < 1) {
 			throw new IllegalArgumentException("the amount of months to forward has to be greater than zero.");
 		}
+		int currentMonth = getJewishMonth();
+		int currentYear = getJewishYear();
+		int currentDay = getJewishDayOfMonth();
 		for (int i = 0; i < amount; i++) {
-			if (getJewishMonth() == ELUL) {
-				setJewishMonth(TISHREI);
-				setJewishYear(getJewishYear() + 1);
-			} else if ((! isJewishLeapYear() && getJewishMonth() == ADAR)
-						|| (isJewishLeapYear() && getJewishMonth() == ADAR_II)){
-				setJewishMonth(NISSAN);
+			boolean isLeapYear = JewishDate.isJewishLeapYear(currentYear);
+			if (currentMonth == ELUL) {
+				currentMonth = TISHREI;
+				currentYear = currentYear + 1;
+			} else if ((!isLeapYear && currentMonth == ADAR)
+						|| (isLeapYear && currentMonth == ADAR_II)){
+				currentMonth = NISSAN;
 			} else {
-				setJewishMonth(getJewishMonth() + 1);
+				currentMonth = currentMonth + 1;
 			}
 		}
+		int maxDaysInMonth = JewishDate.getDaysInJewishMonth(currentMonth, currentYear);
+		if (currentDay > maxDaysInMonth) {
+			currentDay = maxDaysInMonth;
+		}
+		setJewishDate(currentYear, currentMonth, currentDay);
 	}
 
 	/**
