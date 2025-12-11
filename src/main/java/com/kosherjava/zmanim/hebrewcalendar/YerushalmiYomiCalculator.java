@@ -17,7 +17,9 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
+import com.kosherjava.zmanim.util.TimeZoneUtils;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
@@ -31,7 +33,11 @@ public class YerushalmiYomiCalculator {
 	/**
 	 * The start date of the first Daf Yomi Yerushalmi cycle of February 2, 1980 / 15 Shevat, 5740.
 	 */
-	private final static Calendar DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
+	private final static Calendar DAF_YOMI_START_DAY;
+	static {
+		DAF_YOMI_START_DAY = new GregorianCalendar(1980, Calendar.FEBRUARY, 2);
+		DAF_YOMI_START_DAY.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 	/** The number of milliseconds in a day. */
 	private final static int DAY_MILIS = 1000 * 60 * 60 * 24;
 	/** The number of pages in the Talmud Yerushalmi.*/
@@ -64,8 +70,8 @@ public class YerushalmiYomiCalculator {
 	 */
 	public static Daf getDafYomiYerushalmi(JewishCalendar calendar) {
 		
-		Calendar nextCycle = new GregorianCalendar();
-		Calendar prevCycle = new GregorianCalendar();
+		Calendar nextCycle = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		Calendar prevCycle = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
 		Calendar requested = calendar.getGregorianCalendar();
 		int masechta = 0;
 		Daf dafYomi = null;
@@ -83,17 +89,23 @@ public class YerushalmiYomiCalculator {
 		}
 		
 		// Start to calculate current cycle. init the start day
+		prevCycle.setTime(DAF_YOMI_START_DAY.getTime());
 		nextCycle.setTime(DAF_YOMI_START_DAY.getTime());
-		
+		// Move the nextCycle to the last day of the current cycle
+		nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS - 1);
+		nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
+
 		// Go cycle by cycle, until we get the next cycle
 		while (requested.after(nextCycle)) {
+			// Move the prevCycle from the 1st day of the current cycle to the 1st day of the next cycle
 			prevCycle.setTime(nextCycle.getTime());
-			
-			// Adds the number of whole shas dafs. and the number of days that not have daf.
-			nextCycle.add(Calendar.DAY_OF_MONTH, WHOLE_SHAS_DAFS);
-			nextCycle.add(Calendar.DAY_OF_MONTH, getNumOfSpecialDays(prevCycle, nextCycle));		
+			prevCycle = TimeZoneUtils.addDay(prevCycle, 1);
+
+			// Move the nextCycle from the last day of the current cycle to the last day of the next cycle
+			nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS);
+			nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
 		}
-		
+
 		// Get the number of days from cycle start until request.
 		int dafNo = (int)(getDiffBetweenDays(prevCycle, requested));
 		
@@ -110,6 +122,7 @@ public class YerushalmiYomiCalculator {
 			total -= i;
 			masechta++;
 		}
+		 
 
 		return dafYomi;
 	}

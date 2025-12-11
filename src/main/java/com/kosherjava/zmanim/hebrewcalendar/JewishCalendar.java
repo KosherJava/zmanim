@@ -1249,7 +1249,7 @@ public class JewishCalendar extends JewishDate {
 				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
 		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
 		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time
-		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
+		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset(cal));
 		return cal.getTime();
 	}
 

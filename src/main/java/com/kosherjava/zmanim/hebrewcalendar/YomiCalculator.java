@@ -17,6 +17,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * This class calculates the Daf Yomi Bavli page (daf) for a given date. To calculate Daf Yomi Yerushalmi
@@ -30,19 +31,27 @@ public class YomiCalculator {
 	/**
 	 * The start date of the first Daf Yomi Bavli cycle of September 11, 1923 / Rosh Hashana 5684.
 	 */
-	private static final Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
+	private static final Calendar DAF_YOMI_START_DAY;
+	static {
+		DAF_YOMI_START_DAY = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11,0,0,0);
+		DAF_YOMI_START_DAY.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for calculations.*/
-	private static final int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
+	private static final int DAF_YOMI_JULIAN_START_DAY = getJulianDay(DAF_YOMI_START_DAY);
 	/**
 	 * The date that the pagination for the Daf Yomi <em>Maseches Shekalim</em> changed to use the commonly used Vilna
 	 * Shas pagination from the no longer commonly available Zhitomir / Slavuta Shas used by Rabbi Meir Shapiro. 
 	 */
-	private static final Calendar shekalimChangeDay = new GregorianCalendar(1975, Calendar.JUNE, 24);
+	private static final Calendar SHEKALIM_CHANGE_DAY;
+	static {
+		SHEKALIM_CHANGE_DAY = new GregorianCalendar(1975, Calendar.JUNE, 24,0,0,0);
+		SHEKALIM_CHANGE_DAY.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
 	
 	/** The Julian date that the cycle for Shekalim changed.
 	 * @see #getDafYomiBavli(JewishCalendar) for details.
 	 */
-	private static final int shekalimJulianChangeDay = getJulianDay(shekalimChangeDay);
+	private static final int SHEKALIM_JULIAN_CHANGE_DAY = getJulianDay(SHEKALIM_CHANGE_DAY);
 	
 	/**
 	 * Default constructor.
@@ -89,17 +98,17 @@ public class YomiCalculator {
 		int julianDay = getJulianDay(calendar);
 		int cycleNo;
 		int dafNo;
-		if (calendar.before(dafYomiStartDay)) {
+		if (calendar.before(DAF_YOMI_START_DAY)) {
 			// TODO: should we return a null or throw an IllegalArgumentException?
 			throw new IllegalArgumentException(calendar + " is prior to organized Daf Yomi Bavli cycles that started on "
-					+ dafYomiStartDay);
+					+ DAF_YOMI_START_DAY);
 		}
-		if (calendar.equals(shekalimChangeDay) || calendar.after(shekalimChangeDay)) {
-			cycleNo = 8 + ((julianDay - shekalimJulianChangeDay) / 2711);
-			dafNo = ((julianDay - shekalimJulianChangeDay) % 2711);
+		if (calendar.equals(SHEKALIM_CHANGE_DAY) || calendar.after(SHEKALIM_CHANGE_DAY)) {
+			cycleNo = 8 + ((julianDay - SHEKALIM_JULIAN_CHANGE_DAY) / 2711);
+			dafNo = ((julianDay - SHEKALIM_JULIAN_CHANGE_DAY) % 2711);
 		} else {
-			cycleNo = 1 + ((julianDay - dafYomiJulianStartDay) / 2702);
-			dafNo = ((julianDay - dafYomiJulianStartDay) % 2702);
+			cycleNo = 1 + ((julianDay - DAF_YOMI_JULIAN_START_DAY) / 2702);
+			dafNo = ((julianDay - DAF_YOMI_JULIAN_START_DAY) % 2702);
 		}
 
 		int total = 0;

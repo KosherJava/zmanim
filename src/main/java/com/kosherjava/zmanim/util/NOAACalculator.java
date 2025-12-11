@@ -15,7 +15,10 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times based on the <a
@@ -100,9 +103,12 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *         day. Fractional days / time should be added later.
 	 */
 	private static double getJulianDay(Calendar calendar) {
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		// Convert Calendar to java.time for accurate date extraction, especially for distant future dates
+		ZoneId zoneId = calendar.getTimeZone().toZoneId();
+		ZonedDateTime zdt = calendar.toInstant().atZone(zoneId);
+		int year = zdt.getYear();
+		int month = zdt.getMonthValue(); // Already 1-12, no need to add 1
+		int day = zdt.getDayOfMonth();
 		if (month <= 2) {
 			year -= 1;
 			month += 12;
@@ -343,13 +349,12 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double longitude = geoLocation.getLongitude();
 		
 		Calendar cloned = (Calendar) calendar.clone();
-		int offset = - adjustHourForTimeZone(cloned);
-		cloned.add(Calendar.MILLISECOND, offset);
+		cloned.setTimeZone(TimeZone.getTimeZone("UTC"));
 		int minute = cloned.get(Calendar.MINUTE);
 		int second = cloned.get(Calendar.SECOND);
 		int hour = cloned.get(Calendar.HOUR_OF_DAY);
 		int milli = cloned.get(Calendar.MILLISECOND);
-		
+
 		double time = (hour + (minute + (second + (milli / 1000.0)) / 60.0) / 60.0 ) / 24.0;
 		double julianDay = getJulianDay(cloned) + time;
 		double julianCenturies = getJulianCenturiesFromJulianDay(julianDay);
@@ -375,21 +380,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		}
 		return isAzimuth ? azimuth % 360 : elevation;
 	}
-	
-	/**
-	 * Returns the hour of day adjusted for the timezone and DST. This is needed for the azimuth and elevation
-	 * calculations.
-	 * @param calendar the Calendar to extract the hour from. This must have the timezone set to the proper timezone.
-	 * @return the adjusted hour corrected for timezone and DST offset.
-	 */
-	private int adjustHourForTimeZone(Calendar calendar) {
-		int offset = calendar.getTimeZone().getRawOffset();
-		int dstOffset = calendar.getTimeZone().getDSTSavings();
-		if(calendar.getTimeZone().inDaylightTime(calendar.getTime())) {
-			offset = offset + dstOffset;
-		}
-		return offset;
-	}
+
 
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * The JewishDate is the base calendar class, that supports maintenance of a {@link java.util.GregorianCalendar}
@@ -567,8 +568,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @param month
 	 *            the Jewish month to validate. It will reject a month &lt; 1 or &gt; 12 (or 13 on a leap year) .
 	 * @param dayOfMonth
-	 *            the day of the Jewish month to validate. It will reject any value &lt; 1 or &gt; 30 TODO: check calling
-	 *            methods to see if there is any reason that the class can validate that 30 is invalid for some months.
+	 *            the day of the Jewish month to validate. It will reject any value &lt; 1 or &gt; the number of days in the month
+	 *            for that year.
 	 * @param hours
 	 *            the hours (for <em>molad</em> calculations). It will reject an hour &lt; 0 or &gt; 23
 	 * @param minutes
@@ -590,9 +591,12 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 			throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
 					+ month + " is invalid for the year " + year + ".");
 		}
-		if (dayOfMonth < 1 || dayOfMonth > 30) {
-			throw new IllegalArgumentException("The Jewish day of month can't be < 1 or > 30.  " + dayOfMonth
-					+ " is invalid.");
+
+		int maxDaysInMonth = getDaysInJewishMonth(month, year);
+
+		if (dayOfMonth < 1 || dayOfMonth > maxDaysInMonth) {
+			throw new IllegalArgumentException("The Jewish day of month can't be < 1 or > " + maxDaysInMonth + ".  " + dayOfMonth
+					+ " is invalid for the month " + month + " of the year " + year + ".");
 		}
 		// reject dates prior to 18 Teves, 3761 (1/1/1 AD). This restriction can be relaxed if the date coding is
 		// changed/corrected
@@ -1180,7 +1184,12 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public Calendar getGregorianCalendar() {
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
 		calendar.set(getGregorianYear(), getGregorianMonth(), getGregorianDayOfMonth());
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar;
 	}
 
@@ -1292,28 +1301,36 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 	
 	/**
-	 * Forward the Jewish date by the number of months passed in.
-	 * FIXME: Deal with forwarding a date such as 30 Nissan by a month. 30 Iyar does not exist. This should be dealt with similar to 
-	 * the way that the Java Calendar behaves (not that simple since there is a difference between add() or roll().
+	 * Advances the Jewish date forward by the specified number of months.
+	 * If the day doesn't exist in the target month (e.g., 30 Iyar), it adjusts to the last day of that month (29 Iyar).
 	 * 
 	 * @throws IllegalArgumentException if the amount is less than 1
-	 * @param amount the number of months to roll the month forward
+	 * @param amount the number of months to advance (must be at least 1)
 	 */
 	private void forwardJewishMonth(int amount) {
 		if (amount < 1) {
 			throw new IllegalArgumentException("the amount of months to forward has to be greater than zero.");
 		}
+		int currentMonth = getJewishMonth();
+		int currentYear = getJewishYear();
+		int currentDay = getJewishDayOfMonth();
 		for (int i = 0; i < amount; i++) {
-			if (getJewishMonth() == ELUL) {
-				setJewishMonth(TISHREI);
-				setJewishYear(getJewishYear() + 1);
-			} else if ((! isJewishLeapYear() && getJewishMonth() == ADAR)
-						|| (isJewishLeapYear() && getJewishMonth() == ADAR_II)){
-				setJewishMonth(NISSAN);
+			boolean isLeapYear = JewishDate.isJewishLeapYear(currentYear);
+			if (currentMonth == ELUL) {
+				currentMonth = TISHREI;
+				currentYear = currentYear + 1;
+			} else if ((!isLeapYear && currentMonth == ADAR)
+						|| (isLeapYear && currentMonth == ADAR_II)){
+				currentMonth = NISSAN;
 			} else {
-				setJewishMonth(getJewishMonth() + 1);
+				currentMonth = currentMonth + 1;
 			}
 		}
+		int maxDaysInMonth = JewishDate.getDaysInJewishMonth(currentMonth, currentYear);
+		if (currentDay > maxDaysInMonth) {
+			currentDay = maxDaysInMonth;
+		}
+		setJewishDate(currentYear, currentMonth, currentDay);
 	}
 
 	/**

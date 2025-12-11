@@ -15,6 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -329,15 +330,17 @@ public class GeoLocation implements Cloneable {
 	 * so a user who is 1&deg; west of this will have noon at 4 minutes after standard time noon, and conversely, a user
 	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM. Lakewood, N.J., whose longitude is
 	 * -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to yield 3 minutes
-	 * and 10 seconds earlier than standard time. The offset returned does not account for the <a
-	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> offset since this class is
-	 * unaware of dates.
+	 * and 10 seconds earlier than standard time. The offset returned uses the actual timezone offset at the specific
+	 * date/time from the Calendar, accounting for <a href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight
+	 * saving time</a>.
 	 * 
-	 * @return the offset in milliseconds not accounting for Daylight saving time. A positive value will be returned
-	 *         East of the 15&deg; timezone line, and a negative value West of it.
+	 * @param calendar the Calendar containing the date/time to calculate the offset for
+	 * @return the offset in milliseconds. A positive value will be returned East of the 15&deg; timezone line, and a
+	 *         negative value West of it.
 	 */
-	public long getLocalMeanTimeOffset() {
-		return (long) (getLongitude() * 4 * MINUTE_MILLIS - getTimeZone().getRawOffset());
+	public long getLocalMeanTimeOffset(Calendar calendar) {
+		long timezoneOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(calendar);
+		return (long) (getLongitude() * 4 * MINUTE_MILLIS - timezoneOffsetMillis);
 	}
 	
 	/**
@@ -355,10 +358,11 @@ public class GeoLocation implements Cloneable {
 	 * UTC time, the local DST offset of <a href="https://en.wikipedia.org/wiki/UTC%2B14:00">UTC+14:00</a> should be applied
 	 * to bring the date back to 2018-02-03.
 	 * 
+	 * @param calendar the Calendar containing the date/time to calculate the adjustment for
 	 * @return the number of days to adjust the date This will typically be 0 unless the date crosses the antimeridian
 	 */
-	public int getAntimeridianAdjustment() {
-		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
+	public int getAntimeridianAdjustment(Calendar calendar) {
+		double localHoursOffset = getLocalMeanTimeOffset(calendar) / (double)HOUR_MILLIS;
 		
 		if (localHoursOffset >= 20){// if the offset is 20 hours or more in the future (never expected anywhere other
 									// than a location using a timezone across the antimeridian to the east such as Samoa)
@@ -565,6 +569,10 @@ public class GeoLocation implements Cloneable {
 	 * @return The XML formatted <code>String</code>.
 	 */
 	public String toXML() {
+		Calendar cal = Calendar.getInstance(getTimeZone());
+		long gmtOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(cal);
+		long dstOffsetMillis = getTimeZone().getDSTSavings();
+		
 		return "<GeoLocation>\n" +
 				"\t<LocationName>" + getLocationName() + "</LocationName>\n" +
 				"\t<Latitude>" + getLatitude() + "</Latitude>\n" +
@@ -572,9 +580,9 @@ public class GeoLocation implements Cloneable {
 				"\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
 				"\t<TimezoneName>" + getTimeZone().getID() + "</TimezoneName>\n" +
 				"\t<TimeZoneDisplayName>" + getTimeZone().getDisplayName() + "</TimeZoneDisplayName>\n" +
-				"\t<TimezoneGMTOffset>" + getTimeZone().getRawOffset() / HOUR_MILLIS +
+				"\t<TimezoneGMTOffset>" + gmtOffsetMillis / HOUR_MILLIS +
 				"</TimezoneGMTOffset>\n" +
-				"\t<TimezoneDSTOffset>" + getTimeZone().getDSTSavings() / HOUR_MILLIS +
+				"\t<TimezoneDSTOffset>" + dstOffsetMillis / HOUR_MILLIS +
 				"</TimezoneDSTOffset>\n" +
 				"</GeoLocation>";
 	}
@@ -620,6 +628,10 @@ public class GeoLocation implements Cloneable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
+		Calendar cal = Calendar.getInstance(getTimeZone());
+		long gmtOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(cal);
+		long dstOffsetMillis = getTimeZone().getDSTSavings();
+		
 		return "\nLocation Name:\t\t\t" + getLocationName() +
 			"\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
 			"\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
@@ -627,8 +639,8 @@ public class GeoLocation implements Cloneable {
 			"\nTimezone ID:\t\t\t" + getTimeZone().getID() +
 			"\nTimezone Display Name:\t\t" + getTimeZone().getDisplayName() +
 			" (" + getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")" +
-			"\nTimezone GMT Offset:\t\t" + getTimeZone().getRawOffset() / HOUR_MILLIS +
-			"\nTimezone DST Offset:\t\t" + getTimeZone().getDSTSavings() / HOUR_MILLIS;
+			"\nTimezone GMT Offset:\t\t" + gmtOffsetMillis / HOUR_MILLIS +
+			"\nTimezone DST Offset:\t\t" + dstOffsetMillis / HOUR_MILLIS;
 	}
 
 	/**
