@@ -15,7 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.TimeZone;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * A class that represents a numeric time. Times that represent a time of day are stored as {@link java.util.Date}s in

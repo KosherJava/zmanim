@@ -16,7 +16,7 @@
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 
 /**
  * Tefila Rules is a utility class that covers the various <em>halachos</em> and <em>minhagim</em> regarding

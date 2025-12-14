@@ -15,7 +15,7 @@
  */
 package com.kosherjava.zmanim;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
@@ -40,7 +40,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * double longitude = -74.222; // Lakewood, NJ
  * double elevation = 20; // optional elevation correction in Meters
  * // the String parameter in getTimeZone() has to be a valid time zone listed in
- * // {@link java.util.TimeZone#getAvailableIDs()}
+ * // {@link com.ibm.icu.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
  * ComplexZmanimCalendar czc = new ComplexZmanimCalendar(location);

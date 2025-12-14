@@ -15,7 +15,7 @@
  */
 package com.kosherjava.zmanim;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
 
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;

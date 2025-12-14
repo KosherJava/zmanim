@@ -18,12 +18,12 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
- * The JewishDate is the base calendar class, that supports maintenance of a {@link java.util.GregorianCalendar}
+ * The JewishDate is the base calendar class, that supports maintenance of a {@link com.ibm.icu.util.GregorianCalendar}
  * instance along with the corresponding Jewish date. This class can use the standard Java Date and Calendar
  * classes for setting and maintaining the dates, but it does not subclass these classes or use them internally
  * in any calculations. This class also does not have a concept of a time (which the Date class does). Please
@@ -51,7 +51,7 @@ import java.util.TimeZone;
  * @see JewishCalendar
  * @see HebrewDateFormatter
  * @see java.util.Date
- * @see java.util.Calendar
+ * @see com.ibm.icu.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
  * @author &copy; Eliyahu Hershfeld 2011 - 2024
  */
@@ -990,7 +990,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
+	 * A constructor that initializes the date to the {@link com.ibm.icu.util.Calendar Calendar} parameter.
 	 * 
 	 * @param calendar
 	 *            the <code>Calendar</code> to set the calendar to
@@ -1014,7 +1014,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Sets the date based on a {@link java.util.Calendar Calendar} object. Modifies the Jewish date as well.
+	 * Sets the date based on a {@link com.ibm.icu.util.Calendar Calendar} object. Modifies the Jewish date as well.
 	 * 
 	 * @param calendar
 	 *            the <code>Calendar</code> to set the calendar to
@@ -1178,9 +1178,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * Returns this object's date as a {@link java.util.Calendar} object.
+	 * Returns this object's date as a {@link com.ibm.icu.util.Calendar} object.
 	 * 
-	 * @return The {@link java.util.Calendar}
+	 * @return The {@link com.ibm.icu.util.Calendar}
 	 */
 	public Calendar getGregorianCalendar() {
 		Calendar calendar = Calendar.getInstance();
@@ -1228,7 +1228,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * 
 	 * <pre>
 	 * <code>
-	 * 	Calendar cal = jewishDate.getTime(); // get a java.util.Calendar representation of the JewishDate
+	 * 	Calendar cal = jewishDate.getTime(); // get a com.ibm.icu.util.Calendar representation of the JewishDate
 	 * 	cal.add(Calendar.MONTH, 3); // add 3 Gregorian months
 	 * 	jewishDate.setDate(cal); // set the updated calendar back to this class
 	 * </code>
@@ -1341,7 +1341,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * 
 	 * <pre>
 	 * <code>
-	 * 	Calendar cal = jewishDate.getTime(); // get a java.util.Calendar representation of the JewishDate
+	 * 	Calendar cal = jewishDate.getTime(); // get a com.ibm.icu.util.Calendar representation of the JewishDate
 	 * 	cal.add(Calendar.MONTH, -3); // subtract 3 Gregorian months
 	 * 	jewishDate.setDate(cal); // set the updated calendar back to this class
 	 * </code>
@@ -1415,7 +1415,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * Returns the Gregorian month (between 0-11).
 	 * 
-	 * @return the Gregorian month (between 0-11). Like the java.util.Calendar, months are 0 based.
+	 * @return the Gregorian month (between 0-11). Like the com.ibm.icu.util.Calendar, months are 0 based.
 	 */
 	public int getGregorianMonth() {
 		return gregorianMonth - 1;

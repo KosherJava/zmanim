@@ -16,15 +16,15 @@
 package com.kosherjava.zmanim.util;
 
 import java.lang.reflect.Method;
-import java.text.DateFormat;
+import com.ibm.icu.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
-import java.text.SimpleDateFormat;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.kosherjava.zmanim.AstronomicalCalendar;
 
 /**
@@ -273,7 +273,7 @@ public class ZmanimFormatter {
 	 * @param dateTime
 	 *            the date to format
 	 * @param calendar
-	 *            the {@link java.util.Calendar Calendar} used to help format based on the Calendar's DST and other
+	 *            the {@link com.ibm.icu.util.Calendar Calendar} used to help format based on the Calendar's DST and other
 	 *            settings.
 	 * @return the formatted String
 	 */

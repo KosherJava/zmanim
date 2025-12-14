@@ -15,10 +15,8 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.TimeZone;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times based on the <a
@@ -103,12 +101,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *         day. Fractional days / time should be added later.
 	 */
 	private static double getJulianDay(Calendar calendar) {
-		// Convert Calendar to java.time for accurate date extraction, especially for distant future dates
-		ZoneId zoneId = calendar.getTimeZone().toZoneId();
-		ZonedDateTime zdt = calendar.toInstant().atZone(zoneId);
-		int year = zdt.getYear();
-		int month = zdt.getMonthValue(); // Already 1-12, no need to add 1
-		int day = zdt.getDayOfMonth();
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH) + 1;
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		if (month <= 2) {
 			year -= 1;
 			month += 12;

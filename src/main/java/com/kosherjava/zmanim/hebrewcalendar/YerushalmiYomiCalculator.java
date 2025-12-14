@@ -15,11 +15,10 @@
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.TimeZone;
 
-import com.kosherjava.zmanim.util.TimeZoneUtils;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
@@ -92,18 +91,18 @@ public class YerushalmiYomiCalculator {
 		prevCycle.setTime(DAF_YOMI_START_DAY.getTime());
 		nextCycle.setTime(DAF_YOMI_START_DAY.getTime());
 		// Move the nextCycle to the last day of the current cycle
-		nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS - 1);
-		nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
+		nextCycle.add(Calendar.DAY_OF_MONTH, WHOLE_SHAS_DAFS - 1);
+		nextCycle.add(Calendar.DAY_OF_MONTH, getNumOfSpecialDays(prevCycle, nextCycle));
 
 		// Go cycle by cycle, until we get the next cycle
 		while (requested.after(nextCycle)) {
 			// Move the prevCycle from the 1st day of the current cycle to the 1st day of the next cycle
 			prevCycle.setTime(nextCycle.getTime());
-			prevCycle = TimeZoneUtils.addDay(prevCycle, 1);
+			prevCycle.add(Calendar.DAY_OF_MONTH, 1);
 
 			// Move the nextCycle from the last day of the current cycle to the last day of the next cycle
-			nextCycle = TimeZoneUtils.addDay(nextCycle, WHOLE_SHAS_DAFS);
-			nextCycle = TimeZoneUtils.addDay(nextCycle, getNumOfSpecialDays(prevCycle, nextCycle));
+			nextCycle.add(Calendar.DAY_OF_MONTH, WHOLE_SHAS_DAFS);
+			nextCycle.add(Calendar.DAY_OF_MONTH, getNumOfSpecialDays(prevCycle, nextCycle));
 		}
 
 		// Get the number of days from cycle start until request.

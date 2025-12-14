@@ -1,6 +1,6 @@
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 
 import org.junit.*;
 

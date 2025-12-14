@@ -16,16 +16,12 @@
 package com.kosherjava.zmanim;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.Instant;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import com.ibm.icu.util.TimeZone;
 
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
-import com.kosherjava.zmanim.util.TimeZoneUtils;
 import com.kosherjava.zmanim.util.ZmanimFormatter;
 
 /**
@@ -53,7 +49,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * double longitude = -74.2094; // Lakewood, NJ
  * double elevation = 20; // optional elevation correction in Meters
  * // the String parameter in getTimeZone() has to be a valid timezone listed in
- * // {@link java.util.TimeZone#getAvailableIDs()}
+ * // {@link com.ibm.icu.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
  * AstronomicalCalendar ac = new AstronomicalCalendar(location);
@@ -634,18 +630,11 @@ public class AstronomicalCalendar implements Cloneable {
 
 		Calendar adjustedCalendar = getAdjustedCalendar();
 
-		// Convert Calendar to java.time for accurate date extraction, especially for distant future dates
-		long milliseconds = adjustedCalendar.getTimeInMillis();
-		Instant instant = Instant.ofEpochMilli(milliseconds);
-		TimeZone timeZone = adjustedCalendar.getTimeZone();
-		ZoneId zoneId = timeZone.toZoneId();
-		ZonedDateTime adjustedZdt = instant.atZone(zoneId);
-
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();// clear all fields
-		cal.set(Calendar.YEAR, adjustedZdt.getYear());
-		cal.set(Calendar.MONTH, adjustedZdt.getMonthValue() - 1); // Calendar months are 0-based
-		cal.set(Calendar.DAY_OF_MONTH, adjustedZdt.getDayOfMonth());
+		cal.set(Calendar.YEAR, adjustedCalendar.get(Calendar.YEAR));
+		cal.set(Calendar.MONTH, adjustedCalendar.get(Calendar.MONTH));
+		cal.set(Calendar.DAY_OF_MONTH, adjustedCalendar.get(Calendar.DAY_OF_MONTH));
 
 		int hours = (int) calculatedTime; // retain only the hours
 		calculatedTime -= hours;
@@ -658,13 +647,13 @@ public class AstronomicalCalendar implements Cloneable {
 		// actually not the target date, but the day prior or after
 		int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
 		if (solarEvent == SolarEvent.SUNRISE && localTimeHours + hours > 18) {
-			cal = TimeZoneUtils.addDay(cal, -1);
+			cal.add(Calendar.DAY_OF_MONTH, -1);
 		} else if (solarEvent == SolarEvent.SUNSET && localTimeHours + hours < 6) {
-			cal = TimeZoneUtils.addDay(cal, 1);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
 		} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours < 12) {
-			cal = TimeZoneUtils.addDay(cal, 1);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
 		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours > 24) {
-			cal = TimeZoneUtils.addDay(cal, -1);
+			cal.add(Calendar.DAY_OF_MONTH, -1);
 		}
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
@@ -771,7 +760,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (hours < 0 || hours >= 24) {
 			throw new IllegalArgumentException("Hours must between 0 and 23.9999...");
 		}
-		long timezoneOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(getCalendar());		
+		long timezoneOffsetMillis = getCalendar().getTimeZone().getOffset(getCalendar().getTimeInMillis());		
 		return getTimeOffset(getDateFromTime(hours - timezoneOffsetMillis
 				/ (double) HOUR_MILLIS, SolarEvent.SUNRISE), -getGeoLocation().getLocalMeanTimeOffset(calendar));
 	}
@@ -787,7 +776,8 @@ public class AstronomicalCalendar implements Cloneable {
 		if (offset == 0) {
 			return getCalendar();
 		}
-		Calendar adjustedCalendar = TimeZoneUtils.addDay(getCalendar(), offset);
+		Calendar adjustedCalendar = getCalendar().clone();
+		adjustedCalendar.add(Calendar.DAY_OF_MONTH, offset);
 		return adjustedCalendar;
 	}
 
@@ -913,10 +903,10 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that creates a <a href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
-	 * <b>Note:</b> If the {@link java.util.TimeZone} in the cloned {@link com.kosherjava.zmanim.util.GeoLocation} will
+	 * <b>Note:</b> If the {@link com.ibm.icu.util.TimeZone} in the cloned {@link com.kosherjava.zmanim.util.GeoLocation} will
 	 * be changed from the original, it is critical that
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
+	 * {@link com.ibm.icu.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
 	 * AstronomicalCalendar to output times in the expected offset after being cloned.
 	 * 
 	 * @see java.lang.Object#clone()

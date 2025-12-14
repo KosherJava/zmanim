@@ -15,7 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm

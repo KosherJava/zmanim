@@ -15,7 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at

@@ -20,9 +20,9 @@ package com.kosherjava.zmanim.hebrewcalendar;
 import com.kosherjava.zmanim.util.GeoLocation;
 
 import java.time.LocalDate;
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * </ol>
  * 
  * @see java.util.Date
- * @see java.util.Calendar
+ * @see com.ibm.icu.util.Calendar
  * @author &copy; Y. Paritcher 2019 - 2022
  * @author &copy; Avrom Finkelstien 2002
  * @author &copy; Eliyahu Hershfeld 2011 - 2024
@@ -264,7 +264,7 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
+	 * A constructor that initializes the date to the {@link com.ibm.icu.util.Calendar Calendar} parameter.
 	 * 
 	 * @param calendar
 	 *            the <code>Calendar</code> to set the calendar to

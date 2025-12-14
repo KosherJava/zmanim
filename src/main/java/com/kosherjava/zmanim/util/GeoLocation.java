@@ -15,9 +15,9 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Objects;
-import java.util.TimeZone;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * A class that contains location information such as latitude and longitude required for astronomical calculations. The
@@ -310,7 +310,7 @@ public class GeoLocation implements Cloneable {
 	 * Method to set the TimeZone. If this is ever set after the GeoLocation is set in the
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar}, it is critical that
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
+	 * {@link com.ibm.icu.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
 	 * AstronomicalCalendar to output times in the expected offset. This situation will arise if the
 	 * AstronomicalCalendar is ever {@link com.kosherjava.zmanim.AstronomicalCalendar#clone() cloned}.
 	 * 
@@ -339,7 +339,7 @@ public class GeoLocation implements Cloneable {
 	 *         negative value West of it.
 	 */
 	public long getLocalMeanTimeOffset(Calendar calendar) {
-		long timezoneOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(calendar);
+		long timezoneOffsetMillis = calendar.getTimeZone().getOffset(calendar.getTimeInMillis());
 		return (long) (getLongitude() * 4 * MINUTE_MILLIS - timezoneOffsetMillis);
 	}
 	
@@ -570,7 +570,7 @@ public class GeoLocation implements Cloneable {
 	 */
 	public String toXML() {
 		Calendar cal = Calendar.getInstance(getTimeZone());
-		long gmtOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(cal);
+		long gmtOffsetMillis = cal.getTimeZone().getOffset(cal.getTimeInMillis());
 		long dstOffsetMillis = getTimeZone().getDSTSavings();
 		
 		return "<GeoLocation>\n" +
@@ -629,7 +629,7 @@ public class GeoLocation implements Cloneable {
 	 */
 	public String toString() {
 		Calendar cal = Calendar.getInstance(getTimeZone());
-		long gmtOffsetMillis = TimeZoneUtils.getTimezoneOffsetAt(cal);
+		long gmtOffsetMillis = cal.getTimeZone().getOffset(cal.getTimeInMillis());
 		long dstOffsetMillis = getTimeZone().getDSTSavings();
 		
 		return "\nLocation Name:\t\t\t" + getLocationName() +
@@ -646,9 +646,9 @@ public class GeoLocation implements Cloneable {
 	/**
 	 * An implementation of the {@link java.lang.Object#clone()} method that creates a <a
 	 * href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
-	 * <b>Note:</b> If the {@link java.util.TimeZone} in the clone will be changed from the original, it is critical
+	 * <b>Note:</b> If the {@link com.ibm.icu.util.TimeZone} in the clone will be changed from the original, it is critical
 	 * that {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} is called after cloning in order for the
+	 * {@link com.ibm.icu.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} is called after cloning in order for the
 	 * AstronomicalCalendar to output times in the expected offset.
 	 * 
 	 * @see java.lang.Object#clone()

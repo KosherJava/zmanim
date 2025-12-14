@@ -6,7 +6,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 
 /**
  * Verify the calculation of the number of days in a month. Not too hard...just the rules about when February

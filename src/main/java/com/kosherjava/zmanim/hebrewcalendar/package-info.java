@@ -1,6 +1,6 @@
 /**
  * This package contain classes that represent a <a href="https://en.wikipedia.org/wiki/Hebrew_calendar">Jewish Date/Calendar</a>,
- * and allows conversion between {@link com.kosherjava.zmanim.hebrewcalendar.JewishDate Jewish} and {@link java.util.GregorianCalendar Gregorian dates}. The main calendar
+ * and allows conversion between {@link com.kosherjava.zmanim.hebrewcalendar.JewishDate Jewish} and {@link com.ibm.icu.util.GregorianCalendar Gregorian dates}. The main calendar
  * classes {@link com.kosherjava.zmanim.hebrewcalendar.JewishCalendar} and {@link com.kosherjava.zmanim.hebrewcalendar.JewishDate}
  * are based on <a href="http://www.facebook.com/avromf">Avrom Finkelstien's</a> code,
  * refactored to fit the Zmanim API. The parsha and season-based <em>tefila</em> change code was ported by Y. Paritcher from his

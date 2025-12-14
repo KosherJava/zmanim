@@ -6,7 +6,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
-import java.util.Calendar;
+import com.ibm.icu.util.Calendar;
 
 /**
  * Checks that we can roll forward & backward the gregorian dates...
