@@ -833,7 +833,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * 	 * Method to return <em>alos</em> (dawn) calculated as 60 minutes before {@link #getSunrise() sunrise} or
+	 * Method to return <em>alos</em> (dawn) calculated as 60 minutes before {@link #getSunrise() sunrise} or
 	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting). This is the
 	 * time to walk the distance of 4 <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
 	 * >mil</a> at 15 minutes a mil. This seems to be the opinion of the
@@ -3486,18 +3486,22 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	private Date getMoladBasedTime(Date moladBasedTime, Date alos, Date tzais, boolean techila) {
 		Date lastMidnight = getMidnightLastNight();
-		Date midnightTonight = getMidnightTonight();
-		if (!(moladBasedTime.before(lastMidnight) || moladBasedTime.after(midnightTonight))){
-			if (alos != null || tzais != null) {
-				if (techila && !(moladBasedTime.before(tzais) || moladBasedTime.after(alos))){
+	    Date midnightTonight = getMidnightTonight();
+		if(moladBasedTime.before(lastMidnight) || moladBasedTime.after(midnightTonight)){ // Invalid time, bailout
+			return null;
+		} else if (alos == null || tzais == null){ // Not enough info to adjust
+		   return moladBasedTime;
+		} else { // It's the daytime, get the next/prev night
+			if (moladBasedTime.after(alos) && moladBasedTime.before(tzais)) {
+				if (techila) {
 					return tzais;
 				} else {
 					return alos;
 				}
+			} else { // It's the night, the provided time is valid
+				return moladBasedTime;
 			}
-			return moladBasedTime;
 		}
-		return null;
 	}
 
 	/**
