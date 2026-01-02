@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -105,7 +105,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * 
  * <h2>See documentation from the {@link ZmanimCalendar} parent class</h2>
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public class ComplexZmanimCalendar extends ZmanimCalendar {
 
@@ -195,6 +195,17 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMisheyakir11Point5Degrees()
 	 */
 	protected static final double ZENITH_11_POINT_5 = GEOMETRIC_ZENITH + 11.5;
+	
+	/**
+	 * The zenith of 12.85&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This is used for calculating
+	 * <em>misheyakir</em> according to some opinions. This calculation is based on the position of the sun slightly less
+	 * than 57 minutes before {@link #getSunrise() sunrise} in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
+	 * calculates to 12.85&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * 
+	 * @see #getMisheyakir12Point85Degrees()
+	 */
+	protected static final double ZENITH_12_POINT_85 = GEOMETRIC_ZENITH + 12.86;
 
 	/**
 	 * The zenith of 13.24&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
@@ -1122,6 +1133,50 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getAlos16Point1Degrees() {
 		return getSunriseOffsetByDegrees(ZENITH_16_POINT_1);
+	}
+	
+	/**
+	 * This method returns <em>misheyakir</em> based on the position of the sun {@link #ZENITH_12_POINT_85 12.85&deg;}
+	 * below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This is based on the position of the sun slightly
+	 * later than 57 minutes before {@link #getSunrise() sunrise} in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>. This
+	 * <em>zman</em> is mentioned for use <b><em>bish'as hadchak</em></b> in the Birur Halacha <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=50535&st=&pgnum=88">Tinyana</a> and <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=50537&st=&pgnum=31">Tlisa'ah</a> in  Orach Chaim siman 18 as 12.85&deg;.
+	 * Actual calculations show it to be slightly more than 12.9&deg;, but the Birur Halacha indicates that 12.85&deg; is a
+	 * slight <em>chumra</em> (on a <em>bedieved</em> time) VS the 12.9&deg; that 57 minutes calculates as (a difference of
+	 * about 14 seconds at the equinox/equilux in Jerusalem). The <em>zman</em> of 12.9&deg; is also mentioned in the Piskei
+	 * Tshuvos siman 18, page 190 (where a typo indicates that this is the degree equivalent to 60 minutes before sunrise,
+	 * when in fact at that point the sun is about 13.5&deg; below the horizon). The 57 minute based time is mentioned by the
+	 * Minchas Yitzchak <a href="https://hebrewbooks.org/pdfpager.aspx?req=1601&st=&pgnum=21">vol. 9, siman 9</a> as 15 minutes
+	 * before <em>alos hashachar</em> (though he is not clear what location he refers to, and does not mention a degree-based
+	 * conversion). The Kaf Hachaim <a href="https://hebrewbooks.org/pdfpager.aspx?req=8140&st=&pgnum=81">vol.1 siman 18, no.
+	 * 18</a> states that in Yerushalayim 60 fixed minutes are used year round. Calculations show that 60 fixed minutes in
+	 * Yerushalayim ranges from 13.5&deg; at the spring equinox to 11.5&deg; at the summer solstice. 57-minute
+	 * <em>misheyakir</em> range from 12.9&deg; at the winter equinox to 11&deg; at the summer solstice.
+	 * Analysis of the difference between 12.85&deg; and 12.9&deg;, shows that the maximum difference occurs at the summer
+	 * solstice. In Lakewood, NJ at a latitude of 40.096&deg;, the maximum difference throughout the year is 23 seconds.
+	 * In the winter where there is the greatest need for very early <em>misheyakir</em> times, the difference is in the 16
+	 * second range. Going north to Montreal at latitude 45.5&deg;, the maximum is 29 seconds and is about 18 seconds in the
+	 * winter. Moving farther north to the elevation of Vilnius at a latitude of 54.68&deg;, things change. Firstly, around the
+	 * summer solstice it will not reach that far below the horizon. On the dates that both can be calculated, the maximum
+	 * difference can be pretty high on one or two days of the year (around Jul 8),  with about a week having over a two minute
+	 * difference between the two. Even at the latitude of Vilna, from Dec - March, the difference is about 22 seconds.
+	 * 
+	 * @deprecated This method returns a very early <em>misheyakir</em> time that should only be used <b><em>bish'as
+	 *         hadchak</em></b>. <em>Lechatchila</em>, a later <em>zman</em> should be used. There is no current plan to remove
+	 *         this method from the API, and this deprecation is intended to notify developers to add an alert to users of
+	 *         the risk of using it.
+	 * 
+	 * @return The <code>Date</code> of <em>misheyakir</em>. If the calculation can't be computed such as northern and
+	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
+	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #ZENITH_12_POINT_85
+	 */
+	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	public Date getMisheyakir12Point85Degrees() {
+		return getSunriseOffsetByDegrees(ZENITH_12_POINT_85);
 	}
 
 	/**
