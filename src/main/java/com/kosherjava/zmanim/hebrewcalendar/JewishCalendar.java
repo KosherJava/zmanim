@@ -163,6 +163,13 @@ public class JewishCalendar extends JewishDate {
 	private boolean isMukafChoma = false;
 
 	/**
+	 * Is the calendar set to have a safek (doubtful) Purim <em>demukafim</em>, where Purim is celebrated (mainly) on the 14th and the 15th of Adar.
+	 * @see #getIsSafekMukafChoma()
+	 * @see #setIsSafekMukafChoma(boolean)
+	 */
+	private boolean isSafekMukafChoma = false;
+
+	/**
 	 * Is the calendar set to use modern Israeli holidays such as Yom Haatzmaut.
 	 * @see #isUseModernHolidays()
 	 * @see #setUseModernHolidays(boolean)
@@ -367,6 +374,30 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public void setIsMukafChoma(boolean isMukafChoma) {
 		this.isMukafChoma = isMukafChoma;
+	}
+
+
+	/**
+	 * Returns if the city is set as a city that may have been surrounded by a wall from the time of Yehoshua, and
+	 * Shushan Purim should be celebrated as well as regular Purim.
+	 * @return if the city is set as a city that may have been surrounded by a wall from the time of Yehoshua, and
+	 * Shushan Purim should be celebrated as well as regular Purim.
+	 * @see #setIsSafekMukafChoma(boolean)
+	 */
+	public boolean getIsSafekMukafChoma() {
+		return isSafekMukafChoma;
+	}
+
+	/**
+	 * Sets if the location may have been surrounded by a wall from the time of Yehoshua, and Shushan Purim should be
+	 * celebrated as well as regular Purim. This can be set for Baghdad Iraq, or other cities around the world that
+	 * have the status of a "Safek Mukaf Choma". There are multiple cities in Israel that have this status.
+	 * The exception being Yerushalayim.
+	 * @param isSafekMukafChoma if the city may have been surrounded by a wall from the time of Yehoshua.
+	 * @see #getIsSafekMukafChoma()
+	 */
+	public void setIsSafekMukafChoma(boolean isSafekMukafChoma) {
+		this.isSafekMukafChoma = isSafekMukafChoma;
 	}
 	
 	/**
@@ -1146,15 +1177,20 @@ public class JewishCalendar extends JewishDate {
 	
 	/**
 	 * Returns if the day is Purim (<a href="https://en.wikipedia.org/wiki/Purim#Shushan_Purim">Shushan Purim</a>
-	 * in a mukaf choma and regular Purim in a non-mukaf choma). 
-	 * @return if the day is Purim (Shushan Purim in a mukaf choma and regular Purim in a non-mukaf choma)
-	 * 
+	 * in a mukaf choma and regular Purim in a non-mukaf choma. On both days if {@link #setIsSafekMukafChoma(boolean)} is true).
+	 * @return if the day is Purim (Shushan Purim in a mukaf choma and regular Purim in a non-mukaf choma or on both days
+	 * if {@link #setIsSafekMukafChoma(boolean)} is true)
+	 *
 	 * @see #getIsMukafChoma()
 	 * @see #setIsMukafChoma(boolean)
+	 * @see #getIsSafekMukafChoma()
+	 * @see #setIsSafekMukafChoma(boolean)
 	 */
 	public boolean isPurim() {
 		if (isMukafChoma) {
 			return getYomTovIndex() == SHUSHAN_PURIM;
+		} else if (isSafekMukafChoma) {
+			return getYomTovIndex() == PURIM || getYomTovIndex() == SHUSHAN_PURIM;
 		} else {
 			return getYomTovIndex() == PURIM;
 		}
