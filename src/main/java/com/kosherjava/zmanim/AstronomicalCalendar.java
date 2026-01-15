@@ -654,6 +654,8 @@ public class AstronomicalCalendar implements Cloneable {
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours < 0) {
 			cal.add(Calendar.DAY_OF_MONTH, 1);
+		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours > 24) {
+			cal.add(Calendar.DAY_OF_MONTH, -1);
 		}
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
