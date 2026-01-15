@@ -663,8 +663,8 @@ public class AstronomicalCalendar implements Cloneable {
 			cal = TimeZoneUtils.addDay(cal, 1);
 		} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours < 12) {
 			cal = TimeZoneUtils.addDay(cal, 1);
-		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours > 24) {
-			cal = TimeZoneUtils.addDay(cal, -1);
+		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours < 0) {
+			cal = TimeZoneUtils.addDay(cal, 1);
 		}
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
