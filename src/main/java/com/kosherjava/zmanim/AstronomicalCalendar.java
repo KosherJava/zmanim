@@ -612,7 +612,6 @@ public class AstronomicalCalendar implements Cloneable {
 		/**SUNRISE A solar event related to sunrise*/SUNRISE, /**SUNSET A solar event related to sunset*/SUNSET,
 		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT
 	}
-
 	/**
 	 * A method that returns a <code>Date</code> from the time passed in as a parameter.
 	 * 
@@ -623,6 +622,19 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return The Date object representation of the time double
 	 */
 	protected Date getDateFromTime(double time, SolarEvent solarEvent) {
+		return getDateFromTime(time, solarEvent, true);
+	}
+
+	/**
+	 * A method that returns a <code>Date</code> from the time passed in as a parameter.
+	 * 
+	 * @param time
+	 *            The time to be set as the time for the <code>Date</code>. The time expected is in the format: 18.75
+	 *            for 6:45:00 PM.time is sunrise and false if it is sunset
+	 * @param solarEvent the type of {@link SolarEvent}
+	 * @return The Date object representation of the time double
+	 */
+	protected Date getDateFromTime(double time, SolarEvent solarEvent, boolean adjust) {
 		if (Double.isNaN(time)) {
 			return null;
 		}
@@ -645,18 +657,20 @@ public class AstronomicalCalendar implements Cloneable {
 
 		// Check if a date transition has occurred, or is about to occur - this indicates the date of the event is
 		// actually not the target date, but the day prior or after
-		int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
-		if (solarEvent == SolarEvent.SUNRISE && localTimeHours + hours > 18) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
-		} else if (solarEvent == SolarEvent.SUNSET && localTimeHours + hours < 6) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours < 12) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours < 0) {
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours > 24) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
-		}
+		if (adjust) {
+			int localTimeHours = (int)getGeoLocation().getLongitude() / 15;
+			if (solarEvent == SolarEvent.SUNRISE && localTimeHours + hours > 18) {
+				cal.add(Calendar.DAY_OF_MONTH, -1);
+			} else if (solarEvent == SolarEvent.SUNSET && localTimeHours + hours < 6) {
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+			} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours < 12) {
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+			} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours < 0) {
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+			} else if (solarEvent == SolarEvent.NOON && localTimeHours + hours > 24) {
+				cal.add(Calendar.DAY_OF_MONTH, -1);
+			}
+	    }
 
 		cal.set(Calendar.HOUR_OF_DAY, hours);
 		cal.set(Calendar.MINUTE, minutes);
@@ -764,7 +778,7 @@ public class AstronomicalCalendar implements Cloneable {
 		}
 		long timezoneOffsetMillis = getCalendar().getTimeZone().getOffset(getCalendar().getTimeInMillis());		
 		return getTimeOffset(getDateFromTime(hours - timezoneOffsetMillis
-				/ (double) HOUR_MILLIS, SolarEvent.SUNRISE), -getGeoLocation().getLocalMeanTimeOffset(calendar));
+				/ (double) HOUR_MILLIS, SolarEvent.SUNRISE, false), -getGeoLocation().getLocalMeanTimeOffset(calendar));
 	}
 	
 	/**
