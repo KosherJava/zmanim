@@ -772,15 +772,15 @@ public class HebrewDateFormatter {
 		final int month = jewishDate.getJewishMonth();
 		if (isHebrewFormat()) {
 			if (jewishDate.isJewishLeapYear() && month == JewishDate.ADAR) {
-				return hebrewMonths[13] + (useGershGershayim ? GERESH : ""); // return Adar I, not Adar in a leap year
+				return hebrewMonths[JewishDate.ADAR_II] + (useGershGershayim ? GERESH : ""); // return Adar I, not Adar in a leap year
 			} else if (jewishDate.isJewishLeapYear() && month == JewishDate.ADAR_II) {
-				return hebrewMonths[12] + (useGershGershayim ? GERESH : "");
+				return hebrewMonths[JewishDate.ADAR] + (useGershGershayim ? GERESH : "");
 			} else {
 				return hebrewMonths[month - 1];
 			}
 		} else {
 			if (jewishDate.isJewishLeapYear() && month == JewishDate.ADAR) {
-				return transliteratedMonths[13]; // return Adar I, not Adar in a leap year
+				return transliteratedMonths[JewishDate.ADAR_II]; // return Adar I, not Adar in a leap year
 			} else {
 				return transliteratedMonths[month - 1];
 			}
