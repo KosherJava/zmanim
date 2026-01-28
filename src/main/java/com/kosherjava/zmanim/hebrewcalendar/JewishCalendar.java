@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2024 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2026 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  * Copyright (C) 2019 - 2022 Y Paritcher
  *
@@ -1260,8 +1260,8 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the Date representing the moment 3 days after the molad.
 	 * 
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana3Days()
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana3Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days()
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days(Date, Date)
 	 */
 	public Date getTchilasZmanKidushLevana3Days() {
 		Date molad = getMoladAsDate();
@@ -1280,8 +1280,8 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the Date representing the moment 7 days after the molad.
 	 * 
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana7Days()
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getTchilasZmanKidushLevana7Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days()
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days(Date, Date)
 	 */
 	public Date getTchilasZmanKidushLevana7Days() {
 		Date molad = getMoladAsDate();
@@ -1303,8 +1303,8 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment halfway between <em>molad</em> and <em>molad</em>.
 	 * 
 	 * @see #getSofZmanKidushLevana15Days()
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
 	 */
 	public Date getSofZmanKidushLevanaBetweenMoldos() {
 		Date molad = getMoladAsDate();
@@ -1334,8 +1334,8 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the Date representing the moment 15 days after the <em>molad</em>.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevana15Days()
-	 * @see com.kosherjava.zmanim.ComplexZmanimCalendar#getSofZmanKidushLevana15Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days()
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days(Date, Date)
 	 */
 	public Date getSofZmanKidushLevana15Days() {
 		Date molad = getMoladAsDate();
