@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -25,8 +25,8 @@ import com.kosherjava.zmanim.util.GeoLocation;
 /**
  * The ZmanimCalendar is a specialized calendar that can calculate sunrise, sunset and Jewish <em>zmanim</em>
  * (religious times) for prayers and other Jewish religious duties. This class contains the main functionality of the
- * <em>Zmanim</em> library. For a much more extensive list of <em>zmanim</em>, use the {@link ComplexZmanimCalendar} that
- * extends this class. See documentation for the {@link ComplexZmanimCalendar} and {@link AstronomicalCalendar} for
+ * <em>Zmanim</em> library. For a much more extensive list of <em>zmanim</em>, use the {@link ComprehensiveZmanimCalendar} that
+ * extends this class. See documentation for the {@link ComprehensiveZmanimCalendar} and {@link AstronomicalCalendar} for
  * simple examples on using the API. 
  * <strong>Elevation based <em>zmanim</em> (even sunrise and sunset) should not be used <em>lekula</em> without the guidance
  * of a <em>posek</em></strong>. According to Rabbi Dovid Yehudah Bursztyn in his
@@ -42,9 +42,9 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * #setUseElevation(boolean)}. This will impact sunrise and sunset-based <em>zmanim</em> such as {@link #getSunrise()},
  * {@link #getSunset()}, {@link #getSofZmanShmaGRA()}, <em>alos</em>-based <em>zmanim</em> such as {@link #getSofZmanShmaMGA()}
  * that are based on a fixed offset of sunrise or sunset and <em>zmanim</em> based on a percentage of the day such as
- * {@link ComplexZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. Even when set to
+ * {@link ComprehensiveZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. Even when set to
  * true it will not impact <em>zmanim</em> that are a degree-based offset of sunrise and sunset, such as {@link
- * ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()} since
+ * ComprehensiveZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComprehensiveZmanimCalendar#getSofZmanShmaBaalHatanya()} since
  * these <em>zmanim</em> are not linked to sunrise or sunset times (the calculations are based on the astronomical definition of
  * sunrise and sunset calculated in a vacuum with the solar radius above the horizon), and are therefore not impacted by the use
  * of elevation.
@@ -66,7 +66,7 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * <h2>Disclaimer:</h2> I did my best to get accurate results, but please double-check before relying on these
  * <em>zmanim</em> for <em>halacha lema'aseh</em>.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
 	
@@ -91,9 +91,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * impact sunrise and sunset based <em>zmanim</em> such as {@link #getSunrise()}, {@link #getSunset()},
 	 * {@link #getSofZmanShmaGRA()}, alos based <em>zmanim</em> such as {@link #getSofZmanShmaMGA()} that are based on a
 	 * fixed offset of sunrise or sunset and <em>zmanim</em> based on a percentage of the day such as {@link
-	 * ComplexZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. It will not impact
+	 * ComprehensiveZmanimCalendar#getSofZmanShmaMGA90MinutesZmanis()} that are based on sunrise and sunset. It will not impact
 	 * <em>zmanim</em> that are a degree based offset of sunrise and sunset, such as
-	 * {@link ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()}.
+	 * {@link ComprehensiveZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()} or {@link ComprehensiveZmanimCalendar#getSofZmanShmaBaalHatanya()}.
 	 * 
 	 * @return if the use of elevation is active
 	 * 
@@ -225,15 +225,15 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 16.1&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * 
 	 * @see #getAlosHashachar()
-	 * @see ComplexZmanimCalendar#getAlos16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getTzais16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getSofZmanTfilaMGA16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getMinchaGedola16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getMinchaKetana16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getPlagHamincha16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getPlagAlos16Point1ToTzaisGeonim7Point083Degrees()
-	 * @see ComplexZmanimCalendar#getSofZmanShmaAlos16Point1ToSunset()
+	 * @see ComprehensiveZmanimCalendar#getAlos16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getTzais16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getSofZmanTfilaMGA16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getMinchaGedola16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getMinchaKetana16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getPlagHamincha16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getPlagAlos16Point1ToTzaisGeonim7Point083Degrees()
+	 * @see ComprehensiveZmanimCalendar#getSofZmanShmaAlos16Point1ToSunset()
 	 */
 	protected static final double ZENITH_16_POINT_1 = GEOMETRIC_ZENITH + 16.1;
 
@@ -247,7 +247,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * which is later than the required 3 medium stars.
 	 * 
 	 * @see #getTzais()
-	 * @see ComplexZmanimCalendar#getTzaisGeonim8Point5Degrees()
+	 * @see ComprehensiveZmanimCalendar#getTzaisGeonim8Point5Degrees()
 	 */
 	protected static final double ZENITH_8_POINT_5 = GEOMETRIC_ZENITH + 8.5;
 
@@ -260,7 +260,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false (the
 	 * default), or elevation adjusted {@link AstronomicalCalendar#getSunrise()} if it is true. This allows relevant <em>zmanim</em>
-	 * in this and extending classes (such as the {@link ComplexZmanimCalendar}) to automatically adjust to the elevation setting.
+	 * in this and extending classes (such as the {@link ComprehensiveZmanimCalendar}) to automatically adjust to the elevation setting.
 	 * 
 	 * @return {@link #getSeaLevelSunrise()} if {@link #isUseElevation()} is false (the default), or elevation adjusted
 	 *         {@link AstronomicalCalendar#getSunrise()} if it is true.
@@ -276,7 +276,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false (the default),
 	 * or elevation adjusted {@link AstronomicalCalendar#getSunrise()} if it is true. This allows relevant <em>zmanim</em>
-	 * in this and extending classes (such as the {@link ComplexZmanimCalendar}) to automatically adjust to the elevation setting.
+	 * in this and extending classes (such as the {@link ComprehensiveZmanimCalendar}) to automatically adjust to the elevation setting.
 	 * 
 	 * @return {@link #getSeaLevelSunset()} if {@link #isUseElevation()} is false (the default), or elevation adjusted
 	 *         {@link AstronomicalCalendar#getSunset()} if it is true.
@@ -302,7 +302,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #ZENITH_8_POINT_5
-	 * ComplexZmanimCalendar#getTzaisGeonim8Point5Degrees() that returns an identical time to this generic <em>tzais</em>
+	 * ComprehensiveZmanimCalendar#getTzaisGeonim8Point5Degrees() that returns an identical time to this generic <em>tzais</em>
 	 */
 	public Date getTzais() {
 		return getSunsetOffsetByDegrees(ZENITH_8_POINT_5);
@@ -319,7 +319,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 16.1&deg; below {@link #GEOMETRIC_ZENITH}.
 	 * 
 	 * @see #ZENITH_16_POINT_1
-	 * @see ComplexZmanimCalendar#getAlos16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getAlos16Point1Degrees()
 	 * 
 	 * @return The <code>Date</code> of dawn. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
@@ -429,7 +429,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * #getSeaLevelSunset() sea level sunset} to this method (or {@link #getElevationAdjustedSunrise()} and {@link
 	 * #getElevationAdjustedSunset()} that is driven off the {@link #isUseElevation()} setting) will return <em>sof zman krias
 	 * shema</em> according to the opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. In cases
-	 * where the start and end dates are not synchronous such as in {@link ComplexZmanimCalendar
+	 * where the start and end dates are not synchronous such as in {@link ComprehensiveZmanimCalendar
 	 * #getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees()} <code>false</code> should be passed to the synchronous parameter
 	 * to ensure that {@link #isUseAstronomicalChatzosForOtherZmanim()} will not be used.
 	 * 
@@ -489,7 +489,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see #getSofZmanShma(Date, Date)
 	 * @see #getShaahZmanisGra()
 	 * @see #isUseElevation()
-	 * @see ComplexZmanimCalendar#getSofZmanShmaBaalHatanya()
+	 * @see ComprehensiveZmanimCalendar#getSofZmanShmaBaalHatanya()
 	 * @return the <code>Date</code> of the latest <em>zman shema</em> according to the GRA. If the calculation can't be
 	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
 	 *         and one where it does not set, a <code>null</code> will be returned. See the detailed explanation on top
@@ -512,9 +512,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getSofZmanShma(Date, Date)
-	 * @see ComplexZmanimCalendar#getShaahZmanis72Minutes()
-	 * @see ComplexZmanimCalendar#getAlos72()
-	 * @see ComplexZmanimCalendar#getSofZmanShmaMGA72Minutes() that 
+	 * @see ComprehensiveZmanimCalendar#getShaahZmanis72Minutes()
+	 * @see ComprehensiveZmanimCalendar#getAlos72()
+	 * @see ComprehensiveZmanimCalendar#getSofZmanShmaMGA72Minutes() that 
 	 */
 	public Date getSofZmanShmaMGA() {
 		return getSofZmanShma(getAlos72(), getTzais72(), true);
@@ -530,7 +530,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * clock minutes any time of the year in any location. Depending on the {@link #isUseElevation()} setting, a 72-minute
 	 * offset from  either {@link #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} is used.
 	 * 
-	 * @see ComplexZmanimCalendar#getTzais16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getTzais16Point1Degrees()
 	 * @return the <code>Date</code> representing 72 minutes after sunset. If the calculation can't be
 	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
 	 *         and one where it does not set, a <code>null</code> will be returned See detailed explanation on top of the
@@ -630,7 +630,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 
 	 * @see #getSofZmanTfila(Date, Date)
 	 * @see #getShaahZmanisGra()
-	 * @see ComplexZmanimCalendar#getSofZmanTfilaBaalHatanya()
+	 * @see ComprehensiveZmanimCalendar#getSofZmanTfilaBaalHatanya()
 	 * @return the <code>Date</code> of the latest <em>zman tfilah</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
@@ -747,7 +747,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see #getMinchaGedola(Date, Date)
 	 * @see #getShaahZmanisGra()
 	 * @see #getMinchaKetana()
-	 * @see ComplexZmanimCalendar#getMinchaGedolaBaalHatanya()
+	 * @see ComprehensiveZmanimCalendar#getMinchaGedolaBaalHatanya()
 	 * @return the <code>Date</code> of the time of mincha gedola. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
@@ -785,9 +785,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         at least one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will
 	 *         be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 *
-	 * @see ComplexZmanimCalendar#getSamuchLeMinchaKetanaGRA()
-	 * @see ComplexZmanimCalendar#getSamuchLeMinchaKetana16Point1Degrees()
-	 * @see ComplexZmanimCalendar#getSamuchLeMinchaKetana72Minutes()
+	 * @see ComprehensiveZmanimCalendar#getSamuchLeMinchaKetanaGRA()
+	 * @see ComprehensiveZmanimCalendar#getSamuchLeMinchaKetana16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getSamuchLeMinchaKetana72Minutes()
 	 */
 	public Date getSamuchLeMinchaKetana(Date startOfDay, Date endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
@@ -892,7 +892,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see #getMinchaKetana(Date, Date)
 	 * @see #getShaahZmanisGra()
 	 * @see #getMinchaGedola()
-	 * @see ComplexZmanimCalendar#getMinchaKetanaBaalHatanya()
+	 * @see ComprehensiveZmanimCalendar#getMinchaKetanaBaalHatanya()
 	 * @return the <code>Date</code> of the time of mincha ketana. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
@@ -970,7 +970,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * 
 	 * @see #getPlagHamincha(Date, Date, boolean)
 	 * @see #getPlagHamincha(Date, Date)
-	 * @see ComplexZmanimCalendar#getPlagHaminchaBaalHatanya()
+	 * @see ComprehensiveZmanimCalendar#getPlagHaminchaBaalHatanya()
 	 * @return the <code>Date</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
@@ -995,7 +995,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see #getTemporalHour(Date, Date)
 	 * @see #getSeaLevelSunrise()
 	 * @see #getSeaLevelSunset()
-	 * @see ComplexZmanimCalendar#getShaahZmanisBaalHatanya()
+	 * @see ComprehensiveZmanimCalendar#getShaahZmanisBaalHatanya()
 	 */
 	public long getShaahZmanisGra() {
 		return getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
@@ -1009,7 +1009,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * sea level sunrise} (depending on the {@link #isUseElevation()} elevation setting) and dusk is 72 minutes after {@link
 	 * #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} elevation
 	 * setting). This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. Alternate methods of calculating
-	 * a <em>shaah zmanis</em> according to the Magen Avraham (MGA) are available in the subclass {@link ComplexZmanimCalendar}.
+	 * a <em>shaah zmanis</em> according to the Magen Avraham (MGA) are available in the subclass {@link ComprehensiveZmanimCalendar}.
 	 * 
 	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
@@ -1194,7 +1194,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation
 	 *         on top of the {@link AstronomicalCalendar} documentation.
 	 *
-	 * @see ComplexZmanimCalendar#getFixedLocalChatzos()
+	 * @see ComprehensiveZmanimCalendar#getFixedLocalChatzos()
 	 */
 	public Date getHalfDayBasedZman(Date startOfHalfDay, Date endOfHalfDay, double hours) {
 		if (startOfHalfDay == null || endOfHalfDay == null) {
