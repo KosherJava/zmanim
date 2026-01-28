@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -32,7 +32,7 @@ import com.kosherjava.zmanim.AstronomicalCalendar;
  * example the {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()} returns the length of the hour in
  * milliseconds. This class can format this time.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public class ZmanimFormatter {
 	/**
@@ -408,7 +408,7 @@ public class ZmanimFormatter {
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim astronomical.xsd"
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComprehensiveZmanimCalendar")) {
 			sb.append("Zmanim");
 			// TODO: use proper schema ref, and maybe build a real schema.
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
@@ -492,7 +492,7 @@ public class ZmanimFormatter {
 
 		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
 			sb.append("</AstronomicalTimes>");
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComprehensiveZmanimCalendar")) {
 			sb.append("</Zmanim>");
 		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
 			sb.append("</BasicZmanim>");
@@ -581,7 +581,7 @@ public class ZmanimFormatter {
 		
 		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
 			sb.append("AstronomicalTimes");
-		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComplexZmanimCalendar")) {
+		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ComprehensiveZmanimCalendar")) {
 			sb.append("Zmanim");
 		} else if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.ZmanimCalendar")) {
 			sb.append("BasicZmanim");
