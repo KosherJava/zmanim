@@ -5,7 +5,7 @@
  * standard Calendar functionality to change dates etc. For non-religious astronomical / solar calculations such as <a href=
  * "https://en.wikipedia.org/wiki/Sunrise">sunrise</a>, <a href="https://en.wikipedia.org/wiki/Sunset">sunset</a> and <a href=
  * "https://en.wikipedia.org/wiki/Twilight">twilight</a>, use the {@link com.kosherjava.zmanim.AstronomicalCalendar}. The {@link com.kosherjava.zmanim.ZmanimCalendar} contains the most
- * commonly used zmanim or religious time calculations. For a much more extensive list of <em>zmanim</em> use the {@link com.kosherjava.zmanim.ComplexZmanimCalendar}.
+ * commonly used zmanim or religious time calculations. For a much more extensive list of <em>zmanim</em> use the {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar}.
  * <b>Note:</b> It is important to read the technical notes on top of the {@link com.kosherjava.zmanim.util.AstronomicalCalculator} documentation.
  * <h2>Disclaimer:</h2> I did my best to get accurate results using standardized astronomical calculations. Please use care when using the library
  * since people rely on the zmanim calculations for <em><a href="https://en.wikipedia.org/wiki/Halakha">halacha lemaaseh</a></em>.
