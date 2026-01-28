@@ -21,8 +21,8 @@ dependencies {
 
 group = 'com.kosherjava'
 version = '2.1.0'
-sourceCompatibility = '8'
-targetCompatibility = '1.8'
+sourceCompatibility = '9'
+targetCompatibility = '1.9'
 
 publishing {
     publications {
