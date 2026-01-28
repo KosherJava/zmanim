@@ -43,7 +43,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * // {@link java.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
- * ComplexZmanimCalendar czc = new ComplexZmanimCalendar(location);
+ * ComprehensiveZmanimCalendar czc = new ComprehensiveZmanimCalendar(location);
  * // Optionally set the date or it will default to today's date
  * czc.getCalendar().set(Calendar.MONTH, Calendar.FEBRUARY);
  * czc.getCalendar().set(Calendar.DAY_OF_MONTH, 8);</pre>
@@ -107,7 +107,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
-public class ComplexZmanimCalendar extends ZmanimCalendar {
+public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
@@ -291,32 +291,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	protected static final double ZENITH_4_POINT_8 = GEOMETRIC_ZENITH + 4.8;
 
 	/**
-	 * The zenith of 3.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>tzais</em> (nightfall) according to some opinions. This calculation is based on the position of
-	 * the sun {@link #getTzaisGeonim3Point65Degrees() 13.5 minutes} after sunset (3/4 of an 18-minute <a href=
-	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a>) in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> which
-	 * calculates to 3.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
-	 * @deprecated This will be removed in v3.0.0 since calculations show that this time is earlier than 13.5 minutes at
-	 *              the <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the
-	 *              equinox / equilux</a> in Jerusalem.
-	 * 
-	 * @see #getTzaisGeonim3Point65Degrees()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	protected static final double ZENITH_3_POINT_65 = GEOMETRIC_ZENITH + 3.65;
-
-	/**
-	 * The zenith of 3.676&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
-	 * @todo Add more documentation.
-	 * @deprecated This will be removed in v3.0.0 since calculations show that this time is earlier than 13.5 minutes at
-	 *              the <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the
-	 *              equinox / equilux</a> in Jerusalem.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	protected static final double ZENITH_3_POINT_676 = GEOMETRIC_ZENITH + 3.676;
-
-	/**
 	 * The zenith of 5.88&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
 	 * @todo Add more documentation.
 	 */
@@ -458,7 +432,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see ZmanimCalendar#ZmanimCalendar(GeoLocation)
 	 */
-	public ComplexZmanimCalendar(GeoLocation location) {
+	public ComprehensiveZmanimCalendar(GeoLocation location) {
 		super(location);
 	}
 
@@ -467,9 +441,9 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * {@link AstronomicalCalculator#getDefault() AstronomicalCalculator} and default the calendar to the current date.
 	 * 
 	 * @see AstronomicalCalendar#AstronomicalCalendar()
-	 * @see #ComplexZmanimCalendar(GeoLocation)
+	 * @see #ComprehensiveZmanimCalendar(GeoLocation)
 	 */
-	public ComplexZmanimCalendar() {
+	public ComprehensiveZmanimCalendar() {
 		super();
 	}
 
@@ -557,7 +531,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * divides the day based on the opinion of the MGA that the day runs from dawn to dusk. Dawn for this calculation is
 	 * 60 minutes before sunrise and dusk is 60 minutes after sunset. This day is split into 12 equal parts with each
 	 * part being a <em>shaah zmanis</em>. Alternate methods of calculating a <em>shaah zmanis</em> are available in the
-	 * subclass {@link ComplexZmanimCalendar}.
+	 * subclass {@link ComprehensiveZmanimCalendar}.
 	 * 
 	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
@@ -578,7 +552,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * based on the opinion of the MGA that the day runs from dawn to dusk. Dawn for this calculation is 72 minutes
 	 * before sunrise and dusk is 72 minutes after sunset. This day is split into 12 equal parts with each part
 	 * being a <em>shaah zmanis</em>. Alternate methods of calculating a <em>shaah zmanis</em> are available in the
-	 * subclass {@link ComplexZmanimCalendar}.
+	 * subclass {@link ComprehensiveZmanimCalendar}.
 	 * 
 	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
@@ -813,7 +787,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getPlagHamincha26Degrees()
 	 * @see #getPlagHamincha120Minutes()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha120MinutesZmanis() {
 		return getPlagHamincha(getAlos120Zmanis(), getTzais120Zmanis(), true);
 	}
@@ -838,7 +812,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis120Minutes()
 	 * @see #getPlagHamincha26Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha120Minutes() {
 		return getPlagHamincha(getAlos120(), getTzais120(), true);
 	}
@@ -1000,7 +974,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzais120()
 	 * @see #getAlos26Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getAlos120() {
 		return getTimeOffset(getElevationAdjustedSunrise(), -120 * MINUTE_MILLIS);
 	}
@@ -1030,7 +1004,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos120()
 	 * @see #getAlos26Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getAlos120Zmanis() {
 		return getZmanisBasedOffset(-2.0);
 	}
@@ -1059,7 +1033,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzais120()
 	 * @see #getTzais26Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getAlos26Degrees() {
 		return getSunriseOffsetByDegrees(ZENITH_26_DEGREES);
 	}
@@ -1158,7 +1132,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * solstice. In Lakewood, NJ at a latitude of 40.096&deg;, the maximum difference throughout the year is 23 seconds.
 	 * In the winter where there is the greatest need for very early <em>misheyakir</em> times, the difference is in the 16
 	 * second range. Going north to Montreal at latitude 45.5&deg;, the maximum is 29 seconds and is about 18 seconds in the
-	 * winter. Moving farther north to the elevation of Vilnius at a latitude of 54.68&deg;, things change. Firstly, around the
+	 * winter. Moving farther north to the latitude of Vilnius at a latitude of 54.68&deg;, things change. Firstly, around the
 	 * summer solstice it will not reach that far below the horizon. On the dates that both can be calculated, the maximum
 	 * difference can be pretty high on one or two days of the year (around Jul 8),  with about a week having over a two minute
 	 * difference between the two. Even at the latitude of Vilna, from Dec - March, the difference is about 22 seconds.
@@ -1174,7 +1148,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #ZENITH_12_POINT_85
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getMisheyakir12Point85Degrees() {
 		return getSunriseOffsetByDegrees(ZENITH_12_POINT_85);
 	}
@@ -1502,15 +1476,13 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * and <a href="https://hebrewbooks.org/pdfpager.aspx?req=1408&st=&pgnum=69">She'elos Yaavetz vol. 1 no. 40</a>),
 	 * Rav Yitzchak Eizik of Komarno in the Ma'aseh Oreg on Mishnayos Brachos 11:2, Shevus Yaakov, Chasan Sofer and others.
 	 * See Yisrael Vehazmanim <a href="https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=83">vol. 1 7:3, page 55 -
-	 * 62</a>. A variant of this calculation {@link #getSofZmanShmaFixedLocal()} uses {@link #getFixedLocalChatzos() fixed
-	 * local <em>chatzos</em>} for calculating this type of <em>zman</em>.
+	 * 62</a>.
 	 * 
 	 * @return the <code>Date</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where
 	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see ZmanimCalendar#getChatzos()
-	 * @see #getSofZmanShmaFixedLocal()
 	 * @see #getSofZmanTfila2HoursBeforeChatzos()
 	 * @see #isUseAstronomicalChatzos()
 	 */
@@ -1587,32 +1559,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees() {
 		return getSofZmanShma(getAlos16Point1Degrees(), getTzaisGeonim7Point083Degrees(), false);
-	}
-
-	/**
-	 * From the GRA in Kol Eliyahu on Berachos #173 that states that <em>zman krias shema</em> is calculated as half the
-	 * time from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getFixedLocalChatzos() fixed local chatzos}.
-	 * The GRA himself seems to contradict this when he stated that <em>zman krias shema</em> is 1/4 of the day from
-	 * sunrise to sunset. See <em>Sarah Lamoed</em> #25 in Yisroel Vehazmanim Vol. III page 1016.
-	 * 
-	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> based on this calculation. If the
-	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
-	 *         the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
-	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getFixedLocalChatzos()
-	 * 
-	 * @deprecated As per a conversation Rabbi Yisroel Twerski had with Rabbi Harfenes, this <em>zman</em> published in
-	 *         the Yisrael Vehazmanim was based on a misunderstanding and should not be used. This deprecated method
-	 *         will be removed (likely in v3.0) pending confirmation from Rabbi Harfenes.
-	 */
-	@Deprecated // (since="1.3", forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getSofZmanShmaKolEliyahu() {
-		Date chatzos = getFixedLocalChatzos();
-		if (chatzos == null || getSunrise() == null) {
-			return null;
-		}
-		long diff = (chatzos.getTime() - getElevationAdjustedSunrise().getTime()) / 2;
-		return getTimeOffset(chatzos, -diff);
 	}
 
 	/**
@@ -2081,7 +2027,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis72Minutes()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha72Minutes() {
 		return getPlagHamincha(getAlos72(), getTzais72(), true);
 	}
@@ -2105,7 +2051,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis90Minutes()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha90Minutes() {
 		return getPlagHamincha(getAlos90(), getTzais90(), true);
 	}
@@ -2128,7 +2074,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96Minutes()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha96Minutes() {
 		return getPlagHamincha(getAlos96(), getTzais96(), true);
 	}
@@ -2149,7 +2095,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha96MinutesZmanis() {
 		return getPlagHamincha(getAlos96Zmanis(), getTzais96Zmanis(), true);
 	}
@@ -2170,7 +2116,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha90MinutesZmanis() {
 		return getPlagHamincha(getAlos90Zmanis(), getTzais90Zmanis(), true);
 	}
@@ -2191,7 +2137,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha72MinutesZmanis() {
 		return getPlagHamincha(getAlos72Zmanis(), getTzais72Zmanis(), true);
 	}
@@ -2216,7 +2162,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha16Point1Degrees() {
 		return getPlagHamincha(getAlos16Point1Degrees(), getTzais16Point1Degrees(), true);
 	}
@@ -2241,7 +2187,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis19Point8Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha19Point8Degrees() {
 		return getPlagHamincha(getAlos19Point8Degrees(), getTzais19Point8Degrees(), true);
 	}
@@ -2267,7 +2213,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis26Degrees()
 	 * @see #getPlagHamincha120Minutes()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha26Degrees() {
 		return getPlagHamincha(getAlos26Degrees(), getTzais26Degrees(), true);
 	}
@@ -2292,7 +2238,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis18Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagHamincha18Degrees() {
 		return getPlagHamincha(getAlos18Degrees(), getTzais18Degrees(), true);
 	}
@@ -2316,7 +2262,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getSeaLevelSunset()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getPlagAlosToSunset() {
 		return getPlagHamincha(getAlos16Point1Degrees(), getElevationAdjustedSunset(), false);
 	}
@@ -2391,16 +2337,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getBainHashmashosRT13Point24Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_13_POINT_24);
 	}
-	
-
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosRT13Point24Degrees()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosRT13Point24Degrees() {
-		return getBainHashmashosRT13Point24Degrees();
-	}
 
 	/**
 	 * This method returns the beginning of <em>Bain hashmashos</em> of Rabbeinu Tam calculated as a 58.5-minute offset
@@ -2417,15 +2353,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getBainHashmashosRT58Point5Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), 58.5 * MINUTE_MILLIS);
 	}
-	
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosRT58Point5Minutes()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosRT58Point5Minutes() {
-		return getBainHashmashosRT58Point5Minutes();
-	}
 
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> based on the calculation of 13.5 minutes (3/4 of an
@@ -2441,15 +2368,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getBainHashmashosRT13Point5MinutesBefore7Point083Degrees() {
 		return getTimeOffset(getSunsetOffsetByDegrees(ZENITH_7_POINT_083), -13.5 * MINUTE_MILLIS);
-	}
-	
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosRT13Point5MinutesBefore7Point083Degrees()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosRT13Point5MinutesBefore7Point083Degrees() {
-		return getBainHashmashosRT13Point5MinutesBefore7Point083Degrees();
 	}
 
 	/**
@@ -2474,15 +2392,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosRT2Stars()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosRT2Stars() {
-		return getBainHashmashosRT2Stars();
-	}
-	
-	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 18 minutes
 	 * or 3/4 of a 24-minute <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
@@ -2497,15 +2406,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getBainHashmashosYereim18Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), -18 * MINUTE_MILLIS);
-	}
-	
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosYereim18Minutes()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosYereim18Minutes() {
-		return getBainHashmashosYereim18Minutes();
 	}
 	
 	/**
@@ -2543,16 +2443,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosYereim3Point05Degrees()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosYereim3Point05Degrees() {
-		return getBainHashmashosYereim3Point05Degrees();
-	}
-	
-	
-	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 16.875
 	 * minutes or 3/4 of a 22.5-minute <a href=
@@ -2569,15 +2459,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getBainHashmashosYereim16Point875Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), -16.875 * MINUTE_MILLIS);
-	}
-	
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosYereim16Point875Minutes()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosYereim16Point875Minutes() {
-		return getBainHashmashosYereim16Point875Minutes();
 	}
 	
 	/**
@@ -2606,16 +2487,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosYereim2Point8Degrees()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosYereim2Point8Degrees() {
-		return getBainHashmashosYereim2Point8Degrees();
-	}
-	
-	
-	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 13.5 minutes
 	 * or 3/4 of an 18-minute <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a>
@@ -2631,15 +2502,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getBainHashmashosYereim13Point5Minutes() {
 		return getTimeOffset(getElevationAdjustedSunset(), -13.5 * MINUTE_MILLIS);
-	}
-	
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosYereim13Point5Minutes()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosYereim13Point5Minutes() {
-		return getBainHashmashosYereim13Point5Minutes();
 	}
 	
 	/**
@@ -2665,15 +2527,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getBainHashmashosYereim2Point1Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_1);
-	}
-	
-	/**
-	 * Misspelled method name that should be {@link #getBainHashmashosYereim2Point1Degrees()}.
-	 * @return the properly spelled version.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getBainHasmashosYereim2Point1Degrees() {
-		return getBainHashmashosYereim2Point1Degrees();
 	}
 	
 	/**
@@ -2711,49 +2564,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getTzaisGeonim5Point95Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_5_POINT_95);
-	}
-
-	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
-	 * of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> based on an
-	 * 18-minute mil, or 13.5 minutes. It is the sun's position at {@link #ZENITH_3_POINT_65 3.65&deg;} below the western
-	 * horizon. This is a very early <em>zman</em> and should not be relied on without Rabbinical guidance.
-	 * 
-	 * @return the <code>Date</code> representing the time when the sun is 3.65&deg; below sea level. If the calculation
-	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
-	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
-	 *         documentation.
-	 * @deprecated This will be removed in v3.0.0 since calculations show that this time is earlier than 13.5 minutes at
-	 *              the <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the
-	 *              equinox / equilux</a> in Jerusalem.
-	 * @see #ZENITH_3_POINT_65
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getTzaisGeonim3Point65Degrees() {
-		return getSunsetOffsetByDegrees(ZENITH_3_POINT_65);
-	}
-
-	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
-	 * of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> based on an
-	 * 18-minute mil, or 13.5 minutes. It is the sun's position at {@link #ZENITH_3_POINT_676 3.676&deg;} below the western
-	 * horizon based on the calculations of Stanley Fishkind. This is a very early <em>zman</em> and should not be
-	 * relied on without Rabbinical guidance.
-	 * 
-	 * @return the <code>Date</code> representing the time when the sun is 3.676&deg; below sea level. If the
-	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
-	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
-	 *         calculation, a <code>null</code> will be returned. See detailed explanation on top of the
-	 *         {@link AstronomicalCalendar} documentation.
-	 * @deprecated This will be removed in v3.0.0 since calculations show that this time is earlier than 13.5 minutes at
-	 *              the <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the
-	 *              equinox / equilux</a> in Jerusalem.
-	 * @see #ZENITH_3_POINT_676
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getTzaisGeonim3Point676Degrees() {
-		return getSunsetOffsetByDegrees(ZENITH_3_POINT_676);
 	}
 
 	/**
@@ -3074,19 +2884,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	public Date getSofZmanTfilaAteretTorah() {
 		return getSofZmanTfila(getAlos72Zmanis(), getTzaisAteretTorah(), false);
 	}
-	
-	/**
-	 * @see #getSofZmanTfilaAteretTorah()
-	 * @deprecated misspelled method name (all other methods spell tfila without an H) to be removed in 3.0.0.
-	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> based on this calculation. If the
-	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
-	 *         the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
-	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getSofZmanTfilahAteretTorah() {
-		return getSofZmanTfila(getAlos72Zmanis(), getTzaisAteretTorah(), false);
-	}
 
 	/**
 	 * This method returns the time of <em>mincha gedola</em> based on the calculation of <em>Chacham</em> Yosef
@@ -3282,7 +3079,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzais26Degrees()
 	 * @see #getAlos120()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getTzais120() {
 		return getTimeOffset(getElevationAdjustedSunset(), 120 * MINUTE_MILLIS);
 	}
@@ -3306,7 +3103,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzais120()
 	 * @see #getTzais26Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getTzais120Zmanis() {
 		return getZmanisBasedOffset(2.0);
 	}
@@ -3353,7 +3150,7 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 * @see #getTzais120()
 	 * @see #getAlos26Degrees()
 	 */
-	@Deprecated // (forRemoval=false) // add back once Java 9 is the minimum supported version
+	@Deprecated (forRemoval=false)
 	public Date getTzais26Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_26_DEGREES);
 	}
@@ -3420,64 +3217,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getFixedLocalChatzos() {
 		return getLocalMeanTime(12.0);
-	}
-
-	/**
-	 * A method that returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) calculated as 3
-	 * clock hours before {@link #getFixedLocalChatzos()}. Note that there are opinions brought down in Yisrael Vehazmanim
-	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a> and Rav Yitzchak Silber's <a href=
-	 * "https://www.worldcat.org/oclc/811253716">Shaos Shavos Bahalacha</a> that this calculation is a mistake and regular
-	 * <em>chatzos</em> should be used for clock-hour calculations as opposed to fixed local <em>chatzos</em>. According to
-	 * these opinions it should be 3 clock hours before regular <em>chatzos</em> as calculated in {@link
-	 * #getSofZmanShma3HoursBeforeChatzos()}.
-	 * 
-	 * @return the <code>Date</code> of the latest <em>zman krias shema</em> calculated as 3 clock hours before
-	 *         {@link #getFixedLocalChatzos()}.
-	 * @see #getFixedLocalChatzos()
-	 * @see #getSofZmanShma3HoursBeforeChatzos()
-	 * @see #getSofZmanTfilaFixedLocal()
-	 *         
-	 * @deprecated This method of calculating <em>sof zman Shma</em> is considered a mistaken understanding of the proper
-	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchak Silber's <a href=
-	 *         "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Bahalacha</a>. On pages 316-318 he discusses Rav Yisrael
-	 *         Harfenes's calculations and points to his seeming agreement that using fixed local <em>chatzos</em> as the focal
-	 *         point is problematic. See Yisrael Vehazmanim <a href=
-	 *         "https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a>. While the Yisrael Vehazmanim mentions
-	 *         this issue in vol. 1, it was not corrected in the calculations in vol. 3 and other parts of the <em>sefer</em>.
-	 *         A competent rabbinical authority should be consulted before using this <em>zman</em>. Instead, the use of {@link
-	 *         #getSofZmanShma3HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using 3 fixed clock hours.
-	 *         This will likely be removed in v3.0.
-	 */
-	@Deprecated // (since="2.4.0", forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getSofZmanShmaFixedLocal() {
-		return getTimeOffset(getFixedLocalChatzos(), -180 * MINUTE_MILLIS);
-	}
-
-	/**
-	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) calculated as 2 hours
-	 * before {@link #getFixedLocalChatzos()}. See the documentation on {@link #getSofZmanShmaFixedLocal()} showing
-	 * differing opinions on how the <em>zman</em> is calculated. According to many opinions {@link
-	 * #getSofZmanTfila2HoursBeforeChatzos()} should be used as opposed to this <em>zman</em>.
-	 * 
-	 * @return the <code>Date</code> of the latest <em>zman tfila</em>.
-	 * @see #getFixedLocalChatzos()
-	 * @see #getSofZmanShmaFixedLocal()
-	 * @see #getSofZmanTfila2HoursBeforeChatzos()
-	 *         
-	 * @deprecated This method of calculating <em>sof zman Tfila</em> is considered a mistaken understanding of the proper
-	 *         calculation of this <em>zman</em> in the opinion of Rav Yitzchak Silber's <a href=
-	 *         "https://www.worldcat.org/oclc/811253716">Sha'aos Shavos Bahalacha</a>. On pages 316-318 he discusses Rav Yisrael
-	 *         Harfenes's calculations and points to his seeming agreement that using fixed local <em>chatzos</em> as the focal
-	 *         point is problematic. See Yisrael Vehazmanim <a href=
-	 *         "https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=85">page 57</a>. While the Yisrael Vehazmanim mentions
-	 *         this issue in vol. 1, it was not corrected in the calculations in vol. 3 and other parts of the <em>sefer</em>.
-	 *         A competent rabbinical authority should be consulted before using this <em>zman</em>. Instead, the use of {@link
-	 *         #getSofZmanTfila2HoursBeforeChatzos()} should be used to calculate <em>sof zman Tfila</em> using 2 fixed
-	 *         clock hours. This will likely be removed in v3.0.
-	 */
-	@Deprecated // (since="2.4.0", forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getSofZmanTfilaFixedLocal() {
-		return getTimeOffset(getFixedLocalChatzos(), -120 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -4359,38 +4098,6 @@ public class ComplexZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Date getTzaisBaalHatanya() {
 		return getSunsetOffsetByDegrees(ZENITH_6_DEGREES);
-	}
-	
-	/**
-	 * A utility method to calculate zmanim based on <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe
-	 * Feinstein</a> as calculated in <a href="https://en.wikipedia.org/wiki/Mesivtha_Tifereth_Jerusalem">MTJ</a>, <a href=
-	 * "https://en.wikipedia.org/wiki/Mesivtha_Tifereth_Jerusalem">Yeshiva of Staten Island</a>, and Camp Yeshiva
-	 * of Staten Island. The day is split in two, from <em>alos</em> / sunrise to fixed local <em>chatzos</em>, and the
-	 * second half of the day, from fixed local <em>chatzos</em> to sunset / <em>tzais</em>. Morning based times are calculated
-	 * based on the first 6 hours, and afternoon times based on the second half of the day.
-	 * @deprecated This method will be replaced in v3.0.0 by the more generic {@link
-	 *         ZmanimCalendar#getHalfDayBasedZman(Date, Date, double)} method.
-	 * 
-	 * @param startOfHalfDay
-	 *            The start of the half day. This would be <em>alos</em> or sunrise for morning based times and fixed
-	 *            local <em>chatzos</em> for the second half of the day.
-	 * @param endOfHalfDay
-	 *            The end of the half day. This would be fixed local <em>chatzos</em> for morning based times and sunset
-	 *            or <em>tzais</em> for afternoon based times.
-	 * @param hours
-	 *            the number of hours to offset the beginning of the first or second half of the day
-	 * 
-	 * @return the <code>Date</code> of the <em>zman</em> based on calculation of the first or second half of the day. If
-	 *         the calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
-	 *         the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
-	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
-	 *
-	 * @see ComplexZmanimCalendar#getFixedLocalChatzos()
-	 * @see ZmanimCalendar#getHalfDayBasedZman(Date, Date, double)
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public Date getFixedLocalChatzosBasedZmanim(Date startOfHalfDay, Date endOfHalfDay, double hours) {
-		return getHalfDayBasedZman(startOfHalfDay, endOfHalfDay, hours);
 	}
 	
 	/**
