@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -35,7 +35,7 @@ import java.util.Date;
  * // the String parameter in getTimeZone() has to be a valid timezone listed in {@link java.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
- * ComplexZmanimCalendar czc = new ComplexZmanimCalendar(location);
+ * ComprehensiveZmanimCalendar czc = new ComprehensiveZmanimCalendar(location);
   * Zman sunset = new Zman(czc.getSunset(), "Sunset");
  * Zman shaah16 = new Zman(czc.getShaahZmanis16Point1Degrees(), "Shaah zmanis 16.1");
  * Zman sunrise = new Zman(czc.getSunrise(), "Sunrise");
@@ -55,7 +55,7 @@ import java.util.Date;
  * // will sort shaah 1.6, shaah GRA, sunrise, sunset
  * </pre>
  * 
- * @author &copy; Eliyahu Hershfeld 2007-2025
+ * @author &copy; Eliyahu Hershfeld 2007-2026
  * @todo Add secondary sorting. As of now the {@code Comparator}s in this class do not sort by secondary order. This means that when sorting a
  * {@link java.util.Collection} of <em>zmanim</em> and using the {@link #DATE_ORDER} {@code Comparator} will have the duration based <em>zmanim</em>
  * at the end, but they will not be sorted by duration. This should be N/A for label based sorting.
@@ -74,7 +74,7 @@ public class Zman {
 	/**
 	 * The duration if the <em>zman</em> is  a {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various
 	 * <em>shaah zmanis</em> base times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra()  <em>shaah Zmanis GRA</em>} or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}).
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}).
 	 */
 	private long duration;
 	
@@ -116,7 +116,7 @@ public class Zman {
 	 * The constructor setting a duration based <em>zman</em> such as
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various <em>shaah zmanis</em> times such as
 	 * {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() <em>shaah zmanis GRA</em>} or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}) and label.
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}) and label.
 	 * @param duration a duration based <em>zman</em> such as ({@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()}
 	 * @param label the label of the  <em>zman</em> such as "<em>Shaah Zmanis GRA</em>".
 	 * @see #Zman(Date, String)
@@ -163,7 +163,7 @@ public class Zman {
 	/**
 	 * Returns a duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}
 	 * (or the various <em>shaah zmanis</em> times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() <em>shaah zmanis GRA</em>}
-	 * or {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
+	 * or {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
 	 * @return the duration based <em>zman</em>.
 	 * @see #setDuration(long)
 	 */
@@ -174,7 +174,7 @@ public class Zman {
 	/**
 	 *  Sets a duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}
 	 * (or the various <em>shaah zmanis</em> times as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() <em>shaah zmanis GRA</em>} or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
 	 * @param duration duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()}.
 	 * @see #getDuration()
 	 */
@@ -254,7 +254,7 @@ public class Zman {
 	 * A {@link Comparator} that will compare and sort duration based <em>zmanim</em>  such as
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various <em>shaah zmanis</em> times
 	 * such as <em>{@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() shaah zmanis GRA}</em> or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}). Returns a negative
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}). Returns a negative
 	 * integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
 	 * Please note that this class will sort cases where {@code Zman} is a null.
 	 */
