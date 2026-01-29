@@ -4356,4 +4356,68 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Date getSamuchLeMinchaKetana72Minutes() {
 		return getSamuchLeMinchaKetana(getAlos72(), getTzais72(), true);
 	}
+
+    public Date getSofZmanShmaKolEliyahu() {
+        return null;
+    }
+
+    public Date getSofZmanShmaFixedLocal() {
+        return null;
+    }
+
+    public Date getSofZmanTfilaFixedLocal() {
+        return null;
+    }
+
+    public Date getBainHasmashosRT13Point24Degrees() {
+        return null;
+    }
+
+    public Date getBainHasmashosRT58Point5Minutes() {
+        return null;
+    }
+
+    public Date getBainHasmashosRT13Point5MinutesBefore7Point083Degrees() {
+        return null;
+    }
+
+    public Date getBainHasmashosRT2Stars() {
+        return null;
+    }
+
+    public Date getBainHasmashosYereim18Minutes() {
+        return null;
+    }
+
+    public Date getBainHasmashosYereim3Point05Degrees() {
+        return null;
+    }
+
+    public Date getBainHasmashosYereim16Point875Minutes() {
+        return null;
+    }
+
+    public Date getBainHasmashosYereim2Point8Degrees() {
+        return null;
+    }
+
+    public Date getBainHasmashosYereim13Point5Minutes() {
+        return null;
+    }
+
+    public Date getBainHasmashosYereim2Point1Degrees() {
+        return null;
+    }
+
+    public Date getTzaisGeonim3Point65Degrees() {
+        return null;
+    }
+
+    public Date getTzaisGeonim3Point676Degrees() {
+        return null;
+    }
+
+    public Date getSofZmanTfilahAteretTorah() {
+        return null;
+    }
 }

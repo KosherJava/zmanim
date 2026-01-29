@@ -107,8 +107,8 @@
                 <version>3.10.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -124,7 +124,7 @@
         </repository>
     </distributionManagement>
     <properties>
-        <maven.compiler.target>1.9</maven.compiler.target>
-        <maven.compiler.source>1.9</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
     </properties>
 </project>

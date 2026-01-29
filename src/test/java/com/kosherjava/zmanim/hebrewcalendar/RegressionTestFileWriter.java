@@ -1,10 +1,12 @@
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import com.kosherjava.zmanim.ComplexZmanimCalendar;
-import com.kosherjava.zmanim.util.AstronomicalCalculator;
+import com.kosherjava.zmanim.ComprehensiveZmanimCalendar;
 import com.kosherjava.zmanim.util.GeoLocation;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -17,7 +19,7 @@ public class RegressionTestFileWriter {
         JewishCalendar cal = new JewishCalendar(current);
         GregorianCalendar gregorian = new GregorianCalendar(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth());
         JewishDate date = new JewishDate(current);
-        ComplexZmanimCalendar zcal = new ComplexZmanimCalendar(new GeoLocation("Lakewood, NJ", 40.096, -74.222, 29.02, TimeZone.getTimeZone("America/New_York")));
+        ComprehensiveZmanimCalendar zcal = new ComprehensiveZmanimCalendar(new GeoLocation("Lakewood, NJ", 40.096, -74.222, 29.02, TimeZone.getTimeZone("America/New_York")));
         List<FullCalendar> calendars = new ArrayList<>();
         List<FullZmanim> zmanim = new ArrayList<>();
 
