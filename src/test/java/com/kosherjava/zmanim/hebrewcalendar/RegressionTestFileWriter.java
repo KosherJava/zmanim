@@ -676,8 +676,6 @@ public class RegressionTestFileWriter {
         public final Date getTzais19Point8Degrees;
         public final Date getTzais96;
         public final Date getFixedLocalChatzos;
-        public final Date getSofZmanShmaFixedLocal;
-        public final Date getSofZmanTfilaFixedLocal;
         public final Date getSofZmanKidushLevanaBetweenMoldos;
         public final Date getSofZmanKidushLevana15Days;
         public final Date getTchilasZmanKidushLevana3Days;
