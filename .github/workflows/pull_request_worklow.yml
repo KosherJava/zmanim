@@ -7,11 +7,11 @@ jobs:
       - name: Check out Repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 1.8
-        uses: actions/setup-java@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v5
         with:
-          java-version: 8.0.232
-          distribution: adopt
+          distribution: 'adopt'
+          java-version: 11
 
       - name: Run tests
         run: mvn test
