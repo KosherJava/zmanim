@@ -514,8 +514,6 @@ public class RegressionTestFileWriter {
             this.getTzais19Point8Degrees = getTzais19Point8Degrees;
             this.getTzais96 = getTzais96;
             this.getFixedLocalChatzos = getFixedLocalChatzos;
-            this.getSofZmanShmaFixedLocal = getSofZmanShmaFixedLocal;
-            this.getSofZmanTfilaFixedLocal = getSofZmanTfilaFixedLocal;
             this.getSofZmanKidushLevanaBetweenMoldos = getSofZmanKidushLevanaBetweenMoldos;
             this.getSofZmanKidushLevana15Days = getSofZmanKidushLevana15Days;
             this.getTchilasZmanKidushLevana3Days = getTchilasZmanKidushLevana3Days;
