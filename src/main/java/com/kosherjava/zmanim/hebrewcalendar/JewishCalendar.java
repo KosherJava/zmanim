@@ -142,7 +142,7 @@ public class JewishCalendar extends JewishDate {
 	public static final int YOM_KIPPUR_KATAN = 36;
 	
 	/**
-	 * The Monday, Thursday and Monday after the first <em>Shabbos</em> after <em>Rosh Chodesh Cheshvan</em> and <em>Iyar</em>) are BeHab
+	 * The Monday, Thursday and Monday after the first <em>Shabbos</em> after <em>Rosh Chodesh Marcheshvan</em> and <em>Iyar</em>) are BeHab
 	 * days. This constant is not actively in use.
 	 * @see #isBeHaB()
 	 */
@@ -409,7 +409,7 @@ public class JewishCalendar extends JewishDate {
 					}
 					return 6;
 				}
-				if (isCheshvanLong()) { //BaSh
+				if (isMarcheshvanLong()) { //BaSh
 					if (getInIsrael()) {
 						return 15;
 					}
@@ -425,7 +425,7 @@ public class JewishCalendar extends JewishDate {
 				if (isKislevShort()) { //HaCh
 					return 8;
 				}
-				if (isCheshvanLong()) { //HaSh
+				if (isMarcheshvanLong()) { //HaSh
 					return 9;
 				}
 				break;
@@ -433,7 +433,7 @@ public class JewishCalendar extends JewishDate {
 				if (isKislevShort()) { //ZaCh
 					return 10;
 				}
-				if (isCheshvanLong()) { //ZaSh
+				if (isMarcheshvanLong()) { //ZaSh
 					if (getInIsrael()) {
 						return 16;
 					}
@@ -447,7 +447,7 @@ public class JewishCalendar extends JewishDate {
 				if (isKislevShort()) { //BaCh
 					return 0;
 				}
-				if (isCheshvanLong()) { //BaSh
+				if (isMarcheshvanLong()) { //BaSh
 					if (getInIsrael()) {
 						return 12;
 					}
@@ -460,7 +460,7 @@ public class JewishCalendar extends JewishDate {
 				}
 				return 1;
 			case Calendar.THURSDAY:
-				if (isCheshvanLong()) { //HaSh
+				if (isMarcheshvanLong()) { //HaSh
 					return 3;
 				}
 				if (!isKislevShort()) { //Hak
@@ -474,7 +474,7 @@ public class JewishCalendar extends JewishDate {
 				if (isKislevShort()) { //ZaCh
 					return 4;
 				}
-				if (isCheshvanLong()) { //ZaSh
+				if (isMarcheshvanLong()) { //ZaSh
 					return 5;
 				}
 				break;
@@ -1047,7 +1047,7 @@ public class JewishCalendar extends JewishDate {
 	
 	/**
 	 * Returns true if the current day is <em>Yom Kippur Katan</em>. Returns false for <em>Erev Rosh Hashana</em>,
-	 * <em>Erev Rosh Chodesh Cheshvan</em>, <em>Teves</em> and <em>Iyyar</em>. If <em>Erev Rosh Chodesh</em> occurs
+	 * <em>Erev Rosh Chodesh Marcheshvan</em>, <em>Teves</em> and <em>Iyyar</em>. If <em>Erev Rosh Chodesh</em> occurs
 	 * on a Friday or <em>Shabbos</em>, <em>Yom Kippur Katan</em> is moved back to Thursday.
 	 * 
 	 * @return true if the current day is <em>Erev Rosh Chodesh</em>. Returns false for <em>Erev Rosh Hashana</em>.
@@ -1069,7 +1069,7 @@ public class JewishCalendar extends JewishDate {
 	
 	/**
 	 * The Monday, Thursday and Monday after the first <em>Shabbos</em> after {@link #isRoshChodesh() <em>Rosh Chodesh</em>}
-	 * {@link JewishDate#CHESHVAN <em>Cheshvan</em>} and {@link JewishDate#IYAR <em>Iyar</em>} are <a href=
+	 * {@link JewishDate#CHESHVAN <em>Marcheshvan</em>} and {@link JewishDate#IYAR <em>Iyar</em>} are <a href=
 	 * "https://outorah.org/p/41334/"> <em>BeHaB</em></a> days. If the last Monday of Iyar's BeHaB coincides with {@link
 	 * #PESACH_SHENI <em>Pesach Sheni</em>}, the method currently considers it both <em>Pesach Sheni</em> and <em>BeHaB</em>.
 	 * As seen in an Ohr Sameach  article on the subject <a href="https://ohr.edu/this_week/insights_into_halacha/9340">The
@@ -1416,7 +1416,7 @@ public class JewishCalendar extends JewishDate {
 	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isVeseinTalUmatarStartDate() {
 		if (inIsrael) {
-			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
+			 // The 7th Marcheshvan can't occur on Shabbos, so always return true for 7 Marcheshvan
 			return getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7;
 		} else {
 			if (getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
@@ -1450,7 +1450,7 @@ public class JewishCalendar extends JewishDate {
 	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
 	public boolean isVeseinTalUmatarStartingTonight() {
 		if (inIsrael) {
-			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
+			// The 7th Marcheshvan can't occur on Shabbos, so always return true for 6 Marcheshvan
 			return getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 6;
 		} else {
 			if (getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
