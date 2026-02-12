@@ -859,9 +859,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is
 	 * 72 minutes which is 1/10th of a day (12 * 60 = 720) based on the day being from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunrise() sunrise} to {@link #getSunset()
-	 * sunset} (depending on the {@link #isUseElevation()} setting). The actual calculation is {@link #getSeaLevelSunrise()} -
-	 * ({@link #getShaahZmanisGra()} * 1.2). This calculation is used in the calendars published by the <a href=
-	 * "https://en.wikipedia.org/wiki/Central_Rabbinical_Congress">Hisachdus Harabanim D'Artzos Habris Ve'Canada</a>.
+	 * sunset} (depending on the {@link #isUseElevation()} setting). The actual calculation is {@link
+	 * #getElevationAdjustedSunrise()} - ({@link #getShaahZmanisGra()} * 1.2). This calculation is used in the calendars
+	 * published by the <a href="https://en.wikipedia.org/wiki/Central_Rabbinical_Congress">Hisachdus Harabanim D'Artzos Habris
+	 * Ve'Canada</a>.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -900,7 +901,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * mil is 90 minutes which is 1/8th of a day (12 * 60) / 8 = 90. The day is calculated from {@link
 	 * #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunrise()
 	 * sunrise} to {@link #getSunset() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used
-	 * is {@link #getSunrise()} - ({@link #getShaahZmanisGra()} * 1.5).
+	 * is {@link #getElevationAdjustedSunrise()} - ({@link #getShaahZmanisGra()} * 1.5).
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -919,8 +920,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is 96
 	 * minutes which is 1/7.5th of a day (12 * 60 / 7.5 = 96). The day is calculated from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunrise() sunrise} to {@link #getSunset()
-	 * sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link #getSunrise()} -
-	 * ({@link #getShaahZmanisGra()} * 1.6).
+	 * sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link #getElevationAdjustedSunrise()}
+	 * - ({@link #getShaahZmanisGra()} * 1.6).
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -933,8 +934,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * Method to return <em>alos</em> (dawn) calculated using 90 minutes before {@link #getSeaLevelSunrise() sea level
-	 * sunrise} based on the time to walk the distance of 4 <a href=
+	 * Method to return <em>alos</em> (dawn) calculated using 90 minutes before {@link #getSunrise() sunrise} or
+	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting) based
+	 * on the time to walk the distance of 4 <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> at 22.5 minutes a
 	 * mil. Time-based offset calculations for <em>alos</em> are based on the opinion of the <em><a href=
 	 * "https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>Neshef</em>
@@ -952,14 +954,15 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method should be used <em>lechumra</em> only and returns <em>alos</em> (dawn) calculated using 120 minutes
-	 * before {@link #getSeaLevelSunrise() sea level sunrise} (no adjustment for elevation is made) based on the time
-	 * to walk the distance of 5 <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
-	 * >mil</a> (<em>Ula</em>) at 24 minutes a mil. Time based offset calculations for <em>alos</em> are
-	 * based on the* opinion of the <em><a href="https://en.wikipedia.org/wiki/Rishonim">Rishonim</a>
-	 * </em> who stated that the time of the <em>neshef</em> (time between dawn and sunrise) does not vary by the time of
-	 * year or location but purely depends on the time it takes to walk the distance of 5 mil (<em>Ula</em>). Since
-	 * this time is extremely early, it should only be used <em>lechumra</em>, such as not eating after this time on a fast
-	 * day, and not as the start time for <em>mitzvos</em> that can only be performed during the day.
+	 * before {@link #getSunrise() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link
+	 * #isUseElevation()} setting) based on the time to walk the distance of 5 <a href=
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> (<em>Ula</em>) at 24 minutes a
+	 * mil. Time based offset calculations for <em>alos</em> are based on the* opinion of the <em><a href=
+	 * "https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>neshef</em> (time
+	 * between dawn and sunrise) does not vary by the time of year or location but purely depends on the time it takes to
+	 * walk the distance of 5 mil (<em>Ula</em>). Since this time is extremely early, it should only be used <em>lechumra</em>,
+	 * such as not eating after this time on a fast day, and not as the start time for <em>mitzvos</em> that can only be
+	 * performed during the day.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only (such as stopping to eat at this time on a fast day),
 	 *         since it returns a very early time, and if used <em>lekula</em> can result in doing <em>mitzvos hayom</em>
@@ -2775,8 +2778,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://he.wikipedia.org/wiki/%D7%9E%D7%9C%D7%9B%D7%99%D7%90%D7%9C_%D7%A6%D7%91%D7%99_%D7%98%D7%A0%D7%A0%D7%91%D7%95%D7%99%D7%9D"
 	 * >Divrei Malkiel</a> that the time to walk the distance of a <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> is 15 minutes, for a total of 60 minutes
-	 * for 4 mil after {@link #getElevationAdjustedSunset() elevation adjusted sunset}. See detailed documentation explaining the 60 minute
-	 * concept at {@link #getAlos60()}.
+	 * for 4 mil after {@link #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} (depending on the {@link
+	 * #isUseElevation()} setting). See detailed documentation explaining the 60 minute concept at {@link #getAlos60()}.
 	 * 
 	 * @return the <code>Date</code> representing 60 minutes after sea level sunset. If the calculation can't be
 	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
@@ -3038,13 +3041,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * Method to return <em>tzais</em> (dusk) calculated as 90 minutes after {@link #getElevationAdjustedSunset()
-	 * elevation adjusted sunset}. This method returns <em>tzais</em> (nightfall) based on the opinion of the Magen Avraham
-	 * that the time to walk the distance of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
-	 * >mil</a> according to the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a>'s opinion is 18 minutes, for a
-	 * total of 90 minutes based on the opinion of Ula who calculated <em>tzais</em> as 5 mil after elevation adjusted
-	 * <em>shkiah</em> (sunset). A similar calculation {@link #getTzais19Point8Degrees()} uses solar position* calculations based
-	 * on this time.
+	 * Method to return <em>tzais</em> (dusk) calculated as 90 minutes after {@link #getSunset() sunset} or {@link
+	 * #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} setting). This method returns
+	 * <em>tzais</em> (nightfall) based on the opinion of the Magen Avraham that the time to walk the distance of a <a href=
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> according to the <a href=
+	 * "https://en.wikipedia.org/wiki/Maimonides">Rambam</a>'s opinion is 18 minutes, for a total of 90 minutes based on the
+	 * opinion of Ula who calculated <em>tzais</em> as 5 mil after elevation adjusted <em>shkiah</em> (sunset). A similar
+	 * calculation {@link #getTzais19Point8Degrees()} uses solar position* calculations based on this time.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -3062,11 +3065,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of <a href="https://en.wikipedia.org/wiki/Avraham_Chaim_Naeh">Rav Chaim Naeh</a> that the time to walk the
 	 * distance of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a>
 	 * according to the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a>'s opinion is 2/5 of an hour (24 minutes)
-	 * for a total of 120 minutes based on the opinion of <em>Ula</em> who calculated <em>tzais</em> as 5 mil after
-	 * sea level <em>shkiah</em> (sunset). A similar calculation {@link #getTzais26Degrees()} uses degree-based calculations
-	 * based on this 120 minute calculation. Since the <em>zman</em> is extremely late and at a point that is long past the
-	 * 18&deg; point where the darkest point is reached, it should only be used <em>lechumra</em>, such as delaying the start
-	 * of nighttime <em>mitzvos</em>.
+	 * for a total of 120 minutes based on the opinion of <em>Ula</em> who calculated <em>tzais</em> as 5 mil after {@link
+	 * #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} setting).
+	 * A similar calculation {@link #getTzais26Degrees()} uses degree-based calculations based on this 120 minute calculation.
+	 * Since the <em>zman</em> is extremely late and at a point that is long past the 18&deg; point where the darkest point is
+	 * reached, it should only be used <em>lechumra</em>, such as delaying the start of nighttime <em>mitzvos</em>.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time, and if used
 	 *         <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this
@@ -3183,8 +3186,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * A method to return <em>tzais</em> (dusk) calculated as 96 minutes after {@link #getElevationAdjustedSunset()
-	 * elevation adjusted sunset}. For information on how
+	 * A method to return <em>tzais</em> (dusk) calculated as 96 minutes after {@link #getSunset() sunset} or {@link
+	 * #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} setting). For information on how
 	 * this is calculated see the comments on {@link #getAlos96()}.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
@@ -4267,10 +4270,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Method to return <em>tzais</em> (dusk) calculated as 50 minutes after {@link #getElevationAdjustedSunset()
-	 * elevation adjusted sunset}. This method returns <em>tzais</em> (nightfall) based on the opinion of Rabbi Moshe
-	 * Feinstein for the New York area. This time should not be used for latitudes other than ones similar to the
-	 * latitude of the NY area.
+	 * Method to return <em>tzais</em> (dusk) calculated as 50 minutes after {@link #getSunset() sunset} or {@link
+	 * #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} setting). This method returns
+	 * <em>tzais</em> (nightfall) based on the opinion of Rabbi Moshe Feinstein for the New York area. This time should
+	 * not be used for latitudes other than ones similar to the latitude of the NY area.
 	 * 
 	 * @return the <code>Date</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
