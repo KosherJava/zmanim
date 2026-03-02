@@ -313,12 +313,12 @@ public class HebrewDateFormatter {
 	private static final String GERSHAYIM = "\u05F4";
 	
 	/**
-	 * Transliterated month names.&nbsp; Defaults to ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan",
+	 * Transliterated month names.&nbsp; Defaults to ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Marcheshvan",
 	 * "Kislev", "Teves", "Shevat", "Adar", "Adar II", "Adar I" ].
 	 * @see #getTransliteratedMonthList()
 	 * @see #setTransliteratedMonthList(String[])
 	 */
-	private String[] transliteratedMonths = { "Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan",
+	private String[] transliteratedMonths = { "Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Marcheshvan",
 			"Kislev", "Teves", "Shevat", "Adar", "Adar II", "Adar I" };
 	
 	/**
@@ -581,7 +581,7 @@ public class HebrewDateFormatter {
 	 * "Adar", "Adar II", "Adar I"
 	 * 
 	 * @return the array of months beginning in Nissan and ending in "Adar", "Adar II", "Adar I". The default list is
-	 *         currently ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Teves",
+	 *         currently ["Nissan", "Iyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Marcheshvan", "Kislev", "Teves",
 	 *         "Shevat", "Adar", "Adar II", "Adar I"].
 	 * @see #setTransliteratedMonthList(String[])
 	 */
@@ -595,7 +595,7 @@ public class HebrewDateFormatter {
 	 * 
 	 * @param transliteratedMonths
 	 *            an array of 14 month names that defaults to ["Nissan", "Iyar", "Sivan", "Tamuz", "Av", "Elul", "Tishrei",
-	 *            "Heshvan", "Kislev", "Tevet", "Shevat", "Adar", "Adar II", "Adar I"].
+	 *            "Marheshvan", "Kislev", "Tevet", "Shevat", "Adar", "Adar II", "Adar I"].
 	 * @see #getTransliteratedMonthList()
 	 */
 	public void setTransliteratedMonthList(String[] transliteratedMonths) {
@@ -605,14 +605,14 @@ public class HebrewDateFormatter {
 	/**
 	 * Unicode list of Hebrew months in the following format <code>["\u05E0\u05D9\u05E1\u05DF","\u05D0\u05D9\u05D9\u05E8",
 	 * "\u05E1\u05D9\u05D5\u05DF","\u05EA\u05DE\u05D5\u05D6","\u05D0\u05D1","\u05D0\u05DC\u05D5\u05DC",
-	 * "\u05EA\u05E9\u05E8\u05D9","\u05D7\u05E9\u05D5\u05DF","\u05DB\u05E1\u05DC\u05D5","\u05D8\u05D1\u05EA",
+	 * "\u05EA\u05E9\u05E8\u05D9","\u05DE\u05E8\u05D7\u05E9\u05D5\u05DF","\u05DB\u05E1\u05DC\u05D5","\u05D8\u05D1\u05EA",
 	 * "\u05E9\u05D1\u05D8","\u05D0\u05D3\u05E8","\u05D0\u05D3\u05E8 \u05D1","\u05D0\u05D3\u05E8 \u05D0"]</code>
 	 * 
 	 * @see #formatMonth(JewishDate)
 	 */
 	private static final String[] hebrewMonths = { "\u05E0\u05D9\u05E1\u05DF", "\u05D0\u05D9\u05D9\u05E8",
 			"\u05E1\u05D9\u05D5\u05DF", "\u05EA\u05DE\u05D5\u05D6", "\u05D0\u05D1", "\u05D0\u05DC\u05D5\u05DC",
-			"\u05EA\u05E9\u05E8\u05D9", "\u05D7\u05E9\u05D5\u05DF", "\u05DB\u05E1\u05DC\u05D5",
+			"\u05EA\u05E9\u05E8\u05D9", "\u05DE\u05E8\u05D7\u05E9\u05D5\u05DF", "\u05DB\u05E1\u05DC\u05D5",
 			"\u05D8\u05D1\u05EA", "\u05E9\u05D1\u05D8", "\u05D0\u05D3\u05E8", "\u05D0\u05D3\u05E8 \u05D1",
 			"\u05D0\u05D3\u05E8 \u05D0" };
 
@@ -845,7 +845,7 @@ public class HebrewDateFormatter {
 
 	/**
 	 * Returns the kviah in the traditional 3 letter Hebrew format where the first letter represents the day of week of
-	 * Rosh Hashana, the second letter represents the lengths of Cheshvan and Kislev ({@link JewishDate#SHELAIMIM
+	 * Rosh Hashana, the second letter represents the lengths of Marcheshvan and Kislev ({@link JewishDate#SHELAIMIM
 	 * Shelaimim} , {@link JewishDate#KESIDRAN Kesidran} or {@link JewishDate#CHASERIM Chaserim}) and the 3rd letter
 	 * represents the day of week of Pesach. For example 5729 (1969) would return &#x5D1;&#x5E9;&#x5D4; (Rosh Hashana on
 	 * Monday, Shelaimim, and Pesach on Thursday), while 5771 (2011) would return &#x5D4;&#x5E9;&#x5D2; (Rosh Hashana on
@@ -858,7 +858,7 @@ public class HebrewDateFormatter {
 	 */
 	public String getFormattedKviah(int jewishYear) {
 		JewishDate jewishDate = new JewishDate(jewishYear, JewishDate.TISHREI, 1); // set date to Rosh Hashana
-		int kviah = jewishDate.getCheshvanKislevKviah();
+		int kviah = jewishDate.getMarcheshvanKislevKviah();
 		int roshHashanaDayOfWeek = jewishDate.getDayOfWeek();
 		String returnValue = formatHebrewNumber(roshHashanaDayOfWeek);
 		returnValue += (kviah == JewishDate.CHASERIM ? "\u05D7" : kviah == JewishDate.SHELAIMIM ? "\u05E9" : "\u05DB");
