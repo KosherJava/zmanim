@@ -16,15 +16,16 @@
 package com.kosherjava.zmanim.util;
 
 import java.lang.reflect.Method;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
-import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import com.kosherjava.zmanim.AstronomicalCalendar;
 
 /**
@@ -70,32 +71,32 @@ public class ZmanimFormatter {
 
 	/**
 	 * The SimpleDateFormat class.
-	 * @see #setDateFormat(SimpleDateFormat)
+	 * @see #setDateTimeFormatter(DateTimeFormatter)
 	 */
-	private SimpleDateFormat dateFormat;
-
+	private DateTimeFormatter dateTimeFormatter;
+	
 	/**
 	 * The TimeZone class.
-	 * @see #setTimeZone(TimeZone)
+	 * @see #setZoneId(ZoneId)
 	 */
-	private TimeZone timeZone = null;
+	private ZoneId zoneId = null;
 
 
 	/**
-	 * Method to return the TimeZone.
-	 * @return the timeZone
+	 * Method to return the <code>ZoneId</code>.
+	 * @return the ZoneId
 	 */
-	public TimeZone getTimeZone() {
-		return timeZone;
+	public ZoneId getZoneId() {
+		return zoneId;
 	}
 
 	/**
 	 * Method to set the TimeZone.
-	 * @param timeZone
-	 *            the timeZone to set
+	 * @param zoneId
+	 *            the ZoneId to set
 	 */
-	public void setTimeZone(TimeZone timeZone) {
-		this.timeZone = timeZone;
+	public void setZoneId(ZoneId zoneId) {
+		this.zoneId = zoneId;
 	}
 
 	/**
@@ -138,10 +139,10 @@ public class ZmanimFormatter {
 
 	/**
 	 * Constructor that defaults to this will use the format "h:mm:ss" for dates and 00.00.00.0 for {@link Time}.
-	 * @param timeZone the TimeZone Object
+	 * @param zoneId the <code>ZoneId</code> Object
 	 */
-	public ZmanimFormatter(TimeZone timeZone) {
-		this(0, new SimpleDateFormat("h:mm:ss"), timeZone);
+	public ZmanimFormatter(ZoneId zoneId) {
+		this(0, DateTimeFormatter.ofPattern("h:mm:ss"), zoneId);
 	}
 
 	/**
@@ -150,19 +151,18 @@ public class ZmanimFormatter {
 	 * @param format
 	 *            int The formatting style to use. Using ZmanimFormatter.SEXAGESIMAL_SECONDS_FORMAT will format the
 	 *            time of 90*60*1000 + 1 as 1:30:00
-	 * @param dateFormat the SimpleDateFormat Object
-	 * @param timeZone the TimeZone Object
+	 * @param dateTimeFormatter the <code>DateTimeFormatter</code> Object
+	 * @param zoneId the <code>ZoneId</code> Object
 	 */
-	public ZmanimFormatter(int format, SimpleDateFormat dateFormat, TimeZone timeZone) {
-		setTimeZone(timeZone);
+	public ZmanimFormatter(int format, DateTimeFormatter dateTimeFormatter, ZoneId zoneId) {
+		setZoneId(zoneId);
 		String hourFormat = "0";
 		if (prependZeroHours) {
 			hourFormat = "00";
 		}
 		this.hourNF = new DecimalFormat(hourFormat);
 		setTimeFormat(format);
-		dateFormat.setTimeZone(timeZone);
-		setDateFormat(dateFormat);
+		setDateTimeFormatter(dateTimeFormatter.withZone(zoneId));
 	}
 
 	/**
@@ -193,18 +193,18 @@ public class ZmanimFormatter {
 
 	/**
 	 * Sets the SimpleDateFormat Object
-	 * @param simpleDateFormat the SimpleDateFormat Object to set
+	 * @param dateTimeFormatter the <code>DateTimeFormatter</code> Object to set
 	 */
-	public void setDateFormat(SimpleDateFormat simpleDateFormat) {
-		this.dateFormat = simpleDateFormat;
+	public void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
+		this.dateTimeFormatter = dateTimeFormatter;
 	}
 
 	/**
-	 * returns the SimpleDateFormat Object
-	 * @return the SimpleDateFormat Object
+	 * returns the <code>DateTimeFormatter</code> Object.
+	 * @return the <code>DateTimeFormatter</code> Object.
 	 */
-	public SimpleDateFormat getDateFormat() {
-		return this.dateFormat;
+	public DateTimeFormatter getDateTimeFormatter() {
+		return this.dateTimeFormatter;
 	}
 
 	/**
@@ -268,54 +268,36 @@ public class ZmanimFormatter {
 	}
 
 	/**
-	 * Formats a date using this class's {@link #getDateFormat() date format}.
+	 * Formats an <code>Instant</code> using this class's {@link #getDateTimeFormatter()}.
 	 * 
-	 * @param dateTime
-	 *            the date to format
-	 * @param calendar
-	 *            the {@link java.util.Calendar Calendar} used to help format based on the Calendar's DST and other
+	 * @param instant
+	 *            the <code>Instant</code> to format
+	 * @param zonedDateTime
+	 *            the {@link java.time.ZonedDateTime ZonedDateTime} used to help format based on the ZonedDateTime DST and other
 	 *            settings.
 	 * @return the formatted String
 	 */
-	public String formatDateTime(Date dateTime, Calendar calendar) {
-		this.dateFormat.setCalendar(calendar);
-		if (this.dateFormat.toPattern().equals("yyyy-MM-dd'T'HH:mm:ss")) {
-			return getXSDateTime(dateTime);
-		} else {
-			return this.dateFormat.format(dateTime);
-		}
+	public String formatDateTime(Instant instant, ZonedDateTime zonedDateTime) {
+	    ZonedDateTime dateTime = instant.atZone(zonedDateTime.getZone());
 
-	}
-
-	/**
-	 * The date:date-time function returns the current date and time as a date/time string. The date/time string that's
-	 * returned must be a string in the format defined as the lexical representation of xs:dateTime in <a
-	 * href="http://www.w3.org/TR/xmlschema11-2/#dateTime">[3.3.8 dateTime]</a> of <a
-	 * href="http://www.w3.org/TR/xmlschema11-2/">[XML Schema 1.1 Part 2: Datatypes]</a>. The date/time format is
-	 * basically CCYY-MM-DDThh:mm:ss, although implementers should consult <a
-	 * href="http://www.w3.org/TR/xmlschema11-2/">[XML Schema 1.1 Part 2: Datatypes]</a> and <a
-	 * href="http://www.iso.ch/markete/8601.pdf">[ISO 8601]</a> for details. The date/time string format must include a
-	 * time zone, either a Z to indicate Coordinated Universal Time or a + or - followed by the difference between the
-	 * difference from UTC represented as hh:mm.
-	 * @param date Date Object
-	 * @param calendar Calendar Object that is now ignored.
-	 * @return the XSD dateTime
-	 * @deprecated This method will be removed in v3.0
-	 */
-	@Deprecated // (since="2.5", forRemoval=true)// add back once Java 9 is the minimum supported version
-	public String getXSDateTime(Date date, Calendar calendar) {
-		return getXSDateTime(date);
+	    if (this.dateTimeFormatter.toString().equals("yyyy-MM-dd'T'HH:mm:ss")) {
+	        return getXSDateTime(instant);
+	    } else {
+	        return this.dateTimeFormatter.format(dateTime);
+	    }
 	}
 	
 	/**
-	 * Format the Date using the format "yyyy-MM-dd'T'HH:mm:ssXXX"
-	 * @param date the Date to format.
-	 * @return the Date formatted using the format "yyyy-MM-dd'T'HH:mm:ssXXX
+	 * Format the <code>Instant</code> using the format "yyyy-MM-dd'T'HH:mm:ssXXX".
+	 * @param instant the <code>Instant</code> to format.
+	 * @return the <code>Instant</code> formatted using the format "yyyy-MM-dd'T'HH:mm:ssXXX
 	 */
-	public String getXSDateTime(Date date) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-		dateFormat.setTimeZone(getTimeZone());
-		return new StringBuilder(dateFormat.format(date)).toString();
+	public String getXSDateTime(Instant instant) {
+	    DateTimeFormatter formatter =
+	            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+	                             .withZone(getZoneId());
+
+	    return formatter.format(instant);
 	}
 
 	/**
@@ -393,14 +375,13 @@ public class ZmanimFormatter {
 	 * @todo Add proper schema, and support for nulls. XSD duration (for solar hours), should probably return nil and not P.
 	 */
 	public static String toXML(AstronomicalCalendar astronomicalCalendar) {
-		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getTimeZone());
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		df.setTimeZone(astronomicalCalendar.getGeoLocation().getTimeZone());
+		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, DateTimeFormatter.ofPattern(
+				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getZoneId());
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		df = df.withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 
-		Date date = astronomicalCalendar.getCalendar().getTime();
-		TimeZone tz = astronomicalCalendar.getGeoLocation().getTimeZone();
-		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
+		Instant instant = astronomicalCalendar.getZonedDateTime().toInstant();
+		ZoneId zi = astronomicalCalendar.getGeoLocation().getZoneId();
 
 		StringBuilder sb = new StringBuilder("<");
 		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
@@ -419,19 +400,18 @@ public class ZmanimFormatter {
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
 		}
-		sb.append(" date=\"").append(df.format(date)).append("\"");
+		sb.append(" date=\"").append(df.format(instant)).append("\"");
 		sb.append(" type=\"").append(astronomicalCalendar.getClass().getName()).append("\"");
 		sb.append(" algorithm=\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\"");
 		sb.append(" location=\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\"");
 		sb.append(" latitude=\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\"");
 		sb.append(" longitude=\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\"");
 		sb.append(" elevation=\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\"");
-		sb.append(" timeZoneName=\"").append(tz.getDisplayName(daylight, TimeZone.LONG)).append("\"");
-		sb.append(" timeZoneID=\"").append(tz.getID()).append("\"");
-		sb.append(" timeZoneOffset=\"")
-				.append((tz.getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
-				.append("\"");
-		// sb.append(" useElevationAllZmanim=\"").append(astronomicalCalendar.useElevationAllZmanim).append("\""); //TODO likely using reflection
+		sb.append(" timeZoneName=\"").append(zi.getDisplayName(TextStyle.FULL, Locale.getDefault())).append("\"");
+	    sb.append(" timeZoneID=\"").append(zi.getId()).append("\"");
+	    double offsetHours = astronomicalCalendar.getZonedDateTime().getOffset().getTotalSeconds() / 3600.0;
+	    sb.append(" timeZoneOffset=\"").append(offsetHours).append("\"");
+		//sb.append(" useElevationAllZmanim=\"").append(astronomicalCalendar.useElevationAllZmanim()).append("\""); //TODO likely using reflection
 
 		sb.append(">\n");
 
@@ -451,8 +431,8 @@ public class ZmanimFormatter {
 						otherList.add("<" + tagName + ">N/A</" + tagName + ">");
 						// TODO: instead of N/A, consider return proper xs:nil.
 						// otherList.add("<" + tagName + " xs:nil=\"true\" />");
-					} else if (value instanceof Date) {
-						dateList.add(new Zman((Date) value, tagName));
+					} else if (value instanceof Instant) {
+						dateList.add(new Zman((Instant) value, tagName));
 					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
 						if (((Long) value).longValue() == Long.MIN_VALUE) {
 							otherList.add("<" + tagName + ">N/A</" + tagName + ">");
@@ -475,7 +455,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
 			sb.append("\t<").append(zman.getLabel()).append(">");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
+			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getZonedDateTime()));
 			sb.append("</").append(zman.getLabel()).append(">\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
@@ -554,29 +534,30 @@ public class ZmanimFormatter {
 	 * </pre>
 	 */
 	public static String toJSON(AstronomicalCalendar astronomicalCalendar) {
-		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getTimeZone());
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		df.setTimeZone(astronomicalCalendar.getGeoLocation().getTimeZone());
+		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, DateTimeFormatter.ofPattern(
+				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getZoneId());
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                .withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 
-		Date date = astronomicalCalendar.getCalendar().getTime();
-		TimeZone tz = astronomicalCalendar.getGeoLocation().getTimeZone();
-		boolean daylight = tz.useDaylightTime() && tz.inDaylightTime(date);
+		Instant instant = astronomicalCalendar.getZonedDateTime().toInstant();
+		ZoneId zi = astronomicalCalendar.getGeoLocation().getZoneId();
 
 		StringBuilder sb = new StringBuilder("{\n\"metadata\":{\n");
-		sb.append("\t\"date\":\"").append(df.format(date)).append("\",\n");
+		sb.append("\t\"date\":\"").append(df.format(instant)).append("\",\n");
 		sb.append("\t\"type\":\"").append(astronomicalCalendar.getClass().getName()).append("\",\n");
 		sb.append("\t\"algorithm\":\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\",\n");
 		sb.append("\t\"location\":\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\",\n");
 		sb.append("\t\"latitude\":\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\",\n");
 		sb.append("\t\"longitude\":\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\",\n");
 		sb.append("\t\"elevation\":\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\",\n");
-		sb.append("\t\"timeZoneName\":\"").append(tz.getDisplayName(daylight, TimeZone.LONG)).append("\",\n");
-		sb.append("\t\"timeZoneID\":\"").append(tz.getID()).append("\",\n");
-		sb.append("\t\"timeZoneOffset\":\"")
-				.append((tz.getOffset(astronomicalCalendar.getCalendar().getTimeInMillis()) / ((double) HOUR_MILLIS)))
-				.append("\"");
-
+	    
+	    
+		sb.append("\t\"timeZoneName\":\"").append(zi.getDisplayName(TextStyle.FULL, Locale.getDefault())).append("\",\n");
+		sb.append("\t\"timeZoneID\":\"").append(zi.getId()).append("\",\n"); //FIXME
+		
+		
+	    double offsetHours = astronomicalCalendar.getZonedDateTime().getOffset().getTotalSeconds() / 3600.0;
+	    sb.append(" timeZoneOffset=\"").append(offsetHours).append("\"");
 		sb.append("},\n\"");
 		
 		if (astronomicalCalendar.getClass().getName().equals("com.kosherjava.zmanim.AstronomicalCalendar")) {
@@ -601,8 +582,8 @@ public class ZmanimFormatter {
 					value = theMethods[i].invoke(astronomicalCalendar, (Object[]) null);
 					if (value == null) {// TODO: Consider using reflection to determine the return type, not the value
 						otherList.add("\"" + tagName + "\":\"N/A\",");
-					} else if (value instanceof Date) {
-						dateList.add(new Zman((Date) value, tagName));
+					} else if (value instanceof Instant) {
+						dateList.add(new Zman((Instant) value, tagName));
 					} else if (value instanceof Long || value instanceof Integer) {// shaah zmanis
 						if (((Long) value).longValue() == Long.MIN_VALUE) {
 							otherList.add("\"" + tagName + "\":\"N/A\"");
@@ -622,7 +603,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
 			sb.append("\t\"").append(zman.getLabel()).append("\":\"");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getCalendar()));
+			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getZonedDateTime()));
 			sb.append("\",\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
