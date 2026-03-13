@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2024 Eliyahu Hershfeld
+ * Copyright (C) 2011 - 2026 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -17,7 +17,9 @@
 package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -52,7 +54,7 @@ import java.util.GregorianCalendar;
  * @see java.util.Date
  * @see java.util.Calendar
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2024
+ * @author &copy; Eliyahu Hershfeld 2011 - 2026
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
@@ -976,25 +978,25 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * A constructor that initializes the date to the {@link java.util.Date Date} parameter.
 	 * 
-	 * @param date
-	 *            the <code>Date</code> to set the calendar to
+	 * @param instant
+	 *            the <code>Instant</code> to set the calendar to
 	 * @throws IllegalArgumentException
 	 *             if the date would fall prior to the January 1, 1 AD
 	 */
-	public JewishDate(Date date) {
-		setDate(date);
+	public JewishDate(Instant instant) {
+		setDate(instant);
 	}
 
 	/**
 	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
 	 * 
-	 * @param calendar
-	 *            the <code>Calendar</code> to set the calendar to
+	 * @param zonedDateTime
+	 *            the <code>ZonedDateTime</code> to set the calendar to
 	 * @throws IllegalArgumentException
 	 *             if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
 	 */
-	public JewishDate(Calendar calendar) {
-		setDate(calendar);
+	public JewishDate(ZonedDateTime zonedDateTime) {
+		setDate(zonedDateTime);
 	}
 
 	/**
@@ -1012,37 +1014,45 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
 	 * Sets the date based on a {@link java.util.Calendar Calendar} object. Modifies the Jewish date as well.
 	 * 
-	 * @param calendar
-	 *            the <code>Calendar</code> to set the calendar to
+	 * @param zonedDateTime
+	 *            the <code>ZonedDateTime</code> to set the calendar to
 	 * @throws IllegalArgumentException
 	 *             if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
 	 */
-	public void setDate(Calendar calendar) {
-		if (calendar.get(Calendar.ERA) == GregorianCalendar.BC) {
-			throw new IllegalArgumentException("Calendars with a BC era are not supported. The year "
-					+ calendar.get(Calendar.YEAR) + " BC is invalid.");
-		}
-		gregorianMonth = calendar.get(Calendar.MONTH) + 1;
-		gregorianDayOfMonth = calendar.get(Calendar.DATE);
-		gregorianYear = calendar.get(Calendar.YEAR);
-		gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth); // init the date
-		absDateToJewishDate();
+	public void setDate(ZonedDateTime zonedDateTime) {
+	    int year = zonedDateTime.getYear();
 
-		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // set day of week
+	    if (year <= 0) {
+	        throw new IllegalArgumentException(
+	            "Calendars with a BC era are not supported. The year "
+	            + year + " BC is invalid."
+	        );
+	    }
+
+	    gregorianYear = year;
+	    gregorianMonth = zonedDateTime.getMonthValue(); // 1 = January
+	    gregorianDayOfMonth = zonedDateTime.getDayOfMonth();
+
+	    // initialize absolute date
+	    gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+
+	    // convert to Jewish date
+	    absDateToJewishDate();
+
+	    // day of week (same calculation as original)
+	    dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1;
 	}
 
 	/**
-	 * Sets the date based on a {@link java.util.Date Date} object. Modifies the Jewish date as well.
+	 * Sets the date based on a {@link java.time.Instant Instant} object. Modifies the Jewish date as well.
 	 * 
-	 * @param date
-	 *            the <code>Date</code> to set the calendar to
+	 * @param instant
+	 *            the <code>Instant</code> to set the calendar to
 	 * @throws IllegalArgumentException
 	 *             if the date would fall prior to the year 1 AD
 	 */
-	public void setDate(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		setDate(cal);
+	public void setDate(Instant instant) {
+	    setDate(instant.atZone(ZoneId.systemDefault()));
 	}
 
 	/**
@@ -1054,9 +1064,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *             if the date would fall prior to the year 1 AD
 	 */
 	public void setDate(LocalDate localDate) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth());
-		setDate(cal);
+		ZonedDateTime zdt = localDate.atStartOfDay(ZoneId.systemDefault());
+	    setDate(zdt);
 	}
 
 	/**
@@ -1197,8 +1206,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Resets this date to the current system date.
 	 */
 	public void resetDate() {
-		Calendar calendar = Calendar.getInstance();
-		setDate(calendar);
+		ZonedDateTime zdt = ZonedDateTime.now();
+		setDate(zdt);
 	}
 
 	/**
@@ -1234,7 +1243,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @see Calendar#add(int, int)
 	 * @see Calendar#roll(int, int)
 	 */
-	public void forward(int field, int amount) {
+	public void forward(int field, int amount) { //FIXME first param should be converted from the Calendar.DATE
 		if (field != Calendar.DATE && field != Calendar.MONTH && field != Calendar.YEAR) {
 			throw new IllegalArgumentException("Unsupported field was passed to Forward. Only Calendar.DATE, Calendar.MONTH or Calendar.YEAR are supported.");
 		}
@@ -1401,7 +1410,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the Gregorian month (between 0-11). Like the java.util.Calendar, months are 0 based.
 	 */
 	public int getGregorianMonth() {
-		return gregorianMonth - 1;
+		return gregorianMonth - 1; //FIXME
 	}
 
 	/**
@@ -1471,7 +1480,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public void setGregorianMonth(int month) {
 		validateGregorianMonth(month);
-		setInternalGregorianDate(gregorianYear, month + 1, gregorianDayOfMonth);
+		setInternalGregorianDate(gregorianYear, month + 1, gregorianDayOfMonth); //FIXME
 	}
 
 	/**
