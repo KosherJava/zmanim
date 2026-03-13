@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -15,7 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.Calendar;
+import java.time.ZonedDateTime;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at
@@ -23,7 +23,7 @@ import java.util.Calendar;
  * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
  * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -104,7 +104,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A method that calculates UTC sunrise as well as any time based on an angle above or below sunrise. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param calendar
+	 * @param zonedDateTime
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
@@ -121,14 +121,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	public abstract double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith,
+	public abstract double getUTCSunrise(ZonedDateTime zonedDateTime, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 
 	/**
 	 * A method that calculates UTC sunset as well as any time based on an angle above or below sunset. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param calendar
+	 * @param zonedDateTime
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
@@ -145,7 +145,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	public abstract double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith,
+	public abstract double getUTCSunset(ZonedDateTime zonedDateTime, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 	
 	
@@ -155,14 +155,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * true solar noon, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
 	 * the time as halfway between sunrise and sunset.
 	 * 
-	 * @param calendar
+	 * @param zonedDateTime
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.         
 	 * 
 	 * @return the time in minutes from zero UTC
 	 */
-	public abstract double getUTCNoon(Calendar calendar, GeoLocation geoLocation);
+	public abstract double getUTCNoon(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
 	
 	
 	/**
@@ -171,21 +171,21 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * true solar midnight, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
 	 * the time as 12 hours after halfway between sunrise and sunset.
 	 * 
-	 * @param calendar
+	 * @param zonedDateTime
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.         
 	 * 
 	 * @return the time in minutes from zero UTC
 	 */
-	public abstract double getUTCMidnight(Calendar calendar, GeoLocation geoLocation);
+	public abstract double getUTCMidnight(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
 	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
 	 * 
-	 * @param calendar
+	 * @param zonedDateTime
 	 *            time of calculation
 	 * @param geoLocation
 	 *            The location information
@@ -193,14 +193,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            is 090&deg;, civil twilight is -690&deg; etc. This means that sunrise and sunset that do use
 	 *            refraction and are calculated from the upper limb of the sun will return about 0.83390&deg;.
 	 */
-	public abstract double getSolarElevation(Calendar calendar, GeoLocation geoLocation);
+	public abstract double getSolarElevation(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
 	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> for the
 	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 180
 	 * degrees.
 	 * 
-	 * @param calendar
+	 * @param zonedDateTime
 	 *            time of calculation
 	 * @param geoLocation
 	 *            The location information
@@ -208,7 +208,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            southern hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about
 	 *            90&deg; and sunset about 270&deg;.
 	 */
-	public abstract double getSolarAzimuth(Calendar calendar, GeoLocation geoLocation);
+	public abstract double getSolarAzimuth(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
 
 	/**
 	 * Method to return the adjustment to the zenith required to account for the elevation. Since a person at a higher
@@ -258,7 +258,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * below the zenith}. This is traditionally calculated with none of the above mentioned adjustments. The same goes
 	 * for various <em>tzais</em> and <em>alos</em> times such as the
 	 * {@link com.kosherjava.zmanim.ZmanimCalendar#ZENITH_16_POINT_1 16.1&deg;} dip used in
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getAlos16Point1Degrees()}.
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getAlos16Point1Degrees()}.
 	 * 
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
