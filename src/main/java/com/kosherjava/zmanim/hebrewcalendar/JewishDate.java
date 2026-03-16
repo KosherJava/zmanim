@@ -32,17 +32,17 @@ import java.util.GregorianCalendar;
  * href="http://en.wikipedia.org/wiki/Hillel_II">Hillel II's (Hakatan's</a>) calendar (4119 in the Jewish Calendar / 359
  * CE Julian as recorded by <a href="http://en.wikipedia.org/wiki/Hai_Gaon">Rav Hai Gaon</a>) would be just an
  * approximation.
- * 
+ *
  * This open source Java code was written by <a href="http://www.facebook.com/avromf">Avrom Finkelstien</a> from his C++
  * code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements and some bug
  * fixing.
- * 
+ *
  * Some of Avrom's original C++ code was translated from
  * <a href="https://web.archive.org/web/20120124134148/http://emr.cs.uiuc.edu/~reingold/calendar.C">C/C++ code</a> in
  * <a href="http://www.calendarists.com">Calendrical Calculations</a> by Nachum Dershowitz and Edward M.
  * Reingold, Software-- Practice &amp; Experience, vol. 20, no. 9 (September, 1990), pp. 899- 928. Any method with the mark
  * "ND+ER" indicates that the method was taken from this source with minor modifications.
- * 
+ *
  * If you are looking for a class that implements a Jewish calendar version of the Calendar class, one is available from
  * the <a href="http://site.icu-project.org/" >ICU (International Components for Unicode)</a> project, formerly part of
  * IBM's DeveloperWorks.
@@ -153,7 +153,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/** The number  of <em>chalakim</em> (1080) in an hour.*/
 	private static final int CHALAKIM_PER_HOUR = 1080;
 	/** The number of <em>chalakim</em> (25,920) in a 24-hour day .*/
-	private static final int CHALAKIM_PER_DAY = 25920; // 24 * 1080
+	private static final long CHALAKIM_PER_DAY = 25920; // 24 * 1080
 	/** The number  of <em>chalakim</em> in an average Jewish month. A month has 29 days, 12 hours and 793
 	 * <em>chalakim</em> (44 minutes and 3.3 seconds) for a total of 765,433 <em>chalakim</em>*/
 	private static final long CHALAKIM_PER_MONTH = 765433; // (29 * 24 + 12) * 1080 + 793
@@ -460,8 +460,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public static int getJewishCalendarElapsedDays(int year) {
 		long chalakimSince = getChalakimSinceMoladTohu(year, TISHREI);
-		int moladDay = (int) (chalakimSince / (long) CHALAKIM_PER_DAY);
-		int moladParts = (int) (chalakimSince - moladDay * (long) CHALAKIM_PER_DAY);
+		int moladDay = (int) (chalakimSince / CHALAKIM_PER_DAY);
+		int moladParts = (int) (chalakimSince - moladDay * CHALAKIM_PER_DAY);
 		// delay Rosh Hashana for the 4 dechiyos
 		return addDechiyos(year, moladDay, moladParts);
 	}
@@ -533,7 +533,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Returns the number of <em>chalakim</em> (parts - 1080 to the hour) from the original hypothetical <em>Molad Tohu</em>
 	 * to the Jewish year and month that this Object is set to.
 	 * 
-	 * @return the number of <em>chalakim</em> (parts - 1080 to the hour) from the original hypothetical <em>Molad Tohu</em> 
+	 * @return the number of <em>chalakim</em> (parts - 1080 to the hour) from the original hypothetical <em>Molad Tohu</em>
 	 */
 	public long getChalakimSinceMoladTohu() {
 		return getChalakimSinceMoladTohu(jewishYear, jewishMonth);
@@ -888,8 +888,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 */
 	public JewishDate(long molad) {
 		absDateToDate(moladToAbsDate(molad));
-		int conjunctionDay = (int) (molad / (long) CHALAKIM_PER_DAY);
-		int conjunctionParts = (int) (molad - conjunctionDay * (long) CHALAKIM_PER_DAY);
+		int conjunctionDay = (int) (molad / CHALAKIM_PER_DAY);
+		int conjunctionParts = (int) (molad - conjunctionDay * CHALAKIM_PER_DAY);
 		setMoladTime(conjunctionParts);
 	}
 
@@ -1293,7 +1293,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	
 	/**
 	 * Forward the Jewish date by the number of months passed in.
-	 * FIXME: Deal with forwarding a date such as 30 Nissan by a month. 30 Iyar does not exist. This should be dealt with similar to 
+	 * FIXME: Deal with forwarding a date such as 30 Nissan by a month. 30 Iyar does not exist. This should be dealt with similar to
 	 * the way that the Java Calendar behaves (not that simple since there is a difference between add() or roll().
 	 * 
 	 * @throws IllegalArgumentException if the amount is less than 1
