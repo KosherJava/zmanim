@@ -266,7 +266,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar#getSunriseWithElevation()} if it is true.
 	 * @see com.kosherjava.zmanim.AstronomicalCalendar#getSunriseWithElevation()
 	 */
-	protected Instant getElevationAdjustedSunrise() {
+	protected Instant getSunriseBasedOnElevationSetting() {
 		if (isUseElevation()) {
 			return super.getSunriseWithElevation();
 		}
@@ -282,7 +282,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar#getSunsetWithElevation()} if it is true.
 	 * @see com.kosherjava.zmanim.AstronomicalCalendar#getSunsetWithElevation()
 	 */
-	protected Instant getElevationAdjustedSunset() {
+	protected Instant getSunsetBasedOnElevationSetting() {
 		if (isUseElevation()) {
 			return super.getSunsetWithElevation();
 		}
@@ -345,7 +345,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         documentation.
 	 */
 	public Instant getAlos72() {
-		return getTimeOffset(getElevationAdjustedSunrise(), -72 * MINUTE_MILLIS);
+		return getTimeOffset(getSunriseBasedOnElevationSetting(), -72 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -426,8 +426,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * the day. If {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>true</code>, the 3 <em>shaos zmaniyos</em> will be
 	 * based on 1/6 of the time between sunrise and {@link #getSunTransit() astronomical <em>chatzos</em>}. As an example, passing
 	 * {@link #getSunriseWithElevation() sunrise} and {@link #getSunsetWithElevation() sunset} or {@link #getSeaLevelSunrise() sea level sunrise} and {@link
-	 * #getSeaLevelSunset() sea level sunset} to this method (or {@link #getElevationAdjustedSunrise()} and {@link
-	 * #getElevationAdjustedSunset()} that is driven off the {@link #isUseElevation()} setting) will return <em>sof zman krias
+	 * #getSeaLevelSunset() sea level sunset} to this method (or {@link #getSunriseBasedOnElevationSetting()} and {@link
+	 * #getSunsetBasedOnElevationSetting()} that is driven off the {@link #isUseElevation()} setting) will return <em>sof zman krias
 	 * shema</em> according to the opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. In cases
 	 * where the start and end dates are not synchronous such as in {@link ComprehensiveZmanimCalendar
 	 * #getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees()} <code>false</code> should be passed to the synchronous parameter
@@ -496,7 +496,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanShmaGRA() {
-		return getSofZmanShma(getElevationAdjustedSunrise(), getElevationAdjustedSunset(), true);
+		return getSofZmanShma(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
@@ -537,7 +537,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getTzais72() {
-		return getTimeOffset(getElevationAdjustedSunset(), 72 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 72 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -637,7 +637,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanTfilaGRA() {
-		return getSofZmanTfila(getElevationAdjustedSunrise(), getElevationAdjustedSunset(), true);
+		return getSofZmanTfila(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
@@ -754,7 +754,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaGedola() {
-		return getMinchaGedola(getElevationAdjustedSunrise(), getElevationAdjustedSunset(), true);
+		return getMinchaGedola(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 	
 	/**
@@ -899,7 +899,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaKetana() {
-		return getMinchaKetana(getElevationAdjustedSunrise(), getElevationAdjustedSunset(), true);
+		return getMinchaKetana(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
@@ -977,7 +977,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getPlagHamincha() {
-		return getPlagHamincha(getElevationAdjustedSunrise(), getElevationAdjustedSunset(), true);
+		return getPlagHamincha(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
@@ -998,7 +998,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see ComprehensiveZmanimCalendar#getShaahZmanisBaalHatanya()
 	 */
 	public long getShaahZmanisGra() {
-		return getTemporalHour(getElevationAdjustedSunrise(), getElevationAdjustedSunset());
+		return getTemporalHour(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting());
 	}
 
 	/**
@@ -1071,7 +1071,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This is a utility method to determine if the current Instant passed in has a <em>melacha</em> (work) prohibition.
 	 * Since there are many opinions on the time of <em>tzais</em>, the <em>tzais</em> for the current day has to be passed to this
-	 * class. Sunset is the classes current day's {@link #getElevationAdjustedSunset() elevation adjusted sunset} that observes the
+	 * class. Sunset is the classes current day's {@link #getSunsetBasedOnElevationSetting() elevation adjusted sunset} that observes the
 	 * {@link #isUseElevation()} settings. The {@link JewishCalendar#getInIsrael()} will be set by the inIsrael parameter.
 	 * 
 	 * @param currentTime the current time
@@ -1091,7 +1091,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 		
 		jewishCalendar.setInIsrael(inIsrael);
 		
-		if (jewishCalendar.hasCandleLighting() && currentTime.compareTo(getElevationAdjustedSunset()) >= 0) { //erev shabbos, YT or YT sheni and after shkiah
+		if (jewishCalendar.hasCandleLighting() && currentTime.compareTo(getSunsetBasedOnElevationSetting()) >= 0) { //erev shabbos, YT or YT sheni and after shkiah
 			return true;
 		}
 		

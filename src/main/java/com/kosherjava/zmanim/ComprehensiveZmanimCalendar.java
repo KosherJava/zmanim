@@ -850,7 +850,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis60Minutes()
 	 */
 	public Instant getAlos60() {
-		return getTimeOffset(getElevationAdjustedSunrise(), -60 * MINUTE_MILLIS);
+		return getTimeOffset(getSunriseBasedOnElevationSetting(), -60 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -860,7 +860,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 72 minutes which is 1/10th of a day (12 * 60 = 720) based on the day being from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation()
 	 * sunset} (depending on the {@link #isUseElevation()} setting). The actual calculation is {@link
-	 * #getElevationAdjustedSunrise()} - ({@link #getShaahZmanisGra()} * 1.2). This calculation is used in the calendars
+	 * #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGra()} * 1.2). This calculation is used in the calendars
 	 * published by the <a href="https://en.wikipedia.org/wiki/Central_Rabbinical_Congress">Hisachdus Harabanim D'Artzos Habris
 	 * Ve'Canada</a>.
 	 * 
@@ -890,7 +890,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 */
 	public Instant getAlos96() {
-		return getTimeOffset(getElevationAdjustedSunrise(), -96 * MINUTE_MILLIS);
+		return getTimeOffset(getSunriseBasedOnElevationSetting(), -96 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -901,7 +901,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * mil is 90 minutes which is 1/8th of a day (12 * 60) / 8 = 90. The day is calculated from {@link
 	 * #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation()
 	 * sunrise} to {@link #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used
-	 * is {@link #getElevationAdjustedSunrise()} - ({@link #getShaahZmanisGra()} * 1.5).
+	 * is {@link #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGra()} * 1.5).
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -920,7 +920,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is 96
 	 * minutes which is 1/7.5th of a day (12 * 60 / 7.5 = 96). The day is calculated from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation()
-	 * sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link #getElevationAdjustedSunrise()}
+	 * sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link #getSunriseBasedOnElevationSetting()}
 	 * - ({@link #getShaahZmanisGra()} * 1.6).
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
@@ -949,7 +949,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 */
 	public Instant getAlos90() {
-		return getTimeOffset(getElevationAdjustedSunrise(), -90 * MINUTE_MILLIS);
+		return getTimeOffset(getSunriseBasedOnElevationSetting(), -90 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -979,7 +979,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getAlos120() {
-		return getTimeOffset(getElevationAdjustedSunrise(), -120 * MINUTE_MILLIS);
+		return getTimeOffset(getSunriseBasedOnElevationSetting(), -120 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -1538,7 +1538,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSeaLevelSunset()
 	 */
 	public Instant getSofZmanShmaAlos16Point1ToSunset() {
-		return getSofZmanShma(getAlos16Point1Degrees(), getElevationAdjustedSunset(), false);
+		return getSofZmanShma(getAlos16Point1Degrees(), getSunsetBasedOnElevationSetting(), false);
 	}
 
 	/**
@@ -2271,7 +2271,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getPlagAlosToSunset() {
-		return getPlagHamincha(getAlos16Point1Degrees(), getElevationAdjustedSunset(), false);
+		return getPlagHamincha(getAlos16Point1Degrees(), getSunsetBasedOnElevationSetting(), false);
 	}
 
 	/**
@@ -2358,7 +2358,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 */
 	public Instant getBainHashmashosRT58Point5Minutes() {
-		return getTimeOffset(getElevationAdjustedSunset(), 58.5 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 58.5 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -2391,11 +2391,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getBainHashmashosRT2Stars() {
 		Instant alos19Point8 = getAlos19Point8Degrees();
-		Instant sunrise = getElevationAdjustedSunrise();
+		Instant sunrise = getSunriseBasedOnElevationSetting();
 		if (alos19Point8 == null || sunrise == null) {
 			return null;
 		}
-		return getTimeOffset(getElevationAdjustedSunset(), (sunrise.toEpochMilli() - alos19Point8.toEpochMilli()) * (5 / 18d));
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), (sunrise.toEpochMilli() - alos19Point8.toEpochMilli()) * (5 / 18d));
 	}
 	
 	/**
@@ -2412,7 +2412,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getBainHashmashosYereim3Point05Degrees()
 	 */
 	public Instant getBainHashmashosYereim18Minutes() {
-		return getTimeOffset(getElevationAdjustedSunset(), -18 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), -18 * MINUTE_MILLIS);
 	}
 	
 	/**
@@ -2465,7 +2465,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getBainHashmashosYereim2Point8Degrees()
 	 */
 	public Instant getBainHashmashosYereim16Point875Minutes() {
-		return getTimeOffset(getElevationAdjustedSunset(), -16.875 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), -16.875 * MINUTE_MILLIS);
 	}
 	
 	/**
@@ -2508,7 +2508,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getBainHashmashosYereim2Point1Degrees()
 	 */
 	public Instant getBainHashmashosYereim13Point5Minutes() {
-		return getTimeOffset(getElevationAdjustedSunset(), -13.5 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), -13.5 * MINUTE_MILLIS);
 	}
 	
 	/**
@@ -2795,7 +2795,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis60Minutes()
 	 */
 	public Instant getTzais60() {
-		return getTimeOffset(getElevationAdjustedSunset(), 60 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 60 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -2815,7 +2815,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
 	public Instant getTzaisAteretTorah() {
-		return getTimeOffset(getElevationAdjustedSunset(), getAteretTorahSunsetOffset() * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), getAteretTorahSunsetOffset() * MINUTE_MILLIS);
 	}
 
 	/**
@@ -3009,9 +3009,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		}
 
 		if (hours > 0) {
-			return getTimeOffset(getElevationAdjustedSunset(), (long) (shaahZmanis * hours));
+			return getTimeOffset(getSunsetBasedOnElevationSetting(), (long) (shaahZmanis * hours));
 		} else {
-			return getTimeOffset(getElevationAdjustedSunrise(), (long) (shaahZmanis * hours));
+			return getTimeOffset(getSunriseBasedOnElevationSetting(), (long) (shaahZmanis * hours));
 		}
 	}
 
@@ -3061,7 +3061,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos90()
 	 */
 	public Instant getTzais90() {
-		return getTimeOffset(getElevationAdjustedSunset(), 90 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 90 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -3088,7 +3088,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getTzais120() {
-		return getTimeOffset(getElevationAdjustedSunset(), 120 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 120 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -3201,7 +3201,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos96()
 	 */
 	public Instant getTzais96() {
-		return getTimeOffset(getElevationAdjustedSunset(), 96 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 96 * MINUTE_MILLIS);
 	}
 
 	/**
@@ -3688,7 +3688,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getElevationAdjustedSunrise(), getShaahZmanisGra() * 5);
+			return getTimeOffset(getSunriseBasedOnElevationSetting(), getShaahZmanisGra() * 5);
 		} else {
 			return null;
 		}
@@ -4178,7 +4178,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getHalfDayBasedZman(Instant, Instant, double)
 	 */
 	public Instant getSofZmanShmaGRASunriseToFixedLocalChatzos() {
-		return getHalfDayBasedZman(getElevationAdjustedSunrise(), getFixedLocalChatzos(), 3);
+		return getHalfDayBasedZman(getSunriseBasedOnElevationSetting(), getFixedLocalChatzos(), 3);
 	}
 	
 	/**
@@ -4198,7 +4198,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getHalfDayBasedZman(Instant, Instant, double)
 	 */
 	public Instant getSofZmanTfilaGRASunriseToFixedLocalChatzos() {
-		return getHalfDayBasedZman(getElevationAdjustedSunrise(), getFixedLocalChatzos(), 4);
+		return getHalfDayBasedZman(getSunriseBasedOnElevationSetting(), getFixedLocalChatzos(), 4);
 	}
 	
 	/**
@@ -4238,7 +4238,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see ZmanimCalendar#getHalfDayBasedZman(Instant, Instant, double)
 	 */
 	public Instant getMinchaKetanaGRAFixedLocalChatzosToSunset() {
-		return getHalfDayBasedZman(getFixedLocalChatzos(), getElevationAdjustedSunset(), 3.5);
+		return getHalfDayBasedZman(getFixedLocalChatzos(), getSunsetBasedOnElevationSetting(), 3.5);
 	}
 	
 	/**
@@ -4259,7 +4259,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see ZmanimCalendar#getHalfDayBasedZman(Instant, Instant, double)
 	 */
 	public Instant getPlagHaminchaGRAFixedLocalChatzosToSunset() {
-		return getHalfDayBasedZman(getFixedLocalChatzos(), getElevationAdjustedSunset(), 4.75);
+		return getHalfDayBasedZman(getFixedLocalChatzos(), getSunsetBasedOnElevationSetting(), 4.75);
 	}
 	
 	/**
@@ -4274,7 +4274,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 */
 	public Instant getTzais50() {
-		return getTimeOffset(getElevationAdjustedSunset(), 50 * MINUTE_MILLIS);
+		return getTimeOffset(getSunsetBasedOnElevationSetting(), 50 * MINUTE_MILLIS);
 	}
 	
 	/**
@@ -4283,7 +4283,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the day, calculated according to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> using a day starting at
 	 * sunrise and ending at sunset. This is the time that eating or other activity can't begin prior to praying <em>mincha</em>.
 	 * The calculation used is 9 * {@link #getShaahZmanisGra()} after {@link #getSunriseWithElevation() sunrise} or {@link
-	 * #getElevationAdjustedSunrise() elevation adjusted sunrise} (depending on the {@link #isUseElevation()} setting). See the
+	 * #getSunriseBasedOnElevationSetting() elevation adjusted sunrise} (depending on the {@link #isUseElevation()} setting). See the
 	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
 	 * 
@@ -4296,7 +4296,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSamuchLeMinchaKetanaGRA() {
-		return getSamuchLeMinchaKetana(getElevationAdjustedSunrise(), getElevationAdjustedSunset(), true);
+		return getSamuchLeMinchaKetana(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 	
 	/**
