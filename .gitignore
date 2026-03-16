@@ -3,3 +3,4 @@ target/
 zmanim.iml
 .gradle
 build
+local.properties

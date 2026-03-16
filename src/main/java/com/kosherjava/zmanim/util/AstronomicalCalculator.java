@@ -15,6 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 /**
@@ -104,7 +105,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A method that calculates UTC sunrise as well as any time based on an angle above or below sunrise. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
@@ -121,14 +122,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	public abstract double getUTCSunrise(ZonedDateTime zonedDateTime, GeoLocation geoLocation, double zenith,
+	public abstract double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 
 	/**
 	 * A method that calculates UTC sunset as well as any time based on an angle above or below sunset. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
@@ -145,7 +146,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	public abstract double getUTCSunset(ZonedDateTime zonedDateTime, GeoLocation geoLocation, double zenith,
+	public abstract double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 	
 	
@@ -155,14 +156,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * true solar noon, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
 	 * the time as halfway between sunrise and sunset.
 	 * 
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.         
 	 * 
 	 * @return the time in minutes from zero UTC
 	 */
-	public abstract double getUTCNoon(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
+	public abstract double getUTCNoon(LocalDate localDate, GeoLocation geoLocation);
 	
 	
 	/**
@@ -171,21 +172,21 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * true solar midnight, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
 	 * the time as 12 hours after halfway between sunrise and sunset.
 	 * 
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.         
 	 * 
 	 * @return the time in minutes from zero UTC
 	 */
-	public abstract double getUTCMidnight(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
+	public abstract double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation);
 	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
 	 * 
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            time of calculation
 	 * @param geoLocation
 	 *            The location information
@@ -200,7 +201,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 180
 	 * degrees.
 	 * 
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            time of calculation
 	 * @param geoLocation
 	 *            The location information
