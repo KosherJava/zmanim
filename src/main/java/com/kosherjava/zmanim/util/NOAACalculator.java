@@ -16,6 +16,7 @@
 package com.kosherjava.zmanim.util;
 
 import java.time.ZoneOffset;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 /**
@@ -69,24 +70,24 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunrise(LocalDate, GeoLocation, double, boolean)
 	 */
-	public double getUTCSunrise(ZonedDateTime zdt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+	public double getUTCSunrise(LocalDate dt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunrise = getSunRiseSetUTC(zdt, geoLocation.getLatitude(), -geoLocation.getLongitude(),
+		double sunrise = getSunRiseSetUTC(dt, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, SolarEvent.SUNRISE);
 		sunrise = sunrise / 60;
 		return sunrise > 0  ? sunrise % 24 : sunrise % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
 
 	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunset(LocalDate, GeoLocation, double, boolean)
 	 */
-	public double getUTCSunset(ZonedDateTime zdt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+	public double getUTCSunset(LocalDate dt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunset = getSunRiseSetUTC(zdt, geoLocation.getLatitude(), -geoLocation.getLongitude(),
+		double sunset = getSunRiseSetUTC(dt, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, SolarEvent.SUNSET);
 		sunset = sunset / 60;
 		return sunset > 0  ? sunset % 24 : sunset % 24 + 24; // ensure that the time is >= 0 and < 24
@@ -95,15 +96,15 @@ public class NOAACalculator extends AstronomicalCalculator {
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Julian_day">Julian day</a> from a Java Calendar.
 	 * 
-	 * @param zonedDateTime
-	 *            The ZonedDateTime
+	 * @param localDate
+	 *            The LocalDate
 	 * @return the Julian day corresponding to the date Note: Number is returned for the start of the Julian
 	 *         day. Fractional days / time should be added later.
 	 */
-	private static double getJulianDay(ZonedDateTime zonedDateTime) {
-	    int year = zonedDateTime.getYear();
-	    int month = zonedDateTime.getMonthValue();
-	    int day = zonedDateTime.getDayOfMonth();
+	private static double getJulianDay(LocalDate localDate) {
+	    int year = localDate.getYear();
+	    int month = localDate.getMonthValue();
+	    int day = localDate.getDayOfMonth();
 
 	    if (month <= 2) {
 	        year -= 1;
@@ -311,18 +312,18 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 	
 	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarElevation(ZonedDateTime, GeoLocation)
 	 */
-	public double getSolarElevation(ZonedDateTime zdt, GeoLocation geoLocation) {
-		return getSolarElevationAzimuth(zdt, geoLocation, false);
+	public double getSolarElevation(ZonedDateTime zonedDateTime, GeoLocation geoLocation) {
+		return getSolarElevationAzimuth(zonedDateTime, geoLocation, false);
 
 	}
-	
+
 	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarAzimuth(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarAzimuth(ZonedDateTime, GeoLocation)
 	 */
-	public double getSolarAzimuth(ZonedDateTime zdt, GeoLocation geoLocation) {
-		return getSolarElevationAzimuth(zdt, geoLocation, true);
+	public double getSolarAzimuth(ZonedDateTime zonedDateTime, GeoLocation geoLocation) {
+		return getSolarElevationAzimuth(zonedDateTime, geoLocation, true);
 	}
 
 	/**
@@ -339,22 +340,22 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            true for azimuth, false for elevation
 	 * @return solar elevation or azimuth in degrees.
 	 * 
-	 * @see #getSolarElevation(Calendar, GeoLocation)
-	 * @see #getSolarAzimuth(Calendar, GeoLocation)
+	 * @see #getSolarElevation(ZonedDateTime, GeoLocation)
+	 * @see #getSolarAzimuth(ZonedDateTime, GeoLocation)
 	 */
 	private double getSolarElevationAzimuth(ZonedDateTime zonedDateTime, GeoLocation geoLocation, boolean isAzimuth) {
 
 	    double lat = Math.toRadians(geoLocation.getLatitude());
 	    double lon = geoLocation.getLongitude();
 
-	    ZonedDateTime utc = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
+        ZonedDateTime utc = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
 
 	    double fractionalDay =
 	            (utc.getHour()
 	            + (utc.getMinute()
 	            + (utc.getSecond() + utc.getNano() / 1_000_000_000.0) / 60.0) / 60.0) / 24.0;
 
-	    double jd = getJulianDay(utc) + fractionalDay;
+	    double jd = getJulianDay(utc.toLocalDate()) + fractionalDay;
 	    double jc = getJulianCenturiesFromJulianDay(jd);
 
 	    double decl = Math.toRadians(getSunDeclination(jc));
@@ -393,18 +394,18 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * Other calculators may return a more simplified calculation of halfway between sunrise and sunset. See <a href=
 	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for details on
 	 * solar noon calculations.
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 * @see #getSolarNoonMidnightUTC(double, double, SolarEvent)
 	 * 
-	 * @param zonedDateTime
-	 *            The zonedDateTime representing the date to calculate solar noon for
+	 * @param localDate
+	 *            The localDate representing the date to calculate solar noon for
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times. This class uses only requires
 	 *            the longitude for calculating noon since it is the same time anywhere along the longitude line.
 	 * @return the time in minutes from zero UTC
 	 */
-	public double getUTCNoon(ZonedDateTime zonedDateTime, GeoLocation geoLocation) {
-		double noon = getSolarNoonMidnightUTC(getJulianDay(zonedDateTime), -geoLocation.getLongitude(), SolarEvent.NOON);
+	public double getUTCNoon(LocalDate localDate, GeoLocation geoLocation) {
+		double noon = getSolarNoonMidnightUTC(getJulianDay(localDate), -geoLocation.getLongitude(), SolarEvent.NOON);
 		noon = noon / 60;
 		return noon > 0  ? noon % 24 : noon % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
@@ -417,18 +418,18 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * simplified calculation of halfway between sunrise and sunset. See <a href=
 	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for details on
 	 * solar noon / midnight calculations.
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 * @see #getSolarNoonMidnightUTC(double, double, SolarEvent)
 	 * 
-	 * @param zonedDateTime
-	 *            The <code>ZonedDateTime</code> representing the date to calculate solar noon for
+	 * @param localDate
+	 *            The <code>LocalDate</code> representing the date to calculate solar noon for
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times. This class uses only requires
 	 *            the longitude for calculating noon since it is the same time anywhere along the longitude line.
 	 * @return the time in minutes from zero UTC
 	 */
-	public double getUTCMidnight(ZonedDateTime zonedDateTime, GeoLocation geoLocation) {
-		double midnight = getSolarNoonMidnightUTC(getJulianDay(zonedDateTime), -geoLocation.getLongitude(), SolarEvent.MIDNIGHT);
+	public double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
+		double midnight = getSolarNoonMidnightUTC(getJulianDay(localDate), -geoLocation.getLongitude(), SolarEvent.MIDNIGHT);
 		midnight = midnight / 60;
 		return midnight > 0  ? midnight % 24 : midnight % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
@@ -448,8 +449,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *            
 	 * @return the time in minutes from zero UTC
 	 * 
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
-	 * @see #getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(LocalDate, GeoLocation)
+	 * @see #getUTCNoon(LocalDate, GeoLocation)
 	 */
 	private static double getSolarNoonMidnightUTC(double julianDay, double longitude, SolarEvent solarEvent) {
 		julianDay = (solarEvent == SolarEvent.NOON) ? julianDay : julianDay + 0.5;
@@ -469,8 +470,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * of sunrise or sunset in minutes for the given day at the given location on earth.
 	 * @todo Possibly increase the number of passes for improved accuracy, especially in the Arctic areas.
 	 * 
-	 * @param zonedDateTime
-	 *            The <code>ZonedDateTime</code>.
+	 * @param localDate
+	 *            The <code>LocalDate</code>.
 	 * @param latitude
 	 *            The latitude of observer in degrees
 	 * @param longitude
@@ -481,9 +482,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 *             If the calculation is for {@link SolarEvent#SUNRISE SUNRISE} or {@link SolarEvent#SUNSET SUNSET}
 	 * @return the time in minutes from zero Universal Coordinated Time (UTC)
 	 */
-	private static double getSunRiseSetUTC(ZonedDateTime zonedDateTime, double latitude, double longitude, double zenith,
+	private static double getSunRiseSetUTC(LocalDate localDate, double latitude, double longitude, double zenith,
 			SolarEvent solarEvent) {
-		double julianDay = getJulianDay(zonedDateTime);
+		double julianDay = getJulianDay(localDate);
 
 		// Find the time of solar noon at the location, and use that declination.
 		// This is better than start of the Julian day

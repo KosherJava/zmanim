@@ -342,7 +342,7 @@ public class GeoLocation implements Cloneable {
 	 */
 	public long getLocalMeanTimeOffset(Instant instant) {
 		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
-		long timezoneOffsetMillis = zonedDateTime.getOffset().getTotalSeconds() * 1000;
+		long timezoneOffsetMillis = zonedDateTime.getOffset().getTotalSeconds() * 1000L;
 		return (long) (getLongitude() * 4 * MINUTE_MILLIS - timezoneOffsetMillis);
 	}
 	
@@ -695,7 +695,7 @@ public class GeoLocation implements Cloneable {
 	 * An implementation of the {@link java.lang.Object#clone()} method that creates a <a
 	 * href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * <b>Note:</b> If the {@link java.time.ZoneId} in the clone will be changed from the original, it is critical
-	 * that {@link com.kosherjava.zmanim.AstronomicalCalendar#getZonedDateTime()}.
+	 * that {@link com.kosherjava.zmanim.AstronomicalCalendar#getLocalDate()}.
 	 * 
 	 * @see java.lang.Object#clone()
 	 */

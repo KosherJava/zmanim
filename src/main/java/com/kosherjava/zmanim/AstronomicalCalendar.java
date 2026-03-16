@@ -19,16 +19,20 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.TimeZone;
+
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.kosherjava.zmanim.util.ZmanimFormatter;
 
 /**
  * A Java calendar that calculates astronomical times such as {@link #getSunrise() sunrise}, {@link #getSunset()
- * sunset} and twilight times. This class contains a {@link #getZonedDateTime() zonedDateTime} and can therefore use the standard
+ * sunset} and twilight times. This class contains a {@link #getLocalDate() zonedDateTime} and can therefore use the standard
  * Calendar functionality to change dates etc. The calculation engine used to calculate the astronomical times can be
  * changed to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it with
  * the {@link #setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine
@@ -95,7 +99,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * The <code>ZonedDateTime</code> encapsulated by this class to track the current date used by the class
 	 */
-	private ZonedDateTime zonedDateTime;
+	private LocalDate localDate;
 
 	/**
 	 * the {@link GeoLocation} used for calculations.
@@ -329,7 +333,7 @@ public class AstronomicalCalendar implements Cloneable {
 	public Instant getSunriseOffsetByDegrees(double offsetZenith) {
 	    double dawn = getUTCSunrise(offsetZenith);
 	    return Double.isNaN(dawn) ? null
-	            : getInstantFromTime(dawn, SolarEvent.SUNSET);
+	            : getInstantFromTime(dawn, SolarEvent.SUNRISE);
 	}
 
 	/**
@@ -371,7 +375,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see #setAstronomicalCalculator(AstronomicalCalculator) for changing the calculator class.
 	 */
 	public AstronomicalCalendar(GeoLocation geoLocation) {
-		setZonedDateTime(ZonedDateTime.now(geoLocation.getZoneId()));
+		setLocalDate(LocalDate.now(geoLocation.getZoneId()));
 		setGeoLocation(geoLocation);// duplicate call
 		setAstronomicalCalculator(AstronomicalCalculator.getDefault());
 	}
@@ -387,7 +391,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         not set, {@link Double#NaN} will be returned. See detailed explanation on top of the page.
 	 */
 	public double getUTCSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(getAdjustedCalendar(), getGeoLocation(), zenith, true);
+		return getAstronomicalCalculator().getUTCSunrise(getAdjustedLocalDate(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -405,7 +409,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSeaLevelSunrise(double zenith) {
-		return getAstronomicalCalculator().getUTCSunrise(getAdjustedCalendar(), getGeoLocation(), zenith, false);
+		return getAstronomicalCalculator().getUTCSunrise(getAdjustedLocalDate(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -420,7 +424,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunset
 	 */
 	public double getUTCSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(getAdjustedCalendar(), getGeoLocation(), zenith, true);
+		return getAstronomicalCalculator().getUTCSunset(getAdjustedLocalDate(), getGeoLocation(), zenith, true);
 	}
 
 	/**
@@ -439,7 +443,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see AstronomicalCalendar#getUTCSeaLevelSunrise
 	 */
 	public double getUTCSeaLevelSunset(double zenith) {
-		return getAstronomicalCalculator().getUTCSunset(getAdjustedCalendar(), getGeoLocation(), zenith, false);
+		return getAstronomicalCalculator().getUTCSunset(getAdjustedLocalDate(), getGeoLocation(), zenith, false);
 	}
 
 	/**
@@ -506,7 +510,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
 	 */
 	public Instant getSunTransit() {
-		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedCalendar(), getGeoLocation());
+		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedLocalDate(), getGeoLocation());
 		return getInstantFromTime(noon, SolarEvent.NOON); //FIXME NEW CODE
 	}
 	
@@ -536,7 +540,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
 	 */
 	public Instant getSolarMidnight() {
-		double noon = getAstronomicalCalculator().getUTCMidnight(getAdjustedCalendar(), getGeoLocation());
+		double noon = getAstronomicalCalculator().getUTCMidnight(getAdjustedLocalDate(), getGeoLocation());
 		return getInstantFromTime(noon, SolarEvent.MIDNIGHT);
 	}
 
@@ -589,35 +593,27 @@ public class AstronomicalCalendar implements Cloneable {
 	        return null;
 	    }
 
-	    ZonedDateTime adjustedZonedDateTime = getAdjustedZonedDateTime();
+        LocalDate date = getAdjustedLocalDate();
 
-	    LocalDate date = adjustedZonedDateTime
-	            .withZoneSameInstant(ZoneOffset.UTC)
-	            .toLocalDate();
+	    double localTimeHours = (getGeoLocation().getLongitude() / 15) + time;
 
-	    // Convert fractional hour to total seconds
-	    int totalSeconds = (int) Math.floor(time * 3600);
-	    int hours = totalSeconds / 3600;
-	    int minutes = (totalSeconds % 3600) / 60;
-	    int seconds = totalSeconds % 60;
-	    int localTimeHours = (int) getGeoLocation().getLongitude() / 15;
-
-	    if (solarEvent == SolarEvent.SUNRISE && localTimeHours + hours > 18) {
+	    if (solarEvent == SolarEvent.SUNRISE && localTimeHours > 18) {
 	        date = date.minusDays(1);
-	    } else if (solarEvent == SolarEvent.SUNSET && localTimeHours + hours < 6) {
+	    } else if (solarEvent == SolarEvent.SUNSET && localTimeHours < 6) {
 	        date = date.plusDays(1);
-	    } else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours + hours < 12) {
+	    } else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours < 12) {
 	        date = date.plusDays(1);
 	    } else if (solarEvent == SolarEvent.NOON) {
-	        if (localTimeHours + hours < 0) {
+	        if (localTimeHours < 0) {
 	            date = date.plusDays(1);
-	        } else if (localTimeHours + hours > 24) {
+	        } else if (localTimeHours > 24) {
 	            date = date.minusDays(1);
 	        }
 	    }
+        LocalDateTime dateTime = date.atStartOfDay().plusSeconds((long) (time*3600));
 
-	    LocalTime localTime = LocalTime.of(hours, minutes, seconds);
-	    return ZonedDateTime.of(date, localTime, ZoneOffset.UTC).toInstant();
+	    // The computed time is in UTC fractional hours; anchor in UTC before converting.
+	    return ZonedDateTime.of(dateTime, ZoneOffset.UTC).toInstant();
 	}
 
 	/**
@@ -669,10 +665,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the degrees below the horizon after sunset that match the offset in minutes passed it as a parameter. If
 	 *            the calculation can't be computed (no sunset occurs on this day) a {@link Double#NaN} will be returned.
 	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced
-	 *            by calls to {@link AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)}. That method will
+	 *            by calls to {@link AstronomicalCalculator#getSolarElevation(ZonedDateTime, GeoLocation)}. That method will
 	 *            efficiently return the the solar elevation (the sun's position in degrees below (or above) the horizon)
 	 *            at the given time even in the arctic when there is no sunrise.
-	 * @see AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
+	 * @see AstronomicalCalculator#getSolarElevation(ZonedDateTime, GeoLocation)
 	 * @see #getSunriseSolarDipFromOffset(double)
 	 */
 	@Deprecated(forRemoval=false)
@@ -718,39 +714,42 @@ public class AstronomicalCalendar implements Cloneable {
 	        throw new IllegalArgumentException("Hours must be between 0 and 23.9999...");
 	    }
 
-	    double rawOffset = getGeoLocation().getZoneId().getRules().getStandardOffset(getZonedDateTime().toInstant()).getTotalSeconds() * 1000;
+	    double rawOffset = getGeoLocation().getZoneId().getRules().getOffset(getMidnightLastNight().toInstant()).getTotalSeconds() * 1000;
 	    double utcTime = hours - rawOffset / (double) HOUR_MILLIS;
 	    Instant instant = getInstantFromTime(utcTime, SolarEvent.SUNRISE);
 
-	    return getTimeOffset(instant, -getGeoLocation().getLocalMeanTimeOffset(getZonedDateTime().toInstant()));
+	    return getTimeOffset(instant, -getGeoLocation().getLocalMeanTimeOffset(getMidnightLastNight().toInstant()));
 	}
-	
+
 	/**
 	 * Adjusts the <code>ZonedDateTime</code> to deal with edge cases where the location crosses the antimeridian.
 	 * 
 	 * @see GeoLocation#getAntimeridianAdjustment(Instant)
 	 * @return the adjusted Calendar
 	 */
-	private ZonedDateTime getAdjustedCalendar(){
-		int offset = getGeoLocation().getAntimeridianAdjustment(getZonedDateTime().toInstant());
-		if (offset == 0) {
-			return getZonedDateTime();
-		}
-		ZonedDateTime adjustedZonedDateTime = getZonedDateTime();
-		return adjustedZonedDateTime.plusDays(1);
+	private LocalDate getAdjustedLocalDate(){
+    	int offset = getGeoLocation().getAntimeridianAdjustment(getMidnightLastNight().toInstant());
+    	return offset == 0 ? getLocalDate() : getLocalDate().plusDays(offset);
 	}
-	
-	/**
-	 * Adjusts the <code>ZonedDateTime</code> to deal with edge cases where the location crosses the antimeridian.
-	 * 
-	 * @see GeoLocation#getAntimeridianAdjustment(Instant)
-	 * @return the adjusted Calendar
-	 */
-	private ZonedDateTime getAdjustedZonedDateTime(){
-		ZonedDateTime adjustedZonedDateTime = getZonedDateTime();
-    	int offset = getGeoLocation().getAntimeridianAdjustment(getZonedDateTime().toInstant());
-    	return offset == 0 ? adjustedZonedDateTime : adjustedZonedDateTime.plusDays(offset);
-	}
+    
+    /**
+     * Used by Molad based <em>zmanim</em> to determine if <em>zmanim</em> occur during the current day.
+     * This is also used as the anchor for current timezone-offset calculations.
+     * @see #getMoladBasedTime(Instant, Instant, Instant, boolean)
+     * @return midnight at the start of the current local date in the configured timezone
+     */
+    protected ZonedDateTime getMidnightLastNight() {
+        return ZonedDateTime.of(getLocalDate(),LocalTime.MIDNIGHT,getGeoLocation().getZoneId());
+    }
+
+    /**
+     * Used by Molad based <em>zmanim</em> to determine if <em>zmanim</em> occur during the current day.
+     * @see #getMoladBasedTime(Instant, Instant, Instant, boolean)
+     * @return following midnight
+     */
+    protected ZonedDateTime getMidnightTonight() {
+        return ZonedDateTime.of(getLocalDate().plusDays(1),LocalTime.MIDNIGHT,getGeoLocation().getZoneId());
+    }
 
 	/**
 	 * Returns an XML formatted representation of the class using the default output of the
@@ -787,7 +786,7 @@ public class AstronomicalCalendar implements Cloneable {
 			return false;
 		}
 		AstronomicalCalendar aCal = (AstronomicalCalendar) object;
-		return getZonedDateTime().equals(aCal.getZonedDateTime()) && getGeoLocation().equals(aCal.getGeoLocation())
+		return getLocalDate().equals(aCal.getLocalDate()) && getGeoLocation().equals(aCal.getGeoLocation())
 				&& getAstronomicalCalculator().equals(aCal.getAstronomicalCalculator());
 	}
 
@@ -797,7 +796,7 @@ public class AstronomicalCalendar implements Cloneable {
 	public int hashCode() {
 		int result = 17;
 		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
-		result += 37 * result + getZonedDateTime().hashCode();
+		result += 37 * result + getLocalDate().hashCode();
 		result += 37 * result + getGeoLocation().hashCode();
 		result += 37 * result + getAstronomicalCalculator().hashCode();
 		return result;
@@ -823,7 +822,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public void setGeoLocation(GeoLocation geoLocation) {
 		this.geoLocation = geoLocation;
-		getZonedDateTime().withZoneSameInstant(getGeoLocation().getZoneId());
 	}
 
 	/**
@@ -856,29 +854,24 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @return Returns the ZonedDateTime.
 	 */
-	public ZonedDateTime getZonedDateTime() {
-		return this.zonedDateTime;
+	public LocalDate getLocalDate() {
+		return this.localDate;
 	}
 	
 	/**
 	 * Sets the <code>ZonedDateTime</code>  object for us in this class.
-	 * @param zonedDateTime
+	 * @param localDate
 	 *            The <code>ZonedDateTime</code> to set.
 	 */
-	public void setZonedDateTime(ZonedDateTime zonedDateTime) {
-		this.zonedDateTime = zonedDateTime;
-		if (getGeoLocation() != null) {// if available set the Calendar's timezone to the GeoLocation TimeZone
-			getZonedDateTime().withZoneSameInstant(getGeoLocation().getZoneId());
-		}
+	public void setLocalDate(LocalDate localDate) {
+		this.localDate = localDate;
 	}
 
 	/**
 	 * A method that creates a <a href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
 	 * <b>Note:</b> If the {@link java.util.TimeZone} in the cloned {@link com.kosherjava.zmanim.util.GeoLocation} will
 	 * be changed from the original, it is critical that
-	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getZonedDateTime()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
-	 * AstronomicalCalendar to output times in the expected offset after being cloned.
+	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getLocalDate()}.
 	 * 
 	 * @see java.lang.Object#clone()
 	 */

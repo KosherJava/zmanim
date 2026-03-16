@@ -1276,7 +1276,7 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 3 days after the molad.
 	 * 
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days(Instant, Instant)
 	 */
 	public Instant getTchilasZmanKidushLevana3Days() {
 	    return getMoladAsInstant().plus(Duration.ofHours(72)); // 3 days after the molad
@@ -1292,7 +1292,7 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 7 days after the molad.
 	 * 
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days(Instant, Instant)
 	 */
 	public Instant getTchilasZmanKidushLevana7Days() {
 	    return getMoladAsInstant().plus(Duration.ofHours(168)); // 7 days after the molad
@@ -1311,7 +1311,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @see #getSofZmanKidushLevana15Days()
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)
 	 */
 	public Instant getSofZmanKidushLevanaBetweenMoldos() {
 	    Instant molad = getMoladAsInstant();
@@ -1342,7 +1342,7 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 15 days after the <em>molad</em>.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days(Instant, Instant)
 	 */
 	public Instant getSofZmanKidushLevana15Days() {
 	    return getMoladAsInstant().plus(Duration.ofHours(24 * 15));

@@ -17,6 +17,8 @@ package com.kosherjava.zmanim.util;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -277,8 +279,8 @@ public class ZmanimFormatter {
 	 *            settings.
 	 * @return the formatted String
 	 */
-	public String formatDateTime(Instant instant, ZonedDateTime zonedDateTime) {
-	    ZonedDateTime dateTime = instant.atZone(zonedDateTime.getZone());
+	public String formatDateTime(Instant instant, ZoneId zoneId) {
+	    ZonedDateTime dateTime = instant.atZone(zoneId);
 
 	    if (this.dateTimeFormatter.toString().equals("yyyy-MM-dd'T'HH:mm:ss")) {
 	        return getXSDateTime(instant);
@@ -380,7 +382,7 @@ public class ZmanimFormatter {
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		df = df.withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 
-		Instant instant = astronomicalCalendar.getZonedDateTime().toInstant();
+		LocalDate localDate = astronomicalCalendar.getLocalDate();
 		ZoneId zi = astronomicalCalendar.getGeoLocation().getZoneId();
 
 		StringBuilder sb = new StringBuilder("<");
@@ -400,7 +402,7 @@ public class ZmanimFormatter {
 			// output += "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 			// output += xsi:schemaLocation="http://www.kosherjava.com/zmanim basicZmanim.xsd"
 		}
-		sb.append(" date=\"").append(df.format(instant)).append("\"");
+		sb.append(" date=\"").append(df.format(localDate)).append("\"");
 		sb.append(" type=\"").append(astronomicalCalendar.getClass().getName()).append("\"");
 		sb.append(" algorithm=\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\"");
 		sb.append(" location=\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\"");
@@ -409,7 +411,9 @@ public class ZmanimFormatter {
 		sb.append(" elevation=\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\"");
 		sb.append(" timeZoneName=\"").append(zi.getDisplayName(TextStyle.FULL, Locale.getDefault())).append("\"");
 	    sb.append(" timeZoneID=\"").append(zi.getId()).append("\"");
-	    double offsetHours = astronomicalCalendar.getZonedDateTime().getOffset().getTotalSeconds() / 3600.0;
+
+        ZonedDateTime lastMidnight = ZonedDateTime.of(astronomicalCalendar.getLocalDate(), LocalTime.MIDNIGHT, astronomicalCalendar.getGeoLocation().getZoneId());
+	    double offsetHours = lastMidnight.getOffset().getTotalSeconds() / 3600.0;
 	    sb.append(" timeZoneOffset=\"").append(offsetHours).append("\"");
 		//sb.append(" useElevationAllZmanim=\"").append(astronomicalCalendar.useElevationAllZmanim()).append("\""); //TODO likely using reflection
 
@@ -455,7 +459,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
 			sb.append("\t<").append(zman.getLabel()).append(">");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getZonedDateTime()));
+			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getGeoLocation().getZoneId()));
 			sb.append("</").append(zman.getLabel()).append(">\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
@@ -539,11 +543,11 @@ public class ZmanimFormatter {
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 .withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 
-		Instant instant = astronomicalCalendar.getZonedDateTime().toInstant();
+		LocalDate localDate = astronomicalCalendar.getLocalDate();
 		ZoneId zi = astronomicalCalendar.getGeoLocation().getZoneId();
 
 		StringBuilder sb = new StringBuilder("{\n\"metadata\":{\n");
-		sb.append("\t\"date\":\"").append(df.format(instant)).append("\",\n");
+		sb.append("\t\"date\":\"").append(df.format(localDate)).append("\",\n");
 		sb.append("\t\"type\":\"").append(astronomicalCalendar.getClass().getName()).append("\",\n");
 		sb.append("\t\"algorithm\":\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\",\n");
 		sb.append("\t\"location\":\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\",\n");
@@ -554,9 +558,9 @@ public class ZmanimFormatter {
 	    
 		sb.append("\t\"timeZoneName\":\"").append(zi.getDisplayName(TextStyle.FULL, Locale.getDefault())).append("\",\n");
 		sb.append("\t\"timeZoneID\":\"").append(zi.getId()).append("\",\n"); //FIXME
-		
-		
-	    double offsetHours = astronomicalCalendar.getZonedDateTime().getOffset().getTotalSeconds() / 3600.0;
+
+        ZonedDateTime lastMidnight = ZonedDateTime.of(astronomicalCalendar.getLocalDate(), LocalTime.MIDNIGHT, astronomicalCalendar.getGeoLocation().getZoneId());
+        double offsetHours = lastMidnight.getOffset().getTotalSeconds() / 3600.0;
 	    sb.append(" timeZoneOffset=\"").append(offsetHours).append("\"");
 		sb.append("},\n\"");
 		
@@ -603,7 +607,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = (Zman) dateList.get(i);
 			sb.append("\t\"").append(zman.getLabel()).append("\":\"");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getZonedDateTime()));
+			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getGeoLocation().getZoneId()));
 			sb.append("\",\n");
 		}
 		Collections.sort(durationList, Zman.DURATION_ORDER);
