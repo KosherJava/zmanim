@@ -16,6 +16,8 @@
 package com.kosherjava.zmanim;
 
 import java.time.Instant;
+import java.time.LocalDate;
+
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
@@ -399,9 +401,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * zmaniyos</em> after sunrise. See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition
 	 * of <em>Chatzos</em></a> for a detailed explanation of the ways to calculate <em>Chatzos</em>.
 	 *
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(ZonedDateTime, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(ZonedDateTime, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(ZonedDateTime, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(LocalDate, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(LocalDate, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 * @see AstronomicalCalendar#getSunTransit(Instant, Instant)
 	 * @see #getChatzos()
 	 * @see #getSunTransit()

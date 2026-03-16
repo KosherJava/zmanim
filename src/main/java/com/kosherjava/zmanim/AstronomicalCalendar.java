@@ -24,6 +24,8 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.TimeZone;
+
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.kosherjava.zmanim.util.ZmanimFormatter;
@@ -663,10 +665,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the degrees below the horizon after sunset that match the offset in minutes passed it as a parameter. If
 	 *            the calculation can't be computed (no sunset occurs on this day) a {@link Double#NaN} will be returned.
 	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced
-	 *            by calls to {@link AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)}. That method will
+	 *            by calls to {@link AstronomicalCalculator#getSolarElevation(ZonedDateTime, GeoLocation)}. That method will
 	 *            efficiently return the the solar elevation (the sun's position in degrees below (or above) the horizon)
 	 *            at the given time even in the arctic when there is no sunrise.
-	 * @see AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
+	 * @see AstronomicalCalculator#getSolarElevation(ZonedDateTime, GeoLocation)
 	 * @see #getSunriseSolarDipFromOffset(double)
 	 */
 	@Deprecated(forRemoval=false)
@@ -870,8 +872,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 * <b>Note:</b> If the {@link java.util.TimeZone} in the cloned {@link com.kosherjava.zmanim.util.GeoLocation} will
 	 * be changed from the original, it is critical that
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getLocalDate()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
-	 * AstronomicalCalendar to output times in the expected offset after being cloned.
 	 * 
 	 * @see java.lang.Object#clone()
 	 */
