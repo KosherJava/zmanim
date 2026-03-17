@@ -627,7 +627,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @param time
 	 *            The time to be set as the time for the <code>Instant</code>. The time expected is in the format: 18.75
 	 *            for 6:45:00 PM.time is sunrise and false if it is sunset
-	 * @param solarEvent the type of {@link SolarEvent}
+	 * @param solarEvent the type of {@link SolarEvent}.
 	 * @return The Instant object representation of the time double
 	 */
 	
@@ -759,7 +759,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 	    double rawOffset = getGeoLocation().getZoneId().getRules().getOffset(getMidnightLastNight().toInstant()).getTotalSeconds() * 1000;
 	    double utcTime = hours - rawOffset / (double) HOUR_MILLIS;
-	    Instant instant = getInstantFromTime(utcTime, SolarEvent.SUNRISE);
+	    Instant instant = getInstantFromTime(utcTime, null);
 
 	    return getTimeOffset(instant, -getGeoLocation().getLocalMeanTimeOffset(getMidnightLastNight().toInstant()));
 	}
