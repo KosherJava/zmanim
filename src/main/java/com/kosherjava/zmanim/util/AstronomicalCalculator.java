@@ -44,24 +44,71 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	/**
 	 * The commonly used average earth radius in KM. At this time, this only affects elevation adjustment and not the
 	 * sunrise and sunset calculations. The value currently defaults to 6356.9 KM.
-	 * 
+	 *
 	 * @see #getEarthRadius()
 	 * @see #setEarthRadius(double)
 	 */
 	private double earthRadius = 6356.9; // in KM
-	
+
+	/**
+	 * WGS84 ellipsoid constants for Earth radius calculation.
+	 * These are used by {@link #getGeocentricRadius(double)} to provide latitude-dependent accuracy.
+	 *
+	 * @see #getGeocentricRadius(double)
+	 */
+	private static final double WGS84_EQUATORIAL_RADIUS = 6378.137; // km
+	private static final double WGS84_POLAR_RADIUS = 6356.752314245; // km
+
 	/**
 	 * Default constructor using the default {@link #refraction refraction}, {@link #solarRadius solar radius} and
 	 * {@link #earthRadius earth radius}.
 	 */
 	public AstronomicalCalculator() {
-		// keep the defaults for now. 
+		// keep the defaults for now.
+	}
+
+	/**
+	 * Calculate geocentric Earth radius at given latitude using WGS84 ellipsoid.
+	 *
+	 * <p>The Earth is an oblate spheroid, so the geocentric radius varies with latitude
+	 * from 6378.137 km at the equator to 6356.752 km at the poles. This method computes
+	 * the precise radius using the WGS84 ellipsoid formula:</p>
+	 *
+	 * <pre>R = sqrt(a² × cos²(lat) + b² × sin²(lat))</pre>
+	 *
+	 * <p>where a is the equatorial radius and b is the polar radius.</p>
+	 *
+	 * <p><b>Usage:</b><br>
+	 * This method is automatically called by {@link com.kosherjava.zmanim.ZmanimCalendar} when elevation
+	 * adjustments are enabled via {@link com.kosherjava.zmanim.ZmanimCalendar#setUseElevation(boolean)}.
+	 * Manual usage: call {@link #setEarthRadius(double)} with the result before calculations.</p>
+	 *
+	 * <p><b>Reference:</b> WGS84 ellipsoid parameters (NGA Technical Report 8350.2)</p>
+	 *
+	 * @param latitude Latitude in degrees (north positive)
+	 * @return Geocentric radius in kilometers at the given latitude
+	 * @see com.kosherjava.zmanim.ZmanimCalendar#setUseElevation(boolean)
+	 */
+	public double getGeocentricRadius(double latitude) {
+		double latRad = Math.toRadians(latitude);
+		double cosLat = Math.cos(latRad);
+		double sinLat = Math.sin(latRad);
+
+		// R = sqrt(a^2 * cos^2(lat) + b^2 * sin^2(lat))
+		double a2 = WGS84_EQUATORIAL_RADIUS * WGS84_EQUATORIAL_RADIUS;
+		double b2 = WGS84_POLAR_RADIUS * WGS84_POLAR_RADIUS;
+
+		return Math.sqrt(a2 * cosLat * cosLat + b2 * sinLat * sinLat);
 	}
 
 	/**
 	 * A method that returns the earth radius in KM. The value currently defaults to 6356.9 KM if not set.
-	 * 
+	 *
+	 * <p><b>Note:</b> For improved accuracy, consider using {@link #getGeocentricRadius(double)} with the
+	 * observer's latitude and calling {@link #setEarthRadius(double)} before calculations.</p>
+	 *
 	 * @return the earthRadius the earth radius in KM.
+	 * @see #getGeocentricRadius(double)
 	 */
 	public double getEarthRadius() {
 		return earthRadius;
@@ -69,9 +116,13 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/**
 	 * A method that allows setting the earth's radius.
-	 * 
+	 *
+	 * <p><b>Note:</b> For improved accuracy based on observer latitude, consider using
+	 * {@link #getGeocentricRadius(double)} to calculate the radius before calling this method.</p>
+	 *
 	 * @param earthRadius
 	 *            the earthRadius to set in KM
+	 * @see #getGeocentricRadius(double)
 	 */
 	public void setEarthRadius(double earthRadius) {
 		this.earthRadius = earthRadius;

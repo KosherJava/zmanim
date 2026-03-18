@@ -268,6 +268,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	protected Date getElevationAdjustedSunrise() {
 		if (isUseElevation()) {
+			getAstronomicalCalculator().setEarthRadius(
+				getAstronomicalCalculator().getGeocentricRadius(getGeoLocation().getLatitude()));
 			return super.getSunrise();
 		}
 		return getSeaLevelSunrise();
@@ -284,6 +286,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	protected Date getElevationAdjustedSunset() {
 		if (isUseElevation()) {
+			getAstronomicalCalculator().setEarthRadius(
+				getAstronomicalCalculator().getGeocentricRadius(getGeoLocation().getLatitude()));
 			return super.getSunset();
 		}
 		return getSeaLevelSunset();
