@@ -17,9 +17,7 @@
 package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -976,18 +974,6 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Date Date} parameter.
-	 * 
-	 * @param instant
-	 *            the <code>Instant</code> to set the calendar to
-	 * @throws IllegalArgumentException
-	 *             if the date would fall prior to the January 1, 1 AD
-	 */
-	public JewishDate(Instant instant) {
-		setDate(instant);
-	}
-
-	/**
 	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
 	 * 
 	 * @param zonedDateTime
@@ -996,7 +982,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *             if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
 	 */
 	public JewishDate(ZonedDateTime zonedDateTime) {
-		setDate(zonedDateTime);
+		setGregorianDate(zonedDateTime);
 	}
 
 	/**
@@ -1008,7 +994,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 *            if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
 	 */
 	public JewishDate(LocalDate localDate) {
-		setDate(localDate);
+		setGregorianDate(localDate);
 	}
 
 	/**
@@ -1019,40 +1005,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @throws IllegalArgumentException
 	 *             if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
 	 */
-	public void setDate(ZonedDateTime zonedDateTime) {
-	    int year = zonedDateTime.getYear();
-
-	    if (year <= 0) {
-	        throw new IllegalArgumentException(
-	            "Calendars with a BC era are not supported. The year "
-	            + year + " BC is invalid."
-	        );
-	    }
-
-	    gregorianYear = year;
-	    gregorianMonth = zonedDateTime.getMonthValue(); // 1 = January
-	    gregorianDayOfMonth = zonedDateTime.getDayOfMonth();
-
-	    // initialize absolute date
-	    gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
-
-	    // convert to Jewish date
-	    absDateToJewishDate();
-
-	    // day of week (same calculation as original)
-	    dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1;
-	}
-
-	/**
-	 * Sets the date based on a {@link java.time.Instant Instant} object. Modifies the Jewish date as well.
-	 * 
-	 * @param instant
-	 *            the <code>Instant</code> to set the calendar to
-	 * @throws IllegalArgumentException
-	 *             if the date would fall prior to the year 1 AD
-	 */
-	public void setDate(Instant instant) {
-	    setDate(instant.atZone(ZoneId.systemDefault()));
+	public void setGregorianDate(ZonedDateTime zonedDateTime) {
+		setGregorianDate(zonedDateTime.toLocalDate());
 	}
 
 	/**
@@ -1063,9 +1017,26 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @throws IllegalArgumentException
 	 *             if the date would fall prior to the year 1 AD
 	 */
-	public void setDate(LocalDate localDate) {
-		ZonedDateTime zdt = localDate.atStartOfDay(ZoneId.systemDefault());
-	    setDate(zdt);
+	public void setGregorianDate(LocalDate localDate) {
+	    if (localDate.getYear() <= 0) {
+	        throw new IllegalArgumentException(
+	            "Calendars with a BC era are not supported. The year "
+	            + localDate.getYear() + " BC is invalid."
+	        );
+	    }
+
+	    gregorianYear = localDate.getYear();
+	    gregorianMonth = localDate.getMonth().getValue(); // FIXME + 1;// 1 = January
+	    gregorianDayOfMonth = localDate.getDayOfMonth();
+
+	    // initialize absolute date
+	    gregorianAbsDate = gregorianDateToAbsDate(gregorianYear, gregorianMonth, gregorianDayOfMonth);
+
+	    // convert to Jewish date
+	    absDateToJewishDate();
+
+	    // day of week (same calculation as original)
+	    dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1;
 	}
 
 	/**
@@ -1206,8 +1177,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * Resets this date to the current system date.
 	 */
 	public void resetDate() {
-		ZonedDateTime zdt = ZonedDateTime.now();
-		setDate(zdt);
+		LocalDate localDate = LocalDate.now();
+		setGregorianDate(localDate);
 	}
 
 	/**
