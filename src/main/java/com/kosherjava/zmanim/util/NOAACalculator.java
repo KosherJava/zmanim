@@ -72,7 +72,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude());
 		double sunrise = getSunRiseSetUTC(calendar, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, SolarEvent.SUNRISE);
 		sunrise = sunrise / 60;
@@ -84,7 +84,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude());
 		double sunset = getSunRiseSetUTC(calendar, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, SolarEvent.SUNSET);
 		sunset = sunset / 60;

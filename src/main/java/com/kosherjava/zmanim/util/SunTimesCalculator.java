@@ -50,7 +50,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude());
 		return getTimeUTC(calendar, geoLocation, adjustedZenith, true);
 	}
 
@@ -59,7 +59,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 */
 	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude());
 		return getTimeUTC(calendar, geoLocation, adjustedZenith, false);
 	}
 
