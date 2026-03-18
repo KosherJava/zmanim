@@ -20,9 +20,8 @@ package com.kosherjava.zmanim.hebrewcalendar;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 
 /**
@@ -1234,19 +1233,16 @@ public class JewishCalendar extends JewishDate {
 	public Instant getMoladAsInstant() {
 	    JewishDate molad = getMolad();
 
-	    // Har Habayis coordinates
-	    //double latitude = 31.778;
-	    double longitude = 35.2354;
-
 	    // Standard time offset for Jerusalem: GMT+2
-	    ZoneOffset jerusalemStandardOffset = ZoneOffset.ofHours(2);
+	    // The raw molad Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will
+	    // result in the time being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual
+	    // time in DST will be done by the date formatter class used to display the Date.
+	    ZoneId jerusalemStandardOffset = ZoneId.of("GMT+2");
 
-	    // Compute molad seconds from chalakim
-	    double moladSeconds = molad.getMoladChalakim() * 10.0 / 3.0;
+	    double moladSeconds = molad.getMoladChalakim() * 10.0 / 3.0; // Compute molad seconds from chalakim
 	    int seconds = (int) moladSeconds;
-	    int millis = (int) ((moladSeconds - seconds) * 1000);
+	    int nanos = (int) ((moladSeconds - seconds) * 1_000_000_000); // convert remainder to nanos
 
-	    // Construct ZonedDateTime in standard time (GMT+2)
 	    ZonedDateTime moladZdt = ZonedDateTime.of(
 	            molad.getGregorianYear(),
 	            molad.getGregorianMonth() +1,       // 1-based FIXME
@@ -1254,18 +1250,17 @@ public class JewishCalendar extends JewishDate {
 	            molad.getMoladHours(),
 	            molad.getMoladMinutes(),
 	            seconds,
-	            millis * 1_000_000,              // nanos
+	            nanos,
 	            jerusalemStandardOffset
 	    );
 
-	    // Compute local mean time offset in milliseconds (example: 20.94 minutes = 1256400 ms)
-	    long localMeanOffsetMillis = (long) ((longitude - 35.0) * 4 * 60 * 1000); 
+	    // Har Habayis at a longitude of 35.2354 offset vs longitude 35 in standard time, so we subtract the time difference
+	    // of 20.94 minutes (20 minutes and 56 seconds and 496 millis) to get to Standard time from local mean time
+	    Duration jerusalemStandardTimeOffset = Duration.ofMinutes(20)
+	            .plusSeconds(56)
+	            .plusMillis(496);
 
-	    // Apply offset using ChronoUnit.MILLIS
-	    moladZdt = moladZdt.minus(localMeanOffsetMillis, ChronoUnit.MILLIS);
-
-	    // Return precise Instant
-	    return moladZdt.toInstant();
+	    return moladZdt.toInstant().minus(jerusalemStandardTimeOffset);
 	}
 
 	/**
