@@ -42,19 +42,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	private double solarRadius = 16 / 60d;
 
 	/**
-	 * The commonly used average earth radius in KM. At this time, this only affects elevation adjustment and not the
-	 * sunrise and sunset calculations. The value currently defaults to 6356.9 KM.
-	 *
-	 * @see #getEarthRadius()
-	 * @see #setEarthRadius(double)
-	 */
-	private double earthRadius = 6356.9; // in KM
-
-	/**
 	 * WGS84 ellipsoid constants for Earth radius calculation.
-	 * These are used by {@link #getGeocentricRadius(double)} to provide latitude-dependent accuracy.
+	 * <p>Earth is an oblate spheroid with radius varying from 6378.137 km at the equator
+	 * to 6356.752 km at the poles. These values are used by {@link #getElevationAdjustment(double, double)}
+	 * to provide latitude-dependent accuracy for elevation adjustments.</p>
 	 *
-	 * @see #getGeocentricRadius(double)
+	 * <p><b>Reference:</b> WGS84 ellipsoid parameters (NGA Technical Report 8350.2)</p>
+	 *
+	 * @see #getElevationAdjustment(double, double)
 	 */
 	private static final double WGS84_EQUATORIAL_RADIUS = 6378.137; // km
 	private static final double WGS84_POLAR_RADIUS = 6356.752314245; // km
@@ -78,18 +73,12 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *
 	 * <p>where a is the equatorial radius and b is the polar radius.</p>
 	 *
-	 * <p><b>Usage:</b><br>
-	 * This method is automatically called by {@link com.kosherjava.zmanim.ZmanimCalendar} when elevation
-	 * adjustments are enabled via {@link com.kosherjava.zmanim.ZmanimCalendar#setUseElevation(boolean)}.
-	 * Manual usage: call {@link #setEarthRadius(double)} with the result before calculations.</p>
-	 *
 	 * <p><b>Reference:</b> WGS84 ellipsoid parameters (NGA Technical Report 8350.2)</p>
 	 *
 	 * @param latitude Latitude in degrees (north positive)
 	 * @return Geocentric radius in kilometers at the given latitude
-	 * @see com.kosherjava.zmanim.ZmanimCalendar#setUseElevation(boolean)
 	 */
-	public double getGeocentricRadius(double latitude) {
+	private double getGeocentricRadius(double latitude) {
 		double latRad = Math.toRadians(latitude);
 		double cosLat = Math.cos(latRad);
 		double sinLat = Math.sin(latRad);
@@ -102,30 +91,30 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the earth radius in KM. The value currently defaults to 6356.9 KM if not set.
+	 * A method that returns the earth radius in KM.
 	 *
-	 * <p><b>Note:</b> For improved accuracy, consider using {@link #getGeocentricRadius(double)} with the
-	 * observer's latitude and calling {@link #setEarthRadius(double)} before calculations.</p>
-	 *
-	 * @return the earthRadius the earth radius in KM.
-	 * @see #getGeocentricRadius(double)
+	 * @deprecated Earth radius is now calculated automatically from latitude using the WGS84 ellipsoid
+	 *             in {@link #getElevationAdjustment(double, double)}. This method is retained only for
+	 *             backward compatibility and returns the WGS84 polar radius.
+	 * @return the WGS84 polar radius in KM (6356.752 km).
 	 */
+	@Deprecated
 	public double getEarthRadius() {
-		return earthRadius;
+		return WGS84_POLAR_RADIUS;
 	}
 
 	/**
 	 * A method that allows setting the earth's radius.
 	 *
-	 * <p><b>Note:</b> For improved accuracy based on observer latitude, consider using
-	 * {@link #getGeocentricRadius(double)} to calculate the radius before calling this method.</p>
-	 *
+	 * @deprecated Earth radius is now calculated automatically from latitude using the WGS84 ellipsoid
+	 *             in {@link #getElevationAdjustment(double, double)}. This method is retained only for
+	 *             backward compatibility and has no effect on calculations.
 	 * @param earthRadius
-	 *            the earthRadius to set in KM
-	 * @see #getGeocentricRadius(double)
+	 *            the earthRadius to set in KM (ignored)
 	 */
+	@Deprecated
 	public void setEarthRadius(double earthRadius) {
-		this.earthRadius = earthRadius;
+		// No-op: Earth radius is now calculated automatically from latitude
 	}
 
 	/**
@@ -269,25 +258,29 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * calculations are based on the level of available light at the given dip below the horizon, something that is not
 	 * affected by elevation, the adjustment should only be made if the zenith == 90&deg; {@link #adjustZenith adjusted}
 	 * for refraction and solar radius. The algorithm used is
-	 * 
+	 *
 	 * <pre>
 	 * elevationAdjustment = Math.toDegrees(Math.acos(earthRadiusInMeters / (earthRadiusInMeters + elevationMeters)));
 	 * </pre>
-	 * 
+	 *
 	 * The source of this algorithm is <a href="https://www.cs.tau.ac.il/~nachum/calendar-book/index.shtml">Calendrical
 	 * Calculations</a> by Edward M. Reingold and Nachum Dershowitz. An alternate algorithm that produces similar (but
 	 * not completely accurate) result found in Ma'aglay Tzedek by Moishe Kosower and other sources is:
-	 * 
+	 *
 	 * <pre>
 	 * elevationAdjustment = 0.0347 * Math.sqrt(elevationMeters);
 	 * </pre>
-	 * 
+	 *
 	 * @param elevation
 	 *            elevation in Meters.
+	 * @param latitude
+	 *            latitude in degrees (used to calculate geocentric radius)
 	 * @return the adjusted zenith
 	 */
-	double getElevationAdjustment(double elevation) {
-		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
+	double getElevationAdjustment(double elevation, double latitude) {
+		// Calculate geocentric radius at the observer's latitude using WGS84 ellipsoid
+		double geocentricRadius = getGeocentricRadius(latitude);
+		double elevationAdjustment = Math.toDegrees(Math.acos(geocentricRadius / (geocentricRadius + (elevation / 1000))));
 		return elevationAdjustment;
 	}
 
@@ -310,7 +303,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * for various <em>tzais</em> and <em>alos</em> times such as the
 	 * {@link com.kosherjava.zmanim.ZmanimCalendar#ZENITH_16_POINT_1 16.1&deg;} dip used in
 	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getAlos16Point1Degrees()}.
-	 * 
+	 *
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
@@ -319,15 +312,17 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param elevation
 	 *            elevation in Meters.
+	 * @param latitude
+	 *            latitude in degrees (used to calculate geocentric radius for elevation adjustment)
 	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
-	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
+	 *         refraction} and {@link #getElevationAdjustment(double, double) elevation} adjustment. This will only be adjusted for
 	 *         sunrise and sunset (if the zenith == 90&deg;)
-	 * @see #getElevationAdjustment(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
-	double adjustZenith(double zenith, double elevation) {
+	double adjustZenith(double zenith, double elevation, double latitude) {
 		double adjustedZenith = zenith;
 		if (zenith == GEOMETRIC_ZENITH) { // only adjust if it is exactly sunrise or sunset
-			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
+			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation, latitude));
 		}
 		return adjustedZenith;
 	}
