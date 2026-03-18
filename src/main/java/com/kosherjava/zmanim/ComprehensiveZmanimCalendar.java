@@ -3252,11 +3252,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see JewishCalendar#getSofZmanKidushLevanaBetweenMoldos()
 	 */
 	public Instant getSofZmanKidushLevanaBetweenMoldos(Instant alos, Instant tzais) {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
-
-
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
+		
 		// Do not calculate for impossible dates, but account for extreme cases. In the extreme case of Rapa Iti in French
 		// Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush Levana
 		// will be on the 12th of the Teves. In the case of Anadyr, Russia on Jan, 2071, sof zman Kiddush Levana between the
@@ -3355,11 +3352,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see JewishCalendar#getSofZmanKidushLevana15Days()
 	 */
 	public Instant getSofZmanKidushLevana15Days(Instant alos, Instant tzais) {
-		JewishCalendar jewishCalendar = new JewishCalendar();
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 		
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
-
 		// Do not calculate for impossible dates, but account for extreme cases. In the extreme case of Rapa Iti in
 		// French Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush
 		// Levana will be on the 12th of the Teves. in the case of Anadyr, Russia on Jan, 2071, sof zman kiddush levana will
@@ -3434,11 +3428,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see JewishCalendar#getTchilasZmanKidushLevana3Days()
 	 */
 	public Instant getTchilasZmanKidushLevana3Days(Instant alos, Instant tzais) {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
-
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 		
 		// Do not calculate for impossible dates, but account for extreme cases. Tchilas zman kiddush Levana 3 days for
 		// the extreme case of Rapa Iti in French Polynesia on Dec 2027 when kiddush Levana 3 days can be said on the evening
@@ -3474,11 +3464,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see JewishCalendar#getMoladAsInstant()
 	 */
 	public Instant getZmanMolad() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
-
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 		
 		// Optimize to not calculate for impossible dates, but account for extreme cases. The molad in the extreme case of Rapa
 		// Iti in French Polynesia on Dec 2027 occurs on the night of the 27th of Kislev. In the case of Anadyr, Russia on
@@ -3519,9 +3505,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see JewishCalendar#getTchilasZmanKidushLevana7Days()
 	 */
 	public Instant getTchilasZmanKidushLevana7Days(Instant alos, Instant tzais) {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 		
 		// Optimize to not calculate for impossible dates, but account for extreme cases. Tchilas zman kiddush Levana 7 days for
 		// the extreme case of Rapa Iti in French Polynesia on Jan 2028 (when kiddush Levana 3 days can be said on the evening
@@ -3567,9 +3551,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanAchilasChametzGRA() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) { 
 			return getSofZmanTfilaGRA();
@@ -3597,9 +3579,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSofZmanTfilaMGA72Minutes()
 	 */
 	public Instant getSofZmanAchilasChametzMGA72Minutes() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getSofZmanTfilaMGA72Minutes();
@@ -3627,10 +3607,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSofZmanTfilaMGA72MinutesZmanis()
 	 */
 	public Instant getSofZmanAchilasChametzMGA72MinutesZmanis() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getSofZmanTfilaMGA72MinutesZmanis();
@@ -3657,10 +3634,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getSofZmanTfilaMGA16Point1Degrees()
 	 */
 	public Instant getSofZmanAchilasChametzMGA16Point1Degrees() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getSofZmanTfilaMGA16Point1Degrees();
@@ -3683,9 +3657,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanBiurChametzGRA() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getTimeOffset(getSunriseBasedOnElevationSetting(), getShaahZmanisGra() * 5);
@@ -3711,9 +3683,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos72()
 	 */
 	public Instant getSofZmanBiurChametzMGA72Minutes() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getTimeOffset(getAlos72(), getShaahZmanisMGA() * 5);
@@ -3739,9 +3709,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos72Zmanis()
 	 */
 	public Instant getSofZmanBiurChametzMGA72MinutesZmanis() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getTimeOffset(getAlos72Zmanis(), getShaahZmanis72MinutesZmanis() * 5);
@@ -3769,10 +3737,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos16Point1Degrees()
 	 */
 	public Instant getSofZmanBiurChametzMGA16Point1Degrees() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
-
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 		
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getTimeOffset(getAlos16Point1Degrees(), getShaahZmanis16Point1Degrees() * 5);
@@ -3945,10 +3910,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanAchilasChametzBaalHatanya() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
-
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
+		
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getSofZmanTfilaBaalHatanya();
 		} else {
@@ -3968,9 +3931,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanBiurChametzBaalHatanya() {
-		JewishCalendar jewishCalendar = new JewishCalendar();
-		LocalDate zdt = getLocalDate();
-		jewishCalendar.setGregorianDate(zdt.getYear(), zdt.getMonthValue() - 1, zdt.getDayOfMonth()); //FIXME - the minus one needs adjustment when the JewishCalendar is changed to use ZonedDateTime
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
+		
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			return getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 5);
 		} else {

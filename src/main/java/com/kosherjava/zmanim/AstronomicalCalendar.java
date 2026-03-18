@@ -30,7 +30,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
 
 /**
  * A Java calendar that calculates astronomical times such as {@link #getSunriseWithElevation() sunrise}, {@link #getSunsetWithElevation()
- * sunset} and twilight times. This class contains a {@link #getLocalDate() zonedDateTime} and can therefore use the standard
+ * sunset} and twilight times. This class contains a {@link #getLocalDate() LocalDate} and can therefore use the standard
  * Calendar functionality to change dates etc. The calculation engine used to calculate the astronomical times can be
  * changed to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it with
  * the {@link #setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine
@@ -61,8 +61,8 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * To get the time of sunrise, first set the date you want (if not set, the date will default to today):
  * 
  * <pre>
- * ZonedDateTime dateTime = ZonedDateTime.of(1969, Month.FEBRUARY.getValue(), 8, 0, 0, 0, 0, location.getZoneId());
- * ac.setZonedDateTime(dateTime);
+ * LocalDate localDate = LocalDate.of(1969, Month.FEBRUARY, 8);
+ * ac.setLocalDate(localDate);
  * Instant sunrise = ac.getSunrise();
  * </pre>
  * 
@@ -95,7 +95,7 @@ public class AstronomicalCalendar implements Cloneable {
 	public static final long HOUR_MILLIS = MINUTE_MILLIS * 60;
 	
 	/**
-	 * The <code>ZonedDateTime</code> encapsulated by this class to track the current date used by the class
+	 * The <code>LocalDate</code> encapsulated by this class to track the current date used by the class
 	 */
 	private LocalDate localDate;
 
@@ -148,12 +148,7 @@ public class AstronomicalCalendar implements Cloneable {
      */
     @Deprecated(forRemoval = false)
     public Instant getSunrise() {
-        double sunrise = getUTCSunrise(GEOMETRIC_ZENITH);
-        if (Double.isNaN(sunrise)) {
-            return null;
-        } else {
-            return getInstantFromTime(sunrise, SolarEvent.SUNRISE);
-        }
+        return getSunriseWithElevation();
     }
 
 	/**
@@ -217,7 +212,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
     /**
-     * The getSunsetWithElevation method returns a <code>Instant</code> representing the
+     * The getSunsetWithElevation method returns an <code>Instant</code> representing the
      * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunset time. The zenith used for
      * the calculation uses {@link #GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus
      * {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is adjusted by the
@@ -259,12 +254,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
     @Deprecated(forRemoval = false)
 	public Instant getSunset() {
-		double sunset = getUTCSunset(GEOMETRIC_ZENITH);
-		if (Double.isNaN(sunset)) {
-			return null;
-		} else {
-			return getInstantFromTime(sunset, SolarEvent.SUNSET);
-		}
+		return getSunsetWithElevation();
 	}
 
 	/**
@@ -401,7 +391,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * Default constructor will set a default {@link GeoLocation#GeoLocation()}, a default
-	 * {@link AstronomicalCalculator#getDefault() AstronomicalCalculator} and default the ZonedDateTime to the current date.
+	 * {@link AstronomicalCalculator#getDefault() AstronomicalCalculator} and default the LocalDate to the current date.
 	 */
 	public AstronomicalCalendar() {
 		this(new GeoLocation());
@@ -765,7 +755,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * Adjusts the <code>ZonedDateTime</code> to deal with edge cases where the location crosses the antimeridian.
+	 * Adjusts the <code>LocalDate</code> to deal with edge cases where the location crosses the antimeridian.
 	 * 
 	 * @see GeoLocation#getAntimeridianAdjustment(Instant)
 	 * @return the adjusted Calendar
@@ -893,18 +883,18 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 	
 	/**
-	 * returns the <code>ZonedDateTime</code> object encapsulated in this class.
+	 * returns the <code>LocalDate</code> object encapsulated in this class.
 	 * 
-	 * @return Returns the ZonedDateTime.
+	 * @return Returns the <code>LocalDate</code>.
 	 */
 	public LocalDate getLocalDate() {
 		return this.localDate;
 	}
 	
 	/**
-	 * Sets the <code>ZonedDateTime</code>  object for us in this class.
+	 * Sets the <code>LocalDate</code>  object for us in this class.
 	 * @param localDate
-	 *            The <code>ZonedDateTime</code> to set.
+	 *            The <code>LocalDate</code> to set.
 	 */
 	public void setLocalDate(LocalDate localDate) {
 		this.localDate = localDate;
@@ -927,7 +917,6 @@ public class AstronomicalCalendar implements Cloneable {
 		}
         if (clone != null) {
 			clone.setGeoLocation((GeoLocation) getGeoLocation().clone());
-			//clone.setZonedDateTime(getZonedDateTime().clone());
 			clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone());
 		}
 		return clone;
