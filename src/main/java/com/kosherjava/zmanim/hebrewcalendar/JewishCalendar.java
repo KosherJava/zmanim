@@ -254,16 +254,6 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Date Date} parameter.
-	 * 
-	 * @param instant
-	 *            the <code>Instant</code> to set the calendar to
-	 */
-	public JewishCalendar(Instant instant) {
-		super(instant);
-	}
-
-	/**
 	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
 	 * 
 	 * @param zonedDateTime
@@ -1245,7 +1235,7 @@ public class JewishCalendar extends JewishDate {
 
 	    ZonedDateTime moladZdt = ZonedDateTime.of(
 	            molad.getGregorianYear(),
-	            molad.getGregorianMonth() +1,       // 1-based FIXME
+	            molad.getGregorianMonth() + 1,       // 1-based FIXME
 	            molad.getGregorianDayOfMonth(),
 	            molad.getMoladHours(),
 	            molad.getMoladMinutes(),
