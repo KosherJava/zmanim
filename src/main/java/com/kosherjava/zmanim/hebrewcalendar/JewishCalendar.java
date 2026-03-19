@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
+import java.util.Calendar; // We still use the old Calendar.WEEKDAY constants
 
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
@@ -1396,9 +1396,9 @@ public class JewishCalendar extends JewishDate {
 		if (this == object) {
 			return true;
 		}
-		if (!(object instanceof JewishCalendar)) {
-			return false;
-		}
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
 		JewishCalendar jewishCalendar = (JewishCalendar) object;
 		return getAbsDate() == jewishCalendar.getAbsDate() && getInIsrael() == jewishCalendar.getInIsrael();
 	}
@@ -1408,9 +1408,8 @@ public class JewishCalendar extends JewishDate {
 	 * @see Object#hashCode()
 	 */
 	public int hashCode() {
-		int result = 17;
-		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
-		result += 37 * result + getAbsDate() + (getInIsrael() ? 1 : 3);
-		return result;
+        int result = Integer.hashCode(getAbsDate());
+        result = 31 * result + Boolean.hashCode(getInIsrael());
+        return result;
 	}
 }
