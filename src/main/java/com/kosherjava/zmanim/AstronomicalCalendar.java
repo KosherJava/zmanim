@@ -749,7 +749,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 	    double rawOffset = getGeoLocation().getZoneId().getRules().getOffset(getMidnightLastNight().toInstant()).getTotalSeconds() * 1000;
 	    double utcTime = hours - rawOffset / (double) HOUR_MILLIS;
-	    Instant instant = getInstantFromTime(utcTime, SolarEvent.SUNRISE);
+	    Instant instant = getInstantFromTime(utcTime, null);
 
 	    return getTimeOffset(instant, -getGeoLocation().getLocalMeanTimeOffset(getMidnightLastNight().toInstant()));
 	}
