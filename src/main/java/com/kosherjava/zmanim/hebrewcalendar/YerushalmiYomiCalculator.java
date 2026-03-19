@@ -15,8 +15,8 @@
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  * This class calculates the <a href="https://en.wikipedia.org/wiki/Jerusalem_Talmud">Talmud Yerusalmi</a> <a href=
@@ -28,11 +28,8 @@ import java.time.ZonedDateTime;
 public class YerushalmiYomiCalculator {
 
     /** Start date of first Daf Yomi Yerushalmi cycle: 1980-02-02 */
-    private static final ZonedDateTime DAF_YOMI_START_DAY =
-            ZonedDateTime.of(1980, 2, 2, 0, 0, 0, 0, ZoneId.systemDefault());
+    private static final LocalDate DAF_YOMI_START_DAY = LocalDate.of(1980, 2, 2);
 
-    /** milliseconds in a day*/
-    private static final int DAY_MILLIS = 1000 * 60 * 60 * 24;
     /** number of pages (<em>blatt/dafim</em>) in <em>Shas</em>*/
     private static final int WHOLE_SHAS_DAFS = 1554;
     
@@ -56,8 +53,7 @@ public class YerushalmiYomiCalculator {
      * @return the daf.
      */
     public static Daf getDafYomiYerushalmi(JewishCalendar jewishCalendar) {
-        ZonedDateTime requested = jewishCalendar.getGregorianCalendar().toInstant()
-                                          .atZone(ZoneId.systemDefault());
+        LocalDate requested = jewishCalendar.getLocalDate();
         int masechta = 0;
         Daf dafYomi = null;
 
@@ -73,8 +69,8 @@ public class YerushalmiYomiCalculator {
         }
 
         // Initialize cycle dates
-        ZonedDateTime nextCycle = DAF_YOMI_START_DAY;
-        ZonedDateTime prevCycle = DAF_YOMI_START_DAY;
+        LocalDate nextCycle = DAF_YOMI_START_DAY;
+        LocalDate prevCycle = DAF_YOMI_START_DAY;
 
         // Loop through cycles until we reach the requested date
         while (requested.isAfter(nextCycle)) {
@@ -107,10 +103,10 @@ public class YerushalmiYomiCalculator {
     /**
      * Counts the number of "special days" (Yom Kippur, Tisha B’Av) between two ZonedDateTimes.
      * @param start the start date for the calculation
-     * @param end the start date for the calculatio
+     * @param end the start date for the calculation
      * @return the number of special days
      */
-    private static int getNumOfSpecialDays(ZonedDateTime start, ZonedDateTime end) {
+    private static int getNumOfSpecialDays(LocalDate start, LocalDate end) {
 
         int startYear = new JewishCalendar(start).getJewishYear();
         int endYear = new JewishCalendar(end).getJewishYear();
@@ -126,10 +122,8 @@ public class YerushalmiYomiCalculator {
             yomKippur.setJewishYear(year);
             tishaBeav.setJewishYear(year);
 
-            ZonedDateTime ykDate = yomKippur.getGregorianCalendar().toInstant()
-                                             .atZone(start.getZone());
-            ZonedDateTime tbDate = tishaBeav.getGregorianCalendar().toInstant()
-                                             .atZone(start.getZone());
+            LocalDate ykDate = yomKippur.getLocalDate();
+            LocalDate tbDate = tishaBeav.getLocalDate();
 
             if (isBetween(start, ykDate, end)) specialDays++;
             if (isBetween(start, tbDate, end)) specialDays++;
@@ -145,7 +139,7 @@ public class YerushalmiYomiCalculator {
      * @param end the end <code>ZonedDateTime</code>
      * @return if the date is between the two dates
      */
-    private static boolean isBetween(ZonedDateTime start, ZonedDateTime date, ZonedDateTime end) {
+    private static boolean isBetween(LocalDate start, LocalDate date, LocalDate end) {
         return start.isBefore(date) && end.isAfter(date);
     }
 
@@ -155,7 +149,7 @@ public class YerushalmiYomiCalculator {
      * @param end the end <code>ZonedDateTime</code>
      * @return the number of days between the dates.
      */
-    private static long getDiffBetweenDays(ZonedDateTime start, ZonedDateTime end) {
-        return (end.toInstant().toEpochMilli() - start.toInstant().toEpochMilli()) / DAY_MILLIS;
+    private static long getDiffBetweenDays(LocalDate start, LocalDate end) {
+        return ChronoUnit.DAYS.between(start, end);
     }
 }

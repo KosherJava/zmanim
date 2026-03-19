@@ -983,6 +983,22 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 		dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // reset day of week
 	}
 
+    public void setJewishMonth(int month){
+        int year = getJewishYear();
+        if (month < NISSAN || month > getLastMonthOfJewishYear(year)) {
+            throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
+                    + month + " is invalid for the year " + year + ".");
+        }
+        int day = Math.min(getDaysInJewishMonth(month,year),getJewishDayOfMonth());
+        setJewishDate(year, month, day);
+    }
+
+    public void setJewishYear(int year){
+        int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
+        setJewishDate(year, month, day);
+    }
+
 
 	/**
 	 * Returns this object's date as a {@link java.time.LocalDate} object.
@@ -1045,6 +1061,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
         setJewishDate(year, month, day);
     }
+
 
 
 	/**
