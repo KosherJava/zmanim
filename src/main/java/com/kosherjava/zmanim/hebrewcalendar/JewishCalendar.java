@@ -20,6 +20,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -506,12 +507,12 @@ public class JewishCalendar extends JewishDate {
 		JewishCalendar clone = (JewishCalendar) clone();
 		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek()  + 7) % 7;
 		if (getDayOfWeek() != Calendar.SATURDAY) {
-			clone.forward(Calendar.DATE, daysToShabbos);
+            clone.addDays(daysToShabbos);
 		} else {
-			clone.forward(Calendar.DATE, 7);
+			clone.addDays( 7);
 		}
 		while(clone.getParshah() == Parsha.NONE) { //Yom Kippur / Sukkos or Pesach with 2 potential non-parsha Shabbosim in a row
-			clone.forward(Calendar.DATE, 7);
+			clone.addDays(7);
 		}
 		return clone.getParshah();
 	}
@@ -1233,16 +1234,9 @@ public class JewishCalendar extends JewishDate {
 	    int seconds = (int) moladSeconds;
 	    int nanos = (int) ((moladSeconds - seconds) * 1_000_000_000); // convert remainder to nanos
 
-	    ZonedDateTime moladZdt = ZonedDateTime.of(
-	            molad.getGregorianYear(),
-	            molad.getGregorianMonth() + 1,       // 1-based FIXME
-	            molad.getGregorianDayOfMonth(),
-	            molad.getMoladHours(),
-	            molad.getMoladMinutes(),
-	            seconds,
-	            nanos,
-	            jerusalemStandardOffset
-	    );
+        LocalTime time = LocalTime.of(molad.getMoladHours(),molad.getMoladMinutes(),seconds,nanos);
+
+	    ZonedDateTime moladZdt = ZonedDateTime.of(molad.getLocalDate(),time,jerusalemStandardOffset);
 
 	    // Har Habayis at a longitude of 35.2354 offset vs longitude 35 in standard time, so we subtract the time difference
 	    // of 20.94 minutes (20 minutes and 56 seconds and 496 millis) to get to Standard time from local mean time

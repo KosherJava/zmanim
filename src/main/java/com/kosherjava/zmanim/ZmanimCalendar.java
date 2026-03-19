@@ -1086,8 +1086,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public boolean isAssurBemlacha(Instant currentTime, Instant tzais, boolean inIsrael) {
 		JewishCalendar jewishCalendar = new JewishCalendar();
-		jewishCalendar.setGregorianDate(getLocalDate().getYear(), getLocalDate().getMonthValue(),
-				getLocalDate().getDayOfMonth());
+		jewishCalendar.setGregorianDate(getLocalDate());
 		
 		jewishCalendar.setInIsrael(inIsrael);
 		
