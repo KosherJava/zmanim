@@ -4,7 +4,9 @@ import com.kosherjava.zmanim.ComprehensiveZmanimCalendar;
 import com.kosherjava.zmanim.util.GeoLocation;
 
 import java.io.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class RegressionTestFileWriter {
@@ -14,9 +16,9 @@ public class RegressionTestFileWriter {
         LocalDate end = LocalDate.of(9999, 1, 1);
         LocalDate current = start;
         JewishCalendar cal = new JewishCalendar(current);
-        GregorianCalendar gregorian = new GregorianCalendar(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth());
+        LocalDate gregorian = LocalDate.of(current.getYear(), current.getMonthValue() , current.getDayOfMonth());
         JewishDate date = new JewishDate(current);
-        ComprehensiveZmanimCalendar zcal = new ComprehensiveZmanimCalendar(new GeoLocation("Lakewood, NJ", 40.096, -74.222, 29.02, TimeZone.getTimeZone("America/New_York")));
+        ComprehensiveZmanimCalendar zcal = new ComprehensiveZmanimCalendar(new GeoLocation("Lakewood, NJ", 40.096, -74.222, 29.02, ZoneId.of("America/New_York")));
         List<FullCalendar> calendars = new ArrayList<>();
         List<FullZmanim> zmanim = new ArrayList<>();
 
@@ -35,7 +37,7 @@ public class RegressionTestFileWriter {
 					cal.isErevYomTov(), cal.isErevRoshChodesh(), cal.isYomKippurKatan(), cal.isBeHaB(), cal.isTaanis(),
 					cal.isTaanisBechoros(), cal.getDayOfChanukah(), cal.isChanukah(), cal.isPurim(),
 					cal.isRoshChodesh(), cal.isMacharChodesh(), cal.isShabbosMevorchim(), cal.getDayOfOmer(),
-					cal.isTishaBav(), cal.getMolad(), cal.getMoladAsDate(), cal.getTchilasZmanKidushLevana3Days(),
+					cal.isTishaBav(), cal.getMolad(), cal.getMoladAsInstant(), cal.getTchilasZmanKidushLevana3Days(),
 					cal.getTchilasZmanKidushLevana7Days(), cal.getSofZmanKidushLevanaBetweenMoldos(),
 					cal.getSofZmanKidushLevana15Days(), cal.getTekufasTishreiElapsedDays()));
 			
@@ -126,10 +128,10 @@ public class RegressionTestFileWriter {
             cal.isMoridHatalRecited();*/
 
             current = current.plusDays(1L);
-            gregorian.roll(Calendar.DATE, true);
-            date.forward(Calendar.DATE, 1);
-            cal.setDate(current);
-            zcal.setCalendar(gregorian);
+            gregorian = gregorian.plusDays(1);
+            date.addDays(1);
+            cal.setGregorianDate(current);
+            zcal.setLocalDate(gregorian);
         }
         //write calendars to file:
 
@@ -324,71 +326,71 @@ public class RegressionTestFileWriter {
         }
 
 		public FullZmanim(long getShaahZmanis19Point8Degrees, long getShaahZmanis18Degrees,
-				long getShaahZmanis26Degrees, long getShaahZmanis16Point1Degrees, long getShaahZmanis60Minutes,
-				long getShaahZmanis72Minutes, long getShaahZmanis72MinutesZmanis, long getShaahZmanis90Minutes,
-				long getShaahZmanis90MinutesZmanis, long getShaahZmanis96MinutesZmanis, long getShaahZmanisAteretTorah,
-				long getShaahZmanisAlos16Point1ToTzais3Point8, long getShaahZmanisAlos16Point1ToTzais3Point7,
-				long getShaahZmanis96Minutes, long getShaahZmanis120Minutes, long getShaahZmanis120MinutesZmanis,
-				Date getPlagHamincha120MinutesZmanis, Date getPlagHamincha120Minutes, Date getAlos60,
-				Date getAlos72Zmanis, Date getAlos96, Date getAlos90Zmanis, Date getAlos96Zmanis, Date getAlos90,
-				Date getAlos120, Date getAlos120Zmanis, Date getAlos26Degrees, Date getAlos18Degrees,
-				Date getAlos19Degrees, Date getAlos19Point8Degrees, Date getAlos16Point1Degrees,
-				Date getMisheyakir11Point5Degrees, Date getMisheyakir11Degrees, Date getMisheyakir10Point2Degrees,
-				Date getMisheyakir7Point65Degrees, Date getMisheyakir9Point5Degrees,
-				Date getSofZmanShmaMGA19Point8Degrees, Date getSofZmanShmaMGA16Point1Degrees,
-				Date getSofZmanShmaMGA18Degrees, Date getSofZmanShmaMGA72Minutes, Date getSofZmanShmaMGA72MinutesZmanis,
-				Date getSofZmanShmaMGA90Minutes, Date getSofZmanShmaMGA90MinutesZmanis, Date getSofZmanShmaMGA96Minutes,
-				Date getSofZmanShmaMGA96MinutesZmanis, Date getSofZmanShma3HoursBeforeChatzos,
-				Date getSofZmanShmaMGA120Minutes, Date getSofZmanShmaAlos16Point1ToSunset,
-				Date getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees,
-				Date getSofZmanTfilaMGA19Point8Degrees, Date getSofZmanTfilaMGA16Point1Degrees,
-				Date getSofZmanTfilaMGA18Degrees, Date getSofZmanTfilaMGA72Minutes,
-				Date getSofZmanTfilaMGA72MinutesZmanis, Date getSofZmanTfilaMGA90Minutes,
-				Date getSofZmanTfilaMGA90MinutesZmanis, Date getSofZmanTfilaMGA96Minutes,
-				Date getSofZmanTfilaMGA96MinutesZmanis, Date getSofZmanTfilaMGA120Minutes,
-				Date getSofZmanTfila2HoursBeforeChatzos, Date getMinchaGedola30Minutes, Date getMinchaGedola72Minutes,
-				Date getMinchaGedola16Point1Degrees, Date getMinchaGedolaAhavatShalom,
-				Date getMinchaGedolaGreaterThan30, Date getMinchaKetana16Point1Degrees,
-				Date getMinchaKetanaAhavatShalom, Date getMinchaKetana72Minutes, Date getPlagHamincha60Minutes,
-				Date getPlagHamincha72Minutes, Date getPlagHamincha90Minutes, Date getPlagHamincha96Minutes,
-				Date getPlagHamincha96MinutesZmanis, Date getPlagHamincha90MinutesZmanis,
-				Date getPlagHamincha72MinutesZmanis, Date getPlagHamincha16Point1Degrees,
-				Date getPlagHamincha19Point8Degrees, Date getPlagHamincha26Degrees, Date getPlagHamincha18Degrees,
-				Date getPlagAlosToSunset, Date getPlagAlos16Point1ToTzaisGeonim7Point083Degrees,
-				Date getPlagAhavatShalom, Date getBainHashmashosRT13Point24Degrees,
-				Date getBainHashmashosRT58Point5Minutes, Date getBainHashmashosRT13Point5MinutesBefore7Point083Degrees,
-				Date getBainHashmashosRT2Stars, Date getBainHashmashosYereim18Minutes,
-				Date getBainHashmashosYereim3Point05Degrees, Date getBainHashmashosYereim16Point875Minutes,
-				Date getBainHashmashosYereim2Point8Degrees, Date getBainHashmashosYereim13Point5Minutes,
-				Date getBainHashmashosYereim2Point1Degrees, Date getTzaisGeonim3Point7Degrees,
-				Date getTzaisGeonim3Point8Degrees, Date getTzaisGeonim5Point95Degrees,
-				Date getTzaisGeonim4Point61Degrees, Date getTzaisGeonim4Point37Degrees,
-				Date getTzaisGeonim5Point88Degrees, Date getTzaisGeonim4Point8Degrees,
-				Date getTzaisGeonim6Point45Degrees, Date getTzaisGeonim7Point083Degrees,
-				Date getTzaisGeonim7Point67Degrees, Date getTzaisGeonim8Point5Degrees,
-				Date getTzaisGeonim9Point3Degrees, Date getTzaisGeonim9Point75Degrees, Date getTzais60,
-				Date getTzaisAteretTorah, Date getSofZmanShmaAteretTorah, Date getSofZmanTfilahAteretTorah,
-				Date getMinchaGedolaAteretTorah, Date getMinchaKetanaAteretTorah, Date getPlagHaminchaAteretTorah,
-				Date getTzais72Zmanis, Date getTzais90Zmanis, Date getTzais96Zmanis, Date getTzais90, Date getTzais120,
-				Date getTzais120Zmanis, Date getTzais16Point1Degrees, Date getTzais26Degrees, Date getTzais18Degrees,
-				Date getTzais19Point8Degrees, Date getTzais96, Date getFixedLocalChatzos,
-				Date getSofZmanKidushLevanaBetweenMoldos,
-				Date getSofZmanKidushLevana15Days, Date getTchilasZmanKidushLevana3Days, Date getZmanMolad,
-				Date getTchilasZmanKidushLevana7Days, Date getSofZmanAchilasChametzGRA,
-				Date getSofZmanAchilasChametzMGA72Minutes, Date getSofZmanAchilasChametzMGA16Point1Degrees,
-				Date getSofZmanBiurChametzGRA, Date getSofZmanBiurChametzMGA72Minutes,
-				Date getSofZmanBiurChametzMGA16Point1Degrees, Date getSolarMidnight, long getShaahZmanisBaalHatanya,
-				Date getAlosBaalHatanya, Date getSofZmanShmaBaalHatanya, Date getSofZmanTfilaBaalHatanya,
-				Date getSofZmanAchilasChametzBaalHatanya, Date getSofZmanBiurChametzBaalHatanya,
-				Date getMinchaGedolaBaalHatanya, Date getMinchaGedolaBaalHatanyaGreaterThan30,
-				Date getMinchaKetanaBaalHatanya, Date getPlagHaminchaBaalHatanya, Date getTzaisBaalHatanya,
-				Date getSofZmanShmaMGA18DegreesToFixedLocalChatzos,
-				Date getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos,
-				Date getSofZmanShmaMGA90MinutesToFixedLocalChatzos, Date getSofZmanShmaMGA72MinutesToFixedLocalChatzos,
-				Date getSofZmanShmaGRASunriseToFixedLocalChatzos, Date getSofZmanTfilaGRASunriseToFixedLocalChatzos,
-				Date getMinchaGedolaGRAFixedLocalChatzos30Minutes, Date getMinchaKetanaGRAFixedLocalChatzosToSunset,
-				Date getPlagHaminchaGRAFixedLocalChatzosToSunset, Date getTzais50, Date getSamuchLeMinchaKetanaGRA,
-				Date getSamuchLeMinchaKetana16Point1Degrees, Date getSamuchLeMinchaKetana72Minutes) {
+                          long getShaahZmanis26Degrees, long getShaahZmanis16Point1Degrees, long getShaahZmanis60Minutes,
+                          long getShaahZmanis72Minutes, long getShaahZmanis72MinutesZmanis, long getShaahZmanis90Minutes,
+                          long getShaahZmanis90MinutesZmanis, long getShaahZmanis96MinutesZmanis, long getShaahZmanisAteretTorah,
+                          long getShaahZmanisAlos16Point1ToTzais3Point8, long getShaahZmanisAlos16Point1ToTzais3Point7,
+                          long getShaahZmanis96Minutes, long getShaahZmanis120Minutes, long getShaahZmanis120MinutesZmanis,
+                          Instant getPlagHamincha120MinutesZmanis, Instant getPlagHamincha120Minutes, Instant getAlos60,
+                          Instant getAlos72Zmanis, Instant getAlos96, Instant getAlos90Zmanis, Instant getAlos96Zmanis, Instant getAlos90,
+                          Instant getAlos120, Instant getAlos120Zmanis, Instant getAlos26Degrees, Instant getAlos18Degrees,
+                          Instant getAlos19Degrees, Instant getAlos19Point8Degrees, Instant getAlos16Point1Degrees,
+                          Instant getMisheyakir11Point5Degrees, Instant getMisheyakir11Degrees, Instant getMisheyakir10Point2Degrees,
+                          Instant getMisheyakir7Point65Degrees, Instant getMisheyakir9Point5Degrees,
+                          Instant getSofZmanShmaMGA19Point8Degrees, Instant getSofZmanShmaMGA16Point1Degrees,
+                          Instant getSofZmanShmaMGA18Degrees, Instant getSofZmanShmaMGA72Minutes, Instant getSofZmanShmaMGA72MinutesZmanis,
+                          Instant getSofZmanShmaMGA90Minutes, Instant getSofZmanShmaMGA90MinutesZmanis, Instant getSofZmanShmaMGA96Minutes,
+                          Instant getSofZmanShmaMGA96MinutesZmanis, Instant getSofZmanShma3HoursBeforeChatzos,
+                          Instant getSofZmanShmaMGA120Minutes, Instant getSofZmanShmaAlos16Point1ToSunset,
+                          Instant getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees,
+                          Instant getSofZmanTfilaMGA19Point8Degrees, Instant getSofZmanTfilaMGA16Point1Degrees,
+                          Instant getSofZmanTfilaMGA18Degrees, Instant getSofZmanTfilaMGA72Minutes,
+                          Instant getSofZmanTfilaMGA72MinutesZmanis, Instant getSofZmanTfilaMGA90Minutes,
+                          Instant getSofZmanTfilaMGA90MinutesZmanis, Instant getSofZmanTfilaMGA96Minutes,
+                          Instant getSofZmanTfilaMGA96MinutesZmanis, Instant getSofZmanTfilaMGA120Minutes,
+                          Instant getSofZmanTfila2HoursBeforeChatzos, Instant getMinchaGedola30Minutes, Instant getMinchaGedola72Minutes,
+                          Instant getMinchaGedola16Point1Degrees, Instant getMinchaGedolaAhavatShalom,
+                          Instant getMinchaGedolaGreaterThan30, Instant getMinchaKetana16Point1Degrees,
+                          Instant getMinchaKetanaAhavatShalom, Instant getMinchaKetana72Minutes, Instant getPlagHamincha60Minutes,
+                          Instant getPlagHamincha72Minutes, Instant getPlagHamincha90Minutes, Instant getPlagHamincha96Minutes,
+                          Instant getPlagHamincha96MinutesZmanis, Instant getPlagHamincha90MinutesZmanis,
+                          Instant getPlagHamincha72MinutesZmanis, Instant getPlagHamincha16Point1Degrees,
+                          Instant getPlagHamincha19Point8Degrees, Instant getPlagHamincha26Degrees, Instant getPlagHamincha18Degrees,
+                          Instant getPlagAlosToSunset, Instant getPlagAlos16Point1ToTzaisGeonim7Point083Degrees,
+                          Instant getPlagAhavatShalom, Instant getBainHashmashosRT13Point24Degrees,
+                          Instant getBainHashmashosRT58Point5Minutes, Instant getBainHashmashosRT13Point5MinutesBefore7Point083Degrees,
+                          Instant getBainHashmashosRT2Stars, Instant getBainHashmashosYereim18Minutes,
+                          Instant getBainHashmashosYereim3Point05Degrees, Instant getBainHashmashosYereim16Point875Minutes,
+                          Instant getBainHashmashosYereim2Point8Degrees, Instant getBainHashmashosYereim13Point5Minutes,
+                          Instant getBainHashmashosYereim2Point1Degrees, Instant getTzaisGeonim3Point7Degrees,
+                          Instant getTzaisGeonim3Point8Degrees, Instant getTzaisGeonim5Point95Degrees,
+                          Instant getTzaisGeonim4Point61Degrees, Instant getTzaisGeonim4Point37Degrees,
+                          Instant getTzaisGeonim5Point88Degrees, Instant getTzaisGeonim4Point8Degrees,
+                          Instant getTzaisGeonim6Point45Degrees, Instant getTzaisGeonim7Point083Degrees,
+                          Instant getTzaisGeonim7Point67Degrees, Instant getTzaisGeonim8Point5Degrees,
+                          Instant getTzaisGeonim9Point3Degrees, Instant getTzaisGeonim9Point75Degrees, Instant getTzais60,
+                          Instant getTzaisAteretTorah, Instant getSofZmanShmaAteretTorah, Instant getSofZmanTfilahAteretTorah,
+                          Instant getMinchaGedolaAteretTorah, Instant getMinchaKetanaAteretTorah, Instant getPlagHaminchaAteretTorah,
+                          Instant getTzais72Zmanis, Instant getTzais90Zmanis, Instant getTzais96Zmanis, Instant getTzais90, Instant getTzais120,
+                          Instant getTzais120Zmanis, Instant getTzais16Point1Degrees, Instant getTzais26Degrees, Instant getTzais18Degrees,
+                          Instant getTzais19Point8Degrees, Instant getTzais96, Instant getFixedLocalChatzos,
+                          Instant getSofZmanKidushLevanaBetweenMoldos,
+                          Instant getSofZmanKidushLevana15Days, Instant getTchilasZmanKidushLevana3Days, Instant getZmanMolad,
+                          Instant getTchilasZmanKidushLevana7Days, Instant getSofZmanAchilasChametzGRA,
+                          Instant getSofZmanAchilasChametzMGA72Minutes, Instant getSofZmanAchilasChametzMGA16Point1Degrees,
+                          Instant getSofZmanBiurChametzGRA, Instant getSofZmanBiurChametzMGA72Minutes,
+                          Instant getSofZmanBiurChametzMGA16Point1Degrees, Instant getSolarMidnight, long getShaahZmanisBaalHatanya,
+                          Instant getAlosBaalHatanya, Instant getSofZmanShmaBaalHatanya, Instant getSofZmanTfilaBaalHatanya,
+                          Instant getSofZmanAchilasChametzBaalHatanya, Instant getSofZmanBiurChametzBaalHatanya,
+                          Instant getMinchaGedolaBaalHatanya, Instant getMinchaGedolaBaalHatanyaGreaterThan30,
+                          Instant getMinchaKetanaBaalHatanya, Instant getPlagHaminchaBaalHatanya, Instant getTzaisBaalHatanya,
+                          Instant getSofZmanShmaMGA18DegreesToFixedLocalChatzos,
+                          Instant getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos,
+                          Instant getSofZmanShmaMGA90MinutesToFixedLocalChatzos, Instant getSofZmanShmaMGA72MinutesToFixedLocalChatzos,
+                          Instant getSofZmanShmaGRASunriseToFixedLocalChatzos, Instant getSofZmanTfilaGRASunriseToFixedLocalChatzos,
+                          Instant getMinchaGedolaGRAFixedLocalChatzos30Minutes, Instant getMinchaKetanaGRAFixedLocalChatzosToSunset,
+                          Instant getPlagHaminchaGRAFixedLocalChatzosToSunset, Instant getTzais50, Instant getSamuchLeMinchaKetanaGRA,
+                          Instant getSamuchLeMinchaKetana16Point1Degrees, Instant getSamuchLeMinchaKetana72Minutes) {
             this.getShaahZmanis19Point8Degrees = getShaahZmanis19Point8Degrees;
             this.getShaahZmanis18Degrees = getShaahZmanis18Degrees;
             this.getShaahZmanis26Degrees = getShaahZmanis26Degrees;
@@ -567,176 +569,176 @@ public class RegressionTestFileWriter {
         public final long getShaahZmanis96Minutes;
         public final long getShaahZmanis120Minutes;
         public final long getShaahZmanis120MinutesZmanis;
-        public final Date getPlagHamincha120MinutesZmanis;
-        public final Date getPlagHamincha120Minutes;
-        public final Date getAlos60;
-        public final Date getAlos72Zmanis;
-        public final Date getAlos96;
-        public final Date getAlos90Zmanis;
-        public final Date getAlos96Zmanis;
-        public final Date getAlos90;
-        public final Date getAlos120;
-        public final Date getAlos120Zmanis;
-        public final Date getAlos26Degrees;
-        public final Date getAlos18Degrees;
-        public final Date getAlos19Degrees;
-        public final Date getAlos19Point8Degrees;
-        public final Date getAlos16Point1Degrees;
-        public final Date getMisheyakir11Point5Degrees;
-        public final Date getMisheyakir11Degrees;
-        public final Date getMisheyakir10Point2Degrees;
-        public final Date getMisheyakir7Point65Degrees;
-        public final Date getMisheyakir9Point5Degrees;
-        public final Date getSofZmanShmaMGA19Point8Degrees;
-        public final Date getSofZmanShmaMGA16Point1Degrees;
-        public final Date getSofZmanShmaMGA18Degrees;
-        public final Date getSofZmanShmaMGA72Minutes;
-        public final Date getSofZmanShmaMGA72MinutesZmanis;
-        public final Date getSofZmanShmaMGA90Minutes;
-        public final Date getSofZmanShmaMGA90MinutesZmanis;
-        public final Date getSofZmanShmaMGA96Minutes;
-        public final Date getSofZmanShmaMGA96MinutesZmanis;
-        public final Date getSofZmanShma3HoursBeforeChatzos;
-        public final Date getSofZmanShmaMGA120Minutes;
-        public final Date getSofZmanShmaAlos16Point1ToSunset;
-        public final Date getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees;
-        public final Date getSofZmanTfilaMGA19Point8Degrees;
-        public final Date getSofZmanTfilaMGA16Point1Degrees;
-        public final Date getSofZmanTfilaMGA18Degrees;
-        public final Date getSofZmanTfilaMGA72Minutes;
-        public final Date getSofZmanTfilaMGA72MinutesZmanis;
-        public final Date getSofZmanTfilaMGA90Minutes;
-        public final Date getSofZmanTfilaMGA90MinutesZmanis;
-        public final Date getSofZmanTfilaMGA96Minutes;
-        public final Date getSofZmanTfilaMGA96MinutesZmanis;
-        public final Date getSofZmanTfilaMGA120Minutes;
-        public final Date getSofZmanTfila2HoursBeforeChatzos;
-        public final Date getMinchaGedola30Minutes;
-        public final Date getMinchaGedola72Minutes;
-        public final Date getMinchaGedola16Point1Degrees;
-        public final Date getMinchaGedolaAhavatShalom;
-        public final Date getMinchaGedolaGreaterThan30;
-        public final Date getMinchaKetana16Point1Degrees;
-        public final Date getMinchaKetanaAhavatShalom;
-        public final Date getMinchaKetana72Minutes;
-        public final Date getPlagHamincha60Minutes;
-        public final Date getPlagHamincha72Minutes;
-        public final Date getPlagHamincha90Minutes;
-        public final Date getPlagHamincha96Minutes;
-        public final Date getPlagHamincha96MinutesZmanis;
-        public final Date getPlagHamincha90MinutesZmanis;
-        public final Date getPlagHamincha72MinutesZmanis;
-        public final Date getPlagHamincha16Point1Degrees;
-        public final Date getPlagHamincha19Point8Degrees;
-        public final Date getPlagHamincha26Degrees;
-        public final Date getPlagHamincha18Degrees;
-        public final Date getPlagAlosToSunset;
-        public final Date getPlagAlos16Point1ToTzaisGeonim7Point083Degrees;
-        public final Date getPlagAhavatShalom;
-        public final Date getBainHashmashosRT13Point24Degrees;
-        public final Date getBainHashmashosRT58Point5Minutes;
-        public final Date getBainHashmashosRT13Point5MinutesBefore7Point083Degrees;
-        public final Date getBainHashmashosRT2Stars;
-        public final Date getBainHashmashosYereim18Minutes;
-        public final Date getBainHashmashosYereim3Point05Degrees;
-        public final Date getBainHashmashosYereim16Point875Minutes;
-        public final Date getBainHashmashosYereim2Point8Degrees;
-        public final Date getBainHashmashosYereim13Point5Minutes;
-        public final Date getBainHashmashosYereim2Point1Degrees;
-        public final Date getTzaisGeonim3Point7Degrees;
-        public final Date getTzaisGeonim3Point8Degrees;
-        public final Date getTzaisGeonim5Point95Degrees;
-        public final Date getTzaisGeonim4Point61Degrees;
-        public final Date getTzaisGeonim4Point37Degrees;
-        public final Date getTzaisGeonim5Point88Degrees;
-        public final Date getTzaisGeonim4Point8Degrees;
-        public final Date getTzaisGeonim6Point45Degrees;
-        public final Date getTzaisGeonim7Point083Degrees;
-        public final Date getTzaisGeonim7Point67Degrees;
-        public final Date getTzaisGeonim8Point5Degrees;
-        public final Date getTzaisGeonim9Point3Degrees;
-        public final Date getTzaisGeonim9Point75Degrees;
-        public final Date getTzais60;
-        public final Date getTzaisAteretTorah;
-        public final Date getSofZmanShmaAteretTorah;
-        public final Date getSofZmanTfilahAteretTorah;
-        public final Date getMinchaGedolaAteretTorah;
-        public final Date getMinchaKetanaAteretTorah;
-        public final Date getPlagHaminchaAteretTorah;
-        public final Date getTzais72Zmanis;
-        public final Date getTzais90Zmanis;
-        public final Date getTzais96Zmanis;
-        public final Date getTzais90;
-        public final Date getTzais120;
-        public final Date getTzais120Zmanis;
-        public final Date getTzais16Point1Degrees;
-        public final Date getTzais26Degrees;
-        public final Date getTzais18Degrees;
-        public final Date getTzais19Point8Degrees;
-        public final Date getTzais96;
-        public final Date getFixedLocalChatzos;
-        public final Date getSofZmanKidushLevanaBetweenMoldos;
-        public final Date getSofZmanKidushLevana15Days;
-        public final Date getTchilasZmanKidushLevana3Days;
-        public final Date getZmanMolad;
-        public final Date getTchilasZmanKidushLevana7Days;
-        public final Date getSofZmanAchilasChametzGRA;
-        public final Date getSofZmanAchilasChametzMGA72Minutes;
-        public final Date getSofZmanAchilasChametzMGA16Point1Degrees;
-        public final Date getSofZmanBiurChametzGRA;
-        public final Date getSofZmanBiurChametzMGA72Minutes;
-        public final Date getSofZmanBiurChametzMGA16Point1Degrees;
-        public final Date getSolarMidnight;
+        public final Instant getPlagHamincha120MinutesZmanis;
+        public final Instant getPlagHamincha120Minutes;
+        public final Instant getAlos60;
+        public final Instant getAlos72Zmanis;
+        public final Instant getAlos96;
+        public final Instant getAlos90Zmanis;
+        public final Instant getAlos96Zmanis;
+        public final Instant getAlos90;
+        public final Instant getAlos120;
+        public final Instant getAlos120Zmanis;
+        public final Instant getAlos26Degrees;
+        public final Instant getAlos18Degrees;
+        public final Instant getAlos19Degrees;
+        public final Instant getAlos19Point8Degrees;
+        public final Instant getAlos16Point1Degrees;
+        public final Instant getMisheyakir11Point5Degrees;
+        public final Instant getMisheyakir11Degrees;
+        public final Instant getMisheyakir10Point2Degrees;
+        public final Instant getMisheyakir7Point65Degrees;
+        public final Instant getMisheyakir9Point5Degrees;
+        public final Instant getSofZmanShmaMGA19Point8Degrees;
+        public final Instant getSofZmanShmaMGA16Point1Degrees;
+        public final Instant getSofZmanShmaMGA18Degrees;
+        public final Instant getSofZmanShmaMGA72Minutes;
+        public final Instant getSofZmanShmaMGA72MinutesZmanis;
+        public final Instant getSofZmanShmaMGA90Minutes;
+        public final Instant getSofZmanShmaMGA90MinutesZmanis;
+        public final Instant getSofZmanShmaMGA96Minutes;
+        public final Instant getSofZmanShmaMGA96MinutesZmanis;
+        public final Instant getSofZmanShma3HoursBeforeChatzos;
+        public final Instant getSofZmanShmaMGA120Minutes;
+        public final Instant getSofZmanShmaAlos16Point1ToSunset;
+        public final Instant getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees;
+        public final Instant getSofZmanTfilaMGA19Point8Degrees;
+        public final Instant getSofZmanTfilaMGA16Point1Degrees;
+        public final Instant getSofZmanTfilaMGA18Degrees;
+        public final Instant getSofZmanTfilaMGA72Minutes;
+        public final Instant getSofZmanTfilaMGA72MinutesZmanis;
+        public final Instant getSofZmanTfilaMGA90Minutes;
+        public final Instant getSofZmanTfilaMGA90MinutesZmanis;
+        public final Instant getSofZmanTfilaMGA96Minutes;
+        public final Instant getSofZmanTfilaMGA96MinutesZmanis;
+        public final Instant getSofZmanTfilaMGA120Minutes;
+        public final Instant getSofZmanTfila2HoursBeforeChatzos;
+        public final Instant getMinchaGedola30Minutes;
+        public final Instant getMinchaGedola72Minutes;
+        public final Instant getMinchaGedola16Point1Degrees;
+        public final Instant getMinchaGedolaAhavatShalom;
+        public final Instant getMinchaGedolaGreaterThan30;
+        public final Instant getMinchaKetana16Point1Degrees;
+        public final Instant getMinchaKetanaAhavatShalom;
+        public final Instant getMinchaKetana72Minutes;
+        public final Instant getPlagHamincha60Minutes;
+        public final Instant getPlagHamincha72Minutes;
+        public final Instant getPlagHamincha90Minutes;
+        public final Instant getPlagHamincha96Minutes;
+        public final Instant getPlagHamincha96MinutesZmanis;
+        public final Instant getPlagHamincha90MinutesZmanis;
+        public final Instant getPlagHamincha72MinutesZmanis;
+        public final Instant getPlagHamincha16Point1Degrees;
+        public final Instant getPlagHamincha19Point8Degrees;
+        public final Instant getPlagHamincha26Degrees;
+        public final Instant getPlagHamincha18Degrees;
+        public final Instant getPlagAlosToSunset;
+        public final Instant getPlagAlos16Point1ToTzaisGeonim7Point083Degrees;
+        public final Instant getPlagAhavatShalom;
+        public final Instant getBainHashmashosRT13Point24Degrees;
+        public final Instant getBainHashmashosRT58Point5Minutes;
+        public final Instant getBainHashmashosRT13Point5MinutesBefore7Point083Degrees;
+        public final Instant getBainHashmashosRT2Stars;
+        public final Instant getBainHashmashosYereim18Minutes;
+        public final Instant getBainHashmashosYereim3Point05Degrees;
+        public final Instant getBainHashmashosYereim16Point875Minutes;
+        public final Instant getBainHashmashosYereim2Point8Degrees;
+        public final Instant getBainHashmashosYereim13Point5Minutes;
+        public final Instant getBainHashmashosYereim2Point1Degrees;
+        public final Instant getTzaisGeonim3Point7Degrees;
+        public final Instant getTzaisGeonim3Point8Degrees;
+        public final Instant getTzaisGeonim5Point95Degrees;
+        public final Instant getTzaisGeonim4Point61Degrees;
+        public final Instant getTzaisGeonim4Point37Degrees;
+        public final Instant getTzaisGeonim5Point88Degrees;
+        public final Instant getTzaisGeonim4Point8Degrees;
+        public final Instant getTzaisGeonim6Point45Degrees;
+        public final Instant getTzaisGeonim7Point083Degrees;
+        public final Instant getTzaisGeonim7Point67Degrees;
+        public final Instant getTzaisGeonim8Point5Degrees;
+        public final Instant getTzaisGeonim9Point3Degrees;
+        public final Instant getTzaisGeonim9Point75Degrees;
+        public final Instant getTzais60;
+        public final Instant getTzaisAteretTorah;
+        public final Instant getSofZmanShmaAteretTorah;
+        public final Instant getSofZmanTfilahAteretTorah;
+        public final Instant getMinchaGedolaAteretTorah;
+        public final Instant getMinchaKetanaAteretTorah;
+        public final Instant getPlagHaminchaAteretTorah;
+        public final Instant getTzais72Zmanis;
+        public final Instant getTzais90Zmanis;
+        public final Instant getTzais96Zmanis;
+        public final Instant getTzais90;
+        public final Instant getTzais120;
+        public final Instant getTzais120Zmanis;
+        public final Instant getTzais16Point1Degrees;
+        public final Instant getTzais26Degrees;
+        public final Instant getTzais18Degrees;
+        public final Instant getTzais19Point8Degrees;
+        public final Instant getTzais96;
+        public final Instant getFixedLocalChatzos;
+        public final Instant getSofZmanKidushLevanaBetweenMoldos;
+        public final Instant getSofZmanKidushLevana15Days;
+        public final Instant getTchilasZmanKidushLevana3Days;
+        public final Instant getZmanMolad;
+        public final Instant getTchilasZmanKidushLevana7Days;
+        public final Instant getSofZmanAchilasChametzGRA;
+        public final Instant getSofZmanAchilasChametzMGA72Minutes;
+        public final Instant getSofZmanAchilasChametzMGA16Point1Degrees;
+        public final Instant getSofZmanBiurChametzGRA;
+        public final Instant getSofZmanBiurChametzMGA72Minutes;
+        public final Instant getSofZmanBiurChametzMGA16Point1Degrees;
+        public final Instant getSolarMidnight;
         public final long getShaahZmanisBaalHatanya;
-        public final Date getAlosBaalHatanya;
-        public final Date getSofZmanShmaBaalHatanya;
-        public final Date getSofZmanTfilaBaalHatanya;
-        public final Date getSofZmanAchilasChametzBaalHatanya;
-        public final Date getSofZmanBiurChametzBaalHatanya;
-        public final Date getMinchaGedolaBaalHatanya;
-        public final Date getMinchaGedolaBaalHatanyaGreaterThan30;
-        public final Date getMinchaKetanaBaalHatanya;
-        public final Date getPlagHaminchaBaalHatanya;
-        public final Date getTzaisBaalHatanya;
-        public final Date getSofZmanShmaMGA18DegreesToFixedLocalChatzos;
-        public final Date getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos;
-        public final Date getSofZmanShmaMGA90MinutesToFixedLocalChatzos;
-        public final Date getSofZmanShmaMGA72MinutesToFixedLocalChatzos;
-        public final Date getSofZmanShmaGRASunriseToFixedLocalChatzos;
-        public final Date getSofZmanTfilaGRASunriseToFixedLocalChatzos;
-        public final Date getMinchaGedolaGRAFixedLocalChatzos30Minutes;
-        public final Date getMinchaKetanaGRAFixedLocalChatzosToSunset;
-        public final Date getPlagHaminchaGRAFixedLocalChatzosToSunset;
-        public final Date getTzais50;
-        public final Date getSamuchLeMinchaKetanaGRA;
-        public final Date getSamuchLeMinchaKetana16Point1Degrees;
-        public final Date getSamuchLeMinchaKetana72Minutes;
+        public final Instant getAlosBaalHatanya;
+        public final Instant getSofZmanShmaBaalHatanya;
+        public final Instant getSofZmanTfilaBaalHatanya;
+        public final Instant getSofZmanAchilasChametzBaalHatanya;
+        public final Instant getSofZmanBiurChametzBaalHatanya;
+        public final Instant getMinchaGedolaBaalHatanya;
+        public final Instant getMinchaGedolaBaalHatanyaGreaterThan30;
+        public final Instant getMinchaKetanaBaalHatanya;
+        public final Instant getPlagHaminchaBaalHatanya;
+        public final Instant getTzaisBaalHatanya;
+        public final Instant getSofZmanShmaMGA18DegreesToFixedLocalChatzos;
+        public final Instant getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos;
+        public final Instant getSofZmanShmaMGA90MinutesToFixedLocalChatzos;
+        public final Instant getSofZmanShmaMGA72MinutesToFixedLocalChatzos;
+        public final Instant getSofZmanShmaGRASunriseToFixedLocalChatzos;
+        public final Instant getSofZmanTfilaGRASunriseToFixedLocalChatzos;
+        public final Instant getMinchaGedolaGRAFixedLocalChatzos30Minutes;
+        public final Instant getMinchaKetanaGRAFixedLocalChatzosToSunset;
+        public final Instant getPlagHaminchaGRAFixedLocalChatzosToSunset;
+        public final Instant getTzais50;
+        public final Instant getSamuchLeMinchaKetanaGRA;
+        public final Instant getSamuchLeMinchaKetana16Point1Degrees;
+        public final Instant getSamuchLeMinchaKetana72Minutes;
     }
     
     /*static class FullAstronomicalCalculator {
-        Date getSunrise
-        Date getSeaLevelSunrise
-        Date getBeginCivilTwilight
-        Date getBeginNauticalTwilight
-        Date getBeginAstronomicalTwilight
-        Date getSunset
-        Date getSeaLevelSunset
-        Date getEndCivilTwilight
-        Date getEndNauticalTwilight
-        Date getEndAstronomicalTwilight
-        Date getTimeOffset
-        Date getTimeOffset
-        Date getSunriseOffsetByDegrees
-        Date getSunsetOffsetByDegrees
+        Instant getSunrise
+        Instant getSeaLevelSunrise
+        Instant getBeginCivilTwilight
+        Instant getBeginNauticalTwilight
+        Instant getBeginAstronomicalTwilight
+        Instant getSunset
+        Instant getSeaLevelSunset
+        Instant getEndCivilTwilight
+        Instant getEndNauticalTwilight
+        Instant getEndAstronomicalTwilight
+        Instant getTimeOffset
+        Instant getTimeOffset
+        Instant getSunriseOffsetByDegrees
+        Instant getSunsetOffsetByDegrees
         double getUTCSunrise
         double getUTCSeaLevelSunrise
         double getUTCSunset
         double getUTCSeaLevelSunset
         long getTemporalHour
         long getTemporalHour
-        Date getSunTransit
-        Date getSunTransit
-        Date getDateFromTime
+        Instant getSunTransit
+        Instant getSunTransit
+        Instant getDateFromTime
         double getSunriseSolarDipFromOffset
         double getSunsetSolarDipFromOffset
         Calendar getAdjustedCalendar
@@ -847,14 +849,14 @@ public class RegressionTestFileWriter {
         private final int dayOfOmer;
         private final boolean tishaBav;
         private final JewishDate molad;
-        private final Date moladAsDate;
-        private final Date tchilasZmanKidushLevana3Days;
-        private final Date tchilasZmanKidushLevana7Days;
-        private final Date sofZmanKidushLevanaBetweenMoldos;
-        private final Date sofZmanKidushLevana15Days;
+        private final Instant moladAsDate;
+        private final Instant tchilasZmanKidushLevana3Days;
+        private final Instant tchilasZmanKidushLevana7Days;
+        private final Instant sofZmanKidushLevanaBetweenMoldos;
+        private final Instant sofZmanKidushLevana15Days;
         private final int tekufasTishreiElapsedDays;
 
-        public FullCalendar(LocalDate current, JewishDate currentJewishDate, int yomTovIndex, Daf dafYomiBavli, Daf dafYomiYerushalmi, boolean isruChag, boolean birkasHachamah, JewishCalendar.Parsha parshah, JewishCalendar.Parsha upcomingParshah, JewishCalendar.Parsha specialShabbos, boolean yomTov, boolean yomTovAssurBemelacha, boolean assurBemelacha, boolean hasCandleLighting, boolean tomorrowShabbosOrYomTov, boolean erevYomTovSheni, boolean aseresYemeiTeshuva, boolean pesach, boolean cholHamoedPesach, boolean shavuos, boolean roshHashana, boolean yomKippur, boolean succos, boolean hoshanaRabba, boolean shminiAtzeres, boolean simchasTorah, boolean cholHamoedSuccos, boolean cholHamoed, boolean erevYomTov, boolean erevRoshChodesh, boolean yomKippurKatan, boolean beHaB, boolean taanis, boolean taanisBechoros, int dayOfChanukah, boolean chanukah, boolean purim, boolean roshChodesh, boolean macharChodesh, boolean shabbosMevorchim, int dayOfOmer, boolean tishaBav, JewishDate molad, Date moladAsDate, Date tchilasZmanKidushLevana3Days, Date tchilasZmanKidushLevana7Days, Date sofZmanKidushLevanaBetweenMoldos, Date sofZmanKidushLevana15Days, int tekufasTishreiElapsedDays) {
+        public FullCalendar(LocalDate current, JewishDate currentJewishDate, int yomTovIndex, Daf dafYomiBavli, Daf dafYomiYerushalmi, boolean isruChag, boolean birkasHachamah, JewishCalendar.Parsha parshah, JewishCalendar.Parsha upcomingParshah, JewishCalendar.Parsha specialShabbos, boolean yomTov, boolean yomTovAssurBemelacha, boolean assurBemelacha, boolean hasCandleLighting, boolean tomorrowShabbosOrYomTov, boolean erevYomTovSheni, boolean aseresYemeiTeshuva, boolean pesach, boolean cholHamoedPesach, boolean shavuos, boolean roshHashana, boolean yomKippur, boolean succos, boolean hoshanaRabba, boolean shminiAtzeres, boolean simchasTorah, boolean cholHamoedSuccos, boolean cholHamoed, boolean erevYomTov, boolean erevRoshChodesh, boolean yomKippurKatan, boolean beHaB, boolean taanis, boolean taanisBechoros, int dayOfChanukah, boolean chanukah, boolean purim, boolean roshChodesh, boolean macharChodesh, boolean shabbosMevorchim, int dayOfOmer, boolean tishaBav, JewishDate molad, Instant moladAsDate, Instant tchilasZmanKidushLevana3Days, Instant tchilasZmanKidushLevana7Days, Instant sofZmanKidushLevanaBetweenMoldos, Instant sofZmanKidushLevana15Days, int tekufasTishreiElapsedDays) {
             this.current = current;
             this.currentJewishDate = currentJewishDate;
             this.yomTovIndex = yomTovIndex;
