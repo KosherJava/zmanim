@@ -1050,16 +1050,28 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
         setJewishDate(year, month, day);
     }
-    public void addYears(int years){
+    public void addYears(int years, boolean useAdarAlephInLeapYear){
         if (years < 1) {
             throw new IllegalArgumentException("the amount of years to add has to be greater than zero.");
         }
-        int year = getJewishYear() + years;
-        // Clamp to ADAR
-        int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
+        int addedYear = getJewishYear() + years;
+        // If we are in the month of Adar in a non-leap year and we are skipping
+        // to a year that is a leap year, we will use useAdarAlephInYear do
+        // decide which month to skip to.
+        int month;
+        if (getJewishMonth() == JewishDate.ADAR && !isJewishLeapYear(getJewishYear()) && isJewishLeapYear(addedYear)){
+            if (useAdarAlephInLeapYear){
+                month = JewishDate.ADAR;
+            }else{
+                month = JewishDate.ADAR_II;
+            }
+        } else{
+            // If we are in JewishDate.ADAR_II, this will clamp the month to 12 (JewishDate.ADAR)
+            month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(addedYear));
+        }
         // Clamp to final day of the month
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
-        setJewishDate(year, month, day);
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,addedYear));
+        setJewishDate(addedYear, month, day);
     }
 
 
