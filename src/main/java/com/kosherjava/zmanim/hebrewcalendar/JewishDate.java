@@ -722,11 +722,6 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
         // day of week (same calculation as original)
         dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1;
-
-        // Set the molad fields to 0
-        moladHours = 0;
-        moladMinutes = 0;
-        moladChalakim = 0;
     }
 
     /**
@@ -762,16 +757,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     public JewishDate getMolad() {
         JewishDate moladDate = new JewishDate(getChalakimSinceMoladTohu());
         if (moladDate.getMoladHours() >= 6) {
-            int hours = getMoladHours();
-            int minutes = getMoladMinutes();
-            int chalakim = getMoladChalakim();
-            // Adding a day resets the molad fields
-            // We must save them before adding a day and restore
-            // them afterward
             moladDate.addDays(1);
-            setMoladHours(hours);
-            setMoladMinutes(minutes);
-            setMoladChalakim(chalakim);
         }
         moladDate.setMoladHours((moladDate.getMoladHours() + 18) % 24);
         return moladDate;
@@ -917,7 +903,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      *             if the date would fall prior to the year 1 AD
      */
     public void setGregorianDate(LocalDate localDate) {
-        int absDate = gregorianDateToAbsDate(localDate.getYear(),  localDate.getMonth().getValue(), localDate.getDayOfMonth()); // FIXME + 1;// 1 = January
+        int absDate = gregorianDateToAbsDate(localDate.getYear(),  localDate.getMonth().getValue(), localDate.getDayOfMonth()); 
 
         // convert to Jewish date
         setAbsDate(absDate);
@@ -940,7 +926,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      *             leap year) or the day of month is &lt; 1 or &gt; 30 is passed in
      */
     public void setJewishDate(int year, int month, int dayOfMonth) {
-        setJewishDate(year, month, dayOfMonth, 0, 0, 0);
+        setJewishDate(year, month, dayOfMonth, getMoladHours(), getMoladMinutes(), getMoladChalakim());
     }
 
     /**
@@ -999,13 +985,13 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
                     + month + " is invalid for the year " + year + ".");
         }
         int day = Math.min(getDaysInJewishMonth(month,year),getJewishDayOfMonth());
-        setJewishDate(year, month, day);
+        setJewishDate(year, month, day, getMoladHours(), getMoladMinutes(), getMoladChalakim());
     }
 
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
-        setJewishDate(year, month, day);
+        setJewishDate(year, month, day, getMoladHours(), getMoladMinutes(), getMoladChalakim());
     }
 
 
