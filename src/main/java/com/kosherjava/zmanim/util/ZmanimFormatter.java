@@ -274,8 +274,8 @@ public class ZmanimFormatter {
 	 * 
 	 * @param instant
 	 *            the <code>Instant</code> to format
-	 * @param zonedDateTime
-	 *            the {@link java.time.ZonedDateTime ZonedDateTime} used to help format based on the ZonedDateTime DST and other
+	 * @param zoneId
+	 *            the {@link java.time.ZoneId ZoneId} used to help format based on the <code>Instant</code>'s DST and other
 	 *            settings.
 	 * @return the formatted String
 	 */
