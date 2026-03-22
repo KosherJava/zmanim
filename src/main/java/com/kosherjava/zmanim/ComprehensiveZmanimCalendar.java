@@ -1903,13 +1903,15 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * FIXME check for synchronous
-	 * This is a convenience method that returns the later of {@link #getMinchaGedola()} and
-	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is
-	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedola()}
-	 * will be returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
-	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em> time
-	 * may be affected by {@link #isUseAstronomicalChatzos()}.
+	 * This is a convenience method that returns the later of the minchaGedola passed in and {@link
+	 * #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is less
+	 * than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise the minchaGedola passed in will be
+	 * returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
+	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em>
+	 * time may be affected by {@link #isUseAstronomicalChatzos()}.
 	 * 
+	 * @param minchaGedola
+	 *            the mincha gedola to be compared to {@link #getMinchaGedola30Minutes()}.
 	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedola()} and {@link #getMinchaGedola30Minutes()}.
 	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
 	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
