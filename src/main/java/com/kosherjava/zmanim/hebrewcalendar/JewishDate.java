@@ -958,12 +958,6 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public void setJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
 
-        // if 30 is passed for a month that only has 29 days (for example by rolling the month from a month that had 30
-        // days to a month that only has 29) set the date to 29th
-        if (dayOfMonth > getDaysInJewishMonth(month, year)) {
-            dayOfMonth = getDaysInJewishMonth(month, year);
-        }
-
         validateJewishDate(year, month, dayOfMonth, hours, minutes, chalakim);
 
         jewishMonth = month;
@@ -978,20 +972,20 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // reset day of week
     }
 
+    public void setJewishDayOfMonth(int dayOfMonth){
+        setJewishDate(getJewishYear(), getJewishMonth(), dayOfMonth);
+    }
+
     public void setJewishMonth(int month){
         int year = getJewishYear();
-        if (month < NISSAN || month > getLastMonthOfJewishYear(year)) {
-            throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
-                    + month + " is invalid for the year " + year + ".");
-        }
         int day = Math.min(getDaysInJewishMonth(month,year),getJewishDayOfMonth());
-        setJewishDate(year, month, day, getMoladHours(), getMoladMinutes(), getMoladChalakim());
+        setJewishDate(year, month, day);
     }
 
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
-        setJewishDate(year, month, day, getMoladHours(), getMoladMinutes(), getMoladChalakim());
+        setJewishDate(year, month, day);
     }
 
 
