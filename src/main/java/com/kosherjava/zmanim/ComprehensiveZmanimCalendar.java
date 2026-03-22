@@ -15,8 +15,6 @@
  */
 package com.kosherjava.zmanim;
 
-import java.time.LocalDate;
-import java.util.Calendar; // FIXME remove once FORWARD can be refactored.
 import java.time.Instant;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
@@ -1905,13 +1903,15 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * FIXME check for synchronous
-	 * This is a convenience method that returns the later of {@link #getMinchaGedola()} and
-	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is
-	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedola()}
-	 * will be returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
-	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em> time
-	 * may be affected by {@link #isUseAstronomicalChatzos()}.
+	 * This is a convenience method that returns the later of the minchaGedola passed in and {@link
+	 * #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is less
+	 * than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise the minchaGedola passed in will be
+	 * returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
+	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em>
+	 * time may be affected by {@link #isUseAstronomicalChatzos()}.
 	 * 
+	 * @param minchaGedola
+	 *            the mincha gedola to be compared to {@link #getMinchaGedola30Minutes()}.
 	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedola()} and {@link #getMinchaGedola30Minutes()}.
 	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
 	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
@@ -1921,12 +1921,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #isUseAstronomicalChatzos()
 	 * 
 	 */
-	public Instant getMinchaGedolaGreaterThan30() {
-		if (getMinchaGedola30Minutes() == null || getMinchaGedola() == null) {
+	public Instant getMinchaGedolaGreaterThan30(Instant minchaGedola) {
+		if (getMinchaGedola30Minutes() == null || minchaGedola == null) {
 			return null;
 		} else {
-			return getMinchaGedola30Minutes().compareTo(getMinchaGedola()) > 0 ? getMinchaGedola30Minutes()
-					: getMinchaGedola();
+			return getMinchaGedola30Minutes().compareTo(minchaGedola) > 0 ? getMinchaGedola30Minutes()
+					: minchaGedola;
 		}
 	}
 
@@ -3964,29 +3964,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getMinchaGedolaBaalHatanya() {
 		return getMinchaGedola(getSunriseBaalHatanya(), getSunsetBaalHatanya(), true);
-	}
-
-	/**
-	 * FIXME synchronous
-	 * This is a convenience method that returns the later of {@link #getMinchaGedolaBaalHatanya()} and
-	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisBaalHatanya()
-	 * <em>shaah zmanis</em>} is less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise
-	 * {@link #getMinchaGedolaBaalHatanya()} will be returned.
-	 * @todo Consider adjusting this to calculate the time as 30 clock or <em>zmaniyos </em> minutes after either {@link
-	 *         #getSunTransit() astronomical <em>chatzos</em>} or {@link #getChatzosAsHalfDay() <em>chatzos</em> as half a day}
-	 *         for {@link AstronomicalCalculator calculators} that support it, based on {@link #isUseAstronomicalChatzos()}.
-	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedolaBaalHatanya()} and {@link #getMinchaGedola30Minutes()}.
-	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
-	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
-	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
-	 */
-	public Instant getMinchaGedolaBaalHatanyaGreaterThan30() {
-		if (getMinchaGedola30Minutes() == null || getMinchaGedolaBaalHatanya() == null) {
-			return null;
-		} else {
-			return getMinchaGedola30Minutes().compareTo(getMinchaGedolaBaalHatanya()) > 0 ? getMinchaGedola30Minutes()
-					: getMinchaGedolaBaalHatanya();
-		}
 	}
 
 	/**
