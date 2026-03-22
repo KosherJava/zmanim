@@ -15,6 +15,8 @@
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -30,14 +32,14 @@ public class YomiCalculator {
 	/**
 	 * The start date of the first Daf Yomi Bavli cycle of September 11, 1923 / Rosh Hashana 5684.
 	 */
-	private static final Calendar dafYomiStartDay = new GregorianCalendar(1923, Calendar.SEPTEMBER, 11);
+	private static final LocalDate dafYomiStartDay = LocalDate.of(1923, Month.SEPTEMBER,11);
 	/** The start date of the first Daf Yomi Bavli cycle in the Julian calendar. Used internally for calculations.*/
 	private static final int dafYomiJulianStartDay = getJulianDay(dafYomiStartDay);
 	/**
 	 * The date that the pagination for the Daf Yomi <em>Maseches Shekalim</em> changed to use the commonly used Vilna
 	 * Shas pagination from the no longer commonly available Zhitomir / Slavuta Shas used by Rabbi Meir Shapiro. 
 	 */
-	private static final Calendar shekalimChangeDay = new GregorianCalendar(1975, Calendar.JUNE, 24);
+	private static final LocalDate shekalimChangeDay =  LocalDate.of(1975, Month.JUNE, 24);
 	
 	/** The Julian date that the cycle for Shekalim changed.
 	 * @see #getDafYomiBavli(JewishCalendar) for details.
@@ -83,18 +85,18 @@ public class YomiCalculator {
 		 */
 		int[] blattPerMasechta = { 64, 157, 105, 121, 22, 88, 56, 40, 35, 31, 32, 29, 27, 122, 112, 91, 66, 49, 90, 82,
 				119, 119, 176, 113, 24, 49, 76, 14, 120, 110, 142, 61, 34, 34, 28, 22, 4, 9, 5, 73 };
-		Calendar calendar = jewishCalendar.getGregorianCalendar();
+		LocalDate date = jewishCalendar.getLocalDate();
 
 		Daf dafYomi = null;
-		int julianDay = getJulianDay(calendar);
+		int julianDay = getJulianDay(date);
 		int cycleNo;
 		int dafNo;
-		if (calendar.before(dafYomiStartDay)) {
+		if (date.isBefore(dafYomiStartDay)  ) {
 			// TODO: should we return a null or throw an IllegalArgumentException?
-			throw new IllegalArgumentException(calendar + " is prior to organized Daf Yomi Bavli cycles that started on "
+			throw new IllegalArgumentException(date + " is prior to organized Daf Yomi Bavli cycles that started on "
 					+ dafYomiStartDay);
 		}
-		if (calendar.equals(shekalimChangeDay) || calendar.after(shekalimChangeDay)) {
+		if (date.equals(shekalimChangeDay) || date.isAfter(shekalimChangeDay)) {
 			cycleNo = 8 + ((julianDay - shekalimJulianChangeDay) / 2711);
 			dafNo = ((julianDay - shekalimJulianChangeDay) % 2711);
 		} else {
@@ -140,10 +142,10 @@ public class YomiCalculator {
 	 *            The Java Calendar of the date to be calculated
 	 * @return the Julian day number corresponding to the date
 	 */
-	private static int getJulianDay(Calendar calendar) {
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
+	private static int getJulianDay(LocalDate localDate) {
+		int year = localDate.getYear();
+		int month = localDate.getMonthValue() ;
+		int day = localDate.getDayOfMonth();
 		if (month <= 2) {
 			year -= 1;
 			month += 12;

@@ -654,7 +654,7 @@ public class HebrewDateFormatter {
 					return getTransliteratedShabbosDayOfWeek().substring(0,3);
 				}
 			} else {
-				return weekFormat.format(jewishDate.getGregorianCalendar().getTime());
+				return weekFormat.format(jewishDate.getLocalDate());
 			}
 		}
 	}
