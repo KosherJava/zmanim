@@ -186,8 +186,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
 	 * 
-	 * @param localDate
-	 *            time of calculation
+	 * @param zonedDateTime
+	 *            the ZonedDateTime of the time of calculation
 	 * @param geoLocation
 	 *            The location information
 	 * @return solar elevation in degrees. The horizon (calculated in a vacuum using the solar radius as the point)
@@ -201,8 +201,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 180
 	 * degrees.
 	 * 
-	 * @param localDate
-	 *            time of calculation
+	 * @param zonedDateTime
+	 *            The ZonedDateTime of the time of calculation.
 	 * @param geoLocation
 	 *            The location information
 	 * @return the solar azimuth in degrees. Astronomical midday would be 180 in the norther hemosphere and 0 in the
