@@ -361,9 +361,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	public int hashCode() {
 		int result = 17;
 		result = 37 * result + getClass().hashCode();
-		result = 37 * result + Long.hashCode(Double.doubleToLongBits(getEarthRadius()));
-		result = 37 * result + Long.hashCode(Double.doubleToLongBits(getRefraction()));
-		result = 37 * result + Long.hashCode(Double.doubleToLongBits(getSolarRadius()));
+		result = 37 * result + Double.hashCode(getEarthRadius());
+		result = 37 * result + Double.hashCode(getRefraction());
+		result = 37 * result + Double.hashCode(getSolarRadius());
 		return result;
 	}
 
