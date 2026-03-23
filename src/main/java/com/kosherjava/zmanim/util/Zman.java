@@ -16,6 +16,7 @@
 package com.kosherjava.zmanim.util;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
@@ -229,11 +230,11 @@ public class Zman {
 	 */
 	public static final Comparator<Zman> DATE_ORDER = new Comparator<Zman>() {
 		public int compare(Zman zman1, Zman zman2) {
-			long firstTime = (zman1 == null || zman1.getZman() == null) ? Long.MAX_VALUE : zman1.getZman().toEpochMilli();
-			long secondTime = (zman2 == null || zman2.getZman() == null) ? Long.MAX_VALUE : zman2.getZman().toEpochMilli();
-			return Long.valueOf(firstTime).compareTo(Long.valueOf(secondTime));
+        long firstTime = (zman1 == null || zman1.getZman() == null) ? Long.MAX_VALUE : zman1.getZman().toEpochMilli();
+        long secondTime = (zman2 == null || zman2.getZman() == null) ? Long.MAX_VALUE : zman2.getZman().toEpochMilli();
+        return Long.compare(firstTime, secondTime);
 		}
-	};
+    };
 
 	/**
 	 * A {@link Comparator} that will compare and sort zmanim by zmanim label order. Compares its two arguments by the zmanim label
@@ -244,11 +245,11 @@ public class Zman {
 	 */
 	public static final Comparator<Zman> NAME_ORDER = new Comparator<Zman>() {
 		public int compare(Zman zman1, Zman zman2) {
-			String firstLabel = (zman1 == null || zman1.getLabel() == null) ? "" : zman1.getLabel();
-			String secondLabel = (zman2 == null || zman2.getLabel() == null) ? "" : zman2.getLabel();
-			return firstLabel.compareTo(secondLabel);
+        String firstLabel = (zman1 == null || zman1.getLabel() == null) ? "" : zman1.getLabel();
+        String secondLabel = (zman2 == null || zman2.getLabel() == null) ? "" : zman2.getLabel();
+        return firstLabel.compareTo(secondLabel);
 		}
-	};
+    };
 
 	/**
 	 * A {@link Comparator} that will compare and sort duration based <em>zmanim</em>  such as
@@ -262,9 +263,9 @@ public class Zman {
 		public int compare(Zman zman1, Zman zman2) {
 			long firstDuration  = zman1 == null ? Long.MAX_VALUE : zman1.getDuration();
 			long secondDuration  = zman2 == null ? Long.MAX_VALUE : zman2.getDuration();
-			return firstDuration == secondDuration ? 0 	: firstDuration > secondDuration ? 1 : -1;
+			return Long.compare(firstDuration, secondDuration);
 		}
-	};
+    };
 
 	/**
 	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very
@@ -288,12 +289,15 @@ public class Zman {
 	 * @return The XML formatted <code>String</code>.
 	 */
 	public String toXML() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		ZoneId zoneId = getGeoLocation() == null ? ZoneId.of("UTC") : getGeoLocation().getZoneId();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(zoneId);
 		StringBuilder sb = new StringBuilder();
 		sb.append("<Zman>\n");
 		sb.append("\t<Label>").append(getLabel()).append("</Label>\n");
 		sb.append("\t<Zman>").append(getZman() == null ? "": formatter.format(getZman())).append("</Zman>\n");
-		sb.append("\t" + getGeoLocation().toXML().replaceAll("\n", "\n\t"));
+		if (getGeoLocation() != null) {
+			sb.append("\t").append(getGeoLocation().toXML().replaceAll("\n", "\n\t"));
+		}
 		sb.append("\n\t<Duration>").append(getDuration()).append("</Duration>\n");
 		sb.append("\t<Description>").append(getDescription()).append("</Description>\n");
 		sb.append("</Zman>");
@@ -307,7 +311,12 @@ public class Zman {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\nLabel:\t").append(this.getLabel());
 		sb.append("\nZman:\t").append(getZman());
-		sb.append("\nGeoLocation:\t").append(getGeoLocation().toString().replaceAll("\n", "\n\t"));
+		sb.append("\nGeoLocation:\t");
+		if (getGeoLocation() == null) {
+			sb.append("null");
+		} else {
+			sb.append(getGeoLocation().toString().replaceAll("\n", "\n\t"));
+		}
 		sb.append("\nDuration:\t").append(getDuration());
 		sb.append("\nDescription:\t").append(getDescription());
 		return sb.toString();

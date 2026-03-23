@@ -16,6 +16,7 @@
 package com.kosherjava.zmanim;
 
 import java.time.Instant;
+import java.time.LocalTime;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
@@ -3221,10 +3222,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @return the Instant representing the local <em>chatzos</em>
 	 * @see GeoLocation#getLocalMeanTimeOffset(Instant)
-	 * @see AstronomicalCalendar#getLocalMeanTime(double)
+	 * @see AstronomicalCalendar#getLocalMeanTime(LocalTime)
 	 */
 	public Instant getFixedLocalChatzos() {
-		return getLocalMeanTime(12.0);
+		return getLocalMeanTime(LocalTime.NOON);
 	}
 
 	/**
@@ -4278,5 +4279,29 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getSamuchLeMinchaKetana72Minutes() {
 		return getSamuchLeMinchaKetana(getAlos72(), getTzais72(), true);
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(Object)
+	 */
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+		if (!super.equals(object)) {
+			return false;
+		}
+		ComprehensiveZmanimCalendar that = (ComprehensiveZmanimCalendar) object;
+		return ateretTorahSunsetOffset == that.ateretTorahSunsetOffset;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return 37 * super.hashCode() + Double.hashCode(ateretTorahSunsetOffset);
 	}
 }

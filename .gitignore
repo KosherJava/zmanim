@@ -4,3 +4,4 @@ zmanim.iml
 .gradle
 build
 local.properties
+*.class

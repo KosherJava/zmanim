@@ -237,8 +237,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return the adjusted zenith
 	 */
 	double getElevationAdjustment(double elevation) {
-		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
-		return elevationAdjustment;
+        return Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
 	}
 
 	/**
@@ -338,6 +337,34 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	public void setSolarRadius(double solarRadius) {
 		this.solarRadius = solarRadius;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(Object)
+	 */
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+		AstronomicalCalculator calculator = (AstronomicalCalculator) object;
+		return Double.doubleToLongBits(getEarthRadius()) == Double.doubleToLongBits(calculator.getEarthRadius())
+				&& Double.doubleToLongBits(getRefraction()) == Double.doubleToLongBits(calculator.getRefraction())
+				&& Double.doubleToLongBits(getSolarRadius()) == Double.doubleToLongBits(calculator.getSolarRadius());
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		int result = 17;
+		result = 37 * result + getClass().hashCode();
+		result = 37 * result + Double.hashCode(getEarthRadius());
+		result = 37 * result + Double.hashCode(getRefraction());
+		result = 37 * result + Double.hashCode(getSolarRadius());
+		return result;
 	}
 
 	/**

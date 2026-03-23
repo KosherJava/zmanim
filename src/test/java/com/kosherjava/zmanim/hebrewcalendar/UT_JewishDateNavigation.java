@@ -7,6 +7,7 @@ package com.kosherjava.zmanim.hebrewcalendar;
 import org.junit.*;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Calendar;
 
 /**
@@ -23,7 +24,7 @@ public class UT_JewishDateNavigation {
 		jewishDate.setJewishDate(5771, 1, 1);
         LocalDate localDate = jewishDate.getLocalDate();
 		Assert.assertEquals(5, localDate.getDayOfMonth());
-		Assert.assertEquals(3, localDate.getMonthValue());
+		Assert.assertEquals(Month.APRIL, localDate.getMonth());
 		Assert.assertEquals(2011, localDate.getYear());
 	}
 
@@ -37,7 +38,7 @@ public class UT_JewishDateNavigation {
 		jewishDate.setJewishDate(5771, 7, 1);
         LocalDate localDate = jewishDate.getLocalDate();
 		Assert.assertEquals(9, localDate.getDayOfMonth());
-		Assert.assertEquals(8, localDate.getMonthValue());
+		Assert.assertEquals(Month.SEPTEMBER, localDate.getMonth());
 		Assert.assertEquals(2010, localDate.getYear());
 	}
 

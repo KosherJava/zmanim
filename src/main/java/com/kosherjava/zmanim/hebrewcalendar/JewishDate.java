@@ -316,7 +316,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /**
      * Computes the Gregorian date from the absolute date. ND+ER
      * @param absDate the absolute date
-     * @return the <code>Localdate</code>.
+     * @return the <code>LocalDate</code>.
      */
     private static LocalDate absDateToDate(int absDate) {
         int year = absDate / 366; // Search forward year by year from approximate year
@@ -998,7 +998,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * 30 days, such as {@link #CHESHVAN} or {@link #KISLEV} or {@link #ADAR ADAR I} on a leap year and the next year is a
      * non-leap year, you must clone your date or once it is set to the 29th, the next time you forward it to a year that has
      * 30 days, the calendar will incorrectly be forwarded a year from the 29th to the 29th and not the 30th that you may expect.
-     * @param year teh year to set.
+     * @param year the year to set.
      */
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
@@ -1074,7 +1074,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     
     /**
      * Add the number of years passed in to the currently set date. If the current month is Adar on a non-leap year,
-     * passing <code>true</code> to the useAdarAlephForLeapYear parameter will set te month to Adar I, and passing
+     * passing <code>true</code> to the useAdarAlephForLeapYear parameter will set the month to Adar I, and passing
      * <code>false</code> will forward it to Adar II. The useAdarAlephForLeapYear will be ignored if the current month
      * is not Adar on a non-leap year. If the current year is a leap year and it is currently Adar I or Adar II and the
      * year it is being increased to is also a leap year, the same Adar will be used. If it is being increased to a
