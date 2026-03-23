@@ -263,7 +263,7 @@ public class Zman {
 		public int compare(Zman zman1, Zman zman2) {
 			long firstDuration  = zman1 == null ? Long.MAX_VALUE : zman1.getDuration();
 			long secondDuration  = zman2 == null ? Long.MAX_VALUE : zman2.getDuration();
-			return Long.compare(firstTime, secondTime);
+			return Long.compare(firstDuration, secondDuration);
 		}
     };
 
@@ -289,7 +289,8 @@ public class Zman {
 	 * @return The XML formatted <code>String</code>.
 	 */
 	public String toXML() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		ZoneId zoneId = getGeoLocation() == null ? ZoneId.of("UTC") : getGeoLocation().getZoneId();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(zoneId);
 		StringBuilder sb = new StringBuilder();
 		sb.append("<Zman>\n");
 		sb.append("\t<Label>").append(getLabel()).append("</Label>\n");
