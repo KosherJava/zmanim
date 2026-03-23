@@ -160,7 +160,7 @@ public class GeoLocation implements Cloneable {
 		setLatitude(latitude);
 		setLongitude(longitude);
 		setElevation(elevation);
-		this.setZoneId(zoneId);
+		setZoneId(zoneId);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class GeoLocation implements Cloneable {
 	 */
 	public void setLongitude(int degrees, int minutes, double seconds, String direction) {
 		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (longTemp > 180 || this.longitude < 0  || Double.isNaN(longTemp)) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
+		if (longTemp > 180 || longitude < 0  || Double.isNaN(longTemp)) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
 			throw new IllegalArgumentException("Longitude must be between 0 and  180.  Use a direction of W instead of negative.");
 		}
 		if (direction.equals("W")) {
@@ -324,21 +324,21 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * A method that will return the location's local mean time offset in milliseconds from local <a
-	 * href="https://en.wikipedia.org/wiki/Standard_time">standard time</a>. The globe is split into 360&deg;, with
+	 * A method that will return the location's local mean time offset in milliseconds from the local clock time defined
+	 * by the time zone offset in effect for the supplied <code>Instant</code>. The globe is split into 360&deg;, with
 	 * 15&deg; per hour of the day. For a local that is at a longitude that is evenly divisible by 15 (longitude % 15 ==
 	 * 0), at solar {@link com.kosherjava.zmanim.AstronomicalCalendar#getSunTransit() noon} (with adjustment for the <a
 	 * href="https://en.wikipedia.org/wiki/Equation_of_time">equation of time</a>) the sun should be directly overhead,
-	 * so a user who is 1&deg; west of this will have noon at 4 minutes after standard time noon, and conversely, a user
-	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM. Lakewood, N.J., whose longitude is
-	 * -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to yield 3 minutes
-	 * and 10 seconds earlier than standard time. The offset returned does not account for the <a
-	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> offset since this class is
-	 * unaware of dates.
+	 * so a user who is 1&deg; west of this will have noon at 4 minutes after local clock noon, and conversely, a user
+	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM local clock time. Lakewood, N.J., whose
+	 * longitude is -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to
+	 * yield 3 minutes and 10 seconds earlier than the local clock time derived from the zone offset in effect for the
+	 * supplied instant, including any applicable <a
+	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> adjustment.
 	 * @param instant
 	 *            the <code>Instant</code> used to claculate the local mean offset for the date in question.
-	 * @return the offset in milliseconds not accounting for Daylight saving time. A positive value will be returned
-	 *         East of the 15&deg; timezone line, and a negative value West of it.
+	 * @return the offset in milliseconds relative to the time zone offset in effect at the supplied instant. A
+	 *         positive value will be returned East of the 15&deg; timezone line, and a negative value West of it.
 	 */
 	public long getLocalMeanTimeOffset(Instant instant) {
 		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
@@ -447,14 +447,14 @@ public class GeoLocation implements Cloneable {
 		double eq_p1_ang_dist = Math.atan2(tanU1, cosAzimuth1); // eq_p1_ang_dist = angular distance on the sphere from the equator to P1
 		double sinAzimuth = cosU1 * sinAzimuth1; //azimuth of the geodesic at the equator
 		double cosSqAzimuth = 1 - sinAzimuth*sinAzimuth;
-		double uSq = cosSqAzimuth * (Math.pow(major_semi_axis, 2) - Math.pow(minor_semi_axis, 2) / Math.pow(minor_semi_axis, 2));
+		double uSq = cosSqAzimuth * (Math.pow(major_semi_axis, 2) - 1.0);
 		double a = 1 + uSq/16384*(4096 + uSq *(-768 + uSq *(320 - 175 * uSq)));
 		double b = uSq / 1024 * (256 + uSq *(-128 + uSq * (74-47 * uSq)));
 		double p1_p2_ang_dist = distance / (minor_semi_axis * a); //p1_p2_ang_dist = angular distance P1 P2 on the sphere
-		double sinSigma = Double.NaN;
-		double cosSigma = Double.NaN;
-		double cos2_eq_mid_ang_distance = Double.NaN; // # eq_mid_ang_distance = angular distance on the sphere from the equator to the midpoint of the line
-		double a_prime = Double.NaN;
+		double sinSigma ;
+		double cosSigma ;
+		double cos2_eq_mid_ang_distance; // # eq_mid_ang_distance = angular distance on the sphere from the equator to the midpoint of the line
+		double a_prime;
 		int iterations = 0;
 		
 		do {
@@ -511,7 +511,7 @@ public class GeoLocation implements Cloneable {
 		double sinSigma = 0;
 		double cosSigma = 0;
 		double sigma = 0;
-		double sinAlpha = 0;
+		double sinAlpha;
 		double cosSqAlpha = 0;
 		double cos2SigmaM = 0;
 		double C;
@@ -620,8 +620,6 @@ public class GeoLocation implements Cloneable {
 	 *   	 &lt;Elevation&gt;0 Meters&lt;/Elevation&gt;
 	 *   	 &lt;TimezoneName&gt;America/New_York&lt;/TimezoneName&gt;
 	 *   	 &lt;TimeZoneDisplayName&gt;Eastern Standard Time&lt;/TimeZoneDisplayName&gt;
-	 *   	 &lt;TimezoneGMTOffset&gt;-5&lt;/TimezoneGMTOffset&gt;
-	 *   	 &lt;TimezoneDSTOffset&gt;1&lt;/TimezoneDSTOffset&gt;
 	 *   &lt;/GeoLocation&gt;
 	 * </pre>
 	 * 
@@ -635,9 +633,6 @@ public class GeoLocation implements Cloneable {
 				"\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
 				"\t<TimezoneName>" + getZoneId().getId() + "</TimezoneName>\n" +
 				"\t<TimeZoneDisplayName>" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "</TimeZoneDisplayName>\n" +
-				/*"</TimezoneGMTOffset>\n" +
-				"\t<TimezoneDSTOffset>" + getTimeZone().getDSTSavings() / HOUR_MILLIS +
-				"</TimezoneDSTOffset>\n" +*/ // FIXME
 				"</GeoLocation>";
 	}
 
@@ -666,9 +661,9 @@ public class GeoLocation implements Cloneable {
 		long latLong = Double.doubleToLongBits(this.latitude);
 		long lonLong = Double.doubleToLongBits(this.longitude);
 		long elevLong = Double.doubleToLongBits(this.elevation);
-		int latInt = (int) (latLong ^ (latLong >>> 32));
-		int lonInt = (int) (lonLong ^ (lonLong >>> 32));
-		int elevInt = (int) (elevLong ^ (elevLong >>> 32));
+		int latInt = Long.hashCode(latLong);
+		int lonInt = Long.hashCode(lonLong);
+		int elevInt = Long.hashCode(elevLong);
 		result = 37 * result + getClass().hashCode();
 		result += 37 * result + latInt;
 		result += 37 * result + lonInt;
@@ -687,8 +682,7 @@ public class GeoLocation implements Cloneable {
 			"\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
 			"\nElevation:\t\t\t" + getElevation() + " Meters" +
 			"\nTimezone ID:\t\t\t" + getZoneId().getId() +
-			"\nTimezone Display Name:\t\t" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH);// +
-			//"\nTimezone DST Offset:\t\t" + getZoneId().getDSTSavings() / HOUR_MILLIS; // FIXME
+			"\nTimezone Display Name:\t\t" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 	}
 
 	/**
@@ -707,7 +701,7 @@ public class GeoLocation implements Cloneable {
 			//Required by the compiler. Should never be reached since we implement clone()
 		}
 		if (clone != null) {
-			clone.zoneId = (ZoneId) getZoneId();
+			clone.zoneId = getZoneId();
 			clone.locationName = getLocationName();
 		}
 		return clone;
