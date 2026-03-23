@@ -998,7 +998,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * 30 days, such as {@link #CHESHVAN} or {@link #KISLEV} or {@link #ADAR ADAR I} on a leap year and the next year is a
      * non-leap year, you must clone your date or once it is set to the 29th, the next time you forward it to a year that has
      * 30 days, the calendar will incorrectly be forwarded a year from the 29th to the 29th and not the 30th that you may expect.
-     * @param year teh year to set.
+     * @param year the year to set.
      */
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
