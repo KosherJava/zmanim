@@ -768,7 +768,6 @@ public class AstronomicalCalendar implements Cloneable {
     /**
      * Used by Molad based <em>zmanim</em> to determine if <em>zmanim</em> occur during the current day.
      * This is also used as the anchor for current timezone-offset calculations.
-     * @see #getMoladBasedTime(Instant, Instant, Instant, boolean)
      * @return midnight at the start of the current local date in the configured timezone
      */
     protected ZonedDateTime getMidnightLastNight() {
@@ -777,7 +776,6 @@ public class AstronomicalCalendar implements Cloneable {
 
     /**
      * Used by Molad based <em>zmanim</em> to determine if <em>zmanim</em> occur during the current day.
-     * @see #getMoladBasedTime(Instant, Instant, Instant, boolean)
      * @return following midnight
      */
     protected ZonedDateTime getMidnightTonight() {

@@ -1793,7 +1793,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * and not 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} after {@link #getChatzos() <em>chatzos</em>} as
 	 * calculated by {@link #getMinchaGedola}. Some use this time to delay the start of <em>mincha</em> in the winter when
 	 * 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is less than 30 minutes. See
-	 * {@link #getMinchaGedolaGreaterThan30()} for a convenience method that returns the later of the 2 calculations. One
+	 * {@link #getMinchaGedolaGreaterThan30(Instant)} for a convenience method that returns the later of the 2 calculations. One
 	 * should not use this time to start <em>mincha</em> before the standard {@link #getMinchaGedola() <em>mincha gedola</em>}.
 	 * See Shulchan Aruch <a href="https://hebrewbooks.org/pdfpager.aspx?req=49624&st=&pgnum=291">Orach Chayim 234:1</a> and
 	 * the Shaar Hatziyon <em>seif katan ches</em>. Since this calculation is a fixed 30 minutes of regular clock time after
@@ -1806,7 +1806,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getMinchaGedola()
-	 * @see #getMinchaGedolaGreaterThan30()
+	 * @see #getMinchaGedolaGreaterThan30(Instant)
 	 * @see #getChatzos()
 	 * @see #isUseAstronomicalChatzos()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
@@ -1877,8 +1877,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * zmanis</em> after <em>chatzos</em> with <em>shaos zmaniyos</em> calculated based on a day starting 72 minutes before sunrise
 	 * {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending 13.5 minutes after sunset {@link
 	 * #getTzaisGeonim3Point7Degrees() <em>tzais</em> 3.7&deg;}. <em>Mincha gedola</em> is the earliest time to pray <em>mincha</em>.
-	 * The later of this time or 30 clock minutes after <em>chatzos</em> is returned. See {@link #getMinchaGedolaGreaterThan30()}
-	 * (though that calculation is based on <em>mincha gedola</em> GRA).
+	 * The later of this time or 30 clock minutes after <em>chatzos</em> is returned. See {@link
+	 * #getMinchaGedolaGreaterThan30(Instant)} for a way to claculate the later of 30 minutes or this <em>mincha gedola</em>.
 	 * For more information about <em>mincha gedola</em> see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}.
 	 * Since calculation of this <em>zman</em> involves <em>chatzos</em> that is offset from the center of the astronomical day,
 	 * {@link #isUseAstronomicalChatzosForOtherZmanim()} is N/A here.
@@ -1890,7 +1890,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getTzaisGeonim3Point7Degrees()
 	 * @see #getShaahZmanisAlos16Point1ToTzais3Point7()
-	 * @see #getMinchaGedolaGreaterThan30()
+	 * @see #getMinchaGedolaGreaterThan30(Instant)
 	 */
 	public Instant getMinchaGedolaAhavatShalom() {
 		if (getChatzos() == null || getMinchaGedola30Minutes() == null || getShaahZmanisAlos16Point1ToTzais3Point7() == Long.MIN_VALUE) {
