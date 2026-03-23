@@ -562,7 +562,7 @@ public class ZmanimFormatter {
 
         ZonedDateTime lastMidnight = ZonedDateTime.of(astronomicalCalendar.getLocalDate(), LocalTime.MIDNIGHT, astronomicalCalendar.getGeoLocation().getZoneId());
         double offsetHours = lastMidnight.getOffset().getTotalSeconds() / 3600.0;
-	    sb.append(" timeZoneOffset=\"").append(offsetHours).append("\"");
+		sb.append("\t\"timeZoneOffset\":\"").append(offsetHours).append("\"");
 		sb.append("},\n\"");
 
         switch (astronomicalCalendar.getClass().getName()) {
