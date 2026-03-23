@@ -683,8 +683,8 @@ public class GeoLocation implements Cloneable {
 	 */
 	public String toString() {
 		return "\nLocation Name:\t\t\t" + getLocationName() +
-			"\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
-			"\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
+			"\nLatitude:\t\t\t" + getLatitude() + "°" +
+			"\nLongitude:\t\t\t" + getLongitude() + "°" +
 			"\nElevation:\t\t\t" + getElevation() + " Meters" +
 			"\nTimezone ID:\t\t\t" + getZoneId().getId() +
 			"\nTimezone Display Name:\t\t" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH);// +
