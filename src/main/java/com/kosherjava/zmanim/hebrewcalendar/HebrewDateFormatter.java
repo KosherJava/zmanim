@@ -69,7 +69,7 @@ public class HebrewDateFormatter {
 	/**
 	 * The internal DateFormat.&nbsp; See {@link #isLongWeekFormat()} and {@link #setLongWeekFormat(boolean)}.
 	 */
-	private DateTimeFormatter weekFormat = null;
+	private DateTimeFormatter weekFormat;
 	
 	/**
 	 * List of transliterated parshiyos using the default <em>Ashkenazi</em> pronunciation.&nbsp; The formatParsha method
