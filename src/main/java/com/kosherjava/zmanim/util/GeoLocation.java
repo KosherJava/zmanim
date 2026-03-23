@@ -324,21 +324,21 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * A method that will return the location's local mean time offset in milliseconds from local <a
-	 * href="https://en.wikipedia.org/wiki/Standard_time">standard time</a>. The globe is split into 360&deg;, with
+	 * A method that will return the location's local mean time offset in milliseconds from the local clock time defined
+	 * by the time zone offset in effect for the supplied <code>Instant</code>. The globe is split into 360&deg;, with
 	 * 15&deg; per hour of the day. For a local that is at a longitude that is evenly divisible by 15 (longitude % 15 ==
 	 * 0), at solar {@link com.kosherjava.zmanim.AstronomicalCalendar#getSunTransit() noon} (with adjustment for the <a
 	 * href="https://en.wikipedia.org/wiki/Equation_of_time">equation of time</a>) the sun should be directly overhead,
-	 * so a user who is 1&deg; west of this will have noon at 4 minutes after standard time noon, and conversely, a user
-	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM. Lakewood, N.J., whose longitude is
-	 * -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to yield 3 minutes
-	 * and 10 seconds earlier than standard time. The offset returned does not account for the <a
-	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> offset since this class is
-	 * unaware of dates.
+	 * so a user who is 1&deg; west of this will have noon at 4 minutes after local clock noon, and conversely, a user
+	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM local clock time. Lakewood, N.J., whose
+	 * longitude is -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to
+	 * yield 3 minutes and 10 seconds earlier than the local clock time derived from the zone offset in effect for the
+	 * supplied instant, including any applicable <a
+	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> adjustment.
 	 * @param instant
 	 *            the <code>Instant</code> used to claculate the local mean offset for the date in question.
-	 * @return the offset in milliseconds not accounting for Daylight saving time. A positive value will be returned
-	 *         East of the 15&deg; timezone line, and a negative value West of it.
+	 * @return the offset in milliseconds relative to the time zone offset in effect at the supplied instant. A
+	 *         positive value will be returned East of the 15&deg; timezone line, and a negative value West of it.
 	 */
 	public long getLocalMeanTimeOffset(Instant instant) {
 		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
