@@ -1147,7 +1147,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public double getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset) {
 		Instant seaLevelSunrise = getSeaLevelSunrise();
 		Instant seaLevelSunset = getSeaLevelSunset();
-		Instant twilight = null;
+		Instant twilight;
 		if (sunset) {
 			twilight = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
 		} else {

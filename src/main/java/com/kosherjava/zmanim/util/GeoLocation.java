@@ -447,14 +447,14 @@ public class GeoLocation implements Cloneable {
 		double eq_p1_ang_dist = Math.atan2(tanU1, cosAzimuth1); // eq_p1_ang_dist = angular distance on the sphere from the equator to P1
 		double sinAzimuth = cosU1 * sinAzimuth1; //azimuth of the geodesic at the equator
 		double cosSqAzimuth = 1 - sinAzimuth*sinAzimuth;
-		double uSq = cosSqAzimuth * (Math.pow(major_semi_axis, 2) - Math.pow(minor_semi_axis, 2) / Math.pow(minor_semi_axis, 2));
+		double uSq = cosSqAzimuth * (Math.pow(major_semi_axis, 2) - 1.0);
 		double a = 1 + uSq/16384*(4096 + uSq *(-768 + uSq *(320 - 175 * uSq)));
 		double b = uSq / 1024 * (256 + uSq *(-128 + uSq * (74-47 * uSq)));
 		double p1_p2_ang_dist = distance / (minor_semi_axis * a); //p1_p2_ang_dist = angular distance P1 P2 on the sphere
-		double sinSigma = Double.NaN;
-		double cosSigma = Double.NaN;
-		double cos2_eq_mid_ang_distance = Double.NaN; // # eq_mid_ang_distance = angular distance on the sphere from the equator to the midpoint of the line
-		double a_prime = Double.NaN;
+		double sinSigma ;
+		double cosSigma ;
+		double cos2_eq_mid_ang_distance; // # eq_mid_ang_distance = angular distance on the sphere from the equator to the midpoint of the line
+		double a_prime;
 		int iterations = 0;
 		
 		do {
@@ -511,7 +511,7 @@ public class GeoLocation implements Cloneable {
 		double sinSigma = 0;
 		double cosSigma = 0;
 		double sigma = 0;
-		double sinAlpha = 0;
+		double sinAlpha;
 		double cosSqAlpha = 0;
 		double cos2SigmaM = 0;
 		double C;
@@ -666,9 +666,9 @@ public class GeoLocation implements Cloneable {
 		long latLong = Double.doubleToLongBits(this.latitude);
 		long lonLong = Double.doubleToLongBits(this.longitude);
 		long elevLong = Double.doubleToLongBits(this.elevation);
-		int latInt = (int) (latLong ^ (latLong >>> 32));
-		int lonInt = (int) (lonLong ^ (lonLong >>> 32));
-		int elevInt = (int) (elevLong ^ (elevLong >>> 32));
+		int latInt = Long.hashCode(latLong);
+		int lonInt = Long.hashCode(lonLong);
+		int elevInt = Long.hashCode(elevLong);
 		result = 37 * result + getClass().hashCode();
 		result += 37 * result + latInt;
 		result += 37 * result + lonInt;
@@ -707,7 +707,7 @@ public class GeoLocation implements Cloneable {
 			//Required by the compiler. Should never be reached since we implement clone()
 		}
 		if (clone != null) {
-			clone.zoneId = (ZoneId) getZoneId();
+			clone.zoneId = getZoneId();
 			clone.locationName = getLocationName();
 		}
 		return clone;

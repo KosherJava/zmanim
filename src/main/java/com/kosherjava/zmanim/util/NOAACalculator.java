@@ -209,8 +209,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	private static double getSunApparentLongitude(double julianCenturies) {
 		double sunTrueLongitude = getSunTrueLongitude(julianCenturies);
 		double omega = 125.04 - 1934.136 * julianCenturies;
-		double lambda = sunTrueLongitude - 0.00569 - 0.00478 * Math.sin(Math.toRadians(omega));
-		return lambda;
+        return sunTrueLongitude - 0.00569 - 0.00478 * Math.sin(Math.toRadians(omega));
 	}
 
 	/**
@@ -255,8 +254,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double obliquityCorrection = getObliquityCorrection(julianCenturies);
 		double lambda = getSunApparentLongitude(julianCenturies);
 		double sint = Math.sin(Math.toRadians(obliquityCorrection)) * Math.sin(Math.toRadians(lambda));
-		double theta = Math.toDegrees(Math.asin(sint));
-		return theta;
+        return Math.toDegrees(Math.asin(sint));
 	}
 
 	/**

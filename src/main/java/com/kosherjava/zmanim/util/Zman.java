@@ -227,13 +227,11 @@ public class Zman {
 	 * than the second.
 	 * Please note that this class will handle cases where either the {@code Zman} is a null or {@link #getZman()} returns a null.
 	 */
-	public static final Comparator<Zman> DATE_ORDER = new Comparator<Zman>() {
-		public int compare(Zman zman1, Zman zman2) {
-			long firstTime = (zman1 == null || zman1.getZman() == null) ? Long.MAX_VALUE : zman1.getZman().toEpochMilli();
-			long secondTime = (zman2 == null || zman2.getZman() == null) ? Long.MAX_VALUE : zman2.getZman().toEpochMilli();
-			return Long.valueOf(firstTime).compareTo(Long.valueOf(secondTime));
-		}
-	};
+	public static final Comparator<Zman> DATE_ORDER = (zman1, zman2) -> {
+        long firstTime = (zman1 == null || zman1.getZman() == null) ? Long.MAX_VALUE : zman1.getZman().toEpochMilli();
+        long secondTime = (zman2 == null || zman2.getZman() == null) ? Long.MAX_VALUE : zman2.getZman().toEpochMilli();
+        return Long.compare(firstTime, secondTime);
+    };
 
 	/**
 	 * A {@link Comparator} that will compare and sort zmanim by zmanim label order. Compares its two arguments by the zmanim label
@@ -242,13 +240,11 @@ public class Zman {
 	 * Please note that this class will sort cases where either the {@code Zman} is a null or {@link #label} returns a null
 	 * as empty {@code String}s.
 	 */
-	public static final Comparator<Zman> NAME_ORDER = new Comparator<Zman>() {
-		public int compare(Zman zman1, Zman zman2) {
-			String firstLabel = (zman1 == null || zman1.getLabel() == null) ? "" : zman1.getLabel();
-			String secondLabel = (zman2 == null || zman2.getLabel() == null) ? "" : zman2.getLabel();
-			return firstLabel.compareTo(secondLabel);
-		}
-	};
+	public static final Comparator<Zman> NAME_ORDER = (zman1, zman2) -> {
+        String firstLabel = (zman1 == null || zman1.getLabel() == null) ? "" : zman1.getLabel();
+        String secondLabel = (zman2 == null || zman2.getLabel() == null) ? "" : zman2.getLabel();
+        return firstLabel.compareTo(secondLabel);
+    };
 
 	/**
 	 * A {@link Comparator} that will compare and sort duration based <em>zmanim</em>  such as
@@ -258,13 +254,11 @@ public class Zman {
 	 * integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
 	 * Please note that this class will sort cases where {@code Zman} is a null.
 	 */
-	public static final Comparator<Zman> DURATION_ORDER = new Comparator<Zman>() {
-		public int compare(Zman zman1, Zman zman2) {
-			long firstDuration  = zman1 == null ? Long.MAX_VALUE : zman1.getDuration();
-			long secondDuration  = zman2 == null ? Long.MAX_VALUE : zman2.getDuration();
-			return firstDuration == secondDuration ? 0 	: firstDuration > secondDuration ? 1 : -1;
-		}
-	};
+	public static final Comparator<Zman> DURATION_ORDER = (zman1, zman2) -> {
+        long firstDuration = zman1 == null ? Long.MAX_VALUE : zman1.getDuration();
+        long secondDuration = zman2 == null ? Long.MAX_VALUE : zman2.getDuration();
+        return Long.compare(firstDuration, secondDuration);
+    };
 
 	/**
 	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very

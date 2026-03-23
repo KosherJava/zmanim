@@ -237,8 +237,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return the adjusted zenith
 	 */
 	double getElevationAdjustment(double elevation) {
-		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
-		return elevationAdjustment;
+        return Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
 	}
 
 	/**

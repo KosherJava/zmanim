@@ -197,7 +197,7 @@ public class JewishCalendar extends JewishDate {
 		 /**The special <em>parsha</em> of Shekalim*/SHKALIM, /** The special <em>parsha</em> of Zachor*/ZACHOR, /**The special <em>parsha</em> of
 		  * Para*/PARA, /** The special <em>parsha</em> of Hachodesh*/HACHODESH, /**<em>Shabbos</em> Shuva*/SHUVA, /**<em>Shabbos</em> Shira*/SHIRA, 
 		  /**<em>Shabbos</em> Hagadol*/HAGADOL, /**<em>Shabbos</em> Chazon*/CHAZON, /**<em>Shabbos</em> Nachamu*/NACHAMU
-	};
+	}
 	
 	/**
 	 * An array of <em>parshiyos</em> in the 17 possible combinations.
