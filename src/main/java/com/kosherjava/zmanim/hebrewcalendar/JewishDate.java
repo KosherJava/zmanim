@@ -1074,7 +1074,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     
     /**
      * Add the number of years passed in to the currently set date. If the current month is Adar on a non-leap year,
-     * passing <code>true</code> to the useAdarAlephForLeapYear parameter will set te month to Adar I, and passing
+     * passing <code>true</code> to the useAdarAlephForLeapYear parameter will set the month to Adar I, and passing
      * <code>false</code> will forward it to Adar II. The useAdarAlephForLeapYear will be ignored if the current month
      * is not Adar on a non-leap year. If the current year is a leap year and it is currently Adar I or Adar II and the
      * year it is being increased to is also a leap year, the same Adar will be used. If it is being increased to a
