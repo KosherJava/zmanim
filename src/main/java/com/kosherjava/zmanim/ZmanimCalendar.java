@@ -17,6 +17,7 @@ package com.kosherjava.zmanim;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
@@ -1147,7 +1148,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public double getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset) {
 		Instant seaLevelSunrise = getSeaLevelSunrise();
 		Instant seaLevelSunset = getSeaLevelSunset();
-		Instant twilight = null;
+		Instant twilight;
 		if (sunset) {
 			twilight = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
 		} else {
@@ -1230,5 +1231,33 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 			return Long.MIN_VALUE;
 		}
 		return (endOfHalfDay.toEpochMilli() - startOfHalfDay.toEpochMilli()) / 6;
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(Object)
+	 */
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+		if (!super.equals(object)) {
+			return false;
+		}
+		ZmanimCalendar that = (ZmanimCalendar) object;
+		return useElevation == that.useElevation
+				&& useAstronomicalChatzos == that.useAstronomicalChatzos
+				&& useAstronomicalChatzosForOtherZmanim == that.useAstronomicalChatzosForOtherZmanim
+				&& candleLightingOffset == that.candleLightingOffset;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), useElevation, useAstronomicalChatzos,
+				useAstronomicalChatzosForOtherZmanim, Double.hashCode(candleLightingOffset));
 	}
 }
