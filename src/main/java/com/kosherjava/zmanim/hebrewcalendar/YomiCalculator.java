@@ -17,8 +17,6 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * This class calculates the Daf Yomi Bavli page (daf) for a given date. To calculate Daf Yomi Yerushalmi
