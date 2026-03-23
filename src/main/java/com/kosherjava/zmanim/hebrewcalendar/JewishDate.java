@@ -316,7 +316,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /**
      * Computes the Gregorian date from the absolute date. ND+ER
      * @param absDate the absolute date
-     * @return the <code>Localdate</code>.
+     * @return the <code>LocalDate</code>.
      */
     private static LocalDate absDateToDate(int absDate) {
         int year = absDate / 366; // Search forward year by year from approximate year
