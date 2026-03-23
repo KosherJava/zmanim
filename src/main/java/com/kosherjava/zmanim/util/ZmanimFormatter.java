@@ -654,6 +654,6 @@ public class ZmanimFormatter {
 		if (!method.getName().startsWith("get"))
 			return false;
 
-        return method.getReturnType().getName().endsWith("Date") || method.getReturnType().getName().endsWith("long");
+        return method.getReturnType().getName().endsWith("Instant") || method.getReturnType().getName().endsWith("long");
     }
 }
