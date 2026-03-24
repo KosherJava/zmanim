@@ -281,7 +281,7 @@ public class ZmanimFormatter {
 	public String formatDateTime(Instant instant, ZoneId zoneId) {
 	    ZonedDateTime dateTime = instant.atZone(zoneId);
 
-	    if (this.dateTimeFormatter.toString().equals("yyyy-MM-dd'T'HH:mm:ss")) {
+	    if (this.dateTimeFormatter.toString().equals("yyyy-MM-dd'T'HH:mm:ss")) { // FIXME this works in the SimpleDateFormat but not with a DateTimeFormatter 
 	        return getXSDateTime(instant);
 	    } else {
 	        return this.dateTimeFormatter.format(dateTime);
@@ -372,6 +372,8 @@ public class ZmanimFormatter {
 	public static String toXML(AstronomicalCalendar astronomicalCalendar) {
 		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, DateTimeFormatter.ofPattern(
 				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getZoneId());
+		DateTimeFormatter xsdFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+				.withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		df = df.withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 
@@ -455,7 +457,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = dateList.get(i);
 			sb.append("\t<").append(zman.getLabel()).append(">");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getGeoLocation().getZoneId()));
+			sb.append(xsdFormatter.format(zman.getZman()));
 			sb.append("</").append(zman.getLabel()).append(">\n");
 		}
 		durationList.sort(Zman.DURATION_ORDER);
@@ -517,6 +519,8 @@ public class ZmanimFormatter {
 	public static String toJSON(AstronomicalCalendar astronomicalCalendar) {
 		ZmanimFormatter formatter = new ZmanimFormatter(ZmanimFormatter.XSD_DURATION_FORMAT, DateTimeFormatter.ofPattern(
 				"yyyy-MM-dd'T'HH:mm:ss"), astronomicalCalendar.getGeoLocation().getZoneId());
+		DateTimeFormatter xsdFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+				.withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 .withZone(astronomicalCalendar.getGeoLocation().getZoneId());
 
@@ -588,7 +592,7 @@ public class ZmanimFormatter {
 		for (int i = 0; i < dateList.size(); i++) {
 			zman = dateList.get(i);
 			sb.append("\t\"").append(zman.getLabel()).append("\":\"");
-			sb.append(formatter.formatDateTime(zman.getZman(), astronomicalCalendar.getGeoLocation().getZoneId()));
+			sb.append(xsdFormatter.format(zman.getZman()));
 			sb.append("\",\n");
 		}
 		durationList.sort(Zman.DURATION_ORDER);
