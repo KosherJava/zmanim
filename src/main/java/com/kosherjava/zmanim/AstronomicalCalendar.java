@@ -644,7 +644,9 @@ public class AstronomicalCalendar implements Cloneable {
 	            date = date.minusDays(1);
 	        }
 	    }
-        LocalDateTime dateTime = date.atStartOfDay().plusNanos(Math.round(time * HOUR_MILLIS) * 1_000_000L);
+	    
+        // Math.round(time * HOUR_MILLIS) * 1_000_000L could be used below, but this exactly matches the pre-3.0 Date-based code.
+        LocalDateTime dateTime = date.atStartOfDay().plusNanos((long)(time * HOUR_MILLIS) * 1_000_000L);  
 
 	    // The computed time is in UTC fractional hours; anchor in UTC before converting.
 	    return ZonedDateTime.of(dateTime, ZoneOffset.UTC).toInstant();
