@@ -277,15 +277,11 @@ public class ZmanimFormatter {
 	 *            the {@link java.time.ZoneId ZoneId} used to help format based on the <code>Instant</code>'s DST and other
 	 *            settings.
 	 * @return the formatted String
+	 * @see #getXSDateTime(Instant)
 	 */
 	public String formatDateTime(Instant instant, ZoneId zoneId) {
 	    ZonedDateTime dateTime = instant.atZone(zoneId);
-
-	    if (this.dateTimeFormatter.toString().equals("yyyy-MM-dd'T'HH:mm:ss")) { // FIXME this works in the SimpleDateFormat but not with a DateTimeFormatter 
-	        return getXSDateTime(instant);
-	    } else {
-	        return this.dateTimeFormatter.format(dateTime);
-	    }
+	    return this.getDateTimeFormatter().format(dateTime);
 	}
 	
 	/**
@@ -293,11 +289,9 @@ public class ZmanimFormatter {
 	 * @param instant the <code>Instant</code> to format.
 	 * @return the <code>Instant</code> formatted using the format "yyyy-MM-dd'T'HH:mm:ssXXX
 	 */
-	public String getXSDateTime(Instant instant) {
-	    DateTimeFormatter formatter =
-	            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
-	                             .withZone(getZoneId());
-
+	public String formatXSDateTime(Instant instant) {
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+	    		.withZone(getZoneId());
 	    return formatter.format(instant);
 	}
 
