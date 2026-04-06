@@ -69,7 +69,7 @@ public class RegressionTestFileWriter {
 					zcal.getSofZmanTfilaMGA96MinutesZmanis(), zcal.getSofZmanTfilaMGA120Minutes(),
 					zcal.getSofZmanTfila2HoursBeforeChatzos(), zcal.getMinchaGedola30Minutes(),
 					zcal.getMinchaGedola72Minutes(), zcal.getMinchaGedola16Point1Degrees(),
-					zcal.getMinchaGedolaAhavatShalom(), zcal.getMinchaGedolaGreaterThan30(zcal.getMinchaGedola()),
+					zcal.getMinchaGedolaAhavatShalom(), zcal.getMinchaGedolaGreaterThan30(zcal.getMinchaGedolaGRA()),
 					zcal.getMinchaKetana16Point1Degrees(), zcal.getMinchaKetanaAhavatShalom(),
 					zcal.getMinchaKetana72Minutes(), zcal.getPlagHamincha60Minutes(), zcal.getPlagHamincha72Minutes(),
 					zcal.getPlagHamincha90Minutes(), zcal.getPlagHamincha96Minutes(),
