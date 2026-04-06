@@ -251,6 +251,16 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see ComprehensiveZmanimCalendar#getTzaisGeonim8Point5Degrees()
 	 */
 	protected static final double ZENITH_8_POINT_5 = GEOMETRIC_ZENITH + 8.5;
+	
+	/**
+	 * The zenith of 1.583&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * calculating <em>netz amiti</em> (sunrise) and <em>shkiah amiti</em> (sunset) based on the opinion of the
+	 * <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>.
+	 *
+	 * @see #getSunriseBaalHatanya()
+	 * @see #getSunsetBaalHatanya()
+	 */
+	protected static final double ZENITH_1_POINT_583 = GEOMETRIC_ZENITH + 1.583;
 
 	/**
 	 * The default <em>Shabbos</em> candle lighting offset is 18 minutes. This can be changed via the
@@ -597,6 +607,107 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 			return getHalfDayBasedZman(startOfDay, getChatzos(), 4);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 4);
+		}
+	}
+	
+	
+	/**
+	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion
+	 * of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This time is 5 hours into the day based on the
+	 * opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from
+	 * sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea
+	 * level sunrise}. If it is not  <em>erev Pesach</em>, a null will be returned.
+	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
+	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least
+	 *         one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be
+	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see ZmanimCalendar#getShaahZmanisGra()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
+	 */
+	
+	/**
+	 * A generic method for calculating <em>sof zman biur chametz</em> or the latest time one is allowed burning
+	 * <em>chametz</em> on <em>Erev Pesach</em> that is 5 * <em>shaos zmaniyos</em> (temporal hours) after the start of the
+	 * day, calculated using the start and end of the day passed to this method. If the date is not <em>erev Pesach</em>, a
+	 * null will be returned. The time from the start of day to the end of day is divided into 12 <em>shaos zmaniyos</em>
+	 * (temporal hours), and <em>sof zman biur chametz</em> is calculated as 5 of those <em>shaos zmaniyos</em> after the
+	 * beginning of the day. As an example, passing {@link #getSunrise() sunrise} and {@link #getSunset() sunset} to this
+	 * method will return <em>sof zman biur chametz</em> according to the opinion of the <a href=
+	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This method's synchronous parameter indicates if the start
+	 * and end of day for the calculation are synchronous, having the same offset. This is typically the case, but some
+	 * <em>zmanim</em> calculations are based on a start and end at different offsets from the real start and end of the day,
+	 * such as starting the day at <em>alos</em> and an ending it at <em>tzais Geonim</em> or some other variant. If the day
+	 * is not synchronous a {@link #getHalfDayBasedZman(Instant, Instant, double) half-day based calculations} will be bypassed.
+	 * It would be illogical to use a half-day based calculation that start/end at <em>chatzos</em> when the two "halves" of
+	 * the day are not equal, and the halfway point between them is not at <em>chatzos</em>.
+	 * 
+	 * @param startOfDay
+	 *            the start of day for calculating <em>sof zman biur chametz</em>. This can be sunrise or any <em>alos</em>
+	 *            passed to this method.
+	 * @param endOfDay
+	 *            the end of day for calculating <em>sof zman biur chametz</em>. This can be sunset or any <em>tzais</em>
+	 *            passed to this method.
+	 * @param synchronous
+	 *            If the <em>zman</em> has a synchronous start and end of the day. If this is <code>false</code>, using a {@link
+	 *            #isUseAstronomicalChatzosForOtherZmanim()} makes no sense and will be ignored even if set to true, since by
+	 *            definition <em>chatzos</em> will not be the middle of the day for the <em>zman</em>.
+	 * @return the <code>Instant</code> of the <em>sof zman biur chametz</em> based on the start and end of day times passed
+	 *         to this method. If the date is not <em>Erev Pesach</em> or if the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
+	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 */
+	public Instant getSofZmanBiurChametz(Instant startOfDay, Instant endOfDay, boolean synchronous) {
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
+		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
+			if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
+				return getHalfDayBasedZman(startOfDay, getChatzos(), 5);
+			} else {
+				return getShaahZmanisBasedZman(startOfDay, endOfDay, 5);
+			}
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * A generic method for calculating <em>sof zman achilas chametz</em> or the latest time one is allowed eating
+	 * <em>chametz</em> on <em>Erev Pesach</em> that is 4 * <em>shaos zmaniyos</em> (temporal hours) after the start of the
+	 * day, calculated using the start and end of the day passed to this method. If the date is not <em>erev Pesach</em>, a
+	 * null will be returned. The time from the start of day to the end of day is divided into 12 <em>shaos zmaniyos</em>
+	 * (temporal hours), and <em>sof zman achilas chametz</em> is calculated as 4 of those <em>shaos zmaniyos</em> after the
+	 * beginning of the day. As an example, passing {@link #getSunrise() sunrise} and {@link #getSunset() sunset} to this
+	 * method will return <em>sof zman achilas chametz</em> according to the opinion of the <a href=
+	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This method's synchronous parameter indicates if the start
+	 * and end of day for the calculation are synchronous, having the same offset. This is typically the case, but some
+	 * <em>zmanim</em> calculations are based on a start and end at different offsets from the real start and end of the day,
+	 * such as starting the day at <em>alos</em> and an ending it at <em>tzais Geonim</em> or some other variant. If the day
+	 * is not synchronous a {@link #getHalfDayBasedZman(Instant, Instant, double) half-day based calculations} will be bypassed.
+	 * It would be illogical to use a half-day based calculation that start/end at <em>chatzos</em> when the two "halves" of
+	 * the day are not equal, and the halfway point between them is not at <em>chatzos</em>.
+	 * 
+	 * @param startOfDay
+	 *            the start of day for calculating <em>sof zman achilas chametz</em>. This can be sunrise or any <em>alos</em>
+	 *            passed to this method.
+	 * @param endOfDay
+	 *            the end of day for calculating <em>sof zman achilas chametz</em>. This can be sunset or any <em>tzais</em>
+	 *            passed to this method.
+	 * @param synchronous
+	 *            If the <em>zman</em> has a synchronous start and end of the day. If this is <code>false</code>, using a {@link
+	 *            #isUseAstronomicalChatzosForOtherZmanim()} makes no sense and will be ignored even if set to true, since by
+	 *            definition <em>chatzos</em> will not be the middle of the day for the <em>zman</em>.
+	 * @return the <code>Instant</code> of the <em>sof zman achilas chametz</em> based on the start and end of day times passed
+	 *         to this method. If the date is not <em>Erev Pesach</em> or if the calculation can't be computed such as in the
+	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
+	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 */
+	public Instant getSofZmanAchilasChametz(Instant startOfDay, Instant endOfDay, boolean synchronous) {
+		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
+		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
+			return getSofZmanTfila(startOfDay, endOfDay, synchronous);
+		} else {
+			return null;
 		}
 	}
 	
@@ -1097,6 +1208,75 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 		
 		//is shabbos or YT and it is before tzais
 		return jewishCalendar.isAssurBemelacha() && currentTime.compareTo(tzais) <= 0;
+	}
+	
+	/**
+	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
+	 * <em>netz amiti</em> (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double)
+	 * elevation adjustment}. This forms the base for the Baal Hatanya's dawn-based calculations that are
+	 * calculated as a dip below the horizon before sunrise.
+	 *
+	 * According to the Baal Hatanya, <em>netz amiti</em>, or true (halachic) sunrise, is when the top of the sun's
+	 * disk is visible at an elevation similar to the mountains of Eretz Yisrael. The time is calculated as the point at which
+	 * the center of the sun's disk is 1.583&deg; below the horizon. This degree-based calculation can be found in Rabbi Shalom
+	 * DovBer Levine's commentary on The <a href="https://www.chabadlibrary.org/books/pdf/Seder-Hachnosas-Shabbos.pdf">Baal
+	 * Hatanya's Seder Hachnasas Shabbos</a>. From an elevation of 546 meters, the top of <a href=
+	 * "https://en.wikipedia.org/wiki/Mount_Carmel">Har Hacarmel</a>, the sun disappears when it is 1&deg; 35' or 1.583&deg;
+	 * below the sea level horizon. This in turn is based on the Gemara <a href=
+	 * "https://hebrewbooks.org/shas.aspx?mesechta=2&daf=35">Shabbos 35a</a>. There are other opinions brought down by
+	 * Rabbi Levine, including Rabbi Yosef Yitzchok Feigelstock who calculates it as the degrees below the horizon 4 minutes after
+	 * sunset in Yerushalayim (on the equinox). That is brought down as 1.583&deg;. This is identical to the 1&deg; 35' <em>zman</em>
+	 * and is probably a typo and should be 1.683&deg;. These calculations are used by most <a href=
+	 * "https://en.wikipedia.org/wiki/Chabad">Chabad</a> calendars that use the Baal Hatanya's <em>zmanim</em>. See
+	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
+	 * <em>Zmanim</em> Calculations @ Chabad.org</a>.
+	 *
+	 * Note: <em>netz amiti</em> is used only for calculating certain <em>zmanim</em>, and is intentionally unpublished. For
+	 * practical purposes, daytime <em>mitzvos</em> like <em>shofar</em> and <em>lulav</em> should not be done until after the
+	 * published time for <em>netz</em> / sunrise.
+	 * 
+	 * @return the <code>Instant</code> representing the exact sea level <em>netz amiti</em> (sunrise) time. If the calculation can't be
+	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
+	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
+	 * 
+	 * @see #getSunriseWithElevation()
+	 * @see #getSeaLevelSunrise()
+	 * @see #getSunsetBaalHatanya()
+	 * @see #ZENITH_1_POINT_583
+	 */
+	protected Instant getSunriseBaalHatanya() {
+		return getSunriseOffsetByDegrees(ZENITH_1_POINT_583);
+	}
+	
+	/**
+	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
+	 * <em>shkiah amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double)
+	 * elevation adjustment}. This forms the base for the Baal Hatanya's dusk-based calculations that are calculated
+	 * as a dip below the horizon after sunset.
+	 * 
+	 * According to the Baal Hatanya, <em>shkiah amiti</em>, true (<em>halachic</em>) sunset, is when the top of the 
+	 * sun's disk disappears from view at an elevation similar to the mountains of <em>Eretz Yisrael</em>.
+	 * This time is calculated as the point at which the center of the sun's disk is 1.583 degrees below the horizon.
+	 *
+	 * Note: <em>shkiah amiti</em> is used only for calculating certain <em>zmanim</em>, and is intentionally unpublished. For
+	 * practical purposes, all daytime mitzvos should be completed before the published time for <em>shkiah</em> / sunset.
+	 *
+	 * For further explanation of the calculations used for the Baal Hatanya's <em>zmanim</em> in this library, see
+	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
+	 * <em>Zmanim</em> Calculations @ Chabad.org</a>.
+	 * 
+	 * @return the <code>Instant</code> representing the exact sea level <em>shkiah amiti</em> (sunset) time. If the calculation
+	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
+	 *         rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of
+	 *         the {@link AstronomicalCalendar} documentation.
+	 * 
+	 * @see #getSunsetWithElevation()
+	 * @see #getSeaLevelSunset()
+	 * @see #getSunriseBaalHatanya()
+	 * @see #ZENITH_1_POINT_583
+	 */
+	protected Instant getSunsetBaalHatanya() {
+		return getSunsetOffsetByDegrees(ZENITH_1_POINT_583);
 	}
 
 	/**
