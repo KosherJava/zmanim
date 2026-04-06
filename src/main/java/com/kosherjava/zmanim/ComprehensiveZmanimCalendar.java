@@ -296,16 +296,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	protected static final double ZENITH_5_POINT_88 = GEOMETRIC_ZENITH + 5.88;
 
 	/**
-	 * The zenith of 1.583&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>netz amiti</em> (sunrise) and <em>shkiah amiti</em> (sunset) based on the opinion of the
-	 * <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>.
-	 *
-	 * @see #getSunriseBaalHatanya()
-	 * @see #getSunsetBaalHatanya()
-	 */
-	protected static final double ZENITH_1_POINT_583 = GEOMETRIC_ZENITH + 1.583;
-
-	/**
 	 * The zenith of 16.9&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
 	 * (dawn) based on the opinion of the Baal Hatanya. It is based on the calculation that the time between dawn
 	 * and <em>netz amiti</em> (sunrise) is 72 minutes, the time that is takes to walk 4 mil at 18 minutes
@@ -3543,22 +3533,16 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from sunrise to sunset.
 	 * This returns the time 4 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea level sunrise}. If it
 	 * is not <em>erev Pesach</em>, a null will be returned.
-	 * 
-	 * @see ZmanimCalendar#getShaahZmanisGra()
-	 * @see ZmanimCalendar#getSofZmanTfilaGRA()
 	 * @return the <code>Instant</code> one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
 	 *         Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least one
 	 *         day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see ZmanimCalendar#getShaahZmanisGra()
+	 * @see ZmanimCalendar#getSofZmanTfilaGRA()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzGRA() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) { 
-			return getSofZmanTfilaGRA();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
@@ -3578,15 +3562,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanisMGA()
 	 * @see #getAlos72()
 	 * @see #getSofZmanTfilaMGA72Minutes()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzMGA72Minutes() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA72Minutes();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getAlos72(), getTzais72(), true);
 	}
 	
 	/**
@@ -3606,15 +3585,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
 	 * @see #getSofZmanTfilaMGA72MinutesZmanis()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzMGA72MinutesZmanis() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA72MinutesZmanis();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getAlos72Zmanis(), getTzais72Zmanis(), true);
 	}
 
 	/**
@@ -3633,42 +3607,30 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getSofZmanTfilaMGA16Point1Degrees()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzMGA16Point1Degrees() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA16Point1Degrees();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getAlos16Point1Degrees(), getTzais16Point1Degrees(), true);
 	}
 
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This time is 5 hours into the day based on the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from
 	 * sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea
 	 * level sunrise}. If it is not  <em>erev Pesach</em>, a null will be returned.
-	 * @see ZmanimCalendar#getShaahZmanisGra()
 	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least
 	 *         one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see ZmanimCalendar#getShaahZmanisGra()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzGRA() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getSunriseBasedOnElevationSetting(), getShaahZmanisGra() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion of
 	 * the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos72() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 5 {@link
@@ -3682,19 +3644,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisMGA()
 	 * @see #getAlos72()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzMGA72Minutes() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos72(), getShaahZmanisMGA() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getAlos72(), getTzais72(), true);
 	}
 	
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion of
 	 * the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos72Zmanis() 72} minutes zmanis before {@link #getSunriseWithElevation() sunrise}. This time is 5 {@link
@@ -3708,19 +3664,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzMGA72MinutesZmanis() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos72Zmanis(), getShaahZmanis72MinutesZmanis() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getAlos72Zmanis(), getTzais72Zmanis(), true);
 	}
 
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos16Point1Degrees() 16.1&deg;} before {@link #getSunriseWithElevation() sunrise}. This time is 5
@@ -3736,84 +3686,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzMGA16Point1Degrees() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos16Point1Degrees(), getShaahZmanis16Point1Degrees() * 5);
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
-	 * <em>netz amiti</em> (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double)
-	 * elevation adjustment}. This forms the base for the Baal Hatanya's dawn-based calculations that are
-	 * calculated as a dip below the horizon before sunrise.
-	 *
-	 * According to the Baal Hatanya, <em>netz amiti</em>, or true (halachic) sunrise, is when the top of the sun's
-	 * disk is visible at an elevation similar to the mountains of Eretz Yisrael. The time is calculated as the point at which
-	 * the center of the sun's disk is 1.583&deg; below the horizon. This degree-based calculation can be found in Rabbi Shalom
-	 * DovBer Levine's commentary on The <a href="https://www.chabadlibrary.org/books/pdf/Seder-Hachnosas-Shabbos.pdf">Baal
-	 * Hatanya's Seder Hachnasas Shabbos</a>. From an elevation of 546 meters, the top of <a href=
-	 * "https://en.wikipedia.org/wiki/Mount_Carmel">Har Hacarmel</a>, the sun disappears when it is 1&deg; 35' or 1.583&deg;
-	 * below the sea level horizon. This in turn is based on the Gemara <a href=
-	 * "https://hebrewbooks.org/shas.aspx?mesechta=2&daf=35">Shabbos 35a</a>. There are other opinions brought down by
-	 * Rabbi Levine, including Rabbi Yosef Yitzchok Feigelstock who calculates it as the degrees below the horizon 4 minutes after
-	 * sunset in Yerushalayim (on the equinox). That is brought down as 1.583&deg;. This is identical to the 1&deg; 35' <em>zman</em>
-	 * and is probably a typo and should be 1.683&deg;. These calculations are used by most <a href=
-	 * "https://en.wikipedia.org/wiki/Chabad">Chabad</a> calendars that use the Baal Hatanya's <em>zmanim</em>. See
-	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
-	 * <em>Zmanim</em> Calculations @ Chabad.org</a>.
-	 *
-	 * Note: <em>netz amiti</em> is used only for calculating certain <em>zmanim</em>, and is intentionally unpublished. For
-	 * practical purposes, daytime <em>mitzvos</em> like <em>shofar</em> and <em>lulav</em> should not be done until after the
-	 * published time for <em>netz</em> / sunrise.
-	 * 
-	 * @return the <code>Instant</code> representing the exact sea level <em>netz amiti</em> (sunrise) time. If the calculation can't be
-	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
-	 * 
-	 * @see #getSunriseWithElevation()
-	 * @see #getSeaLevelSunrise()
-	 * @see #getSunsetBaalHatanya()
-	 * @see #ZENITH_1_POINT_583
-	 */
-	private Instant getSunriseBaalHatanya() {
-		return getSunriseOffsetByDegrees(ZENITH_1_POINT_583);
-	}
-
-	/**
-	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
-	 * <em>shkiah amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double)
-	 * elevation adjustment}. This forms the base for the Baal Hatanya's dusk-based calculations that are calculated
-	 * as a dip below the horizon after sunset.
-	 * 
-	 * According to the Baal Hatanya, <em>shkiah amiti</em>, true (<em>halachic</em>) sunset, is when the top of the 
-	 * sun's disk disappears from view at an elevation similar to the mountains of <em>Eretz Yisrael</em>.
-	 * This time is calculated as the point at which the center of the sun's disk is 1.583 degrees below the horizon.
-	 *
-	 * Note: <em>shkiah amiti</em> is used only for calculating certain <em>zmanim</em>, and is intentionally unpublished. For
-	 * practical purposes, all daytime mitzvos should be completed before the published time for <em>shkiah</em> / sunset.
-	 *
-	 * For further explanation of the calculations used for the Baal Hatanya's <em>zmanim</em> in this library, see
-	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
-	 * <em>Zmanim</em> Calculations @ Chabad.org</a>.
-	 * 
-	 * @return the <code>Instant</code> representing the exact sea level <em>shkiah amiti</em> (sunset) time. If the calculation
-	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
-	 *         rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of
-	 *         the {@link AstronomicalCalendar} documentation.
-	 * 
-	 * @see #getSunsetWithElevation()
-	 * @see #getSeaLevelSunset()
-	 * @see #getSunriseBaalHatanya()
-	 * @see #ZENITH_1_POINT_583
-	 */
-	private Instant getSunsetBaalHatanya() {
-		return getSunsetOffsetByDegrees(ZENITH_1_POINT_583);
+		return getSofZmanBiurChametz(getAlos16Point1Degrees(), getTzais16Point1Degrees(), true);
 	}
 
 	/**
@@ -3903,21 +3779,16 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * is calculated from sunrise to sunset. This returns the time 4 {@link #getShaahZmanisBaalHatanya()} after
 	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a null will be
 	 * returned.
-	 * @see #getShaahZmanisBaalHatanya()
-	 * @see #getSofZmanTfilaBaalHatanya()
 	 * @return the <code>Instant</code> one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
 	 *         Pesach</em> or the  calculation can't be computed such as in the Arctic Circle where there is at least one
 	 *         day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getSofZmanTfilaBaalHatanya()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzBaalHatanya() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaBaalHatanya();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getSunriseBaalHatanya(), getSunsetBaalHatanya(), true);
 	}
 
 	/**
@@ -3925,20 +3796,15 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the Baal Hatanya. This time is 5 hours into the day based on the opinion of the Baal Hatanya that the day is calculated
 	 * from sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisBaalHatanya()} after
 	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a null will be returned.
-	 * @see #getShaahZmanisBaalHatanya()
 	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>.  If it is not
 	 *         <em>erev Pesach</em> or the  calculation can't be computed such as in the Arctic Circle where there is at
 	 *         least one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzBaalHatanya() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getSunriseBaalHatanya(), getSunsetBaalHatanya(), true);
 	}
 
 	/**
