@@ -93,7 +93,7 @@ public class RegressionTestFileWriter {
 					zcal.getSofZmanShmaAteretTorah(), zcal.getSofZmanTfilaAteretTorah(),
 					zcal.getMinchaGedolaAteretTorah(), zcal.getMinchaKetanaAteretTorah(),
 					zcal.getPlagHaminchaAteretTorah(), zcal.getTzais72Zmanis(), zcal.getTzais90Zmanis(),
-					zcal.getTzais96Zmanis(), zcal.getTzais90Minutes(), zcal.getTzais120(), zcal.getTzais120Zmanis(),
+					zcal.getTzais96Zmanis(), zcal.getTzais90Minutes(), zcal.getTzais120Minutes(), zcal.getTzais120Zmanis(),
 					zcal.getTzais16Point1Degrees(), zcal.getTzais26Degrees(), zcal.getTzais18Degrees(),
 					zcal.getTzais19Point8Degrees(), zcal.getTzais96Minutes(), zcal.getFixedLocalChatzos(),
 					zcal.getSofZmanKidushLevanaBetweenMoldos(), zcal.getSofZmanKidushLevana15Days(),
