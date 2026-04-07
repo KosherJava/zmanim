@@ -1112,6 +1112,40 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public long getShaahZmanisGRA() {
 		return getTemporalHour(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting());
 	}
+	
+	/**
+	 * A utility method to return <em>alos</em> (dawn) or <em>tzais</em> (dusk) based on a fractional day offset. As an
+	 * example passing 1.5 to this method as done in the {@link ComprehensiveZmanimCalendar#getTzais90Zmanis()} will return
+	 * the time 90 minutes <em>zmaniyos</em> after {@link #getSunsetBasedOnElevationSetting()}, a <em>zman</em> known as
+	 * the <em>achtel zman</em> or 1/8th of the length of the day (12 * 60 = 720-minute day / 8 = 90 or 1.5 hours
+	 * <em>zmaniyos</em>) after sunset.
+	 * @param hours the number of <em>shaos zmaniyos</em> (temporal hours) before sunrise or after sunset that defines dawn
+	 *        or dusk. If a negative number is passed in, it will return the time of <em>alos</em> (dawn) (subtracting the
+	 *        time from sunrise) and if a positive number is passed in, it will return the time of <em>tzais</em> (dusk)
+	 *        (adding the time to sunset). If 0 is passed in, a <code>null</code> will be returned (since we can't tell if it
+	 *        is sunrise or sunset based).
+	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
+	 *         a <code>null</code> will be returned. A <code>null</code> will also be returned if 0 is passed in, since we can't
+	 *         tell if it is sunrise or sunset based. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation.
+	 * @see ComprehensiveZmanimCalendar#getTzais72Zmanis()
+	 * @see ComprehensiveZmanimCalendar#getTzais90Zmanis()
+	 * @see <a href="{@docRoot}/../search.html?q=ComprehensiveZmanimCalendar%20Zmanis()">...Zmanis() based <em>zmanim</em></a>
+	 * in the ComprehensiveZmanimCalendar.
+	 */
+	public Instant getZmanisBasedOffset(double hours) {
+		long shaahZmanis = getShaahZmanisGRA();
+		if (shaahZmanis == Long.MIN_VALUE || hours == 0) {
+			return null;
+		}
+
+		if (hours > 0) {
+			return getTimeOffset(getSunsetBasedOnElevationSetting(), (long) (shaahZmanis * hours));
+		} else {
+			return getTimeOffset(getSunriseBasedOnElevationSetting(), (long) (shaahZmanis * hours));
+		}
+	}
 
 	/**
 	 * A method that returns a <em>shaah zmanis</em> (temporal hour) according to the opinion of the <em><a href=
