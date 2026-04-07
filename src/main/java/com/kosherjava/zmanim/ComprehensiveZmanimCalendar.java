@@ -2882,37 +2882,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getTzais72Zmanis() {
 		return getZmanisBasedOffset(1.2);
 	}
-	
-	/**
-	 * A utility method to return <em>alos</em> (dawn) or <em>tzais</em> (dusk) based on a fractional day offset.
-	 * @param hours the number of <em>shaos zmaniyos</em> (temporal hours) before sunrise or after sunset that defines dawn
-	 *        or dusk. If a negative number is passed in, it will return the time of <em>alos</em> (dawn) (subtracting the
-	 *        time from sunrise) and if a positive number is passed in, it will return the time of <em>tzais</em> (dusk)
-	 *        (adding the time to sunset). If 0 is passed in, a <code>null</code> will be returned (since we can't tell if it
-	 *        is sunrise or sunset based).
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
-	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. A <code>null</code> will also be returned if 0 is passed in, since we can't
-	 *         tell if it is sunrise or sunset based. See detailed explanation on top of the {@link AstronomicalCalendar}
-	 *         documentation.
-	 */
-	private Instant getZmanisBasedOffset(double hours) {
-		long shaahZmanis = getShaahZmanisGRA();
-		if (shaahZmanis == Long.MIN_VALUE || hours == 0) {
-			return null;
-		}
-
-		if (hours > 0) {
-			return getTimeOffset(getSunsetBasedOnElevationSetting(), (long) (shaahZmanis * hours));
-		} else {
-			return getTimeOffset(getSunriseBasedOnElevationSetting(), (long) (shaahZmanis * hours));
-		}
-	}
 
 	/**
 	 * Method to return <em>tzais</em> (dusk) calculated using 90 minutes zmaniyos or 1/8th of the day after {@link
 	 * #getSeaLevelSunset() sea level sunset}. This time is known in Yiddish as the <em>achtel</em> (an eighth)
-	 * <em>zman</em>.
+	 * <em>zman</em> used in various <em>kehilos</em>.
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
