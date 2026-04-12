@@ -49,9 +49,9 @@ public class RegressionTestFileWriter {
 					zcal.getShaahZmanisAteretTorah(), zcal.getShaahZmanisAlos16Point1ToTzais3Point8(),
 					zcal.getShaahZmanisAlos16Point1ToTzais3Point7(), zcal.getShaahZmanis96Minutes(),
 					zcal.getShaahZmanis120Minutes(), zcal.getShaahZmanis120MinutesZmanis(),
-					zcal.getPlagHamincha120MinutesZmanis(), zcal.getPlagHamincha120Minutes(), zcal.getAlos60(),
-					zcal.getAlos72Zmanis(), zcal.getAlos96(), zcal.getAlos90Zmanis(), zcal.getAlos96Zmanis(),
-					zcal.getAlos90(), zcal.getAlos120(), zcal.getAlos120Zmanis(), zcal.getAlos26Degrees(),
+					zcal.getPlagHamincha120MinutesZmanis(), zcal.getPlagHamincha120Minutes(), zcal.getAlos60Minutes(),
+					zcal.getAlos72Zmanis(), zcal.getAlos96Minutes(), zcal.getAlos90Zmanis(), zcal.getAlos96Zmanis(),
+					zcal.getAlos90Minutes(), zcal.getAlos120Minutes(), zcal.getAlos120Zmanis(), zcal.getAlos26Degrees(),
 					zcal.getAlos18Degrees(), zcal.getAlos19Degrees(), zcal.getAlos19Point8Degrees(),
 					zcal.getAlos16Point1Degrees(), zcal.getMisheyakir11Point5Degrees(), zcal.getMisheyakir11Degrees(),
 					zcal.getMisheyakir10Point2Degrees(), zcal.getMisheyakir7Point65Degrees(),
@@ -69,7 +69,7 @@ public class RegressionTestFileWriter {
 					zcal.getSofZmanTfilaMGA96MinutesZmanis(), zcal.getSofZmanTfilaMGA120Minutes(),
 					zcal.getSofZmanTfila2HoursBeforeChatzos(), zcal.getMinchaGedola30Minutes(),
 					zcal.getMinchaGedola72Minutes(), zcal.getMinchaGedola16Point1Degrees(),
-					zcal.getMinchaGedolaAhavatShalom(), zcal.getMinchaGedolaGreaterThan30(),
+					zcal.getMinchaGedolaAhavatShalom(), zcal.getMinchaGedolaGreaterThan30(zcal.getMinchaGedolaGRA()),
 					zcal.getMinchaKetana16Point1Degrees(), zcal.getMinchaKetanaAhavatShalom(),
 					zcal.getMinchaKetana72Minutes(), zcal.getPlagHamincha60Minutes(), zcal.getPlagHamincha72Minutes(),
 					zcal.getPlagHamincha90Minutes(), zcal.getPlagHamincha96Minutes(),
@@ -89,13 +89,13 @@ public class RegressionTestFileWriter {
 					zcal.getTzaisGeonim4Point8Degrees(), zcal.getTzaisGeonim6Point45Degrees(),
 					zcal.getTzaisGeonim7Point083Degrees(), zcal.getTzaisGeonim7Point67Degrees(),
 					zcal.getTzaisGeonim8Point5Degrees(), zcal.getTzaisGeonim9Point3Degrees(),
-					zcal.getTzaisGeonim9Point75Degrees(), zcal.getTzais60(), zcal.getTzaisAteretTorah(),
+					zcal.getTzaisGeonim9Point75Degrees(), zcal.getTzais60Minutes(), zcal.getTzaisAteretTorah(),
 					zcal.getSofZmanShmaAteretTorah(), zcal.getSofZmanTfilaAteretTorah(),
 					zcal.getMinchaGedolaAteretTorah(), zcal.getMinchaKetanaAteretTorah(),
 					zcal.getPlagHaminchaAteretTorah(), zcal.getTzais72Zmanis(), zcal.getTzais90Zmanis(),
-					zcal.getTzais96Zmanis(), zcal.getTzais90(), zcal.getTzais120(), zcal.getTzais120Zmanis(),
+					zcal.getTzais96Zmanis(), zcal.getTzais90Minutes(), zcal.getTzais120Minutes(), zcal.getTzais120Zmanis(),
 					zcal.getTzais16Point1Degrees(), zcal.getTzais26Degrees(), zcal.getTzais18Degrees(),
-					zcal.getTzais19Point8Degrees(), zcal.getTzais96(), zcal.getFixedLocalChatzos(),
+					zcal.getTzais19Point8Degrees(), zcal.getTzais96Minutes(), zcal.getFixedLocalChatzos(),
 					zcal.getSofZmanKidushLevanaBetweenMoldos(), zcal.getSofZmanKidushLevana15Days(),
 					zcal.getTchilasZmanKidushLevana3Days(), zcal.getZmanMolad(), zcal.getTchilasZmanKidushLevana7Days(),
 					zcal.getSofZmanAchilasChametzGRA(), zcal.getSofZmanAchilasChametzMGA72Minutes(),
@@ -104,7 +104,7 @@ public class RegressionTestFileWriter {
 					zcal.getSolarMidnight(), zcal.getShaahZmanisBaalHatanya(), zcal.getAlosBaalHatanya(),
 					zcal.getSofZmanShmaBaalHatanya(), zcal.getSofZmanTfilaBaalHatanya(),
 					zcal.getSofZmanAchilasChametzBaalHatanya(), zcal.getSofZmanBiurChametzBaalHatanya(),
-					zcal.getMinchaGedolaBaalHatanya(), zcal.getMinchaGedolaBaalHatanyaGreaterThan30(),
+					zcal.getMinchaGedolaBaalHatanya(),
 					zcal.getMinchaKetanaBaalHatanya(), zcal.getPlagHaminchaBaalHatanya(), zcal.getTzaisBaalHatanya(),
 					zcal.getSofZmanShmaMGA18DegreesToFixedLocalChatzos(),
 					zcal.getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos(),
@@ -114,7 +114,7 @@ public class RegressionTestFileWriter {
 					zcal.getSofZmanTfilaGRASunriseToFixedLocalChatzos(),
 					zcal.getMinchaGedolaGRAFixedLocalChatzos30Minutes(),
 					zcal.getMinchaKetanaGRAFixedLocalChatzosToSunset(),
-					zcal.getPlagHaminchaGRAFixedLocalChatzosToSunset(), zcal.getTzais50(),
+					zcal.getPlagHaminchaGRAFixedLocalChatzosToSunset(), zcal.getTzais50Minutes(),
 					zcal.getSamuchLeMinchaKetanaGRA(), zcal.getSamuchLeMinchaKetana16Point1Degrees(),
 					zcal.getSamuchLeMinchaKetana72Minutes()));
             //deprecated
@@ -157,7 +157,7 @@ public class RegressionTestFileWriter {
     }
 
     static class FullZmanim {
-		public static final String fields = "getShaahZmanis19Point8Degrees,getShaahZmanis18Degrees,getShaahZmanis26Degrees,getShaahZmanis16Point1Degrees,getShaahZmanis60Minutes,getShaahZmanis72Minutes,getShaahZmanis72MinutesZmanis,getShaahZmanis90Minutes,getShaahZmanis90MinutesZmanis,getShaahZmanis96MinutesZmanis,getShaahZmanisAteretTorah,getShaahZmanisAlos16Point1ToTzais3Point8,getShaahZmanisAlos16Point1ToTzais3Point7,getShaahZmanis96Minutes,getShaahZmanis120Minutes,getShaahZmanis120MinutesZmanis,getPlagHamincha120MinutesZmanis,getPlagHamincha120Minutes,getAlos60,getAlos72Zmanis,getAlos96,getAlos90Zmanis,getAlos96Zmanis,getAlos90,getAlos120,getAlos120Zmanis,getAlos26Degrees,getAlos18Degrees,getAlos19Degrees,getAlos19Point8Degrees,getAlos16Point1Degrees,getMisheyakir11Point5Degrees,getMisheyakir11Degrees,getMisheyakir10Point2Degrees,getMisheyakir7Point65Degrees,getMisheyakir9Point5Degrees,getSofZmanShmaMGA19Point8Degrees,getSofZmanShmaMGA16Point1Degrees,getSofZmanShmaMGA18Degrees,getSofZmanShmaMGA72Minutes,getSofZmanShmaMGA72MinutesZmanis,getSofZmanShmaMGA90Minutes,getSofZmanShmaMGA90MinutesZmanis,getSofZmanShmaMGA96Minutes,getSofZmanShmaMGA96MinutesZmanis,getSofZmanShma3HoursBeforeChatzos,getSofZmanShmaMGA120Minutes,getSofZmanShmaAlos16Point1ToSunset,getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees,getSofZmanTfilaMGA19Point8Degrees,getSofZmanTfilaMGA16Point1Degrees,getSofZmanTfilaMGA18Degrees,getSofZmanTfilaMGA72Minutes,getSofZmanTfilaMGA72MinutesZmanis,getSofZmanTfilaMGA90Minutes,getSofZmanTfilaMGA90MinutesZmanis,getSofZmanTfilaMGA96Minutes,getSofZmanTfilaMGA96MinutesZmanis,getSofZmanTfilaMGA120Minutes,getSofZmanTfila2HoursBeforeChatzos,getMinchaGedola30Minutes,getMinchaGedola72Minutes,getMinchaGedola16Point1Degrees,getMinchaGedolaAhavatShalom,getMinchaGedolaGreaterThan30,getMinchaKetana16Point1Degrees,getMinchaKetanaAhavatShalom,getMinchaKetana72Minutes,getPlagHamincha60Minutes,getPlagHamincha72Minutes,getPlagHamincha90Minutes,getPlagHamincha96Minutes,getPlagHamincha96MinutesZmanis,getPlagHamincha90MinutesZmanis,getPlagHamincha72MinutesZmanis,getPlagHamincha16Point1Degrees,getPlagHamincha19Point8Degrees,getPlagHamincha26Degrees,getPlagHamincha18Degrees,getPlagAlosToSunset,getPlagAlos16Point1ToTzaisGeonim7Point083Degrees,getPlagAhavatShalom,getBainHashmashosRT58Point5Minutes,getBainHashmashosRT13Point5MinutesBefore7Point083Degrees,getBainHashmashosRT2Stars,getBainHashmashosYereim18Minutes,getBainHashmashosYereim3Point05Degrees,getBainHashmashosYereim16Point875Minutes,getBainHashmashosYereim2Point8Degrees,getBainHashmashosYereim13Point5Minutes,getBainHashmashosYereim2Point1Degrees,getTzaisGeonim3Point7Degrees,getTzaisGeonim3Point8Degrees,getTzaisGeonim5Point95Degrees,getTzaisGeonim4Point61Degrees,getTzaisGeonim4Point37Degrees,getTzaisGeonim5Point88Degrees,getTzaisGeonim4Point8Degrees,getTzaisGeonim6Point45Degrees,getTzaisGeonim7Point083Degrees,getTzaisGeonim7Point67Degrees,getTzaisGeonim8Point5Degrees,getTzaisGeonim9Point3Degrees,getTzaisGeonim9Point75Degrees,getTzais60,getTzaisAteretTorah,getSofZmanShmaAteretTorah,getSofZmanTfilahAteretTorah,getMinchaGedolaAteretTorah,getMinchaKetanaAteretTorah,getPlagHaminchaAteretTorah,getTzais72Zmanis,getTzais90Zmanis,getTzais96Zmanis,getTzais90,getTzais120,getTzais120Zmanis,getTzais16Point1Degrees,getTzais26Degrees,getTzais18Degrees,getTzais19Point8Degrees,getTzais96,getFixedLocalChatzos,getSofZmanKidushLevanaBetweenMoldos,getSofZmanKidushLevana15Days,getTchilasZmanKidushLevana3Days,getZmanMolad,getTchilasZmanKidushLevana7Days,getSofZmanAchilasChametzGRA,getSofZmanAchilasChametzMGA72Minutes,getSofZmanAchilasChametzMGA16Point1Degrees,getSofZmanBiurChametzGRA,getSofZmanBiurChametzMGA72Minutes,getSofZmanBiurChametzMGA16Point1Degrees,getSolarMidnight,getShaahZmanisBaalHatanya,getAlosBaalHatanya,getSofZmanShmaBaalHatanya,getSofZmanTfilaBaalHatanya,getSofZmanAchilasChametzBaalHatanya,getSofZmanBiurChametzBaalHatanya,getMinchaGedolaBaalHatanya,getMinchaGedolaBaalHatanyaGreaterThan30,getMinchaKetanaBaalHatanya,getPlagHaminchaBaalHatanya,getTzaisBaalHatanya,getSofZmanShmaMGA18DegreesToFixedLocalChatzos,getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos,getSofZmanShmaMGA90MinutesToFixedLocalChatzos,getSofZmanShmaMGA72MinutesToFixedLocalChatzos,getSofZmanShmaGRASunriseToFixedLocalChatzos,getSofZmanTfilaGRASunriseToFixedLocalChatzos,getMinchaGedolaGRAFixedLocalChatzos30Minutes,getMinchaKetanaGRAFixedLocalChatzosToSunset,getPlagHaminchaGRAFixedLocalChatzosToSunset,getTzais50,getSamuchLeMinchaKetanaGRA,getSamuchLeMinchaKetana16Point1Degrees,getSamuchLeMinchaKetana72Minutes";
+		public static final String fields = "getShaahZmanis19Point8Degrees,getShaahZmanis18Degrees,getShaahZmanis26Degrees,getShaahZmanis16Point1Degrees,getShaahZmanis60Minutes,getShaahZmanis72Minutes,getShaahZmanis72MinutesZmanis,getShaahZmanis90Minutes,getShaahZmanis90MinutesZmanis,getShaahZmanis96MinutesZmanis,getShaahZmanisAteretTorah,getShaahZmanisAlos16Point1ToTzais3Point8,getShaahZmanisAlos16Point1ToTzais3Point7,getShaahZmanis96Minutes,getShaahZmanis120Minutes,getShaahZmanis120MinutesZmanis,getPlagHamincha120MinutesZmanis,getPlagHamincha120Minutes,getAlos60,getAlos72Zmanis,getAlos96,getAlos90Zmanis,getAlos96Zmanis,getAlos90,getAlos120,getAlos120Zmanis,getAlos26Degrees,getAlos18Degrees,getAlos19Degrees,getAlos19Point8Degrees,getAlos16Point1Degrees,getMisheyakir11Point5Degrees,getMisheyakir11Degrees,getMisheyakir10Point2Degrees,getMisheyakir7Point65Degrees,getMisheyakir9Point5Degrees,getSofZmanShmaMGA19Point8Degrees,getSofZmanShmaMGA16Point1Degrees,getSofZmanShmaMGA18Degrees,getSofZmanShmaMGA72Minutes,getSofZmanShmaMGA72MinutesZmanis,getSofZmanShmaMGA90Minutes,getSofZmanShmaMGA90MinutesZmanis,getSofZmanShmaMGA96Minutes,getSofZmanShmaMGA96MinutesZmanis,getSofZmanShma3HoursBeforeChatzos,getSofZmanShmaMGA120Minutes,getSofZmanShmaAlos16Point1ToSunset,getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees,getSofZmanTfilaMGA19Point8Degrees,getSofZmanTfilaMGA16Point1Degrees,getSofZmanTfilaMGA18Degrees,getSofZmanTfilaMGA72Minutes,getSofZmanTfilaMGA72MinutesZmanis,getSofZmanTfilaMGA90Minutes,getSofZmanTfilaMGA90MinutesZmanis,getSofZmanTfilaMGA96Minutes,getSofZmanTfilaMGA96MinutesZmanis,getSofZmanTfilaMGA120Minutes,getSofZmanTfila2HoursBeforeChatzos,getMinchaGedola30Minutes,getMinchaGedola72Minutes,getMinchaGedola16Point1Degrees,getMinchaGedolaAhavatShalom,getMinchaGedolaGreaterThan30,getMinchaKetana16Point1Degrees,getMinchaKetanaAhavatShalom,getMinchaKetana72Minutes,getPlagHamincha60Minutes,getPlagHamincha72Minutes,getPlagHamincha90Minutes,getPlagHamincha96Minutes,getPlagHamincha96MinutesZmanis,getPlagHamincha90MinutesZmanis,getPlagHamincha72MinutesZmanis,getPlagHamincha16Point1Degrees,getPlagHamincha19Point8Degrees,getPlagHamincha26Degrees,getPlagHamincha18Degrees,getPlagAlosToSunset,getPlagAlos16Point1ToTzaisGeonim7Point083Degrees,getPlagAhavatShalom,getBainHashmashosRT58Point5Minutes,getBainHashmashosRT13Point5MinutesBefore7Point083Degrees,getBainHashmashosRT2Stars,getBainHashmashosYereim18Minutes,getBainHashmashosYereim3Point05Degrees,getBainHashmashosYereim16Point875Minutes,getBainHashmashosYereim2Point8Degrees,getBainHashmashosYereim13Point5Minutes,getBainHashmashosYereim2Point1Degrees,getTzaisGeonim3Point7Degrees,getTzaisGeonim3Point8Degrees,getTzaisGeonim5Point95Degrees,getTzaisGeonim4Point61Degrees,getTzaisGeonim4Point37Degrees,getTzaisGeonim5Point88Degrees,getTzaisGeonim4Point8Degrees,getTzaisGeonim6Point45Degrees,getTzaisGeonim7Point083Degrees,getTzaisGeonim7Point67Degrees,getTzaisGeonim8Point5Degrees,getTzaisGeonim9Point3Degrees,getTzaisGeonim9Point75Degrees,getTzais60,getTzaisAteretTorah,getSofZmanShmaAteretTorah,getSofZmanTfilahAteretTorah,getMinchaGedolaAteretTorah,getMinchaKetanaAteretTorah,getPlagHaminchaAteretTorah,getTzais72Zmanis,getTzais90Zmanis,getTzais96Zmanis,getTzais90,getTzais120,getTzais120Zmanis,getTzais16Point1Degrees,getTzais26Degrees,getTzais18Degrees,getTzais19Point8Degrees,getTzais96,getFixedLocalChatzos,getSofZmanKidushLevanaBetweenMoldos,getSofZmanKidushLevana15Days,getTchilasZmanKidushLevana3Days,getZmanMolad,getTchilasZmanKidushLevana7Days,getSofZmanAchilasChametzGRA,getSofZmanAchilasChametzMGA72Minutes,getSofZmanAchilasChametzMGA16Point1Degrees,getSofZmanBiurChametzGRA,getSofZmanBiurChametzMGA72Minutes,getSofZmanBiurChametzMGA16Point1Degrees,getSolarMidnight,getShaahZmanisBaalHatanya,getAlosBaalHatanya,getSofZmanShmaBaalHatanya,getSofZmanTfilaBaalHatanya,getSofZmanAchilasChametzBaalHatanya,getSofZmanBiurChametzBaalHatanya,getMinchaGedolaBaalHatanya,getMinchaKetanaBaalHatanya,getPlagHaminchaBaalHatanya,getTzaisBaalHatanya,getSofZmanShmaMGA18DegreesToFixedLocalChatzos,getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos,getSofZmanShmaMGA90MinutesToFixedLocalChatzos,getSofZmanShmaMGA72MinutesToFixedLocalChatzos,getSofZmanShmaGRASunriseToFixedLocalChatzos,getSofZmanTfilaGRASunriseToFixedLocalChatzos,getMinchaGedolaGRAFixedLocalChatzos30Minutes,getMinchaKetanaGRAFixedLocalChatzosToSunset,getPlagHaminchaGRAFixedLocalChatzosToSunset,getTzais50,getSamuchLeMinchaKetanaGRA,getSamuchLeMinchaKetana16Point1Degrees,getSamuchLeMinchaKetana72Minutes";
 
         @Override
         public String toString() {
@@ -305,7 +305,6 @@ public class RegressionTestFileWriter {
                     .add(getSofZmanAchilasChametzBaalHatanya.toString())
                     .add(getSofZmanBiurChametzBaalHatanya.toString())
                     .add(getMinchaGedolaBaalHatanya.toString())
-                    .add(getMinchaGedolaBaalHatanyaGreaterThan30.toString())
                     .add(getMinchaKetanaBaalHatanya.toString())
                     .add(getPlagHaminchaBaalHatanya.toString())
                     .add(getTzaisBaalHatanya.toString())
@@ -382,7 +381,7 @@ public class RegressionTestFileWriter {
                           Instant getSofZmanBiurChametzMGA16Point1Degrees, Instant getSolarMidnight, long getShaahZmanisBaalHatanya,
                           Instant getAlosBaalHatanya, Instant getSofZmanShmaBaalHatanya, Instant getSofZmanTfilaBaalHatanya,
                           Instant getSofZmanAchilasChametzBaalHatanya, Instant getSofZmanBiurChametzBaalHatanya,
-                          Instant getMinchaGedolaBaalHatanya, Instant getMinchaGedolaBaalHatanyaGreaterThan30,
+                          Instant getMinchaGedolaBaalHatanya,
                           Instant getMinchaKetanaBaalHatanya, Instant getPlagHaminchaBaalHatanya, Instant getTzaisBaalHatanya,
                           Instant getSofZmanShmaMGA18DegreesToFixedLocalChatzos,
                           Instant getSofZmanShmaMGA16Point1DegreesToFixedLocalChatzos,
@@ -534,7 +533,6 @@ public class RegressionTestFileWriter {
             this.getSofZmanAchilasChametzBaalHatanya = getSofZmanAchilasChametzBaalHatanya;
             this.getSofZmanBiurChametzBaalHatanya = getSofZmanBiurChametzBaalHatanya;
             this.getMinchaGedolaBaalHatanya = getMinchaGedolaBaalHatanya;
-            this.getMinchaGedolaBaalHatanyaGreaterThan30 = getMinchaGedolaBaalHatanyaGreaterThan30;
             this.getMinchaKetanaBaalHatanya = getMinchaKetanaBaalHatanya;
             this.getPlagHaminchaBaalHatanya = getPlagHaminchaBaalHatanya;
             this.getTzaisBaalHatanya = getTzaisBaalHatanya;
@@ -696,7 +694,6 @@ public class RegressionTestFileWriter {
         public final Instant getSofZmanAchilasChametzBaalHatanya;
         public final Instant getSofZmanBiurChametzBaalHatanya;
         public final Instant getMinchaGedolaBaalHatanya;
-        public final Instant getMinchaGedolaBaalHatanyaGreaterThan30;
         public final Instant getMinchaKetanaBaalHatanya;
         public final Instant getPlagHaminchaBaalHatanya;
         public final Instant getTzaisBaalHatanya;

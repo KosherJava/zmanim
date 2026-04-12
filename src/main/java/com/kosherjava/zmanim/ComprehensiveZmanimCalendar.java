@@ -16,6 +16,7 @@
 package com.kosherjava.zmanim;
 
 import java.time.Instant;
+import java.time.LocalTime;
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
@@ -99,7 +100,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * Calculating this <em>sof zman achila</em> according to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>
  * is simplicity itself.
  * <pre style="background: #FEF0C9; display: inline-block;">
- * Instant sofZmanAchila = czc.getTimeOffset(czc.getSunrise(), czc.getShaahZmanisGra() * 9);</pre>
+ * Instant sofZmanAchila = czc.getTimeOffset(czc.getSunrise(), czc.getShaahZmanisGRA() * 9);</pre>
  * 
  * <h2>See documentation from the {@link ZmanimCalendar} parent class</h2>
  * 
@@ -233,8 +234,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getTzais19Point8Degrees()
 	 * @see #getAlos19Point8Degrees()
-	 * @see #getAlos90()
-	 * @see #getTzais90()
+	 * @see #getAlos90Minutes()
+	 * @see #getTzais90Minutes()
 	 * @see #ZENITH_19_DEGREES
 	 */
 	protected static final double ZENITH_19_POINT_8 = GEOMETRIC_ZENITH + 19.8;
@@ -242,7 +243,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * The zenith of 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>alos</em> (dawn) and <em>tzais</em> (nightfall) according to some opinions. This calculation is
-	 * based on the position of the sun {@link #getAlos120() 120 minutes} after sunset in Jerusalem <a href=
+	 * based on the position of the sun {@link #getAlos120Minutes() 120 minutes} after sunset in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> which
 	 * calculates to 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. Since the level of darkness when the sun is
 	 * 26&deg; and at a point when the level of darkness is long past the 18&deg; point where the darkest point is reached,
@@ -251,8 +252,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getAlos26Degrees()
 	 * @see #getTzais26Degrees()
-	 * @see #getAlos120()
-	 * @see #getTzais120()
+	 * @see #getAlos120Minutes()
+	 * @see #getTzais120Minutes()
 	 */
 	protected static final double ZENITH_26_DEGREES = GEOMETRIC_ZENITH + 26.0;
 
@@ -293,16 +294,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @todo Add more documentation.
 	 */
 	protected static final double ZENITH_5_POINT_88 = GEOMETRIC_ZENITH + 5.88;
-
-	/**
-	 * The zenith of 1.583&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>netz amiti</em> (sunrise) and <em>shkiah amiti</em> (sunset) based on the opinion of the
-	 * <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>.
-	 *
-	 * @see #getSunriseBaalHatanya()
-	 * @see #getSunsetBaalHatanya()
-	 */
-	protected static final double ZENITH_1_POINT_583 = GEOMETRIC_ZENITH + 1.583;
 
 	/**
 	 * The zenith of 16.9&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
@@ -536,29 +527,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         where it does not set, a {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
-	 * @see #getAlos60()
-	 * @see #getTzais60()
+	 * @see #getAlos60Minutes()
+	 * @see #getTzais60Minutes()
 	 * @see #getPlagHamincha60Minutes()
 	 */
 	public long getShaahZmanis60Minutes() {
-		return getTemporalHour(getAlos60(), getTzais60());
-	}
-
-	/**
-	 * Method to return a <em>shaah zmanis</em> (solar hour) according to the opinion of the <a href=
-	 * "https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a>. This calculation divides the day
-	 * based on the opinion of the MGA that the day runs from dawn to dusk. Dawn for this calculation is 72 minutes
-	 * before sunrise and dusk is 72 minutes after sunset. This day is split into 12 equal parts with each part
-	 * being a <em>shaah zmanis</em>. Alternate methods of calculating a <em>shaah zmanis</em> are available in the
-	 * subclass {@link ComprehensiveZmanimCalendar}.
-	 * 
-	 * @return the <code>long</code> millisecond length of a <em>shaah zmanis</em>. If the calculation can't be computed
-	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a {@link Long#MIN_VALUE} will be returned. See detailed explanation on top of the
-	 *         {@link AstronomicalCalendar} documentation.
-	 */
-	public long getShaahZmanis72Minutes() {
-		return getShaahZmanisMGA();
+		return getTemporalHour(getAlos60Minutes(), getTzais60Minutes());
 	}
 
 	/**
@@ -593,7 +567,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public long getShaahZmanis90Minutes() {
-		return getTemporalHour(getAlos90(), getTzais90());
+		return getTemporalHour(getAlos90Minutes(), getTzais90Minutes());
 	}
 
 	/**
@@ -717,7 +691,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public long getShaahZmanis96Minutes() {
-		return getTemporalHour(getAlos96(), getTzais96());
+		return getTemporalHour(getAlos96Minutes(), getTzais96Minutes());
 	}
 
 	/**
@@ -736,7 +710,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis26Degrees()
 	 */
 	public long getShaahZmanis120Minutes() {
-		return getTemporalHour(getAlos120(), getTzais120());
+		return getTemporalHour(getAlos120Minutes(), getTzais120Minutes());
 	}
 
 	/**
@@ -780,8 +754,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #getShaahZmanis120MinutesZmanis()
-	 * @see #getAlos120()
-	 * @see #getTzais120()
+	 * @see #getAlos120Minutes()
+	 * @see #getTzais120Minutes()
 	 * @see #getPlagHamincha26Degrees()
 	 * @see #getPlagHamincha120Minutes()
 	 */
@@ -793,8 +767,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method should be used <em>lechumra</em> only and returns the time of <em>plag hamincha</em> according to the
 	 * Magen Avraham with the day starting 120 minutes before sunrise and ending 120 minutes after sunset. This is
-	 * calculated as 10.75 hours after {@link #getAlos120() dawn 120 minutes}. The formula used is 10.75 {@link
-	 * #getShaahZmanis120Minutes()} after {@link #getAlos120()}. Since the <em>zman</em> based on an extremely early
+	 * calculated as 10.75 hours after {@link #getAlos120Minutes() dawn 120 minutes}. The formula used is 10.75 {@link
+	 * #getShaahZmanis120Minutes()} after {@link #getAlos120Minutes()}. Since the <em>zman</em> based on an extremely early
 	 * <em>alos</em> and a very late <em>tzais</em>, it should only be used <em>lechumra</em>.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time (often after
@@ -812,7 +786,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getPlagHamincha120Minutes() {
-		return getPlagHamincha(getAlos120(), getTzais120(), true);
+		return getPlagHamincha(getAlos120Minutes(), getTzais120Minutes(), true);
 	}
 
 	/**
@@ -843,11 +817,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}.
 	 *         documentation.
 	 *
-	 * @see #getTzais60()
+	 * @see #getTzais60Minutes()
 	 * @see #getPlagHamincha60Minutes()
 	 * @see #getShaahZmanis60Minutes()
 	 */
-	public Instant getAlos60() {
+	public Instant getAlos60Minutes() {
 		return getTimeOffset(getSunriseBasedOnElevationSetting(), -60 * MINUTE_MILLIS);
 	}
 
@@ -858,7 +832,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 72 minutes which is 1/10th of a day (12 * 60 = 720) based on the day being from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation()
 	 * sunset} (depending on the {@link #isUseElevation()} setting). The actual calculation is {@link
-	 * #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGra()} * 1.2). This calculation is used in the calendars
+	 * #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.2). This calculation is used in the calendars
 	 * published by the <a href="https://en.wikipedia.org/wiki/Central_Rabbinical_Congress">Hisachdus Harabanim D'Artzos Habris
 	 * Ve'Canada</a>.
 	 * 
@@ -866,7 +840,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #getShaahZmanisGra()
+	 * @see #getShaahZmanisGRA()
 	 */
 	public Instant getAlos72Zmanis() {
 		return getZmanisBasedOffset(-1.2);
@@ -887,7 +861,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
-	public Instant getAlos96() {
+	public Instant getAlos96Minutes() {
 		return getTimeOffset(getSunriseBasedOnElevationSetting(), -96 * MINUTE_MILLIS);
 	}
 
@@ -899,13 +873,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * mil is 90 minutes which is 1/8th of a day (12 * 60) / 8 = 90. The day is calculated from {@link
 	 * #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation()
 	 * sunrise} to {@link #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used
-	 * is {@link #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGra()} * 1.5).
+	 * is {@link #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.5).
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #getShaahZmanisGra()
+	 * @see #getShaahZmanisGRA()
 	 */
 	public Instant getAlos90Zmanis() {
 		return getZmanisBasedOffset(-1.5);
@@ -919,13 +893,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * minutes which is 1/7.5th of a day (12 * 60 / 7.5 = 96). The day is calculated from {@link #getSeaLevelSunrise() sea
 	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation()
 	 * sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link #getSunriseBasedOnElevationSetting()}
-	 * - ({@link #getShaahZmanisGra()} * 1.6).
+	 * - ({@link #getShaahZmanisGRA()} * 1.6).
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #getShaahZmanisGra()
+	 * @see #getShaahZmanisGRA()
 	 */
 	public Instant getAlos96Zmanis() {
 		return getZmanisBasedOffset(-1.6);
@@ -946,7 +920,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
-	public Instant getAlos90() {
+	public Instant getAlos90Minutes() {
 		return getTimeOffset(getSunriseBasedOnElevationSetting(), -90 * MINUTE_MILLIS);
 	}
 
@@ -972,11 +946,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * 
-	 * @see #getTzais120()
+	 * @see #getTzais120Minutes()
 	 * @see #getAlos26Degrees()
 	 */
 	@Deprecated (forRemoval=false)
-	public Instant getAlos120() {
+	public Instant getAlos120Minutes() {
 		return getTimeOffset(getSunriseBasedOnElevationSetting(), -120 * MINUTE_MILLIS);
 	}
 
@@ -988,7 +962,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the time for 5 mil is 120 minutes which is 1/6th of a day (12 * 60 / 6 = 120). The day is calculated
 	 * from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or
 	 * {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The
-	 * actual calculation used is {@link #getSunriseWithElevation()} - ({@link #getShaahZmanisGra()} * 2). Since this time is
+	 * actual calculation used is {@link #getSunriseWithElevation()} - ({@link #getShaahZmanisGRA()} * 2). Since this time is
 	 * extremely early, it should only be used <em>lechumra</em>, such
 	 * as not eating after this time on a fast day, and not as the start time for <em>mitzvos</em> that can only be
 	 * performed during the day.
@@ -1002,7 +976,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #getAlos120()
+	 * @see #getAlos120Minutes()
 	 * @see #getAlos26Degrees()
 	 */
 	@Deprecated (forRemoval=false)
@@ -1013,7 +987,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method should be used <em>lechumra</em> only and returns <em>alos</em> (dawn) calculated when the sun is {@link
 	 * #ZENITH_26_DEGREES 26&deg;} below the eastern geometric horizon before sunrise. This calculation is based on the same
-	 * calculation of {@link #getAlos120() 120 minutes} but uses a degree-based calculation instead of 120 exact minutes. This
+	 * calculation of {@link #getAlos120Minutes() 120 minutes} but uses a degree-based calculation instead of 120 exact minutes. This
 	 * calculation is based on the position of the sun 120 minutes before sunrise in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
 	 * calculates to 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. Since this time is extremely early, it should
@@ -1030,8 +1004,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #ZENITH_26_DEGREES
-	 * @see #getAlos120()
-	 * @see #getTzais120()
+	 * @see #getAlos120Minutes()
+	 * @see #getTzais120Minutes()
 	 * @see #getTzais26Degrees()
 	 */
 	@Deprecated (forRemoval=false)
@@ -1075,7 +1049,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_19_POINT_8 19.8&deg;} below the
 	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
-	 * {@link #getAlos90() 90 minutes} but uses a degree-based calculation instead of 90 exact minutes. This calculation
+	 * {@link #getAlos90Minutes() 90 minutes} but uses a degree-based calculation instead of 90 exact minutes. This calculation
 	 * is based on the position of the sun 90 minutes before sunrise in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
 	 * calculates to 19.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
@@ -1085,29 +1059,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #ZENITH_19_POINT_8
-	 * @see #getAlos90()
+	 * @see #getAlos90Minutes()
 	 */
 	public Instant getAlos19Point8Degrees() {
 		return getSunriseOffsetByDegrees(ZENITH_19_POINT_8);
-	}
-
-	/**
-	 * Method to return <em>alos</em> (dawn) calculated when the sun is {@link #ZENITH_16_POINT_1 16.1&deg;} below the
-	 * eastern geometric horizon before sunrise. This calculation is based on the same calculation of
-	 * {@link #getAlos72() 72 minutes} but uses a degree-based calculation instead of 72 exact minutes. This calculation
-	 * is based on the position of the sun 72 minutes before sunrise in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
-	 * calculates to 16.1&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
-	 * 
-	 * @return the <code>Instant</code> representing <em>alos</em>. If the calculation can't be computed such as northern
-	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun
-	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
-	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #ZENITH_16_POINT_1
-	 * @see #getAlos72()
-	 */
-	public Instant getAlos16Point1Degrees() {
-		return getSunriseOffsetByDegrees(ZENITH_16_POINT_1);
 	}
 	
 	/**
@@ -1331,29 +1286,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) according to the
-	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on
-	 * <em>alos</em> being {@link #getAlos72() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 3 {@link
-	 * #getShaahZmanis72Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos72() dawn} based on the opinion
-	 * of the MGA that the day is calculated from a {@link #getAlos72() dawn} of 72 minutes before sunrise to
-	 * {@link #getTzais72() nightfall} of 72 minutes after sunset. This returns the time of 3 * {@link
-	 * #getShaahZmanis72Minutes()} after {@link #getAlos72() dawn}. This class returns an identical time to {@link
-	 * #getSofZmanShmaMGA()} and is repeated here for clarity.
-	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
-	 *         as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
-	 *         {@link AstronomicalCalendar} documentation.
-	 * @see #isUseAstronomicalChatzosForOtherZmanim()
-	 * @see #getShaahZmanis72Minutes()
-	 * @see #getAlos72()
-	 * @see #getSofZmanShmaMGA()
-	 */
-	public Instant getSofZmanShmaMGA72Minutes() {
-		return getSofZmanShmaMGA();
-	}
-
-	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite <em>Shema</em> in the morning) according
 	 * to the opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based
 	 * on <em>alos</em> being {@link #getAlos72Zmanis() 72} minutes <em>zmaniyos</em>, or 1/10th of the day before
@@ -1379,22 +1311,22 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite <em>Shema</em> in the morning) according
 	 * to the opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on
-	 * <em>alos</em> being {@link #getAlos90() 90} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 3
-	 * {@link #getShaahZmanis90Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos90() dawn} based on
-	 * the opinion of the MGA that the day is calculated from a {@link #getAlos90() dawn} of 90 minutes before sunrise to
-	 * {@link #getTzais90() nightfall} of 90 minutes after sunset. This returns the time of 3 *
-	 * {@link #getShaahZmanis90Minutes()} after {@link #getAlos90() dawn}.
+	 * <em>alos</em> being {@link #getAlos90Minutes() 90} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 3
+	 * {@link #getShaahZmanis90Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos90Minutes() dawn} based on
+	 * the opinion of the MGA that the day is calculated from a {@link #getAlos90Minutes() dawn} of 90 minutes before sunrise to
+	 * {@link #getTzais90Minutes() nightfall} of 90 minutes after sunset. This returns the time of 3 *
+	 * {@link #getShaahZmanis90Minutes()} after {@link #getAlos90Minutes() dawn}.
 	 * 
 	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where
 	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90Minutes()
-	 * @see #getAlos90()
+	 * @see #getAlos90Minutes()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
 	 */
 	public Instant getSofZmanShmaMGA90Minutes() {
-		return getSofZmanShma(getAlos90(), getTzais90(), true);
+		return getSofZmanShma(getAlos90Minutes(), getTzais90Minutes(), true);
 	}
 
 	/**
@@ -1422,22 +1354,22 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based
-	 * on <em>alos</em> being {@link #getAlos96() 96} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 3
-	 * {@link #getShaahZmanis96Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos96() dawn} based on
-	 * the opinion of the MGA that the day is calculated from a {@link #getAlos96() dawn} of 96 minutes before
-	 * sunrise to {@link #getTzais96() nightfall} of 96 minutes after sunset. This returns the time of 3 * {@link
-	 * #getShaahZmanis96Minutes()} after {@link #getAlos96() dawn}.
+	 * on <em>alos</em> being {@link #getAlos96Minutes() 96} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 3
+	 * {@link #getShaahZmanis96Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos96Minutes() dawn} based on
+	 * the opinion of the MGA that the day is calculated from a {@link #getAlos96Minutes() dawn} of 96 minutes before
+	 * sunrise to {@link #getTzais96Minutes() nightfall} of 96 minutes after sunset. This returns the time of 3 * {@link
+	 * #getShaahZmanis96Minutes()} after {@link #getAlos96Minutes() dawn}.
 	 * 
 	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where
 	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96Minutes()
-	 * @see #getAlos96()
+	 * @see #getAlos96Minutes()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
 	 */
 	public Instant getSofZmanShmaMGA96Minutes() {
-		return getSofZmanShma(getAlos96(), getTzais96(), true);
+		return getSofZmanShma(getAlos96Minutes(), getTzais96Minutes(), true);
 	}
 
 	/**
@@ -1494,11 +1426,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman krias shema</em> (time to recite Shema in the morning) according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based
-	 * on <em>alos</em> being {@link #getAlos120() 120} minutes or 1/6th of the day before {@link #getSunriseWithElevation() sunrise}.
-	 * This time is 3 {@link #getShaahZmanis120Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos120()
-	 * dawn} based on the opinion of the MGA that the day is calculated from a {@link #getAlos120() dawn} of 120 minutes
-	 * before sunrise to {@link #getTzais120() nightfall} of 120 minutes after sunset. This returns the time of 3
-	 * {@link #getShaahZmanis120Minutes()} after {@link #getAlos120() dawn}. This is an extremely early <em>zman</em> that
+	 * on <em>alos</em> being {@link #getAlos120Minutes() 120} minutes or 1/6th of the day before {@link #getSunriseWithElevation() sunrise}.
+	 * This time is 3 {@link #getShaahZmanis120Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos120Minutes()
+	 * dawn} based on the opinion of the MGA that the day is calculated from a {@link #getAlos120Minutes() dawn} of 120 minutes
+	 * before sunrise to {@link #getTzais120Minutes() nightfall} of 120 minutes after sunset. This returns the time of 3
+	 * {@link #getShaahZmanis120Minutes()} after {@link #getAlos120Minutes() dawn}. This is an extremely early <em>zman</em> that
 	 * is very much a <em>chumra</em>.
 	 * 
 	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
@@ -1506,11 +1438,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120Minutes()
-	 * @see #getAlos120()
+	 * @see #getAlos120Minutes()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
 	 */
 	public Instant getSofZmanShmaMGA120Minutes() {
-		return getSofZmanShma(getAlos120(), getTzais120(), true);
+		return getSofZmanShma(getAlos120Minutes(), getTzais120Minutes(), true);
 	}
 
 	/**
@@ -1627,28 +1559,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) according to the opinion
-	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on
-	 * <em>alos</em> being {@link #getAlos72() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 4
-	 * {@link #getShaahZmanis72Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos72() dawn} based on
-	 * the opinion of the MGA that the day is calculated from a {@link #getAlos72() dawn} of 72 minutes before
-	 * sunrise to {@link #getTzais72() nightfall} of 72 minutes after sunset. This returns the time of 4 *
-	 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72() dawn}. This class returns an identical time to
-	 * {@link #getSofZmanTfilaMGA()} and is repeated here for clarity.
-	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
-	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
-	 *         {@link AstronomicalCalendar} documentation.
-	 * @see #getShaahZmanis72Minutes()
-	 * @see #getAlos72()
-	 * @see #getSofZmanShmaMGA()
-	 */
-	public Instant getSofZmanTfilaMGA72Minutes() {
-		return getSofZmanTfilaMGA();
-	}
-
-	/**
 	 * This method returns the latest <em>zman tfila</em> (time to the morning prayers) according to the opinion of the
 	 * <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos72Zmanis() 72} minutes <em>zmaniyos</em> before {@link #getSunriseWithElevation() sunrise}. This time is 4
@@ -1671,21 +1581,21 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on
-	 * <em>alos</em> being {@link #getAlos90() 90} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 4
-	 * {@link #getShaahZmanis90Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos90() dawn} based on
-	 * the opinion of the MGA that the day is calculated from a {@link #getAlos90() dawn} of 90 minutes before sunrise to
-	 * {@link #getTzais90() nightfall} of 90 minutes after sunset. This returns the time of 4 *
-	 * {@link #getShaahZmanis90Minutes()} after {@link #getAlos90() dawn}.
+	 * <em>alos</em> being {@link #getAlos90Minutes() 90} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 4
+	 * {@link #getShaahZmanis90Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos90Minutes() dawn} based on
+	 * the opinion of the MGA that the day is calculated from a {@link #getAlos90Minutes() dawn} of 90 minutes before sunrise to
+	 * {@link #getTzais90Minutes() nightfall} of 90 minutes after sunset. This returns the time of 4 *
+	 * {@link #getShaahZmanis90Minutes()} after {@link #getAlos90Minutes() dawn}.
 	 * 
 	 * @return the <code>Instant</code> of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90Minutes()
-	 * @see #getAlos90()
+	 * @see #getAlos90Minutes()
 	 */
 	public Instant getSofZmanTfilaMGA90Minutes() {
-		return getSofZmanTfila(getAlos90(), getTzais90(), true);
+		return getSofZmanTfila(getAlos90Minutes(), getTzais90Minutes(), true);
 	}
 
 	/**
@@ -1712,21 +1622,21 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on
-	 * <em>alos</em> being {@link #getAlos96() 96} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 4
-	 * {@link #getShaahZmanis96Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos96() dawn} based on
-	 * the opinion of the MGA that the day is calculated from a {@link #getAlos96() dawn} of 96 minutes before
-	 * sunrise to {@link #getTzais96() nightfall} of 96 minutes after sunset. This returns the time of 4 *
-	 * {@link #getShaahZmanis96Minutes()} after {@link #getAlos96() dawn}.
+	 * <em>alos</em> being {@link #getAlos96Minutes() 96} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 4
+	 * {@link #getShaahZmanis96Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos96Minutes() dawn} based on
+	 * the opinion of the MGA that the day is calculated from a {@link #getAlos96Minutes() dawn} of 96 minutes before
+	 * sunrise to {@link #getTzais96Minutes() nightfall} of 96 minutes after sunset. This returns the time of 4 *
+	 * {@link #getShaahZmanis96Minutes()} after {@link #getAlos96Minutes() dawn}.
 	 * 
 	 * @return the <code>Instant</code> of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96Minutes()
-	 * @see #getAlos96()
+	 * @see #getAlos96Minutes()
 	 */
 	public Instant getSofZmanTfilaMGA96Minutes() {
-		return getSofZmanTfila(getAlos96(), getTzais96(), true);
+		return getSofZmanTfila(getAlos96Minutes(), getTzais96Minutes(), true);
 	}
 
 	/**
@@ -1753,11 +1663,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the latest <em>zman tfila</em> (time to recite the morning prayers) according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on
-	 * <em>alos</em> being {@link #getAlos120() 120} minutes before {@link #getSunriseWithElevation() sunrise} . This time is 4
-	 * {@link #getShaahZmanis120Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos120() dawn}
-	 * based on the opinion of the MGA that the day is calculated from a {@link #getAlos120() dawn} of 120
-	 * minutes before sunrise to {@link #getTzais120() nightfall} of 120 minutes after sunset. This returns the time of
-	 * 4 * {@link #getShaahZmanis120Minutes()} after {@link #getAlos120() dawn}. This is an extremely early <em>zman</em>
+	 * <em>alos</em> being {@link #getAlos120Minutes() 120} minutes before {@link #getSunriseWithElevation() sunrise} . This time is 4
+	 * {@link #getShaahZmanis120Minutes() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos120Minutes() dawn}
+	 * based on the opinion of the MGA that the day is calculated from a {@link #getAlos120Minutes() dawn} of 120
+	 * minutes before sunrise to {@link #getTzais120Minutes() nightfall} of 120 minutes after sunset. This returns the time of
+	 * 4 * {@link #getShaahZmanis120Minutes()} after {@link #getAlos120Minutes() dawn}. This is an extremely early <em>zman</em>
 	 * that is very much a <em>chumra</em>.
 	 * 
 	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
@@ -1765,10 +1675,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120Minutes()
-	 * @see #getAlos120()
+	 * @see #getAlos120Minutes()
 	 */
 	public Instant getSofZmanTfilaMGA120Minutes() {
-		return getSofZmanTfila(getAlos120(), getTzais120(), true);
+		return getSofZmanTfila(getAlos120Minutes(), getTzais120Minutes(), true);
 	}
 
 	/**
@@ -1790,11 +1700,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns <em>mincha gedola</em> calculated as 30 minutes after {@link #getChatzos() <em>chatzos</em>}
-	 * and not 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} after {@link #getChatzos() <em>chatzos</em>} as
+	 * and not 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} after {@link #getChatzos() <em>chatzos</em>} as
 	 * calculated by {@link #getMinchaGedola}. Some use this time to delay the start of <em>mincha</em> in the winter when
-	 * 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is less than 30 minutes. See
-	 * {@link #getMinchaGedolaGreaterThan30()} for a convenience method that returns the later of the 2 calculations. One
-	 * should not use this time to start <em>mincha</em> before the standard {@link #getMinchaGedola() <em>mincha gedola</em>}.
+	 * 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} is less than 30 minutes. See
+	 * {@link #getMinchaGedolaGreaterThan30(Instant)} for a convenience method that returns the later of the 2 calculations. One
+	 * should not use this time to start <em>mincha</em> before the standard {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}.
 	 * See Shulchan Aruch <a href="https://hebrewbooks.org/pdfpager.aspx?req=49624&st=&pgnum=291">Orach Chayim 234:1</a> and
 	 * the Shaar Hatziyon <em>seif katan ches</em>. Since this calculation is a fixed 30 minutes of regular clock time after
 	 * <em>chatzos</em>, even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha
@@ -1805,8 +1715,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
-	 * @see #getMinchaGedola()
-	 * @see #getMinchaGedolaGreaterThan30()
+	 * @see #getMinchaGedolaGRA()
+	 * @see #getMinchaGedolaGreaterThan30(Instant)
 	 * @see #getChatzos()
 	 * @see #isUseAstronomicalChatzos()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
@@ -1818,17 +1728,17 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the time of <em>mincha gedola</em> according to the Magen Avraham with the day starting 72
 	 * minutes before sunrise and ending 72 minutes after sunset. This is the earliest time to pray <em>mincha</em>. For
-	 * more information on this see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}. This is
+	 * more information on this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is
 	 * calculated as 6.5 {@link #getTemporalHour() solar hours} after <em>alos</em>. The calculation used is 6.5 *
-	 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72() <em>alos</em>}. If {@link
+	 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72Minutes() <em>alos</em>}. If {@link
 	 * #isUseAstronomicalChatzosForOtherZmanim()} is set to <code>true</code>, the calculation will be based on 0.5
 	 * {@link #getHalfDayBasedShaahZmanis(Instant, Instant) half-day based <em>sha'ah zmanis</em>} between {@link #getChatzos()}
-	 * and {@link #getTzais72()} after {@link #getChatzos()}.
+	 * and {@link #getTzais72Minutes()} after {@link #getChatzos()}.
 	 * 
-	 * @see #getAlos72()
-	 * @see #getMinchaGedola()
-	 * @see #getMinchaKetana()
-	 * @see ZmanimCalendar#getMinchaGedola()
+	 * @see #getAlos72Minutes()
+	 * @see #getMinchaGedolaGRA()
+	 * @see #getMinchaKetanaGRA()
+	 * @see ZmanimCalendar#getMinchaGedolaGRA()
 	 * @see #getChatzos()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
 	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
@@ -1838,24 +1748,24 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getMinchaGedola72Minutes() {
 		if (isUseAstronomicalChatzosForOtherZmanim()) {
-			return getHalfDayBasedZman(getChatzos(), getTzais72(), 0.5);
+			return getHalfDayBasedZman(getChatzos(), getTzais72Minutes(), 0.5);
 		} else {
-			return getMinchaGedola(getAlos72(), getTzais72(), true);
+			return getMinchaGedola(getAlos72Minutes(), getTzais72Minutes(), true);
 		}
 	}
 
 	/**
 	 * This method returns the time of <em>mincha gedola</em> according to the Magen Avraham with the day starting and
 	 * ending 16.1&deg; below the horizon. This is the earliest time to pray <em>mincha</em>. For more information on
-	 * this see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}. This is calculated as 6.5
+	 * this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is calculated as 6.5
 	 * {@link #getTemporalHour() solar hours} after <em>alos</em>. The calculation used is 6.5 *
 	 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em>}. If {@link
 	 * #isUseAstronomicalChatzosForOtherZmanim()} is set to <code>true</code>, the calculation will be based on 0.5
 	 * {@link #getHalfDayBasedShaahZmanis(Instant, Instant) half-day based <em>sha'ah zmanis</em>} between {@link #getChatzos()}
 	 * and {@link #getAlos16Point1Degrees()} after {@link #getChatzos()}.
 	 * @see #getShaahZmanis16Point1Degrees()
-	 * @see #getMinchaGedola()
-	 * @see #getMinchaKetana()
+	 * @see #getMinchaGedolaGRA()
+	 * @see #getMinchaKetanaGRA()
 	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
 	 *         the sun  may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
@@ -1877,9 +1787,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * zmanis</em> after <em>chatzos</em> with <em>shaos zmaniyos</em> calculated based on a day starting 72 minutes before sunrise
 	 * {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending 13.5 minutes after sunset {@link
 	 * #getTzaisGeonim3Point7Degrees() <em>tzais</em> 3.7&deg;}. <em>Mincha gedola</em> is the earliest time to pray <em>mincha</em>.
-	 * The later of this time or 30 clock minutes after <em>chatzos</em> is returned. See {@link #getMinchaGedolaGreaterThan30()}
-	 * (though that calculation is based on <em>mincha gedola</em> GRA).
-	 * For more information about <em>mincha gedola</em> see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}.
+	 * The later of this time or 30 clock minutes after <em>chatzos</em> is returned. See {@link
+	 * #getMinchaGedolaGreaterThan30(Instant)} for a way to claculate the later of 30 minutes or this <em>mincha gedola</em>.
+	 * For more information about <em>mincha gedola</em> see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}.
 	 * Since calculation of this <em>zman</em> involves <em>chatzos</em> that is offset from the center of the astronomical day,
 	 * {@link #isUseAstronomicalChatzosForOtherZmanim()} is N/A here.
 	 * @return the <code>Instant</code> of the <em>mincha gedola</em>. If the calculation can't be computed such as northern and
@@ -1890,7 +1800,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getTzaisGeonim3Point7Degrees()
 	 * @see #getShaahZmanisAlos16Point1ToTzais3Point7()
-	 * @see #getMinchaGedolaGreaterThan30()
+	 * @see #getMinchaGedolaGreaterThan30(Instant)
 	 */
 	public Instant getMinchaGedolaAhavatShalom() {
 		if (getChatzos() == null || getMinchaGedola30Minutes() == null || getShaahZmanisAlos16Point1ToTzais3Point7() == Long.MIN_VALUE) {
@@ -1902,9 +1812,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * FIXME check for synchronous
 	 * This is a convenience method that returns the later of the minchaGedola passed in and {@link
-	 * #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGra() <em>shaah zmanis</em>} is less
+	 * #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} is less
 	 * than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise the minchaGedola passed in will be
 	 * returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
 	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em>
@@ -1912,11 +1821,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @param minchaGedola
 	 *            the mincha gedola to be compared to {@link #getMinchaGedola30Minutes()}.
-	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedola()} and {@link #getMinchaGedola30Minutes()}.
+	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
 	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
 	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getMinchaGedola()
+	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaGedola30Minutes()
 	 * @see #isUseAstronomicalChatzos()
 	 * 
@@ -1934,13 +1843,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the time of <em>mincha ketana</em> according to the Magen Avraham with the day starting and
 	 * ending 16.1&deg; below the horizon. This is the preferred earliest time to pray <em>mincha</em> according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others. For more information on
-	 * this see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}. This is calculated as 9.5
+	 * this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is calculated as 9.5
 	 * {@link #getTemporalHour() solar hours} after <em>alos</em>. The calculation used is 9.5 *
 	 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em>}.
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
-	 * @see #getMinchaGedola()
-	 * @see #getMinchaKetana()
+	 * @see #getMinchaGedolaGRA()
+	 * @see #getMinchaKetanaGRA()
 	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
 	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
@@ -1958,7 +1867,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * calculated based on a day starting at {@link #getAlos16Point1Degrees() <em>alos</em> 16.1&deg;} and ending at
 	 * <em>tzais</em> 3.8&deg;. <em>Mincha ketana</em> is the preferred earliest time to pray <em>mincha</em> according to
 	 * the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others. For more information
-	 * on this see the documentation on {@link #getMinchaKetana() <em>mincha ketana</em>}.
+	 * on this see the documentation on {@link #getMinchaKetanaGRA() <em>mincha ketana</em>}.
 	 * 
 	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the
@@ -1977,26 +1886,26 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the time of <em>mincha ketana</em> according to the Magen Avraham with the day
 	 * starting 72 minutes before sunrise and ending 72 minutes after sunset. This is the preferred earliest time to pray
 	 * <em>mincha</em> according to the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a>
-	 * and others. For more information on this see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}.
+	 * and others. For more information on this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}.
 	 * This is calculated as 9.5 {@link #getShaahZmanis72Minutes()} after <em>alos</em>. The calculation used is 9.5 *
-	 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72() <em>alos</em>}.
+	 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72Minutes() <em>alos</em>}.
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
-	 * @see #getMinchaGedola()
-	 * @see #getMinchaKetana()
+	 * @see #getMinchaGedolaGRA()
+	 * @see #getMinchaKetanaGRA()
 	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaKetana72Minutes() {
-		return getMinchaKetana(getAlos72(), getTzais72(), true);
+		return getMinchaKetana(getAlos72Minutes(), getTzais72Minutes(), true);
 	}
 
 	/**
 	 * This method returns the time of <em>plag hamincha</em> according to the Magen Avraham with the day starting 60
 	 * minutes before sunrise and ending 60 minutes after sunset. This is calculated as 10.75 hours after
-	 * {@link #getAlos60() dawn}. The formula used is 10.75 {@link #getShaahZmanis60Minutes()} after {@link #getAlos60()}.
+	 * {@link #getAlos60Minutes() dawn}. The formula used is 10.75 {@link #getShaahZmanis60Minutes()} after {@link #getAlos60Minutes()}.
 	 * 
 	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
@@ -2004,18 +1913,18 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #getShaahZmanis60Minutes()
-	 * @see #getAlos60()
-	 * @see #getTzais60()
+	 * @see #getAlos60Minutes()
+	 * @see #getTzais60Minutes()
 	 */
 	public Instant getPlagHamincha60Minutes() {
-		return getPlagHamincha(getAlos60(), getTzais60(), true);
+		return getPlagHamincha(getAlos60Minutes(), getTzais60Minutes(), true);
 	}
 
 	/**
 	 * This method should be used <em>lechumra</em> only and returns the time of <em>plag hamincha</em> according to the
 	 * Magen Avraham with the day starting 72 minutes before sunrise and ending 72 minutes after sunset. This is calculated
-	 * as 10.75 hours after {@link #getAlos72() dawn}. The formula used is 10.75 {@link #getShaahZmanis72Minutes()} after
-	 * {@link #getAlos72()}. Since <em>plag</em> by this calculation can occur after sunset, it should only be used
+	 * as 10.75 hours after {@link #getAlos72Minutes() dawn}. The formula used is 10.75 {@link #getShaahZmanis72Minutes()} after
+	 * {@link #getAlos72Minutes()}. Since <em>plag</em> by this calculation can occur after sunset, it should only be used
 	 * <em>lechumra</em>.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time (often after
@@ -2032,14 +1941,14 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getPlagHamincha72Minutes() {
-		return getPlagHamincha(getAlos72(), getTzais72(), true);
+		return getPlagHamincha(getAlos72Minutes(), getTzais72Minutes(), true);
 	}
 
 	/**
 	 * This method should be used <em>lechumra</em> only and returns the time of <em>plag hamincha</em> according to the
 	 * Magen Avraham with the day starting 90 minutes before sunrise and ending 90 minutes after sunset. This is calculated
-	 * as 10.75 hours after {@link #getAlos90() dawn}. The formula used is 10.75 {@link #getShaahZmanis90Minutes()} after
-	 * {@link #getAlos90()}. Since <em>plag</em> by this calculation can occur after sunset, it should only be used
+	 * as 10.75 hours after {@link #getAlos90Minutes() dawn}. The formula used is 10.75 {@link #getShaahZmanis90Minutes()} after
+	 * {@link #getAlos90Minutes()}. Since <em>plag</em> by this calculation can occur after sunset, it should only be used
 	 * <em>lechumra</em>.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time (often after
@@ -2056,14 +1965,14 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getPlagHamincha90Minutes() {
-		return getPlagHamincha(getAlos90(), getTzais90(), true);
+		return getPlagHamincha(getAlos90Minutes(), getTzais90Minutes(), true);
 	}
 
 	/**
 	 * This method should be used <em>lechumra</em> only and returns the time of <em>plag hamincha</em> according to the Magen
 	 * Avraham with the day starting 96 minutes before sunrise and ending 96 minutes after sunset. This is calculated as 10.75
-	 * hours after {@link #getAlos96() dawn}. The formula used is 10.75 {@link #getShaahZmanis96Minutes()} after
-	 * {@link #getAlos96()}. Since <em>plag</em> by this calculation can occur after sunset, it should only be used
+	 * hours after {@link #getAlos96Minutes() dawn}. The formula used is 10.75 {@link #getShaahZmanis96Minutes()} after
+	 * {@link #getAlos96Minutes()}. Since <em>plag</em> by this calculation can occur after sunset, it should only be used
 	 * <em>lechumra</em>.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time (often after
@@ -2079,7 +1988,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	@Deprecated (forRemoval=false)
 	public Instant getPlagHamincha96Minutes() {
-		return getPlagHamincha(getAlos96(), getTzais96(), true);
+		return getPlagHamincha(getAlos96Minutes(), getTzais96Minutes(), true);
 	}
 
 	/**
@@ -2722,21 +2631,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getTzaisGeonim7Point67Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_7_POINT_67);
 	}
-
-	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
-	 * sun's position at {@link #ZENITH_8_POINT_5 8.5&deg;} below the western horizon.
-	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 8.5&deg; below sea level. If the calculation
-	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
-	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
-	 *         documentation.
-	 * @see #ZENITH_8_POINT_5
-	 */
-	public Instant getTzaisGeonim8Point5Degrees() {
-		return getSunsetOffsetByDegrees(ZENITH_8_POINT_5);
-	}
 	
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the calculations used in the <a href=
@@ -2770,7 +2664,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 *
-	 * @see #getTzais60()
+	 * @see #getTzais60Minutes()
 	 */
 	public Instant getTzaisGeonim9Point75Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_9_POINT_75);
@@ -2783,18 +2677,18 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * >Divrei Malkiel</a> that the time to walk the distance of a <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> is 15 minutes, for a total of 60 minutes
 	 * for 4 mil after {@link #getSunsetWithElevation() sunset} or {@link #getSeaLevelSunset() sea level sunset} (depending on the {@link
-	 * #isUseElevation()} setting). See detailed documentation explaining the 60 minute concept at {@link #getAlos60()}.
+	 * #isUseElevation()} setting). See detailed documentation explaining the 60 minute concept at {@link #getAlos60Minutes()}.
 	 * 
 	 * @return the <code>Instant</code> representing 60 minutes after sea level sunset. If the calculation can't be
 	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise,
 	 *         and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
-	 * @see #getAlos60()
+	 * @see #getAlos60Minutes()
 	 * @see #getPlagHamincha60Minutes()
 	 * @see #getShaahZmanis60Minutes()
 	 */
-	public Instant getTzais60() {
+	public Instant getTzais60Minutes() {
 		return getTimeOffset(getSunsetBasedOnElevationSetting(), 60 * MINUTE_MILLIS);
 	}
 
@@ -2898,16 +2792,16 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * before sunrise and is usually calculated as ending {@link #getTzaisAteretTorah() 40 minutes after sunset}
 	 * (configurable to any offset via {@link #setAteretTorahSunsetOffset(double)}). This is the preferred earliest
 	 * time to pray <em>mincha</em> according to the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides"
-	 * >Rambam</a> and others. For more information on this see the documentation on {@link #getMinchaGedola() <em>mincha
+	 * >Rambam</a> and others. For more information on this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha
 	 * gedola</em>}. This is calculated as 6.5 {@link #getShaahZmanisAteretTorah()  solar hours} after <em>alos</em>. The
 	 * calculation used is 6.5 * {@link #getShaahZmanisAteretTorah()} after {@link #getAlos72Zmanis() <em>alos</em>}.
 	 * 
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
 	 * @see #getShaahZmanisAteretTorah()
-	 * @see #getMinchaGedola()
+	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaKetanaAteretTorah()
-	 * @see ZmanimCalendar#getMinchaGedola()
+	 * @see ZmanimCalendar#getMinchaGedolaGRA()
 	 * @see #getAteretTorahSunsetOffset()
 	 * @see #setAteretTorahSunsetOffset(double)
 	 * 
@@ -2927,7 +2821,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getTzaisAteretTorah() 40 minutes after sunset} (configurable to any offset via
 	 * {@link #setAteretTorahSunsetOffset(double)}). This is the preferred earliest time to pray <em>mincha</em>
 	 * according to the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others.
-	 * For more information on this see the documentation on {@link #getMinchaGedola() <em>mincha gedola</em>}. This is
+	 * For more information on this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is
 	 * calculated as 9.5 {@link #getShaahZmanisAteretTorah() solar hours} after {@link #getAlos72Zmanis() <em>alos</em>}.
 	 * The calculation used is 9.5 * {@link #getShaahZmanisAteretTorah()} after {@link #getAlos72Zmanis() <em>alos</em>}.
 	 * 
@@ -2936,8 +2830,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanisAteretTorah()
 	 * @see #getAteretTorahSunsetOffset()
 	 * @see #setAteretTorahSunsetOffset(double)
-	 * @see #getMinchaGedola()
-	 * @see #getMinchaKetana()
+	 * @see #getMinchaGedolaGRA()
+	 * @see #getMinchaKetanaGRA()
 	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
@@ -2988,37 +2882,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getTzais72Zmanis() {
 		return getZmanisBasedOffset(1.2);
 	}
-	
-	/**
-	 * A utility method to return <em>alos</em> (dawn) or <em>tzais</em> (dusk) based on a fractional day offset.
-	 * @param hours the number of <em>shaos zmaniyos</em> (temporal hours) before sunrise or after sunset that defines dawn
-	 *        or dusk. If a negative number is passed in, it will return the time of <em>alos</em> (dawn) (subtracting the
-	 *        time from sunrise) and if a positive number is passed in, it will return the time of <em>tzais</em> (dusk)
-	 *        (adding the time to sunset). If 0 is passed in, a <code>null</code> will be returned (since we can't tell if it
-	 *        is sunrise or sunset based).
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
-	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. A <code>null</code> will also be returned if 0 is passed in, since we can't
-	 *         tell if it is sunrise or sunset based. See detailed explanation on top of the {@link AstronomicalCalendar}
-	 *         documentation.
-	 */
-	private Instant getZmanisBasedOffset(double hours) {
-		long shaahZmanis = getShaahZmanisGra();
-		if (shaahZmanis == Long.MIN_VALUE || hours == 0) {
-			return null;
-		}
-
-		if (hours > 0) {
-			return getTimeOffset(getSunsetBasedOnElevationSetting(), (long) (shaahZmanis * hours));
-		} else {
-			return getTimeOffset(getSunriseBasedOnElevationSetting(), (long) (shaahZmanis * hours));
-		}
-	}
 
 	/**
 	 * Method to return <em>tzais</em> (dusk) calculated using 90 minutes zmaniyos or 1/8th of the day after {@link
 	 * #getSeaLevelSunset() sea level sunset}. This time is known in Yiddish as the <em>achtel</em> (an eighth)
-	 * <em>zman</em>.
+	 * <em>zman</em> used in various <em>kehilos</em>.
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -3058,9 +2926,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getTzais19Point8Degrees()
-	 * @see #getAlos90()
+	 * @see #getAlos90Minutes()
 	 */
-	public Instant getTzais90() {
+	public Instant getTzais90Minutes() {
 		return getTimeOffset(getSunsetBasedOnElevationSetting(), 90 * MINUTE_MILLIS);
 	}
 
@@ -3084,10 +2952,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}.
 	 *         documentation.
 	 * @see #getTzais26Degrees()
-	 * @see #getAlos120()
+	 * @see #getAlos120Minutes()
 	 */
 	@Deprecated (forRemoval=false)
-	public Instant getTzais120() {
+	public Instant getTzais120Minutes() {
 		return getTimeOffset(getSunsetBasedOnElevationSetting(), 120 * MINUTE_MILLIS);
 	}
 
@@ -3107,7 +2975,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos120Zmanis()
-	 * @see #getTzais120()
+	 * @see #getTzais120Minutes()
 	 * @see #getTzais26Degrees()
 	 */
 	@Deprecated (forRemoval=false)
@@ -3132,7 +3000,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
 	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getTzais72()
+	 * @see #getTzais72Minutes()
 	 * @see #getAlos16Point1Degrees() for more information on this calculation.
 	 */
 	public Instant getTzais16Point1Degrees() {
@@ -3154,7 +3022,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
 	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getTzais120()
+	 * @see #getTzais120Minutes()
 	 * @see #getAlos26Degrees()
 	 */
 	@Deprecated (forRemoval=false)
@@ -3182,7 +3050,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
 	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getTzais90()
+	 * @see #getTzais90Minutes()
 	 * @see #getAlos19Point8Degrees()
 	 */
 	public Instant getTzais19Point8Degrees() {
@@ -3192,15 +3060,15 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * A method to return <em>tzais</em> (dusk) calculated as 96 minutes after {@link #getSunsetWithElevation() sunset} or {@link
 	 * #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} setting). For information on how
-	 * this is calculated see the comments on {@link #getAlos96()}.
+	 * this is calculated see the comments on {@link #getAlos96Minutes()}.
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #getAlos96()
+	 * @see #getAlos96Minutes()
 	 */
-	public Instant getTzais96() {
+	public Instant getTzais96Minutes() {
 		return getTimeOffset(getSunsetBasedOnElevationSetting(), 96 * MINUTE_MILLIS);
 	}
 
@@ -3221,10 +3089,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @return the Instant representing the local <em>chatzos</em>
 	 * @see GeoLocation#getLocalMeanTimeOffset(Instant)
-	 * @see AstronomicalCalendar#getLocalMeanTime(double)
+	 * @see AstronomicalCalendar#getLocalMeanTime(LocalTime)
 	 */
 	public Instant getFixedLocalChatzos() {
-		return getLocalMeanTime(12.0);
+		return getLocalMeanTime(LocalTime.NOON);
 	}
 
 	/**
@@ -3485,7 +3353,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Returns the earliest time of <em>Kiddush Levana</em> according to the opinions that it should not be said until 7
 	 * days after the <em>molad</em>. If the time of <em>tchilas zman Kiddush Levana</em> occurs during the day (between
-	 * {@link ZmanimCalendar#getAlos72() <em>alos</em>} and {@link ZmanimCalendar#getTzais72() <em>tzais</em>}) it
+	 * {@link ZmanimCalendar#getAlos72Minutes() <em>alos</em>} and {@link ZmanimCalendar#getTzais72Minutes() <em>tzais</em>}) it
 	 * return the next <em>tzais</em>.
 	 * 
 	 * @param alos
@@ -3540,52 +3408,41 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getSofZmanTfilaGRA() <em>Sof zman tfilah</em> GRA} and is provided as a convenience method for those who are
 	 * unaware how this <em>zman</em> is calculated. This time is 4 hours into the day based on the opinion of the
 	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from sunrise to sunset.
-	 * This returns the time 4 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea level sunrise}. If it
+	 * This returns the time 4 * {@link #getShaahZmanisGRA()} after {@link #getSeaLevelSunrise() sea level sunrise}. If it
 	 * is not <em>erev Pesach</em>, a null will be returned.
-	 * 
-	 * @see ZmanimCalendar#getShaahZmanisGra()
-	 * @see ZmanimCalendar#getSofZmanTfilaGRA()
 	 * @return the <code>Instant</code> one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
 	 *         Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least one
 	 *         day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see ZmanimCalendar#getShaahZmanisGRA()
+	 * @see ZmanimCalendar#getSofZmanTfilaGRA()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzGRA() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) { 
-			return getSofZmanTfilaGRA();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
 	 * This method returns the latest time one is allowed eating <em>chametz</em> on <em>Erev Pesach</em> according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
-	 * being {@link #getAlos72() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is identical to the
-	 * {@link #getSofZmanTfilaMGA72Minutes() <em>Sof zman tfilah</em> MGA 72 minutes}. This time is 4 {@link #getShaahZmanisMGA()
-	 * <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72() dawn} based on the opinion of the MGA that the day is
-	 * calculated from a {@link #getAlos72() dawn} of 72 minutes before sunrise to {@link #getTzais72() nightfall} of 72 minutes
-	 * after sunset. This returns the time of 4 * {@link #getShaahZmanisMGA()} after {@link #getAlos72() dawn}. If it is not
-	 * <em>erev Pesach</em>, a null will be returned.
+	 * being {@link #getAlos72Minutes() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is identical to the
+	 * {@link #getSofZmanTfilaMGA72Minutes() <em>Sof zman tfilah</em> MGA 72 minutes}. This time is 4 {@link
+	 * #getShaahZmanis72Minutes() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Minutes() dawn} based on the
+	 * opinion of the MGA that the day is calculated from a {@link #getAlos72Minutes() dawn} of 72 minutes before sunrise to {@link
+	 * #getTzais72Minutes() nightfall} of 72 minutes after sunset. This returns the time of 4 * {@link #getShaahZmanis72Minutes()} after
+	 * {@link #getAlos72Minutes() dawn}. If it is not <em>erev Pesach</em>, a null will be returned.
 	 * 
 	 * @return the <code>Instant</code> of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
 	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of
 	 *         the {@link AstronomicalCalendar} documentation.
-	 * @see #getShaahZmanisMGA()
-	 * @see #getAlos72()
+	 * @see #getShaahZmanis72Minutes()
+	 * @see #getAlos72Minutes()
 	 * @see #getSofZmanTfilaMGA72Minutes()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzMGA72Minutes() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA72Minutes();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getAlos72Minutes(), getTzais72Minutes(), true);
 	}
 	
 	/**
@@ -3593,7 +3450,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos72Zmanis() 72 zmaniyos} minutes before {@link #getSunriseWithElevation() sunrise}. This time is identical to the
 	 * {@link #getSofZmanTfilaMGA72MinutesZmanis() <em>Sof zman tfilah</em> MGA 72 minutes zmanis}. This time is 4 {@link #getShaahZmanis72MinutesZmanis()
-	 * <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72() dawn} based on the opinion of the MGA that the day is
+	 * <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Minutes() dawn} based on the opinion of the MGA that the day is
 	 * calculated from a {@link #getAlos72Zmanis() dawn} of 72 minutes zmanis before sunrise to {@link #getTzais72Zmanis() nightfall} of 72 minutes zmanis
 	 * after sunset. This returns the time of 4 * {@link #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}. If it is not
 	 * <em>erev Pesach</em>, a null will be returned.
@@ -3605,15 +3462,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
 	 * @see #getSofZmanTfilaMGA72MinutesZmanis()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzMGA72MinutesZmanis() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA72MinutesZmanis();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getAlos72Zmanis(), getTzais72Zmanis(), true);
 	}
 
 	/**
@@ -3632,68 +3484,50 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getSofZmanTfilaMGA16Point1Degrees()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzMGA16Point1Degrees() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaMGA16Point1Degrees();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getAlos16Point1Degrees(), getTzais16Point1Degrees(), true);
 	}
 
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This time is 5 hours into the day based on the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from
-	 * sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisGra()} after {@link #getSeaLevelSunrise() sea
+	 * sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisGRA()} after {@link #getSeaLevelSunrise() sea
 	 * level sunrise}. If it is not  <em>erev Pesach</em>, a null will be returned.
-	 * @see ZmanimCalendar#getShaahZmanisGra()
 	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least
 	 *         one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see ZmanimCalendar#getShaahZmanisGRA()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzGRA() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getSunriseBasedOnElevationSetting(), getShaahZmanisGra() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getSunriseBasedOnElevationSetting(), getSunsetBasedOnElevationSetting(), true);
 	}
 
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion of
 	 * the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
-	 * being {@link #getAlos72() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 5 {@link
-	 * #getShaahZmanisMGA() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72() dawn} based on the opinion of
-	 * the MGA that the day is calculated from a {@link #getAlos72() dawn} of 72 minutes before sunrise to {@link
-	 * #getTzais72() nightfall} of 72 minutes after sunset. This returns the time of 5 * {@link #getShaahZmanisMGA()} after
-	 * {@link #getAlos72() dawn}. If it is not  <em>erev Pesach</em>, a null will be returned.
+	 * being {@link #getAlos72Minutes() 72} minutes before {@link #getSunriseWithElevation() sunrise}. This time is 5 {@link
+	 * #getShaahZmanis72Minutes() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Minutes() dawn} based on the opinion of
+	 * the MGA that the day is calculated from a {@link #getAlos72Minutes() dawn} of 72 minutes before sunrise to {@link
+	 * #getTzais72Minutes() nightfall} of 72 minutes after sunset. This returns the time of 5 * {@link #getShaahZmanis72Minutes()} after
+	 * {@link #getAlos72Minutes() dawn}. If it is not  <em>erev Pesach</em>, a null will be returned.
 	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at
 	 *         least one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getShaahZmanisMGA()
-	 * @see #getAlos72()
+	 * @see #getShaahZmanis72Minutes()
+	 * @see #getAlos72Minutes()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzMGA72Minutes() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos72(), getShaahZmanisMGA() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getAlos72Minutes(), getTzais72Minutes(), true);
 	}
 	
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion of
 	 * the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos72Zmanis() 72} minutes zmanis before {@link #getSunriseWithElevation() sunrise}. This time is 5 {@link
@@ -3707,19 +3541,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzMGA72MinutesZmanis() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos72Zmanis(), getShaahZmanis72MinutesZmanis() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getAlos72Zmanis(), getTzais72Zmanis(), true);
 	}
 
 	/**
-	 * FIXME adjust for synchronous
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion
 	 * of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em>
 	 * being {@link #getAlos16Point1Degrees() 16.1&deg;} before {@link #getSunriseWithElevation() sunrise}. This time is 5
@@ -3735,84 +3563,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzMGA16Point1Degrees() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getAlos16Point1Degrees(), getShaahZmanis16Point1Degrees() * 5);
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
-	 * <em>netz amiti</em> (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double)
-	 * elevation adjustment}. This forms the base for the Baal Hatanya's dawn-based calculations that are
-	 * calculated as a dip below the horizon before sunrise.
-	 *
-	 * According to the Baal Hatanya, <em>netz amiti</em>, or true (halachic) sunrise, is when the top of the sun's
-	 * disk is visible at an elevation similar to the mountains of Eretz Yisrael. The time is calculated as the point at which
-	 * the center of the sun's disk is 1.583&deg; below the horizon. This degree-based calculation can be found in Rabbi Shalom
-	 * DovBer Levine's commentary on The <a href="https://www.chabadlibrary.org/books/pdf/Seder-Hachnosas-Shabbos.pdf">Baal
-	 * Hatanya's Seder Hachnasas Shabbos</a>. From an elevation of 546 meters, the top of <a href=
-	 * "https://en.wikipedia.org/wiki/Mount_Carmel">Har Hacarmel</a>, the sun disappears when it is 1&deg; 35' or 1.583&deg;
-	 * below the sea level horizon. This in turn is based on the Gemara <a href=
-	 * "https://hebrewbooks.org/shas.aspx?mesechta=2&daf=35">Shabbos 35a</a>. There are other opinions brought down by
-	 * Rabbi Levine, including Rabbi Yosef Yitzchok Feigelstock who calculates it as the degrees below the horizon 4 minutes after
-	 * sunset in Yerushalayim (on the equinox). That is brought down as 1.583&deg;. This is identical to the 1&deg; 35' <em>zman</em>
-	 * and is probably a typo and should be 1.683&deg;. These calculations are used by most <a href=
-	 * "https://en.wikipedia.org/wiki/Chabad">Chabad</a> calendars that use the Baal Hatanya's <em>zmanim</em>. See
-	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
-	 * <em>Zmanim</em> Calculations @ Chabad.org</a>.
-	 *
-	 * Note: <em>netz amiti</em> is used only for calculating certain <em>zmanim</em>, and is intentionally unpublished. For
-	 * practical purposes, daytime <em>mitzvos</em> like <em>shofar</em> and <em>lulav</em> should not be done until after the
-	 * published time for <em>netz</em> / sunrise.
-	 * 
-	 * @return the <code>Instant</code> representing the exact sea level <em>netz amiti</em> (sunrise) time. If the calculation can't be
-	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
-	 * 
-	 * @see #getSunriseWithElevation()
-	 * @see #getSeaLevelSunrise()
-	 * @see #getSunsetBaalHatanya()
-	 * @see #ZENITH_1_POINT_583
-	 */
-	private Instant getSunriseBaalHatanya() {
-		return getSunriseOffsetByDegrees(ZENITH_1_POINT_583);
-	}
-
-	/**
-	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s
-	 * <em>shkiah amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double)
-	 * elevation adjustment}. This forms the base for the Baal Hatanya's dusk-based calculations that are calculated
-	 * as a dip below the horizon after sunset.
-	 * 
-	 * According to the Baal Hatanya, <em>shkiah amiti</em>, true (<em>halachic</em>) sunset, is when the top of the 
-	 * sun's disk disappears from view at an elevation similar to the mountains of <em>Eretz Yisrael</em>.
-	 * This time is calculated as the point at which the center of the sun's disk is 1.583 degrees below the horizon.
-	 *
-	 * Note: <em>shkiah amiti</em> is used only for calculating certain <em>zmanim</em>, and is intentionally unpublished. For
-	 * practical purposes, all daytime mitzvos should be completed before the published time for <em>shkiah</em> / sunset.
-	 *
-	 * For further explanation of the calculations used for the Baal Hatanya's <em>zmanim</em> in this library, see
-	 * <a href="https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our
-	 * <em>Zmanim</em> Calculations @ Chabad.org</a>.
-	 * 
-	 * @return the <code>Instant</code> representing the exact sea level <em>shkiah amiti</em> (sunset) time. If the calculation
-	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not
-	 *         rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of
-	 *         the {@link AstronomicalCalendar} documentation.
-	 * 
-	 * @see #getSunsetWithElevation()
-	 * @see #getSeaLevelSunset()
-	 * @see #getSunriseBaalHatanya()
-	 * @see #ZENITH_1_POINT_583
-	 */
-	private Instant getSunsetBaalHatanya() {
-		return getSunsetOffsetByDegrees(ZENITH_1_POINT_583);
+		return getSofZmanBiurChametz(getAlos16Point1Degrees(), getTzais16Point1Degrees(), true);
 	}
 
 	/**
@@ -3902,21 +3656,16 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * is calculated from sunrise to sunset. This returns the time 4 {@link #getShaahZmanisBaalHatanya()} after
 	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a null will be
 	 * returned.
-	 * @see #getShaahZmanisBaalHatanya()
-	 * @see #getSofZmanTfilaBaalHatanya()
 	 * @return the <code>Instant</code> one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
 	 *         Pesach</em> or the  calculation can't be computed such as in the Arctic Circle where there is at least one
 	 *         day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getSofZmanTfilaBaalHatanya()
+	 * @see #getSofZmanAchilasChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanAchilasChametzBaalHatanya() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getSofZmanTfilaBaalHatanya();
-		} else {
-			return null;
-		}
+		return getSofZmanAchilasChametz(getSunriseBaalHatanya(), getSunsetBaalHatanya(), true);
 	}
 
 	/**
@@ -3924,20 +3673,15 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the Baal Hatanya. This time is 5 hours into the day based on the opinion of the Baal Hatanya that the day is calculated
 	 * from sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisBaalHatanya()} after
 	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a null will be returned.
-	 * @see #getShaahZmanisBaalHatanya()
 	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>.  If it is not
 	 *         <em>erev Pesach</em> or the  calculation can't be computed such as in the Arctic Circle where there is at
 	 *         least one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @see #getShaahZmanisBaalHatanya()
+	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
 	 */
 	public Instant getSofZmanBiurChametzBaalHatanya() {
-		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
-		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
-			return getTimeOffset(getSunriseBaalHatanya(), getShaahZmanisBaalHatanya() * 5);
-		} else {
-			return null;
-		}
+		return getSofZmanBiurChametz(getSunriseBaalHatanya(), getSunsetBaalHatanya(), true);
 	}
 
 	/**
@@ -4063,7 +3807,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> that the
 	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
-	 * at <em>alos</em> defined as {@link #getAlos90() 90 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
+	 * at <em>alos</em> defined as {@link #getAlos90Minutes() 90 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
 	 * fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or
 	 * half of this half-day.
 	 * 
@@ -4071,12 +3815,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
 	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getAlos90()
+	 * @see #getAlos90Minutes()
 	 * @see #getFixedLocalChatzos()
 	 * @see #getHalfDayBasedZman(Instant, Instant, double)
 	 */
 	public Instant getSofZmanShmaMGA90MinutesToFixedLocalChatzos() {
-		return getHalfDayBasedZman(getAlos90(), getFixedLocalChatzos(), 3);
+		return getHalfDayBasedZman(getAlos90Minutes(), getFixedLocalChatzos(), 3);
 	}
 	
 	/**
@@ -4084,7 +3828,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> that the
 	 * day is calculated from dawn to nightfall, but calculated using the first half of the day only. The half a day starts
-	 * at <em>alos</em> defined as {@link #getAlos72() 72 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
+	 * at <em>alos</em> defined as {@link #getAlos72Minutes() 72 minutes before sunrise} and ends at {@link #getFixedLocalChatzos()
 	 * fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or
 	 * half of this half-day.
 	 * 
@@ -4092,12 +3836,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
 	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #getAlos72()
+	 * @see #getAlos72Minutes()
 	 * @see #getFixedLocalChatzos()
 	 * @see #getHalfDayBasedZman(Instant, Instant, double)
 	 */
 	public Instant getSofZmanShmaMGA72MinutesToFixedLocalChatzos() {
-		return getHalfDayBasedZman(getAlos72(), getFixedLocalChatzos(), 3);
+		return getHalfDayBasedZman(getAlos72Minutes(), getFixedLocalChatzos(), 3);
 	}
 		
 	/**
@@ -4151,7 +3895,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
-	 * @see #getMinchaGedola()
+	 * @see #getMinchaGedolaGRA()
 	 * @see #getFixedLocalChatzos()
 	 * @see #getMinchaKetanaGRAFixedLocalChatzosToSunset
 	 */
@@ -4171,7 +3915,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 *         
-	 * @see #getMinchaGedola()
+	 * @see #getMinchaGedolaGRA()
 	 * @see #getFixedLocalChatzos()
 	 * @see #getMinchaGedolaGRAFixedLocalChatzos30Minutes
 	 * @see ZmanimCalendar#getHalfDayBasedZman(Instant, Instant, double)
@@ -4191,7 +3935,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 *         
-	 * @see #getPlagHamincha()
+	 * @see #getPlagHaminchaGRA()
 	 * @see #getFixedLocalChatzos()
 	 * @see #getMinchaKetanaGRAFixedLocalChatzosToSunset
 	 * @see #getMinchaGedolaGRAFixedLocalChatzos30Minutes
@@ -4212,21 +3956,21 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
-	public Instant getTzais50() {
+	public Instant getTzais50Minutes() {
 		return getTimeOffset(getSunsetBasedOnElevationSetting(), 50 * MINUTE_MILLIS);
 	}
 	
 	/**
 	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
-	 * {@link #getMinchaKetana()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of
+	 * {@link #getMinchaKetanaGRA()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of
 	 * the day, calculated according to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> using a day starting at
 	 * sunrise and ending at sunset. This is the time that eating or other activity can't begin prior to praying <em>mincha</em>.
-	 * The calculation used is 9 * {@link #getShaahZmanisGra()} after {@link #getSunriseWithElevation() sunrise} or {@link
+	 * The calculation used is 9 * {@link #getShaahZmanisGRA()} after {@link #getSunriseWithElevation() sunrise} or {@link
 	 * #getSunriseBasedOnElevationSetting() elevation adjusted sunrise} (depending on the {@link #isUseElevation()} setting). See the
 	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
 	 * 
-	 * @see #getShaahZmanisGra()
+	 * @see #getShaahZmanisGRA()
 	 * @see #getSamuchLeMinchaKetana(Instant, Instant, boolean)
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
 	 * @return the <code>Instant</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
@@ -4241,9 +3985,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * 
 	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
-	 * {@link #getMinchaKetana()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of the day, calculated based
+	 * {@link #getMinchaKetanaGRA()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of the day, calculated based
 	 * on a day from   and ending  a day starting at {@link #getMinchaGedola16Point1Degrees() <em>alos</em> 16.1&deg;} and ending
-	 * at {@link #getTzais72() <em>tzais</em> 16.1&deg;}. This is the time that eating or other activity can't begin prior to praying
+	 * at {@link #getTzais72Minutes() <em>tzais</em> 16.1&deg;}. This is the time that eating or other activity can't begin prior to praying
 	 * <em>mincha</em>.  The calculation used is 9 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees()
 	 * <em>alos</em> 16.1&deg;}. See the <a href="https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna
 	 * Berurah 232</a> and <a href="https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
@@ -4262,10 +4006,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * 
 	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
-	 * {@link #getMinchaKetana()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of the day, calculated based
-	 * on a day from   and ending  a day starting at {@link #getAlos72() <em>alos</em> 72 minutes} and ending at {@link #getTzais72()
+	 * {@link #getMinchaKetanaGRA()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of the day, calculated based
+	 * on a day from   and ending  a day starting at {@link #getAlos72Minutes() <em>alos</em> 72 minutes} and ending at {@link #getTzais72Minutes()
 	 * <em>tzais</em> 72 minutes}. This is the time that eating or other activity can't begin prior to praying <em>mincha</em>.
-	 * The calculation used is 9 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72() <em>alos</em> 72 minutes}. See the <a href=
+	 * The calculation used is 9 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72Minutes() <em>alos</em> 72 minutes}. See the <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=60387&st=&pgnum=294">Mechaber and Mishna Berurah 232</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=60388&pgnum=34">249:2</a>.
 	 * 
@@ -4277,6 +4021,30 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSamuchLeMinchaKetana72Minutes() {
-		return getSamuchLeMinchaKetana(getAlos72(), getTzais72(), true);
+		return getSamuchLeMinchaKetana(getAlos72Minutes(), getTzais72Minutes(), true);
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(Object)
+	 */
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+		if (!super.equals(object)) {
+			return false;
+		}
+		ComprehensiveZmanimCalendar that = (ComprehensiveZmanimCalendar) object;
+		return ateretTorahSunsetOffset == that.ateretTorahSunsetOffset;
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return 37 * super.hashCode() + Double.hashCode(ateretTorahSunsetOffset);
 	}
 }

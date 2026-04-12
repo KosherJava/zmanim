@@ -201,8 +201,9 @@ public class Time {
 	 * @return the time in milliseconds
 	 */
 	public double getTime() {
-		return this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds * SECOND_MILLIS
+		double time = this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds * SECOND_MILLIS
 				+ this.milliseconds;
+		return isNegative() ? -time : time;
 	}
 
 	/**

@@ -186,8 +186,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
 	 * 
-	 * @param localDate
-	 *            time of calculation
+	 * @param zonedDateTime
+	 *            the ZonedDateTime of the time of calculation
 	 * @param geoLocation
 	 *            The location information
 	 * @return solar elevation in degrees. The horizon (calculated in a vacuum using the solar radius as the point)
@@ -201,8 +201,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 180
 	 * degrees.
 	 * 
-	 * @param localDate
-	 *            time of calculation
+	 * @param zonedDateTime
+	 *            The ZonedDateTime of the time of calculation.
 	 * @param geoLocation
 	 *            The location information
 	 * @return the solar azimuth in degrees. Astronomical midday would be 180 in the norther hemosphere and 0 in the
@@ -237,8 +237,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @return the adjusted zenith
 	 */
 	double getElevationAdjustment(double elevation) {
-		double elevationAdjustment = Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
-		return elevationAdjustment;
+        return Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
 	}
 
 	/**
@@ -338,6 +337,34 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	public void setSolarRadius(double solarRadius) {
 		this.solarRadius = solarRadius;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(Object)
+	 */
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+		AstronomicalCalculator calculator = (AstronomicalCalculator) object;
+		return Double.doubleToLongBits(getEarthRadius()) == Double.doubleToLongBits(calculator.getEarthRadius())
+				&& Double.doubleToLongBits(getRefraction()) == Double.doubleToLongBits(calculator.getRefraction())
+				&& Double.doubleToLongBits(getSolarRadius()) == Double.doubleToLongBits(calculator.getSolarRadius());
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		int result = 17;
+		result = 37 * result + getClass().hashCode();
+		result = 37 * result + Double.hashCode(getEarthRadius());
+		result = 37 * result + Double.hashCode(getRefraction());
+		result = 37 * result + Double.hashCode(getSolarRadius());
+		return result;
 	}
 
 	/**

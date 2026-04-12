@@ -22,7 +22,7 @@ import java.time.YearMonth;
 import java.time.ZonedDateTime;
 
 /**
- * The JewishDate is the base calendar class, that supports maintenance of a {@link java.util.GregorianCalendar}
+ * The JewishDate is the base calendar class, that supports maintenance of a {@link LocalDate}
  * instance along with the corresponding Jewish date. This class can use the standard Java Date and Calendar
  * classes for setting and maintaining the dates, but it does not subclass these classes or use them internally
  * in any calculations. This class also does not have a concept of a time (which the Date class does). Please
@@ -296,7 +296,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
     /** Returns the absolute date (days since January 1, 0001 of the Gregorian calendar).
      * @see #getAbsDate()
-     * @see #setJewishDateFromAbsDate()
+     * @see #setAbsDate(int)
      */
     private int gregorianAbsDate;
 
@@ -316,6 +316,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /**
      * Computes the Gregorian date from the absolute date. ND+ER
      * @param absDate the absolute date
+     * @return the <code>LocalDate</code>.
      */
     private static LocalDate absDateToDate(int absDate) {
         int year = absDate / 366; // Search forward year by year from approximate year
@@ -698,6 +699,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
     /**
      * Computes and sets the Jewish date fields based on the provided absolute (Gregorian) date.
+     * @param gregorianAbsDate the Gregorian absolute date.
      */
     private void setAbsDate(int gregorianAbsDate) {
         if (gregorianAbsDate <= 0) {
@@ -861,43 +863,37 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     }
 
     /**
-     * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
+     * A constructor that initializes the date to the {@link ZonedDateTime} parameter.
      *
      * @param zonedDateTime
      *            the <code>ZonedDateTime</code> to set the calendar to
-     * @throws IllegalArgumentException
-     *             if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
      */
     public JewishDate(ZonedDateTime zonedDateTime) {
         setGregorianDate(zonedDateTime);
     }
 
     /**
-     * A constructor that initializes the date to the {@link java.time.LocalDate LocalDate} parameter.
+     * A constructor that initializes the date to the {@link LocalDate} parameter.
      *
      * @param localDate
      *            the <code>LocalDate</code> to set the calendar to
-     * @throws IllegalArgumentException
-     *            if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
      */
     public JewishDate(LocalDate localDate) {
         setGregorianDate(localDate);
     }
 
     /**
-     * Sets the date based on a {@link java.util.Calendar Calendar} object. Modifies the Jewish date as well.
+     * Sets the date based on a {@link ZonedDateTime} object. Modifies the Jewish date as well.
      *
      * @param zonedDateTime
-     *            the <code>ZonedDateTime</code> to set the calendar to
-     * @throws IllegalArgumentException
-     *             if the {@link Calendar#ERA} is {@link GregorianCalendar#BC}
+     *            the {@link ZonedDateTime} to set the calendar to
      */
     public void setGregorianDate(ZonedDateTime zonedDateTime) {
         setGregorianDate(zonedDateTime.toLocalDate());
     }
 
     /**
-     * Sets the date based on a {@link java.time.LocalDate LocalDate} object. Modifies the Jewish date as well.
+     * Sets the date based on a {@link LocalDate} object. Modifies the Jewish date as well.
      *
      * @param localDate
      *            the <code>LocalDate</code> to set the calendar to
@@ -906,9 +902,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public void setGregorianDate(LocalDate localDate) {
         int absDate = gregorianDateToAbsDate(localDate.getYear(),  localDate.getMonth().getValue(), localDate.getDayOfMonth()); 
-
-        // convert to Jewish date
-        setAbsDate(absDate);
+        setAbsDate(absDate); // convert to Jewish date
     }
 
     /**
@@ -974,16 +968,38 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1; // reset day of week
     }
 
+    /**
+     * Setter for the Jewish day of the month that will be <a href="https://en.wikipedia.org/wiki/Clamp_(function)"
+     * >clamped</a> to the lesser of the number passed in or the max number of days in the month.
+     * @param dayOfMonth the day of the month to set the date to.
+     */
     public void setJewishDayOfMonth(int dayOfMonth){
         setJewishDate(getJewishYear(), getJewishMonth(), dayOfMonth);
     }
 
+    /**
+     * Setter for the Jewish month that is passed in. If the day of month is currently the 30th and the month is being set to
+     * a month that only has 29 days, the day of month will be <a href="https://en.wikipedia.org/wiki/Clamp_(function)"
+     * >clamped</a> to the 29th of the month.
+     * @param month the month to be set
+     */
     public void setJewishMonth(int month){
         int year = getJewishYear();
         int day = Math.min(getDaysInJewishMonth(month,year),getJewishDayOfMonth());
         setJewishDate(year, month, day);
     }
 
+    /**
+     * Setter for the Jewish year of the passed in that will <a href="https://en.wikipedia.org/wiki/Clamp_(function)"
+     * >clamp</a> the day to the month to the lesser of the current day and the max number of days in the month (if set
+     * to the 30th).
+     * 
+     * Note that if you are using this for a yahrzeit (or any other reason)on the 30th of the month that will not always have
+     * 30 days, such as {@link #CHESHVAN} or {@link #KISLEV} or {@link #ADAR ADAR I} on a leap year and the next year is a
+     * non-leap year, you must clone your date or once it is set to the 29th, the next time you forward it to a year that has
+     * 30 days, the calendar will incorrectly be forwarded a year from the 29th to the 29th and not the 30th that you may expect.
+     * @param year the year to set.
+     */
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
@@ -992,9 +1008,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 
     /**
-     * Returns this object's date as a {@link java.time.LocalDate} object.
+     * Returns this object's date as a {@link LocalDate} object.
      *
-     * @return The {@link java.time.LocalDate}
+     * @return The {@link LocalDate}
      */
     public LocalDate getLocalDate() {
         return absDateToDate(getAbsDate());
@@ -1008,6 +1024,10 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         setGregorianDate(localDate);
     }
 
+    /**
+     * Subtracts the number of days passed in from the currently set date.
+     * @param days the number of days to subtract.
+     */
     public void minusDays(int days){
         if (days < 1) {
             throw new IllegalArgumentException("the amount of days to subtract has to be greater than zero.");
@@ -1015,12 +1035,22 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         setAbsDate(getAbsDate() - days);
 
     }
+    
+    /**
+     * Add the number of days passed in to the currently set date.
+     * @param days the number of days to add.
+     */
     public void addDays(int days){
         if (days < 1) {
             throw new IllegalArgumentException("the amount of days to add has to be greater than zero.");
         }
         setAbsDate(getAbsDate() + days);
     }
+    
+    /**
+     * Add the number of months passed in to the currently set date.
+     * @param months the number of months to add.
+     */
     public void addMonths(int months){
         if (months < 1) {
             throw new IllegalArgumentException("the amount of months to add has to be greater than zero.");
@@ -1041,9 +1071,22 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
         setJewishDate(year, month, day);
     }
+    
+    /**
+     * Add the number of years passed in to the currently set date. If the current month is Adar on a non-leap year,
+     * passing <code>true</code> to the useAdarAlephForLeapYear parameter will set the month to Adar I, and passing
+     * <code>false</code> will forward it to Adar II. The useAdarAlephForLeapYear will be ignored if the current month
+     * is not Adar on a non-leap year. If the current year is a leap year and it is currently Adar I or Adar II and the
+     * year it is being increased to is also a leap year, the same Adar will be used. If it is being increased to a
+     * non-leap year, the month will be set to Adar.
+     * @param years the number of years to add
+     * @param useAdarAlephForLeapYear if set to true and the current month is Adar on a non-leap year and it is being moved
+     *           forward to a leap year, it will be set to Adar I, and if set to false it will set to Adar II. This will be
+     *           ignored if the month is not set to Adar on a non-leap year.
+     */
     public void addYears(int years, boolean useAdarAlephForLeapYear){
         if (years < 1) {
-            throw new IllegalArgumentException("the amount of years to add has to be greater than zero.");
+            throw new IllegalArgumentException("the amount of years to add has to be greater than zero. Use minusYears(int, boolean)");
         }
         int targetYear = getJewishYear() + years;
         // If we are in the month of Adar in a non-leap year and we are skipping

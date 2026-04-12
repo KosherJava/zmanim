@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
@@ -643,7 +644,9 @@ public class AstronomicalCalendar implements Cloneable {
 	            date = date.minusDays(1);
 	        }
 	    }
-        LocalDateTime dateTime = date.atStartOfDay().plusSeconds((long) (time*3600));
+	    
+        // Math.round(time * HOUR_MILLIS) * 1_000_000L could be used below, but this exactly matches the pre-3.0 Date-based code.
+        LocalDateTime dateTime = date.atStartOfDay().plusNanos((long)(time * HOUR_MILLIS) * 1_000_000L);  
 
 	    // The computed time is in UTC fractional hours; anchor in UTC before converting.
 	    return ZonedDateTime.of(dateTime, ZoneOffset.UTC).toInstant();
@@ -727,7 +730,7 @@ public class AstronomicalCalendar implements Cloneable {
 	
 	/**
 	 * A method that returns <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean time (LMT)</a> time
-	 * converted to regular clock time for the number of hours (0.0 to 23.999...) passed to this method. This time is
+	 * converted to regular clock time for the local wall-clock time passed to this method. This time is
 	 * adjusted from standard time to account for the local latitude. The 360&deg; of the globe divided by 24 calculates
 	 * to 15&deg; per hour with 4 minutes per degree, so at a longitude of 0 , 15, 30 etc... noon is at exactly 12:00pm.
 	 * Lakewood, N.J., with a longitude of -74.222, is 0.7906 away from the closest multiple of 15 at -75&deg;. This is
@@ -735,23 +738,15 @@ public class AstronomicalCalendar implements Cloneable {
 	 * method is not tied to the theoretical 15&deg; time zones, but will adjust to the actual time zone and <a href=
 	 * "https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> to return LMT.
 	 * 
-	 * @param hours
-	 * 			the hour (such as 12.0 for noon and 0.0 for midnight) to calculate as LMT. Valid values are in the range of
-	 * 			0.0 to 23.999.... An IllegalArgumentException will be thrown if the value does not fit in the expected range.
-	 * @return the <code>Instant</code> representing the local mean time (LMT) for the number of hours passed in. In Lakewood,
-	 *         NJ, passing 12 (noon) will return 11:56:50am.
+	 * @param localTime
+	 * 			the local wall-clock time (such as 12:00 for noon and 00:00 for midnight) to calculate as LMT.
+	 * @return the <code>Instant</code> representing the local mean time (LMT) for the time passed in. In Lakewood,
+	 *         NJ, passing noon will return 11:56:50am.
 	 * @see GeoLocation#getLocalMeanTimeOffset(Instant)
 	 */
-	public Instant getLocalMeanTime(double hours) {
-	    if (hours < 0 || hours >= 24) {
-	        throw new IllegalArgumentException("Hours must be between 0 and 23.9999...");
-	    }
-
-	    double rawOffset = getGeoLocation().getZoneId().getRules().getOffset(getMidnightLastNight().toInstant()).getTotalSeconds() * 1000;
-	    double utcTime = hours - rawOffset / (double) HOUR_MILLIS;
-	    Instant instant = getInstantFromTime(utcTime, SolarEvent.SUNRISE);
-
-	    return getTimeOffset(instant, -getGeoLocation().getLocalMeanTimeOffset(getMidnightLastNight().toInstant()));
+	public Instant getLocalMeanTime(LocalTime localTime) {
+	    Instant civilTime = ZonedDateTime.of(getLocalDate(), localTime, getGeoLocation().getZoneId()).toInstant();
+	    return getTimeOffset(civilTime, -getGeoLocation().getLocalMeanTimeOffset(civilTime));
 	}
 
 	/**
@@ -768,7 +763,6 @@ public class AstronomicalCalendar implements Cloneable {
     /**
      * Used by Molad based <em>zmanim</em> to determine if <em>zmanim</em> occur during the current day.
      * This is also used as the anchor for current timezone-offset calculations.
-     * @see #getMoladBasedTime(Instant, Instant, Instant, boolean)
      * @return midnight at the start of the current local date in the configured timezone
      */
     protected ZonedDateTime getMidnightLastNight() {
@@ -777,7 +771,6 @@ public class AstronomicalCalendar implements Cloneable {
 
     /**
      * Used by Molad based <em>zmanim</em> to determine if <em>zmanim</em> occur during the current day.
-     * @see #getMoladBasedTime(Instant, Instant, Instant, boolean)
      * @return following midnight
      */
     protected ZonedDateTime getMidnightTonight() {
@@ -815,12 +808,13 @@ public class AstronomicalCalendar implements Cloneable {
 		if (this == object) {
 			return true;
 		}
-		if (!(object instanceof AstronomicalCalendar)) {
+		if (object == null || getClass() != object.getClass()) {
 			return false;
 		}
 		AstronomicalCalendar aCal = (AstronomicalCalendar) object;
-		return getLocalDate().equals(aCal.getLocalDate()) && getGeoLocation().equals(aCal.getGeoLocation())
-				&& getAstronomicalCalculator().equals(aCal.getAstronomicalCalculator());
+		return Objects.equals(getLocalDate(), aCal.getLocalDate())
+				&& Objects.equals(getGeoLocation(), aCal.getGeoLocation())
+				&& Objects.equals(getAstronomicalCalculator(), aCal.getAstronomicalCalculator());
 	}
 
 	/**
@@ -829,9 +823,9 @@ public class AstronomicalCalendar implements Cloneable {
 	public int hashCode() {
 		int result = 17;
 		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
-		result += 37 * result + getLocalDate().hashCode();
-		result += 37 * result + getGeoLocation().hashCode();
-		result += 37 * result + getAstronomicalCalculator().hashCode();
+		result += 37 * result + Objects.hashCode(getLocalDate());
+		result += 37 * result + Objects.hashCode(getGeoLocation());
+		result += 37 * result + Objects.hashCode(getAstronomicalCalculator());
 		return result;
 	}
 

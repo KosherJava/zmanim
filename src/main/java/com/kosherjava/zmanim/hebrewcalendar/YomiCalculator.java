@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011-2025 Eliyahu Hershfeld
+ * Copyright (C) 2011-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -17,15 +17,13 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * This class calculates the Daf Yomi Bavli page (daf) for a given date. To calculate Daf Yomi Yerushalmi
  * use the {@link YerushalmiYomiCalculator}. The library may cover Mishna Yomi etc. at some point in the future.
  * 
  * @author &copy; Bob Newell (original C code)
- * @author &copy; Eliyahu Hershfeld 2011 - 2025
+ * @author &copy; Eliyahu Hershfeld 2011 - 2026
  */
 public class YomiCalculator {
 
@@ -138,8 +136,8 @@ public class YomiCalculator {
 	/**
 	 * Return the <a href="http://en.wikipedia.org/wiki/Julian_day">Julian day</a> from a Java Calendar.
 	 * 
-	 * @param calendar
-	 *            The Java Calendar of the date to be calculated
+	 * @param localDate
+	 *            The Java {@link java.time.LocalDate} of the date to be calculated
 	 * @return the Julian day number corresponding to the date
 	 */
 	private static int getJulianDay(LocalDate localDate) {
