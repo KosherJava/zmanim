@@ -25,7 +25,7 @@ public class UT_GregorianDateNavigation {
 		Assert.assertEquals(11, hebrewDate.getJewishMonth());
 		Assert.assertEquals(26, hebrewDate.getJewishDayOfMonth());
 
-		hebrewDate.addDays(1);
+		hebrewDate.plusDays(1);
 		Assert.assertEquals(2, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(11, hebrewDate.getJewishMonth());
@@ -38,7 +38,7 @@ public class UT_GregorianDateNavigation {
 		Assert.assertEquals(12, hebrewDate.getJewishMonth());
 		Assert.assertEquals(24, hebrewDate.getJewishDayOfMonth());
 
-		hebrewDate.addDays(1);
+		hebrewDate.plusDays(1);
 		Assert.assertEquals(3, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(12, hebrewDate.getJewishMonth());
@@ -46,7 +46,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.MARCH,31);
         hebrewDate = new JewishDate(localDate);
-		hebrewDate.addDays(1);
+		hebrewDate.plusDays(1);
 		Assert.assertEquals(4, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(13, hebrewDate.getJewishMonth());
@@ -54,7 +54,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.APRIL,30);
         hebrewDate = new JewishDate(localDate);
-		hebrewDate.addDays(1);
+		hebrewDate.plusDays(1);
 		Assert.assertEquals(5, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(1, hebrewDate.getJewishMonth());
@@ -62,7 +62,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.MAY,31);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(6, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(2, hebrewDate.getJewishMonth());
@@ -70,7 +70,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.JUNE,30);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(7, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(3, hebrewDate.getJewishMonth());
@@ -78,7 +78,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.JULY,31);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(8, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(5, hebrewDate.getJewishMonth());
@@ -86,7 +86,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.AUGUST,31);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(9, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(6, hebrewDate.getJewishMonth());
@@ -94,7 +94,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.SEPTEMBER,30);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(10, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(7, hebrewDate.getJewishMonth());
@@ -102,7 +102,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.OCTOBER,31);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(11, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(5772, hebrewDate.getJewishYear());
@@ -111,7 +111,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.NOVEMBER,30);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(12, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
 		Assert.assertEquals(9, hebrewDate.getJewishMonth());
@@ -119,7 +119,7 @@ public class UT_GregorianDateNavigation {
 
         localDate = LocalDate.of(2011, Month.DECEMBER,31);
         hebrewDate = new JewishDate(localDate);
-        hebrewDate.addDays(1);
+        hebrewDate.plusDays(1);
 		Assert.assertEquals(2012, hebrewDate.getLocalDate().getYear());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getMonthValue());
 		Assert.assertEquals(1, hebrewDate.getLocalDate().getDayOfMonth());
