@@ -47,14 +47,14 @@ public class UT_JewishDateNavigation {
 
 		JewishDate adarAlephDate = new JewishDate();
 		adarAlephDate.setJewishDate(5783, JewishDate.ADAR, 10);
-		adarAlephDate.addYears(1, true);
+		adarAlephDate.plusYears(1, true);
 		Assert.assertEquals(5784, adarAlephDate.getJewishYear());
 		Assert.assertEquals(JewishDate.ADAR, adarAlephDate.getJewishMonth());
 		Assert.assertEquals(10, adarAlephDate.getJewishDayOfMonth());
 
 		JewishDate adarBeisDate = new JewishDate();
 		adarBeisDate.setJewishDate(5783, JewishDate.ADAR, 10);
-		adarBeisDate.addYears(1, false);
+		adarBeisDate.plusYears(1, false);
 		Assert.assertEquals(5784, adarBeisDate.getJewishYear());
 		Assert.assertEquals(JewishDate.ADAR_II, adarBeisDate.getJewishMonth());
 		Assert.assertEquals(10, adarBeisDate.getJewishDayOfMonth());
