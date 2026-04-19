@@ -109,25 +109,13 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
 public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
-	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> that <em>tzais</em> is the
-	 * time it takes to walk 3/4 of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
-	 * >mil</a> at 18 minutes a mil, or 13.5 minutes after sunset. The sun is 3.7&deg; below
-	 * {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>.
-	 * 
+	 * The zenith of 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
 	 * @see #getTzaisGeonim3Point7Degrees()
 	 */
 	protected static final double ZENITH_3_POINT_7 = GEOMETRIC_ZENITH + 3.7;
 
 	/**
-	 * The zenith of 3.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> that <em>tzais</em> is the
-	 * time it takes to walk 3/4 of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
-	 * >mil</a> at 18 minutes a mil, or 13.5 minutes after sunset. The sun is 3.8&deg; below
-	 * {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>.
-	 * 
+	 * The zenith of 3.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
 	 * @see #getTzaisGeonim3Point8Degrees()
 	 */
 	protected static final double ZENITH_3_POINT_8 = GEOMETRIC_ZENITH + 3.8;
@@ -145,17 +133,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * The zenith of 7.083&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This is often referred to as
-	 * 7&deg;5' or 7&deg; and 5 minutes. This calculation is used for calculating <em>alos</em> (dawn) and
-	 * <em>tzais</em> (nightfall) according to some opinions. This calculation is based on observation of 3 medium-sized
-	 * stars by Dr. Baruch Cohen in his calendar published in 1899 in Strasbourg, France. This calculates to
-	 * 7.0833333&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. The <a href="https://hebrewbooks.org/1053">Sh"Ut
-	 * Melamed Leho'il</a> in Orach Chaim 30 agreed to this <em>zman</em>, as did the Sh"Ut Bnei Tziyon and the Tenuvas Sadeh.
-	 * It is very close to the time of the <a href="https://hebrewbooks.org/22044">Mekor Chesed</a> of the Sefer chasidim.
-	 * It is close to the position of the sun 30 minutes after sunset in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, but not
-	 * Exactly. The actual position of the sun 30 minutes after sunset in Jerusalem at the equilux is 7.205&deg; and
-	 * 7.199&deg; at the equinox. See Hazmanim Bahalacha vol 2, pages 520-521 for details.
-	 * @todo Hyperlink the proper sources.
+	 * 7&deg;5' (7&deg; and 5 minutes).
 	 * 
 	 * @see #getTzaisGeonim7Point083Degrees()
 	 * @see #getBainHashmashosRT13Point5MinutesBefore7Point083Degrees()
@@ -270,21 +248,20 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	protected static final double ZENITH_4_POINT_37 = GEOMETRIC_ZENITH + 4.37;
 
 	/**
-	 * The zenith of 4.61&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
+	 * The zenith of 4.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
 	 * calculating <em>tzais</em> (nightfall) according to some opinions. This calculation is based on the position of
 	 * the sun {@link #getTzaisGeonim4Point37Degrees() 18 minutes} after sunset (3/4 of a 24-minute <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a>) in
 	 * Jerusalem <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox
-	 * / equilux</a>, which calculates to 4.61&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * / equilux</a>, which calculates to 4.65&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * @todo add documentation links
 	 * 
-	 * @see #getTzaisGeonim4Point61Degrees()
+	 * @see #getTzaisGeonim4Point65Degrees()
 	 */
-	protected static final double ZENITH_4_POINT_61 = GEOMETRIC_ZENITH + 4.61;
+	protected static final double ZENITH_4_POINT_65 = GEOMETRIC_ZENITH + 4.65;
 
 	/**
 	 * The zenith of 4.8&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
-	 * @todo Add more documentation.
 	 * @see #getTzaisGeonim4Point8Degrees()
 	 */
 	protected static final double ZENITH_4_POINT_8 = GEOMETRIC_ZENITH + 4.8;
@@ -327,8 +304,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * height of the summer solstice, this <em>zman</em> is 28 minutes after <em>shkiah</em>. This computes to 6.45&deg;
 	 * below {@link #GEOMETRIC_ZENITH geometric zenith}. This calculation is found in the <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=50536&st=&pgnum=51">Birur Halacha Yoreh Deah 262</a> it the commonly
-	 * used <em>zman</em> in Israel. It should be noted that this differs from the 6.1&deg;/6.2&deg; calculation for
-	 * Rabbi Tucazinsky's time as calculated by the Hazmanim Bahalacha Vol II chapter 50:7 (page 515).
+	 * used <em>zman</em> in Israel. It is also used in the <a href="https://www.worldcat.org/oclc/243303103">Luach Itim
+	 * Lebinah</a> It should be noted that this differs from the 6.1&deg;/6.2&deg; calculation for Rabbi Tucazinsky's time
+	 * as calculated by the Hazmanim Bahalacha Vol II chapter 50:7 (page 515).
+	 * @todo explain the contradiction between 28 and 31 minutes.
 	 * 
 	 * @see #getTzaisGeonim6Point45Degrees()
 	 */
@@ -793,24 +772,21 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>alos</em> (dawn) calculated as 60 minutes before {@link #getSunriseWithElevation() sunrise} or
 	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting). This is the
 	 * time to walk the distance of 4 <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement"
-	 * >mil</a> at 15 minutes a mil. This seems to be the opinion of the
-	 * <a href="https://en.wikipedia.org/wiki/Yair_Bacharach">Chavas Yair</a> in the Mekor Chaim, Orach Chaim Ch. 90,
-	 * though  the Mekor Chaim in Ch. 58 and in the <a href="https://hebrewbooks.org/pdfpager.aspx?req=45193&pgnum=214"
-	 * >Chut Hashani Ch. 97</a> states that a person walks 3 and a 1/3 mil in an hour, or an 18-minute mil.
-	 * Also see the <a href=
+	 * >mil</a> at 15 minutes a mil. This seems to be the opinion of the <a href="https://en.wikipedia.org/wiki/Yair_Bacharach"
+	 * >Chavas Yair</a> in the Mekor Chaim, Orach Chaim Ch. 90, though  the Mekor Chaim in Ch. 58 and in the <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=45193&pgnum=214">Chut Hashani Ch. 97</a> states that a person walks 3 and a
+	 * 1/3 mil in an hour, or an 18-minute mil. Also see the <a href=
 	 * "https://he.wikipedia.org/wiki/%D7%9E%D7%9C%D7%9B%D7%99%D7%90%D7%9C_%D7%A6%D7%91%D7%99_%D7%98%D7%A0%D7%A0%D7%91%D7%95%D7%99%D7%9D"
-	 * >Divrei Malkiel</a> <a href="https://hebrewbooks.org/pdfpager.aspx?req=803&pgnum=33">Vol. 4, Ch. 20, page 34</a>) who
-	 * mentions the 15 minute mil <em>lechumra</em> by baking matzos. Also see the <a href=
-	 * "https://en.wikipedia.org/wiki/Joseph_Colon_Trabotto">Maharik</a> <a href=
-	 * "https://hebrewbooks.org/pdfpager.aspx?req=1142&pgnum=216">Ch. 173</a> where the questioner quoting the
-	 * <a href="https://en.wikipedia.org/wiki/Eliezer_ben_Nathan">Ra'avan</a> is of the opinion that the time to walk a
-	 * mil is 15 minutes (5 mil in a little over an hour). There are many who believe that there is a
-	 * <em>ta'us sofer</em> (scribe's error) in the Ra'avan, and it should 4 mil in a little over an hour, or an
-	 * 18-minute mil. Time based offset calculations are based on the opinion of the
-	 * <em><a href="https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>neshef</em>
-	 * (time between dawn and sunrise) does not vary by the time of year or location but purely depends on the time it takes to
-	 * walk the distance of 4* mil. {@link #getTzaisGeonim9Point75Degrees()} is a related <em>zman</em> that is a
-	 * degree-based calculation based on 60 minutes.
+	 * >Divrei Malkiel</a> <a href="https://hebrewbooks.org/pdfpager.aspx?req=803&pgnum=33">Vol. 4, Ch. 20, page 34</a>) who mentions the
+	 * 15 minute mil <em>lechumra</em> by baking matzos. Also see the <a href="https://en.wikipedia.org/wiki/Joseph_Colon_Trabotto"
+	 * >Maharik</a> <a href="https://hebrewbooks.org/pdfpager.aspx?req=1142&pgnum=216">Ch. 173</a> where the questioner quoting
+	 * the <a href="https://en.wikipedia.org/wiki/Eliezer_ben_Nathan">Ra'avan</a> is of the opinion that the time to walk a mil is
+	 * 15 minutes (5 mil in a little over an hour). There are many who believe that there is a <em>ta'us sofer</em> (scribe's
+	 * error) in the Ra'avan, and it should 4 mil in a little over an hour, or an 18-minute mil. Time based offset calculations are
+	 * based on the opinion of the <em><a href="https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time
+	 * of the <em>neshef</em> (time between dawn and sunrise) does not vary by the time of year or location but purely depends on
+	 * the time it takes to walk the distance of 4* mil. {@link #getTzaisGeonim9Point75Degrees()} is a related <em>zman</em> that
+	 * is a degree-based calculation based on 60 minutes.
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -830,8 +806,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * sunrise. This is based on an 18-minute <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is
 	 * 72 minutes which is 1/10th of a day (12 * 60 = 720) based on the day being from {@link #getSeaLevelSunrise() sea
-	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation()
-	 * sunset} (depending on the {@link #isUseElevation()} setting). The actual calculation is {@link
+	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link
+	 * #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()} setting). The actual calculation is {@link
 	 * #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.2). This calculation is used in the calendars
 	 * published by the <a href="https://en.wikipedia.org/wiki/Central_Rabbinical_Congress">Hisachdus Harabanim D'Artzos Habris
 	 * Ve'Canada</a>.
@@ -869,11 +845,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>alos</em> (dawn) calculated using 90 minutes <em>zmaniyos</em> or 1/8th of the day before
 	 * {@link #getSunriseWithElevation() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link
 	 * #isUseElevation()} setting). This is based on a 22.5-minute <a href=
-	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4
-	 * mil is 90 minutes which is 1/8th of a day (12 * 60) / 8 = 90. The day is calculated from {@link
-	 * #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation()
-	 * sunrise} to {@link #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used
-	 * is {@link #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.5).
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is 90 minutes
+	 * which is 1/8th of a day (12 * 60) / 8 = 90. The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise}
+	 * to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link
+	 * #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is
+	 * {@link #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.5).
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -889,11 +865,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns <em>alos</em> (dawn) calculated using 96 minutes <em>zmaniyos</em> or 1/7.5th of the day before
 	 * {@link #getSunriseWithElevation() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link
 	 * #isUseElevation()} setting). This is based on a 24-minute <a href=
-	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is 96
-	 * minutes which is 1/7.5th of a day (12 * 60 / 7.5 = 96). The day is calculated from {@link #getSeaLevelSunrise() sea
-	 * level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation()
-	 * sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link #getSunriseBasedOnElevationSetting()}
-	 * - ({@link #getShaahZmanisGRA()} * 1.6).
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so the time for 4 mil is 96 minutes
+	 * which is 1/7.5th of a day (12 * 60 / 7.5 = 96). The day is calculated from {@link #getSeaLevelSunrise() sea level sunrise}
+	 * to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunriseWithElevation() sunrise} to {@link
+	 *  #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link
+	 *  #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.6).
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -907,13 +883,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * Method to return <em>alos</em> (dawn) calculated using 90 minutes before {@link #getSunriseWithElevation() sunrise} or
-	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting) based
-	 * on the time to walk the distance of 4 <a href=
-	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> at 22.5 minutes a
-	 * mil. Time-based offset calculations for <em>alos</em> are based on the opinion of the <em><a href=
-	 * "https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>Neshef</em>
-	 * (time between dawn and sunrise) does not vary by the time of year or location but purely depends on the time it
-	 * takes to walk the distance of 4 mil.
+	 * {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting) based on the time
+	 * to walk the distance of 4 <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> at
+	 * 22.5 minutes a mil. Time-based offset calculations for <em>alos</em> are based on the opinion of the <em><a href=
+	 * "https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>Neshef</em> (time between
+	 * dawn and sunrise) does not vary by the time of year or location but purely depends on the time it takes to walk the
+	 * distance of 4 mil.
 	 * 
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
@@ -926,8 +901,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method should be used <em>lechumra</em> only and returns <em>alos</em> (dawn) calculated using 120 minutes
-	 * before {@link #getSunriseWithElevation() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the {@link
-	 * #isUseElevation()} setting) based on the time to walk the distance of 5 <a href=
+	 * before {@link #getSunriseWithElevation() sunrise} or {@link #getSeaLevelSunrise() sea level sunrise} (depending on the
+	 * {@link #isUseElevation()} setting) based on the time to walk the distance of 5 <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> (<em>Ula</em>) at 24 minutes a
 	 * mil. Time based offset calculations for <em>alos</em> are based on the* opinion of the <em><a href=
 	 * "https://en.wikipedia.org/wiki/Rishonim">Rishonim</a></em> who stated that the time of the <em>neshef</em> (time
@@ -959,13 +934,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 120 minutes <em>zmaniyos</em> or 1/6th of the day before {@link #getSunriseWithElevation() sunrise} or {@link
 	 * #getSeaLevelSunrise() sea level sunrise} (depending on the {@link #isUseElevation()} setting). This is based
 	 * on a 24-minute <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> so
-	 * the time for 5 mil is 120 minutes which is 1/6th of a day (12 * 60 / 6 = 120). The day is calculated
-	 * from {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or
-	 * {@link #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation() sunset} (depending on the {@link #isUseElevation()}. The
-	 * actual calculation used is {@link #getSunriseWithElevation()} - ({@link #getShaahZmanisGRA()} * 2). Since this time is
-	 * extremely early, it should only be used <em>lechumra</em>, such
-	 * as not eating after this time on a fast day, and not as the start time for <em>mitzvos</em> that can only be
-	 * performed during the day.
+	 * the time for 5 mil is 120 minutes which is 1/6th of a day (12 * 60 / 6 = 120). The day is calculated from
+	 * {@link #getSeaLevelSunrise() sea level sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link
+	 * #getSunriseWithElevation() sunrise} to {@link #getSunsetWithElevation() sunset} (depending on the {@link
+	 * #isUseElevation()}. The actual calculation used is {@link #getSunriseWithElevation()} - ({@link #getShaahZmanisGRA()}
+	 * * 2). Since this time is extremely early, it should only be used <em>lechumra</em>, such as not eating after this time
+	 * on a fast day, and not as the start time for <em>mitzvos</em> that can only be performed during the day.
 	 * 
 	 * @deprecated This method should be used <em>lechumra</em> only (such as stopping to eat at this time on a fast day),
 	 *         since it returns a very early time, and if used <em>lekula</em> can result in doing <em>mitzvos hayom</em>
@@ -2341,7 +2315,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>zmanim</em>. The 0.5166&deg; refraction is also used by the <a href="https://zmanim.online/">Luach Itim
 	 * Lebinah</a>. Calculating the Yereim's <em>bain hashmashos</em> using 18-minute based degrees is also suggested
 	 * in the upcoming 8th edition of the zmanim Kehilchasam. For more details, see the article <a href=
-	 * "https://kosherjava.com/2020/12/07/the-yereims-bein-hashmashos/">The Yereim's <em>Bein Hashmashos</em></a>.
+	 * "https://kosherjava.com/2020/12/07/the-yereims-bein-hashmashos/">The Yereim's <em>Bain Hashmashos</em></a>.
 	 * 
 	 * @todo recalculate based on equinox/equilux
 	 * @return the <code>Instant</code> of the sun's position 3.05&deg; minutes before sunset. If the calculation can't
@@ -2446,23 +2420,36 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
-	 * sun's position at {@link #ZENITH_3_POINT_7 3.7&deg;} below the western horizon.
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the sun's
+	 * position at {@link #ZENITH_3_POINT_7 3.7&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;), calculated
+	 * as the position of the sun 13.5 minutes after sunset, the time it takes to walk 3/4 of a <a href=
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> at 18 minutes a mil, or 13.5 minutes
+	 *  after sunset. The sun is 3.7&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>. This does
+	 * not cover the time it takes to walk 49 amos (the <em>heref ayin</em> of <em>bain hashmashos</em> of Rav Yosi).
 	 * 
 	 * @return the <code>Instant</code> representing the time when the sun is 3.7&deg; below sea level.
 	 * @see #ZENITH_3_POINT_7
 	 */
+	@Deprecated (forRemoval=false)
 	public Instant getTzaisGeonim3Point7Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_3_POINT_7);
 	}
 
 	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the
-	 * sun's position at {@link #ZENITH_3_POINT_8 3.8&deg;} below the western horizon.
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the sun's
+	 * position at {@link #ZENITH_3_POINT_7 3.8&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;), calculated
+	 * as the position of the sun 13.5 minutes after sunset, the time it takes to walk 3/4 of a <a href=
+	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> at 18 minutes a mil, plus 30 seconds
+	 * for the time it takes to walk 49 amos (the <em>heref ayin</em> of <em>bain hashmashos</em> of Rav Yosi). With this being
+	 * on an 18-minutes mil, 49 amos would take 26.5, rounded to 30 seconds), for a total of 14 minutes after sunset. The sun is
+	 * {@link #ZENITH_3_POINT_8 3.8&deg;} below {@link #GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>.
 	 * 
 	 * @return the <code>Instant</code> representing the time when the sun is 3.8&deg; below sea level.
 	 * @see #ZENITH_3_POINT_8
 	 */
+	@Deprecated (forRemoval=false)
 	public Instant getTzaisGeonim3Point8Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_3_POINT_8);
 	}
@@ -2485,18 +2472,20 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
 	 * of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> based on a
-	 * 24-minute mil, or 18 minutes. It is the sun's position at {@link #ZENITH_4_POINT_61 4.61&deg;} below the
+	 * 24-minute mil, or 18 minutes. It is the sun's position at {@link #ZENITH_4_POINT_65 4.65&deg;} below the
 	 * western horizon. This is a very early <em>zman</em> and should not be relied on without Rabbinical guidance.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 4.61&deg; below sea level. If the calculation
+	 * @return the <code>Instant</code> representing the time when the sun is 4.65&deg; below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
 	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
-	 * @see #ZENITH_4_POINT_61
+	 * @see #ZENITH_4_POINT_65
+	 * @see #getTzaisGeonim4Point8Degrees()
 	 */
-	public Instant getTzaisGeonim4Point61Degrees() {
-		return getSunsetOffsetByDegrees(ZENITH_4_POINT_61);
+	@Deprecated (forRemoval=false)
+	public Instant getTzaisGeonim4Point65Degrees() {
+		return getSunsetOffsetByDegrees(ZENITH_4_POINT_65);
 	}
 
 	/**
@@ -2512,6 +2501,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         documentation.
 	 * @see #ZENITH_4_POINT_37
 	 */
+	@Deprecated (forRemoval=false)
 	public Instant getTzaisGeonim4Point37Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_4_POINT_37);
 	}
@@ -2536,11 +2526,22 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 
 	/**
-	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 3/4
-	 * of a <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> based on the
-	 * sun's position at {@link #ZENITH_4_POINT_8 4.8&deg;} below the western horizon. This is based on Rabbi Leo Levi's
-	 * calculations. This is a very early <em>zman</em> and should not be relied on without Rabbinical guidance.
-	 * @todo Additional documentation needed.
+	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as the
+	 * sun's position below the horizon at a time of 18.6 minutes after sunset. This is calculated as 3/4 of a 24-minute
+	 * <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a>, plus 0.6 minutes for the
+	 * time to walk 49 amos for <em>bain hashmashos</em> of Rav Yosi (with this <em>zman</em> based on a 24-minutes mil, 49
+	 * amos would take 36 seconds to walk), for a total of 18.6 minutes after sunset. This calculates to the sun's position
+	 * at {@link #ZENITH_4_POINT_8 4.8&deg;} below the western horizon. This is based on <a href=
+	 * "https://he.wikipedia.org/wiki/%D7%99%D7%97%D7%99%D7%90%D7%9C_%D7%9E%D7%99%D7%9B%D7%9C_%D7%A9%D7%9C%D7%96%D7%99%D7%A0%D7%92%D7%A8"
+	 * >Rav Yechiel Michel Shlezinger's</a> <em>sefer</em> <a href="https://www.nli.org.il/he/books/NNL_ALEPH997010042055805171/NLI"
+	 * >Aizehu Bain Hashmashos</a>, <a href="https://en.wikipedia.org/wiki/Yehuda_(Leo)_Levi">Rabbi Yehuda (Leo) Levi's</a>
+	 * calculations in <a href="https://www.nli.org.il/en/items/NNL_ALEPH990022548970205171/NLI">Zmanei Hayom BaHalacha</a> p. 37.
+	 * At this point, 3 medium sized stars are visible to a non-expert with good vision with effort. An expert knowing where to
+	 * look can see the 3 medium stars as early as 15 minutes after sunset. This is explained in detail in Hazmanim Bahalacha vol
+	 * II, ch. 41, no. 6 (p. 372-373, ch. 47, no. 11-12 (p. 491-493) where it is clear that medium sized stars would be visible as
+	 * early as 14 minutes after sunset (13.5 minutes for 3/4 of an 18 minute Mil, plus 0.5 minutes for <em>bain Hashmashos</em>
+	 * of Rav Yosi) to an expert.
+	 * This is an early <em>zman</em> for <em>tzais</em>and should not be relied on without Rabbinical guidance.
 	 * 
 	 * @return the <code>Instant</code> representing the time when the sun is 4.8&deg; below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
@@ -2553,7 +2554,6 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		return getSunsetOffsetByDegrees(ZENITH_4_POINT_8);
 	}
 	
-	
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> as calculated by
 	 * <a href="https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a>. It is
@@ -2561,7 +2561,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * in Jerusalem the height of the summer solstice and is 28 minutes after <em>shkiah</em> <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>. This
 	 * computes to 6.45&deg; below the western horizon.
-	 * @todo Additional documentation details needed.
+	 * @todo Additional documentation details needed and explain 28/31 minute contradiction.
 	 * 
 	 * @return the <code>Instant</code> representing the time when the sun is 6.45&deg; below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -2581,7 +2581,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * stars by Dr. Baruch (Berthold) Cohn in his <em>luach</em> <a href=
 	 * "https://sammlungen.ub.uni-frankfurt.de/freimann/content/titleinfo/983088">Tabellen enthaltend die Zeitangaben für
 	 * den Beginn der Nacht und des Tages für die Breitengrade + 66 bis -38</a> published in Strasbourg, France in 1899.
-	 * This calendar was very popular in Europe, and many other calendars based their time on it. <a href=
+	 * This calendar was very popular in Europe, and many other calendars based their <em>tzais</em> time on it. <a href=
 	 * "https://en.wikipedia.org/wiki/David_Zvi_Hoffmann">Rav Dovid Tzvi Hoffman</a> in his
 	 * <a href="https://hebrewbooks.org/1053">Sh"Ut Melamed Leho'il</a> in an exchange of letters with Baruch Cohn in <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=1053&st=&pgnum=37">Orach Chaim 30</a> agreed to this <em>zman</em> (page 36),
@@ -2616,10 +2616,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * href="https://www.worldcat.org/oclc/179728985">The radiance of Shabbos</a> as the earliest <em>zman</em> for New York.
 	 * This <em>zman</em> is also listed in the <a href="https://hebrewbooks.org/pdfpager.aspx?req=1927&pgnum=90">Divrei
 	 * Shalom Vol. III, chapter 75</a>, and <a href="https://hebrewbooks.org/pdfpager.aspx?req=892&pgnum=431">Bais Av"i
-	 * Vol. III, chapter 117</a>. This <em>zman</em> is also listed in the Divrei Shalom etc. chapter 177 (FIXME - could not
-	 * be located). Since this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented this degree-based
-	 * calculation to Rabbi <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a> who agreed
-	 * to it.
+	 * Vol. III, chapter 117</a>. This <em>zman</em> is also listed in the Divrei Shalom etc. chapter 177. Since this
+	 * <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented this degree-based calculation to Rabbi
+	 * <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a> who agreed to it.
 	 * @todo add hyperlinks to source of Divrei Shalom once it is located.
 	 * @return the <code>Instant</code> representing the time when the sun is 7.67&deg; below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
