@@ -761,7 +761,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     public JewishDate getMolad() {
         JewishDate moladDate = new JewishDate(getChalakimSinceMoladTohu());
         if (moladDate.getMoladHours() >= 6) {
-            moladDate.addDays(1);
+            moladDate.plusDays(1);
         }
         moladDate.setMoladHours((moladDate.getMoladHours() + 18) % 24);
         return moladDate;
@@ -1027,10 +1027,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /**
      * Subtracts the number of days passed in from the currently set date.
      * @param days the number of days to subtract.
+     * @see plusDays(int)
      */
     public void minusDays(int days){
         if (days < 1) {
-            throw new IllegalArgumentException("the amount of days to subtract has to be greater than zero.");
+            throw new IllegalArgumentException("The number of days to subtract must be greater than zero.");
         }
         setAbsDate(getAbsDate() - days);
 
@@ -1039,21 +1040,25 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /**
      * Add the number of days passed in to the currently set date.
      * @param days the number of days to add.
+     * 
+     * @see minusDays(int)
      */
-    public void addDays(int days){
+    public void plusDays(int days){
         if (days < 1) {
-            throw new IllegalArgumentException("the amount of days to add has to be greater than zero.");
+            throw new IllegalArgumentException("The number of days to add must be greater than zero. Use minusDays(int) to subtract days.");
         }
         setAbsDate(getAbsDate() + days);
     }
     
     /**
-     * Add the number of months passed in to the currently set date.
+     * Add the number of months passed in to the currently set date. If the day of the month prior to addition is the 30th, and
+     * the target month only has 29 days, the date will be clamped to the 29th.
      * @param months the number of months to add.
+     * @see minusMonths(int)
      */
-    public void addMonths(int months){
+    public void plusMonths(int months){
         if (months < 1) {
-            throw new IllegalArgumentException("the amount of months to add has to be greater than zero.");
+            throw new IllegalArgumentException("The number of months to add must be greater than zero. Use minusMonths(int) to subtract months.");
         }
         int year = getJewishYear();
         int month = getJewishMonth();
@@ -1073,20 +1078,50 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     }
     
     /**
+     * Subtracts the number of months passed in to the currently set date. If the day of the month prior to subtraction
+     * is the 30th, and the target month only has 29 days, the date will be clamped to the 29th.
+     * @param months the number of months to add.
+     * @see plusMonths(int)
+     */
+    public void minusMonths(int months){
+        if (months < 1) {
+            throw new IllegalArgumentException("The number of months to subtract must be greater than zero.");
+        }
+        int year = getJewishYear();
+        int month = getJewishMonth();
+        for (int i = 0; i < months; i++) {
+            if (month == TISHREI) {
+                month = ELUL;
+                year--;
+            } else if ((! isJewishLeapYear(year) && month == ADAR)
+                    || (isJewishLeapYear(year) && month == ADAR_II)){
+                month = SHEVAT;
+            } else {
+                month--;
+            }
+        }
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
+        setJewishDate(year, month, day);
+    }
+    
+    /**
      * Add the number of years passed in to the currently set date. If the current month is Adar on a non-leap year,
-     * passing <code>true</code> to the useAdarAlephForLeapYear parameter will set the month to Adar I, and passing
-     * <code>false</code> will forward it to Adar II. The useAdarAlephForLeapYear will be ignored if the current month
-     * is not Adar on a non-leap year. If the current year is a leap year and it is currently Adar I or Adar II and the
-     * year it is being increased to is also a leap year, the same Adar will be used. If it is being increased to a
-     * non-leap year, the month will be set to Adar.
+     * and the year after the addition will be a leap year, passing <code>true</code> to the useAdarAlephForLeapYear
+     * parameter will set the month to Adar I, and passing <code>false</code> will forward it to Adar II. The
+     * useAdarAlephForLeapYear will be ignored if the month is not Adar. If the current year is a leap year and it is
+     * currently Adar I or Adar II and the year it is being increased to is also a leap year, the same Adar will be used.
+     * If it is being increased to a non-leap year, the month will be set to Adar. It is important to keep in mind when
+     * calculating <em>yahrzits</em> that are on the 30th and the target year only has 29 days, that the date will be set
+     * to the 29th, something that may nt be desirable.
      * @param years the number of years to add
      * @param useAdarAlephForLeapYear if set to true and the current month is Adar on a non-leap year and it is being moved
      *           forward to a leap year, it will be set to Adar I, and if set to false it will set to Adar II. This will be
-     *           ignored if the month is not set to Adar on a non-leap year.
+     *           ignored if the month is not set to Adar.
+     * @see minusYears(int, boolean)
      */
-    public void addYears(int years, boolean useAdarAlephForLeapYear){
+    public void plusYears(int years, boolean useAdarAlephForLeapYear){
         if (years < 1) {
-            throw new IllegalArgumentException("the amount of years to add has to be greater than zero. Use minusYears(int, boolean)");
+            throw new IllegalArgumentException("The number of years to add has to be greater than zero. Use minusYears(int, boolean) to subtract years.");
         }
         int targetYear = getJewishYear() + years;
         // If we are in the month of Adar in a non-leap year and we are skipping
@@ -1108,7 +1143,42 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         setJewishDate(targetYear, month, day);
     }
 
-
+    /**
+     * Subtract the number of years passed in to the currently set date. If the current month is Adar on a non-leap year,
+     * and the year after the subtraction will be a leap year, passing <code>true</code> to the useAdarAlephForLeapYear
+     * parameter will set the month to Adar I, and passing <code>false</code> will set it to Adar II. The
+     * useAdarAlephForLeapYear will be ignored if the current month is not Adar on a non-leap year. If the current year
+     * is a leap year and it is currently Adar I or Adar II and the year it is being decreased to is also a leap year,
+     * the same Adar will be used. If it is being decreased to a non-leap year, the month will be set to Adar.
+     * @param years the number of years to subtract
+     * @param useAdarAlephForLeapYear if set to true and the current month is Adar on a non-leap year and it is being
+     *           subtracted to a leap year, it will be set to Adar I, and if set to false it will set to Adar II. This will
+     *           be ignored if the month is not set to Adar.
+     * @see plusYears(int, boolean)
+     */
+    public void minusYears(int years, boolean useAdarAlephForLeapYear){
+        if (years < 1) {
+            throw new IllegalArgumentException("The number of years to add has to be greater than zero.");
+        }
+        int targetYear = getJewishYear() - years;
+        // If we are in the month of Adar in a non-leap year and we are skipping
+        // to a year that is a leap year, we will use useAdarAlephInYear do
+        // decide which month to skip to.
+        int month;
+        if (getJewishMonth() == JewishDate.ADAR && !isJewishLeapYear(getJewishYear()) && isJewishLeapYear(targetYear)){
+            if (useAdarAlephForLeapYear){
+                month = JewishDate.ADAR;
+            }else{
+                month = JewishDate.ADAR_II;
+            }
+        } else{
+            // If we are in JewishDate.ADAR_II, this will clamp the month to 12 (JewishDate.ADAR)
+            month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(targetYear));
+        }
+        // Clamp to final day of the month
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,targetYear));
+        setJewishDate(targetYear, month, day);
+    }
 
     /**
      * Returns a string containing the Jewish date in the form, "day Month, year" e.g. "21 Shevat, 5729". For more
