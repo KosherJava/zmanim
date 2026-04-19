@@ -509,12 +509,12 @@ public class JewishCalendar extends JewishDate {
 		JewishCalendar clone = (JewishCalendar) clone();
 		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek()  + 7) % 7;
 		if (getDayOfWeek() != Calendar.SATURDAY) {
-            clone.addDays(daysToShabbos);
+            clone.plusDays(daysToShabbos);
 		} else {
-			clone.addDays( 7);
+			clone.plusDays( 7);
 		}
 		while(clone.getParshah() == Parsha.NONE) { //Yom Kippur / Sukkos or Pesach with 2 potential non-parsha Shabbosim in a row
-			clone.addDays(7);
+			clone.plusDays(7);
 		}
 		return clone.getParshah();
 	}
