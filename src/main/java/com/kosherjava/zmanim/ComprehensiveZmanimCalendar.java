@@ -3311,7 +3311,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		//Get the following month's zman kiddush Levana for the extreme case of Rapa Iti in French Polynesia on Dec 2027 when
 		// kiddush Levana can be said on Rosh Chodesh (the evening of the 30th). See Rabbi Dovid Heber's Shaarei Zmanim chapter 4 (page 32)
 		if (zman == null && jewishCalendar.getJewishDayOfMonth() == 30) {
-			jewishCalendar.addMonths(1);
+			jewishCalendar.plusMonths(1);
 			zman = getMoladBasedTime(jewishCalendar.getTchilasZmanKidushLevana3Days(), null, null, true);
 		}
 		
@@ -3343,7 +3343,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 		// deal with molad that happens on the end of the previous month
 		if (molad == null && jewishCalendar.getJewishDayOfMonth() > 26) {
-			jewishCalendar.addMonths(1);
+			jewishCalendar.plusMonths(1);
 			molad = getMoladBasedTime(jewishCalendar.getMoladAsInstant(), null, null, true);
 		}
 		return molad;
