@@ -212,7 +212,7 @@ public class TefilaRules {
 	 */
 	public boolean isTachanunRecitedMincha(JewishCalendar jewishCalendar) {
 		JewishCalendar tomorrow = (JewishCalendar) jewishCalendar.clone();
-		tomorrow.addDays(1);
+		tomorrow.plusDays(1);
 
         return tachanunRecitedMinchaAllYear
                 && jewishCalendar.getDayOfWeek() != Calendar.FRIDAY
