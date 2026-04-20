@@ -1126,13 +1126,11 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *        is sunrise or sunset based).
 	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. A <code>null</code> will also be returned if 0 is passed in, since we can't
-	 *         tell if it is sunrise or sunset based. See detailed explanation on top of the {@link AstronomicalCalendar}
-	 *         documentation.
-	 * @see ComprehensiveZmanimCalendar#getTzais72Zmanis()
-	 * @see ComprehensiveZmanimCalendar#getTzais90Zmanis()
-	 * @see <a href="{@docRoot}/../search.html?q=ComprehensiveZmanimCalendar%20Zmanis()">...Zmanis() based <em>zmanim</em></a>
-	 * in the ComprehensiveZmanimCalendar.
+	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         documentation. A <code>null</code> will also be returned if 0 is passed in, since we can't tell if it is a 
+	 *         sunrise or sunset based <em>zman</em>.
+	 * @see <a href="{@docRoot}/search.html?q=ComprehensiveZmanimCalendar%20Zmanis()">ComprehensiveZmanimCalendar...Zmanis()</a>
+	 * based <em>zmanim</em>.
 	 */
 	public Instant getZmanisBasedOffset(double hours) {
 		long shaahZmanis = getShaahZmanisGRA();
