@@ -181,15 +181,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	protected static final double ZENITH_19_POINT_8 = GEOMETRIC_ZENITH + 19.8;
 
 	/**
-	 * The zenith of 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>alos</em> (dawn) and <em>tzais</em> (nightfall) according to some opinions. This calculation is
-	 * based on the position of the sun {@link #getAlos120Minutes() 120 minutes} after sunset in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> which
-	 * calculates to 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. Since the level of darkness when the sun is
-	 * 26&deg; and at a point when the level of darkness is long past the 18&deg; point where the darkest point is reached,
-	 * it should only be used <em>lechumra</em> such as delaying the start of nighttime <em>mitzvos</em> or avoiding eating
-	 * this early on a fast day.
-	 * 
+	 * The zenith of 26&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
 	 * @see #getAlos26Degrees()
 	 * @see #getTzais26Degrees()
 	 * @see #getAlos120Minutes()
@@ -222,13 +214,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	protected static final double ZENITH_5_POINT_88 = GEOMETRIC_ZENITH + 5.88;
 
 	/**
-	 * The zenith of 16.9&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
-	 * (dawn) based on the opinion of the Baal Hatanya. It is based on the calculation that the time between dawn
-	 * and <em>netz amiti</em> (sunrise) is 72 minutes, the time that is takes to walk 4 mil at 18 minutes
-	 * a mil (<a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others). The sun's position at 72
-	 * minutes before {@link #getSunriseBaalHatanya <em>netz amiti</em> (sunrise)} in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> is
-	 * 16.9&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
+	 * The zenith of 16.9&deg; below geometric zenith (90&deg;).
 	 *
 	 * @see #getAlosBaalHatanya()
 	 */
@@ -3559,9 +3545,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * Returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s <em>alos</em>
 	 * (dawn) calculated as the time when the sun is 16.9&deg; below the eastern {@link #GEOMETRIC_ZENITH geometric horizon}
-	 * before {@link #getSunriseWithElevation() sunrise}. For more information the source of 16.9&deg; see {@link #ZENITH_16_POINT_9}.
+	 * before {@link #getSunriseWithElevation() sunrise}. It is based on the calculation that the time between dawn and
+	 * <em>netz amiti</em> (sunrise) is 72 minutes, the time that is takes to walk 4 mil at 18 minutes
+	 * a mil (<a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others). The sun's position at 72
+	 * minutes before {@link #getSunriseBaalHatanya <em>netz amiti</em> (sunrise)} in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> is
+	 * 16.9&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * 
-	 * @see #ZENITH_16_POINT_9
 	 * @return The <code>Instant</code> of dawn. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
 	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
