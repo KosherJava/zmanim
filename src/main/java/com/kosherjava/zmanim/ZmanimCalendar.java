@@ -216,15 +216,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 
 	/**
-	 * The zenith of 16.1&deg; below geometric zenith (90&deg;). This calculation is used for determining <em>alos</em>
-	 * (dawn) and <em>tzais</em> (nightfall) in some opinions. It is based on the calculation that the time between dawn
-	 * and sunrise (and sunset to nightfall) is 72 minutes, the time that is takes to walk 4 <a href=
-	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> at 18 minutes a mil (<a href=
-	 * "https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others). The sun's position below the horizon 72 minutes
-	 * before {@link #getSunriseWithElevation() sunrise} in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> is
-	 * 16.1&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
-	 * 
+	 * The zenith of 16.1&deg; below geometric zenith (90&deg;).
 	 * @see #getAlos16Point1Degrees()
 	 * @see ComprehensiveZmanimCalendar#getTzais16Point1Degrees()
 	 * @see ComprehensiveZmanimCalendar#getSofZmanShmaMGA16Point1Degrees()
@@ -238,23 +230,13 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	protected static final double ZENITH_16_POINT_1 = GEOMETRIC_ZENITH + 16.1;
 
 	/**
-	 * The zenith of 8.5&deg; below geometric zenith (90&deg;). This calculation is used for calculating <em>alos</em>
-	 * (dawn) and <em>tzais</em> (nightfall) in some opinions. This calculation is based on the sun's position below the
-	 * horizon 36 minutes after {@link #getSunsetWithElevation() sunset} in Jerusalem <a href=
-	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
-	 * is 8.5&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}. The <em><a href=
-	 * "https://www.worldcat.org/oclc/29283612">Ohr Meir</a></em> considers this the time that 3 small stars are visible,
-	 * which is later than the required 3 medium stars.
-	 * 
+	 * The zenith of 8.5&deg; below geometric zenith (90&deg;).
 	 * @see #getTzaisGeonim8Point5Degrees()
 	 */
 	protected static final double ZENITH_8_POINT_5 = GEOMETRIC_ZENITH + 8.5;
 	
 	/**
-	 * The zenith of 1.583&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;). This calculation is used for
-	 * calculating <em>netz amiti</em> (sunrise) and <em>shkiah amiti</em> (sunset) based on the opinion of the
-	 * <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>.
-	 *
+	 * The zenith of 1.583&deg; below {@link #GEOMETRIC_ZENITH geometric zenith} (90&deg;).
 	 * @see #getSunriseBaalHatanya()
 	 * @see #getSunsetBaalHatanya()
 	 */
@@ -300,17 +282,17 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 
 	/**
 	 * A method that returns <em>tzais</em> (nightfall) when the sun is {@link #ZENITH_8_POINT_5 8.5&deg;} below the
-	 * {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;) after {@link #getSunsetWithElevation() sunset}, a time that Rabbi Meir
-	 * Posen in his the <em><a href="https://www.worldcat.org/oclc/29283612">Ohr Meir</a></em> calculated that 3 small
-	 * stars are visible, which is later than the required 3 medium stars. See the {@link #ZENITH_8_POINT_5} constant.
-	 * 
-	 * @see #ZENITH_8_POINT_5
+	 * {@link #GEOMETRIC_ZENITH geometric horizon} (90&deg;) after {@link #getSunsetWithElevation() sunset}, a time that Rabbi
+	 * Meir Posen in his the <em><a href="https://www.worldcat.org/oclc/29283612">Ohr Meir</a></em> calculated that 3 small
+	 * stars are visible, which is later than the required 3 medium stars. This calculation is based on the sun's position below
+	 * the horizon 36 minutes after {@link #getSeaLevelSunrise() sunset} in Jerusalem <a href=
+	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
+	 * is 8.5&deg; below {@link #GEOMETRIC_ZENITH geometric zenith}.
 	 * 
 	 * @return The <code>Instant</code> of nightfall. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
 	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
-	 * @see #ZENITH_8_POINT_5
 	 * ComprehensiveZmanimCalendar#getTzaisGeonim8Point5Degrees() that returns an identical time to this generic <em>tzais</em>
 	 */
 	public Instant getTzaisGeonim8Point5Degrees() {
@@ -327,8 +309,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> is
 	 * 16.1&deg; below {@link #GEOMETRIC_ZENITH}.
 	 * 
-	 * @see #ZENITH_16_POINT_1
-	 * @see ComprehensiveZmanimCalendar#getAlos16Point1Degrees()
+	 * @see ComprehensiveZmanimCalendar#getTzais16Point1Degrees()
 	 * 
 	 * @return The <code>Instant</code> of dawn. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
