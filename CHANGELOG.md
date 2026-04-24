@@ -86,9 +86,8 @@
   * `NOAACalculator` - [implement `getUTCMidnight()`](https://github.com/KosherJava/zmanim/commit/b93eea3388bfdcc2dd526bbcb1be37ddb88fee08)
   * `AstronomicalCalculator` - [add abstract method `getUTCMidnight()`](https://github.com/KosherJava/zmanim/commit/1223dd0b6ad2b492818aacc5eb478747989e0ace)
 * `ComplexZmanimCalendar` - [significant updates](https://github.com/KosherJava/zmanim/commit/46800aa750ac56c2da9bc55fbf976ea1a092221d)
-  * Deprecate `getTzaisGeonim3Point65Degrees()` and `getTzaisGeonim3Point676Degrees()`, very early tzais geonim time that are earlier than 13.5 minutes in Yerushalayim at the equinox / equilux.
   * Started coding some zmanim to use the half-day zmanim config.
-  * Deprecate `getFixedLocalChatzosBasedZmanim()` in favor of `getHalfDayBasedZman()` in the parent ZmanimCalendar class. 
+  * Change `getFixedLocalChatzosBasedZmanim()` in favor of `getHalfDayBasedZman()` in the parent `ZmanimCalendar class. 
   * `getFixedLocalChatzos()` now just calls the new getLocalMeanTime(12.0) in the grandparent AstronomicalCalendar class.
   * Remove `getSolarMidnight()` that was added to the AstronomicalCalendar grandparent class.
   * Undeprecate `getPlagAlosToSunset()` since it is not a zman that can be too late.
