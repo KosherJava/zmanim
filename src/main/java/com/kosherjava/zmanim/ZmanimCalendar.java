@@ -374,19 +374,20 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
-	 * A method that returns <em>chatzos</em> (<em>hayom</em> or <em>layla</em>) calculated as halfway between the begin
-	 * and end times passed in. If sunrise and sunset (or sunset and the following sunrise for <em>chatzos halayla</em>)
-	 * are passed in, it will be close to, but not exactly occur when the Sun is <a href=
+	 * A method that returns <em>chatzos</em> (<em>hayom</em> or <em>layla</em>) calculated as halfway between the begin and end
+	 * times passed in. If sunrise and sunset (or sunset and the following sunrise for <em>chatzos halayla</em>) are passed in,
+	 * the <em>zman</em> returned will be close to, but not exactly, when the Sun is <a href=
 	 * "https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a href=
 	 * "https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a> due to changes in declination (the
-	 * lengthening or shortening day). A practical example of using this would be calculating <em>chatzos halayla</em> for
-	 * the night of <em>Pesach</em>, where <a href="https://en.wikipedia.org/wiki/Shlomo_Zalman_Auerbach">Rav Shlomo Zalman
-	 * Auerbach</a> in the Halichos Shlomo considered <em>chatzos halayla</em> for the end of <em>zman achilas afikoman</em>
-	 * to be halfway between an early <em>tzais</em> that is earlier (degree-wise) than <em>alos</em> the next morning, thus
-	 * making this time earlier than astronomical <em>chatzos</em>. See <a href=
-	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for a detailed
-	 * explanation of the ways to calculate <em>Chatzos</em>. This method is a convenience method that calls the parent class's
-	 * {@link getSunTransit(Instant, Instant)}.
+	 * lengthening or shortening day). A practical example of using this would be calculating <em>chatzos halayla</em> for the for
+	 * the end of <em>zman achilas afikoman</em> on <em>Pesach</em> night, where <a href=
+	 * "https://en.wikipedia.org/wiki/Shlomo_Zalman_Auerbach">Rav Shlomo Zalman Auerbach</a> in the Halichos Shlomo, Moadim Nisan
+	 * - Av, ch. 9, no. 44, pages 289-292, questioned the common practice of considering <em>chatzos halayla</em> as astronomical
+	 * <em>chatzos</em>, and felt that for this it should be <em>chatzi halayla</em>, halfway between sunset and <em>alos</em> or
+	 * <em>bedieved</em> from an early <em>tzais</em> that is lower (degree-wise) than <em>alos</em> the next morning, thus making
+	 * this <em>zman</em> significantly earlier. See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The
+	 * Definition of <em>Chatzos</em></a> for a detailed explanation of the ways to calculate <em>Chatzos</em>. This method is a
+	 * convenience method that calls the parent class's {@link getSunTransit(Instant, Instant)}.
 	 * 
 	 * @param begin
 	 *            the beginning of day or night for calculating <em>chatzos</em>. For <em>chatzos hayom</em>, this can be
