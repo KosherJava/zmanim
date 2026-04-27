@@ -70,8 +70,7 @@
 * `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was moved to the parent `ZmanimCalendar.getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
 * Change `ComprehensiveZmanimcalendar` zmanim that were too early.
   * `getTzaisGeonim4Point37Degrees()` -> `getTzaisGeonim4Point42Degrees()`.
-  * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point65Degrees()`
-  * `getTzaisGeonim4Point65Degrees()` -> `getTzaisGeonim4Point66Degrees()`
+  * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point66Degrees()`
 * `ZmanimCalendar` [Astronomical Chatzos based changes](https://github.com/KosherJava/zmanim/commit/c523424b327f173d70f024bdf207ccae0413d487):
   * Add setting `useAstronomicalChatzos` (defaulted to true) to keep the mistaken compat break introduced in the v2.5.0 release.
   * Add setting `useAstronomicalChatzosForOtherZmanim` (defaulted to false).
