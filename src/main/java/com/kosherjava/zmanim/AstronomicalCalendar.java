@@ -545,7 +545,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Instant getSunTransit() {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedLocalDate(), getGeoLocation());
-		return getInstantFromTime(noon, SolarEvent.NOON); //FIXME NEW CODE
+		return getInstantFromTime(noon, SolarEvent.NOON);
 	}
 	
 	/**
@@ -579,11 +579,10 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that returns sundial or solar noon. It occurs when the Sun is <a href
-	 * ="https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a
-	 * href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. In this class it is
-	 * calculated as halfway between the sunrise and sunset passed to this method. This time can be slightly off the
-	 * real transit time due to changes in declination (the lengthening or shortening day).
+	 * A method that returns sundial or solar noon (or midnight) calculated as halfway between the times passed in. It is
+	 * close to, but not exactly  occurs when the Sun is <a href="https://en.wikipedia.org/wiki/Transit_%28astronomy%29"
+	 * >transiting</a> the <a href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. It
+	 * will not exactly match the astronomical transitdue to changes in declination (the lengthening or shortening day).
 	 * 
 	 * @param startOfDay
 	 *            the start of day for calculating the sun's transit. This can be sea level sunrise, visual sunrise (or
