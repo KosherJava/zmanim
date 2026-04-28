@@ -503,6 +503,38 @@ public class JewishCalendar extends JewishDate {
 		}
 		return Parsha.NONE; //keep the compiler happy
 	}
+
+	/**
+	 * Returns this week's {@link Parsha <em>Parsha</em>} regardless of if it is the weekday or <em>Shabbos</em> (where next
+	 * Shabbos's <em>Parsha</em> will be returned. If the upcoming <em>Shabbos</em> is a <em>Yom Tov</em> and has no <em>Parsha</em>,
+	 * {@link Parsha#NONE} will be returned.
+	 *
+	 * @return the upcoming <em>parsha</em>.
+	 */
+	public Parsha getThisWeeksParshah() {
+		JewishCalendar clone = (JewishCalendar) clone();
+		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek() + 7) % 7;
+		if (getDayOfWeek() != Calendar.SATURDAY) {
+			clone.forward(Calendar.DATE, daysToShabbos);
+		}
+		return clone.getParshah();
+	}
+
+	/**
+	 * Returns this week's {@link #getSpecialShabbos() special shabbos} regardless of if it is the weekday or <em>Shabbos</em> (where next
+	 * Shabbos's <em>Parsha</em> will be returned. If the upcoming <em>Shabbos</em> is a <em>Yom Tov</em> and has no <em>Parsha</em>
+	 * or special shabbos, {@link Parsha#NONE} will be returned.
+	 *
+	 * @return the upcoming <em>parsha</em>.
+	 */
+	public Parsha getThisWeeksSpecialParshah() {
+		JewishCalendar clone = (JewishCalendar) clone();
+		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek() + 7) % 7;
+		if (getDayOfWeek() != Calendar.SATURDAY) {
+			clone.forward(Calendar.DATE, daysToShabbos);
+		}
+		return clone.getSpecialShabbos();
+	}
 	
 	/**
 	 * Returns the upcoming {@link Parsha <em>Parsha</em>} regardless of if it is the weekday or <em>Shabbos</em> (where next
@@ -514,7 +546,7 @@ public class JewishCalendar extends JewishDate {
 	 */
 	public Parsha getUpcomingParshah() {
 		JewishCalendar clone = (JewishCalendar) clone();
-		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek()  + 7) % 7;
+		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek() + 7) % 7;
 		if (getDayOfWeek() != Calendar.SATURDAY) {
 			clone.forward(Calendar.DATE, daysToShabbos);
 		} else {
