@@ -73,24 +73,46 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunrise(LocalDate, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunrise(LocalDate dt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
-		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunrise = getSunRiseSetUTC(dt, geoLocation.getLatitude(), -geoLocation.getLongitude(),
-				adjustedZenith, SolarEvent.SUNRISE);
-		sunrise = sunrise / 60;
-		return sunrise > 0  ? sunrise % 24 : sunrise % 24 + 24; // ensure that the time is >= 0 and < 24
+		return getUTCSunRiseSet(dt, geoLocation, zenith, adjustForElevation,SolarEvent.SUNRISE);
 	}
 
 	/**
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunset(LocalDate, GeoLocation, double, boolean)
 	 */
 	public double getUTCSunset(LocalDate dt, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+		return getUTCSunRiseSet(dt, geoLocation, zenith, adjustForElevation,SolarEvent.SUNSET);
+	}
+	
+	/**
+	 * A method that calculates UTC sunrise or sunset as well as any time based on an angle above or below sunset and
+	 * returns it as a <code>double</code> in 24-hour format. 5:45:00 AM will return 5.75.
+	 * 
+	 * @param localDate
+	 *            Used to calculate day of year.
+	 * @param geoLocation
+	 *            The location information used for astronomical calculating sun times.
+	 * @param zenith
+	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
+	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
+	 *            this slightly to account for solar refraction and the sun's radius. Another example would be
+	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes
+	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
+	 * @param adjustForElevation
+	 *            Should the time be adjusted for elevation
+	 * @param solarEvent if the calculation is for {@link SolarEvent#SUNRISE} or {@link SolarEvent#SUNSET}
+	 * @return The UTC time of sunset in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in
+	 *         the calculation (expected behavior for some locations such as near the poles,
+	 *         {@link java.lang.Double#NaN} will be returned.
+	 * @see #getElevationAdjustment(double)
+	 */
+	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation, 
+			SolarEvent solarEvent) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		double sunset = getSunRiseSetUTC(dt, geoLocation.getLatitude(), -geoLocation.getLongitude(),
-				adjustedZenith, SolarEvent.SUNSET);
-		sunset = sunset / 60;
-		return sunset > 0  ? sunset % 24 : sunset % 24 + 24; // ensure that the time is >= 0 and < 24
+		double riseSet = getSunRiseSetUTC(localDate, geoLocation.getLatitude(), -geoLocation.getLongitude(),
+				adjustedZenith, solarEvent);
+		riseSet = riseSet / 60;
+		return riseSet > 0  ? riseSet % 24 : riseSet % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
 
 	/**
