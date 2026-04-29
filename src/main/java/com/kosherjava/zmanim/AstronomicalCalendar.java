@@ -493,7 +493,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @see getTemporalHour()
 	 */
-	public long getTemporalHour(Instant startOfDay, Instant endOfDay) { //FIXME new code
+	public long getTemporalHour(Instant startOfDay, Instant endOfDay) {
 	    if (startOfDay == null || endOfDay == null) {
 	        return Long.MIN_VALUE;
 	    }
