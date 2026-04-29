@@ -116,21 +116,22 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * Is astronomical <em>chatzos</em> used for <em>zmanim</em> calculations. The default value of <code>true</code> will
 	 * keep the standard astronomical <em>chatzos</em> calculation, while setting it to <code>false</code> will use half of
-	 * a solar day calculation for <em>chatzos</em>.
+	 * a solar day / night calculation for <em>chatzos</em>.
 	 * @see isUseAstronomicalChatzos()
 	 * @see setUseAstronomicalChatzos(boolean)
-	 * @see getChatzos()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 * @see getSunTransit()
-	 * @see getChatzosAsHalfDay()
+	 * @see getChatzosHayomAsHalfDay()
 	 * @see useAstronomicalChatzosForOtherZmanim
 	 */
 	private boolean useAstronomicalChatzos = true;
 	
 	/**
-	 * Is {@link getSunTransit() astronomical <em>chatzos</em>} used for {@link getChatzos()} for enhanced accuracy. For
-	 * example as the day lengthens, the second half of the day is longer than the first and astronomical <em>chatzos</em>
-	 * would be a drop earlier than half of the time between sunrise and sunset.
-	 * 
+	 * Is {@link getSunTransit() astronomical <em>chatzos</em>} used for {@link getChatzosHayom()} and {@link getChatzosHalayla()}
+	 * for enhanced accuracy. For example as the day lengthens, the second half of the day is longer than the first and astronomical
+	 * <em>chatzos</em> would be a drop earlier than half of the time between sunrise and sunset.
+	 *  
 	 * @todo In the future, if this is set to true, the following may change to enhance accuracy. {@link getSofZmanShmaGRA()
 	 * <em>Sof zman Shma</em> GRA} would be calculated as 3 <em>shaos zmaniyos</em> after sunrise, but the <em>shaos
 	 * zmaniyos</em> would be calculated a a 6th of the time between sunrise and <em>chatzos</em>, as opposed to a 12th of the
@@ -143,9 +144,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @return if the use of astronomical <em>chatzos</em> is active.
 	 * @see useAstronomicalChatzos
 	 * @see setUseAstronomicalChatzos(boolean)
-	 * @see getChatzos()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 * @see getSunTransit()
-	 * @see getChatzosAsHalfDay()
+	 * @see getChatzosHayomAsHalfDay()
 	 * @see isUseAstronomicalChatzosForOtherZmanim()
 	 */
 	public boolean isUseAstronomicalChatzos() {
@@ -157,9 +159,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @param useAstronomicalChatzos set to true to use astronomical in <em>chatzos</em> in <em>zmanim</em> calculations.
 	 * @see useAstronomicalChatzos
 	 * @see isUseAstronomicalChatzos()
-	 * @see getChatzos()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 * @see getSunTransit()
-	 * @see getChatzosAsHalfDay()
+	 * @see getChatzosHayomAsHalfDay()
 	 * @see setUseAstronomicalChatzosForOtherZmanim(boolean)
 	 */
 	public void setUseAstronomicalChatzos(boolean useAstronomicalChatzos) {
@@ -174,7 +177,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see setUseAstronomicalChatzosForOtherZmanim(boolean)
 	 * @see isUseAstronomicalChatzos()
 	 * @see setUseAstronomicalChatzos(boolean)
-	 * @see getChatzos()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 */
 	private boolean useAstronomicalChatzosForOtherZmanim = false;
 	
@@ -339,7 +343,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * This method returns {@link getSunTransit() Astronomical <em>chatzos hayom</em>} if the
 	 * {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculator} class used supports it and
-	 * {@link isUseAstronomicalChatzos() isUseAstronomicalChatzos()} is set to <em>true</em> or the {@link getChatzosAsHalfDay()
+	 * {@link isUseAstronomicalChatzos() isUseAstronomicalChatzos()} is set to <em>true</em> or the {@link getChatzosHayomAsHalfDay()
 	 * halfway point between sunrise and sunset} if it does not support it, or it is not configured to use it. There are currently
 	 * two {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculators} available in the API, the default {@link
 	 * com.kosherjava.zmanim.util.NOAACalculator NOAA calculator} and the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO
@@ -352,7 +356,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * calculator, astronomical <em>chatzos</em> will be returned to avoid returning a <code>null</code>.
 	 * 
 	 * @see getSunTransit()
-	 * @see getChatzosAsHalfDay()
+	 * @see getChatzosHayomAsHalfDay()
 	 * @see isUseAstronomicalChatzos()
 	 * @see setUseAstronomicalChatzos(boolean)
 	 * @return the <code>Instant</code> of <em>chatzos</em>. If the calculation can't be computed such as in the Arctic Circle
@@ -360,11 +364,11 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         support astronomical calculations (that will never report a <code>null</code>) a <code>null</code> will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
-	public Instant getChatzos() {
+	public Instant getChatzosHayom() {
 		if (isUseAstronomicalChatzos()) {
 			return getSunTransit(); // can be null if the calculator does not support astronomical chatzos
 		} else {
-			Instant halfDayChatzos = getChatzosAsHalfDay();
+			Instant halfDayChatzos = getChatzosHayomAsHalfDay();
 			if (halfDayChatzos == null) {
 				return getSunTransit(); // can be null if the calculator does not support astronomical chatzos
 			} else {
@@ -445,8 +449,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
 	 *         not set, <code>null</code> will be returned. See detailed explanation on top of the page.
 	 * @see getSunTransit(Instant, Instant)
-	 * @see getChatzosAsHalfDay()
-	 * @see getChatzos()
+	 * @see getChatzosHayomAsHalfDay()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 */
 	public Instant getChatzos(Instant begin, Instant end) {
 		return getSunTransit(begin, end);
@@ -472,7 +477,8 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 * @see getSunTransit(Instant, Instant)
-	 * @see getChatzos()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 * @see getChatzos(Instant, Instant)
 	 * @see getSunTransit()
 	 * @see isUseAstronomicalChatzos()
@@ -482,7 +488,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
-	public Instant getChatzosAsHalfDay() {
+	public Instant getChatzosHayomAsHalfDay() {
 		return getChatzos(getSeaLevelSunrise(), getSeaLevelSunset());
 	}
 
@@ -519,7 +525,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getSofZmanShma(Instant startOfDay, Instant endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-			return getHalfDayBasedZman(startOfDay, getChatzos(), 3);
+			return getHalfDayBasedZman(startOfDay, getChatzosHayom(), 3);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 3);
 		}
@@ -663,7 +669,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getSofZmanTfila(Instant startOfDay, Instant endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-			return getHalfDayBasedZman(startOfDay, getChatzos(), 4);
+			return getHalfDayBasedZman(startOfDay, getChatzosHayom(), 4);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 4);
 		}
@@ -720,7 +726,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
 		if (jewishCalendar.getJewishMonth() == JewishCalendar.NISSAN && jewishCalendar.getJewishDayOfMonth() == 14) {
 			if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-				return getHalfDayBasedZman(startOfDay, getChatzos(), 5);
+				return getHalfDayBasedZman(startOfDay, getChatzosHayom(), 5);
 			} else {
 				return getShaahZmanisBasedZman(startOfDay, endOfDay, 5);
 			}
@@ -843,7 +849,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * isUseAstronomicalChatzosForOtherZmanim()} to control if the time is based on 6.5 <em>shaos zmaniyos</em> into the day
 	 * mentioned above, or as half an hour <em>zmaniyos</em> based on the second half of the day after <em>chatzos</em> ({@link
 	 * getSunTransit() astronomical <em>chatzos</em>} if supported by the {@link AstronomicalCalculator calculator} and {@link
-	 * isUseAstronomicalChatzos() configured} or {@link getChatzosAsHalfDay() <em>chatzos</em> as half a day} if not. This
+	 * isUseAstronomicalChatzos() configured} or {@link getChatzosHayomAsHalfDay() <em>chatzos</em> as half a day} if not. This
 	 * method's synchronous parameter indicates if the start and end of day for the calculation are synchronous, having the same
 	 * offset. This is typically the case, but some <em>zmanim</em> calculations are based on a start and end at different offsets
 	 * from the real start and end of the day, such as starting the day at <em>alos</em> and an ending it at <em>tzais Geonim</em>
@@ -866,14 +872,15 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         at least one day a year where the sun does not rise, and one where it does not set, a <code>null</code> will
 	 *         be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see getSunTransit()
-	 * @see getChatzosAsHalfDay()
-	 * @see getChatzos()
+	 * @see getChatzosHayomAsHalfDay()
+	 * @see getChatzosHayom()
+	 * @see getChatzosHalayla()
 	 * @see isUseAstronomicalChatzos()
 	 * @see isUseAstronomicalChatzosForOtherZmanim()
 	 */
 	public Instant getMinchaGedola(Instant startOfDay, Instant endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-			return getHalfDayBasedZman(getChatzos(), endOfDay, 0.5);
+			return getHalfDayBasedZman(getChatzosHayom(), endOfDay, 0.5);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 6.5);
 		}
@@ -912,7 +919,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * sunset} or {@link getSunriseWithElevation() sunrise} to {@link getSunsetWithElevation() sunset} (depending on the {@link isUseElevation()}
 	 * setting).
 	 * @todo Consider adjusting this to calculate the time as half an hour <em>zmaniyos</em> after either {@link
-	 *         getSunTransit() astronomical <em>chatzos</em>} or {@link getChatzosAsHalfDay() <em>chatzos</em> as half a day}
+	 *         getSunTransit() astronomical <em>chatzos</em>} or {@link getChatzosHayomAsHalfDay() <em>chatzos</em> as half a day}
 	 *         for {@link AstronomicalCalculator calculators} that support it, based on {@link isUseAstronomicalChatzos()}.
 	 * 
 	 * @see getMinchaGedola(Instant, Instant)
@@ -962,7 +969,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getSamuchLeMinchaKetana(Instant startOfDay, Instant endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-			return getHalfDayBasedZman(getChatzos(), endOfDay, 3);
+			return getHalfDayBasedZman(getChatzosHayom(), endOfDay, 3);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 9);
 		}
@@ -1023,7 +1030,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getMinchaKetana(Instant startOfDay, Instant endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-			return getHalfDayBasedZman(getChatzos(), endOfDay, 3.5);
+			return getHalfDayBasedZman(getChatzosHayom(), endOfDay, 3.5);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 9.5);
 		}
@@ -1107,7 +1114,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getPlagHamincha(Instant startOfDay, Instant endOfDay, boolean synchronous) {
 		if (isUseAstronomicalChatzosForOtherZmanim() && synchronous) {
-			return getHalfDayBasedZman(getChatzos(), endOfDay, 4.75);
+			return getHalfDayBasedZman(getChatzosHayom(), endOfDay, 4.75);
 		} else {
 			return getShaahZmanisBasedZman(startOfDay, endOfDay, 10.75);
 		}
@@ -1466,7 +1473,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation
 	 *         on top of the {@link AstronomicalCalendar} documentation.
 	 *
-	 * @see ComprehensiveZmanimCalendar#getFixedLocalChatzos()
+	 * @see ComprehensiveZmanimCalendar#getFixedLocalChatzosHayom()
 	 */
 	public Instant getHalfDayBasedZman(Instant startOfHalfDay, Instant endOfHalfDay, double hours) {
 		if (startOfHalfDay == null || endOfHalfDay == null) {
