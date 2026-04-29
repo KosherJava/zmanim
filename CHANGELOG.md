@@ -53,6 +53,8 @@
     * `getTzais90()` -> `getTzais90Minutes()`
     * `getTzais96()` -> `getTzais96Minutes()`
     * `getTzais120()` -> `getTzais120Minutes()`
+    * `getChatzos()` -> `getChatzosHayom()`
+    * `getChatzosAsHalfDay()` -> `getChatzosHayomAsHalfDay()`
 * Rename some classes the confusingly named `ComplexZmanimCalendar` to `ComrehensiveZmanimCalendar`.
 * Move "legacy" classes to `java.time` equivelants
   * All zmanim now return `Instant`s insead of `Date` objects.
@@ -73,6 +75,7 @@
   * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point66Degrees()`
   * Remove `getTzaisGeonim5Point88Degrees()` since it is a drop too early
 * `ZmanimCalendar` [Astronomical Chatzos based changes](https://github.com/KosherJava/zmanim/commit/c523424b327f173d70f024bdf207ccae0413d487):
+  * Add `getChatzosHalayla()`
   * Add setting `useAstronomicalChatzos` (defaulted to true) to keep the mistaken compat break introduced in the v2.5.0 release.
   * Add setting `useAstronomicalChatzosForOtherZmanim` (defaulted to false).
   * Add `getChatzosAsHalfDay()` to retain the old behavior of chatzos being halfway between sunrise and sunset.
@@ -80,6 +83,7 @@
   * Add `getHalfDayBasedZman(Date startOfHalfDay, Date endOfHalfDay, double hours)` to allow other zmanim to be impacted by chatzos.
   * Use `useAstronomicalChatzosForOtherZmanim`.
   * `ZmanimCalendar` - add utility method `[getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)`](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
+* Remove code duplication in `NOAACalculator.getUTCSunrise()` and `.getUTCSunset()`
 * Use Astronomical Chatzos Halayla (as opposed as halfway between sunset and sunrise or 12 hours after chatzos hayom)
   * `AstronomicalCalculator` - [add `getSunLowerTransit()`](https://github.com/KosherJava/zmanim/commit/a76a3b65aeb45912bfdb02ce354f74bb97a9d9b2)
   * `AstronomicalCalculator` - [add abstract method `getUTCMidnight()`](https://github.com/KosherJava/zmanim/commit/f1904b12393c48b069d1333a7397fce66804958d)
