@@ -337,7 +337,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 
 	/**
-	 * This method returns {@link getSunTransit() Astronomical <em>chatzos</em>} if the
+	 * This method returns {@link getSunTransit() Astronomical <em>chatzos hayom</em>} if the
 	 * {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculator} class used supports it and
 	 * {@link isUseAstronomicalChatzos() isUseAstronomicalChatzos()} is set to <em>true</em> or the {@link getChatzosAsHalfDay()
 	 * halfway point between sunrise and sunset} if it does not support it, or it is not configured to use it. There are currently
@@ -362,7 +362,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getChatzos() {
 		if (isUseAstronomicalChatzos()) {
-			return getSunTransit(); // can be null of the calculator does not support astronomical chatzos
+			return getSunTransit(); // can be null if the calculator does not support astronomical chatzos
 		} else {
 			Instant halfDayChatzos = getChatzosAsHalfDay();
 			if (halfDayChatzos == null) {
@@ -374,20 +374,62 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
+	 * This method returns {@link getSolarMidnight() Astronomical <em>chatzos halayla</em>} if the {@link
+	 * com.kosherjava.zmanim.util.AstronomicalCalculator calculator} class used supports it and {@link
+	 * isUseAstronomicalChatzos() isUseAstronomicalChatzos()} is set to <em>true</em> or the {@link #getChatzos(Instant, Instant)
+	 * halfway point} between sunset and the following day's sunrise, if it does not support it, or it is not configured to use it.
+	 * There are currently two {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculators} available in the API, the
+	 * default {@link com.kosherjava.zmanim.util.NOAACalculator NOAA calculator} and the {@link
+	 * com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator}. The USNO calculator calculates <em>chatzos halayla</em> as
+	 * halfway between sunset and the following day's sunrise (identical to six <em>shaos zmaniyos</em> after sunset), while the
+	 * NOAACalculator calculates it more accurately as {@link getSolarMidnight() astronomical <em>chatzos halayla</em>}. See <a href=
+	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for a detailed explanation of
+	 * the ways to calculate <em>Chatzos</em>. Since half-night <em>chatzos</em> can be <code>null</code> in the Arctic on a day when
+	 * either sunset or the following day's sunrise did not happen and astronomical <em>chatzos halayla</em> can be calculated even in
+	 * the Arctic, if half-day <em>chatzos</em> calculates as <code>null</code> and astronomical <em>chatzos</em> is supported by the
+	 * calculator, astronomical <em>chatzos</em> will be returned to avoid returning a <code>null</code>.
+	 * 
+	 * @see getSolarMidnight()
+	 * @see getChatzos(Instant, Instant)
+	 * @see isUseAstronomicalChatzos()
+	 * @see setUseAstronomicalChatzos(boolean)
+	 * @return the <code>Instant</code> of <em>chatzos halayla</em>. If the calculation can't be computed such as in the Arctic Circle
+	 *         where there is at least one day where the sun does not rise, and one where it does not set, and the calculator does not
+	 *         support astronomical calculations (that will never report a <code>null</code>) a <code>null</code> will be returned.
+	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Instant getChatzosHalayla() {
+		if (isUseAstronomicalChatzos()) {
+			return getSolarMidnight(); // can be null if the calculator does not support astronomical chatzos
+		} else {
+			ZmanimCalendar clonedCalendar = (ZmanimCalendar)this.clone();
+			clonedCalendar.setLocalDate(getLocalDate().plusDays(1));
+			Instant halfNightChatzos = getChatzos(getSeaLevelSunset(), clonedCalendar.getSeaLevelSunrise());
+			if (halfNightChatzos == null) {
+				return getSolarMidnight(); // can be null if the calculator does not support astronomical chatzos
+			} else {
+				return halfNightChatzos;
+			}
+		}
+	}
+	
+	/**
 	 * A method that returns <em>chatzos</em> (<em>hayom</em> or <em>layla</em>) calculated as halfway between the begin and end
 	 * times passed in. If sunrise and sunset (or sunset and the following sunrise for <em>chatzos halayla</em>) are passed in,
 	 * the <em>zman</em> returned will be close to, but not exactly, when the Sun is <a href=
 	 * "https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a href=
 	 * "https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a> due to changes in declination (the
-	 * lengthening or shortening day). A practical example of using this would be calculating <em>chatzos halayla</em> for the for
-	 * the end of <em>zman achilas afikoman</em> on <em>Pesach</em> night, where <a href=
-	 * "https://en.wikipedia.org/wiki/Shlomo_Zalman_Auerbach">Rav Shlomo Zalman Auerbach</a> in the Halichos Shlomo, Moadim Nisan
-	 * - Av, ch. 9, no. 44, pages 289-292, questioned the common practice of considering <em>chatzos halayla</em> as astronomical
-	 * <em>chatzos</em>, and felt that for this it should be <em>chatzi halayla</em>, halfway between sunset and <em>alos</em> or
-	 * <em>bedieved</em> from an early <em>tzais</em> that is lower (degree-wise) than <em>alos</em> the next morning, thus making
-	 * this <em>zman</em> significantly earlier. See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The
-	 * Definition of <em>Chatzos</em></a> for a detailed explanation of the ways to calculate <em>Chatzos</em>. This method is a
-	 * convenience method that calls the parent class's {@link getSunTransit(Instant, Instant)}.
+	 * lengthening or shortening day). See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of
+	 * <em>Chatzos</em></a> for a detailed explanation of the ways to calculate <em>Chatzos</em>. This method is a convenience
+	 * method that calls the parent class's {@link getSunTransit(Instant, Instant)}. A practical example of using this would be
+	 * calculating <em>chatzos halayla</em> for the for the end of <em>zman achilas afikoman</em> on <em>Pesach</em> night, where
+	 * <a href="https://en.wikipedia.org/wiki/Shlomo_Zalman_Auerbach">Rav Shlomo Zalman Auerbach</a> in the Halichos Shlomo,
+	 * Moadim Nisan - Av, ch. 9, no. 44, pages 289-292, questioned the common practice of considering <em>chatzos halayla</em> as
+	 * astronomical <em>chatzos halayla</em>, and felt that for this it should be at <em>chatzi halayla</em>, halfway between sunset
+	 * and <em>alos</em> or <em>bedieved</em> from an early <em>tzais</em> that is lower (degree-wise) than <em>alos</em> the next
+	 * morning, thus making this <em>zman</em> significantly earlier. <a href="https://en.wikipedia.org/wiki/Moshe_Sternbuch">Rav
+	 * Moshe Sternbuch</a> in <a href="https://hebrewbooks.org/pdfpager.aspx?req=69091&pgnum=15">Teshuvos Vehanhagos v. VII, ch 1, p.
+	 * 3</a>, agreed to this calculation for <em>chatzos halayla</em> on <em>Pesach</em> night.
 	 * 
 	 * @param begin
 	 *            the beginning of day or night for calculating <em>chatzos</em>. For <em>chatzos hayom</em>, this can be
