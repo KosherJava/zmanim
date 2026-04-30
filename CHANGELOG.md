@@ -53,6 +53,8 @@
     * `getTzais90()` -> `getTzais90Minutes()`
     * `getTzais96()` -> `getTzais96Minutes()`
     * `getTzais120()` -> `getTzais120Minutes()`
+    * `getChatzos()` -> `getChatzosHayom()`
+    * `getChatzosAsHalfDay()` -> `getChatzosHayomAsHalfDay()`
 * Rename some classes the confusingly named `ComplexZmanimCalendar` to `ComrehensiveZmanimCalendar`.
 * Move "legacy" classes to `java.time` equivelants
   * All zmanim now return `Instant`s insead of `Date` objects.
@@ -65,14 +67,15 @@
 * Increase the minimum supported JRE version from version 8 (the code currently almost certainly works on 6 today) to Java 11 or higher.
 * `JewishCalendar` now has plus and minus methods (matching the `java.time.LocalDate` class) for years, months and days.
 * Tweaked logic in `AstronomicalCalendar.getInstantFromTime()` to address issues near the dateline.
-* Improve null handling in `ComplexZmanimCalendar.getMoladBasedTime()`
-* Add `ComplexZmanimCalendar.getMisheyakir12Point85Degrees()`
+* Improve null handling in `ComprehensiveZmanimCalendar.getMoladBasedTime()`
+* Add `ComprehensiveZmanimCalendar.getMisheyakir12Point85Degrees()`
 * `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was moved to the parent `ZmanimCalendar.getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
 * Change / remove `ComprehensiveZmanimcalendar` zmanim that were too early.
   * `getTzaisGeonim4Point37Degrees()` -> `getTzaisGeonim4Point42Degrees()`.
   * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point66Degrees()`
   * Remove `getTzaisGeonim5Point88Degrees()` since it is a drop too early
 * `ZmanimCalendar` [Astronomical Chatzos based changes](https://github.com/KosherJava/zmanim/commit/c523424b327f173d70f024bdf207ccae0413d487):
+  * Add `getChatzosHalayla()`
   * Add setting `useAstronomicalChatzos` (defaulted to true) to keep the mistaken compat break introduced in the v2.5.0 release.
   * Add setting `useAstronomicalChatzosForOtherZmanim` (defaulted to false).
   * Add `getChatzosAsHalfDay()` to retain the old behavior of chatzos being halfway between sunrise and sunset.
@@ -80,12 +83,13 @@
   * Add `getHalfDayBasedZman(Date startOfHalfDay, Date endOfHalfDay, double hours)` to allow other zmanim to be impacted by chatzos.
   * Use `useAstronomicalChatzosForOtherZmanim`.
   * `ZmanimCalendar` - add utility method `[getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)`](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
+* Remove code duplication in `NOAACalculator.getUTCSunrise()` and `.getUTCSunset()`
 * Use Astronomical Chatzos Halayla (as opposed as halfway between sunset and sunrise or 12 hours after chatzos hayom)
   * `AstronomicalCalculator` - [add `getSunLowerTransit()`](https://github.com/KosherJava/zmanim/commit/a76a3b65aeb45912bfdb02ce354f74bb97a9d9b2)
   * `AstronomicalCalculator` - [add abstract method `getUTCMidnight()`](https://github.com/KosherJava/zmanim/commit/f1904b12393c48b069d1333a7397fce66804958d)
   * `NOAACalculator` - [implement `getUTCMidnight()`](https://github.com/KosherJava/zmanim/commit/b93eea3388bfdcc2dd526bbcb1be37ddb88fee08)
   * `AstronomicalCalculator` - [add abstract method `getUTCMidnight()`](https://github.com/KosherJava/zmanim/commit/1223dd0b6ad2b492818aacc5eb478747989e0ace)
-* `ComplexZmanimCalendar` - [significant updates](https://github.com/KosherJava/zmanim/commit/46800aa750ac56c2da9bc55fbf976ea1a092221d)
+* `ComprehensiveZmanimCalendar` - [significant updates](https://github.com/KosherJava/zmanim/commit/46800aa750ac56c2da9bc55fbf976ea1a092221d)
   * Started coding some zmanim to use the half-day zmanim config.
   * Change `getFixedLocalChatzosBasedZmanim()` in favor of `getHalfDayBasedZman()` in the parent `ZmanimCalendar class. 
   * `getFixedLocalChatzos()` now just calls the new getLocalMeanTime(12.0) in the grandparent AstronomicalCalendar class.
@@ -97,6 +101,9 @@
   * Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
 * `HebrewdateFormatter`
   * add method [`formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParshah()`.
+  * Add `getHebrewMonthList()` and `setHebrewMonthList(String[])`. This allows overriding the default month of Chesvan to Marcheshvan etc.
+  * Throw an `IllegalArgumentException` if the array length of months != 14
+  * Remove the experimental and private `formatMolad(long moladChalakim)`
   * [Fix NullPointer in HebrewDateFormatter week formatting](https://github.com/KosherJava/zmanim/commit/6cef302f4ac815941c1f61765f2749d698f86042)
 * `TefilaRules`
   * [add `isMizmorLesodaRecited()`](https://github.com/KosherJava/zmanim/commit/2cde42644dc72a49b3e4228244bc79cc276e138e)
