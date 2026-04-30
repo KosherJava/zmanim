@@ -478,11 +478,15 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + longitude / 360.0);
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solNoonUTC = (longitude * 4) - equationOfTime; // minutes
-		
-		// second pass
-		double newt = getJulianCenturiesFromJulianDay(julianDay + solNoonUTC / 1440.0);
-		equationOfTime = getEquationOfTime(newt);
-		return (solarEvent == SolarEvent.NOON ? 720 : 1440) + (longitude * 4) - equationOfTime;
+
+		// Refine the equation of time at the calculated transit time.
+		double newt;
+		for (int i = 0; i < 2; i++) {
+			newt = getJulianCenturiesFromJulianDay(julianDay + solNoonUTC / 1440.0);
+			equationOfTime = getEquationOfTime(newt);
+			solNoonUTC = (solarEvent == SolarEvent.NOON ? 720 : 1440) + (longitude * 4) - equationOfTime;
+		}
+		return (solarEvent == SolarEvent.NOON ? 720 : 1440) + (longitude * 4 ) - equationOfTime;
 	}
 	
 	/**
