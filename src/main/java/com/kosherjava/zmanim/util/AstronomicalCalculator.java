@@ -91,33 +91,6 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the earth radius in KM.
-	 *
-	 * @deprecated Earth radius is now calculated automatically from latitude using the WGS84 ellipsoid
-	 *             in {@link #getElevationAdjustment(double, double)}. This method is retained only for
-	 *             backward compatibility and returns the WGS84 polar radius.
-	 * @return the WGS84 polar radius in KM (6356.752 km).
-	 */
-	@Deprecated
-	public double getEarthRadius() {
-		return WGS84_POLAR_RADIUS;
-	}
-
-	/**
-	 * A method that allows setting the earth's radius.
-	 *
-	 * @deprecated Earth radius is now calculated automatically from latitude using the WGS84 ellipsoid
-	 *             in {@link #getElevationAdjustment(double, double)}. This method is retained only for
-	 *             backward compatibility and has no effect on calculations.
-	 * @param earthRadius
-	 *            the earthRadius to set in KM (ignored)
-	 */
-	@Deprecated
-	public void setEarthRadius(double earthRadius) {
-		// No-op: Earth radius is now calculated automatically from latitude
-	}
-
-	/**
 	 * The zenith of astronomical sunrise and sunset. The sun is 90&deg; from the vertical 0&deg;
 	 */
 	private static final double GEOMETRIC_ZENITH = 90;
