@@ -15,7 +15,8 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.time.LocalDate;\nimport java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at
