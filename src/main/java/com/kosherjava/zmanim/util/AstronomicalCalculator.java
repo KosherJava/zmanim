@@ -373,3 +373,4 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		return clone;
 	}
 }
+
