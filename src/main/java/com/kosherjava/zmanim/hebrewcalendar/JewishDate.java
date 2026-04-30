@@ -1093,8 +1093,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
             if (month == TISHREI) {
                 month = ELUL;
                 year--;
-            } else if ((! isJewishLeapYear(year) && month == ADAR)
-                    || (isJewishLeapYear(year) && month == ADAR_II)){
+            } else if (month == NISSAN) {
+                month = getLastMonthOfJewishYear(year);
+            } else if (!isJewishLeapYear(year) && month == ADAR){
                 month = SHEVAT;
             } else {
                 month--;
