@@ -721,8 +721,9 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see GeoLocation#getLocalMeanTimeOffset(Instant)
 	 */
 	public Instant getLocalMeanTime(LocalTime localTime) {
-	    Instant civilTime = ZonedDateTime.of(getAdjustedLocalDate(), localTime, getGeoLocation().getZoneId()).toInstant();
-	    return getTimeOffset(civilTime, -getGeoLocation().getLocalMeanTimeOffset(civilTime));
+	    Instant localMeanTime = LocalDateTime.of(getAdjustedLocalDate(), localTime).toInstant(ZoneOffset.UTC);
+	    long longitudeOffsetMillis = (long) (getGeoLocation().getLongitude() * 4 * MINUTE_MILLIS);
+	    return getTimeOffset(localMeanTime, -longitudeOffsetMillis);
 	}
 
 	/**
