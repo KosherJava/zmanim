@@ -24,7 +24,7 @@ import java.time.ZonedDateTime;
  * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
  * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2026
+ * @author &copy; Eliyahu Hershfeld 2004 - 2025
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -43,39 +43,52 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	private double solarRadius = 16 / 60d;
 
 	/**
-	 * The commonly used average earth radius in KM. At this time, this only affects elevation adjustment and not the
-	 * sunrise and sunset calculations. The value currently defaults to 6356.9 KM.
-	 * 
-	 * @see #getEarthRadius()
-	 * @see #setEarthRadius(double)
+	 * WGS84 ellipsoid constants for Earth radius calculation.
+	 * <p>Earth is an oblate spheroid with radius varying from 6378.137 km at the equator
+	 * to 6356.752 km at the poles. These values are used by {@link #getElevationAdjustment(double, double)}
+	 * to provide latitude-dependent accuracy for elevation adjustments.</p>
+	 *
+	 * <p><b>Reference:</b> WGS84 ellipsoid parameters (NGA Technical Report 8350.2)</p>
+	 *
+	 * @see #getElevationAdjustment(double, double)
 	 */
-	private double earthRadius = 6356.9; // in KM
-	
+	private static final double WGS84_EQUATORIAL_RADIUS = 6378.137; // km
+	private static final double WGS84_POLAR_RADIUS = 6356.752314245; // km
+
 	/**
 	 * Default constructor using the default {@link #refraction refraction}, {@link #solarRadius solar radius} and
 	 * {@link #earthRadius earth radius}.
 	 */
 	public AstronomicalCalculator() {
-		// keep the defaults for now. 
+		// keep the defaults for now.
 	}
 
 	/**
-	 * A method that returns the earth radius in KM. The value currently defaults to 6356.9 KM if not set.
-	 * 
-	 * @return the earthRadius the earth radius in KM.
+	 * Calculate geocentric Earth radius at given latitude using WGS84 ellipsoid.
+	 *
+	 * <p>The Earth is an oblate spheroid, so the geocentric radius varies with latitude
+	 * from 6378.137 km at the equator to 6356.752 km at the poles. This method computes
+	 * the precise radius using the WGS84 ellipsoid formula:</p>
+	 *
+	 * <pre>R = sqrt(a² × cos²(lat) + b² × sin²(lat))</pre>
+	 *
+	 * <p>where a is the equatorial radius and b is the polar radius.</p>
+	 *
+	 * <p><b>Reference:</b> WGS84 ellipsoid parameters (NGA Technical Report 8350.2)</p>
+	 *
+	 * @param latitude Latitude in degrees (north positive)
+	 * @return Geocentric radius in kilometers at the given latitude
 	 */
-	public double getEarthRadius() {
-		return earthRadius;
-	}
+	private double getGeocentricRadius(double latitude) {
+		double latRad = Math.toRadians(latitude);
+		double cosLat = Math.cos(latRad);
+		double sinLat = Math.sin(latRad);
 
-	/**
-	 * A method that allows setting the earth's radius.
-	 * 
-	 * @param earthRadius
-	 *            the earthRadius to set in KM
-	 */
-	public void setEarthRadius(double earthRadius) {
-		this.earthRadius = earthRadius;
+		// R = sqrt(a^2 * cos^2(lat) + b^2 * sin^2(lat))
+		double a2 = WGS84_EQUATORIAL_RADIUS * WGS84_EQUATORIAL_RADIUS;
+		double b2 = WGS84_POLAR_RADIUS * WGS84_POLAR_RADIUS;
+
+		return Math.sqrt(a2 * cosLat * cosLat + b2 * sinLat * sinLat);
 	}
 
 	/**
@@ -105,7 +118,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A method that calculates UTC sunrise as well as any time based on an angle above or below sunrise. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param localDate
+	 * @param calendar
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
@@ -122,14 +135,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	public abstract double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith,
+	public abstract double getUTCSunrise(Calendar LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 
 	/**
 	 * A method that calculates UTC sunset as well as any time based on an angle above or below sunset. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param localDate
+	 * @param calendar
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.
@@ -146,7 +159,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
-	public abstract double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith,
+	public abstract double getUTCSunset(Calendar LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 	
 	
@@ -156,14 +169,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * true solar noon, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
 	 * the time as halfway between sunrise and sunset.
 	 * 
-	 * @param localDate
+	 * @param calendar
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.         
 	 * 
 	 * @return the time in minutes from zero UTC
 	 */
-	public abstract double getUTCNoon(LocalDate localDate, GeoLocation geoLocation);
+	public abstract double getUTCNoon(Calendar LocalDate localDate, GeoLocation geoLocation);
 	
 	
 	/**
@@ -172,44 +185,44 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * true solar midnight, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
 	 * the time as 12 hours after halfway between sunrise and sunset.
 	 * 
-	 * @param localDate
+	 * @param calendar
 	 *            Used to calculate day of year.
 	 * @param geoLocation
 	 *            The location information used for astronomical calculating sun times.         
 	 * 
 	 * @return the time in minutes from zero UTC
 	 */
-	public abstract double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation);
+	public abstract double getUTCMidnight(Calendar LocalDate localDate, GeoLocation geoLocation);
 	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
 	 * 
-	 * @param zonedDateTime
-	 *            the ZonedDateTime of the time of calculation
+	 * @param calendar
+	 *            time of calculation
 	 * @param geoLocation
 	 *            The location information
 	 * @return solar elevation in degrees. The horizon (calculated in a vacuum using the solar radius as the point)
 	 *            is 090&deg;, civil twilight is -690&deg; etc. This means that sunrise and sunset that do use
 	 *            refraction and are calculated from the upper limb of the sun will return about 0.83390&deg;.
 	 */
-	public abstract double getSolarElevation(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
+	public abstract double getSolarElevation(Calendar LocalDate localDate, GeoLocation geoLocation);
 	
 	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> for the
 	 * horizontal coordinate system at the given location at the given time. Not corrected for altitude. True south is 180
 	 * degrees.
 	 * 
-	 * @param zonedDateTime
-	 *            The ZonedDateTime of the time of calculation.
+	 * @param calendar
+	 *            time of calculation
 	 * @param geoLocation
 	 *            The location information
 	 * @return the solar azimuth in degrees. Astronomical midday would be 180 in the norther hemosphere and 0 in the
 	 *            southern hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about
 	 *            90&deg; and sunset about 270&deg;.
 	 */
-	public abstract double getSolarAzimuth(ZonedDateTime zonedDateTime, GeoLocation geoLocation);
+	public abstract double getSolarAzimuth(Calendar LocalDate localDate, GeoLocation geoLocation);
 
 	/**
 	 * Method to return the adjustment to the zenith required to account for the elevation. Since a person at a higher
@@ -219,25 +232,30 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * calculations are based on the level of available light at the given dip below the horizon, something that is not
 	 * affected by elevation, the adjustment should only be made if the zenith == 90&deg; {@link #adjustZenith adjusted}
 	 * for refraction and solar radius. The algorithm used is
-	 * 
+	 *
 	 * <pre>
 	 * elevationAdjustment = Math.toDegrees(Math.acos(earthRadiusInMeters / (earthRadiusInMeters + elevationMeters)));
 	 * </pre>
-	 * 
+	 *
 	 * The source of this algorithm is <a href="https://www.cs.tau.ac.il/~nachum/calendar-book/index.shtml">Calendrical
 	 * Calculations</a> by Edward M. Reingold and Nachum Dershowitz. An alternate algorithm that produces similar (but
 	 * not completely accurate) result found in Ma'aglay Tzedek by Moishe Kosower and other sources is:
-	 * 
+	 *
 	 * <pre>
 	 * elevationAdjustment = 0.0347 * Math.sqrt(elevationMeters);
 	 * </pre>
-	 * 
+	 *
 	 * @param elevation
 	 *            elevation in Meters.
+	 * @param latitude
+	 *            latitude in degrees (used to calculate geocentric radius)
 	 * @return the adjusted zenith
 	 */
-	double getElevationAdjustment(double elevation) {
-        return Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
+	double getElevationAdjustment(double elevation, double latitude) {
+		// Calculate geocentric radius at the observer's latitude using WGS84 ellipsoid
+		double geocentricRadius = getGeocentricRadius(latitude);
+		double elevationAdjustment = Math.toDegrees(Math.acos(geocentricRadius / (geocentricRadius + (elevation / 1000))));
+		return elevationAdjustment;
 	}
 
 	/**
@@ -259,7 +277,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * for various <em>tzais</em> and <em>alos</em> times such as the
 	 * {@link com.kosherjava.zmanim.ZmanimCalendar#ZENITH_16_POINT_1 16.1&deg;} dip used in
 	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getAlos16Point1Degrees()}.
-	 * 
+	 *
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
@@ -268,15 +286,17 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param elevation
 	 *            elevation in Meters.
+	 * @param latitude
+	 *            latitude in degrees (used to calculate geocentric radius for elevation adjustment)
 	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
-	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
+	 *         refraction} and {@link #getElevationAdjustment(double, double) elevation} adjustment. This will only be adjusted for
 	 *         sunrise and sunset (if the zenith == 90&deg;)
-	 * @see #getElevationAdjustment(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
-	double adjustZenith(double zenith, double elevation) {
+	double adjustZenith(double zenith, double elevation, double latitude) {
 		double adjustedZenith = zenith;
 		if (zenith == GEOMETRIC_ZENITH) { // only adjust if it is exactly sunrise or sunset
-			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
+			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation, latitude));
 		}
 		return adjustedZenith;
 	}
@@ -340,34 +360,6 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#equals(Object)
-	 */
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (object == null || getClass() != object.getClass()) {
-			return false;
-		}
-		AstronomicalCalculator calculator = (AstronomicalCalculator) object;
-		return Double.doubleToLongBits(getEarthRadius()) == Double.doubleToLongBits(calculator.getEarthRadius())
-				&& Double.doubleToLongBits(getRefraction()) == Double.doubleToLongBits(calculator.getRefraction())
-				&& Double.doubleToLongBits(getSolarRadius()) == Double.doubleToLongBits(calculator.getSolarRadius());
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		int result = 17;
-		result = 37 * result + getClass().hashCode();
-		result = 37 * result + Double.hashCode(getEarthRadius());
-		result = 37 * result + Double.hashCode(getRefraction());
-		result = 37 * result + Double.hashCode(getSolarRadius());
-		return result;
-	}
-
-	/**
 	 * @see java.lang.Object#clone()
 	 * @since 1.1
 	 */
@@ -381,3 +373,4 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		return clone;
 	}
 }
+
