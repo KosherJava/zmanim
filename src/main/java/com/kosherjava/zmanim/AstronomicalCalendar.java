@@ -528,10 +528,11 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 	
 	/**
-	 * A method that returns solar midnight at the end of the current day (that may actually be after midnight of the day it is being
-	 * calculated for). It occurs when the Sun is <a href="https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the
-	 * lower <a href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>, or when the sun is at it's <a
-	 * href="https://en.wikipedia.org/wiki/Nadir">nadir</a>. The calculations used by this class depend on the {@link
+	 * A method that returns solar midnight as the <b>end of the day</b> (that may actually be after midnight of the  day it is
+	 * being calculated for). For example calculating solar midnight for February 8, will calculate it for midnight between February
+	 * 8 and February 9. It occurs when the Sun is <a href="https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the
+	 * lower <a href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>, or when the sun is at it's
+	 * <a href="https://en.wikipedia.org/wiki/Nadir">nadir</a>. The calculations used by this class depend on the {@link
 	 * AstronomicalCalculator} used. If this calendar instance is {@link setAstronomicalCalculator(AstronomicalCalculator) set} to use
 	 * the {@link com.kosherjava.zmanim.util.NOAACalculator} (the default) it will calculate astronomical midnight. If the calendar
 	 * instance is to use the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO Calculator}, that does not have code to
@@ -540,10 +541,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 * See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on the proper
 	 * definition of solar noon / midday.
 	 * 
-	 * @return the <code>Instant</code> representing Sun's lower transit at the end of the current day. If the calculation can't be
-	 *         computed such as when using the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does not
-	 *         support getting solar noon or midnight for the Arctic Circle (where there is at least one day a year where the sun does
-	 *         not rise, and one where it does not set), a <code>null</code> will be returned. This is not relevant when using the
+	 * @return the <code>Instant</code> representing Sun's lower transit at the <b>end of the current day</b>. If the calculation
+	 *         can't be computed such as when using the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does
+	 *         not support getting solar noon or midnight for the Arctic Circle (where there is at least one day a year where the sun
+	 *         does not rise, and one where it does not set), a <code>null</code> will be returned. This is not relevant when using the
 	 *         {@link com.kosherjava.zmanim.util.NOAACalculator NOAA Calculator} that is never expected to return <code>null</code>.
 	 *         See the detailed explanation on top of the page.
 	 * 
@@ -721,7 +722,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see GeoLocation#getLocalMeanTimeOffset(Instant)
 	 */
 	public Instant getLocalMeanTime(LocalTime localTime) {
-	    Instant localMeanTime = LocalDateTime.of(getAdjustedLocalDate(), localTime).toInstant(ZoneOffset.UTC);
+		Instant localMeanTime = LocalDateTime.of(getAdjustedLocalDate(), localTime).toInstant(ZoneOffset.UTC);
 	    long longitudeOffsetMillis = (long) (getGeoLocation().getLongitude() * 4 * MINUTE_MILLIS);
 	    return getTimeOffset(localMeanTime, -longitudeOffsetMillis);
 	}
@@ -884,8 +885,8 @@ public class AstronomicalCalendar implements Cloneable {
 			// Required by the compiler. Should never be reached since we implement clone()
 		}
         if (clone != null) {
-			clone.setGeoLocation((GeoLocation) getGeoLocation().clone());
-			clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone());
+			clone.setGeoLocation((GeoLocation) getGeoLocation().clone()); // consider converting the GeoLocation class to be immutable to avoid the deep copy
+			clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone()); // likely not needed
 		}
 		return clone;
 	}
