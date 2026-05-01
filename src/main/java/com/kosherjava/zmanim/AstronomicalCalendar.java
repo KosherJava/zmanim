@@ -30,8 +30,8 @@ import com.kosherjava.zmanim.util.GeoLocation;
 import com.kosherjava.zmanim.util.ZmanimFormatter;
 
 /**
- * A Java calendar that calculates astronomical times such as {@link getSunriseWithElevation() sunrise}, {@link
- * getSunsetWithElevation() sunset} and twilight times. This class contains a {@link getLocalDate() LocalDate} and can therefore
+ * A Java calendar that calculates astronomical times such as {@link getSunrise() sunrise}, {@link
+ * getSunset() sunset} and twilight times. This class contains a {@link getLocalDate() LocalDate} and can therefore
  * use the standard Calendar functionality to change dates etc. The calculation engine used to calculate the astronomical times can
  * be changed to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it withthe {@link
  * setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine implementations are included in the
@@ -142,7 +142,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the <code>Instant</code> representing the exact sea-level sunrise time. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
 	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
-	 * @see getSunriseWithElevation()
+	 * @see getSunrise()
 	 * @see getUTCSeaLevelSunrise(double)
 	 * @see getSeaLevelSunset()
 	 */
@@ -224,7 +224,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the <code>Instant</code> representing the exact sea-level sunset time. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
 	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
-	 * @see getSunsetWithElevation()
+	 * @see getSunset()
 	 * @see getUTCSeaLevelSunset(double)
 	 */
 	public Instant getSeaLevelSunset() {
@@ -303,15 +303,15 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 	
 	/**
-	 * A utility method that returns the time of an offset by degrees below or above the horizon of {@link getSunriseWithElevation()
+	 * A utility method that returns the time of an offset by degrees below or above the horizon of {@link getSunrise()
 	 * sunrise}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; before sunrise, an offset of 14
 	 * + {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * 
 	 * @param offsetZenith
-	 *            the degrees before {@link getSunriseWithElevation()} to use in the calculation. For time after sunrise use negative
+	 *            the degrees before {@link getSunrise()} to use in the calculation. For time after sunrise use negative
 	 *            numbers. Note that the degree offset is from the vertical, so for a calculation of 14&deg; before sunrise, an offset
 	 *            of 14 + {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
-	 * @return The {@link java.time.Instant} of the offset after (or before) {@link getSunriseWithElevation()}. If the calculation
+	 * @return The {@link java.time.Instant} of the offset after (or before) {@link getSunrise()}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
 	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation
 	 *         on top of the page.
@@ -323,15 +323,15 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A utility method that returns the time of an offset by degrees below or above the horizon of {@link getSunsetWithElevation()
+	 * A utility method that returns the time of an offset by degrees below or above the horizon of {@link getSunset()
 	 * sunset}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; after sunset, an offset of 14 +
 	 * {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * 
 	 * @param offsetZenith
-	 *            the degrees after {@link getSunsetWithElevation()} to use in the calculation. For time before sunset use negative
+	 *            the degrees after {@link getSunset()} to use in the calculation. For time before sunset use negative
 	 *            numbers. Note that the degree offset is from the vertical, so for a calculation of 14&deg; after sunset, an offset
 	 *            of 14 + {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
-	 * @return The {@link java.time.Instant} of the offset after (or before) {@link getSunsetWithElevation()}. If the calculation
+	 * @return The {@link java.time.Instant} of the offset after (or before) {@link getSunset()}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and
 	 *         and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
 	 */
@@ -449,7 +449,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * A utility method that will allow the calculation of a temporal (solar) hour based on the sunrise and sunset passed as
 	 * parameters to this method. An example of the use of this method would be the calculation of a elevation adjusted temporal
-	 * hour by passing in {@link getSunriseWithElevation() sunrise} and {@link getSunsetWithElevation() sunset} as parameters.
+	 * hour by passing in {@link getSunrise() sunrise} and {@link getSunset() sunset} as parameters.
 	 * 
 	 * @param startOfDay
 	 *            The start of the day.
