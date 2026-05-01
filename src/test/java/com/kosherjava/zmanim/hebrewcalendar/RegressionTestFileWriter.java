@@ -55,7 +55,7 @@ public class RegressionTestFileWriter {
 					zcal.getAlos18Degrees(), zcal.getAlos19Degrees(), zcal.getAlos19Point8Degrees(),
 					zcal.getAlos16Point1Degrees(), zcal.getMisheyakir11Point5Degrees(), zcal.getMisheyakir11Degrees(),
 					zcal.getMisheyakir10Point2Degrees(), zcal.getMisheyakir7Point65Degrees(),
-					zcal.getMisheyakir9Point5Degrees(), zcal.getSunrise(), zcal.getSeaLevelSunrise(),
+					zcal.getMisheyakir9Point5Degrees(), zcal.getSunriseWithElevation(), zcal.getSeaLevelSunrise(),
 					zcal.getSofZmanShmaMGA16Point1Degrees(), zcal.getSofZmanShmaMGA72Minutes(),
 					zcal.getSofZmanShmaMGA72MinutesZmanis(), zcal.getSofZmanShmaMGA90Minutes(),
 					zcal.getSofZmanShmaMGA90MinutesZmanis(), zcal.getSofZmanShmaMGA96Minutes(),
