@@ -336,7 +336,6 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	public double getSolarElevation(ZonedDateTime zonedDateTime, GeoLocation geoLocation) {
 		return getSolarElevationAzimuth(zonedDateTime, geoLocation, false);
-
 	}
 
 	/**
@@ -353,7 +352,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * adjusted for altitude.
 	 * 
 	 * @param zonedDateTime
-	 *            time of calculation
+	 *            date-time of calculation
 	 * @param geoLocation
 	 *            The location for calculating the elevation or azimuth.
 	 * @param isAzimuth
@@ -364,47 +363,57 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @see #getSolarAzimuth(ZonedDateTime, GeoLocation)
 	 */
 	private double getSolarElevationAzimuth(ZonedDateTime zonedDateTime, GeoLocation geoLocation, boolean isAzimuth) {
-
 	    double lat = Math.toRadians(geoLocation.getLatitude());
 	    double lon = geoLocation.getLongitude();
-
         ZonedDateTime utc = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
-
-	    double fractionalDay =
-	            (utc.getHour()
-	            + (utc.getMinute()
+	    double fractionalDay = (utc.getHour() + (utc.getMinute()
 	            + (utc.getSecond() + utc.getNano() / 1_000_000_000.0) / 60.0) / 60.0) / 24.0;
-
 	    double jd = getJulianDay(utc.toLocalDate()) + fractionalDay;
 	    double jc = getJulianCenturiesFromJulianDay(jd);
-
 	    double decl = Math.toRadians(getSunDeclination(jc));
 	    double eot = getEquationOfTime(jc);
-
 	    double trueSolarTime = ((fractionalDay + eot / 1440.0 + lon / 360.0) + 2) % 1;
 	    double hourAngle = trueSolarTime * 2 * Math.PI - Math.PI;
-
-	    double cosZenith =
-	            Math.sin(lat) * Math.sin(decl)
-	            + Math.cos(lat) * Math.cos(decl) * Math.cos(hourAngle);
-
-	    double zenith = Math.acos(Math.max(-1, Math.min(1, cosZenith)));
-	    double elevation = 90 - Math.toDegrees(zenith);
-
+	    double cosZenith = Math.sin(lat) * Math.sin(decl) + Math.cos(lat) * Math.cos(decl) * Math.cos(hourAngle);
+	    double zenith = Math.acos(Math.max(-1, Math.min(1, cosZenith)));	    
+	    double zenithDeg = Math.toDegrees(zenith);
+	    double elevation = 90.0 - zenithDeg;
+	    elevation = 90.0 - (zenithDeg - adjustElevationForRefraction(elevation));
 	    double azimuth;
 	    double azDenom = Math.cos(lat) * Math.sin(zenith);
 
 	    if (Math.abs(azDenom) > 0.001) {
-	        double az =
-	                (Math.sin(lat) * Math.cos(zenith) - Math.sin(decl)) / azDenom;
+	        double az = (Math.sin(lat) * Math.cos(zenith) - Math.sin(decl)) / azDenom;
 
 	        azimuth = 180 - Math.toDegrees(Math.acos(Math.max(-1, Math.min(1, az))))
 	                * (hourAngle > 0 ? -1 : 1);
 	    } else {
 	        azimuth = geoLocation.getLatitude() > 0 ? 180 : 0;
 	    }
-
 	    return isAzimuth ? (azimuth + 360) % 360 : elevation;
+	}
+	
+	/**
+	 * Apply refraction adjustment to solar elevation. 
+	 * @param elevation the elevation to adjust.
+	 * @return the adjusted elevation.
+	 */
+	private double adjustElevationForRefraction(double elevation) {
+	    if (elevation > 85.0) {
+	    	return 0.0;
+	    }
+
+	    double te = Math.tan(Math.toRadians(elevation));
+	    double correction;
+
+	    if (elevation > 5.0) {
+	        correction = 58.1 / te - 0.07 / Math.pow(te, 3) + 0.000086 / Math.pow(te, 5);
+	    } else if (elevation > -0.575) {
+	        correction = 1735.0 + elevation * (-518.2 + elevation * (103.4 + elevation * (-12.79 + 0.711 * elevation)));
+	    } else {
+	        correction = -20.774 / te;
+	    }
+	    return correction / 3600.0;
 	}
 	
 	/**
