@@ -69,16 +69,13 @@ public class YerushalmiYomiCalculator {
         }
 
         // Initialize cycle dates
-        LocalDate nextCycle = DAF_YOMI_START_DAY;
         LocalDate prevCycle = DAF_YOMI_START_DAY;
+        LocalDate nextCycle = getNextCycleStart(prevCycle);
 
         // Loop through cycles until we reach the requested date
-        while (requested.isAfter(nextCycle)) {
+        while (!requested.isBefore(nextCycle)) {
             prevCycle = nextCycle;
-
-            // Add whole cycle days
-            nextCycle = nextCycle.plusDays(WHOLE_SHAS_DAFS);
-            nextCycle = nextCycle.plusDays(getNumOfSpecialDays(prevCycle, nextCycle));
+            nextCycle = getNextCycleStart(prevCycle);
         }
 
         // Days between start of cycle and requested date
@@ -101,9 +98,28 @@ public class YerushalmiYomiCalculator {
     }
 
     /**
-     * Counts the number of "special days" (Yom Kippur, Tisha B’Av) between two ZonedDateTimes.
+     * Returns the start date of the cycle after the one beginning on {@code cycleStart}.
+     * The cycle end is inclusive, so skipped days on the tentative end date extend the cycle.
+     * @param cycleStart the first day of the current cycle
+     * @return the first day of the following cycle
+     */
+    private static LocalDate getNextCycleStart(LocalDate cycleStart) {
+        LocalDate endDate = cycleStart.plusDays(WHOLE_SHAS_DAFS - 1);
+        int specialDays = getNumOfSpecialDays(cycleStart, endDate);
+
+        while (specialDays > 0) {
+            LocalDate newStart = endDate.plusDays(1);
+            endDate = endDate.plusDays(specialDays);
+            specialDays = getNumOfSpecialDays(newStart, endDate);
+        }
+
+        return endDate.plusDays(1);
+    }
+
+    /**
+     * Counts the number of "special days" (Yom Kippur, Tisha B’Av) between two dates.
      * @param start the start date for the calculation
-     * @param end the start date for the calculation
+     * @param end the end date for the calculation
      * @return the number of special days
      */
     private static int getNumOfSpecialDays(LocalDate start, LocalDate end) {
@@ -116,12 +132,12 @@ public class YerushalmiYomiCalculator {
         // Loop over each Jewish year in range
         for (int year = startYear; year <= endYear; year++) {
             // Create Yom Kippur and Tisha B’Av for that Jewish year
-            JewishCalendar yomKippur = new JewishCalendar(5770, 7, 10); // month/day are constants
-            JewishCalendar tishaBeav = new JewishCalendar(5770, 5, 9);
-
-            yomKippur.setJewishYear(year);
-            tishaBeav.setJewishYear(year);
-
+            JewishCalendar yomKippur = new JewishCalendar(year, JewishCalendar.TISHREI, 10);
+            JewishCalendar tishaBeav = new JewishCalendar(year, JewishCalendar.AV, 9);
+            // Check if Tisha B'Av is a Nidche.
+            if (tishaBeav.getDayOfWeek() == 7) {
+                tishaBeav.plusDays(1);
+            }
             LocalDate ykDate = yomKippur.getLocalDate();
             LocalDate tbDate = tishaBeav.getLocalDate();
 
@@ -132,15 +148,16 @@ public class YerushalmiYomiCalculator {
         return specialDays;
     }
 
+
     /**
-     * Checks if a date is strictly between start and end.
+     * Checks if a date is after start and on or before end.
      * @param start the start <code>ZonedDateTime</code>
      * @param date the <code>ZonedDateTime</code> to check
      * @param end the end <code>ZonedDateTime</code>
      * @return if the date is between the two dates
      */
     private static boolean isBetween(LocalDate start, LocalDate date, LocalDate end) {
-        return start.isBefore(date) && end.isAfter(date);
+        return start.isBefore(date) && !end.isBefore(date);
     }
 
     /**
