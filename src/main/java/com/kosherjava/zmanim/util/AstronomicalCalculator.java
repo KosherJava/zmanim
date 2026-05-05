@@ -141,7 +141,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param adjustForElevation
 	 *            Should the time be adjusted for elevation
-	 * @return The UTC time of sunset in 24-hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
+	 * @return The UTC time of sunset in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in
 	 *         the calculation (expected behavior for some locations such as near the poles,
 	 *         {@link java.lang.Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
@@ -282,13 +282,13 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * Method to get the refraction value to be used when calculating sunrise and sunset. The default value is 34
-	 * arcminutes. The <a href="https://www.cs.tau.ac.il/~nachum/calendar-book/second-edition/errata.pdf">Errata and Notes
-	 * for Calendrical Calculations: The Millennium Edition</a> by Edward M. Reingold and Nachum Dershowitz lists the
-	 * actual average refraction value as 34.478885263888294 or approximately 34' 29". The refraction value as well
-	 * as the solarRadius and elevation adjustment are added to the zenith used to calculate sunrise and sunset.
+	 * Method to get the refraction value to be used when calculating sunrise and sunset. The default value is 34 arcminutes
+	 * (returned in degrees). The <a href="https://www.cs.tau.ac.il/~nachum/calendar-book/second-edition/errata.pdf">Errata and
+	 * Notes for Calendrical Calculations: The Millennium Edition</a> by Edward M. Reingold and Nachum Dershowitz lists the
+	 * actual average refraction value as 34.478885263888294 or approximately 34' 29". The refraction value as well as the
+	 * solar radius and elevation adjustment are added to the zenith used to calculate sunrise and sunset.
 	 * 
-	 * @return The refraction in arcminutes.
+	 * @return The refraction in degrees.
 	 */
 	public double getRefraction() {
 		return this.refraction;
@@ -300,7 +300,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * locations might be used for increased accuracy.
 	 * 
 	 * @param refraction
-	 *            The refraction in arcminutes.
+	 *            The refraction in degrees.
 	 * @see #getRefraction()
 	 */
 	public void setRefraction(double refraction) {
@@ -322,7 +322,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * they show the extreme difference on days that are not the perihelion or aphelion, but are shown for illustrative
 	 * purposes only.
 	 * 
-	 * @return The sun's radius in arcminutes.
+	 * @return The sun's radius in degrees.
 	 */
 	public double getSolarRadius() {
 		return this.solarRadius;
@@ -332,7 +332,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * Method to set the sun's radius.
 	 * 
 	 * @param solarRadius
-	 *            The sun's radius in arcminutes.
+	 *            The sun's radius in degrees.
 	 * @see #getSolarRadius()
 	 */
 	public void setSolarRadius(double solarRadius) {
