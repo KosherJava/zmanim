@@ -208,11 +208,12 @@ public class GeoLocation implements Cloneable {
 	 *            IllegalArgumentException will be thrown if the value is not "S" or "N".
 	 */
 	public void setLatitude(int degrees, int minutes, double seconds, String direction) {
-		double tempLat = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (tempLat > 90 || tempLat < 0 || Double.isNaN(tempLat)) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
-			throw new IllegalArgumentException(
-					"Latitude must be between 0 and  90. Use direction of S instead of negative.");
+		if (degrees > 90 || degrees < 0 || Double.isNaN(degrees) || minutes > 59 || minutes < 0 || Double.isNaN(minutes) ||
+				seconds > 59 || seconds < 0 || Double.isNaN(seconds)){
+			throw new IllegalArgumentException("Latitude degrees must be between 0 and 90. Minutes and seconds must be between 0 and 59. Use a direction of \"S\" instead of negative.");
 		}
+		
+		double tempLat = degrees + ((minutes + (seconds / 60.0)) / 60.0);
 		if (direction.equals("S")) {
 			tempLat *= -1;
 		} else if (!direction.equals("N")) {
@@ -264,14 +265,16 @@ public class GeoLocation implements Cloneable {
 	 *            An IllegalArgumentException will be thrown if the value is not E or W.
 	 */
 	public void setLongitude(int degrees, int minutes, double seconds, String direction) {
-		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (longTemp > 180 || longitude < 0  || Double.isNaN(longTemp)) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
-			throw new IllegalArgumentException("Longitude must be between 0 and  180.  Use a direction of W instead of negative.");
+		if (degrees > 180  || degrees < 0 || Double.isNaN(degrees) || minutes > 59 || minutes < 0 || Double.isNaN(minutes) ||
+				seconds > 59 || seconds < 0 || Double.isNaN(seconds)){
+			throw new IllegalArgumentException("Longitude degrees must be between 0 and 180. Minutes and seconds must be between 0 and 59. Use a direction of \"W\" instead of negative.");
 		}
+		
+		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
 		if (direction.equals("W")) {
 			longTemp *= -1;
 		} else if (!direction.equals("E")) {
-			throw new IllegalArgumentException("Longitude direction must be E or W");
+			throw new IllegalArgumentException("Longitude direction must be \"E\" or \"W\"");
 		}
 		this.longitude = longTemp;
 	}
@@ -422,61 +425,6 @@ public class GeoLocation implements Cloneable {
 	 */
 	public double getGeodesicDistance(GeoLocation location) {
 		return vincentyInverseFormula(location, DISTANCE);
-	}
-	
-	/**
-	 * Calculate the destination point based on an initial bearing and distance in meters from the current location using
-	 * <a href="https://en.wikipedia.org/wiki/Thaddeus_Vincenty">Thaddeus Vincenty's</a> direct formula. See T Vincenty, "<a
-	 * href="https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf">Direct and Inverse Solutions of Geodesics on the Ellipsoid
-	 * with application of nested equations</a>", Survey Review, vol XXII no 176, 1975.
-	 * 
-	 * @param initialBearing the initialBearing 
-	 * @param distance the distance in meters.
-	 * @return the GeoLocation containing the destination point. The ZoneId is set to the origin point (current object).
-	 */
-	private GeoLocation vincentyDirectFormulaDestination(double initialBearing, double distance) {
-		double major_semi_axis = 6378137;
-		double minor_semi_axis = 6356752.3142;
-		double flattening = 1 / 298.257223563; // WGS-84 ellipsoid
-		double initial_bearing_radians = Math.toRadians(initialBearing);
-		double sinAzimuth1 = Math.sin(initial_bearing_radians);
-		double cosAzimuth1 = Math.cos(initial_bearing_radians);
-		double tanU1 = (1 - flattening) * Math.tan(Math.toRadians(getLatitude()));
-		double cosU1 = 1 / Math.sqrt((1 + tanU1*tanU1));
-		double sinU1 = tanU1 * cosU1;
-		double eq_p1_ang_dist = Math.atan2(tanU1, cosAzimuth1); // eq_p1_ang_dist = angular distance on the sphere from the equator to P1
-		double sinAzimuth = cosU1 * sinAzimuth1; //azimuth of the geodesic at the equator
-		double cosSqAzimuth = 1 - sinAzimuth*sinAzimuth;
-		double uSq = cosSqAzimuth * (Math.pow(major_semi_axis, 2) - 1.0);
-		double a = 1 + uSq/16384*(4096 + uSq *(-768 + uSq *(320 - 175 * uSq)));
-		double b = uSq / 1024 * (256 + uSq *(-128 + uSq * (74-47 * uSq)));
-		double p1_p2_ang_dist = distance / (minor_semi_axis * a); //p1_p2_ang_dist = angular distance P1 P2 on the sphere
-		double sinSigma ;
-		double cosSigma ;
-		double cos2_eq_mid_ang_distance; // # eq_mid_ang_distance = angular distance on the sphere from the equator to the midpoint of the line
-		double a_prime;
-		int iterations = 0;
-		
-		do {
-			cos2_eq_mid_ang_distance = Math.cos(2*eq_p1_ang_dist + p1_p2_ang_dist);
-			sinSigma = Math.sin(p1_p2_ang_dist);
-			cosSigma = Math.cos(p1_p2_ang_dist);
-			double delta_ang_distance = b * sinSigma * (cos2_eq_mid_ang_distance + b / 4 *
-					(cosSigma * (-1 + 2 * cos2_eq_mid_ang_distance * cos2_eq_mid_ang_distance) - b / 6 * cos2_eq_mid_ang_distance * 
-					(-3+4*sinSigma*sinSigma)*(-3+4*cos2_eq_mid_ang_distance*cos2_eq_mid_ang_distance)));  
-			a_prime = p1_p2_ang_dist;
-			p1_p2_ang_dist = distance / (minor_semi_axis * a) + delta_ang_distance;
-		} while (Math.abs(p1_p2_ang_dist-a_prime) > 1e-12 && ++iterations < 100); // iterate until negligible change in lambda (about 0.006mm)
-		
-		double x = sinU1 * sinSigma - cosU1 * cosSigma * cosAzimuth1;
-		double other_latitude = Math.toDegrees(Math.atan2(sinU1 * cosSigma + cosU1 * sinSigma * cosAzimuth1, (1 - flattening) * Math.sqrt(sinAzimuth*sinAzimuth + x * x)));
-		double lambda = Math.atan2(sinSigma*sinAzimuth1, cosU1*cosSigma - sinU1*sinSigma*cosAzimuth1);
-		double c = flattening/16*cosSqAzimuth*(4+flattening*(4-3*cosSqAzimuth));
-		double l = lambda - (1-c) * flattening * sinAzimuth *
-				(p1_p2_ang_dist + c * sinSigma * (cos2_eq_mid_ang_distance + c * cosSigma * (-1 + 2 * cos2_eq_mid_ang_distance * cos2_eq_mid_ang_distance)));
-		double other_longitude = longitude + Math.toDegrees(l);
-		
-		return new GeoLocation("Destination", other_latitude, other_longitude, getZoneId()); //ToDo - we can easily return final_bearing, it just needs some minor refactoring
 	}
 
 	/**
@@ -688,8 +636,6 @@ public class GeoLocation implements Cloneable {
 	/**
 	 * An implementation of the {@link java.lang.Object#clone()} method that creates a <a
 	 * href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
-	 * <b>Note:</b> If the {@link java.time.ZoneId} in the clone will be changed from the original, it is critical
-	 * that {@link com.kosherjava.zmanim.AstronomicalCalendar#getLocalDate()}.
 	 * 
 	 * @see java.lang.Object#clone()
 	 */
