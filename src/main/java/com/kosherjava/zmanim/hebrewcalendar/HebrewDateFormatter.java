@@ -369,7 +369,7 @@ public class HebrewDateFormatter {
 			"Rosh Hashana", "Fast of Gedalyah", "Erev Yom Kippur", "Yom Kippur", "Erev Succos", "Succos",
 			"Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah", "Erev Chanukah", "Chanukah",
 			"Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim", "Purim Katan", "Rosh Chodesh",
-			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim", "Lag B'Omer","Shushan Purim Katan",
+			"Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim", "Lag B'Omer", "Shushan Purim Katan",
 			"Isru Chag"};
 
 	/**
@@ -383,7 +383,7 @@ public class HebrewDateFormatter {
 	 *         "Erev Succos", "Succos", "Chol Hamoed Succos", "Hoshana Rabbah", "Shemini Atzeres", "Simchas Torah",
 	 *         "Erev Chanukah", "Chanukah", "Tenth of Teves", "Tu B'Shvat", "Fast of Esther", "Purim", "Shushan Purim",
 	 *         "Purim Katan", "Rosh Chodesh", "Yom HaShoah", "Yom Hazikaron", "Yom Ha'atzmaut", "Yom Yerushalayim",
-	 *         "Lag B'Omer","Shushan Purim Katan","Isru Chag"].
+	 *         "Lag B'Omer", "Shushan Purim Katan", "Isru Chag"].
 	 * 
 	 * @see setTransliteratedMonthList(String[])
 	 * @see formatYomTov(JewishCalendar)
@@ -592,7 +592,7 @@ public class HebrewDateFormatter {
 	 * "&#x05D0;&#x05D3;&#x05E8;", "&#x05D0;&#x05D3;&#x05E8; &#x05D1;", "&#x05D0;&#x05D3;&#x05E8;".
 	 * 
 	 * @param hebrewMonths the array of Hebrew months beginning in "&#x05E0;&#x05D9;&#x05E1;&#x05DF;" and ending in
-	 * "&#x05D0;&#x05D3;&#x05E8;","&#x05D0;&#x05D3;&#x05E8; &#x05D1;","&#x05D0;&#x05D3;&#x05E8; &#x05D0;"
+	 * "&#x05D0;&#x05D3;&#x05E8;", "&#x05D0;&#x05D3;&#x05E8; &#x05D1;", "&#x05D0;&#x05D3;&#x05E8; &#x05D0;"
 	 * @see getHebrewMonthList()
 	 */
 	public void setHebrewMonthList(String[] hebrewMonths) {
