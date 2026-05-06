@@ -3,6 +3,7 @@
  * Copyright (C) 2011 - 2026 Eliyahu Hershfeld
  * Copyright (C) September 2002 Avrom Finkelstien
  * Copyright (C) 2019 - 2022 Y Paritcher
+ * Copyright (C) 2026 Moshe Dicker
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -17,12 +18,13 @@
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import com.kosherjava.zmanim.util.GeoLocation;
-
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar; // We still use the old Calendar.WEEKDAY constants
 
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
@@ -42,7 +44,8 @@ import java.util.TimeZone;
  * @see java.util.Calendar
  * @author &copy; Y. Paritcher 2019 - 2022
  * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Eliyahu Hershfeld 2011 - 2024
+ * @author &copy; Moshe Dicker 2026
+ * @author &copy; Eliyahu Hershfeld 2011 - 2026
  */
 public class JewishCalendar extends JewishDate {
 	/** The 14th day of Nissan, the day before Pesach (Passover).*/
@@ -254,23 +257,13 @@ public class JewishCalendar extends JewishDate {
 	}
 
 	/**
-	 * A constructor that initializes the date to the {@link java.util.Date Date} parameter.
-	 * 
-	 * @param date
-	 *            the <code>Date</code> to set the calendar to
-	 */
-	public JewishCalendar(Date date) {
-		super(date);
-	}
-
-	/**
 	 * A constructor that initializes the date to the {@link java.util.Calendar Calendar} parameter.
 	 * 
-	 * @param calendar
-	 *            the <code>Calendar</code> to set the calendar to
+	 * @param zonedDateTime
+	 *            the <code>ZonedDateTime</code> to set the calendar to
 	 */
-	public JewishCalendar(Calendar calendar) {
-		super(calendar);
+	public JewishCalendar(ZonedDateTime zonedDateTime) {
+		super(zonedDateTime);
 	}
 
 	/**
@@ -516,12 +509,12 @@ public class JewishCalendar extends JewishDate {
 		JewishCalendar clone = (JewishCalendar) clone();
 		int daysToShabbos = (Calendar.SATURDAY - getDayOfWeek()  + 7) % 7;
 		if (getDayOfWeek() != Calendar.SATURDAY) {
-			clone.forward(Calendar.DATE, daysToShabbos);
+            clone.plusDays(daysToShabbos);
 		} else {
-			clone.forward(Calendar.DATE, 7);
+			clone.plusDays( 7);
 		}
 		while(clone.getParshah() == Parsha.NONE) { //Yom Kippur / Sukkos or Pesach with 2 potential non-parsha Shabbosim in a row
-			clone.forward(Calendar.DATE, 7);
+			clone.plusDays(7);
 		}
 		return clone.getParshah();
 	}
@@ -1230,27 +1223,30 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the Date representing the moment of the <em>molad</em> in Yerushalayim standard time (GMT + 2)
 	 */
-	public Date getMoladAsDate() {
-		JewishDate molad = getMolad();
-		String locationName = "Jerusalem, Israel";
+	public Instant getMoladAsInstant() {
+	    JewishDate molad = getMolad();
 
-		double latitude = 31.778; // Har Habayis latitude
-		double longitude = 35.2354; // Har Habayis longitude
+	    // Standard time offset for Jerusalem: GMT+2
+	    // The raw molad Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will
+	    // result in the time being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual
+	    // time in DST will be done by the date formatter class used to display the Date.
+	    ZoneId jerusalemStandardOffset = ZoneId.of("GMT+2");
 
-		// The raw molad Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will result in the time
-		// being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual time in DST will be done by the date
-		// formatter class used to display the Date.
-		TimeZone yerushalayimStandardTZ = TimeZone.getTimeZone("GMT+2");
-		GeoLocation geo = new GeoLocation(locationName, latitude, longitude, yerushalayimStandardTZ);
-		Calendar cal = Calendar.getInstance(geo.getTimeZone());
-		cal.clear();
-		double moladSeconds = molad.getMoladChalakim() * 10 / (double) 3;
-		cal.set(molad.getGregorianYear(), molad.getGregorianMonth(), molad.getGregorianDayOfMonth(),
-				molad.getMoladHours(), molad.getMoladMinutes(), (int) moladSeconds);
-		cal.set(Calendar.MILLISECOND, (int) (1000 * (moladSeconds - (int) moladSeconds)));
-		// subtract local time difference of 20.94 minutes (20 minutes and 56.496 seconds) to get to Standard time
-		cal.add(Calendar.MILLISECOND, -1 * (int) geo.getLocalMeanTimeOffset());
-		return cal.getTime();
+	    double moladSeconds = molad.getMoladChalakim() * 10.0 / 3.0; // Compute molad seconds from chalakim
+	    int seconds = (int) moladSeconds;
+	    int nanos = (int) ((moladSeconds - seconds) * 1_000_000_000); // convert remainder to nanos
+
+        LocalTime time = LocalTime.of(molad.getMoladHours(),molad.getMoladMinutes(),seconds,nanos);
+
+	    ZonedDateTime moladZdt = ZonedDateTime.of(molad.getLocalDate(),time,jerusalemStandardOffset);
+
+	    // Har Habayis at a longitude of 35.2354 offset vs longitude 35 in standard time, so we subtract the time difference
+	    // of 20.94 minutes (20 minutes and 56 seconds and 496 millis) to get to Standard time from local mean time
+	    Duration jerusalemStandardTimeOffset = Duration.ofMinutes(20)
+	            .plusSeconds(56)
+	            .plusMillis(496);
+
+	    return moladZdt.toInstant().minus(jerusalemStandardTimeOffset);
 	}
 
 	/**
@@ -1261,14 +1257,10 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 3 days after the molad.
 	 * 
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana3Days(Instant, Instant)
 	 */
-	public Date getTchilasZmanKidushLevana3Days() {
-		Date molad = getMoladAsDate();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
-		cal.add(Calendar.HOUR, 72); // 3 days after the molad
-		return cal.getTime();
+	public Instant getTchilasZmanKidushLevana3Days() {
+	    return getMoladAsInstant().plus(Duration.ofHours(72)); // 3 days after the molad
 	}
 
 	/**
@@ -1281,14 +1273,10 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 7 days after the molad.
 	 * 
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getTchilasZmanKidushLevana7Days(Instant, Instant)
 	 */
-	public Date getTchilasZmanKidushLevana7Days() {
-		Date molad = getMoladAsDate();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
-		cal.add(Calendar.HOUR, 168); // 7 days after the molad
-		return cal.getTime();
+	public Instant getTchilasZmanKidushLevana7Days() {
+	    return getMoladAsInstant().plus(Duration.ofHours(168)); // 7 days after the molad
 	}
 
 	/**
@@ -1304,20 +1292,20 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @see #getSofZmanKidushLevana15Days()
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)
 	 */
-	public Date getSofZmanKidushLevanaBetweenMoldos() {
-		Date molad = getMoladAsDate();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
-		// add half the time between molad and molad (half of 29 days, 12 hours and 793 chalakim (44 minutes, 3.3
-		// seconds), or 14 days, 18 hours, 22 minutes and 666 milliseconds). Add it as hours, not days, to avoid
-		// DST/ST crossover issues.
-		cal.add(Calendar.HOUR, (24 * 14) + 18);
-		cal.add(Calendar.MINUTE, 22);
-		cal.add(Calendar.SECOND, 1);
-		cal.add(Calendar.MILLISECOND, 666);
-		return cal.getTime();
+	public Instant getSofZmanKidushLevanaBetweenMoldos() {
+	    Instant molad = getMoladAsInstant();
+
+	    // Duration for half of the lunar month:
+	    // 14 days, 18 hours, 22 minutes, 1 second, 666 milliseconds
+	    Duration halfLunarMonth = Duration.ofDays(14)
+	            .plusHours(18)
+	            .plusMinutes(22)
+	            .plusSeconds(1)
+	            .plusMillis(666);
+
+	    return molad.plus(halfLunarMonth);
 	}
 
 	/**
@@ -1335,14 +1323,10 @@ public class JewishCalendar extends JewishDate {
 	 * @return the Date representing the moment 15 days after the <em>molad</em>.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
 	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days(Date, Date)
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSofZmanKidushLevana15Days(Instant, Instant)
 	 */
-	public Date getSofZmanKidushLevana15Days() {
-		Date molad = getMoladAsDate();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(molad);
-		cal.add(Calendar.HOUR, 24 * 15); //15 days after the molad. Add it as hours, not days, to avoid DST/ST crossover issues.
-		return cal.getTime();
+	public Instant getSofZmanKidushLevana15Days() {
+	    return getMoladAsInstant().plus(Duration.ofHours(24 * 15));
 	}
 
 	/**
@@ -1381,9 +1365,9 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the number of elapsed days since <em>tekufas Tishrei</em>.
 	 * 
-	 * @see #isVeseinTalUmatarStartDate()
-	 * @see #isVeseinTalUmatarStartingTonight()
-	 * @see #isVeseinTalUmatarRecited()
+	 * @see com.kosherjava.zmanim.hebrewcalendar.TefilaRules#isVeseinTalUmatarStartDate(JewishCalendar)
+	 * @see com.kosherjava.zmanim.hebrewcalendar.TefilaRules#isVeseinTalUmatarStartingTonight(JewishCalendar)
+	 * @see com.kosherjava.zmanim.hebrewcalendar.TefilaRules#isYaalehVeyavoRecited(JewishCalendar)
 	 */
 	public int getTekufasTishreiElapsedDays() {
 		// Days since Rosh Hashana year 1. Add 1/2 day as the first tekufas tishrei was 9 hours into the day. This allows all
@@ -1392,185 +1376,6 @@ public class JewishCalendar extends JewishDate {
 		// days of completed solar years
 		double solar = (getJewishYear() - 1) * 365.25;
 		return (int) Math.floor(days - solar);
-	}
-
-	/**
-	 * Returns if it is the Jewish day (starting the evening before) to start reciting <em>Vesein Tal Umatar
-	 * Livracha</em> (<em>Sheailas Geshamim</em>). In Israel this is the 7th day of <em>Marcheshvan</em>. Outside
-	 * Israel recitation starts on the evening of December 4th (or 5th if it is the year before a civil leap year)
-	 * in the 21st century and shifts a day forward every century not evenly divisible by 400. This method will
-	 * return true if <em>vesein tal umatar</em> on the current Jewish date that starts on the previous night, so
-	 * Dec 5/6 will be returned by this method in the 21st century. <em>vesein tal umatar</em> is not recited on
-	 * <em>Shabbos</em> and the start date will be delayed a day when the start day is on a <em>Shabbos</em> (this
-	 * can only occur out of Israel).
-	 * 
-	 * @deprecated Use {@link TefilaRules#isVeseinTalUmatarStartDate(JewishCalendar)} instead. This method will be
-	 *         removed in the v3.0 release.
-	 * 
-	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
-	 * Livracha</em> (<em>Sheailas Geshamim</em>)).
-	 * 
-	 * @see #isVeseinTalUmatarStartingTonight()
-	 * @see #isVeseinTalUmatarRecited()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isVeseinTalUmatarStartDate() {
-		if (inIsrael) {
-			 // The 7th Cheshvan can't occur on Shabbos, so always return true for 7 Cheshvan
-			return getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 7;
-		} else {
-			if (getDayOfWeek() == Calendar.SATURDAY) { //Not recited on Friday night
-				return false;
-			}
-			if (getDayOfWeek() == Calendar.SUNDAY) { // When starting on Sunday, it can be the start date or delayed from Shabbos
-				return getTekufasTishreiElapsedDays() == 48 || getTekufasTishreiElapsedDays() == 47;
-			} else {
-				return getTekufasTishreiElapsedDays() == 47;
-			}
-		}
-	}
-	
-	/**
-	 * Returns true if tonight is the first night to start reciting <em>Vesein Tal Umatar Livracha</em> (
-	 * <em>Sheailas Geshamim</em>). In Israel this is the 7th day of <em>Marcheshvan</em> (so the 6th will return
-	 * true). Outside Israel recitation starts on the evening of December 4th (or 5th if it is the year before a
-	 * civil leap year) in the 21st century and shifts a day forward every century not evenly divisible by 400.
-	 * <em>Vesein tal umatar</em> is not recited on <em>Shabbos</em> and the start date will be delayed a day when
-	 * the start day is on a <em>Shabbos</em> (this can only occur out of Israel).
-	 * 
-	 * @deprecated Use {@link TefilaRules#isVeseinTalUmatarStartingTonight(JewishCalendar)} instead. This method
-	 *         will be removed in the v3.0 release.
-	 * 
-	 * @return true if it is the first Jewish day (starting the prior evening of reciting <em>Vesein Tal Umatar
-	 * Livracha</em> (<em>Sheailas Geshamim</em>)).
-	 * 
-	 * @see #isVeseinTalUmatarStartDate()
-	 * @see #isVeseinTalUmatarRecited()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isVeseinTalUmatarStartingTonight() {
-		if (inIsrael) {
-			// The 7th Cheshvan can't occur on Shabbos, so always return true for 6 Cheshvan
-			return getJewishMonth() == CHESHVAN && getJewishDayOfMonth() == 6;
-		} else {
-			if (getDayOfWeek() == Calendar.FRIDAY) { //Not recited on Friday night
-				return false;
-			}
-			if (getDayOfWeek() == Calendar.SATURDAY) { // When starting on motzai Shabbos, it can be the start date or delayed from Friday night
-				return getTekufasTishreiElapsedDays() == 47 || getTekufasTishreiElapsedDays() == 46;
-			} else {
-				return getTekufasTishreiElapsedDays() == 46;
-			}
-		}
-	}
-
-	/**
-	 * Returns if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited. This will return
-	 * true for the entire season, even on <em>Shabbos</em> when it is not recited.
-	 * 
-	 * @deprecated Use {@link TefilaRules#isVeseinTalUmatarRecited(JewishCalendar)} instead. This method will
-	 *         be removed in the v3.0 release.
-	 * 
-	 * @return true if <em>Vesein Tal Umatar Livracha</em> (<em>Sheailas Geshamim</em>) is recited.
-	 * 
-	 * @see #isVeseinTalUmatarStartDate()
-	 * @see #isVeseinTalUmatarStartingTonight()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isVeseinTalUmatarRecited() {
-		if (getJewishMonth() == NISSAN && getJewishDayOfMonth() < 15) {
-			return true;
-		}
-		if (getJewishMonth() < CHESHVAN) {
-			return false;
-		}
-		if (inIsrael) {
-			return getJewishMonth() != CHESHVAN || getJewishDayOfMonth() >= 7;
-		} else {
-			return getTekufasTishreiElapsedDays() >= 47;
-		}
-	}
-	
-	/**
-	 * Returns if <em>Vesein Beracha</em> is recited. It is recited from 15 <em>Nissan</em> to the point that {@link
-	 * #isVeseinTalUmatarRecited() <em>vesein tal umatar</em> is recited}.
-	 * 
-	 * @deprecated Use {@link TefilaRules#isVeseinBerachaRecited(JewishCalendar)} instead. This method will be
-	 *         removed in the v3.0 release.
-	 * 
-	 * @return true if <em>Vesein Beracha</em> is recited.
-	 * 
-	 * @see #isVeseinTalUmatarRecited()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isVeseinBerachaRecited() {
-		return !isVeseinTalUmatarRecited();
-	}
-
-	/**
-	 * Returns if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 22 <em>Tishrei</em>.
-	 * 
-	 * @deprecated Use {@link TefilaRules#isMashivHaruachStartDate(JewishCalendar)} instead. This method will be
-	 *         removed in the v3.0 release.
-	 * 
-	 * @return true if the date is the start date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
-	 * 
-	 * @see #isMashivHaruachEndDate()
-	 * @see #isMashivHaruachRecited()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isMashivHaruachStartDate() {
-		return getJewishMonth() == TISHREI && getJewishDayOfMonth() == 22;
-	}
-
-	/**
-	 * Returns if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>. The date is 15 <em>Nissan</em>.
-	 * 
-	 * @deprecated Use {@link TefilaRules#isMashivHaruachEndDate(JewishCalendar)} instead. This method will be
-	 *         removed in the v3.0 release.
-	 * 
-	 * @return true if the date is the end date for reciting <em>Mashiv Haruach Umorid Hageshem</em>.
-	 * 
-	 * @see #isMashivHaruachStartDate()
-	 * @see #isMashivHaruachRecited()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isMashivHaruachEndDate() {
-		return getJewishMonth() == NISSAN && getJewishDayOfMonth() == 15;
-	}
-
-	/**
-	 * Returns if <em>Mashiv Haruach Umorid Hageshem</em> is recited. This period starts on 22 <em>Tishrei</em> and ends
-	 * on the 15th day of <em>Nissan</em>.
-	 * 
-	 * @deprecated Use {@link TefilaRules#isMashivHaruachRecited(JewishCalendar)} instead. This method will be
-	 *         removed in the v3.0 release.
-	 * 
-	 * @return true if <em>Mashiv Haruach Umorid Hageshem</em> is recited.
-	 * 
-	 * @see #isMashivHaruachStartDate()
-	 * @see #isMashivHaruachEndDate()
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isMashivHaruachRecited() {
-		JewishDate startDate = new JewishDate(getJewishYear(), TISHREI, 22);
-		JewishDate endDate = new JewishDate(getJewishYear(), NISSAN, 15);
-		return compareTo(startDate) > 0 && compareTo(endDate) < 0;
-	}
-
-	/**
-	 * Returns if <em>Morid Hatal</em> (or the lack of reciting <em>Mashiv Haruach</em> following <em>nussach Ashkenaz</em>) is recited.
-	 * This period starts on 22 <em>Tishrei</em> and ends on the 15th day of
-	 * <em>Nissan</em>.
-	 * 
-	 * @deprecated Use {@link TefilaRules#isMoridHatalRecited(JewishCalendar)} instead. This method will be
-	 *         removed in the v3.0 release.
-	 * 
-	 * @return true if <em>Morid Hatal</em> (or the lack of reciting <em>Mashiv Haruach</em> following <em>nussach Ashkenaz</em>) is recited.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public boolean isMoridHatalRecited() {
-		return !isMashivHaruachRecited() || isMashivHaruachStartDate() || isMashivHaruachEndDate();
 	}
 	
 	/**
@@ -1593,9 +1398,9 @@ public class JewishCalendar extends JewishDate {
 		if (this == object) {
 			return true;
 		}
-		if (!(object instanceof JewishCalendar)) {
-			return false;
-		}
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
 		JewishCalendar jewishCalendar = (JewishCalendar) object;
 		return getAbsDate() == jewishCalendar.getAbsDate() && getInIsrael() == jewishCalendar.getInIsrael();
 	}
@@ -1605,9 +1410,8 @@ public class JewishCalendar extends JewishDate {
 	 * @see Object#hashCode()
 	 */
 	public int hashCode() {
-		int result = 17;
-		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
-		result += 37 * result + getAbsDate() + (getInIsrael() ? 1 : 3);
-		return result;
+        int result = Integer.hashCode(getAbsDate());
+        result = 31 * result + Boolean.hashCode(getInIsrael());
+        return result;
 	}
 }
