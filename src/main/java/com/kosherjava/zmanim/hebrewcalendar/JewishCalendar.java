@@ -482,7 +482,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @return the current <em>parsha</em>.
 	 */
-	public Parsha getParshah() {
+	public synchronized Parsha getParshah() {
 		if (getDayOfWeek() != Calendar.SATURDAY) {
 			return Parsha.NONE;
 		}
@@ -532,7 +532,7 @@ public class JewishCalendar extends JewishDate {
 	 * 		{@link Parsha#SHUVA <em>Shuva</em>}, {@link Parsha#SHIRA <em>Shira</em>}, or {@link Parsha#NONE Parsha.NONE} for a regular
 	 * 		<em>Shabbos</em> (or any weekday).
 	 */
-	public Parsha getSpecialShabbos() {
+	public synchronized Parsha getSpecialShabbos() {
 		if (getDayOfWeek() == Calendar.SATURDAY) {
 			if ((getJewishMonth() == SHEVAT && !isJewishLeapYear()) || (getJewishMonth() == ADAR && isJewishLeapYear())) {
 				if (getJewishDayOfMonth() == 25 || getJewishDayOfMonth() == 27 || getJewishDayOfMonth() == 29) {
@@ -593,7 +593,7 @@ public class JewishCalendar extends JewishDate {
 	 * 
 	 * @see HebrewDateFormatter#formatYomTov(JewishCalendar)
 	 */
-	public int getYomTovIndex() {
+	public synchronized int getYomTovIndex() {
 		final int day = getJewishDayOfMonth();
 		final int dayOfWeek = getDayOfWeek();
 

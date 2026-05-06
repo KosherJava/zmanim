@@ -701,7 +701,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * Computes and sets the Jewish date fields based on the provided absolute (Gregorian) date.
      * @param gregorianAbsDate the Gregorian absolute date.
      */
-    private void setAbsDate(int gregorianAbsDate) {
+    private synchronized void setAbsDate(int gregorianAbsDate) {
         if (gregorianAbsDate <= 0) {
             throw new IllegalArgumentException("Dates in the BC era are not supported");
         }
@@ -952,7 +952,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      *             larger a larger number of <em>chalakim</em> such as 793 (<em>TaShTzaG</em>) break the <em>chalakim</em> into minutes (18
      *             <em>chalakim</em> per minutes, so it would be 44 minutes and 1 <em>chelek</em> in the case of 793 (<em>TaShTzaG</em>).
      */
-    public void setJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
+    public synchronized void setJewishDate(int year, int month, int dayOfMonth, int hours, int minutes, int chalakim) {
 
         validateJewishDate(year, month, dayOfMonth, hours, minutes, chalakim);
 
