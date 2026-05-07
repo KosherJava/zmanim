@@ -106,9 +106,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * method is implemented by the classes that extend this class.
 	 * 
 	 * @param localDate
-	 *            Used to calculate day of year.
+	 *            The <code>LocalDate</code> representing the date to calculate sunrise for.
 	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun times.
+	 *            The location information used for astronomical calculation of solar times.
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90 degrees. for sunrise typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
@@ -117,9 +117,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param adjustForElevation
 	 *            Should the time be adjusted for elevation
-	 * @return The UTC time of sunrise in 24-hour format. 5:45:00 AM will return 5.75.0. If an error was encountered in
-	 *         the calculation (expected behavior for some locations such as near the poles,
-	 *         {@link java.lang.Double#NaN} will be returned.
+	 * @return The UTC time of sunrise in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in the
+	 *         calculation (expected behavior for some locations such as near the poles, {@link Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
 	public abstract double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith,
@@ -130,9 +129,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * method is implemented by the classes that extend this class.
 	 * 
 	 * @param localDate
-	 *            Used to calculate day of year.
+	 *            The <code>LocalDate</code> representing the date to calculate sunset for.
 	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun times.
+	 *            The location information used for astronomical calculation of solar times.
 	 * @param zenith
 	 *            the azimuth below the vertical zenith of 90&deg;. For sunset typically the {@link #adjustZenith
 	 *            zenith} used for the calculation uses geometric zenith of 90&deg; and {@link #adjustZenith adjusts}
@@ -141,43 +140,55 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *            {@link com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param adjustForElevation
 	 *            Should the time be adjusted for elevation
-	 * @return The UTC time of sunset in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in
-	 *         the calculation (expected behavior for some locations such as near the poles,
-	 *         {@link java.lang.Double#NaN} will be returned.
+	 * @return The UTC time of sunset in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in the
+	 *         calculation (expected behavior for some locations such as near the poles, {@link Double#NaN} will be returned.
 	 * @see #getElevationAdjustment(double)
 	 */
 	public abstract double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
 	
-	
 	/**
-	 * Return <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> (UTC) for the given day at the
-	 * given location on earth. The {@link com.kosherjava.zmanim.util.NOAACalculator} implementation calculates
-	 * true solar noon, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
-	 * the time as halfway between sunrise and sunset.
+	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC) of
+	 * <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> (UTC) for the given day at the given location. The
+	 * {@link NOAACalculator}, the default calculator implementation calculates true solar noon, something that can be calculated
+	 * even in the Arctic / Antarctic where there may be no sunrise or sunset, while the {@link SunTimesCalculator} approximates it,
+	 * calculating the time as halfway between sunrise and sunset, something that can't be calculated in Polar regions where there is
+	 * no sunrise or sunset for part of the year. See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The
+	 * Definition of <em>Chatzos</em></a> for details on solar noon /
+	 * midnight calculations.
 	 * 
 	 * @param localDate
-	 *            Used to calculate day of year.
+	 *            The <code>LocalDate</code> representing the date to calculate noon for.
 	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun times.         
+	 *            The location information used for astronomical calculation of solar times.       
 	 * 
-	 * @return the time in minutes from zero UTC
+	 * @return The UTC time of solar noon in 24-hour format. 1:45:00 PM will return 13.75. If an error was encountered in the
+	 *         the calculation (expected behavior for some locations such as near the poles, {@link Double#NaN} will be returned.
+	 * @see #getUTCMidnight(LocalDate, GeoLocation)
 	 */
 	public abstract double getUTCNoon(LocalDate localDate, GeoLocation geoLocation);
 	
 	
 	/**
-	 * Return <a href="https://en.wikipedia.org/wiki/Midnight">solar midnight</a> (UTC) for the given day at the
-	 * given location on earth. The the {@link com.kosherjava.zmanim.util.NOAACalculator} implementation calculates
-	 * true solar midnight, while the {@link com.kosherjava.zmanim.util.SunTimesCalculator} approximates it, calculating
-	 * the time as 12 hours after halfway between sunrise and sunset.
+	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC) of
+	 * <a href="https://en.wikipedia.org/wiki/Midnight">solar midnight</a> (UTC) for the given day at the given location. The
+	 * {@link NOAACalculator}, the default calculator implementation calculates true solar midnight, something that can be calculated
+	 * even in the Arctic / Antarctic where there may be no sunrise or sunset, while the {@link SunTimesCalculator} approximates it,
+	 * calculating the time as 12 hours after halfway between sunrise and sunset, something that can't be calculated in Polar
+	 * regions where there is no sunrise or sunset for part of the year. See <a href=
+	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for details on solar noon /
+	 * midnight calculations.
 	 * 
 	 * @param localDate
-	 *            Used to calculate day of year.
+	 *            The <code>LocalDate</code> representing the date to calculate midnight for. The calculation will be for midnight
+	 *            at the end of the day passed in.
 	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun times.         
+	 *            The location information used for astronomical calculation of solar times.      
 	 * 
-	 * @return the time in minutes from zero UTC
+	 * @return The UTC time of solar midnight in in a 24-hour <code>double</code> format. 1:45:00 AM will return 1.75. If an error
+	 *         was encountered in the calculation (expected behavior for the {@link SunTimesCalculator} at times of the year in
+	 *         Polar regions), {@link Double#NaN} will be returned.
+	 * @see #getUTCNoon(LocalDate, GeoLocation)
 	 */
 	public abstract double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation);
 	
@@ -187,9 +198,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizon. Not corrected for altitude.
 	 * 
 	 * @param zonedDateTime
-	 *            the ZonedDateTime of the time of calculation
+	 *            The <code>ZonedDateTime</code> to calculate the elevation for.
 	 * @param geoLocation
-	 *            The location information
+	 *            The location information used for astronomical calculation of solar times.
 	 * @return solar elevation in degrees. The horizon (calculated in a vacuum using the solar radius as the point)
 	 *            is 090&deg;, civil twilight is -690&deg; etc. This means that sunrise and sunset that do use
 	 *            refraction and are calculated from the upper limb of the sun will return about 0.83390&deg;.
@@ -202,9 +213,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * degrees.
 	 * 
 	 * @param zonedDateTime
-	 *            The ZonedDateTime of the time of calculation.
+	 *            The <code>ZonedDateTime</code> to calculate the azimuth for.ac
 	 * @param geoLocation
-	 *            The location information
+	 *            The location information used for astronomical calculation of solar times.
 	 * @return the solar azimuth in degrees. Astronomical midday would be 180 in the norther hemosphere and 0 in the
 	 *            southern hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about
 	 *            90&deg; and sunset about 270&deg;.
@@ -340,7 +351,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#equals(Object)
+	 * @see Object#equals(Object)
 	 */
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -356,7 +367,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#hashCode()
+	 * @see Object#hashCode()
 	 */
 	public int hashCode() {
 		int result = 17;
@@ -368,7 +379,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see Object#clone()
 	 * @since 1.1
 	 */
 	public Object clone() {
