@@ -1739,12 +1739,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #isUseAstronomicalChatzos()
 	 */
 	public Instant getMinchaGedolaGRAGreaterThan30() {
-		if (getMinchaGedola30Minutes() == null || getMinchaGedolaGRA() == null) {
-			return null;
-		} else {
-			return getMinchaGedola30Minutes().compareTo(getMinchaGedolaGRA()) > 0 ? getMinchaGedola30Minutes()
-					: getMinchaGedolaGRA();
-		}
+		return getMinchaGedolaGreaterThan30(getMinchaGedolaGRA());
 	}
 
 	/**
