@@ -69,7 +69,8 @@
 * Tweaked logic in `AstronomicalCalendar.getInstantFromTime()` to address issues near the dateline.
 * Improve null handling in `ComprehensiveZmanimCalendar.getMoladBasedTime()`
 * Add `ComprehensiveZmanimCalendar.getMisheyakir12Point85Degrees()`
-* `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was moved to the parent `ZmanimCalendar.getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
+* Add  `getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
+* `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was renamed `getMinchaGedolaGRAGreaterThan30()` for clarity.
 * Change / remove `ComprehensiveZmanimcalendar` zmanim that were too early.
   * `getTzaisGeonim4Point37Degrees()` -> `getTzaisGeonim4Point42Degrees()`.
   * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point66Degrees()`
