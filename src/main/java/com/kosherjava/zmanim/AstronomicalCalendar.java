@@ -362,7 +362,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public AstronomicalCalendar(GeoLocation geoLocation) {
 		setLocalDate(LocalDate.now(geoLocation.getZoneId()));
-		setGeoLocation(geoLocation);// duplicate call
+		setGeoLocation(geoLocation);
 		setAstronomicalCalculator(AstronomicalCalculator.getDefault());
 	}
 
@@ -556,7 +556,20 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	protected enum SolarEvent {
 		/**SUNRISE A solar event related to sunrise*/SUNRISE, /**SUNSET A solar event related to sunset*/SUNSET,
-		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT
+		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT,
+		/**NONE solar event representing azimuth or elevation calculations that that can be any time of the day*/ NONE;
+	}
+	
+	/**
+	 * Return the time at a given azimuth. This often will not occur and a null will be returned.
+	 * @param azimuth the azimuth that you want to get the time of day for.
+	 * @return the time that the azimuth will be reached. There are cases where this azimuth will never be reached for the date
+	 *            and location, and a null will be returned in that case.
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
+	 */
+	public Instant getTimeAtAzimuth(double azimuth) {
+		double rawAzimuth = getAstronomicalCalculator().getTimeAtAzimuth(getAdjustedLocalDate(), getGeoLocation(), azimuth);
+		return getInstantFromTime(rawAzimuth, SolarEvent.NONE);
 	}
 	
 	/**
@@ -568,7 +581,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @param solarEvent the type of {@link SolarEvent}
 	 * @return The Instant object representation of the time double
 	 */
-	
 	protected Instant getInstantFromTime(double time, SolarEvent solarEvent) {
 	    if (Double.isNaN(time)) {
 	        return null;
@@ -592,8 +604,7 @@ public class AstronomicalCalendar implements Cloneable {
 	        }
 	    }
 	    
-        // Math.round(time * HOUR_MILLIS) * 1_000_000L could be used below, but this exactly matches the pre-3.0 Date-based code.
-        LocalDateTime dateTime = date.atStartOfDay().plusNanos((long)(time * HOUR_MILLIS) * 1_000_000L);  
+        LocalDateTime dateTime = date.atStartOfDay().plusNanos(Math.round(time * HOUR_MILLIS * 1_000_000L)); // tiny change from 3.0 code
 
 	    // The computed time is in UTC fractional hours; anchor in UTC before converting.
 	    return ZonedDateTime.of(dateTime, ZoneOffset.UTC).toInstant();
@@ -702,7 +713,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see GeoLocation#getAntimeridianAdjustment(Instant)
 	 * @return the adjusted Calendar
 	 */
-	private LocalDate getAdjustedLocalDate(){
+	protected LocalDate getAdjustedLocalDate(){
     	int offset = getGeoLocation().getAntimeridianAdjustment(getMidnightLastNight().toInstant());
     	return offset == 0 ? getLocalDate() : getLocalDate().plusDays(offset);
 	}
