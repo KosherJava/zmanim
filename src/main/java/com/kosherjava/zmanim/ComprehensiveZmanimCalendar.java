@@ -3977,7 +3977,49 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getSamuchLeMinchaKetana72Minutes() {
 		return getSamuchLeMinchaKetana(getAlos72Minutes(), getTzais72Minutes(), true);
 	}
-
+	
+	/**
+	 * A method that returns sunset if it occurs, or the time that the sun is at its westernmost position (azimuth of 270&deg;), if
+	 * sunset will not occur on that day, such as in the Arctic or Antarctic circles. There are some opinions that in Polar regions
+	 * where there are days of no sunrise or sunset, that the definition of a day during this period is a 24-hour day, and the
+	 * day-night boundary is when the sun is at its westernmost position. sunrise in this opinion is when the sun is at its
+	 * easternmost position.
+	 * FIXME link opinions of the  Ben Ish chai etc.
+	 * @return sunset if it occurs, or the time that the sun will reach its westernmost position (azimuth 270&deg;), if sunset will
+	 *         not occur that day. If there is no sunset this day, and the azimuth 270 will not occur, a null will be returned.
+	 * @see #getSunriseOrEasternmostSolarAzimuth()
+	 * @see #getTimeAtAzimuth(double)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
+	 */
+	public Instant getSunsetOrWesternmostSolarAzimuth() {
+		Instant sunset = getSunsetBasedOnElevationSetting();
+		if(sunset != null) {
+			return sunset;
+		}
+		return getTimeAtAzimuth(270);
+	}
+	
+	/**
+	 * A method that returns sunrise if it occurs, or the time that the sun is at its easternmost position (azimuth of 900&deg;), if
+	 * sunset will not occur on that day, such as in the Arctic or Antarctic circles. There are some opinions that in Polar regions
+	 * where there are days of no sunrise or sunset, that the definition of a day during this period is a 24-hour day, and the
+	 * day-night boundary is when the sun is at its easternmost position. Sunset in this opinion is when the sun is at its
+	 * westernmost position.
+	 * FIXME link opinions of the  Ben Ish chai etc.
+	 * @return sunrise if it occurs, or the time that the sun will reach its easternmost position (azimuth 90&deg;), if sunrise will
+	 *         not occur that day. If there is no sunrise this day, and the azimuth 90 will not occur, a null will be returned.
+	 * @see #getSunsetOrWesternmostSolarAzimuth()
+	 * @see #getTimeAtAzimuth(double)
+	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
+	 */
+	public Instant getSunriseOrEasternmostSolarAzimuth() {
+		Instant sunrise = getSunriseBasedOnElevationSetting();
+		if(sunrise != null) {
+			return sunrise;
+		}
+		return getTimeAtAzimuth(90);
+	}
+	
 	/**
 	 * @see java.lang.Object#equals(Object)
 	 */
