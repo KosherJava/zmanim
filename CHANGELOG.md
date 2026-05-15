@@ -55,6 +55,7 @@
     * `getTzais120()` -> `getTzais120Minutes()`
     * `getChatzos()` -> `getChatzosHayom()`
     * `getChatzosAsHalfDay()` -> `getChatzosHayomAsHalfDay()`
+    * `isAssurBemlacha()` -> `isAssurBemelacha()`
 * Rename some classes the confusingly named `ComplexZmanimCalendar` to `ComrehensiveZmanimCalendar`.
 * Move "legacy" classes to `java.time` equivelants
   * All zmanim now return `Instant`s insead of `Date` objects.
@@ -100,6 +101,7 @@
   * [Add null checks in `getMinchaGedolaAhavatShalom()`](https://github.com/KosherJava/zmanim/commit/93f441f1ff87d4669c91b596eed157c9cf448bca)
   * [Fix `getAlos60()` to use `getElevationAdjustedSunrise()`](https://github.com/KosherJava/zmanim/commit/f5a5b2c68e1f0e2f9f4fbdd2cc585085f2914b74)
   * Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
+  * Add `getSunsetOrWesternmostSolarAzimuth()` and `getSunriseOrEasternmostSolarAzimuth()` methods.
 * `HebrewdateFormatter`
   * add method [`formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParshah()`.
   * Add `getHebrewMonthList()` and `setHebrewMonthList(String[])`. This allows overriding the default month of Chesvan to Marcheshvan etc.
@@ -114,7 +116,10 @@
   * [add missing brace to `isYomTov()` and simplify logic](https://github.com/KosherJava/zmanim/commit/e34fc879313b045f35e70b5947e2c2e20a4364c5)
 * `GeoLocation` - [add NaN validation to `setLatitude` and `setLongitude`](https://github.com/KosherJava/zmanim/commit/d064715ebeaead29a01ec673f3885ee9bd9c78b4)
 * `NOAACalculator` - [fix Solar Azimuth and Elevation](https://github.com/KosherJava/zmanim/commit/860f1939c25b38dd4d23adb1772b12ccbc71fc76)
-* `AstronomicalCalculator` - [add `getSolarAzimuth()` and `getSolarElevation()`](https://github.com/KosherJava/zmanim/commit/feecf7ad2d9ce527cfe0314ae01710d68c6c3c2e)
+* `AstronomicalCalculator` Add some methods
+  * `getSolarAzimuth()`
+  * `getSolarElevation()`
+  * `getTimeAtAzimuth()`
 * `AstronomicalCalendar`
   * [Fix null handling in `getSunTransit(Date,Date)`](https://github.com/KosherJava/zmanim/commit/8221e2895cbab62b037c16de1711f9faacd78a7b)
   * [Deprecate `getSunriseSolarDipFromOffset` and `getSunsetSolarDipFromOffset`](https://github.com/KosherJava/zmanim/commit/0ce858258bff15c11235b1f1063d2eb0ef22b994)
