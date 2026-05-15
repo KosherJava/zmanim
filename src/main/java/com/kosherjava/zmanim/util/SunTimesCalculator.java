@@ -293,4 +293,17 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		throw new UnsupportedOperationException(
 				"The SunTimesCalculator class does not implement the getSolarElevation method. Use the NOAACalculator instead.");
 	}
+	
+	/**
+	 * <b>This calculator class does not implement the getTimeAtAzimuth method, and throws a {@link UnsupportedOperationException}.
+	 * Use the {@link NOAACalculator}if this method is required</b>.
+	 * <br>{@inheritDoc}
+	 * @throws UnsupportedOperationException This calculator class does not implement the getTimeAtAzimuth method. Use the
+	 *         {@link NOAACalculator} instead.
+	 */
+	@Override
+	public double getTimeAtAzimuth(LocalDate localDate, GeoLocation geoLocation, double azimuth) {
+		throw new UnsupportedOperationException(
+				"The SunTimesCalculator class does not implement the getTimeAtAzimuth method. Use the {@link NOAACalculator} instead.");
+	}
 }
