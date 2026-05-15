@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -15,8 +15,12 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.util.Locale;
 import java.util.Objects;
-import java.util.TimeZone;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
 
 /**
  * A class that contains location information such as latitude and longitude required for astronomical calculations. The
@@ -24,7 +28,7 @@ import java.util.TimeZone;
  * specific implementations of the {@link AstronomicalCalculator} to see if elevation is calculated as part of the
  * algorithm.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public class GeoLocation implements Cloneable {
 	/**
@@ -51,11 +55,11 @@ public class GeoLocation implements Cloneable {
 	private String locationName;
 	
 	/**
-	 * The location's time zone.
-	 * @see #getTimeZone()
-	 * @see #setTimeZone(TimeZone)
+	 * The location's zoneId
+	 * @see #getZoneId()
+	 * @see #setZoneId(ZoneId)
 	 */
-	private TimeZone timeZone;
+	private ZoneId zoneId;
 	
 	/**
 	 * The elevation in Meters <b>above</b> sea level.
@@ -127,11 +131,11 @@ public class GeoLocation implements Cloneable {
 	 *            the longitude as a <code>double</code>, for example -74.222 for Lakewood, NJ. <b>Note:</b> For longitudes
 	 *            east of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich),
 	 *            a negative value should be used.
-	 * @param timeZone
-	 *            the <code>TimeZone</code> for the location.
+	 * @param zoneId
+	 *            the <code>ZoneId</code> for the location.
 	 */
-	public GeoLocation(String name, double latitude, double longitude, TimeZone timeZone) {
-		this(name, latitude, longitude, 0, timeZone);
+	public GeoLocation(String name, double latitude, double longitude, ZoneId zoneId) {
+		this(name, latitude, longitude, 0, zoneId);
 	}
 
 	/**
@@ -148,27 +152,27 @@ public class GeoLocation implements Cloneable {
 	 *            Meridian</a> (Greenwich), a negative value should be used.
 	 * @param elevation
 	 *            the elevation above sea level in Meters.
-	 * @param timeZone
-	 *            the <code>TimeZone</code> for the location.
+	 * @param zoneId
+	 *            the <code>ZoneId</code> for the location.
 	 */
-	public GeoLocation(String name, double latitude, double longitude, double elevation, TimeZone timeZone) {
+	public GeoLocation(String name, double latitude, double longitude, double elevation, ZoneId zoneId) {
 		setLocationName(name);
 		setLatitude(latitude);
 		setLongitude(longitude);
 		setElevation(elevation);
-		setTimeZone(timeZone);
+		setZoneId(zoneId);
 	}
 
 	/**
-	 * Default GeoLocation constructor will set location to the Prime Meridian at Greenwich, England and a TimeZone of
-	 * GMT. The longitude will be set to 0 and the latitude will be 51.4772 to match the location of the <a
+	 * Default GeoLocation constructor will set location to the Prime Meridian at Greenwich, England and a <code>ZoneId</code>
+	 * of GMT. The longitude will be set to 0 and the latitude will be 51.4772 to match the location of the <a
 	 * href="https://www.rmg.co.uk/royal-observatory">Royal Observatory, Greenwich</a>. No daylight savings time will be used.
 	 */
 	public GeoLocation() {
 		setLocationName("Greenwich, England");
 		setLongitude(0); // added for clarity
 		setLatitude(51.4772);
-		setTimeZone(TimeZone.getTimeZone("GMT"));
+		setZoneId(ZoneId.of("GMT"));
 	}
 
 	/**
@@ -204,11 +208,12 @@ public class GeoLocation implements Cloneable {
 	 *            IllegalArgumentException will be thrown if the value is not "S" or "N".
 	 */
 	public void setLatitude(int degrees, int minutes, double seconds, String direction) {
-		double tempLat = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (tempLat > 90 || tempLat < 0 || Double.isNaN(tempLat)) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
-			throw new IllegalArgumentException(
-					"Latitude must be between 0 and  90. Use direction of S instead of negative.");
+		if (degrees > 90 || degrees < 0 || Double.isNaN(degrees) || minutes > 59 || minutes < 0 || Double.isNaN(minutes) ||
+				seconds > 59 || seconds < 0 || Double.isNaN(seconds)){
+			throw new IllegalArgumentException("Latitude degrees must be between 0 and 90. Minutes and seconds must be between 0 and 59. Use a direction of \"S\" instead of negative.");
 		}
+		
+		double tempLat = degrees + ((minutes + (seconds / 60.0)) / 60.0);
 		if (direction.equals("S")) {
 			tempLat *= -1;
 		} else if (!direction.equals("N")) {
@@ -260,14 +265,16 @@ public class GeoLocation implements Cloneable {
 	 *            An IllegalArgumentException will be thrown if the value is not E or W.
 	 */
 	public void setLongitude(int degrees, int minutes, double seconds, String direction) {
-		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (longTemp > 180 || this.longitude < 0  || Double.isNaN(longTemp)) { //FIXME An exception should be thrown if degrees, minutes or seconds are negative
-			throw new IllegalArgumentException("Longitude must be between 0 and  180.  Use a direction of W instead of negative.");
+		if (degrees > 180  || degrees < 0 || Double.isNaN(degrees) || minutes > 59 || minutes < 0 || Double.isNaN(minutes) ||
+				seconds > 59 || seconds < 0 || Double.isNaN(seconds)){
+			throw new IllegalArgumentException("Longitude degrees must be between 0 and 180. Minutes and seconds must be between 0 and 59. Use a direction of \"W\" instead of negative.");
 		}
+		
+		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
 		if (direction.equals("W")) {
 			longTemp *= -1;
 		} else if (!direction.equals("E")) {
-			throw new IllegalArgumentException("Longitude direction must be E or W");
+			throw new IllegalArgumentException("Longitude direction must be \"E\" or \"W\"");
 		}
 		this.longitude = longTemp;
 	}
@@ -296,48 +303,50 @@ public class GeoLocation implements Cloneable {
 	public void setLocationName(String name) {
 		this.locationName = name;
 	}
-
+	
 	/**
-	 * Method to return the time zone.
-	 * @return Returns the timeZone.
+	 * Method to return the <code>ZoneId</code>.
+	 * @return Returns the zoneId.
 	 */
-	public TimeZone getTimeZone() {
-		return timeZone;
+	public ZoneId getZoneId() {
+		return zoneId;
 	}
-
+	
 	/**
-	 * Method to set the TimeZone. If this is ever set after the GeoLocation is set in the
+	 * Method to set the zoneId. If this is ever set after the GeoLocation is set in the
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar}, it is critical that
-	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} be called in order for the
+	 * {@link java.time.ZonedDateTime #setZoneId(ZoneId) setZoneId(ZoneId)} be called in order for the
 	 * AstronomicalCalendar to output times in the expected offset. This situation will arise if the
 	 * AstronomicalCalendar is ever {@link com.kosherjava.zmanim.AstronomicalCalendar#clone() cloned}.
 	 * 
-	 * @param timeZone
-	 *            The timeZone to set.
+	 * @param zoneId
+	 *            The zoneId to set.
 	 */
-	public void setTimeZone(TimeZone timeZone) {
-		this.timeZone = timeZone;
+	public void setZoneId(ZoneId zoneId) {
+		this.zoneId = zoneId;
 	}
 
 	/**
-	 * A method that will return the location's local mean time offset in milliseconds from local <a
-	 * href="https://en.wikipedia.org/wiki/Standard_time">standard time</a>. The globe is split into 360&deg;, with
+	 * A method that will return the location's local mean time offset in milliseconds from the local clock time defined
+	 * by the time zone offset in effect for the supplied <code>Instant</code>. The globe is split into 360&deg;, with
 	 * 15&deg; per hour of the day. For a local that is at a longitude that is evenly divisible by 15 (longitude % 15 ==
 	 * 0), at solar {@link com.kosherjava.zmanim.AstronomicalCalendar#getSunTransit() noon} (with adjustment for the <a
 	 * href="https://en.wikipedia.org/wiki/Equation_of_time">equation of time</a>) the sun should be directly overhead,
-	 * so a user who is 1&deg; west of this will have noon at 4 minutes after standard time noon, and conversely, a user
-	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM. Lakewood, N.J., whose longitude is
-	 * -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to yield 3 minutes
-	 * and 10 seconds earlier than standard time. The offset returned does not account for the <a
-	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> offset since this class is
-	 * unaware of dates.
-	 * 
-	 * @return the offset in milliseconds not accounting for Daylight saving time. A positive value will be returned
-	 *         East of the 15&deg; timezone line, and a negative value West of it.
+	 * so a user who is 1&deg; west of this will have noon at 4 minutes after local clock noon, and conversely, a user
+	 * who is 1&deg; east of the 15&deg; longitude will have noon at 11:56 AM local clock time. Lakewood, N.J., whose
+	 * longitude is -74.222, is 0.778 away from the closest multiple of 15 at -75&deg;. This is multiplied by 4 to
+	 * yield 3 minutes and 10 seconds earlier than the local clock time derived from the zone offset in effect for the
+	 * supplied instant, including any applicable <a
+	 * href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> adjustment.
+	 * @param instant
+	 *            the <code>Instant</code> used to claculate the local mean offset for the date in question.
+	 * @return the offset in milliseconds relative to the time zone offset in effect at the supplied instant. A
+	 *         positive value will be returned East of the 15&deg; timezone line, and a negative value West of it.
 	 */
-	public long getLocalMeanTimeOffset() {
-		return (long) (getLongitude() * 4 * MINUTE_MILLIS - getTimeZone().getRawOffset());
+	public long getLocalMeanTimeOffset(Instant instant) {
+		ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
+		long timezoneOffsetMillis = zonedDateTime.getOffset().getTotalSeconds() * 1000L;
+		return (long) (getLongitude() * 4 * MINUTE_MILLIS - timezoneOffsetMillis);
 	}
 	
 	/**
@@ -354,11 +363,13 @@ public class GeoLocation implements Cloneable {
 	 * 2018-02-03, the calculator should operate using 2018-02-02 since the expected zone is -11.  After determining the
 	 * UTC time, the local DST offset of <a href="https://en.wikipedia.org/wiki/UTC%2B14:00">UTC+14:00</a> should be applied
 	 * to bring the date back to 2018-02-03.
+	 * @param instant
+	 *            the <code>Instant</code> required for the local mean time offset calculation
 	 * 
 	 * @return the number of days to adjust the date This will typically be 0 unless the date crosses the antimeridian
 	 */
-	public int getAntimeridianAdjustment() {
-		double localHoursOffset = getLocalMeanTimeOffset() / (double)HOUR_MILLIS;
+	public int getAntimeridianAdjustment(Instant instant) {
+		double localHoursOffset = getLocalMeanTimeOffset(instant) / (double)HOUR_MILLIS;
 		
 		if (localHoursOffset >= 20){// if the offset is 20 hours or more in the future (never expected anywhere other
 									// than a location using a timezone across the antimeridian to the east such as Samoa)
@@ -448,7 +459,7 @@ public class GeoLocation implements Cloneable {
 		double sinSigma = 0;
 		double cosSigma = 0;
 		double sigma = 0;
-		double sinAlpha = 0;
+		double sinAlpha;
 		double cosSqAlpha = 0;
 		double cos2SigmaM = 0;
 		double C;
@@ -557,8 +568,6 @@ public class GeoLocation implements Cloneable {
 	 *   	 &lt;Elevation&gt;0 Meters&lt;/Elevation&gt;
 	 *   	 &lt;TimezoneName&gt;America/New_York&lt;/TimezoneName&gt;
 	 *   	 &lt;TimeZoneDisplayName&gt;Eastern Standard Time&lt;/TimeZoneDisplayName&gt;
-	 *   	 &lt;TimezoneGMTOffset&gt;-5&lt;/TimezoneGMTOffset&gt;
-	 *   	 &lt;TimezoneDSTOffset&gt;1&lt;/TimezoneDSTOffset&gt;
 	 *   &lt;/GeoLocation&gt;
 	 * </pre>
 	 * 
@@ -570,12 +579,8 @@ public class GeoLocation implements Cloneable {
 				"\t<Latitude>" + getLatitude() + "</Latitude>\n" +
 				"\t<Longitude>" + getLongitude() + "</Longitude>\n" +
 				"\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
-				"\t<TimezoneName>" + getTimeZone().getID() + "</TimezoneName>\n" +
-				"\t<TimeZoneDisplayName>" + getTimeZone().getDisplayName() + "</TimeZoneDisplayName>\n" +
-				"\t<TimezoneGMTOffset>" + getTimeZone().getRawOffset() / HOUR_MILLIS +
-				"</TimezoneGMTOffset>\n" +
-				"\t<TimezoneDSTOffset>" + getTimeZone().getDSTSavings() / HOUR_MILLIS +
-				"</TimezoneDSTOffset>\n" +
+				"\t<TimezoneName>" + getZoneId().getId() + "</TimezoneName>\n" +
+				"\t<TimeZoneDisplayName>" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "</TimeZoneDisplayName>\n" +
 				"</GeoLocation>";
 	}
 
@@ -592,7 +597,7 @@ public class GeoLocation implements Cloneable {
 				&& Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(geo.longitude)
 				&& this.elevation == geo.elevation
 				&& (Objects.equals(this.locationName, geo.locationName))
-				&& (Objects.equals(this.timeZone, geo.timeZone));
+				&& (Objects.equals(this.zoneId, geo.zoneId));
 	}
 
 	/**
@@ -604,15 +609,15 @@ public class GeoLocation implements Cloneable {
 		long latLong = Double.doubleToLongBits(this.latitude);
 		long lonLong = Double.doubleToLongBits(this.longitude);
 		long elevLong = Double.doubleToLongBits(this.elevation);
-		int latInt = (int) (latLong ^ (latLong >>> 32));
-		int lonInt = (int) (lonLong ^ (lonLong >>> 32));
-		int elevInt = (int) (elevLong ^ (elevLong >>> 32));
+		int latInt = Long.hashCode(latLong);
+		int lonInt = Long.hashCode(lonLong);
+		int elevInt = Long.hashCode(elevLong);
 		result = 37 * result + getClass().hashCode();
 		result += 37 * result + latInt;
 		result += 37 * result + lonInt;
 		result += 37 * result + elevInt;
 		result += 37 * result + (this.locationName == null ? 0 : this.locationName.hashCode());
-		result += 37 * result + (this.timeZone == null ? 0 : this.timeZone.hashCode());
+		result += 37 * result + (this.zoneId == null ? 0 : this.zoneId.hashCode());
 		return result;
 	}
 
@@ -624,20 +629,13 @@ public class GeoLocation implements Cloneable {
 			"\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
 			"\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
 			"\nElevation:\t\t\t" + getElevation() + " Meters" +
-			"\nTimezone ID:\t\t\t" + getTimeZone().getID() +
-			"\nTimezone Display Name:\t\t" + getTimeZone().getDisplayName() +
-			" (" + getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")" +
-			"\nTimezone GMT Offset:\t\t" + getTimeZone().getRawOffset() / HOUR_MILLIS +
-			"\nTimezone DST Offset:\t\t" + getTimeZone().getDSTSavings() / HOUR_MILLIS;
+			"\nTimezone ID:\t\t\t" + getZoneId().getId() +
+			"\nTimezone Display Name:\t\t" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 	}
 
 	/**
 	 * An implementation of the {@link java.lang.Object#clone()} method that creates a <a
 	 * href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
-	 * <b>Note:</b> If the {@link java.util.TimeZone} in the clone will be changed from the original, it is critical
-	 * that {@link com.kosherjava.zmanim.AstronomicalCalendar#getCalendar()}.
-	 * {@link java.util.Calendar#setTimeZone(TimeZone) setTimeZone(TimeZone)} is called after cloning in order for the
-	 * AstronomicalCalendar to output times in the expected offset.
 	 * 
 	 * @see java.lang.Object#clone()
 	 */
@@ -649,7 +647,7 @@ public class GeoLocation implements Cloneable {
 			//Required by the compiler. Should never be reached since we implement clone()
 		}
 		if (clone != null) {
-			clone.timeZone = (TimeZone) getTimeZone().clone();
+			clone.zoneId = getZoneId();
 			clone.locationName = getLocationName();
 		}
 		return clone;

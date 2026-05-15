@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -15,7 +15,8 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
@@ -24,9 +25,9 @@ import java.util.Calendar;
  * href="https://aa.usno.navy.mil/publications/asa">Astronomical Almanac</a> and used with his permission. Added to Kevin's
  * code is adjustment of the zenith to account for elevation. This algorithm returns the same time every year and does not
  * account for leap years. It is not as accurate as the Jean Meeus based {@link NOAACalculator} that is the default calculator
- * use by the KosherJava <em>zmanim</em> library.
+ * use by the KosherJava <em>zmanim</em> library. It also does not have an implementation of some solar calculation methods.
  *
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  * @author &copy; Kevin Boone 2000
  */
 public class SunTimesCalculator extends AstronomicalCalculator {
@@ -38,29 +39,23 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		super();
 	}
 
-	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getCalculatorName()
-	 */
+	@Override
 	public String getCalculatorName() {
 		return "US Naval Almanac Algorithm";
 	}
 
-	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunrise(Calendar, GeoLocation, double, boolean)
-	 */
-	public double getUTCSunrise(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+	@Override
+	public double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		return getTimeUTC(calendar, geoLocation, adjustedZenith, true);
+		return getTimeUTC(localDate, geoLocation, adjustedZenith, true);
 	}
 
-	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCSunset(Calendar, GeoLocation, double, boolean)
-	 */
-	public double getUTCSunset(Calendar calendar, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+	@Override
+	public double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation);
-		return getTimeUTC(calendar, geoLocation, adjustedZenith, false);
+		return getTimeUTC(localDate, geoLocation, adjustedZenith, false);
 	}
 
 	/**
@@ -118,7 +113,8 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * Get time difference between location's longitude and the Meridian, in hours.
 	 * 
 	 * @param longitude the longitude
-	 * @return time difference between the location's longitude and the Meridian, in hours. West of Meridian has a negative time difference
+	 * @return time difference between the location's longitude and the Meridian, in hours. West of Meridian has a negative
+	 *         time difference
 	 */
 	private static double getHoursFromMeridian(double longitude) {
 		return longitude / DEG_PER_HOUR;
@@ -133,7 +129,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @param isSunrise true for sunrise and false for sunset
 	 * 
 	 * @return the approximate time of sunset or sunrise in days since midnight Jan 1st, assuming 6am and 6pm events. We
-	 * need this figure to derive the Sun's mean anomaly.
+	 *         need this figure to derive the Sun's mean anomaly.
 	 */
 	private static double getApproxTimeDays(int dayOfYear, double hoursFromMeridian, boolean isSunrise) {
 		if (isSunrise) {
@@ -219,23 +215,21 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Get sunrise or sunset time in UTC, according to flag. This time is returned as
-	 * a double and is not adjusted for time-zone.
+	 * Get sunrise or sunset time in UTC, according to flag. This time is returned as a double and is not adjusted for time-zone.
 	 * 
-	 * @param calendar
-	 *            the Calendar object to extract the day of year for calculation
+	 * @param localDate
+	 *            the <code>LocalDate</code> object to extract the day of year for calculation
 	 * @param geoLocation
-	 *            the GeoLocation object that contains the latitude and longitude
+	 *            The location information used for astronomical calculation of solar times.
 	 * @param zenith
-	 *            Sun's zenith, in degrees
+	 *            Sun's zenith in degrees
 	 * @param isSunrise
 	 *            True for sunrise and false for sunset.
-	 * @return the time as a double. If an error was encountered in the calculation
-	 *         (expected behavior for some locations such as near the poles,
-	 *         {@link Double#NaN} will be returned.
+	 * @return the time as a double. If an error was encountered in the calculation (expected behavior for some locations such as
+	 *         near the poles, {@link Double#NaN} will be returned.
 	 */
-	private static double getTimeUTC(Calendar calendar, GeoLocation geoLocation, double zenith, boolean isSunrise) {
-		int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
+	private static double getTimeUTC(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean isSunrise) {
+		int dayOfYear = localDate.getDayOfYear();
 		double sunMeanAnomaly = getMeanAnomaly(dayOfYear, geoLocation.getLongitude(), isSunrise);
 		double sunTrueLong = getSunTrueLongitude(sunMeanAnomaly);
 		double sunRightAscensionHours = getSunRightAscensionHours(sunTrueLong);
@@ -255,26 +249,10 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		return pocessedTime > 0  ? pocessedTime % 24 : pocessedTime % 24 + 24; // ensure that the time is >= 0 and < 24
 	}
 	
-	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of <a href="https://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> for the given day at the given location
-	 * on earth. This implementation returns solar noon as the time halfway between sunrise and sunset.
-	 * {@link NOAACalculator}, the default calculator, returns true solar noon. See <a href=
-	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on solar
-	 * noon calculations.
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
-	 * @see NOAACalculator
-	 * 
-	 * @param calendar
-	 *            The Calendar representing the date to calculate solar noon for
-	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun times.
-	 * @return the time in minutes from zero UTC. If an error was encountered in the calculation (expected behavior for
-	 *         some locations such as near the poles, {@link Double#NaN} will be returned.
-	 */
-	public double getUTCNoon(Calendar calendar, GeoLocation geoLocation) {
-		double sunrise = getUTCSunrise(calendar, geoLocation, 90, false);
-		double sunset = getUTCSunset(calendar, geoLocation, 90, false);
+	@Override
+	public double getUTCNoon(LocalDate localDate, GeoLocation geoLocation) {
+		double sunrise = getUTCSunrise(localDate, geoLocation, 90, false);
+		double sunset = getUTCSunset(localDate, geoLocation, 90, false);
 		double noon = sunrise + ((sunset - sunrise) / 2);
 		if (noon < 0) {
 			noon += 12;
@@ -285,38 +263,47 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		return noon;
 	}
 	
-	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of midnight for the given day at the given location on earth. This implementation returns solar midnight as 12 hours
-	 * after utc noon that is  halfway between sunrise and sunset.
-	 * {@link NOAACalculator}, the default calculator, returns true solar noon. See <a href=
-	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on solar
-	 * noon calculations.
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getUTCNoon(Calendar, GeoLocation)
-	 * @see NOAACalculator
-	 * 
-	 * @param calendar
-	 *            The Calendar representing the date to calculate solar noon for
-	 * @param geoLocation
-	 *            The location information used for astronomical calculating sun times.
-	 * @return the time in minutes from zero UTC. If an error was encountered in the calculation (expected behavior for
-	 *         some locations such as near the poles, {@link Double#NaN} will be returned.
-	 */
-	public double getUTCMidnight(Calendar calendar, GeoLocation geoLocation) {
-		return (getUTCNoon(calendar, geoLocation) + 12);
+	@Override
+	public double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
+		return (getUTCNoon(localDate, geoLocation) + 12);
 	}
 	
 	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarAzimuth(Calendar, GeoLocation)
+	 * <b>This calculator class does not implement the getSolarAzimuth method, and throws a {@link UnsupportedOperationException}.
+	 * Use the {@link NOAACalculator}if this method is required</b>.
+	 * <br>{@inheritDoc}
+	 * @throws UnsupportedOperationException This calculator class does not implement the getSolarAzimuth method. Use the
+	 *         {@link NOAACalculator} instead.
 	 */
-	public double getSolarAzimuth(Calendar calendar, GeoLocation geoLocation) {
-		throw new UnsupportedOperationException("The SunTimesCalculator class does not implement the getSolarAzimuth method. Use the NOAACalculator instead.");
+	@Override
+	public double getSolarAzimuth(ZonedDateTime zdt, GeoLocation geoLocation) {
+		throw new UnsupportedOperationException(
+				"The SunTimesCalculator class does not implement the getSolarAzimuth method. Use the {@link NOAACalculator} instead.");
 	}
 	
 	/**
-	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
+	 * <b>This calculator class does not implement the getSolarElevation method, and throws a {@link UnsupportedOperationException}.
+	 * Use the {@link NOAACalculator}if this method is required</b>.
+	 * <br>{@inheritDoc}
+	 * @throws UnsupportedOperationException This calculator class does not implement the getSolarElevation method. Use the
+	 *         {@link NOAACalculator} instead.
 	 */
-	public double getSolarElevation(Calendar calendar, GeoLocation geoLocation) {
-		throw new UnsupportedOperationException("The SunTimesCalculator class does not implement the getSolarElevation method. Use the NOAACalculator instead.");
+	@Override
+	public double getSolarElevation(ZonedDateTime zdt, GeoLocation geoLocation) {
+		throw new UnsupportedOperationException(
+				"The SunTimesCalculator class does not implement the getSolarElevation method. Use the NOAACalculator instead.");
+	}
+	
+	/**
+	 * <b>This calculator class does not implement the getTimeAtAzimuth method, and throws a {@link UnsupportedOperationException}.
+	 * Use the {@link NOAACalculator}if this method is required</b>.
+	 * <br>{@inheritDoc}
+	 * @throws UnsupportedOperationException This calculator class does not implement the getTimeAtAzimuth method. Use the
+	 *         {@link NOAACalculator} instead.
+	 */
+	@Override
+	public double getTimeAtAzimuth(LocalDate localDate, GeoLocation geoLocation, double azimuth) {
+		throw new UnsupportedOperationException(
+				"The SunTimesCalculator class does not implement the getTimeAtAzimuth method. Use the {@link NOAACalculator} instead.");
 	}
 }

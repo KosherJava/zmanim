@@ -6,6 +6,8 @@ package com.kosherjava.zmanim.hebrewcalendar;
 
 import org.junit.*;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Calendar;
 
 /**
@@ -20,9 +22,10 @@ public class UT_JewishDateNavigation {
 
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishDate(5771, 1, 1);
-		Assert.assertEquals(5, jewishDate.getGregorianDayOfMonth());
-		Assert.assertEquals(3, jewishDate.getGregorianMonth());
-		Assert.assertEquals(2011, jewishDate.getGregorianYear());
+        LocalDate localDate = jewishDate.getLocalDate();
+		Assert.assertEquals(5, localDate.getDayOfMonth());
+		Assert.assertEquals(Month.APRIL, localDate.getMonth());
+		Assert.assertEquals(2011, localDate.getYear());
 	}
 
 
@@ -33,9 +36,28 @@ public class UT_JewishDateNavigation {
 
 		JewishDate jewishDate = new JewishDate();
 		jewishDate.setJewishDate(5771, 7, 1);
-		Assert.assertEquals(9, jewishDate.getGregorianDayOfMonth());
-		Assert.assertEquals(8, jewishDate.getGregorianMonth());
-		Assert.assertEquals(2010, jewishDate.getGregorianYear());
+        LocalDate localDate = jewishDate.getLocalDate();
+		Assert.assertEquals(9, localDate.getDayOfMonth());
+		Assert.assertEquals(Month.SEPTEMBER, localDate.getMonth());
+		Assert.assertEquals(2010, localDate.getYear());
+	}
+
+	@Test
+	public void addYearsUsesConfiguredAdarMonthWhenMovingToLeapYear() {
+
+		JewishDate adarAlephDate = new JewishDate();
+		adarAlephDate.setJewishDate(5783, JewishDate.ADAR, 10);
+		adarAlephDate.plusYears(1, true);
+		Assert.assertEquals(5784, adarAlephDate.getJewishYear());
+		Assert.assertEquals(JewishDate.ADAR, adarAlephDate.getJewishMonth());
+		Assert.assertEquals(10, adarAlephDate.getJewishDayOfMonth());
+
+		JewishDate adarBeisDate = new JewishDate();
+		adarBeisDate.setJewishDate(5783, JewishDate.ADAR, 10);
+		adarBeisDate.plusYears(1, false);
+		Assert.assertEquals(5784, adarBeisDate.getJewishYear());
+		Assert.assertEquals(JewishDate.ADAR_II, adarBeisDate.getJewishMonth());
+		Assert.assertEquals(10, adarBeisDate.getJewishDayOfMonth());
 	}
 
 

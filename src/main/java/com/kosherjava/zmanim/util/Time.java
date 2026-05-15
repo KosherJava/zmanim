@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2025 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -15,14 +15,14 @@
  */
 package com.kosherjava.zmanim.util;
 
-import java.util.TimeZone;
+import java.time.ZoneId;
 
 /**
  * A class that represents a numeric time. Times that represent a time of day are stored as {@link java.util.Date}s in
  * this API. The time class is used to represent numeric time such as the time in hours, minutes, seconds and
  * milliseconds of a {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2025
+ * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public class Time {
 	/** milliseconds in a second. */
@@ -201,14 +201,15 @@ public class Time {
 	 * @return the time in milliseconds
 	 */
 	public double getTime() {
-		return this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds * SECOND_MILLIS
+		double time = this.hours * HOUR_MILLIS + this.minutes * MINUTE_MILLIS + this.seconds * SECOND_MILLIS
 				+ this.milliseconds;
+		return isNegative() ? -time : time;
 	}
 
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return new ZmanimFormatter(TimeZone.getTimeZone("UTC")).format(this);
+		return new ZmanimFormatter(ZoneId.of("UTC")).format(this);
 	}
 }

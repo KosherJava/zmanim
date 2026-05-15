@@ -55,6 +55,7 @@
     * `getTzais120()` -> `getTzais120Minutes()`
     * `getChatzos()` -> `getChatzosHayom()`
     * `getChatzosAsHalfDay()` -> `getChatzosHayomAsHalfDay()`
+    * `isAssurBemlacha()` -> `isAssurBemelacha()`
 * Rename some classes the confusingly named `ComplexZmanimCalendar` to `ComrehensiveZmanimCalendar`.
 * Move "legacy" classes to `java.time` equivelants
   * All zmanim now return `Instant`s insead of `Date` objects.
@@ -69,7 +70,8 @@
 * Tweaked logic in `AstronomicalCalendar.getInstantFromTime()` to address issues near the dateline.
 * Improve null handling in `ComprehensiveZmanimCalendar.getMoladBasedTime()`
 * Add `ComprehensiveZmanimCalendar.getMisheyakir12Point85Degrees()`
-* `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was moved to the parent `ZmanimCalendar.getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
+* Add  `getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
+* `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was renamed `getMinchaGedolaGRAGreaterThan30()` for clarity.
 * Change / remove `ComprehensiveZmanimcalendar` zmanim that were too early.
   * `getTzaisGeonim4Point37Degrees()` -> `getTzaisGeonim4Point42Degrees()`.
   * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point66Degrees()`
@@ -99,6 +101,7 @@
   * [Add null checks in `getMinchaGedolaAhavatShalom()`](https://github.com/KosherJava/zmanim/commit/93f441f1ff87d4669c91b596eed157c9cf448bca)
   * [Fix `getAlos60()` to use `getElevationAdjustedSunrise()`](https://github.com/KosherJava/zmanim/commit/f5a5b2c68e1f0e2f9f4fbdd2cc585085f2914b74)
   * Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
+  * Add [`getSunsetOrWesternmostSolarAzimuth()` and `getSunriseOrEasternmostSolarAzimuth()`](https://github.com/KosherJava/zmanim/commit/ab9a903e94c33d31f1ce006a6102cdfa259786ad) methods.
 * `HebrewdateFormatter`
   * add method [`formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParshah()`.
   * Add `getHebrewMonthList()` and `setHebrewMonthList(String[])`. This allows overriding the default month of Chesvan to Marcheshvan etc.
@@ -113,7 +116,10 @@
   * [add missing brace to `isYomTov()` and simplify logic](https://github.com/KosherJava/zmanim/commit/e34fc879313b045f35e70b5947e2c2e20a4364c5)
 * `GeoLocation` - [add NaN validation to `setLatitude` and `setLongitude`](https://github.com/KosherJava/zmanim/commit/d064715ebeaead29a01ec673f3885ee9bd9c78b4)
 * `NOAACalculator` - [fix Solar Azimuth and Elevation](https://github.com/KosherJava/zmanim/commit/860f1939c25b38dd4d23adb1772b12ccbc71fc76)
-* `AstronomicalCalculator` - [add `getSolarAzimuth()` and `getSolarElevation()`](https://github.com/KosherJava/zmanim/commit/feecf7ad2d9ce527cfe0314ae01710d68c6c3c2e)
+* `AstronomicalCalculator` Add some methods
+  * `getSolarAzimuth()`
+  * `getSolarElevation()`
+  * `getTimeAtAzimuth()`
 * `AstronomicalCalendar`
   * [Fix null handling in `getSunTransit(Date,Date)`](https://github.com/KosherJava/zmanim/commit/8221e2895cbab62b037c16de1711f9faacd78a7b)
   * [Deprecate `getSunriseSolarDipFromOffset` and `getSunsetSolarDipFromOffset`](https://github.com/KosherJava/zmanim/commit/0ce858258bff15c11235b1f1063d2eb0ef22b994)
@@ -121,6 +127,7 @@
   * [Add `getLocalMeanTime()`](https://github.com/KosherJava/zmanim/commit/14bcdc085011ccce327f69d6a001772c0581fcc2).
   * [Move `getSolarMidnight()`](https://github.com/KosherJava/zmanim/commit/a4535717353eb77da10b6951e4a627b10258ac9e) to the  parent class where it belongs.
   * [Correct USNO noon calculation](https://github.com/KosherJava/zmanim/commit/3735c92289a66039b24d7e2b470955b5297f0ca5) in some locations where it was sometimes 12 hours off.
+  * [Add `getTimeAtAzimuth(double azimuth)`](https://github.com/KosherJava/zmanim/commit/05a3bc3cdb2dbc88ffca89be0828f50abf62969f)
 
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...2.5.0) (2023-06-09)
 
