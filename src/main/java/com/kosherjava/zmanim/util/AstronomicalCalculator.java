@@ -193,6 +193,20 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	public abstract double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation);
 	
 	/**
+	 * Returns the time that the azimuth will occur for the date and location passed to this method. As an example, to know
+	 * when the sun will be directly west, pass in an azimuth of 270&deg;, and for directly east, pass in an azimith of 90&deg;.
+	 * 
+	 * @param localDate The <code>LocalDate</code> representing the date to calculate the time of the azimuth for.
+	 * @param geoLocation The location information used for astronomical calculation of solar times.
+	 * @param azimuth the azimuth to run the calculation for
+	 * 
+	 * @return The UTC time that the azimuth will be reached in a 24-hour <code>double</code> format. 5:45:00 PM will return 17.75.
+	 *            If an error was encountered in the calculation (expected behavior for some locations such as near the poles, a
+	 *            {@link Double#NaN} will be returned.
+	 */
+	public abstract double getTimeAtAzimuth(LocalDate localDate, GeoLocation geoLocation, double azimuth);
+	
+	/**
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Elevation</a> for the
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
