@@ -242,8 +242,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Returns the corrected <a href="https://en.wikipedia.org/wiki/Axial_tilt">obliquity of the ecliptic</a> (Axial
-	 * tilt).
+	 * Returns the corrected <a href="https://en.wikipedia.org/wiki/Axial_tilt">obliquity of the ecliptic</a> (Axial tilt).
 	 * 
 	 * @param julianCenturies
 	 *            the number of Julian centuries since <a href=
@@ -373,9 +372,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 
 	    if (Math.abs(azDenom) > 0.001) {
 	        double az = (Math.sin(lat) * Math.cos(zenith) - Math.sin(decl)) / azDenom;
-
-	        azimuth = 180 - Math.toDegrees(Math.acos(Math.max(-1, Math.min(1, az))))
-	                * (hourAngle > 0 ? -1 : 1);
+	        azimuth = 180 - Math.toDegrees(Math.acos(Math.max(-1, Math.min(1, az)))) * (hourAngle > 0 ? -1 : 1);
 	    } else {
 	        azimuth = geoLocation.getLatitude() > 0 ? 180 : 0;
 	    }
@@ -409,6 +406,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * {@inheritDoc}
 	 * @see #getSolarNoonMidnightUTC(double, double, SolarEvent)
 	 */
+	@Override
 	public double getUTCNoon(LocalDate localDate, GeoLocation geoLocation) {
 		double noon = getSolarNoonMidnightUTC(getJulianDay(localDate), -geoLocation.getLongitude(), SolarEvent.NOON);
 		noon = noon / 60;
@@ -419,6 +417,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * {@inheritDoc}
 	 * @see #getSolarNoonMidnightUTC(double, double, SolarEvent)
 	 */
+	@Override
 	public double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
 		double midnight = getSolarNoonMidnightUTC(getJulianDay(localDate), -geoLocation.getLongitude(), SolarEvent.MIDNIGHT);
 		midnight = midnight / 60;
@@ -486,10 +485,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 		// efficient but would likely cause a very minor discrepancy in the calculated times (likely not reducing
 		// accuracy, just slightly different, thus potentially breaking test cases). Regardless, it would be within
 		// milliseconds.
-		double noonmin = getSolarNoonMidnightUTC(julianDay, longitude, SolarEvent.NOON);
-																						
+		double noonmin = getSolarNoonMidnightUTC(julianDay, longitude, SolarEvent.NOON);																		
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + noonmin / 1440.0);
-
 		// First calculates sunrise and approximate length of day
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solarDeclination = getSunDeclination(tnoon);
@@ -497,16 +494,75 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta;
 		double timeUTC = 720 + timeDiff - equationOfTime;
-
 		// Second pass includes fractional Julian Day in gamma calc
 		double newt = getJulianCenturiesFromJulianDay(julianDay + timeUTC / 1440.0);
 		equationOfTime = getEquationOfTime(newt);
-		
 		solarDeclination = getSunDeclination(newt);
 		hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
 		delta = longitude - Math.toDegrees(hourAngle);
 		timeDiff = 4 * delta;
 		timeUTC = 720 + timeDiff - equationOfTime;
 		return timeUTC;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @todo This is very much a work in progress. It works in some but not all cases. 
+	 * There will be edge cases where the azimuth will occur more than once a day when based on the equation of time,
+	 * the day is shorter than 24 hours. In that case, the time for the first one will be returned.
+	 * <br>FIXME:
+	 * <ol><li>Deal with the rerunning the method for a different date when near the boundaries and it rolls over the date.</li>
+	 * <li>Deal with when the event does not occur (it happened right before and after the date)</li>
+	 * <li>Deal with when the event does not occur because the sun never reaches that azimuth (too close to the equator)</li>
+	 * <li>May or may not be an issue - when it reaches 270 but not in every iteration (also an edge case).</li>
+	 * <li>Deal with issues when the solar declination matches the latitude (also an edge case).</li>
+	 * <li>etc</li></ol>
+	 */
+	public double getTimeAtAzimuth(LocalDate date, GeoLocation geo, double targetAzimuth) {
+	    targetAzimuth %= 360.0;
+	    if (targetAzimuth < 0) targetAzimuth += 360.0;
+	    final double step = 15.0 / 60.0;
+	    double bestHour = Double.NaN;
+	    double bestError = Double.POSITIVE_INFINITY;
+	    for (double hour = 0.0; hour <= 24.0; hour += step) {
+	        ZonedDateTime t = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(hour * 3600.0));
+	        double az = getSolarAzimuth(t, geo);
+	        if (Double.isNaN(az)) continue;
+	        double diff = Math.abs((az - targetAzimuth) % 360.0);
+	        diff = Math.min(diff, 360.0 - diff);
+	        if (diff < bestError) {
+	            bestError = diff;
+	            bestHour = hour;
+	        }
+	    }
+
+	    if (Double.isNaN(bestHour) || bestError > 5.0) {
+	        return Double.NaN;
+	    }
+
+	    double low = Math.max(0.0, bestHour - step);
+	    double high = Math.min(24.0, bestHour + step);
+
+	    for (int i = 0; i < 30; i++) {
+	        double m1 = low + (high - low) / 3.0;
+	        double m2 = high - (high - low) / 3.0;
+	        ZonedDateTime t1 = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(m1 * 3600.0));
+	        ZonedDateTime t2 = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(m2 * 3600.0));
+	        double a1 = getSolarAzimuth(t1, geo);
+	        double a2 = getSolarAzimuth(t2, geo);
+	        double e1 = Math.abs((a1 - targetAzimuth) % 360.0);
+	        double e2 = Math.abs((a2 - targetAzimuth) % 360.0);
+	        e1 = Math.min(e1, 360.0 - e1);
+	        e2 = Math.min(e2, 360.0 - e2);
+	        if (e1 < e2) high = m2;
+	        else low = m1;
+	    }
+
+	    double result = (low + high) / 2.0;
+	    ZonedDateTime t = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(result * 3600.0));
+	    double az = getSolarAzimuth(t, geo);
+	    double diff = Math.abs((az - targetAzimuth) % 360.0);
+	    diff = Math.min(diff, 360.0 - diff);
+	    return diff < 0.01 ? result : Double.NaN;
 	}
 }
