@@ -833,7 +833,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 *         the Arctic Circle where there is at least one day a year where the sun does not rise, and one where it
 	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
-	 * @see getSofZmanTfila(Instant, Instan, boolean)
+	 * @see getSofZmanTfila(Instant, Instant, boolean)
 	 * @see getShaahZmanis72Minutes()
 	 * @see getAlos72Minutes()
 	 */
@@ -922,9 +922,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * The day is calculated from {@link getSeaLevelSunrise() sea level sunrise} to {@link getSeaLevelSunset() sea level
 	 * sunset} or {@link getSunrise() sunrise} to {@link getSunset() sunset} (depending on the {@link isUseElevation()}
 	 * setting).
-	 * @todo Consider adjusting this to calculate the time as half an hour <em>zmaniyos</em> after either {@link
-	 *         getSunTransit() astronomical <em>chatzos</em>} or {@link getChatzosHayomAsHalfDay() <em>chatzos</em> as half a day}
-	 *         for {@link AstronomicalCalculator calculators} that support it, based on {@link isUseAstronomicalChatzos()}.
+	 * @todo Consider adjusting this to calculate the time as half an hour <em>zmaniyos</em> after {@link getChatzosHayom()}
+	 *         that uses {@link isUseAstronomicalChatzos()} to determine the type of <em>chatzos</em> to utilize (if the
+	 *         {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculator} support astronomical <em>chatzos</em>),
+	 *         based on the {@link isUseAstronomicalChatzos()} setting.
 	 * 
 	 * @see getMinchaGedola(Instant, Instant)
 	 * @see getShaahZmanisGRA()
@@ -1298,7 +1299,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * @see JewishCalendar#hasCandleLighting()
 	 * @see JewishCalendar#setInIsrael(boolean)
 	 */
-	public boolean isAssurBemlacha(Instant currentTime, Instant tzais, boolean inIsrael) {
+	public boolean isAssurBemelacha(Instant currentTime, Instant tzais, boolean inIsrael) {
 		JewishCalendar jewishCalendar = new JewishCalendar();
 		jewishCalendar.setGregorianDate(getLocalDate());
 		
@@ -1406,7 +1407,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 */
 	public Instant getShaahZmanisBasedZman(Instant startOfDay, Instant endOfDay, double hours) {
 		long shaahZmanis = getTemporalHour(startOfDay, endOfDay);
-		return getTimeOffset(startOfDay, shaahZmanis * hours);
+	    if (shaahZmanis == Long.MIN_VALUE) { //defensive, should not be needed
+	        return null;
+	    }
+	    return getTimeOffset(startOfDay, Math.round(shaahZmanis * hours));
 	}
 	
 	/**
