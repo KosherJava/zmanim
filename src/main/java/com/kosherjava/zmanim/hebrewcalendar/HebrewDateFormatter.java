@@ -222,7 +222,7 @@ public class HebrewDateFormatter {
 		hebrewParshaMap.put(JewishCalendar.Parsha.NITZAVIM, "נצבים");
 		hebrewParshaMap.put(JewishCalendar.Parsha.VAYEILECH, "וילך");
 		hebrewParshaMap.put(JewishCalendar.Parsha.HAAZINU, "האזינו");
-		hebrewParshaMap.put(JewishCalendar.Parsha.VZOS_HABERACHA, "וזאת הברכה ");
+		hebrewParshaMap.put(JewishCalendar.Parsha.VZOS_HABERACHA, "וזאת הברכה");
 		hebrewParshaMap.put(JewishCalendar.Parsha.VAYAKHEL_PEKUDEI, "ויקהל פקודי");
 		hebrewParshaMap.put(JewishCalendar.Parsha.TAZRIA_METZORA, "תזריע מצרע");
 		hebrewParshaMap.put(JewishCalendar.Parsha.ACHREI_MOS_KEDOSHIM, "אחרי מות קדושים");
