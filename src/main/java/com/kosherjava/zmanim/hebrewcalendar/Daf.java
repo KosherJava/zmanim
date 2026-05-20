@@ -44,23 +44,10 @@ public class Daf {
 	/**
 	 * See {@link #getMasechta()}.
 	 */
-	private static final String[] masechtosBavli = { "\u05D1\u05E8\u05DB\u05D5\u05EA", "\u05E9\u05D1\u05EA",
-			"\u05E2\u05D9\u05E8\u05D5\u05D1\u05D9\u05DF", "\u05E4\u05E1\u05D7\u05D9\u05DD",
-			"\u05E9\u05E7\u05DC\u05D9\u05DD", "\u05D9\u05D5\u05DE\u05D0", "\u05E1\u05D5\u05DB\u05D4",
-			"\u05D1\u05D9\u05E6\u05D4", "\u05E8\u05D0\u05E9 \u05D4\u05E9\u05E0\u05D4",
-			"\u05EA\u05E2\u05E0\u05D9\u05EA", "\u05DE\u05D2\u05D9\u05DC\u05D4",
-			"\u05DE\u05D5\u05E2\u05D3 \u05E7\u05D8\u05DF", "\u05D7\u05D2\u05D9\u05D2\u05D4",
-			"\u05D9\u05D1\u05DE\u05D5\u05EA", "\u05DB\u05EA\u05D5\u05D1\u05D5\u05EA", "\u05E0\u05D3\u05E8\u05D9\u05DD",
-			"\u05E0\u05D6\u05D9\u05E8", "\u05E1\u05D5\u05D8\u05D4", "\u05D2\u05D9\u05D8\u05D9\u05DF",
-			"\u05E7\u05D9\u05D3\u05D5\u05E9\u05D9\u05DF", "\u05D1\u05D1\u05D0 \u05E7\u05DE\u05D0",
-			"\u05D1\u05D1\u05D0 \u05DE\u05E6\u05D9\u05E2\u05D0", "\u05D1\u05D1\u05D0 \u05D1\u05EA\u05E8\u05D0",
-			"\u05E1\u05E0\u05D4\u05D3\u05E8\u05D9\u05DF", "\u05DE\u05DB\u05D5\u05EA",
-			"\u05E9\u05D1\u05D5\u05E2\u05D5\u05EA", "\u05E2\u05D1\u05D5\u05D3\u05D4 \u05D6\u05E8\u05D4",
-			"\u05D4\u05D5\u05E8\u05D9\u05D5\u05EA", "\u05D6\u05D1\u05D7\u05D9\u05DD", "\u05DE\u05E0\u05D7\u05D5\u05EA",
-			"\u05D7\u05D5\u05DC\u05D9\u05DF", "\u05D1\u05DB\u05D5\u05E8\u05D5\u05EA", "\u05E2\u05E8\u05DB\u05D9\u05DF",
-			"\u05EA\u05DE\u05D5\u05E8\u05D4", "\u05DB\u05E8\u05D9\u05EA\u05D5\u05EA", "\u05DE\u05E2\u05D9\u05DC\u05D4",
-			"\u05E7\u05D9\u05E0\u05D9\u05DD", "\u05EA\u05DE\u05D9\u05D3", "\u05DE\u05D9\u05D3\u05D5\u05EA",
-			"\u05E0\u05D3\u05D4" };
+	private static final String[] masechtosBavli = { "ברכות", "שבת", "עירובין", "פסחים", "שקלים", "יומא", "סוכה", "ביצה", "ראש השנה",
+			"תענית", "מגילה", "מועד קטן", "חגיגה", "יבמות", "כתובות", "נדרים", "נזיר", "סוטה", "גיטין", "קידושין", "בבא קמא", "בבא מציעא",
+			"בבא בתרא", "סנהדרין", "מכות", "שבועות", "עבודה זרה", "הוריות", "זבחים", "מנחות", "חולין", "בכורות", "ערכין", "תמורה", "כריתות",
+			"מעילה", "קינים", "תמיד", "מידות", "נדה" };
 	
 	/**
 	 * See {@link #getYerushalmiMasechtaTransliterated()}.
@@ -74,20 +61,10 @@ public class Daf {
 	/**
 	 * See {@link #getYerushalmiMasechta()}.
 	 */
-	private static final String[] masechtosYerushalmi = { "\u05d1\u05e8\u05db\u05d5\u05ea","\u05e4\u05d9\u05d0\u05d4",
-			"\u05d3\u05de\u05d0\u05d9","\u05db\u05dc\u05d0\u05d9\u05dd","\u05e9\u05d1\u05d9\u05e2\u05d9\u05ea",
-			"\u05ea\u05e8\u05d5\u05de\u05d5\u05ea","\u05de\u05e2\u05e9\u05e8\u05d5\u05ea","\u05de\u05e2\u05e9\u05e8 \u05e9\u05e0\u05d9",
-			"\u05d7\u05dc\u05d4","\u05e2\u05d5\u05e8\u05dc\u05d4","\u05d1\u05d9\u05db\u05d5\u05e8\u05d9\u05dd",
-			"\u05e9\u05d1\u05ea","\u05e2\u05d9\u05e8\u05d5\u05d1\u05d9\u05df","\u05e4\u05e1\u05d7\u05d9\u05dd",
-			"\u05d1\u05d9\u05e6\u05d4","\u05e8\u05d0\u05e9 \u05d4\u05e9\u05e0\u05d4","\u05d9\u05d5\u05de\u05d0",
-			"\u05e1\u05d5\u05db\u05d4","\u05ea\u05e2\u05e0\u05d9\u05ea","\u05e9\u05e7\u05dc\u05d9\u05dd","\u05de\u05d2\u05d9\u05dc\u05d4",
-			"\u05d7\u05d2\u05d9\u05d2\u05d4","\u05de\u05d5\u05e2\u05d3 \u05e7\u05d8\u05df","\u05d9\u05d1\u05de\u05d5\u05ea",
-			"\u05db\u05ea\u05d5\u05d1\u05d5\u05ea","\u05e1\u05d5\u05d8\u05d4","\u05e0\u05d3\u05e8\u05d9\u05dd","\u05e0\u05d6\u05d9\u05e8",
-			"\u05d2\u05d9\u05d8\u05d9\u05df","\u05e7\u05d9\u05d3\u05d5\u05e9\u05d9\u05df","\u05d1\u05d1\u05d0 \u05e7\u05de\u05d0",
-			"\u05d1\u05d1\u05d0 \u05de\u05e6\u05d9\u05e2\u05d0","\u05d1\u05d1\u05d0 \u05d1\u05ea\u05e8\u05d0",
-			"\u05e9\u05d1\u05d5\u05e2\u05d5\u05ea","\u05de\u05db\u05d5\u05ea","\u05e1\u05e0\u05d4\u05d3\u05e8\u05d9\u05df",
-			"\u05e2\u05d1\u05d5\u05d3\u05d4 \u05d6\u05e8\u05d4","\u05d4\u05d5\u05e8\u05d9\u05d5\u05ea","\u05e0\u05d9\u05d3\u05d4",
-			"\u05d0\u05d9\u05df \u05d3\u05e3 \u05d4\u05d9\u05d5\u05dd" };
+	private static final String[] masechtosYerushalmi = { "ברכות", "פיאה", "דמאי", "כלאים", "שביעית", "תרומות", "מעשרות","מעשר שני",
+			"חלה", "עורלה", "ביכורים", "שבת", "עירובין", "פסחים", "ביצה", "ראש השנה", "יומא", "סוכה", "תענית", "שקלים", "מגילה", "חגיגה",
+			"מועד קטן", "יבמות", "כתובות", "סוטה", "נדרים", "נזיר", "גיטין", "קידושין", "בבא קמא", "בבא מציעא", "בבא בתרא", "שבועות", "מכות",
+			"סנהדרין", "עבודה זרה", "הוריות", "נידה", "אין דף היום" };
 
 	/**
 	 * Gets the <em>masechta</em> number of the currently set <em>Daf</em>. The sequence is: Berachos, Shabbos, Eruvin,
@@ -171,25 +148,11 @@ public class Daf {
 
 	/**
 	 * Returns the <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. The list is in the following format<br>
-	 * <code>["&#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA;",
-	 * "&#x05E9;&#x05D1;&#x05EA;", "&#x05E2;&#x05D9;&#x05E8;&#x05D5;&#x05D1;&#x05D9;&#x05DF;",
-	 * "&#x05E4;&#x05E1;&#x05D7;&#x05D9;&#x05DD;", "&#x05E9;&#x05E7;&#x05DC;&#x05D9;&#x05DD;", "&#x05D9;&#x05D5;&#x05DE;&#x05D0;",
-	 * "&#x05E1;&#x05D5;&#x05DB;&#x05D4;", "&#x05D1;&#x05D9;&#x05E6;&#x05D4;", "&#x05E8;&#x05D0;&#x05E9; &#x05D4;&#x05E9;&#x05E0;&#x05D4;",
-	 * "&#x05EA;&#x05E2;&#x05E0;&#x05D9;&#x05EA;", "&#x05DE;&#x05D2;&#x05D9;&#x05DC;&#x05D4;", "&#x05DE;&#x05D5;&#x05E2;&#x05D3;
-	 * &#x05E7;&#x05D8;&#x05DF;", "&#x05D7;&#x05D2;&#x05D9;&#x05D2;&#x05D4;", "&#x05D9;&#x05D1;&#x05DE;&#x05D5;&#x05EA;",
-	 * "&#x05DB;&#x05EA;&#x05D5;&#x05D1;&#x05D5;&#x05EA;", "&#x05E0;&#x05D3;&#x05E8;&#x05D9;&#x05DD;","&#x05E0;&#x05D6;&#x05D9;&#x05E8;",
-	 * "&#x05E1;&#x05D5;&#x05D8;&#x05D4;", "&#x05D2;&#x05D9;&#x05D8;&#x05D9;&#x05DF;", "&#x05E7;&#x05D9;&#x05D3;&#x05D5;&#x05E9;&#x05D9;&#x05DF;",
-	 * "&#x05D1;&#x05D1;&#x05D0; &#x05E7;&#x05DE;&#x05D0;", "&#x05D1;&#x05D1;&#x05D0; &#x05DE;&#x05E6;&#x05D9;&#x05E2;&#x05D0;",
-	 * "&#x05D1;&#x05D1;&#x05D0; &#x05D1;&#x05EA;&#x05E8;&#x05D0;", "&#x05E1;&#x05E0;&#x05D4;&#x05D3;&#x05E8;&#x05D9;&#x05DF;",
-	 * "&#x05DE;&#x05DB;&#x05D5;&#x05EA;", "&#x05E9;&#x05D1;&#x05D5;&#x05E2;&#x05D5;&#x05EA;", "&#x05E2;&#x05D1;&#x05D5;&#x05D3;&#x05D4;
-	 * &#x05D6;&#x05E8;&#x05D4;", "&#x05D4;&#x05D5;&#x05E8;&#x05D9;&#x05D5;&#x05EA;", "&#x05D6;&#x05D1;&#x05D7;&#x05D9;&#x05DD;",
-	 * "&#x05DE;&#x05E0;&#x05D7;&#x05D5;&#x05EA;", "&#x05D7;&#x05D5;&#x05DC;&#x05D9;&#x05DF;", "&#x05D1;&#x05DB;&#x05D5;&#x05E8;&#x05D5;&#x05EA;",
-	 * "&#x05E2;&#x05E8;&#x05DB;&#x05D9;&#x05DF;", "&#x05EA;&#x05DE;&#x05D5;&#x05E8;&#x05D4;", "&#x05DB;&#x05E8;&#x05D9;&#x05EA;&#x05D5;&#x05EA;",
-	 * "&#x05DE;&#x05E2;&#x05D9;&#x05DC;&#x05D4;", "&#x05E7;&#x05D9;&#x05E0;&#x05D9;&#x05DD;", "&#x05EA;&#x05DE;&#x05D9;&#x05D3;",
-	 * "&#x05DE;&#x05D9;&#x05D3;&#x05D5;&#x05EA;", "&#x05E0;&#x05D3;&#x05D4;"]</code>.
+	 * <code>["ברכות", "שבת", "עירובין", "פסחים", "שקלים", "יומא", "סוכה", "ביצה", "ראש השנה", "תענית", "מגילה", "מועד קטן", "חגיגה", "יבמות", "כתובות", "נדרים","נזיר", "סוטה", "גיטין", 
+	 * "קידושין", "בבא קמא", "בבא מציעא", "בבא בתרא", "סנהדרין", "מכות", "שבועות", "עבודה זרה", "הוריות", "זבחים", "מנחות", "חולין", "בכורות", "ערכין", "תמורה", "כריתות", "מעילה", 
+	 * "קינים", "תמיד", "מידות", "נדה"]</code>.
 	 * 
-	 * @return the <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. As an example, it will return
-	 *         &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 * @return the <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. As an example, it will return ברכות for Berachos.
 	 */
 	public String getMasechta() {
 		return masechtosBavli[masechtaNumber];
@@ -210,17 +173,7 @@ public class Daf {
 	}
 	
 	/**
-	 * @see #getYerushalmiMasechtaTransliterated()
-	 * @deprecated misspelled method name to be removed in 3.0.0.
-	 * @return the transliterated name of the <em>masechta</em> (tractate) of the Daf Yomi such as Berachos.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public String getYerushlmiMasechtaTransliterated() {
-		return getYerushalmiMasechtaTransliterated();
-	}
-	
-	/**
-	 * Setter method to allow overriding of the default list of Yerushalmi <em>masechtos</em> transliterated into Latin chars.
+	 * Setter method to allow overriding of the default list of Yerushalmi <em>masechtos</em> transliterated into into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @param masechtosYerushalmiTransliterated the list of transliterated Yerushalmi <em>masechtos</em> to set.
@@ -230,33 +183,13 @@ public class Daf {
 	}
 	
 	/**
-	 * @see #setYerushalmiMasechtaTransliterated(String[])
-	 * @deprecated misspelled method name to be removed in 3.0.0.
-	 * @param masechtosYerushalmiTransliterated the list of transliterated Yerushalmi <em>masechtos</em> to set.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public void setYerushlmiMasechtaTransliterated(String[] masechtosYerushalmiTransliterated) {
-		setYerushalmiMasechtaTransliterated(masechtosYerushalmiTransliterated);
-	}
-	
-	/**
-	 * Getter method to allow retrieving the list of Yerushalmi <em>masechtos</em> transliterated into Latin chars.
+	 * Getter method to allow retrieving the list of Yerushalmi <em>masechtos</em> transliterated into into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @return the array of transliterated <em>masechta</em> (tractate) names of the Daf Yomi Yerushalmi.
 	 */
 	public static String[] getYerushalmiMasechtosTransliterated() {
 		return masechtosYerushalmiTransliterated;
-	}
-	
-	/**
-	 * @see #getYerushalmiMasechtosTransliterated()
-	 * @deprecated misspelled method name to be removed in 3.0.0.
-	 * @return the array of transliterated <em>masechta</em> (tractate) names of the Daf Yomi Yerushalmi.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public static String[] getYerushlmiMasechtosTransliterated() {
-		return getYerushalmiMasechtosTransliterated();
 	}
 	
 	/**
@@ -267,23 +200,11 @@ public class Daf {
 	public static String[] getYerushalmiMasechtos() {
 		return masechtosYerushalmi;
 	}
-	
-	/**
-	 * @see #getYerushalmiMasechtos()
-	 * @deprecated misspelled method name to be removed in 3.0.0.
-	 * @return the array of Hebrew <em>masechta</em> (tractate) names of the Daf Yomi Yerushalmi.
-	 */
-	@Deprecated // (forRemoval=true) // add back once Java 9 is the minimum supported version
-	public static String[] getYerushlmiMasechtos() {
-		return getYerushalmiMasechtos();
-	}
 
 	/**
-	 * Returns the Yerushalmi <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. As an example, it will return
-	 * &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 * Returns the Yerushalmi <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. As an example, it will return ברכות for Berachos.
 	 * 
-	 * @return the Yerushalmi <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. As an example, it will return
-	 *         &#x05D1;&#x05E8;&#x05DB;&#x05D5;&#x05EA; for Berachos.
+	 * @return the Yerushalmi <em>masechta</em> (tractate) of the Daf Yomi in Hebrew. As an example, it will return ברכות for Berachos.
 	 */
 	public String getYerushalmiMasechta() {
 		return masechtosYerushalmi[masechtaNumber];

@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2020 Eliyahu Hershfeld
+ * Copyright (C) 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -15,8 +15,10 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.Date;
 
 /**
  * A wrapper class for astronomical times / <em>zmanim</em> that is mostly intended to allow sorting collections of astronomical times.
@@ -34,8 +36,8 @@ import java.util.Date;
  * // the String parameter in getTimeZone() has to be a valid timezone listed in {@link java.util.TimeZone#getAvailableIDs()}
  * TimeZone timeZone = TimeZone.getTimeZone(&quot;America/New_York&quot;);
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
- * ComplexZmanimCalendar czc = new ComplexZmanimCalendar(location);
-  * Zman sunset = new Zman(czc.getSunset(), "Sunset");
+ * ComprehensiveZmanimCalendar czc = new ComprehensiveZmanimCalendar(location);
+ * Zman sunset = new Zman(czc.getSunset(), "Sunset");
  * Zman shaah16 = new Zman(czc.getShaahZmanis16Point1Degrees(), "Shaah zmanis 16.1");
  * Zman sunrise = new Zman(czc.getSunrise(), "Sunrise");
  * Zman shaah = new Zman(czc.getShaahZmanisGra(), "Shaah zmanis GRA");
@@ -54,7 +56,7 @@ import java.util.Date;
  * // will sort shaah 1.6, shaah GRA, sunrise, sunset
  * </pre>
  * 
- * @author &copy; Eliyahu Hershfeld 2007-2020
+ * @author &copy; Eliyahu Hershfeld 2007-2026
  * @todo Add secondary sorting. As of now the {@code Comparator}s in this class do not sort by secondary order. This means that when sorting a
  * {@link java.util.Collection} of <em>zmanim</em> and using the {@link #DATE_ORDER} {@code Comparator} will have the duration based <em>zmanim</em>
  * at the end, but they will not be sorted by duration. This should be N/A for label based sorting.
@@ -66,14 +68,14 @@ public class Zman {
 	private String label;
 	
 	/**
-	 * The {@link Date} of the <em>zman</em>
+	 * The {@link Instant} of the <em>zman</em>
 	 */
-	private Date zman;
+	private Instant zman;
 	
 	/**
 	 * The duration if the <em>zman</em> is  a {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various
-	 * <em>shaah zmanis</em> base times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra()  <em>shaah Zmanis GRA</em>} or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}).
+	 * <em>shaah zmanis</em> base times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA()  <em>shaah Zmanis GRA</em>} or
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}).
 	 */
 	private long duration;
 	
@@ -81,26 +83,44 @@ public class Zman {
 	 * A longer description or explanation of a <em>zman</em>.
 	 */
 	private String description;
-
+	
 	/**
-	 * The constructor setting a {@link Date} based <em>zman</em> and a label.
-	 * @param date the Date of the <em>zman</em>.
-	 * @param label the label of the  <em>zman</em> such as "<em>Sof Zman Krias Shema GRA</em>".
-	 * @see #Zman(long, String)
+	 * The location information of the <em>zman</em>.
 	 */
-	public Zman(Date date, String label) {
+	private GeoLocation geoLocation;
+	
+	/**
+	 * The constructor setting a {@link Instant} based <em>zman</em> and a label. In most cases you will likely want to call
+	 * {@link #Zman(Instant, GeoLocation, String)} that also sets the location.
+	 * @param instant the <code>Instant</code> of the <em>zman</em>.
+	 * @param label the label of the <em>zman</em> such as "<em>Sof Zman Krias Shema GRA</em>".
+	 * @see #Zman(Instant, GeoLocation, String)
+	 */
+	public Zman(Instant instant, String label) {
+		this(instant, null, label);
+	}
+	
+	/**
+	 * The constructor setting a {@link Instant} based <em>zman</em> and a label. In most cases you will likely want to call
+	 * {@link #Zman(Instant, GeoLocation, String)} that also sets the geo location.
+	 * @param instant the <code>Instant</code> of the <em>zman</em>.
+	 * @param geoLocation the {@link GeoLocation} of the <em>zman</em>.
+	 * @param label the label of the  <em>zman</em> such as "<em>Sof Zman Krias Shema GRA</em>".
+	 */
+	public Zman(Instant instant, GeoLocation geoLocation, String label) {
+		this.zman = instant;
+		this.geoLocation = geoLocation;
 		this.label = label;
-		this.zman = date;
 	}
 
 	/**
 	 * The constructor setting a duration based <em>zman</em> such as
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various <em>shaah zmanis</em> times such as
-	 * {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() <em>shaah zmanis GRA</em>} or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}) and label.
+	 * {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA() <em>shaah zmanis GRA</em>} or
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}) and label.
 	 * @param duration a duration based <em>zman</em> such as ({@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()}
 	 * @param label the label of the  <em>zman</em> such as "<em>Shaah Zmanis GRA</em>".
-	 * @see #Zman(Date, String)
+	 * @see #Zman(Instant, String)
 	 */
 	public Zman(long duration, String label) {
 		this.label = label;
@@ -108,27 +128,43 @@ public class Zman {
 	}
 
 	/**
-	 * Returns the {@code Date} based <em>zman</em>.
-	 * @return the <em>zman</em>.
-	 * @see #setZman(Date)
+	 * Returns the {@code Instant} based <em>zman</em>.
+	 * @return the <code>Instant</code> of the <em>zman</em>.
+	 * @see #setZman(Instant)
 	 */
-	public Date getZman() {
+	public Instant getZman() {
 		return this.zman;
 	}
 
 	/**
-	 * Sets a {@code Date} based <em>zman</em>.
-	 * @param date a {@code Date} based <em>zman</em>
+	 * Sets a {@code Instant} based <em>zman</em>.
+	 * @param instant an {@code Instant} based <em>zman</em>
 	 * @see #getZman()
 	 */
-	public void setZman(Date date) {
-		this.zman = date;
+	public void setZman(Instant instant) {
+		this.zman = instant;
+	}
+	
+	/**
+	 * Returns the {link TimeZone} of the <em>zman</em>.
+	 * @return the time zone
+	 */
+	public GeoLocation getGeoLocation() {
+		return geoLocation;
+	}
+
+	/**
+	 * Sets the {@code GeoLocation} of the <em>zman</em>.
+	 * @param geoLocation the {@code GeoLocation}  of the <em>zman</em>.
+	 */
+	public void setGeoLocation(GeoLocation geoLocation) {
+		this.geoLocation = geoLocation;
 	}
 
 	/**
 	 * Returns a duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}
-	 * (or the various <em>shaah zmanis</em> times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() <em>shaah zmanis GRA</em>}
-	 * or {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
+	 * (or the various <em>shaah zmanis</em> times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA() <em>shaah zmanis GRA</em>}
+	 * or {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
 	 * @return the duration based <em>zman</em>.
 	 * @see #setDuration(long)
 	 */
@@ -138,8 +174,8 @@ public class Zman {
 
 	/**
 	 *  Sets a duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour}
-	 * (or the various <em>shaah zmanis</em> times as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() <em>shaah zmanis GRA</em>} or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
+	 * (or the various <em>shaah zmanis</em> times as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA() <em>shaah zmanis GRA</em>} or
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
 	 * @param duration duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()}.
 	 * @see #getDuration()
 	 */
@@ -192,11 +228,9 @@ public class Zman {
 	 * than the second.
 	 * Please note that this class will handle cases where either the {@code Zman} is a null or {@link #getZman()} returns a null.
 	 */
-	public static final Comparator<Zman> DATE_ORDER = (zman1, zman2) -> {
-        long firstTime = (zman1 == null || zman1.getZman() == null) ? Long.MAX_VALUE : zman1.getZman().getTime();
-        long secondTime = (zman2 == null || zman2.getZman() == null) ? Long.MAX_VALUE : zman2.getZman().getTime();
-        return Long.compare(firstTime, secondTime);
-    };
+	public static final Comparator<Zman> DATE_ORDER = Comparator.comparingLong(zman ->
+			zman == null || zman.getZman() == null ? Long.MAX_VALUE : zman.getZman().toEpochMilli()
+	);
 
 	/**
 	 * A {@link Comparator} that will compare and sort zmanim by zmanim label order. Compares its two arguments by the zmanim label
@@ -205,33 +239,74 @@ public class Zman {
 	 * Please note that this class will sort cases where either the {@code Zman} is a null or {@link #label} returns a null
 	 * as empty {@code String}s.
 	 */
-	public static final Comparator<Zman> NAME_ORDER = (zman1, zman2) -> {
-        String firstLabel = (zman1 == null || zman1.getLabel() == null) ? "" : zman1.getLabel();
-        String secondLabel = (zman2 == null || zman2.getLabel() == null) ? "" : zman2.getLabel();
-        return firstLabel.compareTo(secondLabel);
-    };
+	public static final Comparator<Zman> NAME_ORDER = Comparator.comparing(zman ->
+			zman == null || zman.getLabel() == null ? "" : zman.getLabel()
+	);
 
 	/**
 	 * A {@link Comparator} that will compare and sort duration based <em>zmanim</em>  such as
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various <em>shaah zmanis</em> times
-	 * such as <em>{@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGra() shaah zmanis GRA}</em> or
-	 * {@link com.kosherjava.zmanim.ComplexZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}). Returns a negative
+	 * such as <em>{@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA() shaah zmanis GRA}</em> or
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}). Returns a negative
 	 * integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
 	 * Please note that this class will sort cases where {@code Zman} is a null.
 	 */
-	public static final Comparator<Zman> DURATION_ORDER = (zman1, zman2) -> {
-        long firstDuration  = zman1 == null ? Long.MAX_VALUE : zman1.getDuration();
-        long secondDuration  = zman2 == null ? Long.MAX_VALUE : zman2.getDuration();
-        return Long.compare(firstDuration, secondDuration);
-    };
+	public static final Comparator<Zman> DURATION_ORDER = Comparator.comparingLong(
+			zman -> zman == null ? Long.MAX_VALUE : zman.getDuration()
+	);
+
+	/**
+	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very
+	 * similar to the toString method but the return value is in an xml format. The format currently used (subject to
+	 * change) is:
+	 * 
+	 * <pre>
+	 * &lt;Zman&gt;
+	 * 	&lt;Label&gt;Sof Zman Krias Shema GRA&lt;/Label&gt;
+	 * 	&lt;Zman&gt;1969-02-08T09:37:56.820&lt;/Zman&gt;
+	 * 	&lt;TimeZone&gt;
+	 * 		&lt;TimezoneName&gt;America/Montreal&lt;/TimezoneName&gt;
+	 * 		&lt;TimeZoneDisplayName&gt;Eastern Standard Time&lt;/TimeZoneDisplayName&gt;
+	 * 		&lt;TimezoneGMTOffset&gt;-5&lt;/TimezoneGMTOffset&gt;
+	 * 		&lt;TimezoneDSTOffset&gt;1&lt;/TimezoneDSTOffset&gt;
+	 * 	&lt;/TimeZone&gt;
+	 * 	&lt;Duration&gt;0&lt;/Duration&gt;
+	 * 	&lt;Description&gt;Sof Zman Krias Shema GRA is 3 sha'os zmaniyos calculated from sunrise to sunset.&lt;/Description&gt;
+	 * &lt;/Zman&gt;
+	 * </pre>
+	 * @return The XML formatted <code>String</code>.
+	 */
+	public String toXML() {
+		ZoneId zoneId = getGeoLocation() == null ? ZoneId.of("UTC") : getGeoLocation().getZoneId();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(zoneId);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<Zman>\n");
+		sb.append("\t<Label>").append(getLabel()).append("</Label>\n");
+		sb.append("\t<Zman>").append(getZman() == null ? "": formatter.format(getZman())).append("</Zman>\n");
+		if (getGeoLocation() != null) {
+			sb.append("\t").append(getGeoLocation().toXML().replaceAll("\n", "\n\t"));
+		}
+		sb.append("\n\t<Duration>").append(getDuration()).append("</Duration>\n");
+		sb.append("\t<Description>").append(getDescription()).append("</Description>\n");
+		sb.append("</Zman>");
+		return sb.toString();
+	}
 	
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-        return "\nLabel:\t\t\t" + this.getLabel() +
-                "\nZman:\t\t\t" + getZman() +
-                "\nDuration:\t\t\t" + getDuration() +
-                "\nDescription:\t\t\t" + getDescription();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nLabel:\t").append(this.getLabel());
+		sb.append("\nZman:\t").append(getZman());
+		sb.append("\nGeoLocation:\t");
+		if (getGeoLocation() == null) {
+			sb.append("null");
+		} else {
+			sb.append(getGeoLocation().toString().replaceAll("\n", "\n\t"));
+		}
+		sb.append("\nDuration:\t").append(getDuration());
+		sb.append("\nDescription:\t").append(getDescription());
+		return sb.toString();
 	}
 }
