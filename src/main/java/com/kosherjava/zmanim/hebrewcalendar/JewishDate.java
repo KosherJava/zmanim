@@ -548,7 +548,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
             throw new IllegalArgumentException("The Jewish month has to be between 1 and 12 (or 13 on a leap year). "
                     + month + " is invalid for the year " + year + ".");
         }
-        int monthLength = getDaysInJewishMonth(month, year);
+        int monthLength = getDaysInJewishMonth(year, month);
         if (dayOfMonth < 1 || dayOfMonth > monthLength) {
             throw new IllegalArgumentException(
                     "The Jewish day of month can't be < 1 or > " + monthLength +
@@ -988,7 +988,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public void setJewishMonth(int month){
         int year = getJewishYear();
-        int day = Math.min(getDaysInJewishMonth(month,year),getJewishDayOfMonth());
+        int day = Math.min(getDaysInJewishMonth(year,month),getJewishDayOfMonth());
         setJewishDate(year, month, day);
     }
 
@@ -1005,7 +1005,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(year,month));
         setJewishDate(year, month, day);
     }
 
@@ -1076,7 +1076,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
                 month++;
             }
         }
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(year,month));
         setJewishDate(year, month, day);
     }
 
@@ -1104,7 +1104,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
                 month--;
             }
         }
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(year,month));
         setJewishDate(year, month, day);
     }
 
@@ -1143,7 +1143,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
             month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(targetYear));
         }
         // Clamp to final day of the month
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,targetYear));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(targetYear,month));
         setJewishDate(targetYear, month, day);
     }
 
@@ -1180,7 +1180,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
             month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(targetYear));
         }
         // Clamp to final day of the month
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,targetYear));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(targetYear,month));
         setJewishDate(targetYear, month, day);
     }
 
