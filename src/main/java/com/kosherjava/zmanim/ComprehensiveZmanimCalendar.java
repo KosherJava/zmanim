@@ -152,7 +152,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMisheyakir11Point5Degrees()
 	 */
 	protected static final double ZENITH_11_POINT_5 = GEOMETRIC_ZENITH + 11.5;
-	
+
 	/**
 	 * The zenith of 12.85° below {@link GEOMETRIC_ZENITH geometric zenith} (90°).
 	 * @see #getMisheyakir12Point85Degrees()
@@ -514,7 +514,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #setAteretTorahSunsetOffset(double)
 	 */
 	public long getShaahZmanisAteretTorah() {
-		return getTemporalHour(getAlos72Zmanis(), getTzaisAteretTorah());
+		ShaahZmanis shaahZmanisTypePrevious = shaahZmanisType;
+		setShaahZmanisType(ShaahZmanis.GRA);
+		long result = getTemporalHour(getAlos72Zmanis(), getTzaisAteretTorah());
+		setShaahZmanisType(shaahZmanisTypePrevious);
+		return result;
 	}
 	
 	/**
@@ -940,7 +944,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getAlos19Point8Degrees() {
 		return getSunriseOffsetByDegrees(ZENITH_19_POINT_8);
 	}
-	
+
 	/**
 	 * This method returns <em>misheyakir</em> based on the position of the sun {@link ZENITH_12_POINT_85 12.85°}
 	 * below {@link GEOMETRIC_ZENITH geometric zenith} (90°). This is based on the position of the sun slightly
@@ -973,7 +977,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         hadchak</em></b>. <em>Lechatchila</em>, a later <em>zman</em> should be used. There is no current plan to remove
 	 *         this method from the API, and this deprecation is intended to notify developers to add an alert to users of
 	 *         the risk of using it.
-	 * 
+	 *
 	 * @return The <code>Instant</code> of <em>misheyakir</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
 	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
@@ -1696,7 +1700,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
 	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em>
 	 * time may be affected by {@link #isUseAstronomicalChatzos()}.
-	 * 
+	 *
 	 * @param minchaGedola
 	 *            the mincha gedola to be compared to {@link #getMinchaGedola30Minutes()}.
 	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
@@ -1706,7 +1710,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaGedola30Minutes()
 	 * @see #isUseAstronomicalChatzos()
-	 * 
+	 *
 	 */
 	public Instant getMinchaGedolaGreaterThan30(Instant minchaGedola) {
 		if (getMinchaGedola30Minutes() == null || minchaGedola == null) {
@@ -1716,7 +1720,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 					: minchaGedola;
 		}
 	}
-	
+
 	/**
 	 * This is a convenience method that returns the later of {@link #getMinchaGedolaGRA()} and
 	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} is
@@ -2072,7 +2076,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * 
+	 *
 	 * @return the <code>Instant</code> of the <em>plag</em>. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
 	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
@@ -2149,7 +2153,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         Arctic Circle and north of the Antarctic Circle where the sun may not reach low enough below the horizon
 	 *         for this calculation, a <code>null</code> will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
-	 * 
+	 *
 	 * @see #getBainHashmashosRT58Point5Minutes()
 	 */
 	public Instant getBainHashmashosRT13Point24Degrees() {
@@ -2259,7 +2263,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getBainHashmashosYereim3Point05Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_MINUS_3_POINT_05);
 	}
-	
+
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 16.875
@@ -2303,7 +2307,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getBainHashmashosYereim2Point8Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_MINUS_2_POINT_8);
 	}
-	
+
 	/**
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 13.5 minutes
@@ -2420,7 +2424,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This does not cover the 35.28 seconds it takes to walk 49 amos (the <em>heref ayin</em> of <em>bain hashmashos</em>
 	 * of Rav Yosi) at the pace of a 24-minute mil. See {@link #getTzaisGeonim4Point8Degrees()} for a time that covers the
 	 * <em>heref ayin</em>.
-	 * 
+	 *
 	 * @return the <code>Instant</code> representing the time when the sun is 4.66° below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
@@ -2484,7 +2488,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getTzaisGeonim4Point8Degrees() {
 		return getSunsetOffsetByDegrees(ZENITH_4_POINT_8);
 	}
-	
+
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> as calculated by <a href=
 	 * "https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a> as the position of
@@ -2497,7 +2501,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * should be noted that this differs from the 6.1° / 6.2° calculation for Rabbi Tucazinsky's time as calculated by the
 	 * Hazmanim Bahalacha Vol II chapter 50:7 (page 515). Calculations show that 6.45° at the equinox is 26.5 minutes after
 	 * <em>shkiah</em> <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox /
-	 * equilux</a>. 
+	 * equilux</a>.
 	 * 
 	 * @return the <code>Instant</code> representing the time when the sun is 6.45° below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
@@ -3056,7 +3060,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getSofZmanKidushLevanaBetweenMoldos(Instant alos, Instant tzais) {
 		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
+
 		// Do not calculate for impossible dates, but account for extreme cases. In the extreme case of Rapa Iti in French
 		// Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush Levana
 		// will be on the 12th of the Teves. In the case of Anadyr, Russia on Jan, 2071, sof zman Kiddush Levana between the
@@ -3156,7 +3160,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getSofZmanKidushLevana15Days(Instant alos, Instant tzais) {
 		JewishCalendar jewishCalendar = new JewishCalendar(getLocalDate());
-		
+
 		// Do not calculate for impossible dates, but account for extreme cases. In the extreme case of Rapa Iti in
 		// French Polynesia on Dec 2027 when kiddush Levana 3 days can be said on <em>Rosh Chodesh</em>, the sof zman Kiddush
 		// Levana will be on the 12th of the Teves. in the case of Anadyr, Russia on Jan, 2071, sof zman kiddush levana will
@@ -3515,7 +3519,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * According to the Baal Hatanya, <em>shkiah amiti</em>, true (halachic) sunset, is when the top of the 
 	 * sun's disk disappears from view at an elevation similar to the mountains of Eretz Yisrael.
 	 * This time is calculated as the point at which the center of the sun's disk is 1.583 degrees below the horizon.
-	 * A method that returns a <em>shaah zmanis</em> ({@link #getTemporalHour(Instant, Instant) temporal hour}) calculated 
+	 * A method that returns a <em>shaah zmanis</em> ({@link #getTemporalHour(Instant, Instant) temporal hour}) calculated
 	 * based on the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s <em>netz
 	 * amiti</em> and <em>shkiah amiti</em> using a dip of 1.583° below the sea level horizon. This calculation divides
 	 * the day based on the opinion of the Baal Hatanya that the day runs from {@link #getSunriseBaalHatanya() netz amiti}
@@ -3717,7 +3721,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getTzaisBaalHatanya() {
 		return getSunsetOffsetByDegrees(ZENITH_6_DEGREES);
 	}
-	
+
 	/**
 	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
 	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
@@ -3939,7 +3943,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * 
+	 *
 	 * A method for calculating <em>samuch lemincha ketana</em>, / near <em>mincha ketana</em> time that is half an hour before
 	 * {@link #getMinchaKetanaGRA()} or is 9 * <em>shaos zmaniyos</em> (solar hours) after the start of the day, calculated based
 	 * on a day from   and ending  a day starting at {@link #getMinchaGedola16Point1Degrees() <em>alos</em> 16.1°} and ending
@@ -3979,7 +3983,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getSamuchLeMinchaKetana72Minutes() {
 		return getSamuchLeMinchaKetana(getAlos72Minutes(), getTzais72Minutes(), true);
 	}
-	
+
 	/**
 	 * {@summary A method that returns {@link #getSunsetBasedOnElevationSetting() sunset} if it occurs, or the time that the sun
 	 * is at its westernmost position (azimuth of 270°), if sunset will not occur that day. In Polar regions (the Arctic or Antarctic
@@ -3993,7 +3997,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=1401&pgnum=461">רב פעלים – חלק ב׳, סוד ישרים ס׳ ד׳</a>. This time is close to six hours
 	 * after {@link #getSunTransit() astronomical <em>chatzos hayom</em>}, but depending on the time of year and location in the
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
-	 * 
+	 *
 	 * @return sunset if it occurs, or the time that the sun will reach its westernmost position (azimuth 270°), if sunset will
 	 *         not occur that day. If there is no sunset this day, and the azimuth 270° will not occur, a <code>null</code> will
 	 *         be returned.
@@ -4008,7 +4012,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		}
 		return getTimeAtAzimuth(270);
 	}
-	
+
 	/**
 	 * {@summary A method that returns {@link #getSunriseBasedOnElevationSetting() sunrise} if it occurs, or the time that the sun
 	 * is at its easternmost position (azimuth of 90°), if sunrise will not occur that day. In Polar regions (the Arctic or Antarctic
@@ -4022,7 +4026,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=1401&pgnum=461">רב פעלים – חלק ב׳, סוד ישרים ס׳ ד׳</a>. This time is close to six hours
 	 * before {@link #getSunTransit() astronomical <em>chatzos hayom</em>}, but depending on the time of year and location in the
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
-	 * 
+	 *
 	 * @return sunrise if it occurs, or the time that the sun will reach its easternmost position (azimuth 90°), if sunrise will
 	 *         not occur that day. If there is no sunrise this day, and the azimuth 90° will not occur, a <code>null</code> will
 	 *         be returned.
@@ -4037,7 +4041,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		}
 		return getTimeAtAzimuth(90);
 	}
-	
+
 	/**
 	 * @see java.lang.Object#equals(Object)
 	 */
@@ -4060,5 +4064,35 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public int hashCode() {
 		return 37 * super.hashCode() + Double.hashCode(ateretTorahSunsetOffset);
+	}
+
+	@Override
+	public long getShaahZmanis() {
+		switch (shaahZmanisType) {
+			case ATERET:
+				return getShaahZmanisAteretTorah();
+			case BAAL_HATANYA:
+				return getShaahZmanisBaalHatanya();
+			case DEGREES_16POINT1:
+				return getShaahZmanis16Point1Degrees();
+			case DEGREES_18:
+				return getShaahZmanis18Degrees();
+			case DEGREES_19POINT8:
+				return getShaahZmanis19Point8Degrees();
+			case DEGREES_26:
+				return getShaahZmanis26Degrees();
+			case MINUTES_60:
+				return getShaahZmanis60Minutes();
+			case MINUTES_72:
+				return getShaahZmanis72Minutes();
+			case MINUTES_90:
+				return getShaahZmanis90Minutes();
+			case MINUTES_96:
+				return getShaahZmanis96Minutes();
+			case MINUTES_120:
+				return getShaahZmanis120Minutes();
+			default:
+				return super.getShaahZmanis();
+		}
 	}
 }
