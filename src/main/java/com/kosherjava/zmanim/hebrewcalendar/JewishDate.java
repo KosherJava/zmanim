@@ -1005,7 +1005,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public void setJewishYear(int year){
         int month = Math.min(getJewishMonth(),getLastMonthOfJewishYear(year));
-        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(month,year));
+        int day = Math.min(getJewishDayOfMonth(), getDaysInJewishMonth(year,month));
         setJewishDate(year, month, day);
     }
 
