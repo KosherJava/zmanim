@@ -15,8 +15,8 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 
 /**
  * Implementation of sunrise and sunset methods to calculate astronomical times. This calculator uses the Java algorithm
@@ -127,7 +127,6 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @param dayOfYear the day of year
 	 * @param hoursFromMeridian hours from the meridian
 	 * @param isSunrise true for sunrise and false for sunset
-	 * 
 	 * @return the approximate time of sunset or sunrise in days since midnight Jan 1st, assuming 6am and 6pm events. We
 	 *         need this figure to derive the Sun's mean anomaly.
 	 */
@@ -217,14 +216,10 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	/**
 	 * Get sunrise or sunset time in UTC, according to flag. This time is returned as a double and is not adjusted for time-zone.
 	 * 
-	 * @param localDate
-	 *            the <code>LocalDate</code> object to extract the day of year for calculation
-	 * @param geoLocation
-	 *            The location information used for astronomical calculation of solar times.
-	 * @param zenith
-	 *            Sun's zenith in degrees
-	 * @param isSunrise
-	 *            True for sunrise and false for sunset.
+	 * @param localDate the <code>LocalDate</code> object to extract the day of year for calculation
+	 * @param geoLocation The location information used for astronomical calculation of solar times.
+	 * @param zenith Sun's zenith in degrees
+	 * @param isSunrise <code>true</code> for sunrise and false for sunset.
 	 * @return the time as a double. If an error was encountered in the calculation (expected behavior for some locations such as
 	 *         near the poles, {@link Double#NaN} will be returned.
 	 */
@@ -276,7 +271,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 *         {@link NOAACalculator} instead.
 	 */
 	@Override
-	public double getSolarAzimuth(ZonedDateTime zdt, GeoLocation geoLocation) {
+	public double getSolarAzimuth(Instant instant, GeoLocation geoLocation) {
 		throw new UnsupportedOperationException(
 				"The SunTimesCalculator class does not implement the getSolarAzimuth method. Use the {@link NOAACalculator} instead.");
 	}
@@ -289,7 +284,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 *         {@link NOAACalculator} instead.
 	 */
 	@Override
-	public double getSolarElevation(ZonedDateTime zdt, GeoLocation geoLocation) {
+	public double getSolarElevation(Instant instant, GeoLocation geoLocation) {
 		throw new UnsupportedOperationException(
 				"The SunTimesCalculator class does not implement the getSolarElevation method. Use the NOAACalculator instead.");
 	}
