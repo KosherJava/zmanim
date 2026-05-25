@@ -163,22 +163,22 @@ public class RegressionTestFileWriter {
         @Override
         public String toString() {
             return new StringJoiner(",")
-                    .add(Long.toString(getShaahZmanis19Point8Degrees))
-                    .add(Long.toString(getShaahZmanis18Degrees))
-                    .add(Long.toString(getShaahZmanis26Degrees))
-                    .add(Long.toString(getShaahZmanis16Point1Degrees))
-                    .add(Long.toString(getShaahZmanis60Minutes))
-                    .add(Long.toString(getShaahZmanis72Minutes))
-                    .add(Long.toString(getShaahZmanis72MinutesZmanis))
-                    .add(Long.toString(getShaahZmanis90Minutes))
-                    .add(Long.toString(getShaahZmanis90MinutesZmanis))
-                    .add(Long.toString(getShaahZmanis96MinutesZmanis))
-                    .add(Long.toString(getShaahZmanisAteretTorah))
-                    .add(Long.toString(getShaahZmanisAlos16Point1ToTzais3Point8))
-                    .add(Long.toString(getShaahZmanisAlos16Point1ToTzais3Point7))
-                    .add(Long.toString(getShaahZmanis96Minutes))
-                    .add(Long.toString(getShaahZmanis120Minutes))
-                    .add(Long.toString(getShaahZmanis120MinutesZmanis))
+                    .add(getShaahZmanis19Point8Degrees.toString())
+                    .add(getShaahZmanis18Degrees.toString())
+                    .add(getShaahZmanis26Degrees.toString())
+                    .add(getShaahZmanis16Point1Degrees.toString())
+                    .add(getShaahZmanis60Minutes.toString())
+                    .add(getShaahZmanis72Minutes.toString())
+                    .add(getShaahZmanis72MinutesZmanis.toString())
+                    .add(getShaahZmanis90Minutes.toString())
+                    .add(getShaahZmanis90MinutesZmanis.toString())
+                    .add(getShaahZmanis96MinutesZmanis.toString())
+                    .add(getShaahZmanisAteretTorah.toString())
+                    .add(getShaahZmanisAlos16Point1ToTzais3Point8.toString())
+                    .add(getShaahZmanisAlos16Point1ToTzais3Point7.toString())
+                    .add(getShaahZmanis96Minutes.toString())
+                    .add(getShaahZmanis120Minutes.toString())
+                    .add(getShaahZmanis120MinutesZmanis.toString())
                     .add(getPlagHamincha120MinutesZmanis.toString())
                     .add(getPlagHamincha120Minutes.toString())
                     .add(getAlos60.toString())
@@ -298,7 +298,7 @@ public class RegressionTestFileWriter {
                     .add(getSofZmanBiurChametzMGA72Minutes.toString())
                     .add(getSofZmanBiurChametzMGA16Point1Degrees.toString())
                     .add(getSolarMidnight.toString())
-                    .add(Long.toString(getShaahZmanisBaalHatanya))
+                    .add(getShaahZmanisBaalHatanya.toString())
                     .add(getAlosBaalHatanya.toString())
                     .add(getSofZmanShmaBaalHatanya.toString())
                     .add(getSofZmanTfilaBaalHatanya.toString())
@@ -378,7 +378,7 @@ public class RegressionTestFileWriter {
                           Instant getTchilasZmanKidushLevana7Days, Instant getSofZmanAchilasChametzGRA,
                           Instant getSofZmanAchilasChametzMGA72Minutes, Instant getSofZmanAchilasChametzMGA16Point1Degrees,
                           Instant getSofZmanBiurChametzGRA, Instant getSofZmanBiurChametzMGA72Minutes,
-                          Instant getSofZmanBiurChametzMGA16Point1Degrees, Instant getSolarMidnight, long getShaahZmanisBaalHatanya,
+                          Instant getSofZmanBiurChametzMGA16Point1Degrees, Instant getSolarMidnight, Duration getShaahZmanisBaalHatanya,
                           Instant getAlosBaalHatanya, Instant getSofZmanShmaBaalHatanya, Instant getSofZmanTfilaBaalHatanya,
                           Instant getSofZmanAchilasChametzBaalHatanya, Instant getSofZmanBiurChametzBaalHatanya,
                           Instant getMinchaGedolaBaalHatanya,
@@ -550,22 +550,22 @@ public class RegressionTestFileWriter {
             this.getSamuchLeMinchaKetana72Minutes = getSamuchLeMinchaKetana72Minutes;
         }
 
-        public final long getShaahZmanis19Point8Degrees;
-        public final long getShaahZmanis18Degrees;
-        public final long getShaahZmanis26Degrees;
-        public final long getShaahZmanis16Point1Degrees;
-        public final long getShaahZmanis60Minutes;
-        public final long getShaahZmanis72Minutes;
-        public final long getShaahZmanis72MinutesZmanis;
-        public final long getShaahZmanis90Minutes;
-        public final long getShaahZmanis90MinutesZmanis;
-        public final long getShaahZmanis96MinutesZmanis;
-        public final long getShaahZmanisAteretTorah;
-        public final long getShaahZmanisAlos16Point1ToTzais3Point8;
-        public final long getShaahZmanisAlos16Point1ToTzais3Point7;
-        public final long getShaahZmanis96Minutes;
-        public final long getShaahZmanis120Minutes;
-        public final long getShaahZmanis120MinutesZmanis;
+        public final Duration getShaahZmanis19Point8Degrees;
+        public final Duration getShaahZmanis18Degrees;
+        public final Duration getShaahZmanis26Degrees;
+        public final Duration getShaahZmanis16Point1Degrees;
+        public final Duration getShaahZmanis60Minutes;
+        public final Duration getShaahZmanis72Minutes;
+        public final Duration getShaahZmanis72MinutesZmanis;
+        public final Duration getShaahZmanis90Minutes;
+        public final Duration getShaahZmanis90MinutesZmanis;
+        public final Duration getShaahZmanis96MinutesZmanis;
+        public final Duration getShaahZmanisAteretTorah;
+        public final Duration getShaahZmanisAlos16Point1ToTzais3Point8;
+        public final Duration getShaahZmanisAlos16Point1ToTzais3Point7;
+        public final Duration getShaahZmanis96Minutes;
+        public final Duration getShaahZmanis120Minutes;
+        public final Duration getShaahZmanis120MinutesZmanis;
         public final Instant getPlagHamincha120MinutesZmanis;
         public final Instant getPlagHamincha120Minutes;
         public final Instant getAlos60;
@@ -685,7 +685,7 @@ public class RegressionTestFileWriter {
         public final Instant getSofZmanBiurChametzMGA72Minutes;
         public final Instant getSofZmanBiurChametzMGA16Point1Degrees;
         public final Instant getSolarMidnight;
-        public final long getShaahZmanisBaalHatanya;
+        public final Duration getShaahZmanisBaalHatanya;
         public final Instant getAlosBaalHatanya;
         public final Instant getSofZmanShmaBaalHatanya;
         public final Instant getSofZmanTfilaBaalHatanya;
@@ -729,8 +729,8 @@ public class RegressionTestFileWriter {
         double getUTCSeaLevelSunrise
         double getUTCSunset
         double getUTCSeaLevelSunset
-        long getTemporalHour
-        long getTemporalHour
+        Duration getTemporalHour
+        Duration getTemporalHour
         Instant getSunTransit
         Instant getSunTransit
         Instant getDateFromTime
