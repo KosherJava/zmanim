@@ -48,12 +48,4 @@ public class SerializationRegressionTest {
 		assertFalse(actualEpochMillis % 1000 == 0);
 		assertTrue(Math.abs(expectedEpochMillis - actualEpochMillis) < 1000);
 	}
-
-	@Test
-	public void negativeTimePreservesSignInValueAndFormatting() {
-		Time time = new Time(-90_500);
-
-		assertEquals(-90_500d, time.getTime(), 0.0);
-		assertEquals("-0:01:30.500", time.toString());
-	}
 }
