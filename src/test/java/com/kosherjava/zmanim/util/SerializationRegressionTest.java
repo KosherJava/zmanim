@@ -42,7 +42,7 @@ public class SerializationRegressionTest {
 		double utcSunrise = astronomicalCalendar.getUTCSunrise(AstronomicalCalendar.GEOMETRIC_ZENITH);
 		long expectedEpochMillis = Math.round(utcSunrise * 3600000);
 		long actualEpochMillis = astronomicalCalendar.getSunrise().toEpochMilli()
-				% (24 * AstronomicalCalendar.HOUR_MILLIS);
+				% (24 * 3600000);
 
 		assertTrue(expectedEpochMillis % 1000 != 0);
 		assertFalse(actualEpochMillis % 1000 == 0);
