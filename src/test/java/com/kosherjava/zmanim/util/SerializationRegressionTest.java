@@ -40,7 +40,7 @@ public class SerializationRegressionTest {
 				new GeoLocation("Lakewood", 40.0828, -74.2094, ZoneId.of("America/New_York")));
 
 		double utcSunrise = astronomicalCalendar.getUTCSunrise(AstronomicalCalendar.GEOMETRIC_ZENITH);
-		long expectedEpochMillis = Math.round(utcSunrise * AstronomicalCalendar.HOUR_MILLIS);
+		long expectedEpochMillis = Math.round(utcSunrise * 3600000);
 		long actualEpochMillis = astronomicalCalendar.getSunrise().toEpochMilli()
 				% (24 * AstronomicalCalendar.HOUR_MILLIS);
 
