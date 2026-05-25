@@ -5,6 +5,7 @@ import com.kosherjava.zmanim.util.GeoLocation;
 
 import java.io.*;
 import java.time.Instant;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -323,12 +324,12 @@ public class RegressionTestFileWriter {
                     .toString();
         }
 
-		public FullZmanim(long getShaahZmanis19Point8Degrees, long getShaahZmanis18Degrees,
-                          long getShaahZmanis26Degrees, long getShaahZmanis16Point1Degrees, long getShaahZmanis60Minutes,
-                          long getShaahZmanis72Minutes, long getShaahZmanis72MinutesZmanis, long getShaahZmanis90Minutes,
-                          long getShaahZmanis90MinutesZmanis, long getShaahZmanis96MinutesZmanis, long getShaahZmanisAteretTorah,
-                          long getShaahZmanisAlos16Point1ToTzais3Point8, long getShaahZmanisAlos16Point1ToTzais3Point7,
-                          long getShaahZmanis96Minutes, long getShaahZmanis120Minutes, long getShaahZmanis120MinutesZmanis,
+		public FullZmanim(Duration getShaahZmanis19Point8Degrees, Duration getShaahZmanis18Degrees,
+                          Duration getShaahZmanis26Degrees, Duration getShaahZmanis16Point1Degrees, Duration getShaahZmanis60Minutes,
+                          Duration getShaahZmanis72Minutes, Duration getShaahZmanis72MinutesZmanis, Duration getShaahZmanis90Minutes,
+                          Duration getShaahZmanis90MinutesZmanis, Duration getShaahZmanis96MinutesZmanis, Duration getShaahZmanisAteretTorah,
+                          Duration getShaahZmanisAlos16Point1ToTzais3Point8, Duration getShaahZmanisAlos16Point1ToTzais3Point7,
+                          Duration getShaahZmanis96Minutes, Duration getShaahZmanis120Minutes, Duration getShaahZmanis120MinutesZmanis,
                           Instant getPlagHamincha120MinutesZmanis, Instant getPlagHamincha120Minutes, Instant getAlos60,
                           Instant getAlos72Zmanis, Instant getAlos96, Instant getAlos90Zmanis, Instant getAlos96Zmanis, Instant getAlos90,
                           Instant getAlos120, Instant getAlos120Zmanis, Instant getAlos26Degrees, Instant getAlos18Degrees,
