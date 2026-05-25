@@ -104,9 +104,9 @@
   * [Fix `getAlos60()` to use `getElevationAdjustedSunrise()`](https://github.com/KosherJava/zmanim/commit/f5a5b2c68e1f0e2f9f4fbdd2cc585085f2914b74)
   * Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
   * Add [`getSunsetOrWesternmostSolarAzimuth()` and `getSunriseOrEasternmostSolarAzimuth()`](https://github.com/KosherJava/zmanim/commit/ab9a903e94c33d31f1ce006a6102cdfa259786ad) methods.
+* `zmanimFormatter now formats `Duration`s and removed support for formatting longs and Time.
 * `HebrewdateFormatter`
   * add method [`formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParshah()`.
-  * Now formats `Duration`s and removed formatting of longs and Time.
   * Add `getHebrewMonthList()` and `setHebrewMonthList(String[])`. This allows overriding the default month of Chesvan to Marcheshvan etc.
   * Throw an `IllegalArgumentException` if the array length of months != 14
   * Remove the experimental and private `formatMolad(long moladChalakim)`
