@@ -15,6 +15,7 @@
  */
 package com.kosherjava.zmanim.util;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +23,8 @@ import java.util.Comparator;
 
 /**
  * A wrapper class for astronomical times / <em>zmanim</em> that is mostly intended to allow sorting collections of astronomical times.
- * It has fields for both date/time and duration based <em>zmanim</em>, name / labels as well as a longer description or explanation of a
- * <em>zman</em>.
+ * It has fields for both date/time and duration based <em>zmanim</em>, name / labels as well as a longer description or explanation
+ * of a <em>zman</em>.
  * <p>
  * Here is an example of various ways of sorting <em>zmanim</em>.
  * <p>First create the Calendar for the location you would like to calculate:
@@ -77,7 +78,7 @@ public class Zman {
 	 * <em>shaah zmanis</em> base times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA()  <em>shaah Zmanis GRA</em>} or
 	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah Zmanis 16.1&deg;</em>}).
 	 */
-	private long duration;
+	private Duration duration;
 	
 	/**
 	 * A longer description or explanation of a <em>zman</em>.
@@ -122,7 +123,7 @@ public class Zman {
 	 * @param label the label of the  <em>zman</em> such as "<em>Shaah Zmanis GRA</em>".
 	 * @see #Zman(Instant, String)
 	 */
-	public Zman(long duration, String label) {
+	public Zman(Duration duration, String label) {
 		this.label = label;
 		this.duration = duration;
 	}
@@ -166,9 +167,9 @@ public class Zman {
 	 * (or the various <em>shaah zmanis</em> times such as {@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA() <em>shaah zmanis GRA</em>}
 	 * or {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
 	 * @return the duration based <em>zman</em>.
-	 * @see #setDuration(long)
+	 * @see #setDuration(Duration)
 	 */
-	public long getDuration() {
+	public Duration getDuration() {
 		return this.duration;
 	}
 
@@ -179,7 +180,7 @@ public class Zman {
 	 * @param duration duration based <em>zman</em> such as {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour()}.
 	 * @see #getDuration()
 	 */
-	public void setDuration(long duration) {
+	public void setDuration(Duration duration) {
 		this.duration = duration;
 	}
 
@@ -214,8 +215,7 @@ public class Zman {
 
 	/**
 	 * Sets the longer description or explanation of a <em>zman</em>.
-	 * @param description
-	 *            the <em>zman</em> description to set.
+	 * @param description the <em>zman</em> description to set.
 	 * @see #getDescription()
 	 */
 	public void setDescription(String description) {
@@ -223,18 +223,32 @@ public class Zman {
 	}
 
 	/**
-	 * A {@link Comparator} that will compare and sort <em>zmanim</em> by date/time order. Compares its two arguments by the zman's date/time
-	 * order. Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater
-	 * than the second.
-	 * Please note that this class will handle cases where either the {@code Zman} is a null or {@link #getZman()} returns a null.
+	 * A {@link Comparator} that will compare and sort <em>zmanim</em> by date/time order. Compares its two arguments by the zman's
+	 * date/time order. Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or
+	 * greater than the second. Please note that this class will handle cases where either the {@code Zman} is a null or
+	 * {@link #getZman()} returns a null.
 	 */
-	public static final Comparator<Zman> DATE_ORDER = new Comparator<Zman>() {
-		public int compare(Zman zman1, Zman zman2) {
-        long firstTime = (zman1 == null || zman1.getZman() == null) ? Long.MAX_VALUE : zman1.getZman().toEpochMilli();
-        long secondTime = (zman2 == null || zman2.getZman() == null) ? Long.MAX_VALUE : zman2.getZman().toEpochMilli();
-        return Long.compare(firstTime, secondTime);
+	public static final Comparator<Zman> DATE_ORDER = Comparator.nullsLast((z1, z2) -> {
+		if (z1.getZman() != null && z2.getZman() != null) {
+			return z1.getZman().compareTo(z2.getZman());
 		}
-    };
+		if (z1.getZman() != null) {
+			return -1;
+		}
+		if (z2.getZman() != null) {
+			return 1;
+		}
+		if (z1.getDuration() != null && z2.getDuration() != null) {
+			return z1.getDuration().compareTo(z2.getDuration());
+		}
+		if (z1.getDuration() != null) {
+			return -1;
+		}
+		if (z2.getDuration() != null) {
+			return 1;
+		}
+		return 0;
+	});
 
 	/**
 	 * A {@link Comparator} that will compare and sort zmanim by zmanim label order. Compares its two arguments by the zmanim label
@@ -243,29 +257,40 @@ public class Zman {
 	 * Please note that this class will sort cases where either the {@code Zman} is a null or {@link #label} returns a null
 	 * as empty {@code String}s.
 	 */
-	public static final Comparator<Zman> NAME_ORDER = new Comparator<Zman>() {
-		public int compare(Zman zman1, Zman zman2) {
-        String firstLabel = (zman1 == null || zman1.getLabel() == null) ? "" : zman1.getLabel();
-        String secondLabel = (zman2 == null || zman2.getLabel() == null) ? "" : zman2.getLabel();
-        return firstLabel.compareTo(secondLabel);
-		}
-    };
+	public static final Comparator<Zman> NAME_ORDER = Comparator.nullsFirst(
+			Comparator.comparing(Zman::getLabel, Comparator.nullsFirst(Comparator.naturalOrder()))
+	);
 
 	/**
 	 * A {@link Comparator} that will compare and sort duration based <em>zmanim</em>  such as
 	 * {@link com.kosherjava.zmanim.AstronomicalCalendar#getTemporalHour() temporal hour} (or the various <em>shaah zmanis</em> times
 	 * such as <em>{@link com.kosherjava.zmanim.ZmanimCalendar#getShaahZmanisGRA() shaah zmanis GRA}</em> or
-	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}). Returns a negative
-	 * integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getShaahZmanis16Point1Degrees() <em>shaah zmanis 16.1&deg;</em>}).
+	 * Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
 	 * Please note that this class will sort cases where {@code Zman} is a null.
 	 */
-	public static final Comparator<Zman> DURATION_ORDER = new Comparator<Zman>() {
-		public int compare(Zman zman1, Zman zman2) {
-			long firstDuration  = zman1 == null ? Long.MAX_VALUE : zman1.getDuration();
-			long secondDuration  = zman2 == null ? Long.MAX_VALUE : zman2.getDuration();
-			return Long.compare(firstDuration, secondDuration);
+	public static final Comparator<Zman> DURATION_ORDER = Comparator.nullsLast((z1, z2) -> {
+		if (z1.getDuration() != null && z2.getDuration() != null) {
+			return z1.getDuration().compareTo(z2.getDuration());
 		}
-    };
+		if (z1.getDuration() != null) {
+			return -1;
+		}
+		if (z2.getDuration() != null) {
+			return 1;
+		}
+		if (z1.getZman() != null && z2.getZman() != null) {
+			return z1.getZman().compareTo(z2.getZman());
+		}
+		if (z1.getZman() != null) {
+			return -1;
+		}
+		if (z2.getZman() != null) {
+			return 1;
+		}
+		return 0;
+	});
+
 
 	/**
 	 * A method that returns an XML formatted <code>String</code> representing the serialized <code>Object</code>. Very
