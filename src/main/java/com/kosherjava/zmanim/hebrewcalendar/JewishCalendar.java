@@ -380,7 +380,9 @@ public class JewishCalendar extends JewishDate {
 		 * Rosh Hashana as 1, we have to add 1 day for a total of 171. To this add a day since the tekufah is on a Tuesday
 		 * night, and we push off the bracha to Wednesday morning resulting in the 172 used in the calculation.
 		 */
-		return elapsedDays % (28 * 365.25) == 172; // 28 years of 365.25 days + the offset from molad tohu mentioned above
+		// Pure integer math prevents implicit promotion to double. 28 * 365.25 is exactly 10227 days.
+		// Using "return elapsedDays % (28 * 365.25) == 172" would break with an integer overflow if Jewish year >= 5,879,101 😀
+		return elapsedDays % 10227 == 172; // 28 years of 365.25 days + the offset from molad tohu mentioned above
 	}
 
 	/**
