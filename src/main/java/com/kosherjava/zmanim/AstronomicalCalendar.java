@@ -635,7 +635,7 @@ public class AstronomicalCalendar implements Cloneable {
 		Duration offsetDuration = Duration.ofNanos((long) (minutes * MINUTE_NANOS));
 		Instant offsetByTime = getTimeOffset(getSeaLevelSunset(), offsetDuration);
 		BigDecimal degrees = new BigDecimal(0);
-		BigDecimal incrementor = new BigDecimal("0.001");
+		BigDecimal incrementor = new BigDecimal("0.0001");
 		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.toEpochMilli() < offsetByTime.toEpochMilli()) ||
 				(minutes < 0.0 && offsetByDegrees.toEpochMilli() > offsetByTime.toEpochMilli()))) {
 			if (minutes > 0.0) {
@@ -740,12 +740,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
-		int result = 17;
-		result = 37 * result + getClass().hashCode(); // needed or this and subclasses will return identical hash
-		result += 37 * result + Objects.hashCode(getLocalDate());
-		result += 37 * result + Objects.hashCode(getGeoLocation());
-		result += 37 * result + Objects.hashCode(getAstronomicalCalculator());
-		return result;
+		return Objects.hash(getClass(), getLocalDate(), getGeoLocation(), getAstronomicalCalculator());
 	}
 
 	/**
