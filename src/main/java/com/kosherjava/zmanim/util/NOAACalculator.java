@@ -426,7 +426,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 			equationOfTime = getEquationOfTime(newt);
 			solNoonUTC = (solarEvent == SolarEvent.NOON ? 720 : 1440) + (longitude * 4) - equationOfTime;
 		}
-		return (solarEvent == SolarEvent.NOON ? 720 : 1440) + (longitude * 4 ) - equationOfTime;
+		return solNoonUTC;
 	}
 	
 	/**
