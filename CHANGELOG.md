@@ -10,9 +10,9 @@
     * `getSofZmanTfilaFixedLocal()`
     * `getMinchaGedolaBaalHatanyaGreaterThan30()` should now be calculated via `ZmanimCalendar.getMinchaGedolaGreaterThan30(Instant minchaGedolaBaalHatanya)`
     * `getFixedLocalChatzosBasedZmanim(Date, Date, double)`
-    * Move ErevPesach zmanim to generic methods in the parent `ZmanimCalendar` class.
+      * was replaced by the more generic [`ZmanimCalendar.getHalfDayBasedZman(Date, Date, double)`](https://github.com/KosherJava/zmanim/commit/b4983499e6e938bf3ee84661d3fcbf98dc4da438) method
     * Move `getSunriseBaalHatanya()` and `getSunsetBaalHatanya()` to the parent `ZmanimCalendar` class.
-    * various mispelled getBainHasmashos based zmanim (use the properly spelled getBainHasmashos versions
+    * various mispelled [`getBainHasmashos()`](https://github.com/KosherJava/zmanim/commit/838ed7f98f526bd5885f2bc865ca450ba6f7123b) based zmanim (use the properly spelled getBainHasmashos versions
   * `JewishCalendar` class
     * `isVeseinTalUmatarStartDate()` - use `TefilaRules.isVeseinTalUmatarStartDate()`
     * `isVeseinTalUmatarStartingTonight()` - use `TefilaRules.isVeseinTalUmatarStartingTonight()`
@@ -32,7 +32,7 @@
   * `getSofZmanTfilaMGA72Minutes()`
   * `getTzaisGeonim8Point5Degrees()`
   * `getZmanisBasedOffset(double)`
-* `ZmanimCalendar` class rename some genericly named method names to be more specific. The actual zmanim were not chnaged.
+* `ZmanimCalendar` class rename some generically named method names to be more specific. The actual zmanim were not changed.
     * rename `getTzais()` -> `getTzaisGeonim8Point5Degrees()`
     * `getAlosHashachar()` -> `getAlos16Point1Degrees()`
     * `getSofZmanShmaMGA()` -> `getSofZmanShmaMGA72Minutes()`
@@ -67,6 +67,7 @@
   * `GeoLocation.getLocalMeanTimeOffset()` and `getAntimeridianAdjustment()` now takes in `Instant` parameter.
   * Remove the no longer necessary `NOAACalculator.adjustHourForTimeZone(Calendar)`
 * `getSofZman*Chametz*` times will retun null if it is not _Erev Pesach_.
+* Move ErevPesach zmanim _calculations_ from the `ComprehensiveZmanimCaledar` to generic methods in the parent `ZmanimCalendar` class. Nothing changed in the signatures of the methods in the `ComprehensivZemanimCalendar` class.
 * Increase the minimum supported JRE version from version 8 (the code currently almost certainly works on 6 today) to Java 11 or higher.
 * `JewishCalendar` now has plus and minus methods (matching the `java.time.LocalDate` class) for years, months and days.
 * Tweaked logic in `AstronomicalCalendar.getInstantFromTime()` to address issues near the dateline.
@@ -86,7 +87,7 @@
   * Use `useAstronomicalChatzos` to control if `getChatzos()` returns `getSunTransit()` (astronomical chatzos) or getChatzosAsHalfDay().
   * Add `getHalfDayBasedZman(Date startOfHalfDay, Date endOfHalfDay, double hours)` to allow other zmanim to be impacted by chatzos.
   * Use `useAstronomicalChatzosForOtherZmanim`.
-  * `ZmanimCalendar` - add utility method `[getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)`](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
+  * `ZmanimCalendar` - add utility method [`getPercentOfShaahZmanisFromDegrees(double degrees, boolean sunset)`](https://github.com/KosherJava/zmanim/commit/60d1f09322835835035afa507ac2dc852f1cb033) to simplify zmaniyos time calculations. This allows calculations of various percentage of the day zmanim calculations.
 * Remove code duplication in `NOAACalculator.getUTCSunrise()` and `.getUTCSunset()`
 * Use Astronomical Chatzos Halayla (as opposed as halfway between sunset and sunrise or 12 hours after chatzos hayom)
   * `AstronomicalCalculator` - [add `getSunLowerTransit()`](https://github.com/KosherJava/zmanim/commit/a76a3b65aeb45912bfdb02ce354f74bb97a9d9b2)
@@ -97,7 +98,7 @@
   * Started coding some zmanim to use the half-day zmanim config.
   * Change `getFixedLocalChatzosBasedZmanim()` in favor of `getHalfDayBasedZman()` in the parent `ZmanimCalendar class. 
   * `getFixedLocalChatzos()` now just calls the new getLocalMeanTime(12.0) in the grandparent AstronomicalCalendar class.
-  * Remove `getSolarMidnight()` that was added to the AstronomicalCalendar grandparent class.
+  * Remove [`getSolarMidnight()`] that was [added to the `AstronomicalCalendar`](https://github.com/KosherJava/zmanim/commit/a4535717353eb77da10b6951e4a627b10258ac9e) grandparent class.
   * Undeprecate `getPlagAlosToSunset()` since it is not a zman that can be too late.
   * Add [`getSofZmanAchilasChametzMGA72MinutesZmanis()` and `getSofZmanBiurChametzMGA72MinutesZmanis()`](https://github.com/KosherJava/zmanim/commit/c444fd3d1ae327560158b5f11c918a59c4eff55e)
   * [Add null checks in `getMinchaGedolaAhavatShalom()`](https://github.com/KosherJava/zmanim/commit/93f441f1ff87d4669c91b596eed157c9cf448bca)
@@ -118,7 +119,7 @@
 * `JewishCalendar`
   * [`isYomTov()` now returns true for 20 Nissan](https://github.com/KosherJava/zmanim/commit/4e5abe6e98d5404f41da519f2f902b3af1e58e30)
   * [add missing brace to `isYomTov()` and simplify logic](https://github.com/KosherJava/zmanim/commit/e34fc879313b045f35e70b5947e2c2e20a4364c5)
-* `JewishCalendar
+* `JewishCalendar`
   * `getDaysInJewishMonth(int,int)` and `getLastDayOfGregorianMonth(int,int)` now have parameter order as year, month (it had been month, year).
   * `isJewishLeapYear(int)` is now public.
 * `GeoLocation` - [add NaN validation to `setLatitude` and `setLongitude`](https://github.com/KosherJava/zmanim/commit/d064715ebeaead29a01ec673f3885ee9bd9c78b4)
