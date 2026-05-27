@@ -404,6 +404,8 @@ public class HebrewDateFormatter {
 			"שושן פורים קטן",
 			"אסרו חג"};
 
+	private final String[] tekufaNames = new String[] {"Tishrei", "Teves", "Nissan", "Tammuz"};
+
 	/**
 	 * Formats the <em>Yom Tov</em> (holiday) in Hebrew or transliterated Latin characters.
 	 * 
@@ -1007,5 +1009,23 @@ public class HebrewDateFormatter {
 	public String formatSpecialParsha(JewishCalendar jewishCalendar) {
 		JewishCalendar.Parsha specialParsha =  jewishCalendar.getSpecialShabbos();
 		return hebrewFormat ? hebrewParshaMap.get(specialParsha) : transliteratedParshaMap.get(specialParsha);
+	}
+
+	/**
+	 * Returns the name of the upcoming tekufa/season.
+	 * @return the name of the upcoming tekufa/season, which could be: "Tishrei", "Teves", "Nissan", "Tammuz"
+	 */
+	public String getTekufaName(JewishCalendar jewishCalendar) {
+		double INITIAL_TEKUFA_OFFSET = 12.625;  // the number of days Tekufas Tishrei occurs before JEWISH_EPOCH
+		double days = JewishDate.getJewishCalendarElapsedDays(jewishCalendar.getJewishYear()) + jewishCalendar.getDaysSinceStartOfJewishYear() + INITIAL_TEKUFA_OFFSET - 1;  // total days since first Tekufas Tishrei event
+
+		double solarDaysElapsed = days % 365.25;  // total days elapsed since start of solar year
+		int currentTekufaNumber = (int) (solarDaysElapsed / 91.3125);  // the current quarter of the solar year
+		double tekufaDaysElapsed = solarDaysElapsed % 91.3125;  // the number of days that have passed since a tekufa event
+		if (tekufaDaysElapsed > 0 && tekufaDaysElapsed <= 1) {  // if the tekufa happens in the upcoming 24 hours
+			return tekufaNames[currentTekufaNumber];//0 for Tishrei, 1 for Tevet, 2, for Nissan, 3 for Tammuz
+		} else {
+			return "";
+		}
 	}
 }

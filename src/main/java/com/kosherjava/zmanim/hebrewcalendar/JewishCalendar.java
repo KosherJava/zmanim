@@ -1379,6 +1379,61 @@ public class JewishCalendar extends JewishDate {
 		double solar = (getJewishYear() - 1) * 365.25;
 		return (int) Math.floor(days - solar);
 	}
+
+	/**
+	 * Returns a <code>Double</code> that represents the hours for when the Tekufa (season) changes. There are 4 tekufas
+	 * a year: Nissan/Spring, Tammuz/Summer, Tishri/Fall, and Tevet/Winter. This is calculation is according to Shmuel
+	 * in Eruvin 56a, which is a more rounded up version of Rav Adda's calculation. The Rama writes in Yoreh De'ah 116:5
+	 * writes that one should not drink water during the tekufa change.
+	 *
+	 * @return the number of hours into the hebrew day that the tekufa (season) change takes place, or null if the
+	 * tekufa does not occur on current day. For example: 19.5 would mean that the tekufa occurs 19 hours and a half into
+	 * the hebrew date, or 13 and a half hours (-6 hours) into the Gregorian date.
+	 */
+	public Double getTekufa() {
+		double INITIAL_TEKUFA_OFFSET = 12.625;  // the number of days Tekufas Tishrei occurs before JEWISH_EPOCH
+
+		double days = getJewishCalendarElapsedDays(getJewishYear()) + getDaysSinceStartOfJewishYear() + INITIAL_TEKUFA_OFFSET - 1;  // total days since first Tekufas Tishrei event
+
+		double solarDaysElapsed = days % 365.25;  // total days elapsed since start of solar year
+		double tekufaDaysElapsed = solarDaysElapsed % 91.3125;  // the number of days that have passed since a tekufa event
+		if (tekufaDaysElapsed > 0 && tekufaDaysElapsed <= 1) {  // if the tekufa happens in the upcoming 24 hours
+			return ((1.0 - tekufaDaysElapsed) * 24.0) % 24;// rationalize the tekufa event to number of hours since start of jewish day
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns a Instant if the current day has a tekufa (season) change. The Instant will contain the time that the tekufa (season)
+	 * is arriving. If this method is called on a day without a tekufa change, it will return a null.
+	 * The default implementation of this method will return the Tekufa change according to the calculations of Rabbi
+	 * Tulchinsky in his calendar <a href="https://zmanim.online/">Luach Itim
+	 * Lebinah</a>. However, there is also the opinion of Rabbi Yonah Boron, who says to calculate
+	 * the tekufa based on local midday in Israel which causes a 21-minute difference. There is a third opinion as well
+	 * to use seasonal midday but that is not a generally followed opinion, so it has not been implemented.
+	 * @param shouldMinus21Minutes if true, removes 21 minutes from the time of Rabbi Tulchinsky's tekufa which will
+	 *                                result to the opinion of Rabbi Yonah Boron.
+	 * @return an Instant with the time that the tekufa (season) changes or a null on a day with no tekufa change.
+	 */
+	public Instant getTekufaAsInstant(boolean shouldMinus21Minutes) {
+		Double hours = getTekufa();
+		if (hours == null) {
+			return null;
+		}
+		// The tekufa Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will result in the time
+		// being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual time in DST will be done by the date
+		// formatter class used to display the Date.
+		ZoneId yerushalayimStandardTZ = ZoneId.of("GMT+2");
+
+		hours = hours - 6; // minus 6 hours because the hebrew date starts at sunset which is at 6PM
+		int minutes = (int) ((hours - hours.intValue()) * 60);
+
+		LocalTime time = LocalTime.of(hours.intValue(), minutes);
+		ZonedDateTime tekufaZDT = ZonedDateTime.of(getLocalDate(), time, yerushalayimStandardTZ);
+
+		return tekufaZDT.minusMinutes(shouldMinus21Minutes ? 21 : 0).toInstant();
+	}
 	
 	/**
 	 * Returns true if the current day is <em>Isru Chag</em>. The method returns true for the day following <em>Pesach</em>
