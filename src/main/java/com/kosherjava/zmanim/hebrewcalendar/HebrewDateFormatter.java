@@ -1012,10 +1012,12 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Returns the name of the upcoming tekufa/season.
-	 * @return the name of the upcoming tekufa/season, which could be: "Tishrei", "Teves", "Nissan", "Tammuz"
+	 * Returns a string if the current day has a tekufa event. The string will contain the name of the tekufa/season that is arriving.
+	 * If this method is called on a day without a tekufa event, it will return an empty string.
+	 * @return a string with the name of the upcoming tekufa/season, which could be: "Tishrei", "Teves", "Nissan", "Tammuz",
+	 * or an empty string on a day without a tekufa event.
 	 */
-	public String getTekufaName(JewishCalendar jewishCalendar) {
+	public String formatTekufaName(JewishCalendar jewishCalendar) {
 		double INITIAL_TEKUFA_OFFSET = 12.625;  // the number of days Tekufas Tishrei occurs before JEWISH_EPOCH
 		double days = JewishDate.getJewishCalendarElapsedDays(jewishCalendar.getJewishYear()) + jewishCalendar.getDaysSinceStartOfJewishYear() + INITIAL_TEKUFA_OFFSET - 1;  // total days since first Tekufas Tishrei event
 

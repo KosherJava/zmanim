@@ -1382,9 +1382,10 @@ public class JewishCalendar extends JewishDate {
 
 	/**
 	 * Returns a <code>Double</code> that represents the hours for when the Tekufa (season) changes. There are 4 tekufas
-	 * a year: Nissan/Spring, Tammuz/Summer, Tishri/Fall, and Tevet/Winter. This is calculation is according to Shmuel
+	 * a year: Nissan/Spring, Tammuz/Summer, Tishri/Fall, and Tevet/Winter. This calculation is according to Shmuel
 	 * in Eruvin 56a, which is a more rounded up version of Rav Adda's calculation. The Rama writes in Yoreh De'ah 116:5
-	 * writes that one should not drink water during the tekufa change.
+	 * that one should not drink water during the tekufa change. Rabbi Ovadia Yosef (Halichot Olam, Chelek 7, Page 183)
+	 * recommends to abstain from drinking water for a range of 1 hour. (30 minutes before and after the tekufa event)
 	 *
 	 * @return the number of hours into the hebrew day that the tekufa (season) change takes place, or null if the
 	 * tekufa does not occur on current day. For example: 19.5 would mean that the tekufa occurs 19 hours and a half into
