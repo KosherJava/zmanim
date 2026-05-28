@@ -2023,12 +2023,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * This method returns the time of <em>plag hamincha</em> (the earliest time that Shabbos can be started) based on the
-	 * opinion of <a href="https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in
-	 * the <em>luach</em> of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that that <em>plag hamincha</em> is calculated
-	 * as 1.25 <em>shaos zmaniyos</em> before {@link #getTzaisGeonim3Point8Degrees() <em>tzais</em> 3.8°} with <em>shaos
-	 * zmaniyos</em> calculated based on a day starting at {@link #getAlos16Point1Degrees() <em>alos</em> 16.1°} and
-	 * ending at <em>tzais</em> 3.8°.
+	 * This method returns the time of <em>plag hamincha</em> (the earliest time that Shabbos can be started) based on the opinion of
+	 * <a href="https://en.wikipedia.org/wiki/Yaakov_Moshe_Hillel">Rabbi Yaakov Moshe Hillel</a> as published in the <em>luach</em>
+	 * of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that that <em>plag hamincha</em> is calculated as 1.25 <em>shaos
+	 * zmaniyos</em> before {@link #getTzaisGeonim3Point8Degrees() <em>tzais</em> 3.8°} with <em>shaos zmaniyos</em> calculated based
+	 * on a day starting at {@link #getAlos16Point1Degrees() <em>alos</em> 16.1°} and ending at <em>tzais</em> 3.8°.
 	 * 
 	 * @return the <code>Instant</code> of the <em>plag</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
@@ -2055,7 +2054,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * minutes. This calculation is based on the position of the sun 58.5 minutes after sunset in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
 	 * which calculates to 13.24° below {@link GEOMETRIC_ZENITH geometric zenith}.
-	 * NOTE: As per Yisrael Vehazmanim Vol. III page 1028, No. 50, a dip of slightly less than 13° should be used.
+	 * NOTE: As per Yisrael Vehazmanim Vol. III page 1025, No. 50, a dip of slightly less than 13° should be used.
 	 * Calculations show that the proper dip to be 13.2456° (truncated to 13.24 that provides about 1.5 second
 	 * earlier (<em>lechumra</em>) time) below the horizon at that time. This makes a difference of 1 minute and 10
 	 * seconds in Jerusalem during the Equinox, and 1 minute 29 seconds during the solstice as compared to the proper
@@ -2204,7 +2203,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as the sun's
 	 * position 2.8° above the horizon <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
-	 * its position 16.875 minutes or 3/4 of an 18-minute <a href=
+	 * its position 16.875 minutes or 3/4 of an 22.5-minute <a href=
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> before sunset. According to
 	 * the Yereim, <em>bain hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall
 	 * starts at sunset. Details, including how the degrees were calculated can be seen in the documentation of
@@ -2457,7 +2456,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * This method returns <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated as 45 minutes
 	 * after sunset during the summer solstice in New York, when the <em>neshef</em> (twilight) is the longest. The sun's
-	 * position at this time computes to {@link ZENITH_7_POINT_67 7.75°} below the western horizon. See <a href=
+	 * position at this time computes to {@link ZENITH_7_POINT_67 7.67°} below the western horizon. See <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=921&pgnum=149">Igros Moshe Even Haezer 4, Ch. 4</a> (regarding
 	 * <em>tzais</em> for <em>krias Shema</em>). It is also mentioned in Rabbi Heber's <a href=
 	 * "https://hebrewbooks.org/53000">Shaarei Zmanim</a> on in
@@ -3015,8 +3014,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * The <em>sof zman Kiddush Levana</em> will be returned even if it occurs during the day. To limit the time to between
 	 * <em>tzais</em> and <em>alos</em>, see {@link #getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)}.
 	 * 
-	 * @return the Instant representing the moment halfway between molad and molad. If the time occurs between
-	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned. If the <em>zman</em> will not occur on this
+	 * @return the Instant representing the moment halfway between molad and molad. If the <em>zman</em> will not occur on this
 	 *         day, a <code>null</code> will be returned.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)
 	 * @see #getSofZmanKidushLevana15Days()
@@ -3074,9 +3072,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Zmanim</a>. The <em>sof zman Kiddush Levana</em> will be returned even if it occurs during the day. To limit the time to
 	 * between <em>tzais</em> and <em>alos</em>, see {@link #getSofZmanKidushLevana15Days(Instant, Instant)}.
 	 * 
-	 * @return the Instant representing the moment 15 days after the <em>molad</em>. If the time occurs between
-	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned. If the <em>zman</em> will not occur on this day, a
-	 *         <code>null</code> will be returned.
+	 * @return the Instant representing the moment 15 days after the <em>molad</em>. If the <em>zman</em> will not occur on this day,
+	 *         a <code>null</code> will be returned.
 	 * @see #getSofZmanKidushLevana15Days(Instant, Instant)
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
 	 * @see JewishCalendar#getSofZmanKidushLevana15Days()
