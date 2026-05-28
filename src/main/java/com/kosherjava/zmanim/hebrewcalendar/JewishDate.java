@@ -143,6 +143,19 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public static final int ADAR_II = 13;
 
+    private static final int MONTH_JANUARY = 1;
+    private static final int MONTH_FEBRUARY = MONTH_JANUARY + 1;
+    private static final int MONTH_MARCH = MONTH_FEBRUARY + 1;
+    private static final int MONTH_APRIL = MONTH_MARCH + 1;
+    private static final int MONTH_MAY = MONTH_APRIL + 1;
+    private static final int MONTH_JUNE = MONTH_MAY + 1;
+    private static final int MONTH_JULY = MONTH_JUNE + 1;
+    private static final int MONTH_AUGUST = MONTH_JULY + 1;
+    private static final int MONTH_SEPTEMBER = MONTH_AUGUST + 1;
+    private static final int MONTH_OCTOBER = MONTH_SEPTEMBER + 1;
+    private static final int MONTH_NOVEMBER = MONTH_OCTOBER + 1;
+    private static final int MONTH_DECEMBER = MONTH_NOVEMBER + 1;
+
     /**
      * the Jewish epoch using the RD (Rata Die/Fixed Date or Reingold Dershowitz) day used in Calendrical Calculations.
      * Day 1 is January 1, 0001 of the Gregorian calendar
@@ -320,11 +333,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     private static LocalDate absDateToDate(int absDate) {
         int year = absDate / 366; // Search forward year by year from approximate year
-        while (absDate >= gregorianDateToAbsDate(year + 1, 1, 1)) {
+        while (absDate >= gregorianDateToAbsDate(year + 1, MONTH_JANUARY, 1)) {
             year++;
         }
 
-        int month = 1; // Search forward month by month from January
+        int month = MONTH_JANUARY; // Search forward month by month from January
         while (absDate > gregorianDateToAbsDate(year, month, getLastDayOfGregorianMonth(year, month))) {
             month++;
         }
@@ -356,7 +369,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     private static int gregorianDateToAbsDate(int year, int month, int dayOfMonth) {
         int absDate = dayOfMonth;
-        for (int m = month - 1; m > 0; m--) {
+        for (int m = month - 1; m >= MONTH_JANUARY; m--) {
             absDate += getLastDayOfGregorianMonth(year, m); // days in prior months of the year
         }
 
@@ -1032,7 +1045,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     /**
      * Subtracts the number of days passed in from the currently set date.
      * @param days the number of days to subtract.
-     * @see plusDays(int)
+     * @see #plusDays(int)
      */
     public void minusDays(int days){
         if (days < 1) {
@@ -1046,7 +1059,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * Add the number of days passed in to the currently set date.
      * @param days the number of days to add.
      *
-     * @see minusDays(int)
+     * @see #minusDays(int)
      */
     public void plusDays(int days){
         if (days < 1) {
@@ -1059,7 +1072,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * Add the number of months passed in to the currently set date. If the day of the month prior to addition is the 30th, and
      * the target month only has 29 days, the date will be clamped to the 29th.
      * @param months the number of months to add.
-     * @see minusMonths(int)
+     * @see #plusMonths(int)
      */
     public void plusMonths(int months){
         if (months < 1) {
@@ -1086,7 +1099,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * Subtracts the number of months passed in to the currently set date. If the day of the month prior to subtraction
      * is the 30th, and the target month only has 29 days, the date will be clamped to the 29th.
      * @param months the number of months to add.
-     * @see plusMonths(int)
+     * @see #plusMonths(int)
      */
     public void minusMonths(int months){
         if (months < 1) {
@@ -1123,7 +1136,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * @param useAdarAlephForLeapYear if set to true and the current month is Adar on a non-leap year and it is being moved
      *           forward to a leap year, it will be set to Adar I, and if set to false it will set to Adar II. This will be
      *           ignored if the month is not set to Adar.
-     * @see minusYears(int, boolean)
+     * @see #minusYears(int, boolean)
      */
     public void plusYears(int years, boolean useAdarAlephForLeapYear){
         if (years < 1) {
@@ -1160,7 +1173,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      * @param useAdarAlephForLeapYear if set to true and the current month is Adar on a non-leap year and it is being
      *           subtracted to a leap year, it will be set to Adar I, and if set to false it will set to Adar II. This will
      *           be ignored if the month is not set to Adar.
-     * @see plusYears(int, boolean)
+     * @see #plusYears(int, boolean)
      */
     public void minusYears(int years, boolean useAdarAlephForLeapYear){
         if (years < 1) {

@@ -4,11 +4,13 @@
 
 package com.kosherjava.zmanim.hebrewcalendar;
 
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+
+
+import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Calendar;
 
 /**
  *
@@ -21,11 +23,11 @@ public class UT_JewishDateNavigation {
 	public void jewishForwardMonthToMonth() {
 
 		JewishDate jewishDate = new JewishDate();
-		jewishDate.setJewishDate(5771, 1, 1);
+		jewishDate.setJewishDate(5771, JewishDate.NISSAN, 1);
         LocalDate localDate = jewishDate.getLocalDate();
-		Assert.assertEquals(5, localDate.getDayOfMonth());
-		Assert.assertEquals(Month.APRIL, localDate.getMonth());
-		Assert.assertEquals(2011, localDate.getYear());
+		assertEquals(5, localDate.getDayOfMonth());
+		assertEquals(Month.APRIL, localDate.getMonth());
+		assertEquals(2011, localDate.getYear());
 	}
 
 
@@ -35,11 +37,11 @@ public class UT_JewishDateNavigation {
 		// At one point, this test was failing as the JewishDate class spun through a never-ending loop...
 
 		JewishDate jewishDate = new JewishDate();
-		jewishDate.setJewishDate(5771, 7, 1);
+		jewishDate.setJewishDate(5771, JewishDate.TISHREI, 1);
         LocalDate localDate = jewishDate.getLocalDate();
-		Assert.assertEquals(9, localDate.getDayOfMonth());
-		Assert.assertEquals(Month.SEPTEMBER, localDate.getMonth());
-		Assert.assertEquals(2010, localDate.getYear());
+		assertEquals(9, localDate.getDayOfMonth());
+		assertEquals(Month.SEPTEMBER, localDate.getMonth());
+		assertEquals(2010, localDate.getYear());
 	}
 
 	@Test
@@ -48,16 +50,16 @@ public class UT_JewishDateNavigation {
 		JewishDate adarAlephDate = new JewishDate();
 		adarAlephDate.setJewishDate(5783, JewishDate.ADAR, 10);
 		adarAlephDate.plusYears(1, true);
-		Assert.assertEquals(5784, adarAlephDate.getJewishYear());
-		Assert.assertEquals(JewishDate.ADAR, adarAlephDate.getJewishMonth());
-		Assert.assertEquals(10, adarAlephDate.getJewishDayOfMonth());
+		assertEquals(5784, adarAlephDate.getJewishYear());
+		assertEquals(JewishDate.ADAR, adarAlephDate.getJewishMonth());
+		assertEquals(10, adarAlephDate.getJewishDayOfMonth());
 
 		JewishDate adarBeisDate = new JewishDate();
 		adarBeisDate.setJewishDate(5783, JewishDate.ADAR, 10);
 		adarBeisDate.plusYears(1, false);
-		Assert.assertEquals(5784, adarBeisDate.getJewishYear());
-		Assert.assertEquals(JewishDate.ADAR_II, adarBeisDate.getJewishMonth());
-		Assert.assertEquals(10, adarBeisDate.getJewishDayOfMonth());
+		assertEquals(5784, adarBeisDate.getJewishYear());
+		assertEquals(JewishDate.ADAR_II, adarBeisDate.getJewishMonth());
+		assertEquals(10, adarBeisDate.getJewishDayOfMonth());
 	}
 
 
