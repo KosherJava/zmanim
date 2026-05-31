@@ -40,52 +40,53 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * caused by trying to calculate times for areas either very far North or South, where sunrise / sunset never happen on that date.
  * This is common when calculating twilight with a deep dip below the horizon for locations as far south of the North Pole as London,
  * in the northern hemisphere. The sun never reaches this dip at certain times of the year. When the calculations encounter this
- * condition a <code>null</code> will be returned when a <code>{@link java.time.Instant}</code> or {@link java.time.Duration} is
- * expected. The reason that <code>Exception</code>s are not thrown in these cases is because the lack of a rise/set or twilight is
- * not an exception, but an expected condition in many parts of the world.
+ * condition a {@code null} will be returned when a {@link java.time.Instant} or {@link java.time.Duration} is expected. The reason
+ * that {@code Excelption}s are not thrown in these cases is because the lack of a rise/set or twilight is not an exception, but
+ * an expected condition in many parts of the world.
  * <p>
  * Here is a simple example of how to use the API to calculate sunrise.
  * First create the Calendar for the location you would like to calculate sunrise or sunset times for:
  * 
- * <pre>
+ * {@snippet lang='java' :
  * String locationName = &quot;Lakewood, NJ&quot;;
  * double latitude = 40.0828; // Lakewood, NJ
  * double longitude = -74.2094; // Lakewood, NJ
  * double elevation = 20; // optional elevation correction in Meters
- * // the String parameter in getZoneId() has to be a valid ZoneId listed in {@link java.time.ZoneId#getAvailableZoneIds()}
- * ZoneId zoneId = ZoneId.of(&quot;America/New_York&quot;);
+ * // @link region="target_zone_link" substring="getAvailableZoneIds()" target="java.time.ZoneId#getAvailableZoneIds()"
+ * ZoneId zoneId = ZoneId.of("America/New_York"); // set the zoneId to a valid ZoneId listed in getAvailableZoneIds()
+ * // @end
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, zoneId);
  * AstronomicalCalendar ac = new AstronomicalCalendar(location);
- * </pre>
+ * }
  * 
  * To get the time of sunrise, first set the date you want (if not set, the date will default to today):
  * 
- * <pre>
+ * {@snippet lang='java' :
  * LocalDate localDate = LocalDate.of(1969, Month.FEBRUARY, 8);
  * ac.setLocalDate(localDate);
  * Instant sunrise = ac.getSunrise();
- * </pre>
+ * }
  * 
  * @author &copy; Eliyahu Hershfeld 2004 - 2026
  */
 public class AstronomicalCalendar implements Cloneable {
 
 	/**
-	 * 90&deg; below the vertical. Used as a basis for most calculations since the location of the sun is 90&deg; below the horizon
+	 * 90° below the vertical. Used as a basis for most calculations since the location of the sun is 90° below the horizon
 	 * at sunrise and sunset.
 	 * <b>Note </b>: it is important to note that for sunrise and sunset the {@link AstronomicalCalculator#adjustZenith(double,
 	 * double) adjusted zenith} is required to account for the radius of the sun and refraction. The adjusted zenith should not be
-	 * used for calculations above or below 90&deg; since they are usually calculated as an offset to 90&deg;.
+	 * used for calculations above or below 90° since they are usually calculated as an offset to 90°.
 	 */
 	public static final double GEOMETRIC_ZENITH = 90;
 
-	/** Sun's zenith at civil twilight (96&deg;). */
+	/** Sun's zenith at civil twilight (96°). */
 	public static final double CIVIL_ZENITH = 96;
 
-	/** Sun's zenith at nautical twilight (102&deg;). */
+	/** Sun's zenith at nautical twilight (102°). */
 	public static final double NAUTICAL_ZENITH = 102;
 
-	/** Sun's zenith at astronomical twilight (108&deg;). */
+	/** Sun's zenith at astronomical twilight (108°). */
 	public static final double ASTRONOMICAL_ZENITH = 108;
 
 	/** constant for nanoseconds in a minute (60,000) */
@@ -95,7 +96,7 @@ public class AstronomicalCalendar implements Cloneable {
 	public static final long HOUR_NANOS = 3_600_000_000_000L;
 	
 	/**
-	 * The <code>LocalDate</code> encapsulated by this class to track the current date used by the class
+	 * The {@code LocalDate} encapsulated by this class to track the current date used by the class
 	 */
 	private LocalDate localDate;
 
@@ -110,16 +111,16 @@ public class AstronomicalCalendar implements Cloneable {
 	private AstronomicalCalculator astronomicalCalculator;
 
 	/**
-	 * The getSunrise method returns a <code>Instant</code> representing the {@link AstronomicalCalculator
+	 * The getSunrise method returns a {@code Instant} representing the {@link AstronomicalCalculator
 	 * #getElevationAdjustment(double) elevation adjusted} sunrise time. The zenith used for the calculation uses {@link
-	 * GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is
+	 * #GEOMETRIC_ZENITH geometric zenith} of 90° plus {@link AstronomicalCalculator#getElevationAdjustment(double)}. This is
 	 * adjusted by the {@link AstronomicalCalculator} to add approximately 50/60 of a degree to account for 34 archminutes of
-	 * refraction and 16 archminutes for the sun's radius for a total of {@link AstronomicalCalculator#adjustZenith 90.83333&deg;}.
+	 * refraction and 16 archminutes for the sun's radius for a total of {@link AstronomicalCalculator#adjustZenith 90.83333°}.
 	 * See documentation for the specific implementation of the {@link AstronomicalCalculator} that you are using.
 	 * 
-	 * @return the <code>Instant</code> representing the exact sunrise time. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} representing the exact sunrise time. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see AstronomicalCalculator#adjustZenith(double, double)
 	 * @see getSeaLevelSunrise()
 	 * @see getUTCSunrise(double)
@@ -139,9 +140,9 @@ public class AstronomicalCalendar implements Cloneable {
 	 * something that is not affected by elevation. This method returns sunrise calculated at sea level. This forms the
 	 * base for dawn calculations that are calculated as a dip below the horizon before sunrise.
 	 * 
-	 * @return the <code>Instant</code> representing the exact sea-level sunrise time. If the calculation can't be computed
+	 * @return the {@code Instant} representing the exact sea-level sunrise time. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         where it does not set, a {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see getSunrise()
 	 * @see getUTCSeaLevelSunrise(double)
 	 * @see getSeaLevelSunset()
@@ -157,10 +158,10 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that returns the beginning of <a href="https://en.wikipedia.org/wiki/Twilight#Civil_twilight">civil twilight</a>
-	 * (dawn) using a zenith of {@link CIVIL_ZENITH 96&deg;}.
+	 * (dawn) using a zenith of {@link #CIVIL_ZENITH 96°}.
 	 * 
-	 * @return The <code>Instant</code> of the beginning of civil twilight using a zenith of 96&deg;. If the calculation
-	 *         can't be computed, <code>null</code> will be returned. See detailed explanation on top of the page.
+	 * @return The {@code Instant} of the beginning of civil twilight using a zenith of 96°. If the calculation
+	 *         can't be computed, {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getBeginCivilTwilight() {
 		return getSunriseOffsetByDegrees(CIVIL_ZENITH);
@@ -168,10 +169,10 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that returns the beginning of <a href="https://en.wikipedia.org/wiki/Twilight#Nautical_twilight">nautical twilight</a>
-	 * using a zenith of {@link NAUTICAL_ZENITH 102&deg;}.
+	 * using a zenith of {@link #NAUTICAL_ZENITH 102°}.
 	 * 
-	 * @return The <code>Instant</code> of the beginning of nautical twilight using a zenith of 102&deg;. If the calculation
-	 *         can't be computed <code>null</code> will be returned. See detailed explanation on top of the page.
+	 * @return The {@code Instant} of the beginning of nautical twilight using a zenith of 102°. If the calculation
+	 *         can't be computed {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getBeginNauticalTwilight() {
 		return getSunriseOffsetByDegrees(NAUTICAL_ZENITH);
@@ -179,30 +180,30 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that returns the beginning of <a href="https://en.wikipedia.org/wiki/Twilight#Astronomical_twilight">astronomical
-	 * twilight</a> using a zenith of {@link ASTRONOMICAL_ZENITH 108&deg;}.
+	 * twilight</a> using a zenith of {@link #ASTRONOMICAL_ZENITH 108°}.
 	 * 
-	 * @return The <code>Instant</code> of the beginning of astronomical twilight using a zenith of 108&deg;. If the calculation
-	 *         can't be computed, <code>null</code> will be returned. See detailed explanation on top of the page.
+	 * @return The {@code Instant} of the beginning of astronomical twilight using a zenith of 108°. If the calculation
+	 *         can't be computed, {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getBeginAstronomicalTwilight() {
 		return getSunriseOffsetByDegrees(ASTRONOMICAL_ZENITH);
 	}
 
 	/**
-	 * The getSunset method returns an <code>Instant</code> representing the
+	 * The getSunset method returns an {@code Instant} representing the
 	 * {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjusted} sunset time. The zenith used for the
-	 * calculation uses {@link GEOMETRIC_ZENITH geometric zenith} of 90&deg; plus {@link AstronomicalCalculator
+	 * calculation uses {@link #GEOMETRIC_ZENITH geometric zenith} of 90° plus {@link AstronomicalCalculator
 	 * #getElevationAdjustment(double)}. This is adjusted by the {@link AstronomicalCalculator} to add approximately 50/60 of a
 	 * degree to account for 34 archminutes of refraction and 16 archminutes for the sun's radius for a total of {@link
-	 * AstronomicalCalculator#adjustZenith(double, double) 90.83333&deg;}. See documentation for the specific implementation of the
+	 * AstronomicalCalculator#adjustZenith(double, double) 90.83333°}. See documentation for the specific implementation of the
 	 * {@link AstronomicalCalculator} that you are using.
 	 * Note: In certain cases the calculates sunset will occur before sunrise. This will typically happen when a time zone other than
 	 * the local timezone is used (calculating Los Angeles sunset using a GMT time zone for example). In this case the sunset date
 	 * will be incremented to the following date.
 	 *
-	 * @return the <code>Instant</code> representing the exact sunset time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the exact sunset time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year where the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see AstronomicalCalculator#adjustZenith(double, double)
 	 * @see getSeaLevelSunset()
 	 * @see getUTCSunset(double)
@@ -222,9 +223,9 @@ public class AstronomicalCalendar implements Cloneable {
 	 * affected by elevation. This method returns sunset calculated at sea level. This forms the base for dusk calculations that are
 	 * calculated as a dip below the horizon after sunset.
 	 * 
-	 * @return the <code>Instant</code> representing the exact sea-level sunset time. If the calculation can't be computed
+	 * @return the {@code Instant} representing the exact sea-level sunset time. If the calculation can't be computed
 	 *         such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
-	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         where it does not set, a {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see getSunset()
 	 * @see getUTCSeaLevelSunset(double)
 	 */
@@ -239,45 +240,44 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method that returns the end of <a href="https://en.wikipedia.org/wiki/Twilight#Civil_twilight">civil twilight</a>
-	 * using a zenith of {@link CIVIL_ZENITH 96&deg;}.
+	 * using a zenith of {@link #CIVIL_ZENITH 96°}.
 	 * 
-	 * @return The <code>Instant</code> of the end of civil twilight using a zenith of {@link CIVIL_ZENITH 96&deg;}. If the
-	 *         calculation can't be computed, <code>null</code> will be returned. See detailed explanation on top of the page.
+	 * @return The {@code Instant} of the end of civil twilight using a zenith of {@link #CIVIL_ZENITH 96°}. If the
+	 *         calculation can't be computed, {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getEndCivilTwilight() {
 		return getSunsetOffsetByDegrees(CIVIL_ZENITH);
 	}
 
 	/**
-	 * A method that returns the end of nautical twilight using a zenith of {@link NAUTICAL_ZENITH 102&deg;}.
+	 * A method that returns the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102°}.
 	 * 
-	 * @return The <code>Instant</code> of the end of nautical twilight using a zenith of {@link NAUTICAL_ZENITH 102&deg;}. If the
-	 *         calculation can't be computed, <code>null</code> will be returned. See detailed explanation on top of the  age.
+	 * @return The {@code Instant} of the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102°}. If the
+	 *         calculation can't be computed, {@code null} will be returned. See detailed explanation on top of the  age.
 	 */
 	public Instant getEndNauticalTwilight() {
 		return getSunsetOffsetByDegrees(NAUTICAL_ZENITH);
 	}
 
 	/**
-	 * A method that returns the end of astronomical twilight using a zenith of {@link ASTRONOMICAL_ZENITH 108&deg;}.
+	 * A method that returns the end of astronomical twilight using a zenith of {@link #ASTRONOMICAL_ZENITH 108°}.
 	 * 
-	 * @return the <code>Instant</code> of the end of astronomical twilight using a zenith of {@link ASTRONOMICAL_ZENITH
-	 *         108&deg;}. If the calculation can't be computed, <code>null</code> will be returned. See detailed
-	 *         explanation on top of the page.
+	 * @return the {@code Instant} of the end of astronomical twilight using a zenith of {@link #ASTRONOMICAL_ZENITH 108°}. If
+	 *         the calculation can't be computed, {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getEndAstronomicalTwilight() {
 		return getSunsetOffsetByDegrees(ASTRONOMICAL_ZENITH);
 	}
 	
 	/**
-	 * A utility method that returns an <code>Instant</code> offset by the offset time passed in. Please note that the level of light
+	 * A utility method that returns an {@code Instant} offset by the offset time passed in. Please note that the level of light
 	 * during twilight is not affected by elevation, so if this is being used to calculate an offset before sunrise or after sunset
 	 * with the intent of getting a rough "level of light" calculation, the sunrise or sunset time passed to this method should be
 	 * sea level sunrise and sunset.
 	 * 
 	 * @param time the start time
-	 * @param offset the <code>Duration</code> of the offset to add to the time.
-	 * @return the {@link java.time.Instant} with the offset of the <code>Duration</code> added to it
+	 * @param offset the {@code Duration} of the offset to add to the time.
+	 * @return the {@link java.time.Instant} with the offset of the {@code Duration} added to it
 	 */
 	public static Instant getTimeOffset(Instant time, Duration offset) {
 		if (time == null || offset == null) {
@@ -288,15 +288,15 @@ public class AstronomicalCalendar implements Cloneable {
 	
 	/**
 	 * A utility method that returns the time of an offset by degrees below or above the horizon of {@link getSunrise() sunrise}.
-	 * Note that the degree offset is from the vertical, so for a calculation of 14&deg; before sunrise, an offset of 14
-	 * + {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 * Note that the degree offset is from the vertical, so for a calculation of 14° before sunrise, an offset of 14
+	 * + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * 
 	 * @param offsetZenith the degrees before {@link getSunrise()} to use in the calculation. For time after sunrise use negative
-	 *         numbers. Note that the degree offset is from the vertical, so for a calculation of 14&deg; before sunrise, an offset
-	 *         of 14 + {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 *         numbers. Note that the degree offset is from the vertical, so for a calculation of 14° before sunrise, an offset
+	 *         of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * @return The {@link java.time.Instant} of the offset after (or before) {@link getSunrise()}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does
-	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation
+	 *         not rise, and one where it does not set, a {@code null} will be returned. See detailed explanation
 	 *         on top of the page.
 	 */
 	public Instant getSunriseOffsetByDegrees(double offsetZenith) {
@@ -306,15 +306,15 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A utility method that returns the time of an offset by degrees below or above the horizon of {@link getSunset()
-	 * sunset}. Note that the degree offset is from the vertical, so for a calculation of 14&deg; after sunset, an offset of 14 +
-	 * {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 * sunset}. Note that the degree offset is from the vertical, so for a calculation of 14° after sunset, an offset of 14 +
+	 * {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * 
 	 * @param offsetZenith the degrees after {@link getSunset()} to use in the calculation. For time before sunset use negative
-	 *         numbers. Note that the degree offset is from the vertical, so for a calculation of 14&deg; after sunset, an offset
-	 *         of 14 + {@link GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
+	 *         numbers. Note that the degree offset is from the vertical, so for a calculation of 14° after sunset, an offset
+	 *         of 14 + {@link #GEOMETRIC_ZENITH} = 104 would have to be passed as a parameter.
 	 * @return The {@link java.time.Instant} of the offset after (or before) {@link getSunset()}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and
-	 *         and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         and one where it does not set, a {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getSunsetOffsetByDegrees(double offsetZenith) {
 		double sunset = getUTCSunset(offsetZenith);
@@ -323,7 +323,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * Default constructor will set a default {@link GeoLocation#GeoLocation()}, a default {@link AstronomicalCalculator#getDefault()
-	 * AstronomicalCalculator} and default the <code>LocalDate</code> to the current date.
+	 * AstronomicalCalculator} and default the {@code LocalDate} to the current date.
 	 */
 	public AstronomicalCalendar() {
 		this(new GeoLocation());
@@ -411,7 +411,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see getSeaLevelSunrise()
 	 * @see getSeaLevelSunset()
 	 * @see getTemporalHour(Instant, Instant)
-	 * @return the <code>Duration</code> of the temporal hour. If the calculation can't be computed a <code>null</code> will be
+	 * @return the {@code Duration} of the temporal hour. If the calculation can't be computed a {@code null} will be
 	 *         returned. See detailed explanation on top of the page.
 	 * 
 	 */
@@ -426,7 +426,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * 
 	 * @param startOfDay The start of the day.
 	 * @param endOfDay The end of the day.
-	 * @return the <code>Duration</code> of the temporal hour. If the calculation can't be computed a <code>null</code> will be
+	 * @return the {@code Duration} of the temporal hour. If the calculation can't be computed a {@code null} will be
 	 *         returned. See detailed explanation on top of the page.
 	 * @see getTemporalHour()
 	 */
@@ -450,10 +450,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 * <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on the proper
 	 * definition of solar noon / midday.
 	 * 
-	 * @return the <code>Instant</code> representing Sun's transit. If the calculation can't be computed such as when using the {@link
+	 * @return the {@code Instant} representing Sun's transit. If the calculation can't be computed such as when using the {@link
 	 *         com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does not support getting solar noon for the Arctic
 	 *         Circle (where there is at least one day a year where the sun does not rise, and one where it does not set), a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see getSunTransit(Instant, Instant)
 	 * @see getTemporalHour()
 	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
@@ -478,11 +478,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 * See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of Chatzos</a> for details on the proper
 	 * definition of solar noon / midday.
 	 * 
-	 * @return the <code>Instant</code> representing Sun's lower transit at the <b>end of the current day</b>. If the calculation
+	 * @return the {@code Instant} representing Sun's lower transit at the <b>end of the current day</b>. If the calculation
 	 *         can't be computed such as when using the {@link com.kosherjava.zmanim.util.SunTimesCalculator USNO calculator} that does
 	 *         not support getting solar noon or midnight for the Arctic Circle (where there is at least one day a year where the sun
-	 *         does not rise, and one where it does not set), a <code>null</code> will be returned. This is not relevant when using the
-	 *         {@link com.kosherjava.zmanim.util.NOAACalculator NOAA Calculator} that is never expected to return <code>null</code>.
+	 *         does not rise, and one where it does not set), a {@code null} will be returned. This is not relevant when using the
+	 *         {@link com.kosherjava.zmanim.util.NOAACalculator NOAA Calculator} that is never expected to return {@code null}.
 	 *         See the detailed explanation on top of the page.
 	 * @see getSunTransit()
 	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
@@ -503,9 +503,9 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         arbitrary start of day) passed to this method.
 	 * @param endOfDay the end of day for calculating the sun's transit. This can be sea level sunset, visual sunset (or any arbitrary
 	 *         end of day) passed to this method.
-	 * @return the <code>Instant</code> representing Sun's transit. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} representing Sun's transit. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year where the sun does not rise, and one where it does
-	 *         not set, <code>null</code> will be returned. See detailed explanation on top of the page.
+	 *         not set, {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getSunTransit(Instant startOfDay, Instant endOfDay) {
 		Duration temporalHour = getTemporalHour(startOfDay, endOfDay);
@@ -533,13 +533,14 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Instant getTimeAtAzimuth(double azimuth) {
 		double rawAzimuth = getAstronomicalCalculator().getTimeAtAzimuth(getAdjustedLocalDate(), getGeoLocation(), azimuth);
+		// double rawAzimuth = getAstronomicalCalculator().getUTCAzimuthMorning(getAdjustedLocalDate(), getGeoLocation());
 		return getInstantFromTime(rawAzimuth, SolarEvent.NONE);
 	}
 	
 	/**
-	 * A method that returns an <code>Instant</code> from the time passed in as a parameter.
+	 * A method that returns an {@code Instant} from the time passed in as a parameter.
 	 * 
-	 * @param time The time to be set as the time for the <code>Instant</code>. The time expected is in the format: 18.75 for
+	 * @param time The time to be set as the time for the {@code Instant}. The time expected is in the format: 18.75 for
 	 *         6:45:00 PM.time is sunrise and false if it is sunset
 	 * @param solarEvent the type of {@link SolarEvent}
 	 * @return The Instant object representation of the time double
@@ -576,7 +577,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * Returns the sun's elevation (number of degrees) below the horizon before sunrise that matches the offset minutes
 	 * on passed in as a parameter. For example passing in 72 minutes for a calendar set to the equinox in Jerusalem
-	 * returns a value close to 16.1&deg;.
+	 * returns a value close to 16.1°.
 	 * 
 	 * @param minutes minutes before sunrise
 	 * @return the degrees below the horizon before sunrise that match the offset in minutes passed it as a parameter. If
@@ -614,7 +615,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * Returns the sun's elevation (number of degrees) below the horizon after sunset that matches the offset minutes
 	 * passed in as a parameter. For example passing in 72 minutes for a calendar set to the equinox in Jerusalem
-	 * returns a value close to 16.1&deg;.
+	 * returns a value close to 16.1°.
 	 * 
 	 * @param minutes minutes after sunset
 	 * @return the degrees below the horizon after sunset that match the offset in minutes passed it as a parameter. If the
@@ -651,14 +652,14 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * A method that returns <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean time (LMT)</a> time converted to
 	 * regular clock time for the local wall-clock time passed to this method. This time is adjusted from standard time to account for
-	 * the local latitude. The 360&deg; of the globe divided by 24 calculates to 15&deg; per hour with 4 minutes per degree, so at a
+	 * the local latitude. The 360° of the globe divided by 24 calculates to 15° per hour with 4 minutes per degree, so at a
 	 * longitude of 0 , 15, 30 etc... noon is at exactly 12:00pm. Lakewood, N.J., with a longitude of -74.222, is 0.7906 away from the
-	 * closest multiple of 15 at -75&deg;. This is multiplied by 4 clock minutes (per degree) to yield 3 minutes and 7 seconds for a
-	 * noon time of 11:56:53am. This method is not tied to the theoretical 15&deg; time zones, but will adjust to the actual time zone
+	 * closest multiple of 15 at -75°. This is multiplied by 4 clock minutes (per degree) to yield 3 minutes and 7 seconds for a
+	 * noon time of 11:56:53am. This method is not tied to the theoretical 15° time zones, but will adjust to the actual time zone
 	 * and <a href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> to return LMT.
 	 * 
 	 * @param localTime the local wall-clock time (such as 12:00 for noon and 00:00 for midnight) to calculate as LMT.
-	 * @return the <code>Instant</code> representing the local mean time (LMT) for the time passed in. In Lakewood, NJ, passing noon
+	 * @return the {@code Instant} representing the local mean time (LMT) for the time passed in. In Lakewood, NJ, passing noon
 	 *         will return 11:56:50am.
 	 * @see GeoLocation#getLocalMeanTimeOffset(Instant)
 	 */
@@ -669,7 +670,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * Adjusts the <code>LocalDate</code> to deal with edge cases where the location crosses the antimeridian.
+	 * Adjusts the {@code LocalDate} to deal with edge cases where the location crosses the antimeridian.
 	 * 
 	 * @see GeoLocation#getAntimeridianAdjustment(Instant)
 	 * @return the adjusted Calendar
@@ -754,7 +755,7 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * Sets the {@link GeoLocation} <code>Object</code> to be used for astronomical calculations.
+	 * Sets the {@link GeoLocation} {@code Object} to be used for astronomical calculations.
 	 * 
 	 * @param geoLocation The geoLocation to set.
 	 * @todo Possibly adjust for horizon elevation. It may be smart to just have the calculator check the GeoLocation
@@ -776,7 +777,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * A method to set the {@link AstronomicalCalculator} used for astronomical calculations. The Zmanim package ships
-	 * with a number of different implementations of the <code>abstract</code> {@link AstronomicalCalculator} based on
+	 * with a number of different implementations of the {@code abstract} {@link AstronomicalCalculator} based on
 	 * different algorithms, including the default {@link com.kosherjava.zmanim.util.NOAACalculator} based on <a href=
 	 * "https://noaa.gov">NOAA's</a> implementation of Jean Meeus's algorithms as well as {@link
 	 * com.kosherjava.zmanim.util.SunTimesCalculator} based on the <a href = "https://www.cnmoc.usff.navy.mil/usno/">US
@@ -789,17 +790,17 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 	
 	/**
-	 * returns the <code>LocalDate</code> object encapsulated in this class.
+	 * returns the {@code LocalDate} object encapsulated in this class.
 	 * 
-	 * @return Returns the <code>LocalDate</code>.
+	 * @return Returns the {@code LocalDate}.
 	 */
 	public LocalDate getLocalDate() {
 		return this.localDate;
 	}
 	
 	/**
-	 * Sets the <code>LocalDate</code>  object for us in this class.
-	 * @param localDate The <code>LocalDate</code> to set.
+	 * Sets the {@code LocalDate}  object for us in this class.
+	 * @param localDate The {@code LocalDate} to set.
 	 */
 	public void setLocalDate(LocalDate localDate) {
 		this.localDate = localDate;
