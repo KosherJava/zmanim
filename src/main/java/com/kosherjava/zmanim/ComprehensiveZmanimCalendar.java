@@ -35,19 +35,21 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * beyond <em>zmanim</em> calculations. Here are some examples. <p>First create the Calendar for the location you would like to
  * calculate:
  * 
- * <pre style="background: #FEF0C9; display: inline-block;">
+ * {@snippet lang='java' :
  * String locationName = "Lakewood, NJ";
  * double latitude = 40.0828; // Lakewood, NJ
  * double longitude = -74.222; // Lakewood, NJ
  * double elevation = 20; // optional elevation correction in Meters
- * // the String parameter in getZoneId() has to be a valid ZoneId listed in {@link java.time.ZoneId#getAvailableZoneIds()}
- * ZoneId zoneId = ZoneId.of("America/New_York");
+ * // @link region="target_zone_link" substring="getAvailableZoneIds()" target="java.time.ZoneId#getAvailableZoneIds()"
+ * ZoneId zoneId = ZoneId.of("America/New_York"); // set the zoneId to a valid ZoneId listed in getAvailableZoneIds()
+ * // @end
  * GeoLocation location = new GeoLocation(locationName, latitude, longitude, elevation, zoneId);
  * ComprehensiveZmanimCalendar czc = new ComprehensiveZmanimCalendar(location);
  * // Optionally set the date or it will default to today's date
  * ZonedDateTime dateTime = ZonedDateTime.of(1969, Month.FEBRUARY.getValue(), 8, 0, 0, 0, 0, location.getZoneId());
- * czc.setZonedDateTime(dateTime);</pre>
- * <p>
+ * czc.setZonedDateTime(dateTime);
+ * }
+ * 
  * <b>Note:</b> For locations such as Israel where the beginning and end of daylight savings time used to fluctuate from
  * year to year, if your version of Java does not have an <a href=
  * "https://www.oracle.com/java/technologies/tzdata-versions.html">up to date time zone database</a>, create a
@@ -55,19 +57,16 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * To get <em>alos</em> calculated as 14° below the horizon (as calculated in the calendars published in Montreal),
  * add {@link GEOMETRIC_ZENITH} (90) to the 14° offset to get the desired time:
  * <br><br>
- * <pre style="background: #FEF0C9; display: inline-block;">
- *  Instant alos14 = czc.getSunriseOffsetByDegrees({@link GEOMETRIC_ZENITH} + 14);</pre>
- * <p>
+ * <pre>
+ *  Instant alos14 = czc.getSunriseOffsetByDegrees({@link com.kosherjava.zmanim.AstronomicalCalendar#GEOMETRIC_ZENITH} + 14);</pre>
  * To get <em>mincha gedola</em> calculated based on the <a href="https://en.wikipedia.org/wiki/Avraham_Gombiner"
  * >Magen Avraham (MGA)</a> using a <em>shaah zmanis</em> based on the day starting
  * 16.1° below the horizon (and ending 16.1° after sunset) the following calculation can be used:
  * 
- * <pre style="background: #FEF0C9; display: inline-block;">
- * Instant minchaGedola = czc.getTimeOffset(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees() * 6.5);</pre>
+ * <pre>Instant minchaGedola = czc.getTimeOffset(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees() * 6.5);</pre>
  * <p>
  * or even simpler using the included convenience methods
- * <pre style="background: #FEF0C9; display: inline-block;">
- * Instant minchaGedola = czc.getMinchaGedola(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees());</pre>
+ * <pre>Instant minchaGedola = czc.getMinchaGedola(czc.getAlos16point1Degrees(), czc.getShaahZmanis16Point1Degrees());</pre>
  * <p>
  * A little more complex example would be calculating <em>zmanim</em> that rely on a <em>shaah zmanis</em> that is
  * not present in this library. While a drop more complex, it is still rather easy. An example would be to calculate
@@ -79,8 +78,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * {@link #getSunTransit() solar transit} (solar midday). To calculate this <em>zman</em>, use the following steps. Note
  * that <em>plag hamincha</em> is 10.75 hours after the start of the day, and the following steps are all that it takes.
  * <br>
- * <pre style="background: #FEF0C9; display: inline-block;">
- * Instant plag = czc.getPlagHamincha(czc.getSunriseOffsetByDegrees({@link GEOMETRIC_ZENITH} + 12),
+ * <pre>Instant plag = czc.getPlagHamincha(czc.getSunriseOffsetByDegrees({@link GEOMETRIC_ZENITH} + 12),
  * 				czc.getSunsetOffsetByDegrees({@link GEOMETRIC_ZENITH} + ZENITH_7_POINT_083));</pre>
  * <p>
  * Something a drop more challenging, but still simple, would be calculating a <em>zman</em> using the same "complex"
@@ -88,20 +86,18 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * supported by this library, such as calculating the point that one should be <em>makpid</em>
  * not to eat on <em>erev Shabbos</em> or <em>erev Yom Tov</em>. This is 9 <em>shaos zmaniyos</em> into the day.
  * <ol>
- * 	<li>Calculate the <em>shaah zmanis</em> <code>Duration</code> for this day</li>
+ * 	<li>Calculate the <em>shaah zmanis</em> {@code Duration} for this day</li>
  * 	<li>Add 9 of these <em>shaos zmaniyos</em> to <em>alos</em> starting at 12°</li>
  * </ol>
  * <br>
- * <pre style="background: #FEF0C9; display: inline-block;">
- * Duration shaahZmanis = czc.getTemporalHour(czc.getSunriseOffsetByDegrees({@link GEOMETRIC_ZENITH} + 12),
+ * <pre>Duration shaahZmanis = czc.getTemporalHour(czc.getSunriseOffsetByDegrees({@link GEOMETRIC_ZENITH} + 12),
  * 						czc.getSunsetOffsetByDegrees({@link GEOMETRIC_ZENITH} + ZENITH_7_POINT_083));
  * Instant sofZmanAchila = getTimeOffset(czc.getSunriseOffsetByDegrees({@link GEOMETRIC_ZENITH} + 12),
  * 					shaahZmanis * 9);</pre>
  * <p>
  * Calculating this <em>sof zman achila</em> according to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>
  * is simplicity itself.
- * <pre style="background: #FEF0C9; display: inline-block;">
- * Instant sofZmanAchila = czc.getTimeOffset(czc.getSunrise(), czc.getShaahZmanisGRA() * 9);</pre>
+ * <pre>Instant sofZmanAchila = czc.getTimeOffset(czc.getSunrise(), czc.getShaahZmanisGRA() * 9);</pre>
  * 
  * <h2>See documentation from the {@link ZmanimCalendar} parent class</h2>
  * 
@@ -325,9 +321,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * below the eastern geometric horizon before sunrise. Dusk for this is when the sun is 19.8° below the western
 	 * geometric horizon after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach low
-	 *         enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed explanation on top
+	 *         enough below the horizon for this calculation, a {@code null} will be returned. See detailed explanation on top
 	 *         of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Duration getShaahZmanis19Point8Degrees() {
@@ -341,9 +337,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * eastern geometric horizon before sunrise. Dusk for this is when the sun is 18° below the western geometric
 	 * horizon after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach low
-	 *         enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed explanation on top
+	 *         enough below the horizon for this calculation, a {@code null} will be returned. See detailed explanation on top
 	 *         of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Duration getShaahZmanis18Degrees() {
@@ -359,9 +355,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * extremely late or early and at a point when the sky is a long time past the 18° point where the darkest point is reached,
 	 * <em>zmanim</em> that use this should only be used <em>lechumra</em>, such as delaying the start of nighttime <em>mitzvos</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach low
-	 *         enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed explanation on top
+	 *         enough below the horizon for this calculation, a {@code null} will be returned. See detailed explanation on top
 	 *         of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120Minutes()
 	 */
@@ -375,9 +371,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * geometric horizon before sunrise and dusk is when the sun is 16.1° below the western geometric horizon after sunset. This day is
 	 * split into 12 equal parts with each part being a <em>shaah zmanis</em>.
 	 * 
-	 * @return the <code>Duration</code>  of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Duration}  of a <em>shaah zmanis</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach low
-	 *         enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed explanation on top
+	 *         enough below the horizon for this calculation, a {@code null} will be returned. See detailed explanation on top
 	 *         of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getTzais16Point1Degrees()
@@ -398,9 +394,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. Alternate methods of
 	 * calculating a <em>shaah zmanis</em> are available in the subclass {@link ComprehensiveZmanimCalendar}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos60Minutes()
 	 * @see #getTzais60Minutes()
 	 * @see #getPlagHamincha60Minutes()
@@ -417,9 +413,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * minutes <em>zmaniyos</em> after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. This
 	 * is identical to 1/10th of the day from {@link #getSunset() sunrise} to {@link #getSunset() sunset}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzais72Zmanis()
 	 */
@@ -433,9 +429,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Avraham (MGA)</a> that the day runs from dawn to dusk. Dawn for this calculation is 90 minutes before sunrise
 	 * and dusk is 90 minutes after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Duration getShaahZmanis90Minutes() {
 		return getTemporalHour(getAlos90Minutes(), getTzais90Minutes());
@@ -449,9 +445,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * before sunrise and dusk is 90 minutes <em>zmaniyos</em> after sunset. This day is split into 12 equal parts with each part
 	 * being a <em>shaah zmanis</em>. This is 1/8th of the day from {@link #getSunset() sunrise} to {@link #getSunset() sunset}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos90Zmanis()
 	 * @see #getTzais90Zmanis()
 	 */
@@ -467,9 +463,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>zmaniyos</em> after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. This is
 	 * identical to 1/7.5th of the day from {@link #getSunset() sunrise} to {@link #getSunset() sunset}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos96Zmanis()
 	 * @see #getTzais96Zmanis()
 	 */
@@ -485,9 +481,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getSunset() sunset}. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. Note that with this
 	 * system, <em>chatzos</em> (midday) will not be the point that the sun is {@link #getSunTransit() halfway across the sky}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
 	 * @see #getAteretTorahSunsetOffset()
@@ -510,9 +506,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>Bain Hashmashos</em>. Sources for an asymmetrical day-based calculation can be seen in the documentation of
 	 * {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getMinchaKetanaAhavatShalom()
 	 * @see #getPlagAhavatShalom()
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point7Degrees()
@@ -534,9 +530,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Sources for an asymmetrical day-based calculation can be seen in the documentation of
 	 * {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getMinchaGedolaAhavatShalom()
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees()
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim7Point083Degrees()
@@ -553,9 +549,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getSunTransit() halfway across the sky}. Sources for an asymmetrical day-based calculation can be seen in the documentation
 	 * of {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point7Degrees()
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees()
 	 */
@@ -569,9 +565,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * runs from dawn to dusk. Dawn for this calculation is 96 minutes before sunrise and dusk is 96 minutes after sunset. This day
 	 * is split into 12 equal parts with each part being a <em>shaah zmanis</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Duration getShaahZmanis96Minutes() {
 		return getTemporalHour(getAlos96Minutes(), getTzais96Minutes());
@@ -586,9 +582,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>zmanim</em> that use this should only be used <em>lechumra</em> only, such as delaying the start of nighttime
 	 * <em>mitzvos</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as inin the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as inin the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis26Degrees()
 	 */
 	public Duration getShaahZmanis120Minutes() {
@@ -606,9 +602,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * past the 18° point where the darkest point is reached, <em>zmanim</em> that use this should only be used <em>lechumra</em>
 	 * such as delaying the start of nighttime <em>mitzvos</em>.
 	 * 
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos120Zmanis()
 	 * @see #getTzais120Zmanis()
 	 */
@@ -626,9 +622,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time (often after <em>shkiah</em>),
 	 *         and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this method
 	 *         from the API, and this deprecation is intended to alert developers of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120MinutesZmanis()
 	 * @see #getAlos120Minutes()
 	 * @see #getTzais120Minutes()
@@ -650,9 +646,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time (often after <em>shkiah</em>),
 	 *         and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this method
 	 *         from the API, and this deprecation is intended to alert developers of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120Minutes()
 	 * @see #getPlagHamincha26Degrees()
 	 */
@@ -682,8 +678,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * it takes to walk the distance of 4* mil. {@link #getTzaisGeonim9Point75Degrees()} is a related <em>zman</em> that is a
 	 * degree-based calculation based on 60 minutes.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic Circle
-	 *         where there is at least one day a year when the sun does not rise, and one where it does not set, a <code>null</code>
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic Circle
+	 *         where there is at least one day a year when the sun does not rise, and one where it does not set, a {@code null}
 	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getTzais60Minutes()
 	 * @see #getPlagHamincha60Minutes()
@@ -702,8 +698,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getShaahZmanisGRA()} * 1.2). This calculation is used in the calendars published by the <a href=
 	 * "https://en.wikipedia.org/wiki/Central_Rabbinical_Congress">Hisachdus Harabanim D'Artzos Habris Ve'Canada</a>.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic Circle where
-	 *         there is at least one day a year when the sun does not rise, and one where it does not set, a <code>null</code> will
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic Circle where
+	 *         there is at least one day a year when the sun does not rise, and one where it does not set, a {@code null} will
 	 *         be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisGRA()
 	 */
@@ -719,8 +715,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * >Rishonim</a></em> who stated that the time of the <em>Neshef</em> (time between dawn and sunrise) does not vary by the time
 	 * of year or location but purely depends on the time it takes to walk the distance of 4 mil.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic Circle
-	 *         where there is at least one day a year when the sun does not rise, and one where it does not set, a <code>null</code>
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic Circle
+	 *         where there is at least one day a year when the sun does not rise, and one where it does not set, a {@code null}
 	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getAlos96Minutes() {
@@ -734,8 +730,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * is 90 minutes which is 1/8th of a day (12 * 60) / 8 = 90. The actual calculation used is {@link
 	 * #getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.5).
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic Circle where
-	 *         there is at least one day a year when the sun does not rise, and one where it does not set, a <code>null</code> will
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic Circle where
+	 *         there is at least one day a year when the sun does not rise, and one where it does not set, a {@code null} will
 	 *         be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisGRA()
 	 */
@@ -753,9 +749,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *  getSunset() sunset} (depending on the {@link #isUseElevation()}. The actual calculation used is {@link
 	 *  getSunriseBasedOnElevationSetting()} - ({@link #getShaahZmanisGRA()} * 1.6).
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getShaahZmanisGRA()
 	 */
@@ -772,9 +768,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * dawn and sunrise) does not vary by the time of year or location but purely depends on the time it takes to walk the
 	 * distance of 4 mil.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
 	public Instant getAlos90Minutes() {
@@ -795,9 +791,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         since it returns a very early time, and if used <em>lekula</em> can result in doing <em>mitzvos hayom</em>
 	 *         too early according to most opinions. There is no current plan to remove this method from the API, and this
 	 *         deprecation is intended to alert developers of the danger of using it.
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getTzais120Minutes()
 	 * @see #getAlos26Degrees()
@@ -823,9 +819,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         since it returns a very early time, and if used <em>lekula</em> can result in doing <em>mitzvos hayom</em>
 	 *         too early according to most opinions. There is no current plan to remove this method from the API, and this
 	 *         deprecation is intended to alert developers of the danger of using it.
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos120Minutes()
 	 * @see #getAlos26Degrees()
@@ -849,9 +845,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         since it returns a very early time, and if used <em>lekula</em> can result in doing <em>mitzvos hayom</em>
 	 *         too early according to most opinions. There is no current plan to remove this  method from the API, and this
 	 *         deprecation is intended to alert developers of the danger of using it.
-	 * @return the <code>Instant</code> representing <em>alos</em>. If the calculation can't be computed such as northern
+	 * @return the {@code Instant} representing <em>alos</em>. If the calculation can't be computed such as northern
 	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun
-	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         may not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos120Minutes()
 	 * @see #getTzais120Minutes()
@@ -866,9 +862,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * A method to return <em>alos</em> (dawn) calculated when the sun is {@link ASTRONOMICAL_ZENITH 18°} below the
 	 * eastern geometric horizon before sunrise.
 	 * 
-	 * @return the <code>Instant</code> representing <em>alos</em>. If the calculation can't be computed such as northern
+	 * @return the {@code Instant} representing <em>alos</em>. If the calculation can't be computed such as northern
 	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun
-	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ASTRONOMICAL_ZENITH
 	 */
@@ -885,9 +881,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=55960&pgnum=258">Yom Valayla Shel Torah, Ch. 34, p. 222</a> and 
 	 * Rabbi Yaakov Shakow's <a href="https://www.worldcat.org/oclc/1043573513">Luach Ikvei Hayom</a>.
 	 * 
-	 * @return the <code>Instant</code> representing <em>alos</em>. If the calculation can't be computed such as northern
+	 * @return the {@code Instant} representing <em>alos</em>. If the calculation can't be computed such as northern
 	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun
-	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getAlos19Degrees() {
@@ -902,9 +898,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>, which
 	 * calculates to 19.8° below {@link GEOMETRIC_ZENITH geometric zenith}.
 	 * 
-	 * @return the <code>Instant</code> representing <em>alos</em>. If the calculation can't be computed such as northern
+	 * @return the {@code Instant} representing <em>alos</em>. If the calculation can't be computed such as northern
 	 *         and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun
-	 *         may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         may not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos90Minutes()
 	 * @see #getTzais19Point8Degrees()
@@ -945,9 +941,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         hadchak</em></b>. <em>Lechatchila</em>, a later <em>zman</em> should be used. There is no current plan to remove
 	 *         this method from the API, and this deprecation is intended to notify developers to add an alert to users of
 	 *         the risk of using it.
-	 * @return The <code>Instant</code> of <em>misheyakir</em>. If the calculation can't be computed such as northern and
+	 * @return The {@code Instant} of <em>misheyakir</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
-	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_12_POINT_85
 	 */
@@ -964,9 +960,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>,
 	 * which calculates to 11.5° below {@link GEOMETRIC_ZENITH geometric zenith}.
 	 * @todo recalculate.
-	 * @return the <code>Instant</code> of <em>misheyakir</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} of <em>misheyakir</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
-	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_11_POINT_5
 	 */
@@ -984,7 +980,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @return If the calculation can't be computed such as northern and southern locations even south of the Arctic
 	 *         Circle and north of the Antarctic Circle where the sun may not reach low enough below the horizon for
-	 *         this calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         this calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_11_DEGREES
 	 */
@@ -1000,9 +996,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox</a> which calculates
 	 * to 10.2° below {@link GEOMETRIC_ZENITH geometric zenith}.
 	 * 
-	 * @return the <code>Instant</code> of <em>misheyakir</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of <em>misheyakir</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_10_POINT_2
 	 */
@@ -1029,9 +1025,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * not provide a degree-based time. Since this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented this
 	 * degree-based calculations to Rabbi Shmuel Kamenetsky who agreed to them.
 	 * 
-	 * @return the <code>Instant</code> of <em>misheyakir</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of <em>misheyakir</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_7_POINT_65
 	 * @see #getMisheyakir9Point5Degrees()
@@ -1056,9 +1052,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * this <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented these degree-based times to Rabbi Shmuel
 	 * Kamenetsky who agreed to them.
 	 * 
-	 * @return the <code>Instant</code> of <em>misheyakir</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of <em>misheyakir</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_9_POINT_5
 	 * @see #getMisheyakir7Point65Degrees()
@@ -1076,9 +1072,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * with both being 19.8° below sunrise or sunset. This returns the time of 3 *
 	 * {@link #getShaahZmanis19Point8Degrees()} after {@link #getAlos19Point8Degrees() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis19Point8Degrees()
 	 * @see #getAlos19Point8Degrees()
@@ -1095,9 +1091,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the opinion of the MGA that the day is calculated from dawn to nightfall with both being 16.1° below sunrise or sunset.
 	 * This returns the time of 3 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
@@ -1115,9 +1111,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * below sunrise or sunset. This returns the time of 3 * {@link #getShaahZmanis18Degrees()} after
 	 * {@link #getAlos18Degrees() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis18Degrees()
 	 * @see #getAlos18Degrees()
@@ -1137,9 +1133,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>zmaniyos</em> after {@link #getSeaLevelSunset() sea level sunset}. This returns the time of 3 *
 	 * {@link #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
@@ -1158,9 +1154,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getTzais90Minutes() nightfall} of 90 minutes after sunset. This returns the time of 3 *
 	 * {@link #getShaahZmanis90Minutes()} after {@link #getAlos90Minutes() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90Minutes()
 	 * @see #getAlos90Minutes()
@@ -1180,9 +1176,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of 90 minutes <em>zmaniyos</em> after sunset. This returns the time of 3 * {@link #getShaahZmanis90MinutesZmanis()}
 	 * after {@link #getAlos90Zmanis() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90MinutesZmanis()
 	 * @see #getAlos90Zmanis()
@@ -1201,9 +1197,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getTzais96Minutes() nightfall} of 96 minutes after sunset. This returns the time of 3 * {@link #getShaahZmanis96Minutes()}
 	 * after {@link #getAlos96Minutes() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96Minutes()
 	 * @see #getAlos96Minutes()
@@ -1222,9 +1218,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * sunrise to {@link #getTzais90Zmanis() nightfall} of 96 minutes <em>zmaniyos</em> after sunset. This returns the time of 3 *
 	 * {@link #getShaahZmanis96MinutesZmanis()} after {@link #getAlos96Zmanis() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96MinutesZmanis()
 	 * @see #getAlos96Zmanis()
@@ -1249,9 +1245,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of Komarno in the Ma'aseh Oreg on Mishnayos Brachos 11:2, Shevus Yaakov, Chasan Sofer and others. See Yisrael Vehazmanim
 	 * <a href="https://hebrewbooks.org/pdfpager.aspx?req=9765&st=&pgnum=83">vol. 1 7:3, page 55 - 62</a>.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getChatzosHayom()
 	 * @see #getSofZmanTfila2HoursBeforeChatzos()
@@ -1270,9 +1266,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getTzais120Minutes() nightfall} of 120 minutes after sunset. This returns the time of 3 {@link #getShaahZmanis120Minutes()}
 	 * after {@link #getAlos120Minutes() dawn}. This is an extremely early <em>zman</em> that is very much a <em>chumra</em>.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120Minutes()
 	 * @see #getAlos120Minutes()
@@ -1295,7 +1291,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * ignored. Sources for an asymmetrical day-based calculation can be seen in the documentation of
 	 * {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em> based on this day. If the calculation can't
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em> based on this day. If the calculation can't
 	 *         be computed such as northern and southern locations even south of the Arctic Circle and north of the
 	 *         Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a null
 	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
@@ -1331,10 +1327,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * an asymmetrical day from an early <em>alos</em> to an early <em>tzais</em> <b>Note: </b> Based on this calculation
 	 * <em>chatzos</em> will not be at midday and {@link #isUseAstronomicalChatzosForOtherZmanim()} will be ignored.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em> based on this calculation. If the
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em> based on this calculation. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
 	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
-	 *         calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getTzaisGeonim7Point083Degrees()
@@ -1352,9 +1348,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * nightfall with both being 19.8° below sunrise or sunset. This returns the time of 4 * {@link
 	 * #getShaahZmanis19Point8Degrees()} after {@link #getAlos19Point8Degrees() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis19Point8Degrees()
 	 * @see #getAlos19Point8Degrees()
@@ -1373,9 +1369,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * nightfall with both being 16.1° below sunrise or sunset. This returns the time of 4 * {@link
 	 * #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
@@ -1392,9 +1388,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * calculated from dawn to nightfall with both being 18° below sunrise or sunset. This returns the time of 4 * {@link
 	 * #getShaahZmanis18Degrees()} after {@link #getAlos18Degrees() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis18Degrees()
 	 * @see #getAlos18Degrees()
@@ -1412,9 +1408,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * minutes <em>zmaniyos</em> before sunrise to {@link #getTzais72Zmanis() nightfall} of 72 minutes <em>zmaniyos</em>
 	 * after sunset. This returns the time of 4 * {@link #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
@@ -1432,9 +1428,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getTzais90Minutes() nightfall} of 90 minutes after sunset. This returns the time of 4 *
 	 * {@link #getShaahZmanis90Minutes()} after {@link #getAlos90Minutes() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
+	 * @return the {@code Instant} of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90Minutes()
 	 * @see #getAlos90Minutes()
@@ -1452,9 +1448,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * sunrise to {@link #getTzais90Zmanis() nightfall} of 90 minutes <em>zmaniyos</em> after sunset. This returns the time of 4 *
 	 * {@link #getShaahZmanis90MinutesZmanis()} after {@link #getAlos90Zmanis() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90MinutesZmanis()
 	 * @see #getAlos90Zmanis()
@@ -1472,9 +1468,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * sunrise to {@link #getTzais96Minutes() nightfall} of 96 minutes after sunset. This returns the time of 4 *
 	 * {@link #getShaahZmanis96Minutes()} after {@link #getAlos96Minutes() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
+	 * @return the {@code Instant} of the latest <em>zman tfila</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96Minutes()
 	 * @see #getAlos96Minutes()
@@ -1493,9 +1489,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>zmaniyos</em> after sunset. This returns the time of 4 * {@link #getShaahZmanis96MinutesZmanis()} after
 	 * {@link #getAlos96Zmanis() dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90MinutesZmanis()
 	 * @see #getAlos90Zmanis()
@@ -1514,9 +1510,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 4 * {@link #getShaahZmanis120Minutes()} after {@link #getAlos120Minutes() dawn}. This is an extremely early <em>zman</em>
 	 * that is very much a <em>chumra</em>.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis120Minutes()
 	 * @see #getAlos120Minutes()
@@ -1531,9 +1527,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>sof zman krias shema</em> as {@link #getSofZmanShma3HoursBeforeChatzos()}. This returns the time of 2 hours
 	 * before {@link #getChatzosHayom()}.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where
-	 *         it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getChatzosHayom()
 	 * @see #getSofZmanShma3HoursBeforeChatzos()
@@ -1551,13 +1547,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * should not use this time to start <em>mincha</em> before the standard {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}.
 	 * See Shulchan Aruch <a href="https://hebrewbooks.org/pdfpager.aspx?req=49624&st=&pgnum=291">Orach Chayim 234:1</a> and
 	 * the Shaar Hatziyon <em>seif katan ches</em>. Since this calculation is a fixed 30 minutes of regular clock time after
-	 * <em>chatzos</em>, even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha
+	 * <em>chatzos</em>, even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is {@code false}, this <em>mincha
 	 * gedola</em> time will be affected by {@link #isUseAstronomicalChatzos()} and not by
 	 * {@link #isUseAstronomicalChatzosForOtherZmanim()}.
 	 * 
-	 * @return the <code>Instant</code> of 30 minutes after <em>chatzos</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of 30 minutes after <em>chatzos</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @todo Consider adjusting this to calculate the time as half an hour after {@link #getChatzosHayom()} that uses
 	 *         {@link #isUseAstronomicalChatzos()} to determine the type of <em>chatzos</em> to utilize. that support it,
@@ -1578,7 +1574,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * more information on this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is
 	 * calculated as 6.5 {@link #getTemporalHour() solar hours} after <em>alos</em>. The calculation used is 6.5 *
 	 * {@link #getShaahZmanis72Minutes()} after {@link #getAlos72Minutes() <em>alos</em>}. If {@link
-	 * #isUseAstronomicalChatzosForOtherZmanim()} is set to <code>true</code>, the calculation will be based on 0.5
+	 * #isUseAstronomicalChatzosForOtherZmanim()} is set to {@code true}, the calculation will be based on 0.5
 	 * {@link #getHalfDayBasedShaahZmanis(Instant, Instant) half-day based <em>sha'ah zmanis</em>} between
 	 * {@link #getChatzosHayom()} and {@link #getTzais72Minutes()} after {@link #getChatzosHayom()}.
 	 * 
@@ -1588,9 +1584,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getChatzosHayom()
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaGedola72Minutes() {
@@ -1607,12 +1603,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is calculated as 6.5
 	 * {@link #getTemporalHour() solar hours} after <em>alos</em>. The calculation used is 6.5 *
 	 * {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() <em>alos</em>}. If {@link
-	 * #isUseAstronomicalChatzosForOtherZmanim()} is set to <code>true</code>, the calculation will be based on 0.5
+	 * #isUseAstronomicalChatzosForOtherZmanim()} is set to {@code true}, the calculation will be based on 0.5
 	 * {@link #getHalfDayBasedShaahZmanis(Instant, Instant) half-day based <em>sha'ah zmanis</em>} between {@link #getChatzosHayom()}
 	 * and {@link #getAlos16Point1Degrees()} after {@link #getChatzosHayom()}.
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun  may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         the sun  may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getMinchaGedolaGRA()
@@ -1639,9 +1635,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Since calculation of this <em>zman</em> involves <em>chatzos</em> that is offset from the center of the astronomical day,
 	 * {@link #isUseAstronomicalChatzosForOtherZmanim()} is N/A here. Sources for an asymmetrical day-based calculation can be seen
 	 * in the documentation of {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
-	 * @return the <code>Instant</code> of the <em>mincha gedola</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} of the <em>mincha gedola</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
-	 *         reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
+	 *         reach low enough below the horizon for this calculation, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getTzaisGeonim3Point7Degrees()
@@ -1666,13 +1662,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} is less
 	 * than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise the mincha gedola passed in will be
 	 * returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
-	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em>
+	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is {@code false}, this <em>mincha</em>
 	 * time may be affected by {@link #isUseAstronomicalChatzos()}.
 	 * 
 	 * @param minchaGedola the mincha gedola to be compared to {@link #getMinchaGedola30Minutes()}.
-	 * @return the <code>Instant</code> of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
+	 * @return the {@code Instant} of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
 	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
-	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
+	 *         where the sun does not rise, and one where it does not set, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaGedola30Minutes()
@@ -1693,12 +1689,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} is
 	 * less than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise {@link #getMinchaGedolaGRA()}
 	 * will be returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
-	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is <code>false</code>, this <em>mincha</em> time
+	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is {@code false}, this <em>mincha</em> time
 	 * may be affected by {@link #isUseAstronomicalChatzos()}.
 	 * 
-	 * @return the <code>Date</code> of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
+	 * @return the {@code Instant} of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
 	 *         If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
-	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
+	 *         where the sun does not rise, and one where it does not set, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @todo Consider adjusting this to calculate the time as 30 minutes after {@link #getChatzosHayom()} that uses {@link
 	 *         isUseAstronomicalChatzos()} to determine the type of <em>chatzos</em> to utilize (if the {@link
@@ -1724,9 +1720,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaKetanaGRA()
-	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the time of <em>mincha ketana</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaKetana16Point1Degrees() {
@@ -1743,9 +1739,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others. For more information
 	 * on this see the documentation on {@link #getMinchaKetanaGRA() <em>mincha ketana</em>}.
 	 * 
-	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the
-	 *         sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees()
@@ -1772,9 +1768,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaKetanaGRA()
-	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaKetana72Minutes() {
@@ -1786,9 +1782,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * minutes before sunrise and ending 60 minutes after sunset. This is calculated as 10.75 hours after {@link
 	 * #getAlos60Minutes() dawn}. The formula used is 10.75 {@link #getShaahZmanis60Minutes()} after {@link #getAlos60Minutes()}.
 	 * 
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis60Minutes()
 	 * @see #getAlos60Minutes()
@@ -1809,9 +1805,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72Minutes()
 	 */
@@ -1831,9 +1827,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
 	 * 
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis90Minutes()
 	 */
@@ -1853,9 +1849,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis96Minutes()
 	 */
@@ -1874,9 +1870,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	@Deprecated (forRemoval=false)
@@ -1894,9 +1890,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	@Deprecated (forRemoval=false)
@@ -1914,9 +1910,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	@Deprecated (forRemoval=false)
@@ -1936,9 +1932,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis16Point1Degrees()
 	 */
@@ -1959,9 +1955,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis19Point8Degrees()
 	 */
@@ -1982,9 +1978,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis26Degrees()
 	 * @see #getPlagHamincha120Minutes()
@@ -2006,9 +2002,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where
-	 *         the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis18Degrees()
 	 */
@@ -2031,9 +2027,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>shkiah</em>), and if used <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no
 	 *         current plan to remove this method from the API, and this deprecation is intended to alert developers
 	 *         of the danger of using it.
-	 * @return the <code>Instant</code> of the <em>plag</em>. If the calculation can't be computed such as northern and southern
+	 * @return the {@code Instant} of the <em>plag</em>. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
-	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
+	 *         low enough below the horizon for this calculation, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getSeaLevelSunset()
@@ -2052,9 +2048,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the time of 10.75 * the calculated <em>shaah zmanis</em> after {@link #getAlos16Point1Degrees()}. Sources for this asymmetrical
 	 * day-based calculation can be seen in the documentation of {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * 
-	 * @return the <code>Instant</code> of the <em>plag</em>. If the calculation can't be computed such as northern and southern
+	 * @return the {@code Instant} of the <em>plag</em>. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach low enough
-	 *         below the horizon for this calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         below the horizon for this calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getTzaisGeonim7Point083Degrees()
@@ -2073,9 +2069,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * asymmetrical day-based calculation can be seen in the documentation of
 	 * {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * 
-	 * @return the <code>Instant</code> of the <em>plag</em>. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} of the <em>plag</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
-	 *         reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
+	 *         reach low enough below the horizon for this calculation, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees()
 	 * @see #getMinchaGedolaAhavatShalom()
@@ -2105,10 +2101,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 13.24° versus 13°. For NY during the solstice, the difference is 1 minute 56 seconds.
 	 * 
 	 * @todo recalculate the above based on equilux/equinox calculations.
-	 * @return the <code>Instant</code> of the sun being 13.24° below {@link GEOMETRIC_ZENITH geometric zenith}
+	 * @return the {@code Instant} of the sun being 13.24° below {@link GEOMETRIC_ZENITH geometric zenith}
 	 *         (90°). If the calculation can't be computed such as northern and southern locations even south of the
 	 *         Arctic Circle and north of the Antarctic Circle where the sun may not reach low enough below the horizon
-	 *         for this calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         for this calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getBainHashmashosRT58Point5Minutes()
 	 */
@@ -2122,9 +2118,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a> before <em>tzais</em> or 3 1/4
 	 * mil after sunset. With a mil calculated as 18 minutes, 3.25 * 18 = 58.5 minutes.
 	 * 
-	 * @return the <code>Instant</code> of 58.5 minutes after sunset. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} of 58.5 minutes after sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
-	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * 
 	 */
@@ -2138,10 +2134,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 18-minute <a href="https://en.wikipedia.org/wiki/Biblical_and_Talmudic_units_of_measurement">mil</a>) before
 	 * <em>shkiah</em> calculated as {@link #getTzaisGeonim7Point083Degrees() 7.083°}.
 	 * 
-	 * @return the <code>Instant</code> of the <em>bain hashmashos</em> of Rabbeinu Tam in this calculation. If the
+	 * @return the {@code Instant} of the <em>bain hashmashos</em> of Rabbeinu Tam in this calculation. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
 	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
-	 *         calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getTzaisGeonim7Point083Degrees()
 	 */
@@ -2156,10 +2152,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>alos</em> (calculated as 19.8° before sunrise) and sunrise. This is added to sunset to arrive at the time
 	 * for <em>bain hashmashos</em> of Rabbeinu Tam.
 	 * 
-	 * @return the <code>Instant</code> of <em>bain hashmashos</em> of Rabbeinu Tam for this calculation. If the
+	 * @return the {@code Instant} of <em>bain hashmashos</em> of Rabbeinu Tam for this calculation. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
 	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
-	 *         calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getBainHashmashosRT2Stars() {
@@ -2180,9 +2176,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * >mil</a> before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4 of a mil before sunset and
 	 * <em>tzais</em> or nightfall starts at sunset.
 	 * 
-	 * @return the <code>Instant</code> of 18 minutes before sunset. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} of 18 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
-	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getBainHashmashosYereim3Point05Degrees()
 	 */
@@ -2210,9 +2206,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://kosherjava.com/2020/12/07/the-yereims-bein-hashmashos/">The Yereim's <em>Bain Hashmashos</em></a>.
 	 * 
 	 * @todo recalculate based on equinox/equilux
-	 * @return the <code>Instant</code> of the sun's position 3.05° minutes before sunset. If the calculation can't
+	 * @return the {@code Instant} of the sun's position 3.05° minutes before sunset. If the calculation can't
 	 *         be computed such as in the Arctic Circle where there is at least one day a year when the sun does not
-	 *         rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on
+	 *         rise, and one where it does not set, a {@code null} will be returned. See detailed explanation on
 	 *         top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_MINUS_3_POINT_05
 	 * @see #getBainHashmashosYereim18Minutes()
@@ -2231,9 +2227,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * to the Yereim, <em>bain hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts
 	 * at sunset.
 	 * 
-	 * @return the <code>Instant</code> of 16.875 minutes before sunset. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} of 16.875 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
-	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getBainHashmashosYereim2Point8Degrees()
 	 */
@@ -2253,9 +2249,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * starts at sunset. Details, including how the degrees were calculated can be seen in the documentation of
 	 * {@link #getBainHashmashosYereim3Point05Degrees()}.
 	 * 
-	 * @return the <code>Instant</code> of the sun's position 2.8° minutes before sunset. If the calculation can't
+	 * @return the {@code Instant} of the sun's position 2.8° minutes before sunset. If the calculation can't
 	 *         be computed such as in the Arctic Circle where there is at least one day a year when the sun does not
-	 *         rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on
+	 *         rise, and one where it does not set, a {@code null} will be returned. See detailed explanation on
 	 *         top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_MINUS_2_POINT_8
 	 * @see #getBainHashmashosYereim16Point875Minutes()
@@ -2273,9 +2269,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * before sunset. According to the Yereim, <em>bain hashmashos</em> starts 3/4 of a mil before sunset and
 	 * <em>tzais</em> or nightfall starts at sunset.
 	 * 
-	 * @return the <code>Instant</code> of 13.5 minutes before sunset. If the calculation can't be computed such as in the
+	 * @return the {@code Instant} of 13.5 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
-	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getBainHashmashosYereim2Point1Degrees()
 	 */
@@ -2295,9 +2291,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * at sunset. Details, including how the degrees were calculated can be seen in the documentation of
 	 * {@link #getBainHashmashosYereim3Point05Degrees()}.
 	 * 
-	 * @return the <code>Instant</code> of the sun's position 2.1° minutes before sunset. If the calculation can't be
+	 * @return the {@code Instant} of the sun's position 2.1° minutes before sunset. If the calculation can't be
 	 *         computed such as in the Arctic Circle where there is at least one day a year when the sun does not rise, and
-	 *         one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         one where it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_MINUS_2_POINT_1
 	 * @see #getBainHashmashosYereim13Point5Minutes()
@@ -2320,7 +2316,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://www.nli.org.il/en/books/NNL_ALEPH002542826/NLI">Zmanei HaHalacha Lema'aseh</a> (4th edition part 2, pages and 22
 	 * and 24) lists 3.65° that appears to be a drop too early.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 3.7° below sea level.
+	 * @return the {@code Instant} representing the time when the sun is 3.7° below sea level.
 	 * @see ZENITH_3_POINT_7
 	 */
 	@Deprecated (forRemoval=false)
@@ -2338,7 +2334,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link ZENITH_3_POINT_8 3.8°} below {@link GEOMETRIC_ZENITH geometric zenith} at this time in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 3.8° below sea level.
+	 * @return the {@code Instant} representing the time when the sun is 3.8° below sea level.
 	 * @see ZENITH_3_POINT_8
 	 */
 	@Deprecated (forRemoval=false)
@@ -2362,10 +2358,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * >Zmanei HaHalacha Lema'aseh</a> (4th edition part 2, pages and 22 and 24) lists 5.88° that appears to be a drop
 	 * too early.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 5.95° below sea level. If the calculation
+	 * @return the {@code Instant} representing the time when the sun is 5.95° below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getTzaisBaalHatanya()
 	 */
@@ -2382,10 +2378,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of Rav Yosi) at the pace of a 24-minute mil. See {@link #getTzaisGeonim4Point8Degrees()} for a time that covers the
 	 * <em>heref ayin</em>.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 4.66° below sea level. If the calculation
+	 * @return the {@code Instant} representing the time when the sun is 4.66° below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see ZENITH_4_POINT_66
 	 * @see #getTzaisGeonim4Point8Degrees()
@@ -2405,10 +2401,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://www.nli.org.il/en/books/NNL_ALEPH002542826/NLI">Zmanei HaHalacha Lema'aseh</a> (4th edition part 2, pages and 22
 	 * and 24) lists 4.37° that appears to be a drop too early.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 4.42° below sea level. If the calculation
+	 * @return the {@code Instant} representing the time when the sun is 4.42° below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see ZENITH_4_POINT_42
 	 */
@@ -2435,10 +2431,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of Rav Yosi) to an expert. See more details on this earier <em>zman</em> at {@link #getTzaisGeonim3Point8Degrees()}.
 	 * This is an early <em>zman</em> for <em>tzais</em>and should not be relied on without Rabbinical guidance.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 4.8° below sea level. If the calculation
+	 * @return the {@code Instant} representing the time when the sun is 4.8° below sea level. If the calculation
 	 *         can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see ZENITH_4_POINT_8
 	 */
@@ -2460,10 +2456,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>shkiah</em> <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox /
 	 * equilux</a>. 
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 6.45° below sea level. If the
+	 * @return the {@code Instant} representing the time when the sun is 6.45° below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
 	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
-	 *         calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_6_POINT_45
 	 */
@@ -2487,9 +2483,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * equilux</a>, but not Exactly. The actual position of the sun 30 minutes after sunset in Jerusalem at the equilux is 7.205°
 	 * and 7.199° at the equinox. See Hazmanim Bahalacha vol 2, pages 520-521 for more details.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 7.083° below sea level. If the calculation can't be
+	 * @return the {@code Instant} representing the time when the sun is 7.083° below sea level. If the calculation can't be
 	 *         computed such as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_7_POINT_083
 	 */
@@ -2514,10 +2510,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>zman</em> depends on the level of light, Rabbi Yaakov Shakow presented this degree-based calculation to Rabbi
 	 * <a href="https://en.wikipedia.org/wiki/Shmuel_Kamenetsky">Rabbi Shmuel Kamenetsky</a> who agreed to it.
 	 * @todo add hyperlinks to source of Divrei Shalom once it is located.
-	 * @return the <code>Instant</code> representing the time when the sun is 7.67° below sea level. If the
+	 * @return the {@code Instant} representing the time when the sun is 7.67° below sea level. If the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and
 	 *         north of the Antarctic Circle where the sun may not reach low enough below the horizon for this
-	 *         calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see ZENITH_7_POINT_67
 	 */
@@ -2530,9 +2526,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://www.worldcat.org/oclc/243303103">Luach Itim Lebinah</a> as the stringent time for <em>tzais</em>. It is calculated
 	 * as the sun's position at {@link ZENITH_9_POINT_3 9.3°} below the western horizon.
 	 * 
-	 * @return the <code>Instant</code> representing the time when the sun is 9.3° below sea level. If the calculation can't be
+	 * @return the {@code Instant} representing the time when the sun is 9.3° below sea level. If the calculation can't be
 	 *         computed such as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getTzaisGeonim9Point3Degrees() {
@@ -2548,9 +2544,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Shmuel Kamenetsky</a>. Rabbi Yaakov Shakow presented these degree-based times to Rabbi Shmuel Kamenetsky who agreed to them.
 	 * 
 	 * @todo recalculate based on equinox / equilux.
-	 * @return the <code>Instant</code> representing the time when the sun is 9.75° below sea level. If the calculation can't be
+	 * @return the {@code Instant} representing the time when the sun is 9.75° below sea level. If the calculation can't be
 	 *         computed such as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 *
 	 * @see #getTzais60Minutes()
@@ -2568,9 +2564,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * for 4 mil after {@link #getSunset() sunset} or {@link #getSeaLevelSunset() sea level sunset} (depending on the
 	 * {@link #isUseElevation()} setting). See detailed documentation explaining the 60 minute concept at {@link #getAlos60Minutes()}.
 	 * 
-	 * @return the <code>Instant</code> representing 60 minutes after sea level sunset. If the calculation can't be computed such as
+	 * @return the {@code Instant} representing 60 minutes after sea level sunset. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * 
 	 * @see #getAlos60Minutes()
 	 * @see #getPlagHamincha60Minutes()
@@ -2588,9 +2584,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * noted that <em>Chacham</em> Harari-Raful provided a 25 minute <em>zman</em> for Israel. This API uses 40 minutes year round in
 	 * any place on the globe by default. This offset can be changed by calling {@link #setAteretTorahSunsetOffset(double)}.
 	 * 
-	 * @return the <code>Instant</code> representing 40 minutes (configurable via {@link #setAteretTorahSunsetOffset}) after sea
+	 * @return the {@code Instant} representing 40 minutes (configurable via {@link #setAteretTorahSunsetOffset}) after sea
 	 *         level sunset. If the calculation can't be computed such as in the Arctic Circle where there is at least one day a year
-	 *         where the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
+	 *         where the sun does not rise, and one where it does not set, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAteretTorahSunsetOffset()
 	 * @see #setAteretTorahSunsetOffset(double)
@@ -2634,9 +2630,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * zmaniyos</em>} (temporal hours) after {@link #getAlos72Zmanis() <em>alos</em> 72 <em>zmaniyos</em>}. <b>Note: </b> Based on
 	 * this calculation <em>chatzos</em> will not be at midday.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em> based on this calculation. If the calculation can't
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em> based on this calculation. If the calculation can't
 	 *         be computed such as in the Arctic Circle where there is at least one day a year when the sun does not rise, and one
-	 *         where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         where it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
@@ -2658,9 +2654,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getAlos72Zmanis() <em>alos</em> 72 zmaniyos}.
 	 * <b>Note: </b> Based on this calculation <em>chatzos</em> will not be at midday.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em> based on this calculation. If the
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em> based on this calculation. If the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year where
-	 *         the sun does not rise, and one where it does not set, a <code>null</code> will be returned. See detailed
+	 *         the sun does not rise, and one where it does not set, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
@@ -2689,9 +2685,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getAteretTorahSunsetOffset()
 	 * @see #setAteretTorahSunsetOffset(double)
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaGedolaAteretTorah() {
@@ -2716,9 +2712,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #setAteretTorahSunsetOffset(double)
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getMinchaKetanaGRA()
-	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaKetanaAteretTorah() {
@@ -2734,7 +2730,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getShaahZmanisAteretTorah() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Zmanis()
 	 * dawn}.
 	 * 
-	 * @return the <code>Instant</code> of the <em>plag</em>. If the calculation can't be computed such as in the Arctic Circle
+	 * @return the {@code Instant} of the <em>plag</em>. If the calculation can't be computed such as in the Arctic Circle
 	 *         where there is at least one day a year when the sun does not rise, and one where it does not set, a null
 	 *         will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Zmanis()
@@ -2757,9 +2753,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * twilight. The shortest twilight is during the equinox, the longest is during the summer solstice, and in the
 	 * winter with the shortest daylight, the twilight period is longer than during the equinoxes.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos72Zmanis()
 	 */
@@ -2772,9 +2768,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getSeaLevelSunset() sea level sunset}. This time is known in Yiddish as the <em>achtel</em> (an eighth)
 	 * <em>zman</em> used in various <em>kehilos</em>.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos90Zmanis()
 	 */
@@ -2786,9 +2782,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Method to return <em>tzais</em> (dusk) calculated using 96 minutes <em>zmaniyos</em> or 1/7.5 of the day after
 	 * {@link #getSeaLevelSunset() sea level sunset}.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos96Zmanis()
 	 */
@@ -2805,9 +2801,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * opinion of Ula who calculated <em>tzais</em> as 5 mil after elevation adjusted <em>shkiah</em> (sunset). A similar
 	 * calculation {@link #getTzais19Point8Degrees()} uses solar position* calculations based on this time.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getTzais19Point8Degrees()
 	 * @see #getAlos90Minutes()
@@ -2830,9 +2826,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very late time, and if used
 	 *         <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this
 	 *         method from the API, and this deprecation is intended to alert developers of the danger of using it.
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}.
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}.
 	 *         documentation.
 	 * @see #getTzais26Degrees()
 	 * @see #getAlos120Minutes()
@@ -2853,9 +2849,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this
 	 *         method from the API, and this deprecation is intended to alert developers of the danger of using it.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos120Zmanis()
 	 * @see #getTzais120Minutes()
@@ -2879,9 +2875,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * astronomical equinox should be used. The difference adds up to about 9 seconds, too trivial to make much of a
 	 * difference. For information on how this is calculated see the comments on {@link #getAlos16Point1Degrees()}.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
-	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getTzais72Minutes()
 	 * @see #getAlos16Point1Degrees() for more information on this calculation.
@@ -2901,9 +2897,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         <em>lekula</em> can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this
 	 *         method from the API, and this deprecation is intended to alert developers of the danger of using it.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
-	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getTzais120Minutes()
 	 * @see #getAlos26Degrees()
@@ -2916,9 +2912,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * For information on how this is calculated see the comments on {@link #getAlos18Degrees()}
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
-	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos18Degrees()
 	 */
@@ -2929,9 +2925,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * For information on how this is calculated see the comments on {@link #getAlos19Point8Degrees()}.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as northern and
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may
-	 *         not reach low enough below the horizon for this calculation, a <code>null</code> will be returned. See
+	 *         not reach low enough below the horizon for this calculation, a {@code null} will be returned. See
 	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getTzais90Minutes()
 	 * @see #getAlos19Point8Degrees()
@@ -2945,9 +2941,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getSeaLevelSunset() sea level sunset} (depending on the {@link #isUseElevation()} setting). For information on how
 	 * this is calculated see the comments on {@link #getAlos96Minutes()}.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 * @see #getAlos96Minutes()
 	 */
@@ -2984,7 +2980,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * halfway between <em>molad</em> and <em>molad</em>. This adds half the 29 days, 12 hours and 793 chalakim time
 	 * between <em>molad</em> and <em>molad</em> (14 days, 18 hours, 22 minutes and 666 milliseconds) to the month's <em>molad</em>.
 	 * If the time of <em>sof zman Kiddush Levana</em> occurs during the day (between the <em>alos</em> and <em>tzais</em> passed in
-	 * as parameters), it returns the <em>alos</em> passed in. If a <code>null</code> <em>alos</em> or <em>tzais</em> are passed to
+	 * as parameters), it returns the <em>alos</em> passed in. If a {@code null} <em>alos</em> or <em>tzais</em> are passed to
 	 * this method, the non-daytime adjusted time will be returned.
 	 * 
 	 * @param alos the beginning of the Jewish day. If <em>Kidush Levana</em> occurs during the day (starting at <em>alos</em> and
@@ -2995,7 +2991,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         are null, no daytime adjustment will be made.
 	 * @return the Instant representing the moment halfway between molad and molad. If the time occurs between
 	 *         <em>alos</em> and <em>tzais</em>, <em>alos</em> will be returned. If the <em>zman</em> will not occur on this day, a
-	 *         <code>null</code> will be returned.
+	 *         {@code null} will be returned.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
 	 * @see #getSofZmanKidushLevana15Days(Instant, Instant)
 	 * @see JewishCalendar#getSofZmanKidushLevanaBetweenMoldos()
@@ -3027,7 +3023,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @param techila is it the start of <em>Kiddush Levana</em> time or the end? If it is start roll it to the next <em>tzais</em>,
 	 *         and if it is the end, return the end of the previous night (<em>alos</em> passed in). Ignored if either
 	 *         <em>alos</em> or <em>tzais</em> are null.
-	 * @return the <em>molad</em> based time. If the <em>zman</em> does not occur during the current date, <code>null</code> will be
+	 * @return the <em>molad</em> based time. If the <em>zman</em> does not occur during the current date, {@code null} will be
 	 *         returned.
 	 */
 	private Instant getMoladBasedTime(Instant moladBasedTime, Instant alos, Instant tzais, boolean techila) {
@@ -3059,7 +3055,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>tzais</em> and <em>alos</em>, see {@link #getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)}.
 	 * 
 	 * @return the Instant representing the moment halfway between molad and molad. If the <em>zman</em> will not occur on this
-	 *         day, a <code>null</code> will be returned.
+	 *         day, a {@code null} will be returned.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)
 	 * @see #getSofZmanKidushLevana15Days()
 	 * @see JewishCalendar#getSofZmanKidushLevanaBetweenMoldos()
@@ -3085,10 +3081,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         parameters are null, no daytime adjustment will be made.
 	 * @param tzais the end of the Jewish day. If <em>Kidush Levana</em> occurs during the day (starting at <em>alos</em> and ending
 	 *         at <em>tzais</em>), the time returned will be <em>alos</em>. If either the <em>alos</em> or <em>tzais</em> parameters
-	 *         are <code>null</code>, no daytime adjustment will be made.
+	 *         are {@code null}, no daytime adjustment will be made.
 	 * @return the Instant representing the moment 15 days after the molad. If the time occurs between <em>alos</em> and
 	 *         <em>tzais</em>, <em>alos</em> will be returned. If the <em>zman</em> will not occur on this day, a
-	 *         <code>null</code> will be returned.
+	 *         {@code null} will be returned.
 	 * @see #getSofZmanKidushLevanaBetweenMoldos(Instant, Instant)
 	 * @see JewishCalendar#getSofZmanKidushLevana15Days()
 	 */
@@ -3117,7 +3113,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * between <em>tzais</em> and <em>alos</em>, see {@link #getSofZmanKidushLevana15Days(Instant, Instant)}.
 	 * 
 	 * @return the Instant representing the moment 15 days after the <em>molad</em>. If the <em>zman</em> will not occur on this day,
-	 *         a <code>null</code> will be returned.
+	 *         a {@code null} will be returned.
 	 * @see #getSofZmanKidushLevana15Days(Instant, Instant)
 	 * @see #getSofZmanKidushLevanaBetweenMoldos()
 	 * @see JewishCalendar#getSofZmanKidushLevana15Days()
@@ -3134,7 +3130,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Use {@link #getTchilasZmanKidushLevana3Days(Instant, Instant)} if you want to limit the time to night hours.
 	 * 
 	 * @return the Instant representing the moment 3 days after the molad. If the <em>zman</em> will not occur on this day, a
-	 *         <code>null</code> will be returned.
+	 *         {@code null} will be returned.
 	 * @see #getTchilasZmanKidushLevana3Days(Instant, Instant)
 	 * @see #getTchilasZmanKidushLevana7Days()
 	 * @see JewishCalendar#getTchilasZmanKidushLevana3Days()
@@ -3157,7 +3153,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         at <em>tzais</em>), the time returned will be <em>tzais</em>. If either the <em>alos</em> or <em>tzais</em> parameters
 	 *         are null, no daytime adjustment will be made.
 	 * @return the Instant representing the moment 3 days after the molad. If the time occurs between <em>alos</em> and
-	 *         <em>tzais</em>, <em>tzais</em> will be returned. If the <em>zman</em> will not occur on this day, a <code>null</code>
+	 *         <em>tzais</em>, <em>tzais</em> will be returned. If the <em>zman</em> will not occur on this day, a {@code null}
 	 *         will be returned.
 	 * @see #getTchilasZmanKidushLevana3Days()
 	 * @see #getTchilasZmanKidushLevana7Days(Instant, Instant)
@@ -3188,12 +3184,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * Returns the point in time of <em>Molad</em> as a <code>Instant</code> Object. For the traditional day of week, hour,
+	 * Returns the point in time of <em>Molad</em> as a {@code Instant} Object. For the traditional day of week, hour,
 	 * minute and chalakim, {@link JewishCalendar#getMoladAsInstant()} and the not yet completed
 	 * {@link com.kosherjava.zmanim.hebrewcalendar.HebrewDateFormatter} that will have formatting for this.
 	 * 
 	 * @return the Instant representing the moment of the molad. If the <em>molad</em> does not occur on this day, a
-	 *         <code>null</code> will be returned.
+	 *         {@code null} will be returned.
 	 * @see #getTchilasZmanKidushLevana3Days()
 	 * @see #getTchilasZmanKidushLevana7Days(Instant, Instant)
 	 * @see JewishCalendar#getMoladAsInstant()
@@ -3228,10 +3224,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         parameters are null, no daytime adjustment will be made.
 	 * @param tzais the end of the Jewish day. If <em>Kidush Levana</em> occurs during the day (starting at <em>alos</em> and ending
 	 *         at <em>tzais</em>), the time returned will be <em>tzais</em>. If either the <em>alos</em> or <em>tzais</em> parameters
-	 *         are <code>null</code>, no daytime adjustment will be made.
+	 *         are {@code null}, no daytime adjustment will be made.
 	 * @return the Instant representing the moment 7 days after the molad. If the time occurs between <em>alos</em> and
 	 *         <em>tzais</em>, <em>tzais</em> will be returned. If the <em>zman</em> will not occur on this day, a
-	 *         <code>null</code> will be returned.
+	 *         {@code null} will be returned.
 	 * @see #getTchilasZmanKidushLevana3Days(Instant, Instant)
 	 * @see #getTchilasZmanKidushLevana7Days()
 	 * @see JewishCalendar#getTchilasZmanKidushLevana7Days()
@@ -3257,7 +3253,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * can't be recited. Use {@link #getTchilasZmanKidushLevana7Days(Instant, Instant)} if you want to limit the time to night hours.
 	 * 
 	 * @return the Instant representing the moment 7 days after the molad regardless of it is day or night. If the <em>zman</em>
-	 *         will not occur on this day, a <code>null</code> will be returned.
+	 *         will not occur on this day, a {@code null} will be returned.
 	 * @see #getTchilasZmanKidushLevana7Days(Instant, Instant)
 	 * @see JewishCalendar#getTchilasZmanKidushLevana7Days()
 	 * @see #getTchilasZmanKidushLevana3Days()
@@ -3273,10 +3269,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * unaware how this <em>zman</em> is calculated. This time is 4 hours into the day based on the opinion of the
 	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from sunrise to sunset.
 	 * This returns the time 4 * {@link #getShaahZmanisGRA()} after {@link #getSeaLevelSunrise() sea level sunrise}. If it
-	 * is not <em>erev Pesach</em>, a <code>null</code> will be returned.
-	 * @return the <code>Instant</code> one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
+	 * is not <em>erev Pesach</em>, a {@code null} will be returned.
+	 * @return the {@code Instant} one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
 	 *         Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least one
-	 *         day a year when the sun does not rise, and one where it does not set, a <code>null</code> will be returned.
+	 *         day a year when the sun does not rise, and one where it does not set, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisGRA()
 	 * @see #getSofZmanTfilaGRA()
@@ -3294,11 +3290,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getShaahZmanis72Minutes() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Minutes() dawn} based on the
 	 * opinion of the MGA that the day is calculated from a {@link #getAlos72Minutes() dawn} of 72 minutes before sunrise to {@link
 	 * #getTzais72Minutes() nightfall} of 72 minutes after sunset. This returns the time of 4 * {@link #getShaahZmanis72Minutes()}
-	 * after {@link #getAlos72Minutes() dawn}. If it is not <em>erev Pesach</em>, a <code>null</code> will be returned.
+	 * after {@link #getAlos72Minutes() dawn}. If it is not <em>erev Pesach</em>, a {@code null} will be returned.
 	 * 
-	 * @return the <code>Instant</code> of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
+	 * @return the {@code Instant} of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year when the sun does
-	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of
+	 *         not rise, and one where it does not set, a {@code null} will be returned. See detailed explanation on top of
 	 *         the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72Minutes()
 	 * @see #getAlos72Minutes()
@@ -3317,13 +3313,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getShaahZmanis72MinutesZmanis() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Minutes() dawn} based on the
 	 * opinion of the MGA that the day is calculated from a {@link #getAlos72Zmanis() dawn} of 72 minutes zmanis before sunrise to
 	 * {@link #getTzais72Zmanis() nightfall} of 72 minutes zmanis after sunset. This returns the time of 4 * {@link
-	 * #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}. If it is not <em>erev Pesach</em>, a <code>null</code>
+	 * #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}. If it is not <em>erev Pesach</em>, a {@code null}
 	 * will be
 	 * returned.
 	 *
-	 * @return the <code>Instant</code> of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
+	 * @return the {@code Instant} of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
 	 *         calculation can't be computed such as in the Arctic Circle where there is at least one day a year when the sun does
-	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of
+	 *         not rise, and one where it does not set, a {@code null} will be returned. See detailed explanation on top of
 	 *         the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
@@ -3341,12 +3337,12 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getShaahZmanis16Point1Degrees() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos16Point1Degrees() dawn} based
 	 * on the opinion of the MGA that the day is calculated from dawn to nightfall with both being 16.1° below sunrise or
 	 * sunset. This returns the time of 4 {@link #getShaahZmanis16Point1Degrees()} after {@link #getAlos16Point1Degrees() dawn}.
-	 * If it is not <em>erev Pesach</em>, a <code>null</code> will be returned.
+	 * If it is not <em>erev Pesach</em>, a {@code null} will be returned.
 	 * 
-	 * @return the <code>Instant</code> of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
+	 * @return the {@code Instant} of the latest time of eating <em>chametz</em>. If it is not <em>erev Pesach</em> or the
 	 *         calculation can't be computed such as northern and southern locations even south of the Arctic Circle and north of
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
-	 *         <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getSofZmanTfilaMGA16Point1Degrees()
@@ -3361,10 +3357,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This time is 5 hours into the day based on the
 	 * opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day is calculated from
 	 * sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisGRA()} after {@link #getSeaLevelSunrise() sea
-	 * level sunrise}. If it is not  <em>erev Pesach</em>, a <code>null</code> will be returned.
-	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
+	 * level sunrise}. If it is not  <em>erev Pesach</em>, a {@code null} will be returned.
+	 * @return the {@code Instant} of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at least
-	 *         one day a year when the sun does not rise, and one where it does not set, a <code>null</code> will be
+	 *         one day a year when the sun does not rise, and one where it does not set, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisGRA()
 	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
@@ -3380,10 +3376,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getShaahZmanis72Minutes() <em>shaos zmaniyos</em>} (temporal hours) after {@link #getAlos72Minutes() dawn} based on the
 	 * opinion of the MGA that the day is calculated from a {@link #getAlos72Minutes() dawn} of 72 minutes before sunrise to {@link
 	 * #getTzais72Minutes() nightfall} of 72 minutes after sunset. This returns the time of 5 * {@link #getShaahZmanis72Minutes()}
-	 * after {@link #getAlos72Minutes() dawn}. If it is not  <em>erev Pesach</em>, a <code>null</code> will be returned.
-	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
+	 * after {@link #getAlos72Minutes() dawn}. If it is not  <em>erev Pesach</em>, a {@code null} will be returned.
+	 * @return the {@code Instant} of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at
-	 *         least one day a year when the sun does not rise, and one where it does not set, a <code>null</code> will be
+	 *         least one day a year when the sun does not rise, and one where it does not set, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72Minutes()
 	 * @see #getAlos72Minutes()
@@ -3401,10 +3397,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * opinion of the MGA that the day is calculated from a {@link #getAlos72Zmanis() dawn} of 72 minutes zmanis before sunrise to
 	 * {@link #getTzais72Zmanis() nightfall} of 72 minutes zmanis after sunset. This returns the time of 5 * {@link
 	 * #getShaahZmanis72MinutesZmanis()} after {@link #getAlos72Zmanis() dawn}. If it is not  <em>erev Pesach</em>, a
-	 * <code>null</code> will be returned.
-	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
+	 * {@code null} will be returned.
+	 * @return the {@code Instant} of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as in the Arctic Circle where there is at
-	 *         least one day a year when the sun does not rise, and one where it does not set, a <code>null</code> will be
+	 *         least one day a year when the sun does not rise, and one where it does not set, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis72MinutesZmanis()
 	 * @see #getAlos72Zmanis()
@@ -3421,11 +3417,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getShaahZmanis16Point1Degrees() <em>shaos zmaniyos</em>} (solar hours) after {@link #getAlos16Point1Degrees()
 	 * dawn} based on the opinion of the MGA that the day is calculated from dawn to nightfall with both being 16.1°
 	 * below sunrise or sunset. This returns the time of 5 {@link #getShaahZmanis16Point1Degrees()} after
-	 * {@link #getAlos16Point1Degrees() dawn}. If it is not  <em>erev Pesach</em>, a <code>null</code> will be returned.
-	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
+	 * {@link #getAlos16Point1Degrees() dawn}. If it is not  <em>erev Pesach</em>, a {@code null} will be returned.
+	 * @return the {@code Instant} of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>. If it is not
 	 *         <em>erev Pesach</em> or the calculation can't be computed such as northern and southern locations even south
 	 *         of the Arctic Circle and north of the Antarctic Circle where the sun may not reach low enough below the
-	 *         horizon for this calculation, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         horizon for this calculation, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanis16Point1Degrees()
 	 * @see #getAlos16Point1Degrees()
@@ -3449,10 +3445,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * to {@link #getSunsetBaalHatanya() sea level <em>shkiah amiti</em>}. The day is split into 12 equal parts with each one being a
 	 * <em>shaah zmanis</em>. This method is similar to {@link #getTemporalHour}, but all calculations are based on a sea level
 	 * sunrise and sunset.
-	 * @return the <code>Duration</code> of a <em>shaah zmanis</em> calculated from {@link #getSunriseBaalHatanya() <em>netz
+	 * @return the {@code Duration} of a <em>shaah zmanis</em> calculated from {@link #getSunriseBaalHatanya() <em>netz
 	 *         amiti</em> (sunrise)} to {@link #getSunsetBaalHatanya() <em>shkiah amiti</em> ("real" sunset)}. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year when the sun does not rise, and
-	 *         one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         one where it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getTemporalHour(Instant, Instant)
 	 * @see #getSunriseBaalHatanya()
@@ -3473,9 +3469,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a> is
 	 * 16.9° below {@link GEOMETRIC_ZENITH geometric zenith}.
 	 * 
-	 * @return The <code>Instant</code> of dawn. If the calculation can't be computed such as northern and southern
+	 * @return The {@code Instant} of dawn. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
-	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
+	 *         low enough below the horizon for this calculation, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getAlosBaalHatanya() {
@@ -3491,9 +3487,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getSofZmanShma(Instant, Instant)
 	 * @see #getShaahZmanisBaalHatanya()
-	 * @return the <code>Instant</code> of the latest <em>zman shema</em> according to the Baal Hatanya. If the calculation
+	 * @return the {@code Instant} of the latest <em>zman shema</em> according to the Baal Hatanya. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year when the sun does
-	 *         not rise, and one where it does not set, a <code>null</code> will be returned. See detailed explanation on
+	 *         not rise, and one where it does not set, a {@code null} will be returned. See detailed explanation on
 	 *         top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanShmaBaalHatanya() {
@@ -3508,9 +3504,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getSofZmanTfila(Instant, Instant)
 	 * @see #getShaahZmanisBaalHatanya()
-	 * @return the <code>Instant</code> of the latest <em>zman tfilah</em>. If the calculation can't be computed such as in
+	 * @return the {@code Instant} of the latest <em>zman tfilah</em>. If the calculation can't be computed such as in
 	 *         the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
-	 *         not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSofZmanTfilaBaalHatanya() {
@@ -3522,11 +3518,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * opinion of the Baal Hatanya. This time is identical to the {@link #getSofZmanTfilaBaalHatanya() <em>Sof zman
 	 * tfilah</em> Baal Hatanya}. This time is 4 hours into the day based on the opinion of the Baal Hatanya that the day
 	 * is calculated from sunrise to sunset. This returns the time 4 {@link #getShaahZmanisBaalHatanya()} after
-	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a <code>null</code> will
+	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a {@code null} will
 	 * be returned.
-	 * @return the <code>Instant</code> one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
+	 * @return the {@code Instant} one is allowed eating <em>chametz</em> on <em>Erev Pesach</em>. If it is not <em>erev
 	 *         Pesach</em> or the  calculation can't be computed such as in the Arctic Circle where there is at least one
-	 *         day a year when the sun does not rise, and one where it does not set, a <code>null</code> will be returned.
+	 *         day a year when the sun does not rise, and one where it does not set, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @see #getSofZmanTfilaBaalHatanya()
@@ -3540,11 +3536,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the latest time for burning <em>chametz</em> on <em>Erev Pesach</em> according to the opinion of
 	 * the Baal Hatanya. This time is 5 hours into the day based on the opinion of the Baal Hatanya that the day is calculated
 	 * from sunrise to sunset. This returns the time 5 * {@link #getShaahZmanisBaalHatanya()} after
-	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a <code>null</code> will
+	 * {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)}. If it is not  <em>erev Pesach</em>, a {@code null} will
 	 * be returned.
-	 * @return the <code>Instant</code> of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>.  If it is not
+	 * @return the {@code Instant} of the latest time for burning <em>chametz</em> on <em>Erev Pesach</em>.  If it is not
 	 *         <em>erev Pesach</em> or the  calculation can't be computed such as in the Arctic Circle where there is at
-	 *         least one day a year when the sun does not rise, and one where it does not set, a <code>null</code> will be
+	 *         least one day a year when the sun does not rise, and one where it does not set, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @see #getSofZmanBiurChametz(Instant, Instant, boolean)
@@ -3570,9 +3566,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaGedola(Instant, Instant)
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @see #getMinchaKetanaBaalHatanya()
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em> according to the Baal Hatanya. If the calculation
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em> according to the Baal Hatanya. If the calculation
 	 *         can't be computed such as in the Arctic Circle where there is at least one day a year when the sun does not rise,
-	 *         and one where it does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         and one where it does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaGedolaBaalHatanya() {
@@ -3591,9 +3587,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaKetana(Instant, Instant)
 	 * @see #getShaahZmanisBaalHatanya()
 	 * @see #getMinchaGedolaBaalHatanya()
-	 * @return the <code>Instant</code> of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getMinchaKetanaBaalHatanya() {
@@ -3608,9 +3604,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>Zmanim</em> Calculations @ Chabad.org</a> for more details on this calculation.
 	 * 
 	 * @see #getPlagHamincha(Instant, Instant)
-	 * @return the <code>Instant</code> of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>plag hamincha</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getPlagHaminchaBaalHatanya() {
@@ -3632,9 +3628,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * the horizon (very close to the slightly later {@link #getTzaisGeonim5Point95Degrees()} that was calculated based on 4 fixed
 	 * minutes) and it is rounded up to 6°.
 	 * 
-	 * @return The <code>Instant</code> of nightfall. If the calculation can't be computed such as northern and southern
+	 * @return The {@code Instant} of nightfall. If the calculation can't be computed such as northern and southern
 	 *         locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not reach
-	 *         low enough below the horizon for this calculation, a <code>null</code> will be returned. See detailed
+	 *         low enough below the horizon for this calculation, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getTzaisGeonim5Point95Degrees()
 	 * @see #getSunsetBaalHatanya()
@@ -3651,9 +3647,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * at <em>alos</em> defined as {@link #getAlos18Degrees() 18°} and ends at {@link #getFixedLocalChatzosHayom() fixed local
 	 * chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after <em>alos</em> or half of this half-day.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos18Degrees()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3671,9 +3667,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * as {@link #getAlos16Point1Degrees() 16.1°} and ends at {@link #getFixedLocalChatzosHayom() fixed local chatzos}. <em>Sof Zman
 	 * Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or half of this half-day.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos16Point1Degrees()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3692,9 +3688,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or
 	 * half of this half-day.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos90Minutes()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3713,9 +3709,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * fixed local chatzos}. <em>Sof Zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar hours) after this <em>alos</em> or
 	 * half of this half-day.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getAlos72Minutes()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3733,9 +3729,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * ends at {@link #getFixedLocalChatzosHayom() fixed local chatzos}. <em>Sof zman Shema</em> is 3 <em>shaos zmaniyos</em> (solar
 	 * hours) after sunrise or half of this half-day.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getSunset()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3753,9 +3749,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getSunset() sunrise} and ends at {@link #getFixedLocalChatzosHayom() fixed local chatzos}. <em>Sof zman
 	 * tefila</em> is 4 <em>shaos zmaniyos</em> (solar hours) after sunrise or 2/3 of this half-day.
 	 * 
-	 * @return the <code>Instant</code> of the latest <em>zman krias shema</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the latest <em>zman krias shema</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 * @see #getSunset()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3771,9 +3767,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> calculated as 30 minutes after {@link #getFixedLocalChatzosHayom() fixed
 	 * local chatzos}.
 	 * 
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3790,9 +3786,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * to the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that is 3.5 <em>shaos zmaniyos</em> (solar
 	 * hours) after {@link #getFixedLocalChatzosHayom() fixed local chatzos}.
 	 * 
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getMinchaGedolaGRA()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3809,9 +3805,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a> that the day ends at sunset and is 4.75 <em>shaos
 	 * zmaniyos</em> (solar hours) after {@link #getFixedLocalChatzosHayom() fixed local chatzos}.
 	 * 
-	 * @return the <code>Instant</code> of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
+	 * @return the {@code Instant} of the time of <em>mincha gedola</em>. If the calculation can't be computed such as
 	 *         in the Arctic Circle where there is at least one day a year when the sun does not rise, and one where it
-	 *         does not set, a <code>null</code> will be returned. See detailed explanation on top of the
+	 *         does not set, a {@code null} will be returned. See detailed explanation on top of the
 	 *         {@link AstronomicalCalendar} documentation.
 	 * @see #getPlagHaminchaGRA()
 	 * @see #getFixedLocalChatzosHayom()
@@ -3829,9 +3825,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <em>tzais</em> (nightfall) based on the opinion of Rabbi Moshe Feinstein for the New York area. This time should
 	 * not be used for latitudes other than ones similar to the latitude of the NY area.
 	 * 
-	 * @return the <code>Instant</code> representing the time. If the calculation can't be computed such as in the Arctic
+	 * @return the {@code Instant} representing the time. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set,
-	 *         a <code>null</code> will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
+	 *         a {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
 	 */
 	public Instant getTzais50Minutes() {
@@ -3851,9 +3847,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getShaahZmanisGRA()
 	 * @see #getSamuchLeMinchaKetana(Instant, Instant, boolean)
 	 * @see #isUseAstronomicalChatzosForOtherZmanim()
-	 * @return the <code>Instant</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be
 	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSamuchLeMinchaKetanaGRA() {
@@ -3873,9 +3869,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getSamuchLeMinchaKetana(Instant, Instant, boolean)
 	 * @see #getShaahZmanis16Point1Degrees()
-	 * @return the <code>Instant</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSamuchLeMinchaKetana16Point1Degrees() {
@@ -3893,9 +3889,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 
 	 * @see #getSamuchLeMinchaKetana(Instant, Instant, boolean)
 	 * @see #getShaahZmanis72Minutes()
-	 * @return the <code>Instant</code> of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
+	 * @return the {@code Instant} of the time of <em>samuch lemincha ketana</em>. If the calculation can't be computed such
 	 *         as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle
-	 *         where the sun may not reach low enough below the horizon for this calculation, a <code>null</code> will be returned.
+	 *         where the sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned.
 	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
 	 */
 	public Instant getSamuchLeMinchaKetana72Minutes() {
@@ -3917,7 +3913,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
 	 * 
 	 * @return sunset if it occurs, or the time that the sun will reach its westernmost position (azimuth 270°), if sunset will
-	 *         not occur that day. If there is no sunset this day, and the azimuth 270° will not occur, a <code>null</code> will
+	 *         not occur that day. If there is no sunset this day, and the azimuth 270° will not occur, a {@code null} will
 	 *         be returned.
 	 * @see #getSunriseOrEasternmostSolarAzimuth()
 	 * @see #getTimeAtAzimuth(double)
@@ -3946,7 +3942,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
 	 * 
 	 * @return sunrise if it occurs, or the time that the sun will reach its easternmost position (azimuth 90°), if sunrise will
-	 *         not occur that day. If there is no sunrise this day, and the azimuth 90° will not occur, a <code>null</code> will
+	 *         not occur that day. If there is no sunrise this day, and the azimuth 90° will not occur, a {@code null} will
 	 *         be returned.
 	 * @see #getSunsetOrWesternmostSolarAzimuth()
 	 * @see #getTimeAtAzimuth(double)
