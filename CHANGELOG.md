@@ -74,7 +74,12 @@
 * Improve null handling in `ComprehensiveZmanimCalendar.getMoladBasedTime()`
 * Add `ComprehensiveZmanimCalendar.getMisheyakir12Point85Degrees()`
 * Add  `getMinchaGedolaGreaterThan30(Instant)` that allows it to work with any mincha gedola claculation.
-* `ComprehensiveZmanimcalendar.getMinchaGedolaGreaterThan30()` was renamed `getMinchaGedolaGRAGreaterThan30()` for clarity.
+* `ComprehensiveZmanimcalendar` rename some methods.
+  * getMinchaGedolaGreaterThan30()`-> `getMinchaGedolaGRAGreaterThan30()`
+  * `getShaahZmanisAlos16Point1ToTzais3Point8()` -> `getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees()`
+  * `getShaahZmanisAlos16Point1ToTzais3Point7()` -> `getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point7Degrees()`
+  * `getSofZmanShmaAlos16Point1ToTzaisGeonim7Point083Degrees()` -> `getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees()`
+  * `getPlagAlos16Point1ToTzaisGeonim7Point083Degrees(`) -> `getPlagAlos16Point1DegreesToTzaisGeonim7Point083Degrees()`
 * Change / remove `ComprehensiveZmanimcalendar` zmanim that were too early.
   * `getTzaisGeonim4Point37Degrees()` -> `getTzaisGeonim4Point42Degrees()`.
   * `getTzaisGeonim4Point61Degrees()` -> `getTzaisGeonim4Point66Degrees()`
