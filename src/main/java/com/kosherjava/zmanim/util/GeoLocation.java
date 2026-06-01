@@ -35,7 +35,6 @@ public class GeoLocation implements Cloneable {
 	 * The latitude, for example 40.096 for Lakewood, NJ.
 	 * @see #getLatitude()
 	 * @see #setLatitude(double)
-	 * @see #setLatitude(int, int, double, String)
 	 */
 	private double latitude;
 	
@@ -43,7 +42,6 @@ public class GeoLocation implements Cloneable {
 	 * The longitude, for example -74.222 for Lakewood, NJ.
 	 * @see #getLongitude()
 	 * @see #setLongitude(double)
-	 * @see #setLongitude(int, int, double, String)
 	 */
 	private double longitude;
 	
@@ -181,34 +179,6 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Method to set the latitude in degrees, minutes and seconds. For example, set the degrees to 40, minutes to 5,
-	 * seconds to 45.6 and direction to "N" for Lakewood, NJ.
-	 * 
-	 * @param degrees The degrees of latitude to set between 0° and 90°, for example 40 would be used for Lakewood, NJ. An
-	 *         {@code IllegalArgumentException} will be thrown if the value exceeds the limit.
-	 * @param minutes <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>, for example 5 would be
-	 *         used for Lakewood, NJ.
-	 * @param seconds <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>, for example 45.6 would be
-	 *         used for Lakewood, NJ.
-	 * @param direction "N" for north and "S" for south,  for example "N" would be used for Lakewood, NJ. An
-	 *         {@code IllegalArgumentException} will be thrown if the value is not "S" or "N".
-	 * @throws IllegalArgumentException if the latitude is not between 0 and 90 or the direction is not N or S.
-	 */
-	public void setLatitude(int degrees, int minutes, double seconds, String direction) {
-		if (degrees > 90 || degrees < 0 || minutes > 59 || minutes < 0 || seconds > 59 || seconds < 0 || Double.isNaN(seconds)){
-			throw new IllegalArgumentException("Latitude degrees must be between 0 and 90. Minutes and seconds must be between 0 and 59. Use a direction of \"S\" instead of negative.");
-		}
-		
-		double tempLat = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (direction.equals("S")) {
-			tempLat *= -1;
-		} else if (!direction.equals("N")) {
-			throw new IllegalArgumentException("Latitude direction must be \"N\" or \"S\"");
-		}
-		this.latitude = tempLat;
-	}
-
-	/**
 	 * Method to return the latitude as a {@code double}, for example 40.096 for Lakewood, NJ.
 	 * @return Returns the latitude.
 	 */
@@ -230,36 +200,6 @@ public class GeoLocation implements Cloneable {
 			throw new IllegalArgumentException("Longitude must be between -180 and  180");
 		}
 		this.longitude = longitude;
-	}
-
-	/**
-	 * Method to set the longitude in degrees, minutes and seconds. For example, set the degrees to 74, minutes to 13,
-	 * seconds to 19.2 and direction to "W" for Lakewood, NJ.
-	 * 
-	 * @param degrees The degrees of longitude to set between 0° and 180°. For example 74° would be set for Lakewood, NJ. An
-	 *         {@code IllegalArgumentException} will be thrown if the value exceeds the limits.
-	 * @param minutes <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">minutes of arc</a>. For example 13 would be
-	 *         set for Lakewood, NJ.
-	 * @param seconds <a href="https://en.wikipedia.org/wiki/Minute_of_arc#Cartography">seconds of arc</a>. For example 19.2 would be
-	 *         set for Lakewood, NJ.
-	 * @param direction "E" for east of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> or "W"for west
-	 *         of it. For example, "W" would be set for Lakewood, NJ. An {@code IllegalArgumentException} will be thrown if the
-	 *         value is not "E" or "W".
-	 * @throws IllegalArgumentException if the longitude is not between 0 and 180, the minutes and seconds are not between 0 and 59
-	 *         0r the direction is not "E" or "W".
-	 */
-	public void setLongitude(int degrees, int minutes, double seconds, String direction) {
-		if (degrees > 180  || degrees < 0 || minutes > 59 || minutes < 0 || seconds > 59 || seconds < 0 || Double.isNaN(seconds)){
-			throw new IllegalArgumentException("Longitude degrees must be between 0 and 180. Minutes and seconds must be between 0 and 59. Use a direction of \"W\" instead of negative.");
-		}
-		
-		double longTemp = degrees + ((minutes + (seconds / 60.0)) / 60.0);
-		if (direction.equals("W")) {
-			longTemp *= -1;
-		} else if (!direction.equals("E")) {
-			throw new IllegalArgumentException("Longitude direction must be \"E\" or \"W\"");
-		}
-		this.longitude = longTemp;
 	}
 
 	/**
@@ -553,22 +493,28 @@ public class GeoLocation implements Cloneable {
 	/**
 	 * @see java.lang.Object#equals(Object)
 	 */
+	@Override
 	public boolean equals(Object object) {
-		if (this == object)
+		if (this == object) {
 			return true;
-		if (!(object instanceof GeoLocation))
+		}
+		if (object == null || getClass() != object.getClass()) {
 			return false;
+		}
+
 		GeoLocation geo = (GeoLocation) object;
-		return Double.doubleToLongBits(this.latitude) == Double.doubleToLongBits(geo.latitude)
-				&& Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(geo.longitude)
-				&& this.elevation == geo.elevation
-				&& (Objects.equals(this.locationName, geo.locationName))
-				&& (Objects.equals(this.zoneId, geo.zoneId));
+
+		return Double.compare(this.latitude, geo.latitude) == 0
+			&& Double.compare(this.longitude, geo.longitude) == 0
+			&& Double.compare(this.elevation, geo.elevation) == 0
+			&& Objects.equals(this.locationName, geo.locationName)
+			&& Objects.equals(this.zoneId, geo.zoneId);
 	}
 
 	/**
 	 * @see java.lang.Object#hashCode()
 	 */
+	@Override
 	public int hashCode() {
 		return Objects.hash(getClass(), this.latitude, this.longitude, this.elevation, this.locationName, this.zoneId);
 	}
@@ -576,6 +522,7 @@ public class GeoLocation implements Cloneable {
 	/**
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		return "\nLocation Name:\t\t\t" + getLocationName() +
 			"\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
