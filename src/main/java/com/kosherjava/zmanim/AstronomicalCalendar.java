@@ -66,7 +66,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * Instant sunrise = ac.getSunrise();
  * }
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2026
+ * @author © Eliyahu Hershfeld 2004 - 2026
  */
 public class AstronomicalCalendar implements Cloneable {
 
@@ -88,10 +88,10 @@ public class AstronomicalCalendar implements Cloneable {
 	/** Sun's zenith at astronomical twilight (108°). */
 	public static final double ASTRONOMICAL_ZENITH = 108;
 
-	/** constant for nanoseconds in a minute (60,000) */
+	/** constant for nanoseconds in a minute (60 billion / 60,000,000,000) */
 	public static final long MINUTE_NANOS = 60_000_000_000L;
 
-	/** constant for nanoseconds in an hour (3,600,000,000,000) */
+	/** constant for nanoseconds in an hour (3.6 trillion / 3,600,000,000,000) */
 	public static final long HOUR_NANOS = 3_600_000_000_000L;
 	
 	/**
@@ -549,7 +549,6 @@ public class AstronomicalCalendar implements Cloneable {
 		}
 		
 		LocalDate date = getAdjustedLocalDate();
-		
 		double localTimeHours = (getGeoLocation().getLongitude() / 15) + time;
 		
 		if (solarEvent == SolarEvent.SUNRISE && localTimeHours > 18) {
@@ -566,7 +565,7 @@ public class AstronomicalCalendar implements Cloneable {
 			}
 		}
 		
-		LocalDateTime dateTime = date.atStartOfDay().plusNanos(Math.round(time * HOUR_NANOS)); // tiny change from 3.0 code
+		LocalDateTime dateTime = date.atStartOfDay().plusNanos(Math.round(time * HOUR_NANOS));
 		
 		// The computed time is in UTC fractional hours; anchor in UTC before converting.
 		return ZonedDateTime.of(dateTime, ZoneOffset.UTC).toInstant();
