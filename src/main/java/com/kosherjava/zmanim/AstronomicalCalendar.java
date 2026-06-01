@@ -15,7 +15,6 @@
  */
 package com.kosherjava.zmanim;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -41,7 +40,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * This is common when calculating twilight with a deep dip below the horizon for locations as far south of the North Pole as London,
  * in the northern hemisphere. The sun never reaches this dip at certain times of the year. When the calculations encounter this
  * condition a {@code null} will be returned when a {@link java.time.Instant} or {@link java.time.Duration} is expected. The reason
- * that {@code Excelption}s are not thrown in these cases is because the lack of a rise/set or twilight is not an exception, but
+ * that {@code Exception}s are not thrown in these cases is because the lack of a rise/set or twilight is not an exception, but
  * an expected condition in many parts of the world.
  * <p>
  * Here is a simple example of how to use the API to calculate sunrise.
@@ -253,7 +252,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * A method that returns the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102°}.
 	 * 
 	 * @return The {@code Instant} of the end of nautical twilight using a zenith of {@link #NAUTICAL_ZENITH 102°}. If the
-	 *         calculation can't be computed, {@code null} will be returned. See detailed explanation on top of the  age.
+	 *         calculation can't be computed, {@code null} will be returned. See detailed explanation on top of the page.
 	 */
 	public Instant getEndNauticalTwilight() {
 		return getSunsetOffsetByDegrees(NAUTICAL_ZENITH);
@@ -283,7 +282,7 @@ public class AstronomicalCalendar implements Cloneable {
 		if (time == null || offset == null) {
 			return null;
 		}
-		return time.plusMillis(offset.toMillis());
+		return time.plus(offset);
 	}
 	
 	/**
@@ -413,7 +412,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @see getTemporalHour(Instant, Instant)
 	 * @return the {@code Duration} of the temporal hour. If the calculation can't be computed a {@code null} will be
 	 *         returned. See detailed explanation on top of the page.
-	 * 
 	 */
 	public Duration getTemporalHour() {
 		return getTemporalHour(getSeaLevelSunrise(), getSeaLevelSunset());
@@ -591,25 +589,35 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunriseSolarDipFromOffset(double minutes) {
-		Instant offsetByDegrees = getSeaLevelSunrise();
-		if(offsetByDegrees == null) {
+		Instant seaLevelSunrise = getSeaLevelSunrise();
+		if (seaLevelSunrise == null) {
 			return Double.NaN;
 		}
-		Duration offsetDuration = Duration.ofNanos((long)(-minutes * MINUTE_NANOS));
-		Instant offsetByTime = getTimeOffset(getSeaLevelSunrise(), offsetDuration);
-		BigDecimal degrees = new BigDecimal(0);
-		BigDecimal incrementor = new BigDecimal("0.0001");
 
-		while (offsetByDegrees == null || ((minutes < 0.0 && offsetByDegrees.toEpochMilli() < offsetByTime.toEpochMilli()) ||
-				(minutes > 0.0 && offsetByDegrees.toEpochMilli() > offsetByTime.toEpochMilli()))) {
+		Duration offsetDuration = Duration.ofNanos((long) (-minutes * MINUTE_NANOS));
+		Instant offsetByTime = getTimeOffset(seaLevelSunrise, offsetDuration);
+		long offsetByTimeMilli = offsetByTime.toEpochMilli();
+		double degrees = 0.0;
+		double incrementor = 0.0001;
+		Instant offsetByDegrees;
+
+		do {
 			if (minutes > 0.0) {
-				degrees = degrees.add(incrementor);
+				degrees += incrementor;
 			} else {
-				degrees = degrees.subtract(incrementor);
+				degrees -= incrementor;
 			}
-			offsetByDegrees = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
-		}
-		return degrees.doubleValue();
+
+			offsetByDegrees = getSunriseOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
+
+			if (offsetByDegrees == null || Math.abs(degrees) > 30.0) {
+				return Double.NaN;
+			}
+			
+		} while ((minutes > 0.0 && offsetByDegrees.toEpochMilli() > offsetByTimeMilli) ||
+				(minutes < 0.0 && offsetByDegrees.toEpochMilli() < offsetByTimeMilli));
+
+		return degrees;
 	}
 
 	/**
@@ -629,26 +637,37 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunsetSolarDipFromOffset(double minutes) {
-		Instant offsetByDegrees = getSeaLevelSunset();
-		if(offsetByDegrees == null) {
+		Instant seaLevelSunset = getSeaLevelSunset();
+		if (seaLevelSunset == null) {
 			return Double.NaN;
 		}
+
 		Duration offsetDuration = Duration.ofNanos((long) (minutes * MINUTE_NANOS));
-		Instant offsetByTime = getTimeOffset(getSeaLevelSunset(), offsetDuration);
-		BigDecimal degrees = new BigDecimal(0);
-		BigDecimal incrementor = new BigDecimal("0.0001");
-		while (offsetByDegrees == null || ((minutes > 0.0 && offsetByDegrees.toEpochMilli() < offsetByTime.toEpochMilli()) ||
-				(minutes < 0.0 && offsetByDegrees.toEpochMilli() > offsetByTime.toEpochMilli()))) {
+		Instant offsetByTime = getTimeOffset(seaLevelSunset, offsetDuration);
+		long offsetByTimeMilli = offsetByTime.toEpochMilli();
+		double degrees = 0.0;
+		double incrementor = 0.0001;
+		Instant offsetByDegrees;
+
+		do {
 			if (minutes > 0.0) {
-				degrees = degrees.add(incrementor);
+				degrees += incrementor;
 			} else {
-				degrees = degrees.subtract(incrementor);
+				degrees -= incrementor;
 			}
-			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees.doubleValue());
-		}
-		return degrees.doubleValue();
+
+			offsetByDegrees = getSunsetOffsetByDegrees(GEOMETRIC_ZENITH + degrees);
+
+			if (offsetByDegrees == null || Math.abs(degrees) > 30.0) {
+				return Double.NaN;
+			}
+
+		} while ((minutes > 0.0 && offsetByDegrees.toEpochMilli() < offsetByTimeMilli) ||
+				(minutes < 0.0 && offsetByDegrees.toEpochMilli() > offsetByTimeMilli));
+
+		return degrees;
 	}
-	
+
 	/**
 	 * A method that returns <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean time (LMT)</a> time converted to
 	 * regular clock time for the local wall-clock time passed to this method. This time is adjusted from standard time to account for
