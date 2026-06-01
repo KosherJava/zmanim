@@ -4,7 +4,11 @@
 
 package com.kosherjava.zmanim.hebrewcalendar;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.*;
+
+import java.time.Month;
 
 /**
  * Verify correct calculations of when a Hebrew leap year occurs.
@@ -61,6 +65,41 @@ public class UT_JewishLeapYear {
 		jewishDate.setJewishYear(year);
 
 		Assert.assertFalse(jewishDate.isJewishLeapYear(  ));
+	}
+
+	@Test
+	public void icu() {
+		for (int y = 0; y < 10000; y++) {
+			assertEquals(isLeapYearICU(y), JewishDate.isJewishLeapYear(y));
+		}
+	}
+
+	/** android.icu.util.HebrewCalendar */
+	public static boolean isLeapYearICU(int year) {
+		int x = (year * 12 + 17) % 19;
+		return x >= ((x < 0) ? -7 : 12);
+	}
+
+	@Test
+	public void leapYears(){
+		final int MONTH_FEBRUARY = Month.FEBRUARY.getValue();
+		for (int y = 0; y < 10000; y++) {
+			assertEquals(isLeapYearWiki(y), JewishDate.getLastDayOfGregorianMonth(y, MONTH_FEBRUARY) == 29);
+		}
+	}
+
+	/** https://en.wikipedia.org/wiki/Leap_year#Algorithm */
+	private static boolean isLeapYearWiki(int year) {
+		if (year % 4 != 0) {
+			return false;
+		}
+		if (year % 100 != 0) {
+			return true;
+		}
+		if (year % 400 != 0) {
+			return false;
+		}
+		return true;
 	}
 
 } // End of UT_JewishLeapYear class

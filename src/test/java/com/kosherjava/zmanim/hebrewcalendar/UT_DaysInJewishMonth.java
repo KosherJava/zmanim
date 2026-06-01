@@ -4,7 +4,13 @@
 
 package com.kosherjava.zmanim.hebrewcalendar;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.*;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
 
 /**
  * Validate the days in a Hebrew month (in various types of years) are correct.
@@ -109,6 +115,17 @@ public class UT_DaysInJewishMonth {
 
 		assertShalem(year);
 		Assert.assertTrue(jewishDate.isJewishLeapYear(  ));
+	}
+
+	@Test
+	public void earlyGregorian() {
+		LocalDate localDate = LocalDate.of(1582, Month.OCTOBER, 15);
+		JewishDate jewishDate = new JewishDate(localDate);
+
+		assertEquals(DayOfWeek.FRIDAY, localDate.getDayOfWeek());
+		assertEquals(5343, jewishDate.getJewishYear());
+		assertEquals(JewishDate.TISHREI, jewishDate.getJewishMonth());
+		assertEquals(19, jewishDate.getJewishDayOfMonth());
 	}
 
 } // End of UT_DaysInJewishMonth class
