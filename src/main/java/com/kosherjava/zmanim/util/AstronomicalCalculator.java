@@ -339,6 +339,12 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/**
 	 * {@inheritDoc}
+	 * <p>
+	 * Two {@code AstronomicalCalculator} instances are considered equal if their
+	 * Earth radius, refraction, and solar radius values are identical.
+	 * 
+	 * @param object the reference object with which to compare
+	 * @return {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(Object object) {
@@ -357,13 +363,21 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/**
 	 * {@inheritDoc}
+	 * <p>
+	 * This implementation hashes the earth radius, refraction, and solar radius properties to maintain the contract with
+	 * {@link #equals(Object)}.
+	 * 
+	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int hashCode() {
 		return Objects.hash(getEarthRadius(), getRefraction(), getSolarRadius());
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @return {@inheritDoc}
 	 */
 	@Override
 	public AstronomicalCalculator clone() {
