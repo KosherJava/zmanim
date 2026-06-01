@@ -17,6 +17,7 @@ package com.kosherjava.zmanim.util;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * An abstract class that all sun time calculating classes extend. This allows the algorithm used to be changed at
@@ -337,8 +338,9 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * @see Object#equals(Object)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;
@@ -347,34 +349,28 @@ public abstract class AstronomicalCalculator implements Cloneable {
 			return false;
 		}
 		AstronomicalCalculator calculator = (AstronomicalCalculator) object;
-		return Double.doubleToLongBits(getEarthRadius()) == Double.doubleToLongBits(calculator.getEarthRadius())
-				&& Double.doubleToLongBits(getRefraction()) == Double.doubleToLongBits(calculator.getRefraction())
-				&& Double.doubleToLongBits(getSolarRadius()) == Double.doubleToLongBits(calculator.getSolarRadius());
+
+		return Double.compare(this.getEarthRadius(), calculator.getEarthRadius()) == 0
+				&& Double.compare(this.getRefraction(), calculator.getRefraction()) == 0
+				&& Double.compare(this.getSolarRadius(), calculator.getSolarRadius()) == 0;
 	}
 
 	/**
-	 * @see Object#hashCode()
+	 * {@inheritDoc}
 	 */
 	public int hashCode() {
-		int result = 17;
-		result = 37 * result + getClass().hashCode();
-		result = 37 * result + Double.hashCode(getEarthRadius());
-		result = 37 * result + Double.hashCode(getRefraction());
-		result = 37 * result + Double.hashCode(getSolarRadius());
-		return result;
+		return Objects.hash(getEarthRadius(), getRefraction(), getSolarRadius());
 	}
 
 	/**
-	 * @see Object#clone()
-	 * @since 1.1
+	 * {@inheritDoc}
 	 */
-	public Object clone() {
-		AstronomicalCalculator clone = null;
+	@Override
+	public AstronomicalCalculator clone() {
 		try {
-			clone = (AstronomicalCalculator) super.clone();
+			return (AstronomicalCalculator) super.clone();
 		} catch (CloneNotSupportedException cnse) {
-			// Required by the compiler. Should never be reached since we implement clone().
+			throw new AssertionError("Clone not supported on a Cloneable object", cnse);
 		}
-		return clone;
 	}
 }
