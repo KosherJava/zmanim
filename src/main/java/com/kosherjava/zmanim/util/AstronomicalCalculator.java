@@ -24,7 +24,7 @@ import java.time.LocalDate;
  * @todo Consider methods that would allow atmospheric modeling. This can currently be adjusted by {@link
  * #setRefraction(double) setting the refraction}.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2026
+ * @author © Eliyahu Hershfeld 2004 - 2026
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
@@ -373,7 +373,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		try {
 			clone = (AstronomicalCalculator) super.clone();
 		} catch (CloneNotSupportedException cnse) {
-			System.out.print("Required by the compiler. Should never be reached since we implement clone()");
+			// Required by the compiler. Should never be reached since we implement clone().
 		}
 		return clone;
 	}
