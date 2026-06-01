@@ -272,9 +272,9 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	}
 	
 	/**
-	 * This method will return {@link #getSeaLevelSunrise() sea level sunrise} if {@link #isUseElevation()} is false (the default),
-	 * or elevation adjusted {@link #getSunrise()} if it is true. This allows relevant <em>zmanim</em>
-	 * in this and extending classes (such as the {@link ComprehensiveZmanimCalendar}) to automatically adjust to the elevation setting.
+	 * This method will return {@link #getSeaLevelSunset() sea level sunset} if {@link #isUseElevation()} is false (the default), or
+	 * elevation adjusted {@link #getSunset()} if it is true. This allows relevant <em>zmanim</em>in this and extending classes (such
+	 * as the {@link ComprehensiveZmanimCalendar}) to automatically adjust to the elevation setting.
 	 * 
 	 * @return {@link #getSeaLevelSunset()} if {@link #isUseElevation()} is false (the default), or elevation adjusted
 	 *         {@link #getSunset()} if it is true.
