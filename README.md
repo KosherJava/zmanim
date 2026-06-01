@@ -52,7 +52,7 @@ The KosherJava Zmanim API has been ported to:
 * Dart / Flutter - https://github.com/yakir8/kosher_dart
 * Go - https://github.com/vlipovetskii/go-zmanim
 * JavaScript - https://github.com/yparitcher/zmanJS
-* Kotlin - https://github.com/Sternbach-Software/KosherKotlin
+* Kotlin - https://github.com/elfifo4/KosherKotlin / [Maven Central](https://central.sonatype.com/artifact/io.github.elfifo4/kosherkotlin) (an up-to-date fork of [Sternbach-Software's port](https://github.com/Sternbach-Software/KosherKotlin)).
 * Monkey C - https://github.com/5E7EN/Garmin-ZmanIQ/tree/rebuild-zmaniq/source/utils/zmanim
 * Objective-C - https://github.com/MosheBerman/KosherCocoa
 * PHP - https://github.com/zachweix/PhpZmanim/
