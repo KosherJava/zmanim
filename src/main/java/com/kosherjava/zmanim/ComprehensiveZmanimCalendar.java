@@ -81,7 +81,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * that <em>plag hamincha</em> is 10.75 hours after the start of the day, and the following steps are all that it takes.
  * {@snippet lang='java' :
  * Instant plag = czc.getPlagHamincha(czc.getSunriseOffsetByDegrees(AstronomicalCalendar.GEOMETRIC_ZENITH + 12),
- * 				czc.getSunsetOffsetByDegrees(AstronomicalCalendar.GEOMETRIC_ZENITH + ZmanimCalendar.ZENITH_7_POINT_083));
+ * 		czc.getSunsetOffsetByDegrees(AstronomicalCalendar.GEOMETRIC_ZENITH + ZmanimCalendar.ZENITH_7_POINT_083));
  * }
  * Something a drop more challenging, but still simple, would be calculating a <em>zman</em> using the same "complex"
  * offset day used in the above-mentioned Manchester calendar, but for a <em>shaos zmaniyos</em> based <em>zman</em> not
@@ -105,7 +105,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * 
  * <h2>See documentation from the {@link ZmanimCalendar} parent class</h2>
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2026
+ * @author © Eliyahu Hershfeld 2004 - 2026
  */
 public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
@@ -2240,6 +2240,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * 24) lists 3.65° that appears to be a drop too early.
 	 * 
 	 * @return the {@code Instant} representing the time when the sun is 3.7° below sea level.
+	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very early time, and if used <em>lekula</em>
+	 *         can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this method from the API, and this
+	 *         deprecation is intended to alert developers of the danger of using it.
 	 * @see #ZENITH_3_POINT_7
 	 */
 	@Deprecated (forRemoval=false)
@@ -2257,6 +2260,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Jerusalem <a href="https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>.
 	 * 
 	 * @return the {@code Instant} representing the time when the sun is 3.8° below sea level.
+	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very early time, and if used <em>lekula</em>
+	 *         can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this method from the API, and this
+	 *         deprecation is intended to alert developers of the danger of using it.
 	 * @see #ZENITH_3_POINT_8
 	 */
 	@Deprecated (forRemoval=false)
@@ -2302,6 +2308,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         such as northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the
 	 *         sun may not reach low enough below the horizon for this calculation, a {@code null} will be returned. See detailed
 	 *         explanation on top of the {@link AstronomicalCalendar} documentation.
+	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very early time, and if used <em>lekula</em>
+	 *         can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this method from the API, and this
+	 *         deprecation is intended to alert developers of the danger of using it.
 	 * @see #ZENITH_4_POINT_66
 	 * @see #getTzaisGeonim4Point8Degrees()
 	 */
@@ -2324,6 +2333,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *         the Antarctic Circle where the sun may not reach low enough below the horizon for this calculation, a
 	 *         {@code null} will be returned. See detailed explanation on top of the {@link AstronomicalCalendar}
 	 *         documentation.
+	 * @deprecated This method should be used <em>lechumra</em> only since it returns a very early time, and if used <em>lekula</em>
+	 *         can result in <em>chillul Shabbos</em> etc. There is no current plan to remove this method from the API, and this
+	 *         deprecation is intended to alert developers of the danger of using it.
 	 * @see #ZENITH_4_POINT_42
 	 */
 	@Deprecated (forRemoval=false)
