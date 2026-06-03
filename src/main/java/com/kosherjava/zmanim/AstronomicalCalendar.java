@@ -531,7 +531,6 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Instant getTimeAtAzimuth(double azimuth) {
 		double rawAzimuth = getAstronomicalCalculator().getTimeAtAzimuth(getAdjustedLocalDate(), getGeoLocation(), azimuth);
-		// double rawAzimuth = getAstronomicalCalculator().getUTCAzimuthMorning(getAdjustedLocalDate(), getGeoLocation());
 		return getInstantFromTime(rawAzimuth, SolarEvent.NONE);
 	}
 	
@@ -577,8 +576,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * returns a value close to 16.1°.
 	 * 
 	 * @param minutes minutes before sunrise
-	 * @return the degrees below the horizon before sunrise that match the offset in minutes passed it as a parameter. If
-	 *         the calculation can't be computed (no sunrise occurs on this day) a {@link Double#NaN} will be returned.
+	 * @return the degrees below the horizon before {@link #getSeaLevelSunrise()} that match the offset in minutes passed it as a
+	 *         parameter. If the calculation can't be computed (no sunrise occurs on this day) a {@link Double#NaN} will be returned.
 	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced by calls to
 	 *         {@link AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)}. That method will efficiently return the the
 	 *         solar elevation (the sun's position in degrees below (or above) the horizon) at the given time even in the arctic when
@@ -588,6 +587,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunriseSolarDipFromOffset(double minutes) {
+		if(minutes == 0.0) {
+			return 0.0;
+		}
+		
 		Instant seaLevelSunrise = getSeaLevelSunrise();
 		if (seaLevelSunrise == null) {
 			return Double.NaN;
@@ -636,6 +639,10 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunsetSolarDipFromOffset(double minutes) {
+		if(minutes == 0.0) {
+			return 0.0;
+		}
+		
 		Instant seaLevelSunset = getSeaLevelSunset();
 		if (seaLevelSunset == null) {
 			return Double.NaN;
@@ -668,13 +675,13 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that returns <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean time (LMT)</a> time converted to
-	 * regular clock time for the local wall-clock time passed to this method. This time is adjusted from standard time to account for
-	 * the local latitude. The 360° of the globe divided by 24 calculates to 15° per hour with 4 minutes per degree, so at a
-	 * longitude of 0 , 15, 30 etc... noon is at exactly 12:00pm. Lakewood, N.J., with a longitude of -74.222, is 0.7906 away from the
-	 * closest multiple of 15 at -75°. This is multiplied by 4 clock minutes (per degree) to yield 3 minutes and 7 seconds for a
-	 * noon time of 11:56:53am. This method is not tied to the theoretical 15° time zones, but will adjust to the actual time zone
-	 * and <a href="https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> to return LMT.
+	 * A method that returns <a href="https://en.wikipedia.org/wiki/Local_mean_time">local mean time (LMT)</a> time for a {@code
+	 * LocalTime} passed to this method. This time is adjusted from standard time to account for the local latitude. The 360° of the
+	 * globe divided by 24 calculates to 15° per hour with 4 minutes per degree, so at a longitude of 0 , 15, 30 etc... noon is at
+	 * exactly 12:00pm. Lakewood, N.J., with a longitude of -74.222, is 0.7906 away from the closest multiple of 15 at -75°. This is
+	 * multiplied by 4 clock minutes (per degree) to yield 3 minutes and 7 seconds for a noon time of 11:56:53am. This method is not
+	 * tied to the theoretical 15° time zones, but will adjust to the actual time zone and <a href=
+	 * "https://en.wikipedia.org/wiki/Daylight_saving_time">Daylight saving time</a> to return LMT.
 	 * 
 	 * @param localTime the local wall-clock time (such as 12:00 for noon and 00:00 for midnight) to calculate as LMT.
 	 * @return the {@code Instant} representing the local mean time (LMT) for the time passed in. In Lakewood, NJ, passing noon
@@ -834,7 +841,7 @@ public class AstronomicalCalendar implements Cloneable {
 		try {
 			clone = (AstronomicalCalendar) super.clone();
 		} catch (CloneNotSupportedException cnse) {
-			// Required by the compiler. Should never be reached since we implement clone()
+			throw new AssertionError("Clone not supported on a Cloneable object", cnse);
 		}
 		if (clone != null) {
 			clone.setGeoLocation((GeoLocation) getGeoLocation().clone()); // consider converting the GeoLocation class to be immutable to avoid the deep copy
