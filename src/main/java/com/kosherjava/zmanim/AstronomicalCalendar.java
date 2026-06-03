@@ -31,7 +31,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
 /**
  * A Java calendar that calculates astronomical times such as {@link getSunrise() sunrise}, {@link
  * getSunset() sunset} and twilight times. This class contains a {@link getLocalDate() LocalDate} and can therefore
- * use the standard Calendar functionality to change dates etc. The calculation engine used to calculate the astronomical times can
+ * use the standard calendar functionality to change dates etc. The calculation engine used to calculate the astronomical times can
  * be changed to a different implementation by implementing the abstract {@link AstronomicalCalculator} and setting it withthe {@link
  * setAstronomicalCalculator(AstronomicalCalculator)}. A number of different calculation engine implementations are included in the
  * util package.
@@ -44,7 +44,7 @@ import com.kosherjava.zmanim.util.ZmanimFormatter;
  * an expected condition in many parts of the world.
  * <p>
  * Here is a simple example of how to use the API to calculate sunrise.
- * First create the Calendar for the location you would like to calculate sunrise or sunset times for:
+ * First create the AstronomicalCalendar for the location you would like to calculate sunrise or sunset times for:
  * 
  * {@snippet lang='java' :
  * String locationName = &quot;Lakewood, NJ&quot;;
@@ -441,7 +441,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * "https://en.wikipedia.org/wiki/Transit_%28astronomy%29">transiting</a> the <a
 	 * href="https://en.wikipedia.org/wiki/Meridian_%28astronomy%29">celestial meridian</a>. The calculations used by this class
 	 * depend on the {@link AstronomicalCalculator} used. If this calendar instance is {@link setAstronomicalCalculator(
-	 * AstronomicalCalculator) set} to use the {@link com.kosherjava.zmanim.util.NOAACalculator} (the default) it will calculate
+	 * AstronomicalCalculator)} is set to use the {@link com.kosherjava.zmanim.util.NOAACalculator} (the default) it will calculate
 	 * astronomical noon. If the calendar instance is  to use the {@link com.kosherjava.zmanim.util.SunTimesCalculator}, that does
 	 * not have code to calculate astronomical noon, the sun transit is calculated as halfway between sea level sunrise and sea level
 	 * sunset, which can be slightly off the real transit time due to changes in declination (the lengthening or shortening day). See
@@ -454,8 +454,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see getSunTransit(Instant, Instant)
 	 * @see getTemporalHour()
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instance, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instance, GeoLocation)
 	 */
 	public Instant getSunTransit() {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedLocalDate(), getGeoLocation());
@@ -483,8 +483,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         {@link com.kosherjava.zmanim.util.NOAACalculator NOAA Calculator} that is never expected to return {@code null}.
 	 *         See the detailed explanation on top of the page.
 	 * @see getSunTransit()
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Calendar, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Calendar, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instance, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instance, GeoLocation)
 	 */
 	public Instant getSolarMidnight() {
 		double noon = getAstronomicalCalculator().getUTCMidnight(getAdjustedLocalDate(), getGeoLocation());
@@ -591,15 +591,15 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the degrees below the horizon before {@link #getSeaLevelSunrise()} that match the offset in minutes passed it as a
 	 *         parameter. If the calculation can't be computed (no sunrise occurs on this day) a {@link Double#NaN} will be returned.
 	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced by calls to
-	 *         {@link AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)}. That method will efficiently return the the
+	 *         {@link AstronomicalCalculator#getSolarElevation(Instance, GeoLocation)}. That method will efficiently return the the
 	 *         solar elevation (the sun's position in degrees below (or above) the horizon) at the given time even in the arctic when
 	 *         there is no sunrise.
-	 * @see AstronomicalCalculator#getSolarElevation(Calendar, GeoLocation)
+	 * @see AstronomicalCalculator#getSolarElevation(Instant, GeoLocation)
 	 * @see getSunsetSolarDipFromOffset(double)
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunriseSolarDipFromOffset(double minutes) {
-		if(minutes == 0.0) {
+		if (minutes == 0.0 || Double.isNaN(minutes)) {
 			return 0.0;
 		}
 		
@@ -636,7 +636,7 @@ public class AstronomicalCalendar implements Cloneable {
 
 	/**
 	 * Returns the sun's elevation (number of degrees) below the horizon after sunset that matches the offset minutes
-	 * passed in as a parameter. For example passing in 72 minutes for a calendar set to the equinox in Jerusalem
+	 * passed in as a parameter. For example passing in 72 minutes for a date set to the equinox in Jerusalem
 	 * returns a value close to 16.1°.
 	 * 
 	 * @param minutes minutes after sunset
@@ -651,7 +651,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunsetSolarDipFromOffset(double minutes) {
-		if(minutes == 0.0) {
+		if (minutes == 0.0 || Double.isNaN(minutes)) {
 			return 0.0;
 		}
 		
@@ -710,7 +710,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * Adjusts the {@code LocalDate} to deal with edge cases where the location crosses the antimeridian.
 	 * 
 	 * @see GeoLocation#getAntimeridianAdjustment(Instant)
-	 * @return the adjusted Calendar
+	 * @return the adjusted {@code LocalDate}
 	 */
 	protected LocalDate getAdjustedLocalDate(){
 		int offset = getGeoLocation().getAntimeridianAdjustment(getMidnightLastNight().toInstant());
@@ -759,8 +759,15 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#equals(Object)
+	 * {@inheritDoc}
+	 * <p>
+	 * Two {@code AstronomicalCalculator} instances are considered equal if their {@link #getLocalDate()}, {@link #getGeoLocation()}
+	 * and {@link #getAstronomicalCalculator()} values are identical.
+	 * 
+	 * @param object the reference object with which to compare
+	 * @return {@inheritDoc}
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;
@@ -775,8 +782,14 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * @see java.lang.Object#hashCode()
+	 * {@inheritDoc}
+	 * <p>
+	 * This implementation hashes the {@code Class}, {@linkplain #getLocalDate()}, {@link #getGeoLocation()} and
+	 * {@link #getAstronomicalCalculator()} properties to maintain the contract with {@link #equals(Object)}.
+	 * 
+	 * @return {@inheritDoc}
 	 */
+	@Override
 	public int hashCode() {
 		return Objects.hash(getClass(), getLocalDate(), getGeoLocation(), getAstronomicalCalculator());
 	}
@@ -844,10 +857,11 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * A method that creates a <a href="https://en.wikipedia.org/wiki/Object_copy#Deep_copy">deep copy</a> of the object.
+	 * {@inheritDoc}
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @return {@inheritDoc}
 	 */
+	@Override
 	public Object clone() {
 		AstronomicalCalendar clone = null;
 		try {
