@@ -454,8 +454,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see getSunTransit(Instant, Instant)
 	 * @see getTemporalHour()
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instant, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instant, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(LocalDate, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 */
 	public Instant getSunTransit() {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedLocalDate(), getGeoLocation());
@@ -483,8 +483,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         {@link com.kosherjava.zmanim.util.NOAACalculator NOAA Calculator} that is never expected to return {@code null}.
 	 *         See the detailed explanation on top of the page.
 	 * @see getSunTransit()
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instant, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instant, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(LocalDate, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(LocalDate, GeoLocation)
 	 */
 	public Instant getSolarMidnight() {
 		double noon = getAstronomicalCalculator().getUTCMidnight(getAdjustedLocalDate(), getGeoLocation());
