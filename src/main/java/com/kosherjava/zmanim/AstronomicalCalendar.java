@@ -454,8 +454,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         {@code null} will be returned. See detailed explanation on top of the page.
 	 * @see getSunTransit(Instant, Instant)
 	 * @see getTemporalHour()
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instance, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instance, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instant, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instant, GeoLocation)
 	 */
 	public Instant getSunTransit() {
 		double noon = getAstronomicalCalculator().getUTCNoon(getAdjustedLocalDate(), getGeoLocation());
@@ -483,8 +483,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 *         {@link com.kosherjava.zmanim.util.NOAACalculator NOAA Calculator} that is never expected to return {@code null}.
 	 *         See the detailed explanation on top of the page.
 	 * @see getSunTransit()
-	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instance, GeoLocation)
-	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instance, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.NOAACalculator#getUTCNoon(Instant, GeoLocation)
+	 * @see com.kosherjava.zmanim.util.SunTimesCalculator#getUTCNoon(Instant, GeoLocation)
 	 */
 	public Instant getSolarMidnight() {
 		double noon = getAstronomicalCalculator().getUTCMidnight(getAdjustedLocalDate(), getGeoLocation());
@@ -591,7 +591,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the degrees below the horizon before {@link #getSeaLevelSunrise()} that match the offset in minutes passed it as a
 	 *         parameter. If the calculation can't be computed (no sunrise occurs on this day) a {@link Double#NaN} will be returned.
 	 * @deprecated This method is slow and inefficient and should NEVER be used in a loop. This method should be replaced by calls to
-	 *         {@link AstronomicalCalculator#getSolarElevation(Instance, GeoLocation)}. That method will efficiently return the the
+	 *         {@link AstronomicalCalculator#getSolarElevation(Instant, GeoLocation)}. That method will efficiently return the the
 	 *         solar elevation (the sun's position in degrees below (or above) the horizon) at the given time even in the arctic when
 	 *         there is no sunrise.
 	 * @see AstronomicalCalculator#getSolarElevation(Instant, GeoLocation)
@@ -599,8 +599,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunriseSolarDipFromOffset(double minutes) {
-		if (minutes == 0.0 || Double.isNaN(minutes)) {
+		if (minutes == 0.0) {
 			return 0.0;
+		}
+		if (Double.isNaN(minutes)) {
+			return Double.NaN;
 		}
 		
 		Instant seaLevelSunrise = getSeaLevelSunrise();
@@ -651,8 +654,11 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	@Deprecated(forRemoval=false)
 	public double getSunsetSolarDipFromOffset(double minutes) {
-		if (minutes == 0.0 || Double.isNaN(minutes)) {
+		if (minutes == 0.0) {
 			return 0.0;
+		}
+		if (Double.isNaN(minutes)) {
+			return Double.NaN;
 		}
 		
 		Instant seaLevelSunset = getSeaLevelSunset();
