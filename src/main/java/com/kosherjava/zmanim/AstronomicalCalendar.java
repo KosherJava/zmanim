@@ -562,6 +562,18 @@ public class AstronomicalCalendar implements Cloneable {
 			} else if (localTimeHours > 24) {
 				date = date.minusDays(1);
 			}
+		} else if (solarEvent == SolarEvent.NONE) {
+			// Azimuth events can occur at any time of day; apply the same date-boundary adjustments as SUNRISE/SUNSET to handle
+			// far-east and far-west locations where local date differs from UTC date. For example, Suva, Fiji (UTC+12): the first
+			// half of any local day (midnight–noon local) corresponds to the previous UTC calendar date (12:00–24:00 UTC the day
+			// before).  A morning azimuth event like 90° (due East, ~6–7 AM local) therefore has a UTC time of ~18:xx on the day
+			// before the requested Fiji local date. Without a date adjustment, anchoring that UTC time to the wrong calendar date
+			// produces an Instant one full day too late.
+			if (localTimeHours > 18) {
+				date = date.minusDays(1);
+			} else if (localTimeHours < 6) {
+				date = date.plusDays(1);
+			}
 		}
 		
 		LocalDateTime dateTime = date.atStartOfDay().plusNanos(Math.round(time * HOUR_NANOS));
@@ -843,10 +855,10 @@ public class AstronomicalCalendar implements Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			throw new AssertionError("Clone not supported on a Cloneable object", cnse);
 		}
-		if (clone != null) {
-			clone.setGeoLocation((GeoLocation) getGeoLocation().clone()); // consider converting the GeoLocation class to be immutable to avoid the deep copy
-			clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone()); // likely not needed
-		}
+
+		clone.setGeoLocation((GeoLocation) getGeoLocation().clone()); // consider converting the GeoLocation class to be immutable to avoid the deep copy
+		clone.setAstronomicalCalculator((AstronomicalCalculator) getAstronomicalCalculator().clone()); // likely not needed
+
 		return clone;
 	}
 }
