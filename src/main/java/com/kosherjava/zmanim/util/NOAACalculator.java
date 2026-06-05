@@ -473,62 +473,21 @@ public class NOAACalculator extends AstronomicalCalculator {
 	
 	/**
 	 * {@inheritDoc}
-	 * @todo This is very much a work in progress. It works in some but not all cases. 
-	 * There will be edge cases where the azimuth will occur more than once a day when based on the equation of time,
-	 * the day is shorter than 24 hours. In that case, the time for the first one will be returned.
-	 * <br>FIXME:
-	 * <ol><li>Deal with the rerunning the method for a different date when near the boundaries and it rolls over the date.</li>
-	 * <li>Deal with when the event does not occur (it happened right before and after the date)</li>
-	 * <li>Deal with when the event does not occur because the sun never reaches that azimuth (too close to the equator)</li>
-	 * <li>May or may not be an issue - when it reaches 270 but not in every iteration (also an edge case).</li>
-	 * <li>Deal with issues when the solar declination matches the latitude (also an edge case).</li>
-	 * <li>etc</li></ol>
+	 * The current implementation in this class only supports azimuth values of 90° (directly east) or 270° (directly west) that are
+	 * directly needed in this library for the
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSunsetOrWesternmostSolarAzimuth()} and
+	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSunriseOrEasternmostSolarAzimuth()}.
+	 * @throws IllegalArgumentException if the azimuth is not 90° or 270°.
+	 * @todo complete the implementation for other azimuths. While not needed by this library, they may be of value to some projects.
+	 *         There will be edge cases where the azimuth will occur more than once a day when based on the equation of time, the day
+	 *         is shorter than 24 hours. In that case, the time for the first one will be returned.
 	 */
 	public double getTimeAtAzimuth(LocalDate date, GeoLocation geo, double targetAzimuth) {
-		targetAzimuth %= 360.0;
-		if (targetAzimuth < 0) targetAzimuth += 360.0;
-		final double step = 15.0 / 60.0;
-		double bestHour = Double.NaN;
-		double bestError = Double.POSITIVE_INFINITY;
-		for (double hour = 0.0; hour <= 24.0; hour += step) {
-			Instant t = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(hour * 3600.0)).toInstant();
-			double az = getSolarAzimuth(t, geo);
-			if (Double.isNaN(az)) continue;
-			double diff = Math.abs((az - targetAzimuth) % 360.0);
-			diff = Math.min(diff, 360.0 - diff);
-			if (diff < bestError) {
-				bestError = diff;
-				bestHour = hour;
-			}
+		if(targetAzimuth != 90 && targetAzimuth != 270) {
+			throw new IllegalArgumentException(
+					"The targetAzimuth must be 90 or  270. Other azimuth values are not currently supported");
 		}
-
-		if (Double.isNaN(bestHour) || bestError > 5.0) {
-			return Double.NaN;
-		}
-
-		double low = Math.max(0.0, bestHour - step);
-		double high = Math.min(24.0, bestHour + step);
-		
-		for (int i = 0; i < 30; i++) {
-			double m1 = low + (high - low) / 3.0;
-			double m2 = high - (high - low) / 3.0;
-			Instant t1 = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(m1 * 3600.0)).toInstant();
-			Instant t2 = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(m2 * 3600.0)).toInstant();
-			double a1 = getSolarAzimuth(t1, geo);
-			double a2 = getSolarAzimuth(t2, geo);
-			double e1 = Math.abs((a1 - targetAzimuth) % 360.0);
-			double e2 = Math.abs((a2 - targetAzimuth) % 360.0);
-			e1 = Math.min(e1, 360.0 - e1);
-			e2 = Math.min(e2, 360.0 - e2);
-			if (e1 < e2) high = m2;
-			else low = m1;
-		}
-
-		double result = (low + high) / 2.0;
-		Instant t = date.atStartOfDay(ZoneOffset.UTC).plusSeconds((long)(result * 3600.0)).toInstant();
-		double az = getSolarAzimuth(t, geo);
-		double diff = Math.abs((az - targetAzimuth) % 360.0);
-		diff = Math.min(diff, 360.0 - diff);
-		return diff < 0.01 ? result : Double.NaN;
+		throw new UnsupportedOperationException(
+				"This is not yet ready for prime time. Proper implementation to follow");
 	}
 }
