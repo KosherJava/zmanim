@@ -29,7 +29,7 @@ import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
  * As an example of the number of different <em>zmanim</em> made available by this class, there are methods to return 18 different
  * calculations for <em>alos</em> (dawn), 18 for <em>plag hamincha</em> and 29 for <em>tzais</em> available in this API. The real
  * power of this API is the ease in calculating <em>zmanim</em> that are not part of the library. The methods for <em>zmanim</em>
- * calculations not present in this class or it's superclass  {@link ZmanimCalendar} are contained in the {@link
+ * calculations not present in this class or its superclass  {@link ZmanimCalendar} are contained in the {@link
  * AstronomicalCalendar}, the base class of the calendars in our API since they are generic methods for calculating time based on
  * degrees or time before or after {@link #getSunrise()} and {@link #getSunset() sunset} and are of interest for calculation
  * beyond <em>zmanim</em> calculations. Here are some examples. <p>First create the Calendar for the location you would like to
@@ -412,11 +412,11 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * Method to return a <em>shaah zmanis</em> (temporal hour) according to the opinion of the <a href=
-	 * "https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em> being {@link #getAlos72Zmanis()
-	 * 72} minutes <em>zmaniyos</em> b{@link #getSunrise()}nrise}. This calculation divides the day based on the opinion of the
-	 * MGA that the day runs from dawn to dusk. Dawn for this calculation is 72 minutes <em>zmaniyos</em> before sunrise and dusk is 72
-	 * minutes <em>zmaniyos</em> after sunset. This day is split into 12 equal parts with each part being a <em>shaah zmanis</em>. This
-	 * is identical to 1/10th of the day from {@link #getSunrise()} to {@link #getSunset() sunset}.
+	 * "https://en.wikipedia.org/wiki/Avraham_Gombiner">Magen Avraham (MGA)</a> based on <em>alos</em> being {@link
+	 * #getAlos72Zmanis() 72 minutes <em>zmaniyos</em>} before {@link #getSunrise()} sunrise}. This calculation divides the day based
+	 * on the opinion of the MGA that the day runs from dawn to dusk. Dawn for this calculation is 72 minutes <em>zmaniyos</em>
+	 * before sunrise and dusk is 72 minutes <em>zmaniyos</em> after sunset. This day is split into 12 equal parts with each part
+	 * being a <em>shaah zmanis</em>. This is identical to 1/10th of the day from {@link #getSunrise()} to {@link #getSunset()}.
 	 * 
 	 * @return the {@code Duration} of a <em>shaah zmanis</em>. If the calculation can't be computed such as in the Arctic
 	 *         Circle where there is at least one day a year when the sun does not rise, and one where it does not set, a
@@ -516,7 +516,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getMinchaKetanaAhavatShalom()
 	 * @see #getPlagAhavatShalom()
 	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point7Degrees()
-	 * @see getShaahZmanisAlos16Point1DegreesToTzaisGeonim7Point083Degrees()
+	 * @see #getShaahZmanisAlos16Point1DegreesToTzaisGeonim7Point083Degrees()
 	 */
 	public Duration getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees() {
 		return getTemporalHour(getAlos16Point1Degrees(), getTzaisGeonim3Point8Degrees());
@@ -642,7 +642,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * {@summary This method <em>plag hamincha</em> according to the Magen Avraham with the day starting at {@link
-	 * #getAlos120Minutes()}. It should be used <em>lechumra</em> only}. This is calculated as* 10.75 {@link
+	 * #getAlos120Minutes()}. It should be used <em>lechumra</em> only}. This is calculated as 10.75 * {@link
 	 * #getShaahZmanis120Minutes()} after {@link #getAlos120Minutes()}. Since the <em>zman</em> based on an extremely early
 	 * <em>alos</em> and a very late <em>tzais</em>, it returns a very late time (often after <em>shkiah</em> and can result in
 	 * <em>chillul Shabbos</em> etc.) and should only be used <em>lechumra</em>.
@@ -3826,7 +3826,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @return sunset if it occurs, or the time that the sun will reach its westernmost position (azimuth 270°), if sunset will not
 	 *         occur that day. If there is no sunset this day, and the azimuth 270° will not occur, a {@code null} will be returned.
 	 * @see #getSunriseOrEasternmostSolarAzimuth()
-	 * @see #getTimeAtAzimuth(double)
+	 * @see #getTimeAtAzimuth90Or270(double)
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
 	 */
 	public Instant getSunsetOrWesternmostSolarAzimuth() {
@@ -3834,7 +3834,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		if(sunset != null) {
 			return sunset;
 		}
-		return getTimeAtAzimuth(270);
+		return getTimeAtAzimuth90Or270(270);
 	}
 	
 	/**
@@ -3854,7 +3854,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @return sunrise if it occurs, or the time that the sun will reach its easternmost position (azimuth 90°), if sunrise will not
 	 *         occur that day. If there is no sunrise this day, and the azimuth 90° will not occur, a {@code null} will be returned.
 	 * @see #getSunsetOrWesternmostSolarAzimuth()
-	 * @see #getTimeAtAzimuth(double)
+	 * @see #getTimeAtAzimuth90Or270(double)
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
 	 */
 	public Instant getSunriseOrEasternmostSolarAzimuth() {
@@ -3862,7 +3862,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		if(sunrise != null) {
 			return sunrise;
 		}
-		return getTimeAtAzimuth(90);
+		return getTimeAtAzimuth90Or270(90);
 	}
 	
 	/**
