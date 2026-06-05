@@ -1,9 +1,9 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011 - 2026 Eliyahu Hershfeld
- * Copyright (C) September 2002 Avrom Finkelstien
- * Copyright (C) 2019 - 2022 Y Paritcher
- * Copyright (C) 2026 Moshe Dicker
+ * Copyright © 2011 - 2026 Eliyahu Hershfeld
+ * Copyright © September 2002 Avrom Finkelstien
+ * Copyright © 2019 - 2022 Y Paritcher
+ * Copyright © 2026 Moshe Dicker
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -381,7 +381,7 @@ public class JewishCalendar extends JewishDate {
 		 * night, and we push off the bracha to Wednesday morning resulting in the 172 used in the calculation.
 		 */
 		// Pure integer math prevents implicit promotion to double. 28 * 365.25 is exactly 10227 days.
-		// Using "return elapsedDays % (28 * 365.25) == 172" would break with an integer overflow if Jewish year >= 5,879,101 😀
+		// Using "return elapsedDays % (28 * 365.25) == 172" would break with an integer overflow in Jewish year >= 5,879,101 😀
 		return elapsedDays % 10227 == 172; // 28 years of 365.25 days + the offset from molad tohu mentioned above
 	}
 
@@ -612,7 +612,7 @@ public class JewishCalendar extends JewishDate {
 			if (day >= 17 && day <= 20 || day == 16) {
 				return CHOL_HAMOED_PESACH;
 			}
-			if (day == 22 || day == 23 && !inIsrael) {
+			if ((day == 22 && inIsrael) || (day == 23 && !inIsrael)) {
 				return ISRU_CHAG;
 			}
 			if (isUseModernHolidays()
@@ -649,12 +649,12 @@ public class JewishCalendar extends JewishDate {
 			if (day == 5) {
 				return EREV_SHAVUOS;
 			}
-			if (day == 6 || (day == 7 && !inIsrael)) {
-				return SHAVUOS;
-			}
-			if (day == 7 || day == 8 && !inIsrael) {
-				return ISRU_CHAG;
-			}
+			if (day == 6 || (day == 7 && !inIsrael)) { 
+				return SHAVUOS; 
+		    }
+		    if ((day == 7 && inIsrael) || (day == 8 && !inIsrael)) { 
+		    	return ISRU_CHAG; 
+		    }
 			break;
 		case TAMMUZ:
 			// push off the fast day if it falls on Shabbos
@@ -710,14 +710,11 @@ public class JewishCalendar extends JewishDate {
 			if (day == 23 && !inIsrael) {
 				return SIMCHAS_TORAH;
 			}
-			if (day == 23 || day == 24 && !inIsrael) {
+			if ((day == 23 && inIsrael) || (day == 24 && !inIsrael)) {
 				return ISRU_CHAG;
 			}
 			break;
 		case KISLEV: // no yomtov in CHESHVAN
-			// if (day == 24) {
-			// return EREV_CHANUKAH;
-			// } else
 			if (day >= 25) {
 				return CHANUKAH;
 			}
@@ -1229,9 +1226,9 @@ public class JewishCalendar extends JewishDate {
 	    JewishDate molad = getMolad();
 
 	    // Standard time offset for Jerusalem: GMT+2
-	    // The raw molad Date (point in time) must be generated using standard time. Using "Asia/Jerusalem" timezone will
-	    // result in the time being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual
-	    // time in DST will be done by the date formatter class used to display the Date.
+	    // The raw point in time must be generated using standard time. Using "Asia/Jerusalem" timezone will result in the time
+	    // being incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual time in DST will be done
+	    // by the formatter class used to display the Instant.
 	    ZoneId jerusalemStandardOffset = ZoneId.of("GMT+2");
 
 	    double moladSeconds = molad.getMoladChalakim() * 10.0 / 3.0; // Compute molad seconds from chalakim
@@ -1370,6 +1367,8 @@ public class JewishCalendar extends JewishDate {
 	 * @see com.kosherjava.zmanim.hebrewcalendar.TefilaRules#isVeseinTalUmatarStartDate(JewishCalendar)
 	 * @see com.kosherjava.zmanim.hebrewcalendar.TefilaRules#isVeseinTalUmatarStartingTonight(JewishCalendar)
 	 * @see com.kosherjava.zmanim.hebrewcalendar.TefilaRules#isYaalehVeyavoRecited(JewishCalendar)
+	 * @see #getTekufa()
+	 * @see #getTekufaAsInstant(boolean)
 	 */
 	public int getTekufasTishreiElapsedDays() {
 		// Days since Rosh Hashana year 1. Add 1/2 day as the first tekufas tishrei was 9 hours into the day. This allows all
@@ -1378,6 +1377,79 @@ public class JewishCalendar extends JewishDate {
 		// days of completed solar years
 		double solar = (getJewishYear() - 1) * 365.25;
 		return (int) Math.floor(days - solar);
+	}
+	
+	/**
+	 * Calculates the hours for when the <a href="https://en.wikipedia.org/wiki/Tekufah"><em>Tekufa</em></a> (season) changes.
+	 * There are 4 <em>tekufos</em> a year: Nissan/Spring, Tammuz/Summer, Tishri/Fall, and Teves/Winter. This calculation is
+	 * according to <a href="https://en.wikipedia.org/wiki/Samuel_of_Nehardea">Shmuel</a> in <a href=
+	 * "https://hebrewbooks.org/shas.aspx?mesechta=3&daf=56">Eruvin 56a</a>, which is a more rounded up version of <a href=
+	 * "https://en.wikipedia.org/wiki/Adda_bar_Ahavah">Rav Adda's</a> calculation. The <a href=
+	 * "https://en.wikipedia.org/wiki/Moses_Isserles">Rama</a> writes in <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=67715&st=&pgnum=218">Yoreh De'ah 116:5</a> that one should not drink water during
+	 * the <em>tekufa</em> change. <a href="https://en.wikipedia.org/wiki/Ovadia_Yosef">Rabbi Ovadia Yosef</a> (Halichot Olam,
+	 * Chelek 7, Page 183) recommends to abstain from drinking water for a range of 1 hour (30 minutes before and after the
+	 * <em>tekufa</em> event).
+	 *
+	 * @return the number of hours into the Hebrew day that the <em>tekufa</em> (season) change takes place as a {code Double}, or
+	 *         {@code null} if the <em>tekufa</em> does not occur on current day. For example: 19.5 would mean that the
+	 *         <em>tekufa</em> occurs 19 hours and a half into the Hebrew date, or 13 and a half hours (-6 hours) into the Gregorian
+	 *         date.
+	 */
+	private Double getTekufa() {
+		double INITIAL_TEKUFA_OFFSET = 12.625;  // the number of days Tekufas Tishrei occurs before JEWISH_EPOCH
+
+		double days = getJewishCalendarElapsedDays(getJewishYear()) + getDaysSinceStartOfJewishYear() + INITIAL_TEKUFA_OFFSET - 1;  // total days since first Tekufas Tishrei event
+
+		double solarDaysElapsed = days % 365.25;  // total days elapsed since the start of solar year
+		double tekufaDaysElapsed = solarDaysElapsed % 91.3125;  // the number of days that have passed since a tekufa event
+		if (tekufaDaysElapsed > 0 && tekufaDaysElapsed <= 1) {  // if the tekufa happens in the upcoming 24 hours
+			return ((1.0 - tekufaDaysElapsed) * 24.0) % 24;// rationalize the tekufa event to number of hours since start of jewish day
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Returns an {@code Instant} if the current day has a <a href="https://en.wikipedia.org/wiki/Tekufah"><em>Tekufa</em></a>
+	 * (season) change. The {@code Instant} will contain the time that the <em>tekufa</em> (season) is arriving. If this method is
+	 * called on a day without a <em>tekufa</em> change, it will return a {@code null}. The default implementation of this method
+	 * will return the <em>tekufa</em> change according to the calculations of the <a href="https://zmanim.online/">Luach Itim
+	 * Lebinah</a> following <a href="https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a>.
+	 * However, there is also the opinion of Rabbi Yonah Boron, who calculates the <em>tekufa</em> based on Local Mean Time (LMT)
+	 * in Israel which causes a 21-minute difference. There is a third opinion as well to use seasonal midday but that is not a
+	 * generally followed opinion, so it has not been implemented.
+	 * @param useLocalMeanTime if true, removes ~21 minutes from the time of the <em>tekufa</em> calculated by Rabbi Yechiel Michel
+	 * Tucazinsky, and will follow the opinion of Rabbi Yonah Boron.
+	 * @return an Instant with the time that the <em>tekufa</em> (season) changes or a null on a day with no <em>tekufa</em> change.
+	 * @see #getTekufa()
+	 */
+	public Instant getTekufaAsInstant(boolean useLocalMeanTime) {
+		Double hours = getTekufa();
+		if (hours == null) {
+			return null;
+		}
+		// The tekufa Date must be generated using standard time. Using "Asia/Jerusalem" timezone will result in the time being
+		// incorrectly off by an hour in the summer due to DST. Proper adjustment for the actual time in DST will be done by the
+		// formatter class used to display the Instant.
+		ZoneId yerushalayimStandardTZ = ZoneId.of("GMT+2");
+
+		hours = hours - 6; // minus 6 hours because the hebrew date starts at sunset which is at 6PM
+		int minutes = (int) ((hours - hours.intValue()) * 60);
+
+		LocalTime time = LocalTime.of(hours.intValue(), minutes);
+		ZonedDateTime tekufaZDT = ZonedDateTime.of(getLocalDate(), time, yerushalayimStandardTZ);
+
+		// Har Habayis at a longitude of 35.2354 offset vs longitude 35 in standard time, so we subtract the time difference
+	    // of 20.94 minutes (20 minutes and 56 seconds and 496 millis) to get to Standard time from local mean time
+		if (useLocalMeanTime) {
+			Duration jerusalemStandardTimeOffset = Duration.ofMinutes(20)
+					.plusSeconds(56)
+					.plusMillis(496);
+			return tekufaZDT.minus(jerusalemStandardTimeOffset).toInstant();
+		} else {
+			return tekufaZDT.toInstant();
+		}
 	}
 	
 	/**
