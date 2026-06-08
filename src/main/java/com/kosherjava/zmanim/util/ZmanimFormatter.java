@@ -106,7 +106,7 @@ public class ZmanimFormatter {
 	public static final int SEXAGESIMAL_XSD_FORMAT = 0;
 
 	/**
-	 * Defaults to {@link #SEXAGESIMAL_SECONDS_FORMAT}.
+	 * Set by the constructor to {@link #SEXAGESIMAL_SECONDS_FORMAT}.
 	 * @see #setTimeFormat(int)
 	 */
 	private int timeFormat;
@@ -218,9 +218,10 @@ public class ZmanimFormatter {
 	 * @param useMillis should milliseconds be used in formatting time.
 	 */
 	private void setSettings(boolean prependZeroHours, boolean useSeconds, boolean useMillis) {
-		this.prependZeroHours = prependZeroHours;
-		this.useSeconds = useSeconds;
-		this.useMillis = useMillis;
+	    this.prependZeroHours = prependZeroHours;
+	    this.useSeconds = useSeconds;
+	    this.useMillis = useMillis;
+	    this.hourNF = new DecimalFormat(prependZeroHours ? "00" : "0");
 	}
 
 	/**
