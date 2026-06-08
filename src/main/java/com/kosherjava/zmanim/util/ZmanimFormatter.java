@@ -112,22 +112,22 @@ public class ZmanimFormatter {
 	private int timeFormat;
 
 	/** Format using hours and minutes. */
-	public static final int SEXAGESIMAL_FORMAT = 2;
+	public static final int SEXAGESIMAL_FORMAT = 1;
 
 	/** Format using hours, minutes and seconds. */
-	public static final int SEXAGESIMAL_SECONDS_FORMAT = 3;
+	public static final int SEXAGESIMAL_SECONDS_FORMAT = 2;
 
 	/** Format using hours, minutes, seconds and milliseconds. */
-	public static final int SEXAGESIMAL_MILLIS_FORMAT = 4;
+	public static final int SEXAGESIMAL_MILLIS_FORMAT = 3;
 	
 	/**
 	 * Format using the XSD Duration format. This is in the format of PT1H6M7.869S (P for period (duration), T for time,
 	 * H, M and S indicate hours, minutes and seconds.
 	 */
-	public static final int XSD_DURATION_FORMAT = 5;
+	public static final int XSD_DURATION_FORMAT = 4;
 
 	/**
-	 * Default constructor that uses the format "{@code h:mm:ss}" for dates and "{@code 0:00:00}" for {@link Duration}s." 
+	 * Default constructor that uses the format "{@code h:mm:ss}" for dates and "{@code 0:00:00}" for {@link Duration}s. 
 	 * @param zoneId the {@code ZoneId} {@code Object}.
 	 */
 	public ZmanimFormatter(ZoneId zoneId) {
@@ -143,7 +143,7 @@ public class ZmanimFormatter {
 	 *         an hour as "{@code 0:30:00}".</li>
 	 *         <li>{@link #SEXAGESIMAL_XSD_FORMAT} - Will format an hour and a half as "{@code 01:30:00.000}", and half an
 	 *         hour as "{@code 00:30:00.000}".</li>
-	 *         <li>{@link #SEXAGESIMAL_MILLIS_FORMAT} -Will format an hour and a half as "{@code 1:30:00.000}", and half an hour as
+	 *         <li>{@link #SEXAGESIMAL_MILLIS_FORMAT} - Will format an hour and a half as "{@code 1:30:00.000}", and half an hour as
 	 *         "{@code 0:30:00.000}".</li>
 	 *         <li>{@link #SEXAGESIMAL_FORMAT} will format an hour and a half as "{@code 1:30}", and half an hour as
 	 *         "{@code 0:30}".</li>
@@ -301,7 +301,7 @@ public class ZmanimFormatter {
 	 * format used is:
 	 * 
 	 * {@snippet lang='xml' :
-	 *  <AstronomicalTimes date="1969-02-08" type="com.kosherjava.zmanim.AstronomicalCalendar
+	 *  <AstronomicalTimes date="1969-02-08" type="com.kosherjava.zmanim.AstronomicalCalendar"
 	 *         algorithm="US Naval Almanac Algorithm" location="Montreal, Quebec" latitude="45.497" longitude="-73.63"
 	 *         elevation="85.0" timeZoneName="Eastern Standard Time" timeZoneID="America/New_York" timeZoneOffset="-5">
 	 *     <SeaLevelSunset>1969-02-08T17:11:26-05:00</SeaLevelSunset>
@@ -430,7 +430,7 @@ public class ZmanimFormatter {
 	 *      "location":"Montreal, Quebec",
 	 *      "latitude":"45.497",
 	 *      "longitude":"-73.63",
-	 *      "elevation:"85.0",
+	 *      "elevation":"85.0",
 	 *      "timeZoneName":"Eastern Standard Time",
 	 *      "timeZoneID":"America/New_York",
 	 *      "timeZoneOffset":"-5"},
