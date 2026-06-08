@@ -105,7 +105,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A method that calculates UTC sunrise as well as any time based on an angle above or below sunrise. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param localDate The <code>LocalDate</code> representing the date to calculate sunrise for.
+	 * @param localDate The {@code LocalDate} representing the date to calculate sunrise for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * @param zenith the azimuth below the vertical zenith of 90°. For sunrise typically the {@link #adjustZenith zenith} used for the
 	 *         calculation uses geometric zenith of 90° and {@link #adjustZenith adjusts} this slightly to account for solar refraction
@@ -124,7 +124,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A method that calculates UTC sunset as well as any time based on an angle above or below sunset. This abstract
 	 * method is implemented by the classes that extend this class.
 	 * 
-	 * @param localDate The <code>LocalDate</code> representing the date to calculate sunset for.
+	 * @param localDate The {@code LocalDate}> representing the date to calculate sunset for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * @param zenith the azimuth below the vertical zenith of 90°. For sunset typically the zenith used for the calculation uses
 	 *         geometric zenith of 90° and {@link #adjustZenith adjusts} this slightly to account for solar refraction and the sun's
@@ -148,7 +148,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * Definition of <em>Chatzos</em></a> for details on solar noon /
 	 * midnight calculations.
 	 * 
-	 * @param localDate The <code>LocalDate</code> representing the date to calculate noon for.
+	 * @param localDate The {@code LocalDate} representing the date to calculate noon for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * 
 	 * @return The UTC time of solar noon in 24-hour format. 1:45:00 PM will return 13.75. If an error was encountered in the
@@ -168,11 +168,11 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * "https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of <em>Chatzos</em></a> for details on solar noon /
 	 * midnight calculations.
 	 * 
-	 * @param localDate The <code>LocalDate</code> representing the date to calculate midnight for. The calculation will be for
+	 * @param localDate The {@code LocalDate} representing the date to calculate midnight for. The calculation will be for
 	 *         midnight at the end of the day passed in.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * 
-	 * @return The UTC time of solar midnight in in a 24-hour <code>double</code> format. 1:45:00 AM will return 1.75. If an error
+	 * @return The UTC time of solar midnight in in a 24-hour {@code double} format. 1:45:00 AM will return 1.75. If an error
 	 *         was encountered in the calculation (expected behavior for the {@link SunTimesCalculator} at times of the year in
 	 *         Polar regions), {@link Double#NaN} will be returned.
 	 * @see #getUTCNoon(LocalDate, GeoLocation)
@@ -183,11 +183,11 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * Returns the time that the azimuth will occur for the date and location passed to this method. As an example, to know when the
 	 * sun will be directly west, pass in an azimuth of 270°, and for directly east, pass in an azimuth of 90°.
 	 * 
-	 * @param localDate The <code>LocalDate</code> representing the date to calculate the time of the azimuth for.
+	 * @param localDate The {@code LocalDate} representing the date to calculate the time of the azimuth for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * @param azimuth the azimuth to run the calculation for
 	 * 
-	 * @return The UTC time that the azimuth will be reached in a 24-hour <code>double</code> format. 5:45:00 PM will return 17.75.
+	 * @return The UTC time that the azimuth will be reached in a 24-hour {@code double} format. 5:45:00 PM will return 17.75.
 	 *         If an error was encountered in the calculation (expected behavior for some dates at latitudes below 23.44°, a
 	 *         {@link Double#NaN} will be returned.
 	 */
@@ -198,7 +198,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * horizontal coordinate system at the given location at the given time. Can be negative if the sun is below the
 	 * horizon. Not corrected for altitude.
 	 * 
-	 * @param instant The <code>instant</code> to calculate the elevation for.
+	 * @param instant The {@code instant} to calculate the elevation for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * @return solar elevation in degrees. The horizon (calculated in a vacuum using the solar radius as the point)is 90°, civil
 	 *         twilight is 96° etc. This means that sunrise and sunset that do use refraction and are calculated from the upper
@@ -210,7 +210,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * Return the <a href="https://en.wikipedia.org/wiki/Celestial_coordinate_system">Solar Azimuth</a> for the horizontal coordinate
 	 * system at the given location at the given time. Not corrected for altitude. True south is 180°.
 	 * 
-	 * @param instant The <code>instant</code> to calculate the azimuth for.
+	 * @param instant The {@code instant} to calculate the azimuth for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * @return the solar azimuth in degrees. Astronomical midday would be 180° in the norther hemosphere and 0° in the southern
 	 *         hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about 90° and sunset about 270°.
