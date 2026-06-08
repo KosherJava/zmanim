@@ -188,7 +188,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @param azimuth the azimuth to run the calculation for
 	 * 
 	 * @return The UTC time that the azimuth will be reached in a 24-hour <code>double</code> format. 5:45:00 PM will return 17.75.
-	 *         If an error was encountered in the calculation (expected behavior for some locations such as near the poles, a
+	 *         If an error was encountered in the calculation (expected behavior for some dates at latitudes below 23.44°, a
 	 *         {@link Double#NaN} will be returned.
 	 */
 	public abstract double getTimeAtAzimuth(LocalDate localDate, GeoLocation geoLocation, double azimuth);
@@ -386,5 +386,50 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		} catch (CloneNotSupportedException cnse) {
 			throw new AssertionError("Clone not supported on a Cloneable object", cnse);
 		}
+	}
+	
+	/**
+	 * A helper method to retun the <a href="https://en.wikipedia.org/wiki/Law_of_tangents">tan / tangent</a> in degrees.
+	 * @param angle the angle
+	 * @return the tangent in degrees
+	 */
+	protected static double tanDegrees(double angle) {
+	    return Math.tan(Math.toRadians(angle));
+	}
+
+	/**
+	 * A helper method to retun the <a href="https://en.wikipedia.org/wiki/Sine_and_cosine">sine</a> in degrees.
+	 * @param angle the angle
+	 * @return the sine in degrees.
+	 */
+	protected static double sinDegrees(double angle) {
+	    return Math.sin(Math.toRadians(angle));
+	}
+
+	/**
+	 * A helper method to retun the <a href="https://en.wikipedia.org/wiki/Sine_and_cosine">cosine</a> in degrees.
+	 * @param angle the angle
+	 * @return the cosine in degrees.
+	 */
+	protected static double cosDegrees(double angle) {
+	    return Math.cos(Math.toRadians(angle));
+	}
+
+	/**
+	 * A helper method to retun the <a href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions">arc cosine</a> in degrees.
+	 * @param angle the angle
+	 * @return the arc cosine in degrees.
+	 */
+	protected static double acosDegrees(double angle) {
+	    return Math.toDegrees(Math.acos(angle));
+	}
+
+	/**
+	 * A helper method to retun the <a href="https://en.wikipedia.org/wiki/Inverse_trigonometric_functions">arc sine</a> in degrees.
+	 * @param angle the angle
+	 * @return the arc sine in degrees.
+	 */
+	protected static double asinDegrees(double angle) {
+	    return Math.toDegrees(Math.asin(angle));
 	}
 }
