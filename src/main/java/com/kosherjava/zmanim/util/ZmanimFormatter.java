@@ -58,7 +58,7 @@ public class ZmanimFormatter {
 	/**
 	 * the formatter for minutes as seconds.
 	 */
-	private static DecimalFormat minuteSecondNF = new DecimalFormat("00");
+	private static final DecimalFormat minuteSecondNF = new DecimalFormat("00");
 
 	/**
 	 * the formatter for hours.
@@ -68,7 +68,7 @@ public class ZmanimFormatter {
 	/**
 	 * the formatter for minutes as milliseconds.
 	 */
-	private static DecimalFormat milliNF = new DecimalFormat("000");
+	private static final DecimalFormat milliNF = new DecimalFormat("000");
 
 	/**
 	 * The {@link DateTimeFormatter} class used by the formatter.
@@ -106,7 +106,7 @@ public class ZmanimFormatter {
 	public static final int SEXAGESIMAL_XSD_FORMAT = 0;
 
 	/**
-	 * Set by the constructor to {@link #SEXAGESIMAL_SECONDS_FORMAT}.
+	 * Set by the constructor; defaults to {@link #SEXAGESIMAL_SECONDS_FORMAT} when using the single-argument constructor.
 	 * @see #setTimeFormat(int)
 	 */
 	private int timeFormat;
@@ -159,11 +159,6 @@ public class ZmanimFormatter {
 	public ZmanimFormatter(int timeFormat, DateTimeFormatter dateTimeFormatter, ZoneId zoneId) {
 		setZoneId(zoneId);
 		setTimeFormat(timeFormat);
-		String hourFormat = "0";
-		if (prependZeroHours) {
-			hourFormat = "00";
-		}
-		this.hourNF = new DecimalFormat(hourFormat);
 		setDateTimeFormatter(dateTimeFormatter.withZone(zoneId));
 	}
 
@@ -218,10 +213,10 @@ public class ZmanimFormatter {
 	 * @param useMillis should milliseconds be used in formatting time.
 	 */
 	private void setSettings(boolean prependZeroHours, boolean useSeconds, boolean useMillis) {
-	    this.prependZeroHours = prependZeroHours;
-	    this.useSeconds = useSeconds;
-	    this.useMillis = useMillis;
-	    this.hourNF = new DecimalFormat(prependZeroHours ? "00" : "0");
+		this.prependZeroHours = prependZeroHours;
+		this.useSeconds = useSeconds;
+		this.useMillis = useMillis;
+		this.hourNF = new DecimalFormat(prependZeroHours ? "00" : "0");
 	}
 
 	/**
