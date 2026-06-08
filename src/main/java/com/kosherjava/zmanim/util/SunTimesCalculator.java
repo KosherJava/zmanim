@@ -27,8 +27,8 @@ import java.time.LocalDate;
  * account for leap years. It is not as accurate as the Jean Meeus based {@link NOAACalculator} that is the default calculator
  * use by the KosherJava <em>zmanim</em> library. It also does not have an implementation of some solar calculation methods.
  *
- * @author &copy; Eliyahu Hershfeld 2004 - 2026
- * @author &copy; Kevin Boone 2000
+ * @author © Eliyahu Hershfeld 2004 - 2026
+ * @author © Kevin Boone 2000
  */
 public class SunTimesCalculator extends AstronomicalCalculator {
 	
@@ -62,52 +62,6 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * The number of degrees of longitude that corresponds to one hour of time difference.
 	 */
 	private static final double DEG_PER_HOUR = 360.0 / 24.0;
-
-	/**
-	 * The sine in degrees.
-	 * @param deg the degrees
-	 * @return sin of the angle in degrees
-	 */
-	private static double sinDeg(double deg) {
-		return Math.sin(deg * 2.0 * Math.PI / 360.0);
-	}
-
-	/**
-	 * Return the arc cosine in degrees.
-	 * @param x angle
-	 * @return acos of the angle in degrees
-	 */
-	private static double acosDeg(double x) {
-		return Math.acos(x) * 360.0 / (2 * Math.PI);
-	}
-
-	/**
-	 * Return the arc sine in degrees.
-	 * @param x angle
-	 * @return asin of the angle in degrees
-	 */
-	private static double asinDeg(double x) {
-		return Math.asin(x) * 360.0 / (2 * Math.PI);
-	}
-
-	/**
-	 * Return the tangent in degrees.
-	 * @param deg degrees
-	 * @return tan of the angle in degrees
-	 */
-	private static double tanDeg(double deg) {
-		return Math.tan(deg * 2.0 * Math.PI / 360.0);
-	}
-	
-	/**
-	 * Calculate cosine of the angle in degrees
-	 * 
-	 * @param deg degrees
-	 * @return cosine of the angle in degrees
-	 */
-	private static double cosDeg(double deg) {
-		return Math.cos(deg * 2.0 * Math.PI / 360.0);
-	}
 
 	/**
 	 * Get time difference between location's longitude and the Meridian, in hours.
@@ -156,7 +110,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @return the Sun's true longitude in degrees. The result is an angle &gt;= 0 and &lt;= 360.
 	 */
 	private static double getSunTrueLongitude(double sunMeanAnomaly) {
-		double l = sunMeanAnomaly + (1.916 * sinDeg(sunMeanAnomaly)) + (0.020 * sinDeg(2 * sunMeanAnomaly)) + 282.634;
+		double l = sunMeanAnomaly + (1.916 * sinDegrees(sunMeanAnomaly)) + (0.020 * sinDegrees(2 * sunMeanAnomaly)) + 282.634;
 
 		// get longitude into 0-360 degree range
 		if (l >= 360.0) {
@@ -174,7 +128,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @return the Sun's right ascension in hours in angles &gt; 0 and &lt; 360.
 	 */
 	private static double getSunRightAscensionHours(double sunTrueLongitude) {
-		double a = 0.91764 * tanDeg(sunTrueLongitude);
+		double a = 0.91764 * tanDegrees(sunTrueLongitude);
 		double ra = 360.0 / (2.0 * Math.PI) * Math.atan(a);
 
 		double lQuadrant = Math.floor(sunTrueLongitude / 90.0) * 90.0;
@@ -193,9 +147,9 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @return the cosine of the Sun's local hour angle
 	 */
 	private static double getCosLocalHourAngle(double sunTrueLongitude, double latitude, double zenith) {
-		double sinDec = 0.39782 * sinDeg(sunTrueLongitude);
-		double cosDec = cosDeg(asinDeg(sinDec));
-		return (cosDeg(zenith) - (sinDec * sinDeg(latitude))) / (cosDec * cosDeg(latitude));
+		double sinDec = 0.39782 * sinDegrees(sunTrueLongitude);
+		double cosDec = cosDegrees(asinDegrees(sinDec));
+		return (cosDegrees(zenith) - (sinDec * sinDegrees(latitude))) / (cosDec * cosDegrees(latitude));
 	}
 	
 	/**
@@ -216,10 +170,10 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	/**
 	 * Get sunrise or sunset time in UTC, according to flag. This time is returned as a double and is not adjusted for time-zone.
 	 * 
-	 * @param localDate the <code>LocalDate</code> object to extract the day of year for calculation
+	 * @param localDate the {@code LocalDate} object to extract the day of year for calculation
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * @param zenith Sun's zenith in degrees
-	 * @param isSunrise <code>true</code> for sunrise and false for sunset.
+	 * @param isSunrise {@code true} for sunrise and false for sunset.
 	 * @return the time as a double. If an error was encountered in the calculation (expected behavior for some locations such as
 	 *         near the poles, {@link Double#NaN} will be returned.
 	 */
@@ -232,9 +186,9 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 
 		double localHourAngle;
 		if (isSunrise) {
-			localHourAngle = 360.0 - acosDeg(cosLocalHourAngle);
+			localHourAngle = 360.0 - acosDegrees(cosLocalHourAngle);
 		} else { // sunset
-			localHourAngle = acosDeg(cosLocalHourAngle);
+			localHourAngle = acosDegrees(cosLocalHourAngle);
 		}
 		double localHour = localHourAngle / DEG_PER_HOUR;
 
