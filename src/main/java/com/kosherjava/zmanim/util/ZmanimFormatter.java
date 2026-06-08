@@ -63,7 +63,7 @@ public class ZmanimFormatter {
 	/**
 	 * the formatter for hours.
 	 */
-	private DecimalFormat hourNF;
+	private DecimalFormat hourNF = new DecimalFormat("0");
 
 	/**
 	 * the formatter for minutes as milliseconds.
@@ -111,11 +111,6 @@ public class ZmanimFormatter {
 	 */
 	private int timeFormat;
 
-	/**
-	 * Format using standard decimal format with 5 positions after the decimal.
-	 */
-	public static final int DECIMAL_FORMAT = 1;
-
 	/** Format using hours and minutes. */
 	public static final int SEXAGESIMAL_FORMAT = 2;
 
@@ -132,7 +127,7 @@ public class ZmanimFormatter {
 	public static final int XSD_DURATION_FORMAT = 5;
 
 	/**
-	 * Constructor that defaults to this will use the format "{@code h:mm:ss}" for dates and "{@code 0:00:00}" for {@link Duration}.
+	 * Default constructor that uses the format "{@code h:mm:ss}" for dates and "{@code 0:00:00}" for {@link Duration}s." 
 	 * @param zoneId the {@code ZoneId} {@code Object}.
 	 */
 	public ZmanimFormatter(ZoneId zoneId) {
@@ -145,7 +140,8 @@ public class ZmanimFormatter {
 	 * @param timeFormat The formatting style to use for {@link Duration} used to represent <em>shaos zmaniyos</em>. The formatting
 	 *         will be as follows.<ul>
 	 *         <li>{@link #SEXAGESIMAL_SECONDS_FORMAT} (the default) - Will format an hour and a half as "{@code 1:30:00}", and half
-	 *         an hour <li>{@link #SEXAGESIMAL_XSD_FORMAT} - Will format an hour and a half as "{@code 01:30:00.000}", and half an
+	 *         an hour as "{@code 0:30:00}".</li>
+	 *         <li>{@link #SEXAGESIMAL_XSD_FORMAT} - Will format an hour and a half as "{@code 01:30:00.000}", and half an
 	 *         hour as "{@code 00:30:00.000}".</li>
 	 *         <li>{@link #SEXAGESIMAL_MILLIS_FORMAT} -Will format an hour and a half as "{@code 1:30:00.000}", and half an hour as
 	 *         "{@code 0:30:00.000}".</li>
