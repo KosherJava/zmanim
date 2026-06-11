@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -47,14 +47,14 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	@Override
 	public double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
+		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
 		return getTimeUTC(localDate, geoLocation, adjustedZenith, true);
 	}
 
 	@Override
 	public double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation);
+		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
 		return getTimeUTC(localDate, geoLocation, adjustedZenith, false);
 	}
 
