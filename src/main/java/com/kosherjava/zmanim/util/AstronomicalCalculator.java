@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -29,19 +29,48 @@ import java.util.Objects;
  */
 public abstract class AstronomicalCalculator implements Cloneable {
 	/**
-	 * The commonly used average solar refraction. <a href="https://www.cs.tau.ac.il//~nachum/calendar-book/index.shtml"
-	 * >Calendrical Calculations</a> lists a more accurate global average of 34.478885263888294
+	 * The commonly used average solar refraction in degrees that defaults to 34′, or 0.5666°.
+	 * <a href="https://www.cs.tau.ac.il//~nachum/calendar-book/index.shtml">Calendrical Calculations</a> lists a more accurate
+	 * global average of 34.478885263888294′ or 0.574648087731472°,
 	 * 
 	 * @see #getRefraction()
 	 */
 	private double refraction = 34 / 60d;
 
 	/**
-	 * The commonly used average solar radius in minutes of a degree.
+	 * The commonly used average solar radius that is about 16′ or 0.2666°.
 	 * 
 	 * @see #getSolarRadius()
+	 * @see #getSolarRadius(LocalDate)
 	 */
 	private double solarRadius = 16 / 60d;
+	
+	/**
+	 * Should the calculator use the {@link #isUseAstronomicApparentSolarRadius()} (defaults to {@code true}).
+	 * @see #setUseAstronomicApparentSolarRadius(boolean)
+	 * @see #setUseAstronomicApparentSolarRadius(boolean)
+	 * */
+	private boolean useAstronomicApparentSolarRadius = true;
+
+	/**
+	 * Returns if useAstronomicApparentSolarRadius is true (the default) or false.
+	 * @return if useAstronomicApparentSolarRadius is true or false.
+	 * @see #getSolarRadius(LocalDate)
+	 * @see #getSolarRadius()
+	 */
+	public boolean isUseAstronomicApparentSolarRadius() {
+		return useAstronomicApparentSolarRadius;
+	}
+
+	/**
+	 * Sets if useAstronomicApparentSolarRadius should be true (the default) or false.
+	 * @param useAstronomicalApparentSolarRadius should astronomic apparent solar radius be used (default is true).
+	 * @see #getSolarRadius(LocalDate)
+	 * @see #getSolarRadius()
+	 */
+	public void setUseAstronomicApparentSolarRadius(boolean useAstronomicalApparentSolarRadius) {
+		this.useAstronomicApparentSolarRadius = useAstronomicalApparentSolarRadius;
+	}
 
 	/**
 	 * The commonly used average earth radius in KM. At this time, this only affects elevation adjustment and not the
@@ -268,15 +297,20 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         com.kosherjava.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes {@link
 	 *         com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param elevation elevation in Meters.
+	 * @param localDate the date to use for the solar radius. See {@link #getSolarRadius(LocalDate)}.
 	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
 	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
 	 *         sunrise and sunset (if the zenith == 90°)
 	 * @see #getElevationAdjustment(double)
 	 */
-	double adjustZenith(double zenith, double elevation) {
+	double adjustZenith(double zenith, double elevation, LocalDate localDate) {
 		double adjustedZenith = zenith;
 		if (zenith == GEOMETRIC_ZENITH) { // only adjust if it is exactly sunrise or sunset
-			adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
+			if(isUseAstronomicApparentSolarRadius() && localDate != null) {
+				adjustedZenith = zenith + (getSolarRadius(localDate) + getRefraction() + getElevationAdjustment(elevation));
+			} else {
+				adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
+			}
 		}
 		return adjustedZenith;
 	}
@@ -307,10 +341,10 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * Method to get the sun's radius. The default value is 16 arcminutes. The sun's radius as it appears from earth is
-	 * almost universally given as 16 arcminutes but in fact it differs by the time of the year. At the <a
-	 * href="https://en.wikipedia.org/wiki/Perihelion">perihelion</a> it has an apparent radius of 16.293, while at the
-	 * <a href="https://en.wikipedia.org/wiki/Aphelion">aphelion</a> it has an apparent radius of 15.755. There is little
+	 * Method to get the sun's radius. The default value is 16 arcminutes. The sun's radius as it appears from earth is almost
+	 * universally given as 16 arcminutes but in fact it differs by the time of the year. At the <a
+	 * href="https://en.wikipedia.org/wiki/Perihelion">perihelion</a> it has an apparent radius of 16.293′ (0.2710°), while at the
+	 * <a href="https://en.wikipedia.org/wiki/Aphelion">aphelion</a> it has an apparent radius of 15.755′ (0.2622°). There is little
 	 * affect for most location, but at high and low latitudes the difference becomes more apparent. My Calculations for
 	 * the difference at the location of the <a href="https://www.rmg.co.uk/royal-observatory">Royal Observatory, Greenwich</a>
 	 * shows only a 4.494-second difference between the perihelion and aphelion radii, but moving into the arctic circle the
@@ -432,4 +466,82 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	protected static double asinDegrees(double angle) {
 	    return Math.toDegrees(Math.asin(angle));
 	}
+	
+	/**
+	 * The Sun's apparent angular semi-diameter ("solar radius") in degrees for each day of the year, precomputed from the
+	 * <a href="https://en.wikipedia.org/wiki/VSOP_model">VSOP87</a> Earth-Sun distance for reference year 2050 (chosen as the
+	 * midpoint of 2000-2100 to keep the century drift symmetric and small; 2050 is a common year, so there are 365 entries and
+	 * February 29 reuses the February 28 value - see {@link #getSolarRadius(LocalDate)}). The Sun's apparent size varies through
+	 * the year as the Earth-Sun distance changes between perihelion (~Jan 3, about 16.27′ or 0.2710°) and aphelion (~Jul 5, about
+	 * 15.73′ or 0.2622°), with a mean of the conventional 16′. Indexed by day-of-year (1-365).
+	 * <p>A fixed table is used instead of evaluating the series at run time because the value for a given calendar date
+	 * drifts by less than ~0.4′ across the whole of 2000-2100 (perihelion advances ~1 day per 57 years), which
+	 * at latitude 60° is at most ~50 ms of sunrise / sunset time, basically negligible.
+	 */
+	private static final double[] SOLAR_RADIUS_BY_DAY_OF_YEAR = {
+		0.27108024, 0.27108486, 0.27108790, 0.27108930, 0.27108899, 0.27108695, 0.27108316, 0.27107762, 0.27107033,
+		0.27106133, 0.27105062, 0.27103826, 0.27102427, 0.27100873, 0.27099168, 0.27097320, 0.27095337, 0.27093228, 
+		0.27091002, 0.27088667, 0.27086231, 0.27083701, 0.27081079, 0.27078369, 0.27075569, 0.27072676, 0.27069684,
+		0.27066588, 0.27063378, 0.27060048, 0.27056589, 0.27052995, 0.27049261, 0.27045383, 0.27041359, 0.27037186, 
+		0.27032864, 0.27028396, 0.27023782, 0.27019025, 0.27014129, 0.27009098, 0.27003938, 0.26998658, 0.26993264,
+		0.26987767, 0.26982177, 0.26976506, 0.26970763, 0.26964958, 0.26959099, 0.26953191, 0.26947239, 0.26941242, 
+		0.26935200, 0.26929108, 0.26922962, 0.26916755, 0.26910482, 0.26904136, 0.26897712, 0.26891206, 0.26884614,
+		0.26877935, 0.26871165, 0.26864306, 0.26857358, 0.26850321, 0.26843197, 0.26835989, 0.26828703, 0.26821343, 
+		0.26813918, 0.26806437, 0.26798910, 0.26791348, 0.26783763, 0.26776167, 0.26768569, 0.26760979, 0.26753404,
+		0.26745846, 0.26738308, 0.26730790, 0.26723289, 0.26715800, 0.26708320, 0.26700842, 0.26693363, 0.26685877, 
+		0.26678380, 0.26670870, 0.26663342, 0.26655796, 0.26648229, 0.26640640, 0.26633030, 0.26625399, 0.26617748,
+		0.26610082, 0.26602406, 0.26594728, 0.26587055, 0.26579398, 0.26571769, 0.26564180, 0.26556641, 0.26549164, 
+		0.26541756, 0.26534425, 0.26527174, 0.26520006, 0.26512920, 0.26505915, 0.26498987, 0.26492132, 0.26485345,
+		0.26478622, 0.26471959, 0.26465351, 0.26458794, 0.26452285, 0.26445820, 0.26439396, 0.26433010, 0.26426661, 
+		0.26420348, 0.26414070, 0.26407832, 0.26401636, 0.26395489, 0.26389400, 0.26383378, 0.26377435, 0.26371580,
+		0.26365825, 0.26360179, 0.26354651, 0.26349247, 0.26343971, 0.26338825, 0.26333807, 0.26328918, 0.26324153, 
+		0.26319510, 0.26314983, 0.26310568, 0.26306261, 0.26302057, 0.26297951, 0.26293938, 0.26290014, 0.26286173,
+		0.26282411, 0.26278725, 0.26275111, 0.26271570, 0.26268102, 0.26264710, 0.26261399, 0.26258177, 0.26255053, 
+		0.26252037, 0.26249137, 0.26246366, 0.26243731, 0.26241239, 0.26238897, 0.26236707, 0.26234671, 0.26232790,
+		0.26231061, 0.26229481, 0.26228048, 0.26226756, 0.26225602, 0.26224581, 0.26223687, 0.26222914, 0.26222257, 
+		0.26221708, 0.26221262, 0.26220912, 0.26220653, 0.26220480, 0.26220392, 0.26220388, 0.26220470, 0.26220642,
+		0.26220910, 0.26221282, 0.26221768, 0.26222375, 0.26223114, 0.26223991, 0.26225014, 0.26226187, 0.26227512, 
+		0.26228992, 0.26230626, 0.26232413, 0.26234349, 0.26236433, 0.26238659, 0.26241024, 0.26243521, 0.26246145,
+		0.26248890, 0.26251746, 0.26254708, 0.26257766, 0.26260913, 0.26264141, 0.26267446, 0.26270823, 0.26274270, 
+		0.26277789, 0.26281382, 0.26285054, 0.26288813, 0.26292666, 0.26296622, 0.26300686, 0.26304868, 0.26309171,
+		0.26313601, 0.26318159, 0.26322848, 0.26327666, 0.26332612, 0.26337685, 0.26342881, 0.26348197, 0.26353627, 
+		0.26359167, 0.26364809, 0.26370545, 0.26376368, 0.26382267, 0.26388233, 0.26394256, 0.26400328, 0.26406442,
+		0.26412593, 0.26418777, 0.26424995, 0.26431249, 0.26437542, 0.26443880, 0.26450270, 0.26456718, 0.26463231, 
+		0.26469815, 0.26476474, 0.26483213, 0.26490034, 0.26496937, 0.26503922, 0.26510990, 0.26518138, 0.26525364,
+		0.26532664, 0.26540034, 0.26547467, 0.26554957, 0.26562495, 0.26570072, 0.26577676, 0.26585296, 0.26592922, 
+		0.26600544, 0.26608154, 0.26615745, 0.26623314, 0.26630859, 0.26638382, 0.26645884, 0.26653372, 0.26660850,
+		0.26668323, 0.26675798, 0.26683280, 0.26690773, 0.26698280, 0.26705803, 0.26713345, 0.26720905, 0.26728485, 
+		0.26736083, 0.26743698, 0.26751326, 0.26758964, 0.26766606, 0.26774245, 0.26781872, 0.26789476, 0.26797045,
+		0.26804569, 0.26812035, 0.26819433, 0.26826755, 0.26833992, 0.26841141, 0.26848200, 0.26855170, 0.26862051,
+		0.26868849, 0.26875567, 0.26882211, 0.26888786, 0.26895296, 0.26901746, 0.26908139, 0.26914478, 0.26920767,
+		0.26927006, 0.26933199, 0.26939345, 0.26945445, 0.26951496, 0.26957497, 0.26963442, 0.26969325, 0.26975136,
+		0.26980865, 0.26986502, 0.26992034, 0.26997450, 0.27002740, 0.27007895, 0.27012907, 0.27017773, 0.27022491,
+		0.27027060, 0.27031483, 0.27035764, 0.27039906, 0.27043914, 0.27047794, 0.27051549, 0.27055186, 0.27058709,
+		0.27062122, 0.27065430, 0.27068636, 0.27071746, 0.27074761, 0.27077684, 0.27080516, 0.27083256, 0.27085899,
+		0.27088442, 0.27090875, 0.27093191, 0.27095379, 0.27097427, 0.27099326, 0.27101067, 0.27102640, 0.27104041, 
+		0.27105266, 0.27106312, 0.27107182, 0.27107876, 0.27108399};
+
+	/**
+	 * Return the Sun's apparent angular semi-diameter ("solar radius") for the given date, in degrees, suitable for passing to
+	 * {@link #setSolarRadius(double)} for slightly more accurate sunrise / sunset times. The value comes from a precomputed table
+	 * ({@link #SOLAR_RADIUS_BY_DAY_OF_YEAR}) keyed by calendar day. The date's month/day is mapped onto the (common-year) reference
+	 * 2050 via {@code withYear(2050)}; because 2050 is not a leap year, a February 29 input is automatically resolved to February 28
+	 * and assigned that day's value.
+	 *
+	 * <p>Example: //FIXME once integrated
+	 * <pre>
+	 *    calculator.setSolarRadius(calculator.getSolarRadius(localDate));
+	 * </pre>
+	 *
+	 * @param date the date for which to return the solar semi-diameter.
+	 * @return the Sun's apparent semi-diameter in degrees (about 0.2711° near the
+	 *         <a href="https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">perihelion</a>, 0.2622° near  the <a href=
+	 *         "https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">aphelion</a>, and about 0.2666° - the conventional 16′
+	 *         near the <a href="https://en.wikipedia.org/wiki/Equinox">equinoxes</a>).
+	 * @see #setSolarRadius(double)
+	 */
+	public static double getSolarRadius(LocalDate date) {
+		return SOLAR_RADIUS_BY_DAY_OF_YEAR[date.withYear(2050).getDayOfYear() - 1];
+	}
+
 }
