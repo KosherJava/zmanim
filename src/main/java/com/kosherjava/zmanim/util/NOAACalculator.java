@@ -103,7 +103,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double riseSet = getSunRiseSetUTC(localDate, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, solarEvent);
 		riseSet = riseSet / 60;
-		return riseSet > 0  ? riseSet % 24 : riseSet % 24 + 24; // ensure that the time is >= 0 and < 24
+		return (riseSet % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 */
 	private static double getSunGeometricMeanLongitude(double julianCenturies) {
 		double longitude = 280.46646 + julianCenturies * (36000.76983 + 0.0003032 * julianCenturies);
-		return longitude > 0  ? longitude % 360 : longitude % 360 + 360; // ensure that the longitude is >= 0 and < 360
+		return (longitude % 360 + 360) % 360; // return a longitude is in the range of 0 - 360
 	}
 
 	/**
@@ -386,7 +386,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCNoon(LocalDate localDate, GeoLocation geoLocation) {
 		double noon = getSolarNoonMidnightUTC(getJulianDay(localDate), -geoLocation.getLongitude(), SolarEvent.NOON);
 		noon = noon / 60;
-		return noon > 0  ? noon % 24 : noon % 24 + 24; // ensure that the time is >= 0 and < 24
+		return (noon % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 	
 	/**
@@ -397,7 +397,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	public double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
 		double midnight = getSolarNoonMidnightUTC(getJulianDay(localDate), -geoLocation.getLongitude(), SolarEvent.MIDNIGHT);
 		midnight = midnight / 60;
-		return midnight > 0  ? midnight % 24 : midnight % 24 + 24; // ensure that the time is >= 0 and < 24
+		return (midnight % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 
 	/**
@@ -499,7 +499,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 			double julianCenturies = getJulianCenturiesFromJulianDay(julianDay + dateTime);
 			double ratio = tanDegrees(getSunDeclination(julianCenturies)) / tanDegrees(geoLocation.getLatitude());
 
-			if (Double.isNaN(ratio) || ratio > 1.0 || ratio < -1.0) { // Handle Tropics, Polar Regions, and Equator line divisions
+			if (Double.isNaN(ratio) || ratio > 1.0 || ratio < -1.0) { // Handle Tropics, the Poles, and Equator line divisions
 				return Double.NaN;
 			}
 
@@ -507,6 +507,6 @@ public class NOAACalculator extends AstronomicalCalculator {
 			dateTime = solarNoonBase + offset - (getEquationOfTime(julianCenturies) / 1440.0);
 		}
 		
-		return dateTime * 24.0;
+		return (dateTime * 24 % 24 + 24) % 24;
 	}
 }
