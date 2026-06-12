@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -122,7 +122,7 @@ public class GeoLocation implements Cloneable {
 	 * @param name The location name for display, for example "Lakewood, NJ".
 	 * @param latitude the latitude as a {@code double}, for example 40.096 for Lakewood, NJ. <b>Note:</b> For latitudes south of
 	 *         the equator, a negative value should be used.
-	 * @param longitude the longitude as a {@code double}, for example -74.222 for Lakewood, NJ. <b>Note:</b> For longitudes east
+	 * @param longitude the longitude as a {@code double}, for example -74.222 for Lakewood, NJ. <b>Note:</b> For longitudes west
 	 *         of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich), a negative value should
 	 *         be used.
 	 * @param zoneId the {@code ZoneId} for the location.
@@ -137,7 +137,7 @@ public class GeoLocation implements Cloneable {
 	 * @param name The location name for display, for example "Lakewood, NJ".
 	 * @param latitude the latitude as a {@code double}, for example 40.096 for Lakewood, NJ. <b>Note:</b> For latitudes south of
 	 *         the equator, a negative value should be used.
-	 * @param longitude the longitude as a {@code double}, for example -74.222 for Lakewood, NJ. <b>Note:</b> For longitudes east
+	 * @param longitude the longitude as a {@code double}, for example -74.222 for Lakewood, NJ. <b>Note:</b> For longitudes west
 	 *         of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich), a negative value should
 	 *         be used.
 	 * @param elevation the elevation above sea level in Meters.
@@ -190,7 +190,7 @@ public class GeoLocation implements Cloneable {
 	 * Method to set the longitude as a {@code double}, for example -74.222 for Lakewood, NJ
 	 * 
 	 * @param longitude The degrees of longitude to set as a {@code double} between -180.0° and 180.0°. For example
-	 *         -74.222 would be used for Lakewood, NJ. Note: for longitudes east of the <a href=
+	 *         -74.222 would be used for Lakewood, NJ. Note: for longitudes west of the <a href=
 	 *         "https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich) a negative value should be used. An
 	 *         {@code IllegalArgumentException} will be thrown if the value exceeds the limit.
 	 * @throws IllegalArgumentException if the longitude is not between -180 and 180.
@@ -538,12 +538,13 @@ public class GeoLocation implements Cloneable {
 	 * 
 	 * @see java.lang.Object#clone()
 	 */
+	@Override
 	public Object clone() {
 		GeoLocation clone = null;
 		try {
 			clone = (GeoLocation) super.clone();
 		} catch (CloneNotSupportedException cnse) {
-			//Required by the compiler. Should never be reached since we implement clone()
+			throw new AssertionError("Clone not supported on a Cloneable object", cnse);
 		}
 		if (clone != null) {
 			clone.zoneId = getZoneId();
