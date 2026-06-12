@@ -540,7 +540,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         near the <a href="https://en.wikipedia.org/wiki/Equinox">equinoxes</a>).
 	 * @see #setSolarRadius(double)
 	 */
-	public static double getSolarRadius(LocalDate date) {
+	public double getSolarRadius(LocalDate date) {
 		return SOLAR_RADIUS_BY_DAY_OF_YEAR[date.withYear(2050).getDayOfYear() - 1];
 	}
 
