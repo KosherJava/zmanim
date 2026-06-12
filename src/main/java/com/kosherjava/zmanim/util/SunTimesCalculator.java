@@ -111,15 +111,8 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 */
 	private static double getSunTrueLongitude(double sunMeanAnomaly) {
 		double l = sunMeanAnomaly + (1.916 * sinDegrees(sunMeanAnomaly)) + (0.020 * sinDegrees(2 * sunMeanAnomaly)) + 282.634;
-
-		// get longitude into 0-360 degree range
-		if (l >= 360.0) {
-			l = l - 360.0;
-		}
-		if (l < 0) {
-			l = l + 360.0;
-		}
-		return l;
+		return (l % 360 + 360) % 360; // return longitude as a 0-360 degree range
+		
 	}
 
 	/**
@@ -195,7 +188,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double localMeanTime = getLocalMeanTime(localHour, sunRightAscensionHours,
 				getApproxTimeDays(dayOfYear, getHoursFromMeridian(geoLocation.getLongitude()), isSunrise));
 		double pocessedTime = localMeanTime - getHoursFromMeridian(geoLocation.getLongitude());
-		return pocessedTime > 0  ? pocessedTime % 24 : pocessedTime % 24 + 24; // ensure that the time is >= 0 and < 24
+		return (pocessedTime % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 	
 	@Override
@@ -203,9 +196,6 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double sunrise = getUTCSunrise(localDate, geoLocation, 90, false);
 		double sunset = getUTCSunset(localDate, geoLocation, 90, false);
 		double noon = sunrise + ((sunset - sunrise) / 2);
-		if (noon < 0) {
-			noon += 12;
-		}
 		if (noon < sunrise) {
 			noon -= 12;
 		} 
