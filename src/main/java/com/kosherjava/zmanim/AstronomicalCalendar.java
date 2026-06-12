@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -514,12 +514,13 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * An enum to indicate what type of solar event is being calculated.
+	 * An {@code enum} to indicate what type of solar event is being calculated. {@code SolarEvent.NONE} Is reserved for possible
+	 * future use where a time other than sunrise, noon, sunset or midnight would have different logic.
 	 */
 	protected enum SolarEvent {
 		/**SUNRISE A solar event related to sunrise*/SUNRISE, /**SUNSET A solar event related to sunset*/SUNSET,
 		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT,
-		/**NONE solar event representing azimuth or elevation calculations that can be any time of the day*/ NONE;
+		/**NONE solar event representing azimuth, elevation etc. calculations that can be any time of the day*/ NONE;
 	}
 	
 	/**
@@ -537,7 +538,7 @@ public class AstronomicalCalendar implements Cloneable {
 	 */
 	public Instant getTimeAtAzimuth90Or270(double azimuth) {
 		double rawAzimuth = getAstronomicalCalculator().getTimeAtAzimuth(getAdjustedLocalDate(), getGeoLocation(), azimuth);
-		return getInstantFromTime(rawAzimuth, SolarEvent.NONE);
+		return getInstantFromTime(rawAzimuth, (azimuth == 90) ? SolarEvent.SUNRISE : SolarEvent.SUNSET); 
 	}
 	
 	/**
@@ -772,7 +773,7 @@ public class AstronomicalCalendar implements Cloneable {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * Two {@code AstronomicalCalculator} instances are considered equal if their {@link #getLocalDate()}, {@link #getGeoLocation()}
+	 * Two {@code AstronomicalCalendar} instances are considered equal if their {@link #getLocalDate()}, {@link #getGeoLocation()}
 	 * and {@link #getAstronomicalCalculator()} values are identical.
 	 * 
 	 * @param object the reference object with which to compare
