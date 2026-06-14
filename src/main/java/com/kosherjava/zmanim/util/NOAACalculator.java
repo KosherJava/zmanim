@@ -415,7 +415,7 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @see #getUTCMidnight(LocalDate, GeoLocation)
 	 */
 	private static double getSolarNoonMidnightUTC(double julianDay, double longitude, SolarEvent solarEvent) {
-		julianDay = (solarEvent == SolarEvent.NOON) ? julianDay : julianDay + 0.5;
+		// no day-half shift: the loop epoch julianDay + solNoonUTC/1440 already lands on the event
 		// First pass for approximate solar noon to calculate equation of time
 		double tnoon = getJulianCenturiesFromJulianDay(julianDay + longitude / 360.0);
 		double equationOfTime = getEquationOfTime(tnoon);
