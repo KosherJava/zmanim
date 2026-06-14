@@ -41,35 +41,42 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * The commonly used average solar radius that is about 16′ or 0.2666°.
 	 * 
 	 * @see #getSolarRadius()
-	 * @see #getSolarRadius(LocalDate)
+	 * @see #getApparentSolarRadius(LocalDate)
 	 */
 	private double solarRadius = 16 / 60d;
 	
 	/**
-	 * Should the calculator use the {@link #isUseAstronomicApparentSolarRadius()} (defaults to {@code true}).
-	 * @see #setUseAstronomicApparentSolarRadius(boolean)
-	 * @see #setUseAstronomicApparentSolarRadius(boolean)
-	 * */
-	private boolean useAstronomicApparentSolarRadius = true;
+	 * Whether sunrise and sunset should use the date-based apparent solar radius ({@link #getApparentSolarRadius(LocalDate)}),
+	 * which varies slightly through the year as the Earth-Sun distance changes, rather than the fixed {@link #getSolarRadius()
+	 * solar radius}. Defaults to {@code true}. When {@code false}, the fixed {@link #getSolarRadius()} value (default 16&prime;)
+	 * is used instead, which is appropriate for matching other implementations that assume a constant solar radius. Note that
+	 * calling {@link #setSolarRadius(double)} automatically sets this to {@code false}.
+	 *
+	 * @see #isUseApparentSolarRadius()
+	 * @see #setUseApparentSolarRadius(boolean)
+	 * @see #getApparentSolarRadius(LocalDate)
+	 * @see #getSolarRadius()
+	 */
+	private boolean useApparentSolarRadius = true;
 
 	/**
 	 * Returns if useAstronomicApparentSolarRadius is true (the default) or false.
 	 * @return if useAstronomicApparentSolarRadius is true or false.
-	 * @see #getSolarRadius(LocalDate)
+	 * @see #getApparentSolarRadius(LocalDate)
 	 * @see #getSolarRadius()
 	 */
-	public boolean isUseAstronomicApparentSolarRadius() {
-		return useAstronomicApparentSolarRadius;
+	public boolean isUseApparentSolarRadius() {
+		return useApparentSolarRadius;
 	}
 
 	/**
 	 * Sets if useAstronomicApparentSolarRadius should be true (the default) or false.
-	 * @param useAstronomicalApparentSolarRadius should astronomic apparent solar radius be used (default is true).
-	 * @see #getSolarRadius(LocalDate)
+	 * @param useApparentSolarRadius should apparent solar radius be used (default is true).
+	 * @see #getApparentSolarRadius(LocalDate)
 	 * @see #getSolarRadius()
 	 */
-	public void setUseAstronomicApparentSolarRadius(boolean useAstronomicalApparentSolarRadius) {
-		this.useAstronomicApparentSolarRadius = useAstronomicalApparentSolarRadius;
+	public void setUseApparentSolarRadius(boolean useApparentSolarRadius) {
+		this.useApparentSolarRadius = useApparentSolarRadius;
 	}
 
 	/**
@@ -297,7 +304,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         com.kosherjava.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes {@link
 	 *         com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
 	 * @param elevation elevation in Meters.
-	 * @param localDate the date to use for the solar radius. See {@link #getSolarRadius(LocalDate)}.
+	 * @param localDate the date to use for the solar radius. See {@link #getApparentSolarRadius(LocalDate)}.
 	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
 	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
 	 *         sunrise and sunset (if the zenith == 90°)
@@ -306,8 +313,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	double adjustZenith(double zenith, double elevation, LocalDate localDate) {
 		double adjustedZenith = zenith;
 		if (zenith == GEOMETRIC_ZENITH) { // only adjust if it is exactly sunrise or sunset
-			if(isUseAstronomicApparentSolarRadius() && localDate != null) {
-				adjustedZenith = zenith + (getSolarRadius(localDate) + getRefraction() + getElevationAdjustment(elevation));
+			if(isUseApparentSolarRadius() && localDate != null) {
+				adjustedZenith = zenith + (getApparentSolarRadius(localDate) + getRefraction() + getElevationAdjustment(elevation));
 			} else {
 				adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
 			}
@@ -341,34 +348,55 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * Method to get the sun's radius. The default value is 16 arcminutes. The sun's radius as it appears from earth is almost
-	 * universally given as 16 arcminutes but in fact it differs by the time of the year. At the <a
-	 * href="https://en.wikipedia.org/wiki/Perihelion">perihelion</a> it has an apparent radius of 16.293′ (0.2710°), while at the
-	 * <a href="https://en.wikipedia.org/wiki/Aphelion">aphelion</a> it has an apparent radius of 15.755′ (0.2622°). There is little
-	 * affect for most location, but at high and low latitudes the difference becomes more apparent. My Calculations for
-	 * the difference at the location of the <a href="https://www.rmg.co.uk/royal-observatory">Royal Observatory, Greenwich</a>
-	 * shows only a 4.494-second difference between the perihelion and aphelion radii, but moving into the arctic circle the
-	 * difference becomes more noticeable. Tests for Tromso, Norway (latitude 69.672312, longitude 19.049787) show that
-	 * on May 17, the rise of the midnight sun, a 2 minute and 23 second difference is observed between the perihelion and
-	 * aphelion radii using the USNO algorithm, but only 1 minute and 6 seconds difference using the NOAA algorithm.
-	 * Areas farther north show an even greater difference. Note that these test are not real valid test cases because
-	 * they show the extreme difference on days that are not the perihelion or aphelion, but are shown for illustrative
-	 * purposes only.
-	 * 
-	 * @return The sun's radius in degrees.
-	 */
+	* Method to get the fixed sun's radius. The default value is 16 arcminutes. The sun's radius as it appears from earth is almost
+	* universally given as 16 arcminutes but in fact it differs by the time of the year. At the <a href=
+	* "https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">perihelion</a> it has an apparent radius of 16.293′ (0.2710°),
+	* while at the <a href="https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">aphelion</a> it has an apparent radius of
+	* 15.755′ (0.2622°). There is little effect for most locations, but at high and low latitudes the difference becomes more
+	* apparent. Calculations for the difference at the location of the <a href="https://www.rmg.co.uk/royal-observatory">Royal
+	* Observatory, Greenwich</a> show only a 4.494-second difference between the perihelion and aphelion radii, but moving into the
+	* arctic circle the difference becomes more noticeable. Tests for Tromso, Norway (latitude 69.67°, longitude 19.05°) show that on
+	* May 17, the rise of the midnight sun, a 2 minute and 23 second difference is observed between the perihelion and aphelion radii
+	* using the USNO algorithm, but only 1 minute and 6 seconds difference using the NOAA algorithm. Areas farther north show an even
+	* greater difference. Note that these are not real-world tests. It simply compared the min and max solar radius at different
+	* locations. Real world examples of comparing the actual apperant solar radius would yield less significant differences.
+	* Regardless, this is exactly the error that the date-based apparent solar radius eliminates: by default ({@link
+	* #isUseApparentSolarRadius()} is {@code true}) sunrise and sunset use {@link #getApparentSolarRadius(LocalDate)}
+	* instead, and the fixed value returned here only applies when that setting is {@code false} (typically to match other
+	* implementations that assume a constant 16′ radius; see {@link #setSolarRadius(double)}, which switches that setting off
+	* automatically).
+	*
+	* @return The fixed sun's radius in degrees, used only when {@link #isUseApparentSolarRadius()} is {@code false}.
+	* @see #getApparentSolarRadius(LocalDate)
+	* @see #isUseApparentSolarRadius()
+	*/
 	public double getSolarRadius() {
 		return this.solarRadius;
 	}
 
 	/**
-	 * Method to set the sun's radius.
-	 * 
-	 * @param solarRadius The sun's radius in degrees.
+	 * Sets the Sun's radius as a fixed, date-independent value in degrees, for example {@code 16.0 / 60.0} for the
+	 * conventional 16′. This is typically used to match another implementation or reference that assumes a constant
+	 * solar radius.
+	 * <p>
+	 * A fixed radius has no effect while {@link #isUseApparentSolarRadius()} is {@code true} (the default), since
+	 * in that mode the date-based {@link #getApparentSolarRadius(LocalDate) apparent solar radius} is used instead. So that
+	 * a value set here actually takes effect, this method also disables that mode (equivalent to calling
+	 * {@link #setUseApparentSolarRadius(boolean) setUseAstronomicApparentSolarRadius(false)}). To return to the
+	 * date-based radius afterward, pass {@code true} to {@link #setUseApparentSolarRadius(boolean)}.
+	 *
+	 * @param solarRadius the Sun's radius in degrees. Must be a non-negative number.
+	 * @throws IllegalArgumentException if {@code solarRadius} is &lt; 0 or is {@link Double#NaN}.
 	 * @see #getSolarRadius()
+	 * @see #isUseApparentSolarRadius()
+	 * @see #getApparentSolarRadius(LocalDate)
 	 */
 	public void setSolarRadius(double solarRadius) {
+		if (solarRadius < 0 || Double.isNaN(solarRadius)) {
+			throw new IllegalArgumentException("Solar radius must be a non-negative number");
+		}
 		this.solarRadius = solarRadius;
+		this.useApparentSolarRadius = false;
 	}
 
 	/**
@@ -392,7 +420,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 		return Double.compare(this.getEarthRadius(), calculator.getEarthRadius()) == 0
 				&& Double.compare(this.getRefraction(), calculator.getRefraction()) == 0
-				&& Double.compare(this.getSolarRadius(), calculator.getSolarRadius()) == 0;
+				&& Double.compare(this.getSolarRadius(), calculator.getSolarRadius()) == 0
+				&& this.isUseApparentSolarRadius()  == calculator.isUseApparentSolarRadius();
 	}
 
 	/**
@@ -405,7 +434,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getEarthRadius(), getRefraction(), getSolarRadius());
+		return Objects.hash(getEarthRadius(), getRefraction(), getSolarRadius(), useApparentSolarRadius);
 	}
 
 	/**
@@ -468,15 +497,26 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 	
 	/**
-	 * The Sun's apparent angular semi-diameter ("solar radius") in degrees for each day of the year, precomputed from the
-	 * <a href="https://en.wikipedia.org/wiki/VSOP_model">VSOP87</a> Earth-Sun distance for reference year 2050 (chosen as the
-	 * midpoint of 2000-2100 to keep the century drift symmetric and small; 2050 is a common year, so there are 365 entries and
-	 * February 29 reuses the February 28 value - see {@link #getSolarRadius(LocalDate)}). The Sun's apparent size varies through
-	 * the year as the Earth-Sun distance changes between perihelion (~Jan 3, about 16.27′ or 0.2710°) and aphelion (~Jul 5, about
-	 * 15.73′ or 0.2622°), with a mean of the conventional 16′. Indexed by day-of-year (1-365).
-	 * <p>A fixed table is used instead of evaluating the series at run time because the value for a given calendar date
-	 * drifts by less than ~0.4′ across the whole of 2000-2100 (perihelion advances ~1 day per 57 years), which
-	 * at latitude 60° is at most ~50 ms of sunrise / sunset time, basically negligible.
+	 * The Sun's apparent angular semi-diameter (the "solar radius") in degrees for each day of the year, precomputed from
+	 * the <a href="https://en.wikipedia.org/wiki/VSOP_(planets)">VSOP87</a> Earth-Sun distance for reference year 2050.
+	 * The Sun's apparent size varies through the year as the Earth-Sun distance changes between the perihelion (~Jan 3,
+	 * about 16.27′ or 0.2710°) and the aphelion (~Jul 5, about 15.73′ or 0.2622°), with a mean of the conventional 16′.
+	 * The table has 365 entries indexed by day-of-year (1-365); 2050 is a common year, so February 29 reuses the
+	 * February 28 value (see {@link #getApparentSolarRadius(LocalDate)}).
+	 * <p>
+	 * <b>Valid epoch.</b> Reference year 2050 was chosen as the midpoint of the years 2000-2100 so that the small drift in
+	 * the value for a fixed calendar date stays symmetric and minimal across that span. The date of the perihelion advances
+	 * through the calendar by roughly one day every 57 years, so the apparent radius for a given calendar date is not
+	 * perfectly constant from year to year. Across 2000-2100 this table is within about 0.4″ of the exact value (at most
+	 * roughly 50 ms of sunrise / sunset time at latitude 60°, and less elsewhere) - negligible for any practical purpose.
+	 * Outside 2000-2100 the table is still returned but its accuracy degrades gradually as the perihelion drifts further;
+	 * for use centuries away from 2050 the table should be regenerated against a closer reference year.
+	 * <p>
+	 * A fixed table is used in preference to evaluating the VSOP87 series at run time because, given the negligible drift
+	 * above, the lookup is both simpler and faster while remaining far more accurate than any sunrise / sunset calculation
+	 * requires.
+	 *
+	 * @see #getApparentSolarRadius(LocalDate)
 	 */
 	private static final double[] SOLAR_RADIUS_BY_DAY_OF_YEAR = {
 		0.27108024, 0.27108486, 0.27108790, 0.27108930, 0.27108899, 0.27108695, 0.27108316, 0.27107762, 0.27107033,
@@ -522,26 +562,38 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		0.27105266, 0.27106312, 0.27107182, 0.27107876, 0.27108399};
 
 	/**
-	 * Return the Sun's apparent angular semi-diameter ("solar radius") for the given date, in degrees, suitable for passing to
-	 * {@link #setSolarRadius(double)} for slightly more accurate sunrise / sunset times. The value comes from a precomputed table
-	 * ({@link #SOLAR_RADIUS_BY_DAY_OF_YEAR}) keyed by calendar day. The date's month/day is mapped onto the (common-year) reference
-	 * 2050 via {@code withYear(2050)}; because 2050 is not a leap year, a February 29 input is automatically resolved to February 28
-	 * and assigned that day's value.
+	 * Returns the Sun's apparent angular semi-diameter (the "solar radius") for the given date, in degrees. The Sun's
+	 * apparent size changes over the year as the Earth-Sun distance varies between the <a href=
+	 * "https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">perihelion</a> (~Jan 3, when the Sun is largest)
+	 * and the <a href="https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">aphelion</a> (~Jul 5, when it is
+	 * smallest). The value is read from a precomputed table ({@link #SOLAR_RADIUS_BY_DAY_OF_YEAR}) keyed by calendar
+	 * day; the date's month and day are mapped onto the (common-year) reference year 2050 via {@code withYear(2050)},
+	 * so a February 29 input is automatically resolved to February 28 and assigned that day's value.
+	 * <p>
+	 * This is the value the calculator applies <b>automatically</b> for sunrise and sunset while
+	 * {@link #isUseApparentSolarRadius()} is {@code true} (the default). It is recomputed from the date on
+	 * every call and is never stored, so it is always correct for the date being calculated. The method is exposed only
+	 * for inspection and comparison.
+	 * <p>
+	 * <b>Do not pass the result to {@link #setSolarRadius(double)}.</b> {@link #setSolarRadius(double)} is meant for a
+	 * fixed, date-independent radius (for example to match another implementation that uses a constant 16′). Storing
+	 * a single day's apparent radius there would freeze that one day's value onto this instance and apply it incorrectly
+	 * to every other date subsequently calculated (and would also switch off {@link #isUseApparentSolarRadius()
+	 * apparent-radius mode}). To use the date-based radius, simply leave {@link #isUseApparentSolarRadius()}
+	 * enabled and let the calculator call this method itself.
 	 *
-	 * <p>Example: //FIXME once integrated
-	 * <pre>
-	 *    calculator.setSolarRadius(calculator.getSolarRadius(localDate));
-	 * </pre>
-	 *
-	 * @param date the date for which to return the solar semi-diameter.
-	 * @return the Sun's apparent semi-diameter in degrees (about 0.2711° near the
-	 *         <a href="https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">perihelion</a>, 0.2622° near  the <a href=
-	 *         "https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">aphelion</a>, and about 0.2666° - the conventional 16′
-	 *         near the <a href="https://en.wikipedia.org/wiki/Equinox">equinoxes</a>).
-	 * @see #setSolarRadius(double)
+	 * @param localDate the date for which to return the Sun's apparent semi-diameter. If a {@code null} is passed, the
+	 *         default solar radius of 16/60 will be returned.
+	 * 
+	 * @return the Sun's apparent semi-diameter in degrees: about 0.2711° near the <a href=
+	 *         "https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">perihelion</a>, about 0.2622° near the
+	 *         <a href="https://en.wikipedia.org/wiki/Apsis#Perihelion_and_aphelion">aphelion</a>, and about 0.2666°
+	 *         - the conventional 16′ - near the <a href="https://en.wikipedia.org/wiki/Equinox">equinoxes</a>.
+	 * @see #isUseApparentSolarRadius()
+	 * @see #getSolarRadius()
 	 */
-	public double getSolarRadius(LocalDate date) {
-		return SOLAR_RADIUS_BY_DAY_OF_YEAR[date.withYear(2050).getDayOfYear() - 1];
+	public double getApparentSolarRadius(LocalDate localDate) {
+		return localDate == null ? 16 / 60d : SOLAR_RADIUS_BY_DAY_OF_YEAR[localDate.withYear(2050).getDayOfYear() - 1];
 	}
 
 }
