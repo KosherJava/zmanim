@@ -1,6 +1,6 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
@@ -1599,10 +1599,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * Bais Horaah of Yeshivat Chevrat Ahavat Shalom that <em>mincha gedola</em> is calculated as half a <em>shaah zmanis</em> after
 	 * <em>chatzos</em> with <em>shaos zmaniyos</em> calculated based on a day starting at {@link #getAlos16Point1Degrees()} and
 	 * ending at {@link #getTzaisGeonim3Point7Degrees()}. The later of this time or 30 clock minutes after <em>chatzos</em> is
-	 * returned. See {@link #getMinchaGedolaGreaterThan30(Instant)} for a way to claculate the later of 30 minutes or this <em>mincha
-	 * gedola</em>. For more information about <em>mincha gedola</em> see the documentation on {@link #getMinchaGedolaGRA() <em>mincha
-	 * gedola</em>}. Since calculation of this <em>zman</em> involves <em>chatzos</em> that is offset from the center of the
-	 * astronomical day, {@link #isUseAstronomicalChatzosForOtherZmanim()} is N/A here. Sources for an asymmetrical day-based
+	 * returned. See {@link #getMinchaGedolaGreaterThan30(Instant)} for a way to calculate the later of 30 minutes or this <em>mincha
+	 * gedola</em>. For more information about <em>mincha gedola</em> see the documentation on {@link #getMinchaGedolaGRA()
+	 * <em>mincha gedola</em>}. Since calculation of this <em>zman</em> involves <em>chatzos</em> that is offset from the center of
+	 * the astronomical day, {@link #isUseAstronomicalChatzosForOtherZmanim()} is N/A here. Sources for an asymmetrical day-based
 	 * calculation can be seen in the documentation of {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}.
 	 * @return the {@code Instant} of the <em>mincha gedola</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
@@ -2277,8 +2277,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 
 	/**
 	 * This method returns the <em>tzais</em> (nightfall) based on the opinion of the <em>Geonim</em> calculated at the sun's
-	 * position at {@link #ZENITH_5_POINT_95 5.95°} below below {@link AstronomicalCalendar#GEOMETRIC_ZENITH} (90°), calculated as
-	 * the position of the sun 24 minutes after sunset in Jerusalem <a href=
+	 * position at {@link #ZENITH_5_POINT_95 5.95°} below {@link AstronomicalCalendar#GEOMETRIC_ZENITH} (90°), calculated as the
+	 * position of the sun 24 minutes after sunset in Jerusalem <a href=
 	 * "https://kosherjava.com/2022/01/12/equinox-vs-equilux-zmanim-calculations/">around the equinox / equilux</a>. The 24 minutes
 	 * is based on the Baal Hatanya's calculation of 18 minutes (3/4 of a 24 minute mil) + 4 minutes for <em>shkiah amitis</em> +
 	 * 2 minutes for bain hashmashos of Rav Yosi. See Hazmanim Bahalacha vol II, ch. 50, no. 5, p. 512-513, ch. 47, and Yisrael
@@ -2378,7 +2378,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * look can see the 3 medium stars as early as 15 minutes after sunset. This is explained in detail in Hazmanim Bahalacha vol
 	 * II, ch. 41, no. 6 (p. 372-373, ch. 47, no. 11-12 (p. 491-493) where it is clear that medium sized stars would be visible as
 	 * early as 14 minutes after sunset (13.5 minutes for 3/4 of an 18 minute Mil, plus 0.5 minutes for <em>bain Hashmashos</em>
-	 * of Rav Yosi) to an expert. See more details on this earier <em>zman</em> at {@link #getTzaisGeonim3Point8Degrees()}.
+	 * of Rav Yosi) to an expert. See more details on this earlier <em>zman</em> at {@link #getTzaisGeonim3Point8Degrees()}.
 	 * This is an early <em>zman</em> for <em>tzais</em>and should not be relied on without Rabbinical guidance.
 	 * 
 	 * @return the {@code Instant} representing the time when the sun is 4.8° below sea level. If the calculation can't be computed
@@ -2396,7 +2396,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a> as the position of
 	 * the sun no later than 31 minutes after sea-level sunset in Jerusalem (the Birur halacha shows that Rav Tucazinsky's
 	 * calculations for sunset, listed as 28 minutes in this case, were about 3 minutes later than reality), and at the height of
-	 * the summer solstice, this <em>zman</em>, calculatons show that 30.75 minutes after <em>shkiah</em> computes to 6.45° below
+	 * the summer solstice, this <em>zman</em>, calculations show that 30.75 minutes after <em>shkiah</em> computes to 6.45° below
 	 * {@link AstronomicalCalendar#GEOMETRIC_ZENITH}. This calculation is found in the <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=50536&st=&pgnum=51">Birur Halacha Yoreh Deah 262</a> and it is the commonly used
 	 * <em>zman</em> in Israel. It is also used in the <a href="https://www.worldcat.org/oclc/243303103">Luach Itim Lebinah</a>. it
