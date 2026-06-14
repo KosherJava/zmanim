@@ -51,9 +51,9 @@ import java.time.ZonedDateTime;
  * @see HebrewDateFormatter
  * @see java.util.Date
  * @see java.util.Calendar
- * @author &copy; Avrom Finkelstien 2002
- * @author &copy; Moshe Dicker 2026
- * @author &copy; Eliyahu Hershfeld 2011 - 2026
+ * @author © Avrom Finkelstien 2002
+ * @author © Moshe Dicker 2026
+ * @author © Eliyahu Hershfeld 2011 - 2026
  */
 public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	/**
@@ -226,8 +226,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Returns the <em>molad</em> minutes. Only an object populated with {@link #getMolad()},
-	 * {@link #setJewishDate(int, int, int, int, int, int)} or or {@link #setMoladMinutes(int)} will have these fields
-	 * populated. A regular JewishDate object will have this field set to 0.
+	 * {@link #setJewishDate(int, int, int, int, int, int)} or {@link #setMoladMinutes(int)} will have these fields populated.
+	 * A regular JewishDate object will have this field set to 0.
 	 *
 	 * @return the <em>molad</em> minutes
 	 * @see #setMoladMinutes(int)
@@ -272,7 +272,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 
 	/**
 	 * Returns the <em>molad chalakim</em> / parts. Only an object populated with {@link #getMolad()},
-	 * {@link #setJewishDate(int, int, int, int, int, int)} or or {@link #setMoladChalakim(int)} will have these fields
+	 * {@link #setJewishDate(int, int, int, int, int, int)} or {@link #setMoladChalakim(int)} will have these fields
 	 * populated. A regular JewishDate object will have this field set to 0.
 	 *
 	 * @return the <em>molad chalakim</em> / parts
