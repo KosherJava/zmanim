@@ -80,13 +80,14 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * The commonly used average earth radius in KM. At this time, this only affects elevation adjustment and not the
-	 * sunrise and sunset calculations. The value currently defaults to 6356.9 KM.
-	 * 
+	 * The commonly used average earth radius of 6371.0088 KM (the IUGG mean radius R1 = (2a + b) / 3 of the WGS-84
+	 * ellipsoid). At this time, this only affects the elevation adjustment, not the underlying solar position
+	 * calculations.
+	 *
 	 * @see #getEarthRadius()
 	 * @see #setEarthRadius(double)
 	 */
-	private double earthRadius = 6356.9; // in KM
+	private double earthRadius = 6371.0088; // in KM (IUGG mean radius R1 = (2a + b) / 3, WGS-84)
 	
 	/**
 	 * Default constructor using the default {@link #refraction refraction}, {@link #solarRadius solar radius} and
@@ -97,9 +98,11 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * A method that returns the earth radius in KM. The value currently defaults to 6356.9 KM if not set.
-	 * 
-	 * @return the earthRadius the earth radius in KM.
+	 * A method that returns the earth radius in KM. The value currently defaults to the commonly used average earth
+	 * radius of 6371.0088 KM (the IUGG mean radius R1 = (2a + b) / 3 of the WGS-84 ellipsoid) if not set. At this time,
+	 * this only affects the elevation adjustment, not the underlying solar position calculations.
+	 *
+	 * @return the earth radius in KM.
 	 */
 	public double getEarthRadius() {
 		return earthRadius;
