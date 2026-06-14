@@ -514,13 +514,11 @@ public class AstronomicalCalendar implements Cloneable {
 	}
 
 	/**
-	 * An {@code enum} to indicate what type of solar event is being calculated. {@code SolarEvent.NONE} Is reserved for possible
-	 * future use where a time other than sunrise, noon, sunset or midnight would have different logic.
+	 * An {@code enum} to indicate what type of solar event is being calculated.
 	 */
 	protected enum SolarEvent {
 		/**SUNRISE A solar event related to sunrise*/SUNRISE, /**SUNSET A solar event related to sunset*/SUNSET,
-		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT,
-		/**NONE solar event representing azimuth, elevation etc. calculations that can be any time of the day*/ NONE;
+		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT;
 	}
 	
 	/**
@@ -567,18 +565,6 @@ public class AstronomicalCalendar implements Cloneable {
 				date = date.plusDays(1);
 			} else if (localTimeHours > 24) {
 				date = date.minusDays(1);
-			}
-		} else if (solarEvent == SolarEvent.NONE) {
-			// Azimuth events can occur at any time of day; apply the same date-boundary adjustments as SUNRISE/SUNSET to handle
-			// far-east and far-west locations where local date differs from UTC date. For example, Suva, Fiji (UTC+12): the first
-			// half of any local day (midnight–noon local) corresponds to the previous UTC calendar date (12:00–24:00 UTC the day
-			// before).  A morning azimuth event like 90° (due East, ~6–7 AM local) therefore has a UTC time of ~18:xx on the day
-			// before the requested Fiji local date. Without a date adjustment, anchoring that UTC time to the wrong calendar date
-			// produces an Instant one full day too late.
-			if (localTimeHours > 18) {
-				date = date.minusDays(1);
-			} else if (localTimeHours < 6) {
-				date = date.plusDays(1);
 			}
 		}
 		
