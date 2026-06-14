@@ -198,13 +198,13 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		double noon = sunrise + ((sunset - sunrise) / 2);
 		if (noon < sunrise) {
 			noon -= 12;
-		} 
-		return noon;
+		}
+		return (noon % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 	
 	@Override
 	public double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
-		return (getUTCNoon(localDate, geoLocation) + 12);
+		return (getUTCNoon(localDate, geoLocation) + 12) % 24;
 	}
 	
 	/**
