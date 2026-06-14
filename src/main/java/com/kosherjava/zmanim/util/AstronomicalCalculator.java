@@ -60,8 +60,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	private boolean useApparentSolarRadius = true;
 
 	/**
-	 * Returns if useAstronomicApparentSolarRadius is true (the default) or false.
-	 * @return if useAstronomicApparentSolarRadius is true or false.
+	 * Returns if useApparentSolarRadius is true (the default) or false.
+	 * @return if useApparentSolarRadius is true or false.
 	 * @see #getApparentSolarRadius(LocalDate)
 	 * @see #getSolarRadius()
 	 */
@@ -70,7 +70,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * Sets if useAstronomicApparentSolarRadius should be true (the default) or false.
+	 * Sets if useApparentSolarRadius should be true (the default) or false.
 	 * @param useApparentSolarRadius should apparent solar radius be used (default is true).
 	 * @see #getApparentSolarRadius(LocalDate)
 	 * @see #getSolarRadius()
@@ -208,7 +208,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 *         midnight at the end of the day passed in.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
 	 * 
-	 * @return The UTC time of solar midnight in in a 24-hour {@code double} format. 1:45:00 AM will return 1.75. If an error
+	 * @return The UTC time of solar midnight in a 24-hour {@code double} format. 1:45:00 AM will return 1.75. If an error
 	 *         was encountered in the calculation (expected behavior for the {@link SunTimesCalculator} at times of the year in
 	 *         Polar regions), {@link Double#NaN} will be returned.
 	 * @see #getUTCNoon(LocalDate, GeoLocation)
@@ -248,8 +248,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * 
 	 * @param instant The {@code instant} to calculate the azimuth for.
 	 * @param geoLocation The location information used for astronomical calculation of solar times.
-	 * @return the solar azimuth in degrees. Astronomical midday would be 180° in the norther hemosphere and 0° in the southern
-	 *         hemosphere. Depending on the location and time of year, sunrise will have an azimuth of about 90° and sunset about 270°.
+	 * @return the solar azimuth in degrees. Astronomical midday would be 180° in the northern hemisphere and 0° in the southern
+	 *         hemisphere. Depending on the location and time of year, sunrise will have an azimuth of about 90° and sunset about 270°.
 	 */
 	public abstract double getSolarAzimuth(Instant instant, GeoLocation geoLocation);
 
@@ -359,7 +359,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	* May 17, the rise of the midnight sun, a 2 minute and 23 second difference is observed between the perihelion and aphelion radii
 	* using the USNO algorithm, but only 1 minute and 6 seconds difference using the NOAA algorithm. Areas farther north show an even
 	* greater difference. Note that these are not real-world tests. It simply compared the min and max solar radius at different
-	* locations. Real world examples of comparing the actual apperant solar radius would yield less significant differences.
+	* locations. Real world examples of comparing the actual apparent solar radius would yield less significant differences.
 	* Regardless, this is exactly the error that the date-based apparent solar radius eliminates: by default ({@link
 	* #isUseApparentSolarRadius()} is {@code true}) sunrise and sunset use {@link #getApparentSolarRadius(LocalDate)}
 	* instead, and the fixed value returned here only applies when that setting is {@code false} (typically to match other
@@ -382,8 +382,8 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * A fixed radius has no effect while {@link #isUseApparentSolarRadius()} is {@code true} (the default), since
 	 * in that mode the date-based {@link #getApparentSolarRadius(LocalDate) apparent solar radius} is used instead. So that
 	 * a value set here actually takes effect, this method also disables that mode (equivalent to calling
-	 * {@link #setUseApparentSolarRadius(boolean) setUseAstronomicApparentSolarRadius(false)}). To return to the
-	 * date-based radius afterward, pass {@code true} to {@link #setUseApparentSolarRadius(boolean)}.
+	 * {@link #setUseApparentSolarRadius(boolean)}). To return to the date-based radius afterward, pass {@code true} to
+	 * {@link #setUseApparentSolarRadius(boolean)}.
 	 *
 	 * @param solarRadius the Sun's radius in degrees. Must be a non-negative number.
 	 * @throws IllegalArgumentException if {@code solarRadius} is &lt; 0 or is {@link Double#NaN}.
