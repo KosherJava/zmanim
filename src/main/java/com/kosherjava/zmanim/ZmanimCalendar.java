@@ -1,12 +1,12 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
  *
- * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
@@ -66,7 +66,7 @@ import com.kosherjava.zmanim.util.GeoLocation;
  * <h2>Disclaimer:</h2> I did my best to get accurate results, but please double-check before relying on these
  * <em>zmanim</em> for <em>halacha lema'aseh</em>.
  * 
- * @author &copy; Eliyahu Hershfeld 2004 - 2026
+ * @author © Eliyahu Hershfeld 2004 - 2026
  */
 public class ZmanimCalendar extends AstronomicalCalendar {
 	
@@ -432,7 +432,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * lengthening or shortening day). See <a href="https://kosherjava.com/2020/07/02/definition-of-chatzos/">The Definition of
 	 * <em>Chatzos</em></a> for a detailed explanation of the ways to calculate <em>Chatzos</em>. This method is a convenience
 	 * method that calls the parent class's {@link #getSunTransit(Instant, Instant)}. A practical example of using this would be
-	 * calculating <em>chatzos halayla</em> for the for the end of <em>zman achilas afikoman</em> on <em>Pesach</em> night, where
+	 * calculating <em>chatzos halayla</em> for the end of <em>zman achilas afikoman</em> on <em>Pesach</em> night, where
 	 * <a href="https://en.wikipedia.org/wiki/Shlomo_Zalman_Auerbach">Rav Shlomo Zalman Auerbach</a> in the Halichos Shlomo,
 	 * Moadim Nisan - Av, ch. 9, no. 44, pages 289-292, questioned the common practice of considering <em>chatzos halayla</em> as
 	 * astronomical <em>chatzos halayla</em>, and felt that for this it should be at <em>chatzi halayla</em>, halfway between sunset
@@ -1108,10 +1108,10 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	/**
 	 * A method that returns a <em>shaah zmanis</em> ({@link #getTemporalHour(Instant, Instant) temporal hour}) according to
 	 * the opinion of the <a href="https://en.wikipedia.org/wiki/Vilna_Gaon">GRA</a>. This calculation divides the day
-	 * based on the opinion of the <em>GRA</em> that the day runs from from {@link #getSeaLevelSunrise() sea level
-	 * sunrise} to {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunrise() sunrise} to {@link #getSunset()
-	 * sunset} (depending on the {@link #isUseElevation()} setting). The day is split into 12 equal parts with each one
-	 * being a <em>shaah zmanis</em>. This method is similar to {@link #getTemporalHour()}, but can account for elevation.
+	 * based on the opinion of the <em>GRA</em> that the day runs from {@link #getSeaLevelSunrise() sea level sunrise} to
+	 * {@link #getSeaLevelSunset() sea level sunset} or {@link #getSunrise() sunrise} to {@link #getSunset() sunset} (depending
+	 * on the {@link #isUseElevation()} setting). The day is split into 12 equal parts with each one being a <em>shaah zmanis</em>.
+	 * This method is similar to {@link #getTemporalHour()}, but can account for elevation.
 	 * 
 	 * @return the <code>Duration</code> of a <em>shaah zmanis</em> calculated from sunrise to sunset. If the calculation can't be
 	 *         computed such as in the Arctic Circle where there is at least one day a year where the sun does not rise, and one
