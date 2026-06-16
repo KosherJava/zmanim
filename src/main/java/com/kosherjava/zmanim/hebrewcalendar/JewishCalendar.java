@@ -1,7 +1,7 @@
 /*
  * Zmanim Java API
  * Copyright © 2011 - 2026 Eliyahu Hershfeld
- * Copyright © September 2002 Avrom Finkelstien
+ * Copyright © September 2002 Avrom Finkelstein
  * Copyright © 2019 - 2022 Y Paritcher
  * Copyright © 2026 Moshe Dicker
  *
@@ -29,7 +29,7 @@ import java.util.Calendar; // We still use the old Calendar.WEEKDAY constants
 /**
  * The JewishCalendar extends the JewishDate class and adds calendar methods.
  * 
- * This open source Java code was originally ported by <a href="http://www.facebook.com/avromf">Avrom Finkelstien</a>
+ * This open source Java code was originally ported by <a href="https://www.linkedin.com/in/avromf/">Avrom Finkelstein</a>
  * from his C++ code. It was refactored to fit the KosherJava Zmanim API with simplification of the code, enhancements
  * and some bug fixing. The class allows setting whether the holiday and <em>parsha</em> scheme follows the Israel scheme
  * or outside Israel scheme. The default is the outside Israel scheme.
@@ -43,7 +43,7 @@ import java.util.Calendar; // We still use the old Calendar.WEEKDAY constants
  * @see java.util.Date
  * @see java.util.Calendar
  * @author © Y. Paritcher 2019 - 2022
- * @author © Avrom Finkelstien 2002
+ * @author © Avrom Finkelstein 2002
  * @author © Moshe Dicker 2026
  * @author © Eliyahu Hershfeld 2011 - 2026
  */
