@@ -312,8 +312,13 @@ public class SPACalculator extends AstronomicalCalculator {
 
 	/**
 	 * {@inheritDoc}
-	 * Only azimuth values of 90° (east) or 270° (west) are supported.
+	 * The current implementation in this class only supports azimuth values of 90° (directly east) or 270° (directly west) that are
+	 * directly needed in this library for the {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunsetBenIshChai()}
+	 * and {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunriseBenIshChai()}.
 	 * @throws IllegalArgumentException if the azimuth is not 90° or 270°.
+	 * @todo complete the implementation for other azimuths. While not needed by this library, they may be of value to some projects.
+	 *         There will be edge cases where the azimuth will occur more than once a day when based on the equation of time, the day
+	 *         is shorter than 24 hours. In that case, the time for the first one will be returned.
 	 */
 	@Override
 	public double getTimeAtAzimuth(LocalDate localDate, GeoLocation geoLocation, double targetAzimuth) {
