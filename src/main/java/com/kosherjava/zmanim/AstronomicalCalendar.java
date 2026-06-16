@@ -528,8 +528,8 @@ public class AstronomicalCalendar implements Cloneable {
 	 * @return the time that the azimuth will be reached. There are cases where this azimuth will never be reached for the date and
 	 *         location, and a null will be returned in that case.
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSunriseOrEasternmostSolarAzimuth()
-	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getSunsetOrWesternmostSolarAzimuth()
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunriseBenIshChai()
+	 * @see com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunsetBenIshChai()
 	 * @throws IllegalArgumentException if the azimuth is not 90° or 270°.
 	 * @todo Once a reliable implementation to get any azimuth at any date for any latitude is implemented, make this method more
 	 *         generic.
