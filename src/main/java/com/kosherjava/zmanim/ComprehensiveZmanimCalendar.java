@@ -3561,7 +3561,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://www.chabad.org/library/article_cdo/aid/3209349/jewish/About-Our-Zmanim-Calculations.htm">About Our <em>Zmanim</em>
 	 * Calculations @ Chabad.org</a> that is based on {@link #getSunsetBaalHatanya() <em>shkiah amitis</em> as 1.583° below the
 	 * horizon} calculated around the equinox / equilux that computes 3.516 minutes after sunset. To this, 18 minutes of 3/4 of a
-	 * 24-minute mil and two minutes for <em>bain hashmashos</em> of Rav Yosi is added. This calculation computes the the sun being
+	 * 24-minute mil and two minutes for <em>bain hashmashos</em> of Rav Yosi is added. This calculation computes the sun being
 	 * 5.83° below the horizon (very close to the slightly later {@link #getTzaisGeonim5Point95Degrees()} that was calculated based
 	 * on 4 fixed minutes) and it is rounded up to 6°.
 	 * 
@@ -3830,13 +3830,13 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * A method that returns sunset calculated as the the time when the sun is directly due west (azimuth 270°) in <a href=
+	 * A method that returns sunset calculated as the time when the sun is directly due west (azimuth 270°) in <a href=
 	 * "https://en.wikipedia.org/wiki/Polar_regions_of_Earth">Polar regions</a> on days that there are no {@link
 	 * #getSunsetBasedOnElevationSetting() sunset}. If there is sunset that day, a {@code null} will be returned.
 	 * <p>In Polar regions (the <a href="https://en.wikipedia.org/wiki/Arctic">Arctic</a> or <a href=
 	 * "https://en.wikipedia.org/wiki/Antarctic">Antarctic</a> circles), there are days of no sunrise or sunset, and there are
 	 * <em>halachic</em> opinions that during these periods, sunset (the day-night boundary) is reached when the sun is directly due
-	 * west (azimuth 270°). Sunrise in this opinion os when the sun is directly due eat (azimuth 90°) returned by {@link
+	 * west (azimuth 270°). Sunrise in this opinion is when the sun is directly due east (azimuth 90°) returned by {@link
 	 * #getPolarSunriseBenIshChai()}. This is the opinion of <a href="https://en.wikipedia.org/wiki/Joseph_Schwarz_(geographer)">Rabbi Yehosef
 	 * Schwarz</a> in his <a href="https://hebrewbooks.org/pdfpager.aspx?req=31703&pgnum=134">דברי יוסף – דרך מבוא השמש</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=159&pgnum=83">דברי יוסף – תשובות, שאלה ח׳</a>. This is brought down <em>lehalacha</em>
@@ -3846,9 +3846,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
 	 * 
 	 * @return Sunset calculated as the time the sun is directly due west (azimuth 270°) in Polar regions on days that there is no
-	 *         sunset. If there is sunrise that day, a {@code null} will be returned. While unlikely, it is theoretically possible
+	 *         sunset. If there is sunset that day, a {@code null} will be returned. While unlikely, it is theoretically possible
 	 *         for a {@code null} to be returned by the code even in Polar regions.
-	 * @see #getPolarSunsetBenIshChai()
+	 * @see #getPolarSunriseBenIshChai()
 	 * @see #getTimeAtAzimuth90Or270(double)
 	 * @see com.kosherjava.zmanim.util.AstronomicalCalculator#getTimeAtAzimuth(LocalDate, GeoLocation, double)
 	 */
@@ -3860,14 +3860,14 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	}
 	
 	/**
-	 * A method that returns sunrise calculated as the the time when the sun is directly due east (azimuth 90°) in <a href=
+	 * A method that returns sunrise calculated as the time when the sun is directly due east (azimuth 90°) in <a href=
 	 * "https://en.wikipedia.org/wiki/Polar_regions_of_Earth">Polar regions</a> on days that there are no {@link
 	 * #getSunriseBasedOnElevationSetting() sunrise}. If there is sunrise that day, a {@code null} will be returned.
 	 * <p>In Polar regions (the <a href="https://en.wikipedia.org/wiki/Arctic">Arctic</a> or <a href=
 	 * "https://en.wikipedia.org/wiki/Antarctic">Antarctic</a> circles), there are days of no sunrise or sunset, and there are
 	 * <em>halachic</em> opinions that during these periods, sunrise is reached when the sun is directly due east (azimuth 90°).
 	 * The day-night boundary (sunset) in these opinions is when the sun is directly due west (azimuth 270°) returned by
-	 * {@link #getPolarSunriseBenIshChai()} This is the opinion of <a href=
+	 * {@link #getPolarSunsetBenIshChai()}. This is the opinion of <a href=
 	 * "https://en.wikipedia.org/wiki/Joseph_Schwarz_(geographer)">Rabbi Yehosef Schwarz</a> in his <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=31703&pgnum=134">דברי יוסף – דרך מבוא השמש</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=159&pgnum=83">דברי יוסף – תשובות, שאלה ח׳</a>. This is brought down <em>lehalacha</em>
@@ -3876,8 +3876,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * before {@link #getSunTransit() astronomical <em>chatzos hayom</em>}, but depending on the time of year and location in the
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
 	 * 
-	 * @return Sunrise calculated as the easternmost solar position (azimuth 90°) in Polar regions on days that there is no rise. If 
-	 *         there is sunrise that day, a {@code null} will be returned. While unlikely, it is theoretically possible for a
+	 * @return Sunrise calculated as the easternmost solar position (azimuth 90°) in Polar regions on days that there is no sunrise.
+	 *         If there is sunrise that day, a {@code null} will be returned. While unlikely, it is theoretically possible for a
 	 *         {@code null} to be returned by the code even in Polar regions.
 	 * @see #getPolarSunsetBenIshChai()
 	 * @see #getTimeAtAzimuth90Or270(double)
