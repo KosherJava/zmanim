@@ -39,14 +39,15 @@ import java.util.Objects;
  *
  * <p><b>Refraction and the Sun's radius are applied at sunrise and sunset only.</b> Like {@link NOAACalculator}, this class does not
  * model atmospheric refraction itself; the horizon corrections come entirely from the parent {@link #adjustZenith(double, double,
- * LocalDate)}, which adds {@link #getRefraction()} (default 0.5667° / 34′), the solar radius - the date-based {@link
+ * double, LocalDate)}, which adds {@link #getRefraction()} (default 0.5667° / 34′), the solar radius - the date-based {@link
  * #getApparentSolarRadius(LocalDate)} by default (it varies slightly day to day), or the fixed {@link #getSolarRadius()} (default
  * 0.26667° / 16′) when {@link #isUseApparentSolarRadius()} is {@code false} - and the {@link
- * #getElevationAdjustment(double) elevation dip}, but <em>only</em> when the requested zenith is exactly the geometric 90°, that is,
+ * #getElevationAdjustment(double, double) elevation dip} (WGS84 latitude-dependent geocentric radius with atmospheric refraction
+ * correction), but <em>only</em> when the requested zenith is exactly the geometric 90°, that is,
  * only for true sunrise and sunset. For every other zenith - twilight angles and depression-angle <em>zmanim</em> such as
  * <em>alos</em> and <em>tzais</em> (e.g. 16.1°, 19.8°) - no refraction or solar-radius term is added and the time is solved for the
- * Sun's true geometric depression, as those <em>zmanim</em> are defined geometrically. Consequently {@link #setRefraction(double)} 
- * nd {@link #setSolarRadius(double)} affect sunrise / sunset (and any 90°-based time) but have no effect on depression-angle
+ * Sun's true geometric depression, as those <em>zmanim</em> are defined geometrically. Consequently {@link #setRefraction(double)}
+ * and {@link #setSolarRadius(double)} affect sunrise / sunset (and any 90°-based time) but have no effect on depression-angle
  * <em>zmanim</em>. This calculator has no temperature or pressure inputs of any kind, since the only place they would matter is a
  * refraction model it does not use.
  *
@@ -147,12 +148,12 @@ public class MeeusCalculator extends AstronomicalCalculator {
 	 * @return The UTC time of sunrise or sunset in 24-hour format. 5:45:00 AM will return 5.75, while 5:45 PM will return
 	 *         17.75. If an error was encountered in the calculation (expected behavior for some locations such as near the
 	 *         poles, {@link Double#NaN} will be returned.
-	 * @see #getElevationAdjustment(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
 	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation, SolarEvent solarEvent) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude(), localDate);
 		double riseSet = getSunRiseSetUTC(localDate, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, solarEvent);
 		riseSet = riseSet / 60;

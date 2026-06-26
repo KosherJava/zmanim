@@ -34,16 +34,17 @@ import java.util.Objects;
  * refraction model (and even their solar radius); this one does not:
  * <ul>
  * <li><b>Sunrise / sunset (the geometric 90° zenith only).</b> The horizon geometry is taken entirely from the parent's {@link
- *     #adjustZenith(double, double, LocalDate)}: {@link #getRefraction()} / {@link #setRefraction(double)} (default 0.5667° / 34′);
+ *     #adjustZenith(double, double, double, LocalDate)}: {@link #getRefraction()} / {@link #setRefraction(double)} (default 0.5667° / 34′);
  *     the solar radius - the date-based {@link #getApparentSolarRadius(LocalDate)} by default (it varies slightly day to day), or the
  *     fixed {@link #getSolarRadius()} (default 0.26667° / 16′) when {@link #isUseApparentSolarRadius()} is {@code false};
- *     and the {@link #getElevationAdjustment(double) elevation dip}. SPA's own atmospheric refraction is <em>not</em> applied on this
+ *     and the {@link #getElevationAdjustment(double, double) elevation dip} (WGS84 latitude-dependent geocentric radius with atmospheric
+ *     refraction correction). SPA's own atmospheric refraction is <em>not</em> applied on this
  *     path - the calculator solves for the geometric (parallax-included, un-refracted) center of the Sun reaching the parent-supplied
  *     zenith, exactly as {@link NOAACalculator} and {@link MeeusCalculator} do. The parent only adds these corrections when the
  *     zenith is exactly 90°, so {@link #setRefraction(double)} and {@link #setSolarRadius(double)} change sunrise / sunset (and any
  *     90°-based time) and nothing else.</li>
  * <li><b>Twilight and depression-angle <em>zmanim</em> (e.g. <em>alos</em> / <em>tzais</em> at 16.1°, 19.8°).</b> These pass a zenith
- *     other than 90°, so {@link #adjustZenith(double, double, LocalDate)} adds nothing: no refraction, no solar radius. The time is
+ *     other than 90°, so {@link #adjustZenith(double, double, double, LocalDate)} adds nothing: no refraction, no solar radius. The time is
  *     solved for the Sun's <em>true geometric</em> depression, as such <em>zmanim</em> are defined. None of {@link
  *     #setRefraction(double)}, {@link #setSolarRadius(double)}, {@link #setPressure(double)} or {@link #setTemperature(double)}
  *     affect them.</li>
@@ -197,7 +198,7 @@ public class SPACalculator extends AstronomicalCalculator {
 
 	/**
 	 * Calculate UTC sunrise or sunset (or any twilight angle) in 24-hour format. The horizon geometry (refraction, the sun's radius
-	 * and the elevation dip) is supplied entirely by the parent {@link #adjustZenith(double, double, LocalDate)}, so the SPA
+	 * and the elevation dip) is supplied entirely by the parent {@link #adjustZenith(double, double, double, LocalDate)}, so the SPA
 	 * topocentric solution is solved for the un-refracted, parallax-corrected center of the Sun reaching that zenith.
 	 * @param localDate the date.
 	 * @param geoLocation the observer location.
@@ -209,7 +210,7 @@ public class SPACalculator extends AstronomicalCalculator {
 	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation, SolarEvent solarEvent) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude(), localDate);
 		double riseSet = solveRiseSet(localDate, geoLocation, adjustedZenith, solarEvent);
 		if (Double.isNaN(riseSet)) {
 			return Double.NaN;
