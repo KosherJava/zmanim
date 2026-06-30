@@ -3,8 +3,7 @@
  * Copyright © 2011 - 2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Public License as published by the Free Software Foundation; either version 2.1 of the License.
  *
  * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -173,7 +172,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Setter method to allow overriding of the default list of Yerushalmi <em>masechtos</em> transliterated into into Latin chars.
+	 * Setter method to allow overriding of the default list of Yerushalmi <em>masechtos</em> transliterated into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @param masechtosYerushalmiTransliterated the list of transliterated Yerushalmi <em>masechtos</em> to set.
@@ -183,7 +182,7 @@ public class Daf {
 	}
 	
 	/**
-	 * Getter method to allow retrieving the list of Yerushalmi <em>masechtos</em> transliterated into into Latin chars.
+	 * Getter method to allow retrieving the list of Yerushalmi <em>masechtos</em> transliterated into Latin chars.
 	 * The default uses Ashkenazi American English transliteration.
 	 * 
 	 * @return the array of transliterated <em>masechta</em> (tractate) names of the Daf Yomi Yerushalmi.
