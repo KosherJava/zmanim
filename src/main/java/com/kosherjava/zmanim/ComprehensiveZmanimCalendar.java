@@ -3,8 +3,7 @@
  * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Public License as published by the Free Software Foundation; version 2.1 of the License.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
@@ -3886,6 +3885,70 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getPolarSunriseBenIshChai() {
 		if(getSunriseBasedOnElevationSetting() == null) {
 			return getTimeAtAzimuth90Or270(90);
+		}
+		return null;
+	}
+	
+	/**
+	 * A method that returns <em>Plag Hamincha</em> in <a href="https://en.wikipedia.org/wiki/Polar_regions_of_Earth">Polar
+	 * regions</a> on days that there are no {@link #getSunriseBasedOnElevationSetting() sunrise} and {@link
+	 * #getSunsetBasedOnElevationSetting() sunset}, calculated 10.75 <em>shaaos zmaniyos</em> of a day calculated starting at
+	 * {@link #getPolarSunriseBenIshChai()} and ending at {@link #getPolarSunsetBenIshChai()}. This is the opinion of <a href=
+	 * "https://en.wikipedia.org/wiki/Joseph_Schwarz_(geographer)">Rabbi Yehosef Schwarz</a> in his <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=31703&pgnum=134">דברי יוסף – דרך מבוא השמש</a> and <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=159&pgnum=83">דברי יוסף – תשובות, שאלה ח׳</a>. This is brought down <em>lehalacha</em>
+	 * by The <a href="https://en.wikipedia.org/wiki/Yosef_Hayyim">Ben Ish Chai</a> in the <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=1401&pgnum=461">רב פעלים – חלק ב׳, סוד ישרים ס׳ ד׳</a>.
+	 * 
+	 * @return <em>Plag Hamincha</em> according to the Ben Ish Chai in Polar regions on days that there is no sunrise or sunset.
+	 *         If there is sunrise or sunset that day, a {@code null} will be returned.
+	 * @see #getPolarSunriseBenIshChai()
+	 * @see #getPolarSunsetBenIshChai()
+	 * @see #getPlagHamincha(Instant, Instant, boolean)
+	 */
+	public Instant getPolarPlagHaminchaBenIshChai() {
+		return getPlagHamincha(getPolarSunriseBenIshChai(), getPolarSunsetBenIshChai(), true);
+	}
+	
+	/**
+	 * In Polar regions during the period where the sun is above the horizon 24-hours a day, <a href=
+	 * "https://en.wikipedia.org/wiki/Moshe_Sternbuch">Rav Moshe Sternbuch</a> in <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=19963&st=&pgnum=316">מועדים וזמנים ח״ב ס׳ קנ״ה הע׳ א׳</a> (<span lang="he">ח״ד ס׳ ת״א
+	 * הע׳ א׳</span> in the new edition) and in תשובות והנהגות <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=20025&st=&pgnum=224">ח״א ס׳ שט״ו,</a> and <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=69067&st=&pgnum=135">ח״ה ס׳ פ״ד</a> ruled that during the Polar summer night-based
+	 * <em>mitzvos</em> are not applicable, and during the Polar winter, day-based mitzvos are not applicable. Despite this, the day
+	 * of the calendar week changes when the sun is at its lowest position (an instantaneous set and rise) at {@link
+	 * #getChatzosHalayla()} in the Polar summer and when it is at its highest position in the Polar winter that occurs at {@link
+	 * #getChatzosHayom()}. Rabbi Dovid Heber the author of the <a href="https://hebrewbooks.org/53000">שערי זמנים</a> who <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=53000&st=&pgnum=111">discusses the Moadim Uzmanim's opinion</a> clarified to me
+	 * that in the Polar winter this really only applies when there is no <em>alos hashachar</em>, something not very common unless
+	 * you are extremely far north or south. It should be noted that in the <span>מועדים וזמנים</span> linked abovepublished in 1961,
+	 * Rav Moshe Sternbuch mentions that [<span lang="he"
+	 * >ולתפלה, היום מתהלק, עד י״ב שעות שחרית,  ומאז מנחה, ומעריב מתפלל סמוך ללילה כרבי יהודה כנל״ד ...</span>]. This comment (in () in the original, and
+	 * [] in the new edition published in 2023) was not brought down in the <span>תשובות והנהגות</span> vol. 1 that was published in
+	 * 1977. Since it is not clear to me if this constitutes a retraction, these calculations for davening times mentioned in the
+	 * Moadim Uzmanim are not currently part of the code.
+	 * <p>FIXME:
+	 * <ul>
+	 *   <li>Discuss This with Rabbi Heber in detail.</li>
+	 *   <li>Account for refraction, not just 0</li>
+	 *   <li>Account for <em>alos</em> not just rise and set in the winter. Define what alos (it may vary)</li>
+	 *   <li>Deal with logic for day with either a rise or a set</li>
+	 * </ul>
+	 * @return the time of the Jewish calendar transition to the next day in Polar regions according to Rav Moshe Sternbuch.
+	 */
+	public Instant getPolarStartOfDayTeshuvosVehanhagos() {
+		if(getSunriseBasedOnElevationSetting() == null && getSunsetBasedOnElevationSetting() == null) {
+			Instant chatzosHayom = getChatzosHayom();
+			Instant chatzosHalayla = getChatzosHalayla();
+			double chatzosHayomSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHayom, getGeoLocation());
+			double chatzosHalaylaSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHalayla, getGeoLocation());
+			if(chatzosHayomSolarElevation < 0 && chatzosHalaylaSolarElevation < 0) { // Polar winter in either hemisphere
+				return chatzosHayom; // the "sunrise" as the closest to the horizon
+			} else if(chatzosHayomSolarElevation > 0 && chatzosHalaylaSolarElevation > 0) { // Polar summer when both are above the horizon
+				return chatzosHalayla;
+			}
 		}
 		return null;
 	}
