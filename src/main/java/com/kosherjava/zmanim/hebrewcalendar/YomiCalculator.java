@@ -1,10 +1,9 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2011-2026 Eliyahu Hershfeld
+ * Copyright © 2011-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Public License as published by the Free Software Foundation; version 2.1 of the License.
  *
  * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
@@ -22,8 +21,8 @@ import java.time.Month;
  * This class calculates the Daf Yomi Bavli page (daf) for a given date. To calculate Daf Yomi Yerushalmi
  * use the {@link YerushalmiYomiCalculator}. The library may cover Mishna Yomi etc. at some point in the future.
  * 
- * @author &copy; Bob Newell (original C code)
- * @author &copy; Eliyahu Hershfeld 2011 - 2026
+ * @author © Bob Newell (original C code)
+ * @author © Eliyahu Hershfeld 2011 - 2026
  */
 public class YomiCalculator {
 
