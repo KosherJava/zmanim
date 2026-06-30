@@ -1255,7 +1255,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s <em>netz amiti</em>
-	 * (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double)}. This forms the base for the Baal Hatanya's
+	 * (sunrise) without {@link AstronomicalCalculator#getElevationAdjustment(double, double)}. This forms the base for the Baal Hatanya's
 	 * dawn-based calculations that are calculated as a dip below the horizon before sunrise. According to the Baal Hatanya, <em>netz
 	 * amiti</em>, or true (halachic) sunrise, is when the top of the sun's disk is visible at an elevation similar to the mountains
 	 * of Eretz Yisrael. The time is calculated as the point at which the center of the sun's disk is 1.583° below the horizon. This
@@ -1289,7 +1289,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	
 	/**
 	 * A method that returns the <a href="https://en.wikipedia.org/wiki/Shneur_Zalman_of_Liadi">Baal Hatanya</a>'s <em>shkiah
-	 * amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double) elevation adjustment}. This forms
+	 * amiti</em> (sunset) without {@link AstronomicalCalculator#getElevationAdjustment(double, double) elevation adjustment}. This forms
 	 * the base for the Baal Hatanya's dusk-based calculations that are calculated as a dip below the horizon after sunset. According
 	 * to the Baal Hatanya, <em>shkiah amiti</em>, true (<em>halachic</em>) sunset, is when the top of the sun's disk disappears from
 	 * view at an elevation similar to the mountains of <em>Eretz Yisrael</em>. This time is calculated as the point at which the
