@@ -1,11 +1,10 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2019 - 2026 Eliyahu Hershfeld
- * Copyright (C) 2019 - 2021 Y Paritcher
+ * Copyright © 2019 - 2026 Eliyahu Hershfeld
+ * Copyright © 2019 - 2021 Y Paritcher
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Public License as published by the Free Software Foundation; version 2.1 of the License.
  *
  * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
@@ -44,8 +43,8 @@ import java.util.Calendar;
  * tr.setTachanunRecitedWeekOfPurim(false);
  * System.out.println(hdf.format(jewishCalendar) + ": " + tr.isTachanunRecitedShacharis(jewishCalendar));</pre>
  * 
- * @author &copy; Y. Paritcher 2019 - 2021
- * @author &copy; Eliyahu Hershfeld 2019 - 2026
+ * @author © Y. Paritcher 2019 - 2021
+ * @author © Eliyahu Hershfeld 2019 - 2026
  * 
  * @todo The following items may be added at a future date.
  * <ol>
