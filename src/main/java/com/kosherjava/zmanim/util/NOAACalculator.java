@@ -3,8 +3,7 @@
  * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Public License as published by the Free Software Foundation; version 2.1 of the License.
  *
  * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -401,9 +400,9 @@ public class NOAACalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC)
-	 * of the current day <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> or the the upcoming
-	 * midnight (about 12 hours after solar noon) of the given day at the given location on earth.
+	 * Return the <a href="https://en.wikipedia.org/wiki/Universal_Coordinated_Time">Universal Coordinated Time</a> (UTC) of the
+	 * current day <a href="http://en.wikipedia.org/wiki/Noon#Solar_noon">solar noon</a> or the upcoming midnight (about 12 hours
+	 * after solar noon) of the given day at the given location on earth.
 	 * 
 	 * @param julianDay The Julian day since <a href="https://en.wikipedia.org/wiki/Epoch_(astronomy)#J2000">J2000.0</a>.
 	 * @param longitude The longitude of observer in degrees
@@ -478,9 +477,8 @@ public class NOAACalculator extends AstronomicalCalculator {
 	/**
 	 * {@inheritDoc}
 	 * The current implementation in this class only supports azimuth values of 90° (directly east) or 270° (directly west) that are
-	 * directly needed in this library for the
-	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunsetBenIshChai()} and
-	 * {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunriseBenIshChai()}.
+	 * directly needed in this library for the {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunsetBenIshChai()}
+	 * and {@link com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getPolarSunriseBenIshChai()}.
 	 * @throws IllegalArgumentException if the azimuth is not 90° or 270°.
 	 * @todo complete the implementation for other azimuths. While not needed by this library, they may be of value to some projects.
 	 *         There will be edge cases where the azimuth will occur more than once a day when based on the equation of time, the day
