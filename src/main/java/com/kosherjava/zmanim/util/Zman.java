@@ -1,10 +1,9 @@
 /*
  * Zmanim Java API
- * Copyright (C) 2004-2026 Eliyahu Hershfeld
+ * Copyright © 2004-2026 Eliyahu Hershfeld
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * Public License as published by the Free Software Foundation; version 2.1 of the License.
  *
  * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
@@ -57,7 +56,7 @@ import java.util.Comparator;
  * // will sort shaah 1.6, shaah GRA, sunrise, sunset
  * </pre>
  * 
- * @author &copy; Eliyahu Hershfeld 2007-2026
+ * @author © Eliyahu Hershfeld 2007-2026
  * @todo Add secondary sorting. As of now the {@code Comparator}s in this class do not sort by secondary order. This means that when sorting a
  * {@link java.util.Collection} of <em>zmanim</em> and using the {@link #DATE_ORDER} {@code Comparator} will have the duration based <em>zmanim</em>
  * at the end, but they will not be sorted by duration. This should be N/A for label based sorting.
