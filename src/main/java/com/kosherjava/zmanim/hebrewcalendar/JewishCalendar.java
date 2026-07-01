@@ -1347,6 +1347,62 @@ public class JewishCalendar extends JewishDate {
 	public Daf getDafYomiYerushalmi() {
 		return YerushalmiYomiCalculator.getDafYomiYerushalmi(this);
 	}
+
+	/**
+	 * Returns the <em>Mishna Yomi</em> for the date that the calendar is set to.
+	 * @return the Mishna Yomi as a {@link MishnaYomi}
+	 */
+	public MishnaYomi getMishnaYomi() {
+		return MishnaYomiCalculator.getMishnaYomi(this);
+	}
+
+	/**
+	 * Returns the one chapter <em>Rambam Yomi</em> for the date that the calendar is set to.
+	 * @return the Rambam Yomi as a {@link RambamYomi}
+	 */
+	public RambamYomi getRambamYomi() {
+		return RambamYomiCalculator.getRambamYomi(this);
+	}
+
+	/**
+	 * Returns the three chapter <em>Rambam Yomi</em> for the date that the calendar is set to.
+	 * @return the Rambam Yomi as a {@link RambamYomi}
+	 */
+	public RambamYomi getRambamYomi3Chapters() {
+		return RambamYomiCalculator.getRambamYomi3Chapters(this);
+	}
+
+	/**
+	 * Returns the daily Tehillim for the date that the calendar is set to.
+	 * @return the daily Tehillim as a {@link TehillimYomi}
+	 */
+	public TehillimYomi getDailyTehillim() {
+		return TehillimYomiCalculator.getDailyTehillim(this);
+	}
+
+	/**
+	 * Returns the <em>Tanach Yomi</em> for the date that the calendar is set to.
+	 * @return the Tanach Yomi as a {@link TanachYomi}, or null on days without a reading
+	 */
+	public TanachYomi getTanachYomi() {
+		return TanachYomiCalculator.getTanachYomi(this);
+	}
+
+	/**
+	 * Returns the <em>Kitzur Shulchan Aruch Yomi</em> for the date that the calendar is set to.
+	 * @return the Kitzur Shulchan Aruch Yomi as a {@link KitzurShulchanAruchYomi}, or null on days without a reading
+	 */
+	public KitzurShulchanAruchYomi getKitzurShulchanAruchYomi() {
+		return KitzurShulchanAruchYomiCalculator.getKitzurShulchanAruchYomi(this);
+	}
+
+	/**
+	 * Returns the <em>Shemiras HaLashon Yomi</em> for the date that the calendar is set to.
+	 * @return the Shemiras HaLashon Yomi as a {@link ShemirasHaLashonYomi}
+	 */
+	public ShemirasHaLashonYomi getShemirasHaLashonYomi() {
+		return ShemirasHaLashonYomiCalculator.getShemirasHaLashonYomi(this);
+	}
 	
 	/**
 	 * Returns the elapsed days since <em>Tekufas Tishrei</em>. This uses <em>Tekufas Shmuel</em> (identical to the <a href=
