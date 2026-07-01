@@ -17,6 +17,12 @@ import java.time.temporal.ChronoUnit;
 public class RambamYomiCalculator {
   private static final LocalDate START = LocalDate.of(1984, 4, 29);
   private static final int ONE_CHAPTER_CYCLE = 1017;
+  private static final String[][] FIRST_FOUR_SECTIONS = {
+    {"1-21", "22-33", "34-45"},
+    {"1-83", "84-166", "167-248"},
+    {"1-122", "123-245", "246-365"},
+    {"1:1-4:8", "5:1-9:9", "10:1-14:10"}
+  };
 
   public RambamYomiCalculator() {}
 
@@ -26,18 +32,28 @@ public class RambamYomiCalculator {
 
   public static RambamYomi getRambamYomi1Chapter(JewishCalendar calendar) {
     int d = day(calendar, ONE_CHAPTER_CYCLE);
-    return chapterAt(d, LimudYomiData.RAMBAM_CHAPTERS);
+    RambamYomi reading = chapterAt(d, LimudYomiData.RAMBAM_CHAPTERS);
+    if ("The Order of Prayer".equals(reading.getName())
+        && "4".equals(reading.getStartChapterString())) {
+      return new RambamYomi(reading.getBookNumber(), "4", "5");
+    }
+    return reading;
   }
 
   public static RambamYomi getRambamYomi3Chapters(JewishCalendar calendar) {
     int d = day(calendar, ONE_CHAPTER_CYCLE / 3) * 3;
-    RambamYomi first = chapterAt(d, LimudYomiData.RAMBAM_CHAPTERS);
-    RambamYomi third = chapterAt(d + 2, LimudYomiData.RAMBAM_CHAPTERS);
-    return new RambamYomi(
-        first.getBookNumber(),
-        first.getStartChapter(),
-        third.getBookNumber(),
-        third.getEndChapter());
+    int[] chapters = LimudYomiData.RAMBAM_CHAPTERS.clone();
+    chapters[15] = 5; // The Order of Prayer has an extra day in the 3-chapter cycle.
+    chapters[20] = 8; // The Haggadah text is combined with chapter 8 of Chametz U'Matzah.
+    RambamYomi[] readings =
+        new RambamYomi[] {
+          chapterAt(d, chapters), chapterAt(d + 1, chapters), chapterAt(d + 2, chapters)
+        };
+    if ("Leavened and Unleavened Bread".equals(readings[0].getName())
+        && "8".equals(readings[0].getStartChapterString())) {
+      readings[0] = new RambamYomi(readings[0].getBookNumber(), "8", "9");
+    }
+    return collapseAdjacent(readings);
   }
 
   private static int day(JewishCalendar calendar, int cycle) {
@@ -53,10 +69,48 @@ public class RambamYomiCalculator {
     int total = index;
     for (int i = 0; i < chapters.length; i++) {
       if (total < chapters[i]) {
-        return new RambamYomi(i, total + 1, total + 1);
+        String chapter =
+            i < FIRST_FOUR_SECTIONS.length
+                ? FIRST_FOUR_SECTIONS[i][total]
+                : String.valueOf(total + 1);
+        return new RambamYomi(i, chapter, chapter);
       }
       total -= chapters[i];
     }
     throw new IllegalStateException("Unable to calculate Rambam Yomi");
+  }
+
+  private static RambamYomi collapseAdjacent(RambamYomi[] readings) {
+    int count = 0;
+    int[] books = new int[3];
+    String[] starts = new String[3];
+    String[] ends = new String[3];
+    for (RambamYomi reading : readings) {
+      if (count > 0 && books[count - 1] == reading.getBookNumber()) {
+        ends[count - 1] = lastChapterInRange(reading.getEndChapterString());
+      } else {
+        books[count] = reading.getBookNumber();
+        starts[count] = firstChapterInRange(reading.getStartChapterString());
+        ends[count] = lastChapterInRange(reading.getEndChapterString());
+        count++;
+      }
+    }
+    int[] collapsedBooks = new int[count];
+    String[] collapsedStarts = new String[count];
+    String[] collapsedEnds = new String[count];
+    System.arraycopy(books, 0, collapsedBooks, 0, count);
+    System.arraycopy(starts, 0, collapsedStarts, 0, count);
+    System.arraycopy(ends, 0, collapsedEnds, 0, count);
+    return new RambamYomi(collapsedBooks, collapsedStarts, collapsedEnds);
+  }
+
+  private static String firstChapterInRange(String chapter) {
+    int dash = chapter.indexOf('-');
+    return dash < 0 ? chapter : chapter.substring(0, dash);
+  }
+
+  private static String lastChapterInRange(String chapter) {
+    int dash = chapter.lastIndexOf('-');
+    return dash < 0 ? chapter : chapter.substring(dash + 1);
   }
 }

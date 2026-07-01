@@ -848,24 +848,28 @@ public class HebrewDateFormatter {
 	 * @return the formatted Rambam Yomi.
 	 */
 	public String formatRambamYomi(RambamYomi rambamYomi) {
-		if (hebrewFormat) {
-			if (rambamYomi.getBookNumber() != rambamYomi.getEndBookNumber()) {
-				return "הלכות " + rambamYomi.getHebrewName() + " פרק " + formatPlainHebrewNumber(rambamYomi.getStartChapter())
-						+ " - הלכות " + rambamYomi.getEndHebrewName() + " פרק " + formatPlainHebrewNumber(rambamYomi.getEndChapter());
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < rambamYomi.getReadingCount(); i++) {
+			if (i > 0) {
+				sb.append(", ");
 			}
-			String chapterPrefix = rambamYomi.getStartChapter() == rambamYomi.getEndChapter() ? " פרק " : " פרקים ";
-			String chapters = formatPlainHebrewNumber(rambamYomi.getStartChapter());
-			if (rambamYomi.getStartChapter() != rambamYomi.getEndChapter()) {
-				chapters += "-" + formatPlainHebrewNumber(rambamYomi.getEndChapter());
+			String start = rambamYomi.getStartChapter(i);
+			String end = rambamYomi.getEndChapter(i);
+			if (hebrewFormat) {
+				sb.append(formatRambamHebrewName(rambamYomi.getBookNumber(i)));
+				sb.append(start.equals(end) ? " פרק " : " פרקים ");
+				sb.append(formatRambamChapter(start));
+				if (!start.equals(end)) {
+					sb.append("-").append(formatRambamChapter(end));
+				}
+			} else {
+				sb.append(rambamYomi.getName(i)).append(" ").append(start);
+				if (!start.equals(end)) {
+					sb.append("-").append(end);
+				}
 			}
-			return "הלכות " + rambamYomi.getHebrewName() + chapterPrefix + chapters;
 		}
-		if (rambamYomi.getBookNumber() != rambamYomi.getEndBookNumber()) {
-			return rambamYomi.getName() + " " + rambamYomi.getStartChapter() + "-" + rambamYomi.getEndName() + " "
-					+ rambamYomi.getEndChapter();
-		}
-		return rambamYomi.getName() + " " + rambamYomi.getStartChapter()
-				+ (rambamYomi.getStartChapter() == rambamYomi.getEndChapter() ? "" : "-" + rambamYomi.getEndChapter());
+		return sb.toString();
 	}
 
 	/**
@@ -932,11 +936,15 @@ public class HebrewDateFormatter {
 			return "";
 		}
 		if (hebrewFormat) {
-			return formatShemirasRef(shemirasYomi.getStart()) + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
-					: (sameShemirasKlal(shemirasYomi.getStart(), shemirasYomi.getEnd()) ? "-" + shemirasHalacha(shemirasYomi.getEnd())
-							: " - " + formatShemirasRef(shemirasYomi.getEnd())));
+			if ("x".equals(shemirasYomi.getSection())) {
+				return formatShemirasKlalRef(shemirasYomi.getStart()) + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
+						: (sameShemirasKlal(shemirasYomi.getStart(), shemirasYomi.getEnd()) ? "-" + shemirasHalacha(shemirasYomi.getEnd())
+								: " - " + formatShemirasKlalRef(shemirasYomi.getEnd())));
+			}
+			return formatShemirasSection(shemirasYomi.getSection()) + " " + formatShemirasSectionRef(shemirasYomi.getStart())
+					+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : formatShemirasSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
 		}
-		String prefix = "Book " + (shemirasYomi.getBook() == 1 ? "I" : "II") + " ";
+		String prefix = "Book " + (shemirasYomi.getBook() == 1 ? "I" : "II") + ("x".equals(shemirasYomi.getSection()) ? " " : ", " + shemirasYomi.getSection() + " ");
 		return prefix + shemirasYomi.getStart() + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : "-" + shemirasYomi.getEnd());
 	}
 
@@ -948,9 +956,66 @@ public class HebrewDateFormatter {
 		return ref;
 	}
 
-	private String formatShemirasRef(String ref) {
+	private String formatRambamHebrewName(int bookNumber) {
+		String name = LimudYomiData.RAMBAM_NAMES_HEBREW[bookNumber];
+		if (bookNumber < 4 || "סדר התפילה".equals(name)) {
+			return name;
+		}
+		return "הלכות " + name;
+	}
+
+	private String formatRambamChapter(String chapter) {
+		String[] range = chapter.split("-");
+		if (range.length == 2) {
+			return formatRambamChapterPart(range[0]) + "-" + formatRambamChapterPart(range[1]);
+		}
+		return formatRambamChapterPart(chapter);
+	}
+
+	private String formatRambamChapterPart(String chapter) {
+		String[] parts = chapter.split(":");
+		if (parts.length == 2) {
+			return formatPlainHebrewNumber(Integer.parseInt(parts[0])) + ":" + formatPlainHebrewNumber(Integer.parseInt(parts[1]));
+		}
+		return formatPlainHebrewNumber(Integer.parseInt(chapter));
+	}
+
+	private String formatShemirasKlalRef(String ref) {
 		String[] parts = ref.split("\\.");
 		return "כלל " + formatHebrewNumber(Integer.parseInt(parts[0])) + " " + (parts.length > 1 ? formatPlainHebrewToken(parts[1]) : "");
+	}
+
+	private String formatShemirasSection(String section) {
+		if ("Hakdamah".equals(section)) {
+			return "הקדמה";
+		}
+		if ("Shar Hazechira".equals(section)) {
+			return "שער הזכירה";
+		}
+		if ("Shar Hatvuna".equals(section)) {
+			return "שער התבונה";
+		}
+		if ("Shar Hatorah".equals(section)) {
+			return "שער התורה";
+		}
+		if ("Chasimas Hasefer".equals(section)) {
+			return "חתימת הספר";
+		}
+		return section;
+	}
+
+	private String formatShemirasSectionRef(String ref) {
+		if (ref.indexOf('.') >= 0) {
+			return formatShemirasKlalRef(ref);
+		}
+		return formatPlainHebrewToken(ref);
+	}
+
+	private String formatShemirasSectionRangeEnd(String start, String end) {
+		if (start.indexOf('.') >= 0 && end.indexOf('.') >= 0) {
+			return sameShemirasKlal(start, end) ? "-" + shemirasHalacha(end) : " - " + formatShemirasKlalRef(end);
+		}
+		return "-" + formatPlainHebrewToken(end);
 	}
 
 	private boolean sameShemirasKlal(String start, String end) {
@@ -972,7 +1037,11 @@ public class HebrewDateFormatter {
 		if ("Klalim".equals(token)) {
 			return "כללים";
 		}
-		return formatHebrewNumber(Integer.parseInt(token));
+		try {
+			return formatHebrewNumber(Integer.parseInt(token));
+		} catch (NumberFormatException e) {
+			return token;
+		}
 	}
 
 	private String formatPlainHebrewToken(String token) {
@@ -985,7 +1054,11 @@ public class HebrewDateFormatter {
 		if ("Klalim".equals(token)) {
 			return "כללים";
 		}
-		return formatPlainHebrewNumber(Integer.parseInt(token));
+		try {
+			return formatPlainHebrewNumber(Integer.parseInt(token));
+		} catch (NumberFormatException e) {
+			return token;
+		}
 	}
 
 	private String formatPlainHebrewNumber(int number) {

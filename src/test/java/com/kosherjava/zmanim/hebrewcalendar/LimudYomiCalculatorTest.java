@@ -29,12 +29,46 @@ public class LimudYomiCalculatorTest {
   }
 
   @Test
+  public void testRambamYomiIntroAndSpecialChapters() {
+    JewishCalendar calendar = new JewishCalendar(LocalDate.of(1984, 4, 29));
+    Assert.assertEquals(
+        "Transmission of the Oral Law 1-21", formatter.formatRambamYomi(calendar.getRambamYomi()));
+    Assert.assertEquals(
+        "מסירת תורה שבעל פה פרק א-כא", hebrewFormatter.formatRambamYomi(calendar.getRambamYomi()));
+
+    calendar = new JewishCalendar(LocalDate.of(2023, 8, 8));
+    Assert.assertEquals(
+        "The Order of Prayer 4-5", formatter.formatRambamYomi(calendar.getRambamYomi()));
+    Assert.assertEquals(
+        "סדר התפילה פרקים ד-ה", hebrewFormatter.formatRambamYomi(calendar.getRambamYomi()));
+  }
+
+  @Test
   public void testRambamYomiThreeChapters() {
     JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 7, 29));
     Assert.assertEquals(
         "Gifts to the Poor 8-10", formatter.formatRambamYomi(calendar.getRambamYomi3Chapters()));
     Assert.assertEquals(
         "הלכות מתנות עניים פרקים ח-י",
+        hebrewFormatter.formatRambamYomi(calendar.getRambamYomi3Chapters()));
+  }
+
+  @Test
+  public void testRambamYomiThreeChapterSpecialCases() {
+    JewishCalendar calendar = new JewishCalendar(LocalDate.of(1984, 4, 29));
+    Assert.assertEquals(
+        "Transmission of the Oral Law 1-45",
+        formatter.formatRambamYomi(calendar.getRambamYomi3Chapters()));
+    Assert.assertEquals(
+        "מסירת תורה שבעל פה פרקים א-מה",
+        hebrewFormatter.formatRambamYomi(calendar.getRambamYomi3Chapters()));
+
+    calendar = new JewishCalendar(LocalDate.of(2020, 9, 3));
+    Assert.assertEquals(
+        "Leavened and Unleavened Bread 8-9, Shofar, Sukkah and Lulav 1-2",
+        formatter.formatRambamYomi(calendar.getRambamYomi3Chapters()));
+    Assert.assertEquals(
+        "הלכות חמץ ומצה פרקים ח-ט, הלכות שופר וסוכה ולולב פרקים א-ב",
         hebrewFormatter.formatRambamYomi(calendar.getRambamYomi3Chapters()));
   }
 
@@ -73,6 +107,17 @@ public class LimudYomiCalculatorTest {
         formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
     Assert.assertEquals(
         "כלל ט׳ ח-י",
+        hebrewFormatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
+  }
+
+  @Test
+  public void testShemirasHaLashonSectionYomi() {
+    JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 10, 3));
+    Assert.assertEquals(
+        "Book I, Hakdamah 1-2",
+        formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
+    Assert.assertEquals(
+        "הקדמה א-ב",
         hebrewFormatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
   }
 }
