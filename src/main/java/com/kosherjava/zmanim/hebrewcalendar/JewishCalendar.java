@@ -818,6 +818,24 @@ public class JewishCalendar extends JewishDate {
 	}
 	
 	/**
+	 * Returns if <em>Havdalah</em> is recited at the conclusion of the current day if the following day is not {@link
+	 * #isAssurBemelacha() <em>assur bemelacha</em>} (meaning that a Yom Tov night that falls on a <em><motzais Shabbos/em> and has
+	 * <em>havdalah</em> in <em>kiddush</em> will not return true.
+	 *
+	 * @return {@code true} if <em>Havdalah</em> is recited at the conclusion of the current day when the night is not <em>assur
+	 * bemelacha</em>.
+	 * @see #isAssurBemelacha()
+	 */
+	public boolean isHavdalahRecited() {
+		if (!isAssurBemelacha()) {
+			return false;
+		}
+		JewishCalendar tomorrow = (JewishCalendar) clone();
+		tomorrow.plusDays(1);
+		return !tomorrow.isAssurBemelacha();
+	}
+	
+	/**
 	 * Returns true if the day has candle lighting. This will return true on <em>Erev Shabbos</em>, <em>Erev Yom Tov</em>, the
 	 * first day of <em>Rosh Hashana</em> and the first days of <em>Yom Tov</em> out of Israel. It is identical
 	 * to calling {@link #isTomorrowShabbosOrYomTov()}.
