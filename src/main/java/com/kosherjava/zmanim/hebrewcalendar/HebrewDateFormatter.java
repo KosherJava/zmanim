@@ -944,8 +944,13 @@ public class HebrewDateFormatter {
 			return formatShemirasSection(shemirasYomi.getSection()) + " " + formatShemirasSectionRef(shemirasYomi.getStart())
 					+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : formatShemirasSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
 		}
-		String prefix = "Book " + (shemirasYomi.getBook() == 1 ? "I" : "II") + ("x".equals(shemirasYomi.getSection()) ? " " : ", " + shemirasYomi.getSection() + " ");
-		return prefix + shemirasYomi.getStart() + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : "-" + shemirasYomi.getEnd());
+		if ("x".equals(shemirasYomi.getSection())) {
+			return formatShemirasEnglishKlalRef(shemirasYomi.getStart()) + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
+					: (sameShemirasKlal(shemirasYomi.getStart(), shemirasYomi.getEnd()) ? "-" + shemirasHalachaEnglish(shemirasYomi.getEnd())
+							: " - " + formatShemirasEnglishKlalRef(shemirasYomi.getEnd())));
+		}
+		return "Shemirat HaLashon, " + shemirasYomi.getSection() + " " + shemirasYomi.getStart()
+				+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : "-" + shemirasYomi.getEnd());
 	}
 
 	private String formatKitzurRef(String ref) {
@@ -983,6 +988,11 @@ public class HebrewDateFormatter {
 	private String formatShemirasKlalRef(String ref) {
 		String[] parts = ref.split("\\.");
 		return "כלל " + formatHebrewNumber(Integer.parseInt(parts[0])) + " " + (parts.length > 1 ? formatPlainHebrewToken(parts[1]) : "");
+	}
+
+	private String formatShemirasEnglishKlalRef(String ref) {
+		String[] parts = ref.split("\\.");
+		return "Klal " + parts[0] + " Halacha " + (parts.length > 1 ? parts[1] : "");
 	}
 
 	private String formatShemirasSection(String section) {
@@ -1025,6 +1035,11 @@ public class HebrewDateFormatter {
 	private String shemirasHalacha(String ref) {
 		String[] parts = ref.split("\\.");
 		return parts.length > 1 ? formatPlainHebrewToken(parts[1]) : "";
+	}
+
+	private String shemirasHalachaEnglish(String ref) {
+		String[] parts = ref.split("\\.");
+		return parts.length > 1 ? parts[1] : "";
 	}
 
 	private String formatHebrewToken(String token) {

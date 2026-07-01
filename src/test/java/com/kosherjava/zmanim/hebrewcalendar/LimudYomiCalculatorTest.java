@@ -103,7 +103,7 @@ public class LimudYomiCalculatorTest {
   public void testShemirasHaLashonYomi() {
     JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 6, 26));
     Assert.assertEquals(
-        "Book II 9.8-9.10",
+        "Klal 9 Halacha 8-10",
         formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
     Assert.assertEquals(
         "כלל ט׳ ח-י",
@@ -114,7 +114,7 @@ public class LimudYomiCalculatorTest {
   public void testShemirasHaLashonSectionYomi() {
     JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 10, 3));
     Assert.assertEquals(
-        "Book I, Hakdamah 1-2",
+        "Shemirat HaLashon, Hakdamah 1-2",
         formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
     Assert.assertEquals(
         "הקדמה א-ב",
