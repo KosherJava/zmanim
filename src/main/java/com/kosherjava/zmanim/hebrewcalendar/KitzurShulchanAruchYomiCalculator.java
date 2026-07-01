@@ -4,13 +4,30 @@
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
+ * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
-/** Calculates the annual Hebrew-date Kitzur Shulchan Aruch Yomi schedule. */
+/**
+ * Calculates the annual Hebrew-date Kitzur Shulchan Aruch Yomi schedule. The schedule repeats every
+ * Hebrew year. It returns {@code null} for dates that do not have a regular table entry, such as 30
+ * Cheshvan and 30 Adar I.
+ */
 public class KitzurShulchanAruchYomiCalculator {
   public KitzurShulchanAruchYomiCalculator() {}
 
+  /**
+   * Returns the Kitzur Shulchan Aruch Yomi reading for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the Kitzur Shulchan Aruch Yomi reading, or {@code null} on days without a reading
+   */
   public static KitzurShulchanAruchYomi getKitzurShulchanAruchYomi(JewishCalendar calendar) {
     int month = calendar.getJewishMonth();
     int day = calendar.getJewishDayOfMonth();

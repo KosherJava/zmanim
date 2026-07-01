@@ -4,6 +4,13 @@
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
+ * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
@@ -11,7 +18,8 @@ import java.time.LocalDate;
 
 /**
  * Calculates Tanach Yomi according to the annual Masoretic seder cycle that began on October 26,
- * 1948 / 23 Tishrei 5709.
+ * 1948 / 23 Tishrei 5709. The cycle starts each year on 23 Tishrei and skips Shabbos and selected
+ * Jewish holidays. It returns {@code null} on skipped days.
  */
 public class TanachYomiCalculator {
   private static final LocalDate START = LocalDate.of(1948, 10, 26);
@@ -69,6 +77,13 @@ public class TanachYomiCalculator {
 
   public TanachYomiCalculator() {}
 
+  /**
+   * Returns the Tanach Yomi seder for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the Tanach Yomi reading, or {@code null} on days without a reading
+   * @throws IllegalArgumentException if the date is before October 26, 1948, the start of the cycle
+   */
   public static TanachYomi getTanachYomi(JewishCalendar calendar) {
     if (calendar.getLocalDate().isBefore(START)) {
       throw new IllegalArgumentException(

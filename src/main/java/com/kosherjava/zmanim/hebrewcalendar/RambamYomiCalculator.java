@@ -4,6 +4,13 @@
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
+ * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
@@ -12,7 +19,9 @@ import java.time.temporal.ChronoUnit;
 
 /**
  * Calculates the one and three chapter daily Rambam Mishneh Torah cycles that began on April 29,
- * 1984 / 27 Nisan 5744.
+ * 1984 / 27 Nisan 5744. The one chapter cycle repeats every 1,017 days and the three chapter cycle
+ * repeats every 339 days. The opening introduction sections and the published special groupings in
+ * <em>Seder Tefilos</em> and <em>Hilchos Chametz U'Matzah</em> are handled offline.
  */
 public class RambamYomiCalculator {
   private static final LocalDate START = LocalDate.of(1984, 4, 29);
@@ -26,10 +35,24 @@ public class RambamYomiCalculator {
 
   public RambamYomiCalculator() {}
 
+  /**
+   * Returns the one chapter daily Rambam reading for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the one chapter Rambam Yomi reading
+   * @throws IllegalArgumentException if the date is before April 29, 1984, the start of the cycle
+   */
   public static RambamYomi getRambamYomi(JewishCalendar calendar) {
     return getRambamYomi1Chapter(calendar);
   }
 
+  /**
+   * Returns the one chapter daily Rambam reading for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the one chapter Rambam Yomi reading
+   * @throws IllegalArgumentException if the date is before April 29, 1984, the start of the cycle
+   */
   public static RambamYomi getRambamYomi1Chapter(JewishCalendar calendar) {
     int d = day(calendar, ONE_CHAPTER_CYCLE);
     RambamYomi reading = chapterAt(d, LimudYomiData.RAMBAM_CHAPTERS);
@@ -40,6 +63,13 @@ public class RambamYomiCalculator {
     return reading;
   }
 
+  /**
+   * Returns the three chapter daily Rambam reading for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the three chapter Rambam Yomi reading, collapsed by adjacent Mishneh Torah section
+   * @throws IllegalArgumentException if the date is before April 29, 1984, the start of the cycle
+   */
   public static RambamYomi getRambamYomi3Chapters(JewishCalendar calendar) {
     int d = day(calendar, ONE_CHAPTER_CYCLE / 3) * 3;
     int[] chapters = LimudYomiData.RAMBAM_CHAPTERS.clone();

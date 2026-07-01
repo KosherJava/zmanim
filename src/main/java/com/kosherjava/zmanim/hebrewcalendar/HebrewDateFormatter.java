@@ -831,14 +831,14 @@ public class HebrewDateFormatter {
 	 */
 	public String formatMishnaYomi(MishnaYomi mishnaYomi) {
 		String start = (hebrewFormat ? mishnaYomi.getMasechta() + " " + formatHebrewNumber(mishnaYomi.getStartChapter())
-				+ ": " + formatPlainHebrewNumber(mishnaYomi.getStartMishna()) : mishnaYomi.getMasechtaTransliterated() + " "
+				+ ": " + formatMishnaNumber(mishnaYomi.getStartMishna()) : mishnaYomi.getMasechtaTransliterated() + " "
 				+ mishnaYomi.getStartChapter() + ":" + mishnaYomi.getStartMishna());
 		if (mishnaYomi.getStartMasechtaNumber() == mishnaYomi.getEndMasechtaNumber()
 				&& mishnaYomi.getStartChapter() == mishnaYomi.getEndChapter()) {
-			return start + "-" + (hebrewFormat ? formatPlainHebrewNumber(mishnaYomi.getEndMishna()) : mishnaYomi.getEndMishna());
+			return start + "-" + (hebrewFormat ? formatMishnaNumber(mishnaYomi.getEndMishna()) : mishnaYomi.getEndMishna());
 		}
 		return start + "-" + (hebrewFormat ? mishnaYomi.getEndMasechta() + " " + formatHebrewNumber(mishnaYomi.getEndChapter())
-				+ ": " + formatPlainHebrewNumber(mishnaYomi.getEndMishna()) : mishnaYomi.getEndMasechtaTransliterated() + " "
+				+ ": " + formatMishnaNumber(mishnaYomi.getEndMishna()) : mishnaYomi.getEndMasechtaTransliterated() + " "
 				+ mishnaYomi.getEndChapter() + ":" + mishnaYomi.getEndMishna());
 	}
 
@@ -1078,6 +1078,10 @@ public class HebrewDateFormatter {
 
 	private String formatPlainHebrewNumber(int number) {
 		return formatHebrewNumber(number).replace(GERESH, "").replace(GERSHAYIM, "");
+	}
+
+	private String formatMishnaNumber(int number) {
+		return formatHebrewNumber(number).replace(GERESH, "");
 	}
 
 	/**

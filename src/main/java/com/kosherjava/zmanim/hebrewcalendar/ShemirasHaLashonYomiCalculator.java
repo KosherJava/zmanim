@@ -4,12 +4,24 @@
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
+ * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
 import java.time.LocalDate;
 
-/** Calculates the annual Hebrew-date Shemiras HaLashon Yomi schedule. */
+/**
+ * Calculates the annual Hebrew-date Shemiras HaLashon Yomi schedule. The cycle follows the
+ * published calendar-date schedule for Sefer Shemiras HaLashon and has separate common-year and
+ * leap-year date columns. Short Cheshvan and Kislev years combine the missing 30th day with the
+ * 29th day.
+ */
 public class ShemirasHaLashonYomiCalculator {
   private static final LocalDate START = LocalDate.of(1876, 2, 16);
   private static final String[][] SCHEDULE = {
@@ -402,6 +414,14 @@ public class ShemirasHaLashonYomiCalculator {
 
   public ShemirasHaLashonYomiCalculator() {}
 
+  /**
+   * Returns the Shemiras HaLashon Yomi reading for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the Shemiras HaLashon Yomi reading
+   * @throws IllegalArgumentException if the date is before February 16, 1876, the start of the
+   *     cycle
+   */
   public static ShemirasHaLashonYomi getShemirasHaLashonYomi(JewishCalendar calendar) {
     if (calendar.getLocalDate().isBefore(START)) {
       throw new IllegalArgumentException(

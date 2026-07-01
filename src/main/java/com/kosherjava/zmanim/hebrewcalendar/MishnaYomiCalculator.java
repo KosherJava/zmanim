@@ -4,6 +4,13 @@
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; version 2.1 of the License.
+ *
+ * This library is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA,
+ * or connect to: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  */
 package com.kosherjava.zmanim.hebrewcalendar;
 
@@ -11,7 +18,9 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Calculates Mishna Yomi, the two-mishnayos-a-day cycle that began on May 20, 1947 / 1 Sivan 5707.
+ * Calculates <em>Mishna Yomi</em>, the cycle of learning two mishnayos a day. The cycle began on
+ * May 20, 1947 / 1 Sivan 5707 and repeats every 2,096 days. The schedule is calculated offline from
+ * the number of mishnayos in each chapter of Shisha Sidrei Mishna.
  */
 public class MishnaYomiCalculator {
   private static final LocalDate START = LocalDate.of(1947, 5, 20);
@@ -19,6 +28,13 @@ public class MishnaYomiCalculator {
 
   public MishnaYomiCalculator() {}
 
+  /**
+   * Returns the Mishna Yomi for the date that the calendar is set to.
+   *
+   * @param calendar the calendar set to the date to calculate
+   * @return the Mishna Yomi reading
+   * @throws IllegalArgumentException if the date is before May 20, 1947, the start of the cycle
+   */
   public static MishnaYomi getMishnaYomi(JewishCalendar calendar) {
     LocalDate date = calendar.getLocalDate();
     if (date.isBefore(START)) {

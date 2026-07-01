@@ -21,6 +21,14 @@ public class LimudYomiCalculatorTest {
   }
 
   @Test
+  public void testMishnaYomiHebrewFifteen() {
+    JewishCalendar calendar = new JewishCalendar(LocalDate.of(2020, 10, 18));
+    Assert.assertEquals("Kelim 17:14-15", formatter.formatMishnaYomi(calendar.getMishnaYomi()));
+    Assert.assertEquals(
+        "כלים י״ז: י״ד-ט״ו", hebrewFormatter.formatMishnaYomi(calendar.getMishnaYomi()));
+  }
+
+  @Test
   public void testRambamYomiOneChapter() {
     JewishCalendar calendar = new JewishCalendar(LocalDate.of(2020, 11, 11));
     Assert.assertEquals("Sabbath 17", formatter.formatRambamYomi(calendar.getRambamYomi()));
