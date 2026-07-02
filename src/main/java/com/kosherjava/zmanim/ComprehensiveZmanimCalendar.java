@@ -3958,7 +3958,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 			double chatzosHayomSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHayom, getGeoLocation());
 			double chatzosHalaylaSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHalayla, getGeoLocation());
 			double sunriseElevation = getAstronomicalCalculator().getSolarRadius() + getAstronomicalCalculator().getRefraction();
-			if(chatzosHayomSolarElevation < 16.1 && chatzosHalaylaSolarElevation < 0) { // Polar winter in either hemisphere above 16.1 degrees
+			if(getAlos16Point1Degrees() == null && getSunriseBasedOnElevationSetting() == null) { // Polar winter in either hemisphere no alos 16.1 or sunrise
 				return chatzosHayom; // the "sunrise" as the closest to the horizon
 			} else if(chatzosHayomSolarElevation > (0 - sunriseElevation) && chatzosHalaylaSolarElevation > (0 - sunriseElevation)) { // Polar summer when both are above the horizon
 				return chatzosHalayla;
