@@ -17,6 +17,8 @@ package com.kosherjava.zmanim;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+
 import com.kosherjava.zmanim.util.AstronomicalCalculator;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
@@ -3922,21 +3924,32 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getChatzosHalayla()} in the Polar summer and when it is at its highest position in the Polar winter that occurs at {@link
 	 * #getChatzosHayom()}. Rabbi Dovid Heber the author of the <a href="https://hebrewbooks.org/53000">שערי זמנים</a> who <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=53000&st=&pgnum=111">discusses the Moadim Uzmanim's opinion</a> clarified to me
-	 * that in the Polar winter this really only applies when there is no <em>alos hashachar</em>, something not very common unless
-	 * you are extremely far north or south. It should be noted that in the <span>מועדים וזמנים</span> linked abovepublished in 1961,
-	 * Rav Moshe Sternbuch mentions that [<span lang="he"
-	 * >ולתפלה, היום מתהלק, עד י״ב שעות שחרית,  ומאז מנחה, ומעריב מתפלל סמוך ללילה כרבי יהודה כנל״ד ...</span>]. This comment (in () in the original, and
-	 * [] in the new edition published in 2023) was not brought down in the <span>תשובות והנהגות</span> vol. 1 that was published in
-	 * 1977. Since it is not clear to me if this constitutes a retraction, these calculations for davening times mentioned in the
-	 * Moadim Uzmanim are not currently part of the code.
+	 * that in the Polar winter this really only applies when there is no <em>alos hashachar</em>. The lack of <em>alos
+	 * hashachar</em> only occurs in Antarctica and in uninhabited extreme northern regions. This means almost every northern
+	 * inhabited location has an <em>alos hashachar</em> and "day" even on December 21st. This method considers <em>alos</em> to be
+	 * {@link #getAlos16Point1Degrees()}.
+	 * <p> It should be noted that in the <span lang="he">מועדים וזמנים</span> linked above that was published in 1961, Rav Moshe
+	 * Sternbuch mentions that [<span lang="he">ולתפלה, היום מתהלק, עד י״ב שעות שחרית,  ומאז מנחה, ומעריב מתפלל סמוך ללילה כרבי יהודה כנל״ד ...</span>].
+	 * This comment (in () in the original, and [] in the new edition published in 2023) was not brought down in the <span lang="he"
+	 * >תשובות והנהגות</span> vol. 1 that was published in 1977 nor in vol. 5. published in 2009. Since it is not clear to me if this
+	 * constitutes a retraction, the calculations for the start of <em>mincha</em> mentioned in the Moadim Uzmanim was omitted. This
+	 * is 12 hours after the start of the day (either {@link #getChatzosHalayla()}  in the Polar summer, or {@link #getChatzosHayom()}
+	 * in the Polar winter. {@link #getPolarPlagHaminchaTeshuvosVehanhagos()} was included and is the start of the time that
+	 * <em>maariv</em> can be recited (until the end of the Polar day).
+	 * was omitted.
+	 * 
+	 *  <em>plag hamincha</em>
+	 * were not implemented. For those* who want the zmanim, the end of <em>Shacharis</em> is essentially 12 hours after the start of the day (either {@link
+	 * #getChatzosHalayla()}  in the Polar summer, or {@link #getChatzosHayom()} in the Polar winter, while mincha will start at that
+	 * point and can in daven mincha until night (or plag).
 	 * <p>FIXME:
 	 * <ul>
-	 *   <li>Discuss This with Rabbi Heber in detail.</li>
-	 *   <li>Account for refraction, not just 0</li>
-	 *   <li>Account for <em>alos</em> not just rise and set in the winter. Define what alos (it may vary)</li>
-	 *   <li>Deal with logic for day with either a rise or a set</li>
+	 *   <li>Attemt to clarify the discrepancy.</li>
+	 *   <li>Research if an earlier alos such as 18° should be used</li>
+	 *   <li>Consider logic for day with EITHER an <em>alos</em> or a sunset</li>
 	 * </ul>
 	 * @return the time of the Jewish calendar transition to the next day in Polar regions according to Rav Moshe Sternbuch.
+	 * @see #getPolarPlagHaminchaTeshuvosVehanhagos()
 	 */
 	public Instant getPolarStartOfDayTeshuvosVehanhagos() {
 		if(getSunriseBasedOnElevationSetting() == null && getSunsetBasedOnElevationSetting() == null) {
@@ -3944,13 +3957,37 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 			Instant chatzosHalayla = getChatzosHalayla();
 			double chatzosHayomSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHayom, getGeoLocation());
 			double chatzosHalaylaSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHalayla, getGeoLocation());
-			if(chatzosHayomSolarElevation < 0 && chatzosHalaylaSolarElevation < 0) { // Polar winter in either hemisphere
+			double sunriseElevation = getAstronomicalCalculator().getSolarRadius() + getAstronomicalCalculator().getRefraction();
+			if(chatzosHayomSolarElevation < 16.1 && chatzosHalaylaSolarElevation < 0) { // Polar winter in either hemisphere above 16.1 degrees
 				return chatzosHayom; // the "sunrise" as the closest to the horizon
-			} else if(chatzosHayomSolarElevation > 0 && chatzosHalaylaSolarElevation > 0) { // Polar summer when both are above the horizon
+			} else if(chatzosHayomSolarElevation > (0 - sunriseElevation) && chatzosHalaylaSolarElevation > (0 - sunriseElevation)) { // Polar summer when both are above the horizon
 				return chatzosHalayla;
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * In Polar regions during the period where the sun is above the horizon 24-hours a day, <a href=
+	 * "https://en.wikipedia.org/wiki/Moshe_Sternbuch">Rav Moshe Sternbuch</a> in <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=19963&st=&pgnum=316">מועדים וזמנים ח״ב ס׳ קנ״ה הע׳ א׳</a> (<span lang="he">ח״ד ס׳ ת״א
+	 * הע׳ א׳</span> in the new edition) mentions the concept of zmanim based on his {@link #getPolarStartOfDayTeshuvosVehanhagos()}.
+	 * This calculates {@link #getPlagHamincha(Instant, Instant, boolean)} as 10.75 <em>sha'os zmaniyos</em> starting 24 hours prior
+	 * to the current start/end of the current day. This will be very close to 2.5 clock hours before the start/end of the day.
+	 * @return <em>plag hamincha</em> as 2.5 hours prior to the start of the next day.
+	 * 
+	 * @see #getPolarStartOfDayTeshuvosVehanhagos() for more details on this opinion.
+	 * @see #getPlagHamincha(Instant, Instant, boolean)
+	 */
+	public Instant getPolarPlagHaminchaTeshuvosVehanhagos() {
+		Instant polarStartOfDay = getPolarStartOfDayTeshuvosVehanhagos();
+		if(polarStartOfDay == null) {
+			return null;
+		} else {
+			Instant yesterday = polarStartOfDay.minus(1, ChronoUnit.DAYS);
+			return getPlagHamincha(yesterday, polarStartOfDay, true);
+		}
+		
 	}
 	
 	/**
