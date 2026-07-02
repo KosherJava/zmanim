@@ -111,10 +111,10 @@ public class LimudYomiCalculatorTest {
   public void testShemirasHaLashonYomi() {
     JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 6, 26));
     Assert.assertEquals(
-        "Klal 9 Halacha 8-10",
+        "Shemirat HaLashon, Part 2, Perek 9 Halacha 8-10",
         formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
     Assert.assertEquals(
-        "כלל ט׳ ח-י",
+        "שמירת הלשון, חלק ב׳, פרק ט׳ הלכה ח-י",
         hebrewFormatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
   }
 
@@ -122,10 +122,21 @@ public class LimudYomiCalculatorTest {
   public void testShemirasHaLashonSectionYomi() {
     JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 10, 3));
     Assert.assertEquals(
-        "Shemirat HaLashon, Hakdamah 1-2",
+        "Shemirat HaLashon, Part 1, Hakdamah, 1-2",
         formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
     Assert.assertEquals(
-        "הקדמה א-ב",
+        "שמירת הלשון, חלק א׳, הקדמה, א-ב",
+        hebrewFormatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
+  }
+
+  @Test
+  public void testShemirasHaLashonShaarYomi() {
+    JewishCalendar calendar = new JewishCalendar(LocalDate.of(2024, 10, 13));
+    Assert.assertEquals(
+        "Shemirat HaLashon, Part 1, Shaar HaZechirah, Perek 1 Halacha 1-4",
+        formatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
+    Assert.assertEquals(
+        "שמירת הלשון, חלק א׳, שער הזכירה, פרק א׳ הלכה א-ד",
         hebrewFormatter.formatShemirasHaLashonYomi(calendar.getShemirasHaLashonYomi()));
   }
 }

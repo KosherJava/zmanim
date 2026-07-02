@@ -936,21 +936,19 @@ public class HebrewDateFormatter {
 			return "";
 		}
 		if (hebrewFormat) {
-			if ("x".equals(shemirasYomi.getSection())) {
-				return formatShemirasKlalRef(shemirasYomi.getStart()) + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
-						: (sameShemirasKlal(shemirasYomi.getStart(), shemirasYomi.getEnd()) ? "-" + shemirasHalacha(shemirasYomi.getEnd())
-								: " - " + formatShemirasKlalRef(shemirasYomi.getEnd())));
-			}
-			return formatShemirasSection(shemirasYomi.getSection()) + " " + formatShemirasSectionRef(shemirasYomi.getStart())
-					+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : formatShemirasSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
+			String section = formatShemirasSection(shemirasYomi.getSection());
+			return "שמירת הלשון, חלק " + formatHebrewNumber(shemirasYomi.getBook())
+					+ (section.length() == 0 ? ", " : ", " + section + ", ")
+					+ formatShemirasSectionRef(shemirasYomi.getStart())
+					+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
+							: formatShemirasSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
 		}
-		if ("x".equals(shemirasYomi.getSection())) {
-			return formatShemirasEnglishKlalRef(shemirasYomi.getStart()) + (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
-					: (sameShemirasKlal(shemirasYomi.getStart(), shemirasYomi.getEnd()) ? "-" + shemirasHalachaEnglish(shemirasYomi.getEnd())
-							: " - " + formatShemirasEnglishKlalRef(shemirasYomi.getEnd())));
-		}
-		return "Shemirat HaLashon, " + shemirasYomi.getSection() + " " + shemirasYomi.getStart()
-				+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? "" : "-" + shemirasYomi.getEnd());
+		String section = formatShemirasEnglishSection(shemirasYomi.getSection());
+		return "Shemirat HaLashon, Part " + shemirasYomi.getBook()
+				+ (section.length() == 0 ? ", " : ", " + section + ", ")
+				+ formatShemirasEnglishSectionRef(shemirasYomi.getStart())
+				+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
+						: formatShemirasEnglishSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
 	}
 
 	private String formatKitzurRef(String ref) {
@@ -987,12 +985,34 @@ public class HebrewDateFormatter {
 
 	private String formatShemirasKlalRef(String ref) {
 		String[] parts = ref.split("\\.");
-		return "כלל " + formatHebrewNumber(Integer.parseInt(parts[0])) + " " + (parts.length > 1 ? formatPlainHebrewToken(parts[1]) : "");
+		return "פרק " + formatHebrewNumber(Integer.parseInt(parts[0])) + (parts.length > 1 ? " הלכה " + formatPlainHebrewToken(parts[1]) : "");
 	}
 
 	private String formatShemirasEnglishKlalRef(String ref) {
 		String[] parts = ref.split("\\.");
-		return "Klal " + parts[0] + " Halacha " + (parts.length > 1 ? parts[1] : "");
+		return "Perek " + parts[0] + (parts.length > 1 ? " Halacha " + parts[1] : "");
+	}
+
+	private String formatShemirasEnglishSection(String section) {
+		if ("Hakdamah".equals(section)) {
+			return "Hakdamah";
+		}
+		if ("Shar Hazechira".equals(section)) {
+			return "Shaar HaZechirah";
+		}
+		if ("Shar Hatvuna".equals(section)) {
+			return "Shaar HaTevunah";
+		}
+		if ("Shar Hatorah".equals(section)) {
+			return "Shaar HaTorah";
+		}
+		if ("Chasimas Hasefer".equals(section)) {
+			return "Chasima";
+		}
+		if ("x".equals(section)) {
+			return "";
+		}
+		return section;
 	}
 
 	private String formatShemirasSection(String section) {
@@ -1009,7 +1029,10 @@ public class HebrewDateFormatter {
 			return "שער התורה";
 		}
 		if ("Chasimas Hasefer".equals(section)) {
-			return "חתימת הספר";
+			return "חתימה";
+		}
+		if ("x".equals(section)) {
+			return "";
 		}
 		return section;
 	}
@@ -1021,11 +1044,25 @@ public class HebrewDateFormatter {
 		return formatPlainHebrewToken(ref);
 	}
 
+	private String formatShemirasEnglishSectionRef(String ref) {
+		if (ref.indexOf('.') >= 0) {
+			return formatShemirasEnglishKlalRef(ref);
+		}
+		return ref;
+	}
+
 	private String formatShemirasSectionRangeEnd(String start, String end) {
 		if (start.indexOf('.') >= 0 && end.indexOf('.') >= 0) {
 			return sameShemirasKlal(start, end) ? "-" + shemirasHalacha(end) : " - " + formatShemirasKlalRef(end);
 		}
 		return "-" + formatPlainHebrewToken(end);
+	}
+
+	private String formatShemirasEnglishSectionRangeEnd(String start, String end) {
+		if (start.indexOf('.') >= 0 && end.indexOf('.') >= 0) {
+			return sameShemirasKlal(start, end) ? "-" + shemirasHalachaEnglish(end) : " - " + formatShemirasEnglishKlalRef(end);
+		}
+		return "-" + end;
 	}
 
 	private boolean sameShemirasKlal(String start, String end) {
