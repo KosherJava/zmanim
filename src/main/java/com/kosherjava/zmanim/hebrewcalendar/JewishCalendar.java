@@ -819,8 +819,8 @@ public class JewishCalendar extends JewishDate {
 	
 	/**
 	 * Returns if <em>melacha</em> is permissible at night at the end of a day that was {@link #isAssurBemelacha()} (i.e. that the
-	 * following day is not <em>assur bemelacha</em>). If it is a case of a <em>Yom Tov</em> night that falls on a <em><motzais
-	 * Shabbos/em> that has <em>havdalah</em> in <em>kiddush</em>, false will be returned. Don't rely on this to determine if
+	 * following day is not <em>assur bemelacha</em>). If it is a case of a <em>Yom Tov</em> night that falls on a <em>motzai
+	 * Shabbos</em> that has <em>havdalah</em> in <em>kiddush</em>, false will be returned. Don't rely on this to determine if
 	 * <em>havdalah</em> should be recited.
 	 *
 	 * @return {@code true} if <em>melacha</em> is permissible at night at the end of a day that was {@link #isAssurBemelacha()}.
