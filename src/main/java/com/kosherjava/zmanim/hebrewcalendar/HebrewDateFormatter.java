@@ -825,6 +825,303 @@ public class HebrewDateFormatter {
 	}
 
 	/**
+	 * Formats the Mishna Yomi reading.
+	 * @param mishnaYomi the Mishna Yomi to be formatted.
+	 * @return the formatted Mishna Yomi.
+	 */
+	public String formatMishnaYomi(MishnaYomi mishnaYomi) {
+		String start = (hebrewFormat ? mishnaYomi.getMasechta() + " " + formatHebrewNumber(mishnaYomi.getStartChapter())
+				+ ": " + formatMishnaNumber(mishnaYomi.getStartMishna()) : mishnaYomi.getMasechtaTransliterated() + " "
+				+ mishnaYomi.getStartChapter() + ":" + mishnaYomi.getStartMishna());
+		if (mishnaYomi.getStartMasechtaNumber() == mishnaYomi.getEndMasechtaNumber()
+				&& mishnaYomi.getStartChapter() == mishnaYomi.getEndChapter()) {
+			return start + "-" + (hebrewFormat ? formatMishnaNumber(mishnaYomi.getEndMishna()) : mishnaYomi.getEndMishna());
+		}
+		return start + "-" + (hebrewFormat ? mishnaYomi.getEndMasechta() + " " + formatHebrewNumber(mishnaYomi.getEndChapter())
+				+ ": " + formatMishnaNumber(mishnaYomi.getEndMishna()) : mishnaYomi.getEndMasechtaTransliterated() + " "
+				+ mishnaYomi.getEndChapter() + ":" + mishnaYomi.getEndMishna());
+	}
+
+	/**
+	 * Formats the daily Rambam reading.
+	 * @param rambamYomi the Rambam Yomi to be formatted.
+	 * @return the formatted Rambam Yomi.
+	 */
+	public String formatRambamYomi(RambamYomi rambamYomi) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < rambamYomi.getReadingCount(); i++) {
+			if (i > 0) {
+				sb.append(", ");
+			}
+			String start = rambamYomi.getStartChapter(i);
+			String end = rambamYomi.getEndChapter(i);
+			if (hebrewFormat) {
+				sb.append(formatRambamHebrewName(rambamYomi.getBookNumber(i)));
+				sb.append(start.equals(end) ? " פרק " : " פרקים ");
+				sb.append(formatRambamChapter(start));
+				if (!start.equals(end)) {
+					sb.append("-").append(formatRambamChapter(end));
+				}
+			} else {
+				sb.append(rambamYomi.getName(i)).append(" ").append(start);
+				if (!start.equals(end)) {
+					sb.append("-").append(end);
+				}
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Formats the daily Tehillim reading.
+	 * @param tehillimYomi the daily Tehillim to be formatted.
+	 * @return the formatted daily Tehillim.
+	 */
+	public String formatDailyTehillim(TehillimYomi tehillimYomi) {
+		if (hebrewFormat) {
+			return "תהילים " + formatHebrewNumber(tehillimYomi.getStartChapter())
+					+ (tehillimYomi.getStartChapter() == tehillimYomi.getEndChapter() ? "" : "-" + formatHebrewNumber(tehillimYomi.getEndChapter()));
+		}
+		return "Psalms " + tehillimYomi.getStartChapter()
+				+ (tehillimYomi.getStartChapter() == tehillimYomi.getEndChapter() ? "" : "-" + tehillimYomi.getEndChapter());
+	}
+
+	/**
+	 * Formats the Tanach Yomi reading.
+	 * @param tanachYomi the Tanach Yomi to be formatted.
+	 * @return the formatted Tanach Yomi.
+	 */
+	public String formatTanachYomi(TanachYomi tanachYomi) {
+		if (tanachYomi == null) {
+			return "";
+		}
+		if (hebrewFormat) {
+			String[] parts = tanachYomi.getSeder().split("\\.");
+			String seder = " ס׳ " + formatHebrewNumber(Integer.parseInt(parts[0]));
+			if (parts.length > 1) {
+				seder += " " + formatHebrewNumber(Integer.parseInt(parts[1]));
+			}
+			return tanachYomi.getHebrewBook() + seder;
+		}
+		return tanachYomi.getBook() + " Seder " + tanachYomi.getSeder();
+	}
+
+	/**
+	 * Formats the Kitzur Shulchan Aruch Yomi reading.
+	 * @param kitzurYomi the Kitzur Shulchan Aruch Yomi to be formatted.
+	 * @return the formatted Kitzur Shulchan Aruch Yomi.
+	 */
+	public String formatKitzurShulchanAruchYomi(KitzurShulchanAruchYomi kitzurYomi) {
+		if (kitzurYomi == null) {
+			return "";
+		}
+		if (kitzurYomi.getStart().equals(kitzurYomi.getEnd())) {
+			return formatKitzurRef(kitzurYomi.getStart());
+		}
+		String[] start = kitzurYomi.getStart().split(":");
+		String[] end = kitzurYomi.getEnd().split(":");
+		if (start.length > 1 && end.length > 1 && start[0].equals(end[0])) {
+			return formatKitzurRef(kitzurYomi.getStart()) + "-" + (hebrewFormat ? formatPlainHebrewToken(end[1]) : end[1]);
+		}
+		return formatKitzurRef(kitzurYomi.getStart()) + (hebrewFormat ? " - " : "-") + formatKitzurRef(kitzurYomi.getEnd());
+	}
+
+	/**
+	 * Formats the Shemiras HaLashon Yomi reading.
+	 * @param shemirasYomi the Shemiras HaLashon Yomi to be formatted.
+	 * @return the formatted Shemiras HaLashon Yomi.
+	 */
+	public String formatShemirasHaLashonYomi(ShemirasHaLashonYomi shemirasYomi) {
+		if (shemirasYomi == null) {
+			return "";
+		}
+		if (hebrewFormat) {
+			String section = formatShemirasSection(shemirasYomi.getSection());
+			return "שמירת הלשון, חלק " + formatHebrewNumber(shemirasYomi.getBook())
+					+ (section.length() == 0 ? ", " : ", " + section + ", ")
+					+ formatShemirasSectionRef(shemirasYomi.getStart())
+					+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
+							: formatShemirasSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
+		}
+		String section = formatShemirasEnglishSection(shemirasYomi.getSection());
+		return "Shemirat HaLashon, Part " + shemirasYomi.getBook()
+				+ (section.length() == 0 ? ", " : ", " + section + ", ")
+				+ formatShemirasEnglishSectionRef(shemirasYomi.getStart())
+				+ (shemirasYomi.getStart().equals(shemirasYomi.getEnd()) ? ""
+						: formatShemirasEnglishSectionRangeEnd(shemirasYomi.getStart(), shemirasYomi.getEnd()));
+	}
+
+	private String formatKitzurRef(String ref) {
+		String[] parts = ref.split(":");
+		if (hebrewFormat) {
+			return formatHebrewToken(parts[0]) + (parts.length > 1 ? ": " + formatPlainHebrewToken(parts[1]) : "");
+		}
+		return ref;
+	}
+
+	private String formatRambamHebrewName(int bookNumber) {
+		String name = LimudYomiData.RAMBAM_NAMES_HEBREW[bookNumber];
+		if (bookNumber < 4 || "סדר התפילה".equals(name)) {
+			return name;
+		}
+		return "הלכות " + name;
+	}
+
+	private String formatRambamChapter(String chapter) {
+		String[] range = chapter.split("-");
+		if (range.length == 2) {
+			return formatRambamChapterPart(range[0]) + "-" + formatRambamChapterPart(range[1]);
+		}
+		return formatRambamChapterPart(chapter);
+	}
+
+	private String formatRambamChapterPart(String chapter) {
+		String[] parts = chapter.split(":");
+		if (parts.length == 2) {
+			return formatPlainHebrewNumber(Integer.parseInt(parts[0])) + ":" + formatPlainHebrewNumber(Integer.parseInt(parts[1]));
+		}
+		return formatPlainHebrewNumber(Integer.parseInt(chapter));
+	}
+
+	private String formatShemirasKlalRef(String ref) {
+		String[] parts = ref.split("\\.");
+		return "פרק " + formatHebrewNumber(Integer.parseInt(parts[0])) + (parts.length > 1 ? " הלכה " + formatPlainHebrewToken(parts[1]) : "");
+	}
+
+	private String formatShemirasEnglishKlalRef(String ref) {
+		String[] parts = ref.split("\\.");
+		return "Perek " + parts[0] + (parts.length > 1 ? " Halacha " + parts[1] : "");
+	}
+
+	private String formatShemirasEnglishSection(String section) {
+		if ("Hakdamah".equals(section)) {
+			return "Hakdamah";
+		}
+		if ("Shar Hazechira".equals(section)) {
+			return "Shaar HaZechirah";
+		}
+		if ("Shar Hatvuna".equals(section)) {
+			return "Shaar HaTevunah";
+		}
+		if ("Shar Hatorah".equals(section)) {
+			return "Shaar HaTorah";
+		}
+		if ("Chasimas Hasefer".equals(section)) {
+			return "Chasima";
+		}
+		if ("x".equals(section)) {
+			return "";
+		}
+		return section;
+	}
+
+	private String formatShemirasSection(String section) {
+		if ("Hakdamah".equals(section)) {
+			return "הקדמה";
+		}
+		if ("Shar Hazechira".equals(section)) {
+			return "שער הזכירה";
+		}
+		if ("Shar Hatvuna".equals(section)) {
+			return "שער התבונה";
+		}
+		if ("Shar Hatorah".equals(section)) {
+			return "שער התורה";
+		}
+		if ("Chasimas Hasefer".equals(section)) {
+			return "חתימה";
+		}
+		if ("x".equals(section)) {
+			return "";
+		}
+		return section;
+	}
+
+	private String formatShemirasSectionRef(String ref) {
+		if (ref.indexOf('.') >= 0) {
+			return formatShemirasKlalRef(ref);
+		}
+		return formatPlainHebrewToken(ref);
+	}
+
+	private String formatShemirasEnglishSectionRef(String ref) {
+		if (ref.indexOf('.') >= 0) {
+			return formatShemirasEnglishKlalRef(ref);
+		}
+		return ref;
+	}
+
+	private String formatShemirasSectionRangeEnd(String start, String end) {
+		if (start.indexOf('.') >= 0 && end.indexOf('.') >= 0) {
+			return sameShemirasKlal(start, end) ? "-" + shemirasHalacha(end) : " - " + formatShemirasKlalRef(end);
+		}
+		return "-" + formatPlainHebrewToken(end);
+	}
+
+	private String formatShemirasEnglishSectionRangeEnd(String start, String end) {
+		if (start.indexOf('.') >= 0 && end.indexOf('.') >= 0) {
+			return sameShemirasKlal(start, end) ? "-" + shemirasHalachaEnglish(end) : " - " + formatShemirasEnglishKlalRef(end);
+		}
+		return "-" + end;
+	}
+
+	private boolean sameShemirasKlal(String start, String end) {
+		return start.split("\\.")[0].equals(end.split("\\.")[0]);
+	}
+
+	private String shemirasHalacha(String ref) {
+		String[] parts = ref.split("\\.");
+		return parts.length > 1 ? formatPlainHebrewToken(parts[1]) : "";
+	}
+
+	private String shemirasHalachaEnglish(String ref) {
+		String[] parts = ref.split("\\.");
+		return parts.length > 1 ? parts[1] : "";
+	}
+
+	private String formatHebrewToken(String token) {
+		if ("E".equals(token)) {
+			return "סוף";
+		}
+		if ("Shmita".equals(token)) {
+			return "שמיטה";
+		}
+		if ("Klalim".equals(token)) {
+			return "כללים";
+		}
+		try {
+			return formatHebrewNumber(Integer.parseInt(token));
+		} catch (NumberFormatException e) {
+			return token;
+		}
+	}
+
+	private String formatPlainHebrewToken(String token) {
+		if ("E".equals(token)) {
+			return "סוף";
+		}
+		if ("Shmita".equals(token)) {
+			return "שמיטה";
+		}
+		if ("Klalim".equals(token)) {
+			return "כללים";
+		}
+		try {
+			return formatPlainHebrewNumber(Integer.parseInt(token));
+		} catch (NumberFormatException e) {
+			return token;
+		}
+	}
+
+	private String formatPlainHebrewNumber(int number) {
+		return formatHebrewNumber(number).replace(GERESH, "").replace(GERSHAYIM, "");
+	}
+
+	private String formatMishnaNumber(int number) {
+		return formatHebrewNumber(number).replace(GERESH, "");
+	}
+
+	/**
 	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 to 9999.
 	 * <ul>
 	 * <li>Single digit numbers such as 3, 30 and 100 will be returned with a ׳ (<a
