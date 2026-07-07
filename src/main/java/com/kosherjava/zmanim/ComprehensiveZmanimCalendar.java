@@ -3944,7 +3944,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * point and can in daven mincha until night (or plag).
 	 * <p>FIXME:
 	 * <ul>
-	 *   <li>Attemt to clarify the discrepancy.</li>
+	 *   <li>Attempt to clarify the discrepancy.</li>
 	 *   <li>Research if an earlier alos such as 18° should be used</li>
 	 *   <li>Consider logic for day with EITHER an <em>alos</em> or a sunset</li>
 	 * </ul>
@@ -3958,7 +3958,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 			double chatzosHayomSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHayom, getGeoLocation());
 			double chatzosHalaylaSolarElevation = getAstronomicalCalculator().getSolarElevation(chatzosHalayla, getGeoLocation());
 			double sunriseElevation = getAstronomicalCalculator().getSolarRadius() + getAstronomicalCalculator().getRefraction();
-			if(getAlos16Point1Degrees() == null && getSunriseBasedOnElevationSetting() == null) { // Polar winter in either hemisphere no alos 16.1 or sunrise
+			if(chatzosHayomSolarElevation < (0 - sunriseElevation) && chatzosHalaylaSolarElevation < (0 - sunriseElevation) && // and the sun is always below the horizon
+					getAlos16Point1Degrees() == null && getSunriseBasedOnElevationSetting() == null) { // Polar winter in either hemisphere no alos 16.1 or sunrise
 				return chatzosHayom; // the "sunrise" as the closest to the horizon
 			} else if(chatzosHayomSolarElevation > (0 - sunriseElevation) && chatzosHalaylaSolarElevation > (0 - sunriseElevation)) { // Polar summer when both are above the horizon
 				return chatzosHalayla;
