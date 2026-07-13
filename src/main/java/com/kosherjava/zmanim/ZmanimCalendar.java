@@ -382,7 +382,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * A method that returns <em>chatzos halayla</em> at the <b>end of the day</b> (the last <em>zman</em> of the day
 	 * returned by the calendar, that may actually be after midnight of the day it is being calculated for). For example, if
 	 * calculating it for the date of <em>Erev Pesach</em>, the calculation will be for <em>Lail Pesach</em> to allow you to use the
-	 * <em>zman</em> as <em>sof zman achilas chametz</em>. {@link #getSolarMidnight() Astronomical <em>chatzos halayla</em>} will be
+	 * <em>zman</em> as <em>sof zman achilas afikoman</em>. {@link #getSolarMidnight() Astronomical <em>chatzos halayla</em>} will be
 	 * returned if the {@link com.kosherjava.zmanim.util.AstronomicalCalculator calculator} class used supports it and {@link
 	 * isUseAstronomicalChatzos() isUseAstronomicalChatzos()} is set to <em>true</em>. Otherwise the {@link #getChatzos(Instant,
 	 * Instant) halfway point} between sunset and the following day's sunrise, if it does not support it, or it is not configured to
