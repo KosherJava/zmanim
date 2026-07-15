@@ -111,6 +111,21 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!-- The default patterns plus UT_* so the existing UT_ prefixed unit tests are also run. -->
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
+                        <include>**/*TestCase.java</include>
+                        <include>**/UT_*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <distributionManagement>
