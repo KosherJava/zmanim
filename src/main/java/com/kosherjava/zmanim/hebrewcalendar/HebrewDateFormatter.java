@@ -562,7 +562,7 @@ public class HebrewDateFormatter {
 	 * @see #getTransliteratedMonthList()
 	 */
 	public void setTransliteratedMonthList(String[] transliteratedMonths) {
-		if(transliteratedHolidays.length !=14) {
+		if(transliteratedMonths.length !=14) {
 			throw new IllegalArgumentException("The transliterated month array must have a length of 14.");
 		}
 		this.transliteratedMonths = transliteratedMonths;
