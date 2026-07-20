@@ -79,41 +79,74 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	}
 
 	/**
-	 * The commonly used average earth radius of 6371.0088 KM (the IUGG mean radius R1 = (2a + b) / 3 of the WGS-84
-	 * ellipsoid). At this time, this only affects the elevation adjustment, not the underlying solar position
-	 * calculations.
+	 * The refraction coefficient used in dip calculations. The default value of 0.17 represents standard atmospheric
+	 * conditions. This affects the effective Earth radius used in the latitude-aware elevation adjustment:
+	 * R_eff = R / (1 - k) where k is the refraction coefficient. With k=0.17, the effective radius is increased by
+	 * approximately 20.5%, allowing observers to see farther than pure geometric calculations predict.
 	 *
-	 * @see #getEarthRadius()
-	 * @see #setEarthRadius(double)
+	 * <p>Reference: <a href="https://aty.sdsu.edu/explain/atmos_refr/dip.html">Atmospheric Refraction - Dip</a></p>
+	 *
+	 * @see #getRefractionCoefficient()
+	 * @see #setRefractionCoefficient(double)
+	 * @see #getElevationAdjustment(double, double, double)
 	 */
-	private double earthRadius = 6371.0088; // in KM (IUGG mean radius R1 = (2a + b) / 3, WGS-84)
-	
+	private double refractionCoefficient = 0.17;
+
 	/**
-	 * Default constructor using the default {@link #refraction refraction}, {@link #solarRadius solar radius} and
-	 * {@link #earthRadius earth radius}.
+	 * WGS84 ellipsoid semi-major (equatorial) radius in km.
+	 * <p>Reference: NGA Technical Report 8350.2, WGS84 Definition and Relationships.</p>
+	 *
+	 * @see #getElevationAdjustment(double, double, double)
+	 */
+	private static final double WGS84_EQUATORIAL_RADIUS = 6378.137; // km
+
+	/**
+	 * WGS84 ellipsoid semi-minor (polar) radius in km.
+	 * <p>Reference: NGA Technical Report 8350.2, WGS84 Definition and Relationships.</p>
+	 *
+	 * @see #getElevationAdjustment(double, double, double)
+	 */
+	private static final double WGS84_POLAR_RADIUS = 6356.752314245; // km
+
+	/**
+	 * Default constructor using the default {@link #refraction refraction} and {@link #solarRadius solar radius}.
 	 */
 	public AstronomicalCalculator() {
 		// keep the defaults for now. 
 	}
 
 	/**
-	 * A method that returns the earth radius in KM. The value currently defaults to the commonly used average earth
-	 * radius of 6371.0088 KM (the IUGG mean radius R1 = (2a + b) / 3 of the WGS-84 ellipsoid) if not set. At this time,
-	 * this only affects the elevation adjustment, not the underlying solar position calculations.
+	 * Returns the refraction coefficient used for dip calculations in the latitude-aware elevation adjustment methods.
 	 *
-	 * @return the earth radius in KM.
+	 * @return the refraction coefficient (default 0.17 for standard atmosphere)
+	 * @see #setRefractionCoefficient(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
-	public double getEarthRadius() {
-		return earthRadius;
+	public double getRefractionCoefficient() {
+		return refractionCoefficient;
 	}
 
 	/**
-	 * A method that allows setting the earth's radius.
-	 * 
-	 * @param earthRadius the earthRadius to set in KM
+	 * Sets the refraction coefficient used for dip calculations. The standard value is 0.17 for typical atmospheric
+	 * conditions. This affects the effective Earth radius used in {@link #getElevationAdjustment(double, double)} and
+	 * {@link #getElevationAdjustment(double, double, double)}: R_eff = R / (1 - k) where k is this coefficient.
+	 *
+	 * <p>Typical range is 0.13–0.17 at sea level; 0.17 represents standard terrestrial conditions. Values
+	 * approaching 1 represent ducting conditions where this simple formula breaks down.</p>
+	 *
+	 * <p>Reference: <a href="https://aty.sdsu.edu/explain/atmos_refr/dip.html">Atmospheric Refraction - Dip</a></p>
+	 *
+	 * @param refractionCoefficient the refraction coefficient; must be in [0, 1)
+	 * @throws IllegalArgumentException if the value is NaN, Infinite, negative, or &ge; 1
+	 * @see #getRefractionCoefficient()
 	 */
-	public void setEarthRadius(double earthRadius) {
-		this.earthRadius = earthRadius;
+	public void setRefractionCoefficient(double refractionCoefficient) {
+		if (Double.isNaN(refractionCoefficient) || Double.isInfinite(refractionCoefficient)
+				|| refractionCoefficient < 0.0 || refractionCoefficient >= 1.0) {
+			throw new IllegalArgumentException("Refraction coefficient must be in [0, 1) (was "
+					+ refractionCoefficient + "). Values >= 1 represent ducting conditions where the simple formula breaks down.");
+		}
+		this.refractionCoefficient = refractionCoefficient + 0.0; // -0.0 < 0.0 is false in IEEE 754, so -0.0 evades the guard above; +0.0 normalizes it to +0.0
 	}
 
 	/**
@@ -153,7 +186,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @param adjustForElevation Should the time be adjusted for elevation
 	 * @return The UTC time of sunrise in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in the
 	 *         calculation (expected behavior for some locations such as near the poles, {@link Double#NaN} will be returned.
-	 * @see #getElevationAdjustment(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
 	public abstract double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
@@ -171,7 +204,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * @param adjustForElevation Should the time be adjusted for elevation
 	 * @return The UTC time of sunset in 24-hour format. 5:45:00 AM will return 5.75. If an error was encountered in the
 	 *         calculation (expected behavior for some locations such as near the poles, {@link Double#NaN} will be returned.
-	 * @see #getElevationAdjustment(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
 	public abstract double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation);
@@ -256,70 +289,114 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	public abstract double getSolarAzimuth(Instant instant, GeoLocation geoLocation);
 
 	/**
-	 * Method to return the adjustment to the zenith required to account for the elevation. Since a person at a higher elevation can
-	 * see farther below the horizon, the calculation for sunrise / sunset is calculated below the horizon used at sea level. This is
-	 * only used for sunrise and sunset and not times before or after it such as {@link
-	 * com.kosherjava.zmanim.AstronomicalCalendar#getBeginNauticalTwilight() nautical twilight} since those calculations are based on
-	 * the level of available light at the given dip below the horizon, something that is not affected by elevation, the adjustment
-	 * should only be made if the zenith == 90° {@link #adjustZenith adjusted} for refraction and solar radius. The algorithm used is
-	 *  
-	 * <pre>
-	 * elevationAdjustment = Math.toDegrees(Math.acos(earthRadiusInMeters / (earthRadiusInMeters + elevationMeters)));
-	 * </pre>
-	 * 
-	 * The source of this algorithm is <a href="https://www.cs.tau.ac.il/~nachum/calendar-book/index.shtml">Calendrical
-	 * Calculations</a> by Edward M. Reingold and Nachum Dershowitz. An alternate algorithm that produces similar (but not completely
-	 * accurate) result found in Ma'aglay Tzedek by Moishe Kosower and other sources is:
-	 * 
-	 * <pre>
-	 * elevationAdjustment = 0.0347 * Math.sqrt(elevationMeters);
-	 * </pre>
-	 * 
-	 * @param elevation elevation in Meters.
-	 * @return the adjusted zenith
+	 * Calculates the geocentric Earth radius at the given geodetic latitude using the exact WGS84 ellipsoid formula:
+	 * R = sqrt((a²cosφ)² + (b²sinφ)²) / sqrt((acosφ)² + (bsinφ)²), where a and b are {@link #WGS84_EQUATORIAL_RADIUS}
+	 * and {@link #WGS84_POLAR_RADIUS} respectively. This is the distance from the Earth's center to the point on the
+	 * ellipsoid surface at the given geodetic latitude.
+	 *
+	 * @param latitude geodetic latitude in degrees (north positive)
+	 * @return geocentric radius in km at the given latitude
 	 */
-	double getElevationAdjustment(double elevation) {
-		return Math.toDegrees(Math.acos(earthRadius / (earthRadius + (elevation / 1000))));
+	private double getGeocentricRadius(double latitude) {
+		double latRad = Math.toRadians(latitude);
+		double cosLat = Math.cos(latRad);
+		double sinLat = Math.sin(latRad);
+		double a = WGS84_EQUATORIAL_RADIUS;
+		double b = WGS84_POLAR_RADIUS;
+		double aSqCosLat = a * a * cosLat; // a²·cos(φ)
+		double bSqSinLat = b * b * sinLat; // b²·sin(φ)
+		double acosLat = a * cosLat;       // a·cos(φ)
+		double bsinLat = b * sinLat;       // b·sin(φ)
+		return Math.sqrt(aSqCosLat * aSqCosLat + bSqSinLat * bSqSinLat)
+				/ Math.sqrt(acosLat * acosLat + bsinLat * bsinLat);
 	}
 
 	/**
-	 * Adjusts the zenith of astronomical sunrise and sunset to account for solar refraction, solar radius and elevation. The value
-	 * for Sun's zenith and true rise/set Zenith (used in this class and subclasses) is the angle that the center of the Sun makes to
-	 * a line perpendicular to the Earth's surface. If the Sun were a point and the Earth were without an atmosphere, true sunset and
-	 * sunrise would correspond to a 90° zenith. Because the Sun is not a point, and because the atmosphere refracts light, this 90°
-	 * zenith does not, in fact, correspond to true sunset or sunrise, instead the center of the Sun's disk must lie just below the
-	 * horizon for the upper edge to be obscured. This means that a zenith of just above 90° must be used. The Sun subtends an angle
-	 * of 16 minutes of arc (this can be changed via the {@link #setSolarRadius(double)} method , and atmospheric refraction accounts
-	 * for 34 minutes or so (this can be changed via the {@link #setRefraction(double)} method), giving a total of 50 arcminutes. The
-	 * total value for ZENITH is 90+(5/6) or 90.8333333° for true sunrise/sunset. Since a person at an elevation can see below the
-	 * horizon of a person at sea level, this will also adjust the zenith to account for elevation if available. Note that this will
-	 * only adjust the value if the zenith is exactly 90°. For values below and above this no correction is done. As an example,
-	 * astronomical twilight is when the sun is 18° below the horizon or {@link
-	 * com.kosherjava.zmanim.AstronomicalCalendar#ASTRONOMICAL_ZENITH 108° below the zenith}. This is traditionally calculated with
-	 * none of the above mentioned adjustments. The same goes for various <em>tzais</em> and <em>alos</em> times such as the {@link
-	 * com.kosherjava.zmanim.ZmanimCalendar#ZENITH_16_POINT_1 16.1°} dip used in {@link
-	 * com.kosherjava.zmanim.ComprehensiveZmanimCalendar#getAlos16Point1Degrees()}.
-	 * 
-	 * @param zenith the azimuth below the vertical zenith of 90°. For sunset typically the {@link #adjustZenith zenith} used for the
-	 *         calculation uses geometric zenith of 90° and {@link #adjustZenith adjusts} this slightly to account for solar
-	 *         refraction and the sun's radius. Another example would be {@link
-	 *         com.kosherjava.zmanim.AstronomicalCalendar#getEndNauticalTwilight()} that passes {@link
-	 *         com.kosherjava.zmanim.AstronomicalCalendar#NAUTICAL_ZENITH} to this method.
-	 * @param elevation elevation in Meters.
-	 * @param localDate the date to use for the solar radius. See {@link #getApparentSolarRadius(LocalDate)}.
-	 * @return The zenith adjusted to include the {@link #getSolarRadius sun's radius}, {@link #getRefraction
-	 *         refraction} and {@link #getElevationAdjustment elevation} adjustment. This will only be adjusted for
-	 *         sunrise and sunset (if the zenith == 90°)
-	 * @see #getElevationAdjustment(double)
+	 * Returns the elevation adjustment to the zenith using a WGS84 latitude-dependent geocentric radius and atmospheric
+	 * refraction correction. Equivalent to calling {@link #getElevationAdjustment(double, double, double)} with a sea-level
+	 * horizon elevation of 0.
+	 *
+	 * @param elevation observer elevation in meters above sea level (may be negative, e.g. Dead Sea); when negative
+	 *                  (observer below sea level with a sea-level horizon) the effective height is clamped to 0 and
+	 *                  the method returns 0°
+	 * @param latitude  observer latitude in degrees (used to compute the WGS84 geocentric radius)
+	 * @return the elevation adjustment in degrees; 0° when the observer elevation is at or below sea level
+	 * @see #getElevationAdjustment(double, double, double)
 	 */
-	double adjustZenith(double zenith, double elevation, LocalDate localDate) {
+	public double getElevationAdjustment(double elevation, double latitude) {
+		return getElevationAdjustment(elevation, 0.0, latitude);
+	}
+
+	/**
+	 * Returns the elevation adjustment to the zenith for an observer at {@code observerElevation} looking toward a horizon
+	 * at {@code horizonElevation}, using a WGS84 latitude-dependent geocentric radius and atmospheric refraction correction.
+	 *
+	 * <p>The refraction correction uses R_eff = R / (1 - k) where k is the {@link #getRefractionCoefficient() refraction
+	 * coefficient} (default 0.17). This increases the effective radius by ~20.5% under standard conditions, reducing the
+	 * geometric dip, which delays the calculated sunrise and advances the calculated sunset relative to a pure geometric
+	 * calculation (k = 0).</p>
+	 *
+	 * <p>At 750 m elevation (Jerusalem), this refraction correction reduces the dip angle by ~0.08° (~22–27 seconds of time).</p>
+	 *
+	 * <p>References: <a href="https://aty.sdsu.edu/explain/atmos_refr/dip.html">Atmospheric Refraction - Dip</a> and
+	 * <a href="https://www.cs.tau.ac.il/~nachum/calendar-book/index.shtml">Calendrical Calculations</a>.</p>
+	 *
+	 * @param observerElevation observer elevation in meters above sea level (may be negative, e.g. Dead Sea)
+	 * @param horizonElevation  elevation of the visible horizon in meters above sea level (0 for a sea-level horizon).
+	 *                          When {@code horizonElevation &gt; observerElevation} (observer is below the horizon,
+	 *                          e.g. an observer at a sub-sea-level location with a sea-level horizon) the effective
+	 *                          height difference is clamped to 0 and the method returns 0°. Computing the exact
+	 *                          elevation angle of a raised horizon requires the horizontal distance to the terrain,
+	 *                          which is not available in this API; 0° is the conservative fallback.
+	 * @param latitude          observer latitude in degrees (used to compute the WGS84 geocentric radius)
+	 * @return the elevation adjustment in degrees; 0° when the observer is at or below the horizon elevation
+	 */
+	public double getElevationAdjustment(double observerElevation, double horizonElevation, double latitude) {
+		double effectiveHeight = Math.max(0.0, observerElevation - horizonElevation);
+		double R = getGeocentricRadius(latitude);
+		double Reff = R / (1.0 - getRefractionCoefficient());
+		return Math.toDegrees(Math.acos(Reff / (Reff + effectiveHeight / 1000.0)));
+	}
+
+	/**
+	 * Adjusts the zenith of astronomical sunrise and sunset to account for solar refraction, solar radius and elevation,
+	 * using a WGS84 latitude-dependent geocentric radius with atmospheric refraction correction for the dip calculation.
+	 * Equivalent to calling {@link #adjustZenith(double, double, double, double, LocalDate)} with a sea-level horizon.
+	 *
+	 * @param zenith      the zenith angle in degrees (90° = geometric horizon)
+	 * @param elevation   observer elevation in meters
+	 * @param latitude    observer latitude in degrees (used for WGS84 geocentric radius)
+	 * @param localDate   the date to use for the apparent solar radius; may be {@code null} to use the fixed solar radius
+	 * @return the adjusted zenith in degrees; unchanged if {@code zenith} is not exactly {@link #GEOMETRIC_ZENITH}
+	 * @see #getElevationAdjustment(double, double)
+	 */
+	public double adjustZenith(double zenith, double elevation, double latitude, LocalDate localDate) {
+		return adjustZenith(zenith, elevation, 0.0, latitude, localDate);
+	}
+
+	/**
+	 * Adjusts the zenith of astronomical sunrise and sunset to account for solar refraction, solar radius and elevation,
+	 * with support for an elevated visible horizon. Uses a WGS84 latitude-dependent geocentric radius with atmospheric
+	 * refraction correction for the dip calculation.
+	 *
+	 * <p>This is useful when the visible horizon is not at sea level — for example, when viewing sunset over mountains
+	 * or from an elevated location looking at elevated terrain.</p>
+	 *
+	 * @param zenith             the zenith angle in degrees (90° = geometric horizon)
+	 * @param observerElevation  observer elevation in meters above sea level
+	 * @param horizonElevation   elevation of the visible horizon in meters above sea level (0 for sea-level horizon)
+	 * @param latitude           observer latitude in degrees (used for WGS84 geocentric radius)
+	 * @param localDate          the date to use for the apparent solar radius; may be {@code null} to use the fixed radius
+	 * @return the adjusted zenith in degrees; unchanged if {@code zenith} is not exactly {@link #GEOMETRIC_ZENITH}
+	 * @see #getElevationAdjustment(double, double, double)
+	 */
+	public double adjustZenith(double zenith, double observerElevation, double horizonElevation, double latitude, LocalDate localDate) {
 		double adjustedZenith = zenith;
-		if (zenith == GEOMETRIC_ZENITH) { // only adjust if it is exactly sunrise or sunset
-			if(isUseApparentSolarRadius() && localDate != null) {
-				adjustedZenith = zenith + (getApparentSolarRadius(localDate) + getRefraction() + getElevationAdjustment(elevation));
-			} else {
-				adjustedZenith = zenith + (getSolarRadius() + getRefraction() + getElevationAdjustment(elevation));
-			}
+		if (zenith == GEOMETRIC_ZENITH) {
+			double solarR = (isUseApparentSolarRadius() && localDate != null)
+					? getApparentSolarRadius(localDate) : getSolarRadius();
+			adjustedZenith = zenith + (solarR + getRefraction()
+					+ getElevationAdjustment(observerElevation, horizonElevation, latitude));
 		}
 		return adjustedZenith;
 	}
@@ -405,7 +482,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 * {@inheritDoc}
 	 * <p>
 	 * Two {@code AstronomicalCalculator} instances are considered equal if their
-	 * Earth radius, refraction, and solar radius values are identical.
+	 * refraction, solar radius, and refraction coefficient values are identical.
 	 * 
 	 * @param object the reference object with which to compare
 	 * @return {@inheritDoc}
@@ -420,23 +497,23 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		}
 		AstronomicalCalculator calculator = (AstronomicalCalculator) object;
 
-		return Double.compare(this.getEarthRadius(), calculator.getEarthRadius()) == 0
-				&& Double.compare(this.getRefraction(), calculator.getRefraction()) == 0
+		return Double.compare(this.getRefraction(), calculator.getRefraction()) == 0
 				&& Double.compare(this.getSolarRadius(), calculator.getSolarRadius()) == 0
-				&& this.isUseApparentSolarRadius()  == calculator.isUseApparentSolarRadius();
+				&& this.isUseApparentSolarRadius()  == calculator.isUseApparentSolarRadius()
+				&& Double.compare(this.getRefractionCoefficient(), calculator.getRefractionCoefficient()) == 0;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation hashes the earth radius, refraction, and solar radius properties to maintain the contract with
+	 * This implementation hashes the refraction, solar radius, and refraction coefficient properties to maintain the contract with
 	 * {@link #equals(Object)}.
 	 * 
 	 * @return {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getEarthRadius(), getRefraction(), getSolarRadius(), useApparentSolarRadius);
+		return Objects.hash(getRefraction(), getSolarRadius(), useApparentSolarRadius, getRefractionCoefficient());
 	}
 
 	/**
