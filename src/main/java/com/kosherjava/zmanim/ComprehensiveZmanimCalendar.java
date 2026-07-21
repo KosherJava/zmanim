@@ -3576,7 +3576,21 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	public Instant getTzaisBaalHatanya() {
 		return getSunsetOffsetByDegrees(ZENITH_6_DEGREES);
 	}
-	
+
+	/**
+	 * This method returns <em>chatzos</em> (midday) following the opinion of the Baal Hatanya that the day for Jewish halachic
+	 * times start at {@link #getSunriseBaalHatanya() <em>netz amiti</em> (sunrise)} and ends at {@link #getSunsetBaalHatanya()
+	 * <em>shkiah amiti</em> (sunset)}.
+	 *
+	 * @see AstronomicalCalendar#getSunTransit()
+	 * @return the <code>Date</code> of chatzos. If the calculation can't be computed such as in the Arctic Circle where
+	 *         there is at least one day where the sun does not rise, and one where it does not set, a null will be
+	 *         returned. See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 */
+	public Instant getChatzosBaalHatanya() {
+		return getSunTransit(getSunriseBaalHatanya(), getSunsetBaalHatanya());
+	}
+
 	/**
 	 * This method returns <a href="https://en.wikipedia.org/wiki/Moshe_Feinstein">Rav Moshe Feinstein's</a> opinion of the
 	 * calculation of <em>sof zman krias shema</em> (latest time to recite <em>Shema</em> in the morning) according to the
