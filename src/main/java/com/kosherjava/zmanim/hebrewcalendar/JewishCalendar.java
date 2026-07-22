@@ -1435,14 +1435,19 @@ public class JewishCalendar extends JewishDate {
 	 * called on a day without a <em>tekufa</em> change, it will return a {@code null}. The default implementation of this method
 	 * will return the <em>tekufa</em> change according to the calculations of the <a href="https://zmanim.online/">Luach Itim
 	 * Lebinah</a> following <a href="https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a>.
-	 * However, there is also the opinion of Rabbi Yonah Martzbach, who calculates the <em>tekufa</em> based on Local Mean Time (LMT)
-	 * in Israel which causes a 21-minute difference.
-	 * It should be noted that this method only covers two opinions of how to calculate the tekufa (based on 6 hours after Midday of the day before the tekufa).
-	 * The Rosh (Tosafos HaRosh Berachos 3:2) is of the opinion that the calculation starts at sunset and to use proportional hours.
-	 * While the Tashbetz (Shut Tashbetz Chelek 1, Siman 109) is also of the opinion that the calculation starts at sunset, however, he writes to use regular hours.
+	 * However, there is also the opinion of <a href=
+	 * "https://he.wikipedia.org/wiki/%D7%99%D7%95%D7%A0%D7%94_%D7%9E%D7%A8%D7%A6%D7%91%D7%9A">Rabbi Yonah Merzbach</a>, who
+	 * calculates the <em>tekufa</em> based on Local Mean Time (LMT) in Israel which causes a ~21-minute difference. It should be
+	 * noted that this method only covers two opinions of how to calculate the tekufa (based on 6 hours after Midday of the day
+	 * before the tekufa). The <a href="https://en.wikipedia.org/wiki/Asher_ben_Jehiel">Rosh</a> (Tosafos HaRosh <a href=
+	 * "https://www.sefaria.org/Tosafot_HaRosh_on_Berakhot.3b.6?lang=he">Berachos 3b</a>) is of the opinion that the calculation
+	 * starts at sunset and to use proportional hours. While the <a href="https://en.wikipedia.org/wiki/Simeon_ben_Zemah_Duran"
+	 * >Tashbetz</a> (Shut Tashbetz <a href="https://hebrewbooks.org/pdfpager.aspx?req=1381&st=&pgnum=91">Chelek 1, Siman 109</a>)
+	 * is also of the opinion that the calculation starts at sunset, however, his opinion is to use regular hours.
 	 * @param useLocalMeanTime if true, removes ~21 minutes from the time of the <em>tekufa</em> calculated by Rabbi Yechiel Michel
-	 * Tucazinsky, and will follow the opinion of Rabbi Yonah Martzbach.
-	 * @return an Instant with the time that the <em>tekufa</em> (season) changes or a null on a day with no <em>tekufa</em> change.
+	 *         Tucazinsky, and will follow the opinion of Rabbi Yonah Merzbach.
+	 * @return an Instant with the time that the <em>tekufa</em> (season) changes or a {@code null} on a day with no <em>tekufa</em>
+	 *         change.
 	 * @see #getTekufa()
 	 */
 	public Instant getTekufaAsInstant(boolean useLocalMeanTime) {
