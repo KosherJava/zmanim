@@ -1395,13 +1395,15 @@ public class JewishCalendar extends JewishDate {
 		double solar = (getJewishYear() - 1) * 365.25;
 		return (int) Math.floor(days - solar);
 	}
-	
+
 	/**
 	 * Calculates the hours for when the <a href="https://en.wikipedia.org/wiki/Tekufah"><em>Tekufa</em></a> (season) changes.
 	 * There are 4 <em>tekufos</em> a year: Nissan/Spring, Tammuz/Summer, Tishri/Fall, and Teves/Winter. This calculation is
 	 * according to <a href="https://en.wikipedia.org/wiki/Samuel_of_Nehardea">Shmuel</a> in <a href=
 	 * "https://hebrewbooks.org/shas.aspx?mesechta=3&daf=56">Eruvin 56a</a>, which is a more rounded up version of <a href=
-	 * "https://en.wikipedia.org/wiki/Adda_bar_Ahavah">Rav Adda's</a> calculation. The <a href=
+	 * "https://en.wikipedia.org/wiki/Adda_bar_Ahavah">Rav Adda's</a> calculation. This calculation follows the Levush in the end of Siman 428,
+	 * who writes that the hours to calculate the tekufa are based on regular clock hours and not proportional hours, and that the time
+	 * for the tekufa are based on 6 hours after the previous day's Midday. The <a href=
 	 * "https://en.wikipedia.org/wiki/Moses_Isserles">Rama</a> writes in <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=67715&st=&pgnum=218">Yoreh De'ah 116:5</a> that one should not drink water during
 	 * the <em>tekufa</em> change. <a href="https://en.wikipedia.org/wiki/Ovadia_Yosef">Rabbi Ovadia Yosef</a> (Halichot Olam,
@@ -1426,18 +1428,20 @@ public class JewishCalendar extends JewishDate {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Returns an {@code Instant} if the current day has a <a href="https://en.wikipedia.org/wiki/Tekufah"><em>Tekufa</em></a>
 	 * (season) change. The {@code Instant} will contain the time that the <em>tekufa</em> (season) is arriving. If this method is
 	 * called on a day without a <em>tekufa</em> change, it will return a {@code null}. The default implementation of this method
 	 * will return the <em>tekufa</em> change according to the calculations of the <a href="https://zmanim.online/">Luach Itim
 	 * Lebinah</a> following <a href="https://en.wikipedia.org/wiki/Yechiel_Michel_Tucazinsky">Rabbi Yechiel Michel Tucazinsky</a>.
-	 * However, there is also the opinion of Rabbi Yonah Boron, who calculates the <em>tekufa</em> based on Local Mean Time (LMT)
-	 * in Israel which causes a 21-minute difference. There is a third opinion as well to use seasonal midday but that is not a
-	 * generally followed opinion, so it has not been implemented.
+	 * However, there is also the opinion of Rabbi Yonah Martzbach, who calculates the <em>tekufa</em> based on Local Mean Time (LMT)
+	 * in Israel which causes a 21-minute difference.
+	 * It should be noted that this method only covers two opinions of how to calculate the tekufa (based on 6 hours after Midday of the day before the tekufa).
+	 * The Rosh (Tosafos HaRosh Berachos 3:2) is of the opinion that the calculation starts at sunset and to use proportional hours.
+	 * While the Tashbetz (Shut Tashbetz Chelek 1, Siman 109) is also of the opinion that the calculation starts at sunset, however, he writes to use regular hours.
 	 * @param useLocalMeanTime if true, removes ~21 minutes from the time of the <em>tekufa</em> calculated by Rabbi Yechiel Michel
-	 * Tucazinsky, and will follow the opinion of Rabbi Yonah Boron.
+	 * Tucazinsky, and will follow the opinion of Rabbi Yonah Martzbach.
 	 * @return an Instant with the time that the <em>tekufa</em> (season) changes or a null on a day with no <em>tekufa</em> change.
 	 * @see #getTekufa()
 	 */
@@ -1451,11 +1455,18 @@ public class JewishCalendar extends JewishDate {
 		// formatter class used to display the Instant.
 		ZoneId yerushalayimStandardTZ = ZoneId.of("GMT+2");
 
-		hours = hours - 6; // minus 6 hours because the hebrew date starts at sunset which is at 6PM
+		hours -= 6; // minus 6 hours because the hebrew date starts at sunset which is at 6PM
+
+		LocalDate tekufaDate = getLocalDate();
+		if (hours < 0) {
+			hours += 24;
+			tekufaDate = tekufaDate.minusDays(1);
+		}
+
 		int minutes = (int) ((hours - hours.intValue()) * 60);
 
 		LocalTime time = LocalTime.of(hours.intValue(), minutes);
-		ZonedDateTime tekufaZDT = ZonedDateTime.of(getLocalDate(), time, yerushalayimStandardTZ);
+		ZonedDateTime tekufaZDT = ZonedDateTime.of(tekufaDate, time, yerushalayimStandardTZ);
 
 		// Har Habayis at a longitude of 35.2354 offset vs longitude 35 in standard time, so we subtract the time difference
 	    // of 20.94 minutes (20 minutes and 56 seconds and 496 millis) to get to Standard time from local mean time
