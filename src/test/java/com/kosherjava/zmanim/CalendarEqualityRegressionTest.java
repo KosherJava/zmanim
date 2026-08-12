@@ -17,7 +17,6 @@ public class CalendarEqualityRegressionTest {
 				new GeoLocation("Lakewood", 40.0828, -74.2094, ZoneId.of("America/New_York")));
 		astronomicalCalendar.getAstronomicalCalculator().setRefraction(0.6);
 		astronomicalCalendar.getAstronomicalCalculator().setSolarRadius(0.3);
-		astronomicalCalendar.getAstronomicalCalculator().setEarthRadius(6400);
 
 		AstronomicalCalendar clone = (AstronomicalCalendar) astronomicalCalendar.clone();
 

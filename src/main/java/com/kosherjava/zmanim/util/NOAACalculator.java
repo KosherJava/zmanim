@@ -93,12 +93,12 @@ public class NOAACalculator extends AstronomicalCalculator {
 	 * @return The UTC time of sunrise or sunset in 24-hour format. 5:45:00 AM will return 5.75, while 5:45 PM will return 17.75. If
 	 *         an error was encountered in the calculation (expected behavior for some locations such as near the poles,
 	 *         {@link Double#NaN} will be returned.
-	 * @see #getElevationAdjustment(double)
+	 * @see #getElevationAdjustment(double, double)
 	 */
-	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation, 
+	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation,
 			SolarEvent solarEvent) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude(), localDate);
 		double riseSet = getSunRiseSetUTC(localDate, geoLocation.getLatitude(), -geoLocation.getLongitude(),
 				adjustedZenith, solarEvent);
 		riseSet = riseSet / 60;
