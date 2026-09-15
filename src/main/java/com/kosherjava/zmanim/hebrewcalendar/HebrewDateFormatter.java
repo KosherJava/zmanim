@@ -953,19 +953,19 @@ public class HebrewDateFormatter {
 	}
 	
 	/**
-	 * Returns a String with the name of the current parshah(ios). This method gets the current <em>parshah</em> by calling {@link
+	 * Returns a String with the name of the current parshah(iyos). This method gets the current <em>parshah</em> by calling {@link
 	 * JewishCalendar#getParshah()} that does not return a <em>parshah</em> for any non-<em>Shabbos</em> or a <em>Shabbos</em> that
 	 * occurs on a <em>Yom Tov</em>, and will return an empty <code>String</code> in those cases. If the class {@link
-	 * #isHebrewFormat() is set to format in Hebrew} it will return a <code>String</code> of the current parshah(ios) in Hebrew for
+	 * #isHebrewFormat() is set to format in Hebrew} it will return a <code>String</code> of the current parshah(iyos) in Hebrew for
 	 * example בראשית or נצבים וילך for a double parshah, or an empty string will be returned if there is not parshah that week. If not set
-	 * to Hebrew, it returns a string of the parshah(ios) transliterated into Latin chars. The default uses Ashkenazi pronunciation
+	 * to Hebrew, it returns a string of the parshah(iyos) transliterated into Latin chars. The default uses Ashkenazi pronunciation
 	 * in typical American English spelling, for example Bereshis, Nitzavim Vayeilech for a double parshah, An empty string if there
 	 * are none.
 	 * 
 	 * @param jewishCalendar the JewishCalendar Object
-	 * @return today's parshah(ios) in Hebrew for example, if the formatter is set to format in Hebrew, returns a string of the current
-	 *         parshah(ios) in Hebrew for example בראשית or נצבים וילך, for a double parshah or an empty <code>String</code> if there is
-	 *         no parshah that week. If not set to Hebrew, it returns a string of the parshah(ios) transliterated into Latin chars. The
+	 * @return today's parshah(iyos) in Hebrew for example, if the formatter is set to format in Hebrew, returns a string of the current
+	 *         parshah(iyos) in Hebrew for example בראשית or נצבים וילך, for a double parshah or an empty <code>String</code> if there is
+	 *         no parshah that week. If not set to Hebrew, it returns a string of the parshah(iyos) transliterated into Latin chars. The
 	 *         default uses Ashkenazi pronunciation in typical American English spelling, for example Bereshis, Nitzavim Vayeilech for
 	 *         a double parshah, or an empty <code>String</code> if there are none.
 	 * @see #formatParshah(JewishCalendar)
@@ -978,15 +978,15 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Returns a <code>String</code> with the name of the current parshah(ios). This method overloads {@link
+	 * Returns a <code>String</code> with the name of the current parshah(iyos). This method overloads {@link
 	 * #formatParshah(JewishCalendar)} and unlike that method, it will format the <em>parshah</em> passed to this method regardless of
 	 * the day of week. This is the way to format a <em>parshah</em> retrieved from calling
 	 * {@link JewishCalendar#getUpcomingParshah()}.
 	 *
 	 * @param parshah a JewishCalendar.Parshah object
-	 * @return today's parshah(ios) in Hebrew for example, if the formatter is set to format in Hebrew, returns a <code>String</code>
-	 *         of the current parshah(ios) in Hebrew for example בראשית or נצבים וילך for a double parshah, or an empty <code>String</code>
-	 *         if there is no parshah that week. If not set to Hebrew, it returns a string of the parshah(ios) transliterated into
+	 * @return today's parshah(iyos) in Hebrew for example, if the formatter is set to format in Hebrew, returns a <code>String</code>
+	 *         of the current parshah(iyos) in Hebrew for example בראשית or נצבים וילך for a double parshah, or an empty <code>String</code>
+	 *         if there is no parshah that week. If not set to Hebrew, it returns a string of the parshah(iyos) transliterated into
 	 *         Latin chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example Bereshis,  or
 	 *         Nitzavim Vayeilech for a double parshah, or an empty string if there are none.
 	 * @see #formatParshah(JewishCalendar)
