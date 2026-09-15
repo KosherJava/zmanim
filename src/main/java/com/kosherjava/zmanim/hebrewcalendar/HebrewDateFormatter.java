@@ -68,13 +68,13 @@ public class HebrewDateFormatter {
 	
 	/**
 	 * List of transliterated parshiyos using the default <em>Ashkenazi</em> pronunciation. For information on the format, see
-	 * {@link #getTransliteratedParshiosList()}.
+	 * {@link #getTransliteratedParshiyosList()}.
 	 * 
-	 * @see #getTransliteratedParshiosList()
-	 * @see #setTransliteratedParshiosList(EnumMap)
+	 * @see #getTransliteratedParshiyosList()
+	 * @see #setTransliteratedParshiyosList(EnumMap)
 	 * @see #HebrewDateFormatter() where the map is initially set.
 	 */
-	private EnumMap<JewishCalendar.Parshah, String> transliteratedParshaMap;
+	private EnumMap<JewishCalendar.Parshah, String> transliteratedParshahMap;
 	
 	/**
 	 * An {@link EnumMap} of Hebrew <em>parshiyos</em>. The list includes double and special <em>parshiyos</em> and contains<br>
@@ -83,158 +83,158 @@ public class HebrewDateFormatter {
 	 * תבוא, נצבים, וילך,האזינו, וזאת הברכה,ויקהל פקודי, תזריעמצרע, אחרי מותקדושים, בהר בחקתי,חוקת בלק, מטות מסעי,נצבים וילך,
 	 * שקלים,זכור, פרה, החדש,שובה,שירה,הגדול,חזון,נחמו</code>
 	 */
-	private final EnumMap<JewishCalendar.Parshah, String> hebrewParshaMap;
+	private final EnumMap<JewishCalendar.Parshah, String> hebrewParshahMap;
 	
 	/**
 	 * Default constructor sets the {@link EnumMap}s of Hebrew and default transliterated parshiyos.
 	 */
 	public HebrewDateFormatter() {
 		weekFormat = DateTimeFormatter.ofPattern("EEEE");
-		transliteratedParshaMap = new EnumMap<>(JewishCalendar.Parshah.class);
-		transliteratedParshaMap.put(JewishCalendar.Parshah.NONE, "");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BERESHIS, "Bereshis");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.NOACH, "Noach");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.LECH_LECHA, "Lech Lecha");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYERA, "Vayera");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.CHAYEI_SARA, "Chayei Sara");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.TOLDOS, "Toldos");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYETZEI, "Vayetzei");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYISHLACH, "Vayishlach");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYESHEV, "Vayeshev");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.MIKETZ, "Miketz");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYIGASH, "Vayigash");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYECHI, "Vayechi");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHEMOS, "Shemos");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAERA, "Vaera");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BO, "Bo");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BESHALACH, "Beshalach");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.YISRO, "Yisro");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.MISHPATIM, "Mishpatim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.TERUMAH, "Terumah");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.TETZAVEH, "Tetzaveh");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.KI_SISA, "Ki Sisa");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYAKHEL, "Vayakhel");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.PEKUDEI, "Pekudei");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYIKRA, "Vayikra");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.TZAV, "Tzav");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHMINI, "Shmini");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.TAZRIA, "Tazria");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.METZORA, "Metzora");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.ACHREI_MOS, "Achrei Mos");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.KEDOSHIM, "Kedoshim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.EMOR, "Emor");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BEHAR, "Behar");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BECHUKOSAI, "Bechukosai");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BAMIDBAR, "Bamidbar");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.NASSO, "Nasso");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BEHAALOSCHA, "Beha'aloscha");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHLACH, "Sh'lach");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.KORACH, "Korach");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.CHUKAS, "Chukas");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BALAK, "Balak");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.PINCHAS, "Pinchas");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.MATOS, "Matos");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.MASEI, "Masei");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.DEVARIM, "Devarim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAESCHANAN, "Vaeschanan");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.EIKEV, "Eikev");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.REEH, "Re'eh");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHOFTIM, "Shoftim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.KI_SEITZEI, "Ki Seitzei");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.KI_SAVO, "Ki Savo");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.NITZAVIM, "Nitzavim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYEILECH, "Vayeilech");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.HAAZINU, "Ha'Azinu");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VZOS_HABERACHA, "Vezos Habracha");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.VAYAKHEL_PEKUDEI, "Vayakhel Pekudei");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.TAZRIA_METZORA, "Tazria Metzora");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.ACHREI_MOS_KEDOSHIM, "Achrei Mos Kedoshim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.BEHAR_BECHUKOSAI, "Behar Bechukosai");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.CHUKAS_BALAK, "Chukas Balak");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.MATOS_MASEI, "Matos Masei");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.NITZAVIM_VAYEILECH, "Nitzavim Vayeilech");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHKALIM, "Shekalim");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.ZACHOR, "Zachor");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.PARA, "Parah");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.HACHODESH, "Hachodesh");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHUVA, "Shuva");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.SHIRA, "Shira");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.HAGADOL, "Hagadol");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.CHAZON, "Chazon");
-		transliteratedParshaMap.put(JewishCalendar.Parshah.NACHAMU, "Nachamu");
+		transliteratedParshahMap = new EnumMap<>(JewishCalendar.Parshah.class);
+		transliteratedParshahMap.put(JewishCalendar.Parshah.NONE, "");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BERESHIS, "Bereshis");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.NOACH, "Noach");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.LECH_LECHA, "Lech Lecha");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYERA, "Vayera");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.CHAYEI_SARA, "Chayei Sara");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.TOLDOS, "Toldos");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYETZEI, "Vayetzei");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYISHLACH, "Vayishlach");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYESHEV, "Vayeshev");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.MIKETZ, "Miketz");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYIGASH, "Vayigash");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYECHI, "Vayechi");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHEMOS, "Shemos");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAERA, "Vaera");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BO, "Bo");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BESHALACH, "Beshalach");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.YISRO, "Yisro");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.MISHPATIM, "Mishpatim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.TERUMAH, "Terumah");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.TETZAVEH, "Tetzaveh");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.KI_SISA, "Ki Sisa");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYAKHEL, "Vayakhel");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.PEKUDEI, "Pekudei");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYIKRA, "Vayikra");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.TZAV, "Tzav");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHMINI, "Shmini");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.TAZRIA, "Tazria");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.METZORA, "Metzora");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.ACHREI_MOS, "Achrei Mos");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.KEDOSHIM, "Kedoshim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.EMOR, "Emor");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BEHAR, "Behar");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BECHUKOSAI, "Bechukosai");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BAMIDBAR, "Bamidbar");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.NASSO, "Nasso");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BEHAALOSCHA, "Beha'aloscha");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHLACH, "Sh'lach");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.KORACH, "Korach");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.CHUKAS, "Chukas");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BALAK, "Balak");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.PINCHAS, "Pinchas");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.MATOS, "Matos");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.MASEI, "Masei");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.DEVARIM, "Devarim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAESCHANAN, "Vaeschanan");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.EIKEV, "Eikev");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.REEH, "Re'eh");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHOFTIM, "Shoftim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.KI_SEITZEI, "Ki Seitzei");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.KI_SAVO, "Ki Savo");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.NITZAVIM, "Nitzavim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYEILECH, "Vayeilech");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.HAAZINU, "Ha'Azinu");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VZOS_HABERACHA, "Vezos Habracha");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.VAYAKHEL_PEKUDEI, "Vayakhel Pekudei");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.TAZRIA_METZORA, "Tazria Metzora");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.ACHREI_MOS_KEDOSHIM, "Achrei Mos Kedoshim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.BEHAR_BECHUKOSAI, "Behar Bechukosai");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.CHUKAS_BALAK, "Chukas Balak");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.MATOS_MASEI, "Matos Masei");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.NITZAVIM_VAYEILECH, "Nitzavim Vayeilech");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHKALIM, "Shekalim");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.ZACHOR, "Zachor");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.PARA, "Parah");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.HACHODESH, "Hachodesh");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHUVA, "Shuva");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.SHIRA, "Shira");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.HAGADOL, "Hagadol");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.CHAZON, "Chazon");
+		transliteratedParshahMap.put(JewishCalendar.Parshah.NACHAMU, "Nachamu");
 		
-		hebrewParshaMap = new EnumMap<>(JewishCalendar.Parshah.class);
-		hebrewParshaMap.put(JewishCalendar.Parshah.NONE, "");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BERESHIS, "בראשית");
-		hebrewParshaMap.put(JewishCalendar.Parshah.NOACH, "נח");
-		hebrewParshaMap.put(JewishCalendar.Parshah.LECH_LECHA, "לך לך");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYERA, "וירא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.CHAYEI_SARA, "חיי שרה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.TOLDOS, "תולדות");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYETZEI, "ויצא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYISHLACH, "וישלח");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYESHEV, "וישב");
-		hebrewParshaMap.put(JewishCalendar.Parshah.MIKETZ, "מקץ");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYIGASH, "ויגש");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYECHI, "ויחי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHEMOS, "שמות");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAERA, "וארא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BO, "בא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BESHALACH, "בשלח");
-		hebrewParshaMap.put(JewishCalendar.Parshah.YISRO, "יתרו");
-		hebrewParshaMap.put(JewishCalendar.Parshah.MISHPATIM, "משפטים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.TERUMAH, "תרומה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.TETZAVEH, "תצוה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.KI_SISA, "כי תשא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYAKHEL, "ויקהל");
-		hebrewParshaMap.put(JewishCalendar.Parshah.PEKUDEI, "פקודי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYIKRA, "ויקרא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.TZAV, "צו");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHMINI, "שמיני");
-		hebrewParshaMap.put(JewishCalendar.Parshah.TAZRIA, "תזריע");
-		hebrewParshaMap.put(JewishCalendar.Parshah.METZORA, "מצרע");
-		hebrewParshaMap.put(JewishCalendar.Parshah.ACHREI_MOS, "אחרי מות");
-		hebrewParshaMap.put(JewishCalendar.Parshah.KEDOSHIM, "קדושים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.EMOR, "אמור");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BEHAR, "בהר");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BECHUKOSAI, "בחקתי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BAMIDBAR, "במדבר");
-		hebrewParshaMap.put(JewishCalendar.Parshah.NASSO, "נשא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BEHAALOSCHA, "בהעלתך");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHLACH, "שלח לך");
-		hebrewParshaMap.put(JewishCalendar.Parshah.KORACH, "קרח");
-		hebrewParshaMap.put(JewishCalendar.Parshah.CHUKAS, "חוקת");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BALAK, "בלק");
-		hebrewParshaMap.put(JewishCalendar.Parshah.PINCHAS, "פינחס");
-		hebrewParshaMap.put(JewishCalendar.Parshah.MATOS, "מטות");
-		hebrewParshaMap.put(JewishCalendar.Parshah.MASEI, "מסעי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.DEVARIM, "דברים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAESCHANAN, "ואתחנן");
-		hebrewParshaMap.put(JewishCalendar.Parshah.EIKEV, "עקב");
-		hebrewParshaMap.put(JewishCalendar.Parshah.REEH, "ראה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHOFTIM, "שופטים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.KI_SEITZEI, "כי תצא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.KI_SAVO, "כי תבוא");
-		hebrewParshaMap.put(JewishCalendar.Parshah.NITZAVIM, "נצבים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYEILECH, "וילך");
-		hebrewParshaMap.put(JewishCalendar.Parshah.HAAZINU, "האזינו");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VZOS_HABERACHA, "וזאת הברכה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.VAYAKHEL_PEKUDEI, "ויקהל פקודי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.TAZRIA_METZORA, "תזריע מצרע");
-		hebrewParshaMap.put(JewishCalendar.Parshah.ACHREI_MOS_KEDOSHIM, "אחרי מות קדושים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.BEHAR_BECHUKOSAI, "בהר בחקתי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.CHUKAS_BALAK, "חוקת בלק");
-		hebrewParshaMap.put(JewishCalendar.Parshah.MATOS_MASEI, "מטות מסעי");
-		hebrewParshaMap.put(JewishCalendar.Parshah.NITZAVIM_VAYEILECH, "נצבים וילך");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHKALIM, "שקלים");
-		hebrewParshaMap.put(JewishCalendar.Parshah.ZACHOR, "זכור");
-		hebrewParshaMap.put(JewishCalendar.Parshah.PARA, "פרה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.HACHODESH, "החדש");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHUVA, "שובה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.SHIRA, "שירה");
-		hebrewParshaMap.put(JewishCalendar.Parshah.HAGADOL, "הגדול");
-		hebrewParshaMap.put(JewishCalendar.Parshah.CHAZON, "חזון");
-		hebrewParshaMap.put(JewishCalendar.Parshah.NACHAMU, "נחמו");
+		hebrewParshahMap = new EnumMap<>(JewishCalendar.Parshah.class);
+		hebrewParshahMap.put(JewishCalendar.Parshah.NONE, "");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BERESHIS, "בראשית");
+		hebrewParshahMap.put(JewishCalendar.Parshah.NOACH, "נח");
+		hebrewParshahMap.put(JewishCalendar.Parshah.LECH_LECHA, "לך לך");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYERA, "וירא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.CHAYEI_SARA, "חיי שרה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.TOLDOS, "תולדות");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYETZEI, "ויצא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYISHLACH, "וישלח");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYESHEV, "וישב");
+		hebrewParshahMap.put(JewishCalendar.Parshah.MIKETZ, "מקץ");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYIGASH, "ויגש");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYECHI, "ויחי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHEMOS, "שמות");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAERA, "וארא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BO, "בא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BESHALACH, "בשלח");
+		hebrewParshahMap.put(JewishCalendar.Parshah.YISRO, "יתרו");
+		hebrewParshahMap.put(JewishCalendar.Parshah.MISHPATIM, "משפטים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.TERUMAH, "תרומה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.TETZAVEH, "תצוה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.KI_SISA, "כי תשא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYAKHEL, "ויקהל");
+		hebrewParshahMap.put(JewishCalendar.Parshah.PEKUDEI, "פקודי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYIKRA, "ויקרא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.TZAV, "צו");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHMINI, "שמיני");
+		hebrewParshahMap.put(JewishCalendar.Parshah.TAZRIA, "תזריע");
+		hebrewParshahMap.put(JewishCalendar.Parshah.METZORA, "מצרע");
+		hebrewParshahMap.put(JewishCalendar.Parshah.ACHREI_MOS, "אחרי מות");
+		hebrewParshahMap.put(JewishCalendar.Parshah.KEDOSHIM, "קדושים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.EMOR, "אמור");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BEHAR, "בהר");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BECHUKOSAI, "בחקתי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BAMIDBAR, "במדבר");
+		hebrewParshahMap.put(JewishCalendar.Parshah.NASSO, "נשא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BEHAALOSCHA, "בהעלתך");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHLACH, "שלח לך");
+		hebrewParshahMap.put(JewishCalendar.Parshah.KORACH, "קרח");
+		hebrewParshahMap.put(JewishCalendar.Parshah.CHUKAS, "חוקת");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BALAK, "בלק");
+		hebrewParshahMap.put(JewishCalendar.Parshah.PINCHAS, "פינחס");
+		hebrewParshahMap.put(JewishCalendar.Parshah.MATOS, "מטות");
+		hebrewParshahMap.put(JewishCalendar.Parshah.MASEI, "מסעי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.DEVARIM, "דברים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAESCHANAN, "ואתחנן");
+		hebrewParshahMap.put(JewishCalendar.Parshah.EIKEV, "עקב");
+		hebrewParshahMap.put(JewishCalendar.Parshah.REEH, "ראה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHOFTIM, "שופטים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.KI_SEITZEI, "כי תצא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.KI_SAVO, "כי תבוא");
+		hebrewParshahMap.put(JewishCalendar.Parshah.NITZAVIM, "נצבים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYEILECH, "וילך");
+		hebrewParshahMap.put(JewishCalendar.Parshah.HAAZINU, "האזינו");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VZOS_HABERACHA, "וזאת הברכה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.VAYAKHEL_PEKUDEI, "ויקהל פקודי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.TAZRIA_METZORA, "תזריע מצרע");
+		hebrewParshahMap.put(JewishCalendar.Parshah.ACHREI_MOS_KEDOSHIM, "אחרי מות קדושים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.BEHAR_BECHUKOSAI, "בהר בחקתי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.CHUKAS_BALAK, "חוקת בלק");
+		hebrewParshahMap.put(JewishCalendar.Parshah.MATOS_MASEI, "מטות מסעי");
+		hebrewParshahMap.put(JewishCalendar.Parshah.NITZAVIM_VAYEILECH, "נצבים וילך");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHKALIM, "שקלים");
+		hebrewParshahMap.put(JewishCalendar.Parshah.ZACHOR, "זכור");
+		hebrewParshahMap.put(JewishCalendar.Parshah.PARA, "פרה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.HACHODESH, "החדש");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHUVA, "שובה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.SHIRA, "שירה");
+		hebrewParshahMap.put(JewishCalendar.Parshah.HAGADOL, "הגדול");
+		hebrewParshahMap.put(JewishCalendar.Parshah.CHAZON, "חזון");
+		hebrewParshahMap.put(JewishCalendar.Parshah.NACHAMU, "נחמו");
 	}
 
 	/**
@@ -924,7 +924,7 @@ public class HebrewDateFormatter {
 	/**
 	 * Returns the map of transliterated parshiyos used by this formatter. This list using the default <em>Ashkenazi</em>
 	 * pronunciation. This list can be overridden (for <em>Sephardi</em> English transliteration for example) by setting the
-	 * {@link #setTransliteratedParshiosList(EnumMap)}. The list includes double and special <em>parshiyos</em> in the following
+	 * {@link #setTransliteratedParshiyosList(EnumMap)}. The list includes double and special <em>parshiyos</em> in the following
 	 * order and spelling "<em>Bereshis, Noach, Lech Lecha, Vayera, Chayei Sara, Toldos, Vayetzei, Vayishlach, Vayeshev, Miketz,
 	 * Vayigash, Vayechi, Shemos, Vaera, Bo, Beshalach, Yisro, Mishpatim, Terumah, Tetzaveh, Ki Sisa, Vayakhel, Pekudei, Vayikra,
 	 * Tzav, Shmini, Tazria, Metzora, Achrei Mos, Kedoshim, Emor, Behar, Bechukosai, Bamidbar, Nasso, Beha'aloscha, Sh'lach,
@@ -932,24 +932,24 @@ public class HebrewDateFormatter {
 	 * Vayeilech, Ha'Azinu, Vezos Habracha, Vayakhel Pekudei, Tazria Metzora, Achrei Mos Kedoshim, Behar Bechukosai, Chukas Balak,
 	 * Matos Masei, Nitzavim Vayeilech, Shekalim, Zachor, Parah, Hachodesh,Shuva, Shira, Hagadol, Chazon, Nachamu</em>".
 	 * 
-	 * @return the map of transliterated Parshios
-	 * @see #setTransliteratedParshiosList(EnumMap)
-	 * @see #formatParsha(JewishCalendar)
-	 * @see #formatParsha(JewishCalendar.Parshah)
+	 * @return the map of transliterated Parshiyos
+	 * @see #setTransliteratedParshiyosList(EnumMap)
+	 * @see #formatParshah(JewishCalendar)
+	 * @see #formatParshah(JewishCalendar.Parshah)
 	 */
-	public EnumMap<JewishCalendar.Parshah, String> getTransliteratedParshiosList() {
-		return transliteratedParshaMap;
+	public EnumMap<JewishCalendar.Parshah, String> getTransliteratedParshiyosList() {
+		return transliteratedParshahMap;
 	}
 
 	/**
 	 * Setter method to allow overriding of the default list of parshiyos transliterated into Latin chars. The
 	 * default uses Ashkenazi American English transliteration.
 	 * 
-	 * @param transliteratedParshaMap the transliterated Parshios as an EnumMap to set
-	 * @see #getTransliteratedParshiosList() for information on the format.
+	 * @param transliteratedParshahMap the transliterated Parshiyos as an EnumMap to set
+	 * @see #getTransliteratedParshiyosList() for information on the format.
 	 */
-	public void setTransliteratedParshiosList(EnumMap<JewishCalendar.Parshah, String> transliteratedParshaMap) {
-		this.transliteratedParshaMap = transliteratedParshaMap;
+	public void setTransliteratedParshiyosList(EnumMap<JewishCalendar.Parshah, String> transliteratedParshahMap) {
+		this.transliteratedParshahMap = transliteratedParshahMap;
 	}
 	
 	/**
@@ -968,18 +968,18 @@ public class HebrewDateFormatter {
 	 *         no parshah that week. If not set to Hebrew, it returns a string of the parshah(ios) transliterated into Latin chars. The
 	 *         default uses Ashkenazi pronunciation in typical American English spelling, for example Bereshis, Nitzavim Vayeilech for
 	 *         a double parshah, or an empty <code>String</code> if there are none.
-	 * @see #formatParsha(JewishCalendar)
+	 * @see #formatParshah(JewishCalendar)
 	 * @see #isHebrewFormat()
 	 * @see JewishCalendar#getParshah()
 	 */
-	public String formatParsha(JewishCalendar jewishCalendar) {
+	public String formatParshah(JewishCalendar jewishCalendar) {
 		JewishCalendar.Parshah parshah =  jewishCalendar.getParshah();
-		return formatParsha(parshah);
+		return formatParshah(parshah);
 	}
 
 	/**
 	 * Returns a <code>String</code> with the name of the current parshah(ios). This method overloads {@link
-	 * #formatParsha(JewishCalendar)} and unlike that method, it will format the <em>parshah</em> passed to this method regardless of
+	 * #formatParshah(JewishCalendar)} and unlike that method, it will format the <em>parshah</em> passed to this method regardless of
 	 * the day of week. This is the way to format a <em>parshah</em> retrieved from calling
 	 * {@link JewishCalendar#getUpcomingParshah()}.
 	 *
@@ -989,11 +989,11 @@ public class HebrewDateFormatter {
 	 *         if there is no parshah that week. If not set to Hebrew, it returns a string of the parshah(ios) transliterated into
 	 *         Latin chars. The default uses Ashkenazi pronunciation in typical American English spelling, for example Bereshis,  or
 	 *         Nitzavim Vayeilech for a double parshah, or an empty string if there are none.
-	 * @see #formatParsha(JewishCalendar)
+	 * @see #formatParshah(JewishCalendar)
 	 * @see JewishCalendar#getUpcomingParshah()
 	 */
-	public String formatParsha(JewishCalendar.Parshah parshah) {
-		return hebrewFormat ? hebrewParshaMap.get(parshah) : transliteratedParshaMap.get(parshah);
+	public String formatParshah(JewishCalendar.Parshah parshah) {
+		return hebrewFormat ? hebrewParshahMap.get(parshah) : transliteratedParshahMap.get(parshah);
 	}
 	
 	/**
@@ -1009,9 +1009,9 @@ public class HebrewDateFormatter {
 	 *         returns a string of the special parshah transliterated into Latin chars. The default uses Ashkenazi pronunciation in
 	 *         typical American English spelling of Shekalim, Zachor, Parah or Hachodesh. An empty string if there are none.
 	 */
-	public String formatSpecialParsha(JewishCalendar jewishCalendar) {
-		JewishCalendar.Parshah specialParsha =  jewishCalendar.getSpecialShabbos();
-		return hebrewFormat ? hebrewParshaMap.get(specialParsha) : transliteratedParshaMap.get(specialParsha);
+	public String formatSpecialParshah(JewishCalendar jewishCalendar) {
+		JewishCalendar.Parshah specialParshah =  jewishCalendar.getSpecialShabbos();
+		return hebrewFormat ? hebrewParshahMap.get(specialParshah) : transliteratedParshahMap.get(specialParshah);
 	}
 	
 	/**
