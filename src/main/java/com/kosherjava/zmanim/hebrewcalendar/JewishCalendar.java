@@ -189,7 +189,7 @@ public class JewishCalendar extends JewishDate {
 		/**BAMIDBAR*/BAMIDBAR, /**NASSO*/NASSO, /**BEHAALOSCHA*/BEHAALOSCHA, /**SHLACH*/SHLACH, /**KORACH*/KORACH, /**CHUKAS*/CHUKAS, /**BALAK*/BALAK,
 		/**PINCHAS*/PINCHAS, /**MATOS*/MATOS, /**MASEI*/MASEI, /**DEVARIM*/DEVARIM, /**VAESCHANAN*/VAESCHANAN, /**EIKEV*/EIKEV, /**REEH*/REEH,
 		/**SHOFTIM*/SHOFTIM, /**KI_SEITZEI*/KI_SEITZEI, /**KI_SAVO*/KI_SAVO, /**NITZAVIM*/NITZAVIM, /**VAYEILECH*/VAYEILECH, /**HAAZINU*/HAAZINU,
-		/**VZOS_HABERACHA*/VZOS_HABERACHA, /**The double parshah of Vayakhel &amp; Peudei*/VAYAKHEL_PEKUDEI, /**The double <em>parshah</em> of Tazria
+		/**VZOS_HABERACHA*/VZOS_HABERACHA, /**The double parshah of Vayakhel &amp; Pekudei*/VAYAKHEL_PEKUDEI, /**The double <em>parshah</em> of Tazria
 		 * &amp; Metzora*/TAZRIA_METZORA,/**The double <em>parshah</em> of Achrei Mos &amp; Kedoshim*/ACHREI_MOS_KEDOSHIM,/**The double <em>parshah</em>
 		 * of Behar &amp; Bechukosai*/BEHAR_BECHUKOSAI,/**The double <em>parshah</em> of Chukas &amp; Balak*/CHUKAS_BALAK, /**The double
 		 * <em>parshah</em> of Matos &amp; Masei*/MATOS_MASEI,/**The double <em>parshah</em> of Nitzavim &amp; Vayelech*/NITZAVIM_VAYEILECH,
@@ -201,7 +201,7 @@ public class JewishCalendar extends JewishDate {
 	/**
 	 * An array of <em>parshiyos</em> in the 17 possible combinations.
 	 */
-	public static final Parshah[][] parshalist = {
+	public static final Parshah[][] parshahlist = {
 		{Parshah.NONE, Parshah.VAYEILECH, Parshah.HAAZINU, Parshah.NONE, Parshah.BERESHIS, Parshah.NOACH, Parshah.LECH_LECHA, Parshah.VAYERA, Parshah.CHAYEI_SARA, Parshah.TOLDOS, Parshah.VAYETZEI, Parshah.VAYISHLACH, Parshah.VAYESHEV, Parshah.MIKETZ, Parshah.VAYIGASH, Parshah.VAYECHI, Parshah.SHEMOS, Parshah.VAERA, Parshah.BO, Parshah.BESHALACH, Parshah.YISRO, Parshah.MISHPATIM, Parshah.TERUMAH, Parshah.TETZAVEH, Parshah.KI_SISA, Parshah.VAYAKHEL_PEKUDEI, Parshah.VAYIKRA, Parshah.TZAV, Parshah.NONE, Parshah.SHMINI, Parshah.TAZRIA_METZORA, Parshah.ACHREI_MOS_KEDOSHIM, Parshah.EMOR, Parshah.BEHAR_BECHUKOSAI, Parshah.BAMIDBAR, Parshah.NASSO, Parshah.BEHAALOSCHA, Parshah.SHLACH, Parshah.KORACH, Parshah.CHUKAS, Parshah.BALAK, Parshah.PINCHAS, Parshah.MATOS_MASEI, Parshah.DEVARIM, Parshah.VAESCHANAN, Parshah.EIKEV, Parshah.REEH, Parshah.SHOFTIM, Parshah.KI_SEITZEI, Parshah.KI_SAVO, Parshah.NITZAVIM_VAYEILECH},
 		{Parshah.NONE, Parshah.VAYEILECH, Parshah.HAAZINU, Parshah.NONE, Parshah.BERESHIS, Parshah.NOACH, Parshah.LECH_LECHA, Parshah.VAYERA, Parshah.CHAYEI_SARA, Parshah.TOLDOS, Parshah.VAYETZEI, Parshah.VAYISHLACH, Parshah.VAYESHEV, Parshah.MIKETZ, Parshah.VAYIGASH, Parshah.VAYECHI, Parshah.SHEMOS, Parshah.VAERA, Parshah.BO, Parshah.BESHALACH, Parshah.YISRO, Parshah.MISHPATIM, Parshah.TERUMAH, Parshah.TETZAVEH, Parshah.KI_SISA, Parshah.VAYAKHEL_PEKUDEI, Parshah.VAYIKRA, Parshah.TZAV, Parshah.NONE, Parshah.SHMINI, Parshah.TAZRIA_METZORA, Parshah.ACHREI_MOS_KEDOSHIM, Parshah.EMOR, Parshah.BEHAR_BECHUKOSAI, Parshah.BAMIDBAR, Parshah.NONE, Parshah.NASSO, Parshah.BEHAALOSCHA, Parshah.SHLACH, Parshah.KORACH, Parshah.CHUKAS_BALAK, Parshah.PINCHAS, Parshah.MATOS_MASEI, Parshah.DEVARIM, Parshah.VAESCHANAN, Parshah.EIKEV, Parshah.REEH, Parshah.SHOFTIM, Parshah.KI_SEITZEI, Parshah.KI_SAVO, Parshah.NITZAVIM_VAYEILECH},
 		{Parshah.NONE, Parshah.HAAZINU, Parshah.NONE, Parshah.NONE, Parshah.BERESHIS, Parshah.NOACH, Parshah.LECH_LECHA, Parshah.VAYERA, Parshah.CHAYEI_SARA, Parshah.TOLDOS, Parshah.VAYETZEI, Parshah.VAYISHLACH, Parshah.VAYESHEV, Parshah.MIKETZ, Parshah.VAYIGASH, Parshah.VAYECHI, Parshah.SHEMOS, Parshah.VAERA, Parshah.BO, Parshah.BESHALACH, Parshah.YISRO, Parshah.MISHPATIM, Parshah.TERUMAH, Parshah.TETZAVEH, Parshah.KI_SISA, Parshah.VAYAKHEL_PEKUDEI, Parshah.VAYIKRA, Parshah.TZAV, Parshah.NONE, Parshah.NONE, Parshah.SHMINI, Parshah.TAZRIA_METZORA, Parshah.ACHREI_MOS_KEDOSHIM, Parshah.EMOR, Parshah.BEHAR_BECHUKOSAI, Parshah.BAMIDBAR, Parshah.NASSO, Parshah.BEHAALOSCHA, Parshah.SHLACH, Parshah.KORACH, Parshah.CHUKAS, Parshah.BALAK, Parshah.PINCHAS, Parshah.MATOS_MASEI, Parshah.DEVARIM, Parshah.VAESCHANAN, Parshah.EIKEV, Parshah.REEH, Parshah.SHOFTIM, Parshah.KI_SEITZEI, Parshah.KI_SAVO, Parshah.NITZAVIM},
@@ -389,7 +389,7 @@ public class JewishCalendar extends JewishDate {
 	 * <a href="http://hebrewbooks.org/pdfpager.aspx?req=14268&amp;st=&amp;pgnum=222">Luach Arba'ah Shearim</a> in the Tur Ohr Hachaim.
 	 * @return the type of year for <em>parshah</em> calculations.
 	 */
-	private int getParshaYearType() {
+	private int getParshahYearType() {
 		int roshHashanaDayOfWeek = (getJewishCalendarElapsedDays(getJewishYear()) + 1) % 7; // plus one to the original Rosh Hashana of year 1 to get a week starting on Sunday
 		if (roshHashanaDayOfWeek == 0) {
 			roshHashanaDayOfWeek = 7; // convert 0 to 7 for Shabbos for readability
@@ -488,12 +488,12 @@ public class JewishCalendar extends JewishDate {
 			return Parshah.NONE;
 		}
 		
-		int yearType = getParshaYearType();
+		int yearType = getParshahYearType();
 		int roshHashanaDayOfWeek = getJewishCalendarElapsedDays(getJewishYear()) % 7;
 		int day = roshHashanaDayOfWeek + getDaysSinceStartOfJewishYear();
 		
 		if (yearType >= 0) { // negative year should be impossible, but let's cover all bases
-			return parshalist[yearType][day/7];
+			return parshahlist[yearType][day/7];
 		}
 		return Parshah.NONE; //keep the compiler happy
 	}
@@ -502,7 +502,7 @@ public class JewishCalendar extends JewishDate {
 	 * Returns the upcoming {@link Parshah <em>Parshah</em>} regardless of if it is the weekday or <em>Shabbos</em> (where next
 	 * Shabbos's <em>Parshah</em> will be returned. This is unlike {@link #getParshah()} that returns {@link Parshah#NONE} if
 	 * the date is not <em>Shabbos</em>. If the upcoming <em>Shabbos</em> is a <em>Yom Tov</em> and has no <em>Parshah</em>, the
-	 * following week's <em>Parshah</em> will be returned.
+	 * following week's <em>parshah</em> will be returned.
 	 * 
 	 * @return the upcoming <em>parshah</em>.
 	 */
