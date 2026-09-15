@@ -46,13 +46,13 @@ public class JewishCalendarHolidayTest {
 	@Test
 	public void parsha() {
 		HebrewDateFormatter formatter = new HebrewDateFormatter();
-		assertEquals("Bereshis", formatter.formatParsha(new JewishCalendar(LocalDate.of(2023, 10, 14))));
+		assertEquals("Bereshis", formatter.formatParshah(new JewishCalendar(LocalDate.of(2023, 10, 14))));
 
 		HebrewDateFormatter hebrew = new HebrewDateFormatter();
 		hebrew.setHebrewFormat(true);
-		assertEquals("בראשית", hebrew.formatParsha(new JewishCalendar(LocalDate.of(2023, 10, 14))));
+		assertEquals("בראשית", hebrew.formatParshah(new JewishCalendar(LocalDate.of(2023, 10, 14))));
 
-		assertEquals("Terumah", formatter.formatParsha(new JewishCalendar(LocalDate.of(2024, 2, 17))));
+		assertEquals("Terumah", formatter.formatParshah(new JewishCalendar(LocalDate.of(2024, 2, 17))));
 	}
 
 	@Test
