@@ -808,9 +808,9 @@ public class RegressionTestFileWriter {
         private final Daf dafYomiYerushalmi;
         private final boolean isruChag;
         private final boolean birkasHachamah;
-        private final JewishCalendar.Parsha parshah;
-        private final JewishCalendar.Parsha upcomingParshah;
-        private final JewishCalendar.Parsha specialShabbos;
+        private final JewishCalendar.Parshah parshah;
+        private final JewishCalendar.Parshah upcomingParshah;
+        private final JewishCalendar.Parshah specialShabbos;
         private final boolean yomTov;
         private final boolean yomTovAssurBemelacha;
         private final boolean assurBemelacha;
@@ -851,7 +851,7 @@ public class RegressionTestFileWriter {
         private final Instant sofZmanKidushLevana15Days;
         private final int tekufasTishreiElapsedDays;
 
-        public FullCalendar(LocalDate current, JewishDate currentJewishDate, int yomTovIndex, Daf dafYomiBavli, Daf dafYomiYerushalmi, boolean isruChag, boolean birkasHachamah, JewishCalendar.Parsha parshah, JewishCalendar.Parsha upcomingParshah, JewishCalendar.Parsha specialShabbos, boolean yomTov, boolean yomTovAssurBemelacha, boolean assurBemelacha, boolean hasCandleLighting, boolean tomorrowShabbosOrYomTov, boolean erevYomTovSheni, boolean aseresYemeiTeshuva, boolean pesach, boolean cholHamoedPesach, boolean shavuos, boolean roshHashana, boolean yomKippur, boolean succos, boolean hoshanaRabba, boolean shminiAtzeres, boolean simchasTorah, boolean cholHamoedSuccos, boolean cholHamoed, boolean erevYomTov, boolean erevRoshChodesh, boolean yomKippurKatan, boolean beHaB, boolean taanis, boolean taanisBechoros, int dayOfChanukah, boolean chanukah, boolean purim, boolean roshChodesh, boolean macharChodesh, boolean shabbosMevorchim, int dayOfOmer, boolean tishaBav, JewishDate molad, Instant moladAsDate, Instant tchilasZmanKidushLevana3Days, Instant tchilasZmanKidushLevana7Days, Instant sofZmanKidushLevanaBetweenMoldos, Instant sofZmanKidushLevana15Days, int tekufasTishreiElapsedDays) {
+        public FullCalendar(LocalDate current, JewishDate currentJewishDate, int yomTovIndex, Daf dafYomiBavli, Daf dafYomiYerushalmi, boolean isruChag, boolean birkasHachamah, JewishCalendar.Parshah parshah, JewishCalendar.Parshah upcomingParshah, JewishCalendar.Parshah specialShabbos, boolean yomTov, boolean yomTovAssurBemelacha, boolean assurBemelacha, boolean hasCandleLighting, boolean tomorrowShabbosOrYomTov, boolean erevYomTovSheni, boolean aseresYemeiTeshuva, boolean pesach, boolean cholHamoedPesach, boolean shavuos, boolean roshHashana, boolean yomKippur, boolean succos, boolean hoshanaRabba, boolean shminiAtzeres, boolean simchasTorah, boolean cholHamoedSuccos, boolean cholHamoed, boolean erevYomTov, boolean erevRoshChodesh, boolean yomKippurKatan, boolean beHaB, boolean taanis, boolean taanisBechoros, int dayOfChanukah, boolean chanukah, boolean purim, boolean roshChodesh, boolean macharChodesh, boolean shabbosMevorchim, int dayOfOmer, boolean tishaBav, JewishDate molad, Instant moladAsDate, Instant tchilasZmanKidushLevana3Days, Instant tchilasZmanKidushLevana7Days, Instant sofZmanKidushLevanaBetweenMoldos, Instant sofZmanKidushLevana15Days, int tekufasTishreiElapsedDays) {
             this.current = current;
             this.currentJewishDate = currentJewishDate;
             this.yomTovIndex = yomTovIndex;
