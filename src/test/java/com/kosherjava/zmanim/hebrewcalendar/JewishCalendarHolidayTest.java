@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import org.junit.Test;
 
 /**
- * Coverage for {@link JewishCalendar} holiday / special-day predicates and {@link HebrewDateFormatter#formatParsha}.
+ * Coverage for {@link JewishCalendar} holiday / special-day predicates and {@link HebrewDateFormatter#formatParshah}.
  * These are deterministic halachic classifications asserted against known dates.
  *
  * @author Test coverage
@@ -44,7 +44,7 @@ public class JewishCalendarHolidayTest {
 	}
 
 	@Test
-	public void parsha() {
+	public void parshah() {
 		HebrewDateFormatter formatter = new HebrewDateFormatter();
 		assertEquals("Bereshis", formatter.formatParshah(new JewishCalendar(LocalDate.of(2023, 10, 14))));
 
