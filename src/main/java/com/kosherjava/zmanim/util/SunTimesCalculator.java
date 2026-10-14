@@ -67,14 +67,14 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	@Override
 	public double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude(), localDate);
 		return getTimeUTC(localDate, geoLocation, adjustedZenith, true);
 	}
 
 	@Override
 	public double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
-		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
+		double adjustedZenith = adjustZenith(zenith, elevation, geoLocation.getLatitude(), localDate);
 		return getTimeUTC(localDate, geoLocation, adjustedZenith, false);
 	}
 
