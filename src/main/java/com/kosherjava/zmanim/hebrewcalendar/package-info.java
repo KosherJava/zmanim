@@ -12,7 +12,9 @@
  *   <li>{@link TefilaRules} is a utility class for various calendar based <em>tefila</em> rules.</li>
  *   <li>{@link HebrewDateFormatter} defines the basics for taking a JewishCalendar and formatting the dates.</li>
  *   <li>{@link YomiCalculator} calculates the {@link Daf} Yomi Bavli for a given JewishCalendar and {@link YerushalmiYomiCalculator} does the same
- *   for Yerushalmi Yomi.</li>
+ *   for Yerushalmi Yomi. Other daily limud calculators include {@link MishnaYomiCalculator}, {@link RambamYomiCalculator},
+ *   {@link TehillimYomiCalculator}, {@link TanachYomiCalculator}, {@link KitzurShulchanAruchYomiCalculator} and
+ *   {@link ShemirasHaLashonYomiCalculator}.</li>
  * </ul>
  * @author © Eliyahu Hershfeld 2011 - 2026
  */
