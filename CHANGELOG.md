@@ -69,7 +69,6 @@
 * `getSofZman*Chametz*` times will retun null if it is not _Erev Pesach_.
 * Move ErevPesach zmanim _calculations_ from the `ComprehensiveZmanimCaledar` to generic methods in the parent `ZmanimCalendar` class. Nothing changed in the signatures of the methods in the `ComprehensivZemanimCalendar` class.
 * Increase the minimum supported JRE version from version 8 (the code currently almost certainly works on 6 today) to Java 11 or higher.
-* `JewishCalendar` now has plus and minus methods (matching the `java.time.LocalDate` class) for years, months and days.
 * Tweaked logic in `AstronomicalCalendar.getInstantFromTime()` to address issues near the dateline.
 * Improve null handling in `ComprehensiveZmanimCalendar.getMoladBasedTime()`
 * Add `ComprehensiveZmanimCalendar.getMisheyakir12Point85Degrees()`
@@ -110,9 +109,11 @@
   * [Fix `getAlos60()` to use `getElevationAdjustedSunrise()`](https://github.com/KosherJava/zmanim/commit/f5a5b2c68e1f0e2f9f4fbdd2cc585085f2914b74)
   * Update Tefila method to Use [Consistent Spelling](https://github.com/KosherJava/zmanim/commit/bca6ddb85542683f229d905636a06fbfc66fbe03).
   * Add [`getSunsetOrWesternmostSolarAzimuth()` and `getSunriseOrEasternmostSolarAzimuth()`](https://github.com/KosherJava/zmanim/commit/ab9a903e94c33d31f1ce006a6102cdfa259786ad) methods.
+  * Add [`getPolarPlagHaminchaBenIshChai()` and `getPolarStartOfDayTeshuvosVehanhagos()`](https://github.com/KosherJava/zmanim/commit/61a0b38ad295044ca39c884e1bda99a2b6644425)
+  * Add [`getPolarStartOfDayTeshuvosVehanhagos()`](https://github.com/KosherJava/zmanim/commit/df53b1d73e0a2c9bfb3be1da748e605a6f5b5b47)
 * `zmanimFormatter now formats `Duration`s and removed support for formatting longs and Time.
 * `HebrewdateFormatter`
-  * add method [`formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParshah()`.
+  * add method [`formatParsha(JewishCalendar.Parsha parsha)`](https://github.com/KosherJava/zmanim/commit/ee3347b04bf0f4221bc8aa71af59437cd7533f72) to allow formatting of a parsha retrieved from `JewishCalendar.getUpcomingParsha()`.
   * Add `getHebrewMonthList()` and `setHebrewMonthList(String[])`. This allows overriding the default month of Chesvan to Marcheshvan etc.
   * Throw an `IllegalArgumentException` if the array length of months != 14
   * Remove the experimental and private `formatMolad(long moladChalakim)`
@@ -124,15 +125,23 @@
 * `JewishCalendar`
   * [`isYomTov()` now returns true for 20 Nissan](https://github.com/KosherJava/zmanim/commit/4e5abe6e98d5404f41da519f2f902b3af1e58e30)
   * [add missing brace to `isYomTov()` and simplify logic](https://github.com/KosherJava/zmanim/commit/e34fc879313b045f35e70b5947e2c2e20a4364c5)
-* `JewishCalendar`
   * `getDaysInJewishMonth(int,int)` and `getLastDayOfGregorianMonth(int,int)` now have parameter order as year, month (it had been month, year).
   * `isJewishLeapYear(int)` is now public.
-* `GeoLocation` - [add NaN validation to `setLatitude` and `setLongitude`](https://github.com/KosherJava/zmanim/commit/d064715ebeaead29a01ec673f3885ee9bd9c78b4)
+  * [Rename `isHavdalahRecited()` -> `isTonightMutarBemelacha()`](https://github.com/KosherJava/zmanim/commit/61a0b38ad295044ca39c884e1bda99a2b6644425)
+  * Added plus and minus methods (matching the `java.time.LocalDate` class) for years, months and days.
+  * [Add `getTekufa()` and `getTekufaAsInstant()`](https://github.com/KosherJava/zmanim/commit/ad91c0a65633d2b3f0f9745f84c56946436a7f64)
+  * [Rename `Parsha` to `Parshah`](https://github.com/KosherJava/zmanim/commit/df53b1d73e0a2c9bfb3be1da748e605a6f5b5b47). This was done in formatters as well.
+* `GeoLocation`
+  * [add NaN validation to `setLatitude` and `setLongitude`](https://github.com/KosherJava/zmanim/commit/d064715ebeaead29a01ec673f3885ee9bd9c78b4)
+  * [Remove DMS versions of setLatitude and setLongitude](https://github.com/KosherJava/zmanim/commit/910ee42b91de350007dfc3b832897bc263893b89)
 * `NOAACalculator` - [fix Solar Azimuth and Elevation](https://github.com/KosherJava/zmanim/commit/860f1939c25b38dd4d23adb1772b12ccbc71fc76)
 * `AstronomicalCalculator` Add some methods
   * `getSolarAzimuth((Instant, GeoLocation)` - the first parameter was a ZonedDateTime earlier in the rewrite
   * `getSolarElevation(Instant, GeoLocation)` - the first parameter was a ZonedDateTime earlier in the rewrite
-  * `getTimeAtAzimuth()`
+  * [`getTimeAtAzimuth90Or270(double)`](https://github.com/KosherJava/zmanim/commit/7287a6ab54eb76324b442ea56ffbd56973f0429f)
+  * [Use and Default to Using The sun's apparent angular semi-diameter for that day](https://github.com/KosherJava/zmanim/commit/911d58ea09996560c3f2804e612fb433bcd0dee2)
+  * [Rename `getSolarRadius(LocalDate)` -> `getApparentSolarRadius(LocalDate)`](https://github.com/KosherJava/zmanim/commit/d002497e76ef5fda06c0c6bdb812492d0b87856d) to avoid confusion
+  * Rename a`stronomicalApparentSolarRadius` -> `apparentSolarRadius`
 * `AstronomicalCalendar`
   * [Fix null handling in `getSunTransit(Date,Date)`](https://github.com/KosherJava/zmanim/commit/8221e2895cbab62b037c16de1711f9faacd78a7b)
   * [Deprecate `getSunriseSolarDipFromOffset` and `getSunsetSolarDipFromOffset`](https://github.com/KosherJava/zmanim/commit/0ce858258bff15c11235b1f1063d2eb0ef22b994)
@@ -142,6 +151,10 @@
   * [Correct USNO noon calculation](https://github.com/KosherJava/zmanim/commit/3735c92289a66039b24d7e2b470955b5297f0ca5) in some locations where it was sometimes 12 hours off.
   * [Add `getTimeAtAzimuth(double azimuth)`](https://github.com/KosherJava/zmanim/commit/05a3bc3cdb2dbc88ffca89be0828f50abf62969f)
   * All sha'os zmaniyos that had returned long (and a Long.MIN_VALUE when N/A) now return java.time.Duration (and a null when N/A)
+  * [Add two new more accurate and slower calculators](https://github.com/KosherJava/zmanim/commit/0b033da4375a8b341a69031f05977573d4556394)
+    * `MeeusCalculator` - a calculator that implements the higher accuracy Jean Meeus algorithmn (the existing NOAACalculator uses the low accuracy implementation)
+    * `SPACalculator` - a higher accuracy calculator
+  * [Deprecate the USNO-Based `SunTimesCalculator`](https://github.com/KosherJava/zmanim/commit/340a1524af55748b41e4f0b780387eff41710617) that is not as accurate as other calculators.
 
 ## [2.5.0](https://github.com/KosherJava/zmanim/compare/2.4.0...2.5.0) (2023-06-09)
 
