@@ -66,9 +66,9 @@ public class GeoLocation implements Cloneable {
 	private double elevation;
 
 	/**
-	 * The elevation in Meters above sea level of the horizon in the direction of sunrise. The sun's rising point moves along
-	 * the horizon through the year, so this describes the skyline at that day's sunrise azimuth and is expected to change from
-	 * day to day. Defaults to 0, a sea-level horizon.
+	 * The elevation in Meters above sea level of the horizon at the point where the sun rises that day.
+	 * This point is not simply due east and shifts through the year as the sunrise azimuth changes with the season.
+	 * Defaults to 0.
 	 * @see #getHorizonElevationAtSunrise()
 	 * @see #setHorizonElevationAtSunrise(double)
 	 * @see #getSunriseElevation()
@@ -76,9 +76,9 @@ public class GeoLocation implements Cloneable {
 	private double horizonElevationAtSunrise = 0;
 
 	/**
-	 * The elevation in Meters above sea level of the horizon in the direction of sunset. The sun's setting point moves along
-	 * the horizon through the year, so this describes the skyline at that day's sunset azimuth and is expected to change from
-	 * day to day. Defaults to 0, a sea-level horizon.
+	 * The elevation in Meters above sea level of the horizon at the point where the sun sets that day.
+	 * This point is not simply due west and shifts through the year as the sunset azimuth changes with the season.
+	 * Defaults to 0.
 	 * @see #getHorizonElevationAtSunset()
 	 * @see #setHorizonElevationAtSunset(double)
 	 * @see #getSunsetElevation()
@@ -139,9 +139,9 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Method to return the elevation in Meters above sea level of the horizon at the sunrise azimuth.
+	 * Method to return the elevation in Meters above sea level of the horizon at the point where the sun rises that day.
 	 *
-	 * @return Returns the horizon elevation at sunrise in Meters.
+	 * @return the horizon elevation at sunrise in Meters.
 	 * @see #setHorizonElevationAtSunrise(double)
 	 */
 	public double getHorizonElevationAtSunrise() {
@@ -149,10 +149,10 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Method to set the elevation in Meters above sea level of the horizon at the sunrise azimuth. Sunrise is calculated with the
-	 * observer's height above this horizon instead of above sea level. Since the sunrise azimuth moves through the year, this is
-	 * a per-day value; a caller tracking a varied skyline should set it for the date being calculated.
-	 * @param horizonElevationAtSunrise The horizon elevation at sunrise to set in Meters. An IllegalArgumentException will be thrown
+	 * Method to set the elevation in Meters above sea level of the horizon at the point where the sun rises that day.
+	 * This point is not simply due east and shifts through the year as the sunrise azimuth changes with the season.
+	 * Sunrise is calculated with the observer's height above this horizon instead of above sea level.
+	 * @param horizonElevationAtSunrise the horizon elevation at sunrise in Meters. An IllegalArgumentException will be thrown
 	 *         if the value is a negative, {@link java.lang.Double#isNaN(double)} or {@link java.lang.Double#isInfinite(double)}.
 	 * @see #getSunriseElevation()
 	 */
@@ -162,9 +162,9 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Method to return the elevation in Meters above sea level of the horizon at the sunset azimuth.
+	 * Method to return the elevation in Meters above sea level of the horizon at the point where the sun sets that day.
 	 *
-	 * @return Returns the horizon elevation at sunset in Meters.
+	 * @return the horizon elevation at sunset in Meters.
 	 * @see #setHorizonElevationAtSunset(double)
 	 */
 	public double getHorizonElevationAtSunset() {
@@ -172,10 +172,10 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * Method to set the elevation in Meters above sea level of the horizon at the sunset azimuth. Sunset is calculated with the
-	 * observer's height above this horizon instead of above sea level. Since the sunset azimuth moves through the year, this is
-	 * a per-day value; a caller tracking a varied skyline should set it for the date being calculated.
-	 * @param horizonElevationAtSunset The horizon elevation at sunset to set in Meters. An IllegalArgumentException will be thrown
+	 * Method to set the elevation in Meters above sea level of the horizon at the point where the sun sets that day.
+	 * This point is not simply due west and shifts through the year as the sunset azimuth changes with the season.
+	 * Sunset is calculated with the observer's height above this horizon instead of above sea level.
+	 * @param horizonElevationAtSunset the horizon elevation at sunset in Meters. An IllegalArgumentException will be thrown
 	 *         if the value is a negative, {@link java.lang.Double#isNaN(double)} or {@link java.lang.Double#isInfinite(double)}.
 	 * @see #getSunsetElevation()
 	 */
@@ -198,7 +198,7 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * The height in Meters of the observer above the {@link #getHorizonElevationAtSunrise() horizon at the sunrise azimuth}, used for sunrise.
+	 * The height in Meters of the observer above the {@link #getHorizonElevationAtSunrise() sunrise horizon}.
 	 * A higher horizon returns 0, since <em>halachically</em> land blocking the sun does not delay sunrise.
 	 *
 	 * @return the observer's height above the sunrise horizon in Meters, never negative. With the default sea-level horizon
@@ -209,7 +209,7 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
-	 * The height in Meters of the observer above the {@link #getHorizonElevationAtSunset() horizon at the sunset azimuth}, used for sunset.
+	 * The height in Meters of the observer above the {@link #getHorizonElevationAtSunset() sunset horizon}.
 	 * A higher horizon returns 0, since <em>halachically</em> land blocking the sun does not make sunset earlier.
 	 *
 	 * @return the observer's height above the sunset horizon in Meters, never negative. With the default sea-level horizon
@@ -264,11 +264,10 @@ public class GeoLocation implements Cloneable {
 	 *         of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich), a negative value should
 	 *         be used.
 	 * @param elevation the elevation above sea level in Meters.
-	 * @param horizonElevationAtSunrise the elevation above sea level in Meters of the horizon at the sunrise azimuth. The sun
-	 *         rises at a different point on the horizon each day, so this is the skyline height for the date being calculated
-	 *         and is expected to change from day to day.
-	 * @param horizonElevationAtSunset the elevation above sea level in Meters of the horizon at the sunset azimuth. Like the
-	 *         sunrise horizon, this is a per-day value that follows the sun's setting point along the horizon.
+	 * @param horizonElevationAtSunrise the elevation above sea level in Meters of the horizon at the point where the sun rises
+	 *         that day.
+	 * @param horizonElevationAtSunset the elevation above sea level in Meters of the horizon at the point where the sun sets
+	 *         that day.
 	 * @param zoneId the {@code ZoneId} for the location.
 	 * @see #setHorizonElevationAtSunrise(double)
 	 */
