@@ -1,3 +1,6 @@
+## 3.1.0 (future)
+  * `GeoLocation` Adds support for [eastern and western horizon elevation for sunrise and sunset](https://github.com/KosherJava/zmanim/commit/cb2b1835ae875c5fb2fbd3b35ae18f523ab93bfe).
+
 ## [3.0.0](https://github.com/KosherJava/zmanim/compare/2.5.0...3.0.0) (2026-10-21)
 ### Includes breaking changes
 * Remove deprecated methods flagged for removal, including
