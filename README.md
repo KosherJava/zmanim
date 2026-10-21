@@ -24,19 +24,19 @@ Add the following to your `pom.xml` file:
 <dependency>
   <groupId>com.kosherjava</groupId>
   <artifactId>zmanim</artifactId>
-  <version>2.5.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 
 #### Gradle
 Add the following to your `build.gradle` file:
 ```groovy
-implementation 'com.kosherjava:zmanim:2.5.0'
+implementation 'com.kosherjava:zmanim:3.0.0'
 ```
 Or if you have `build.gradle.kts` file:
 
 ```kotlin
-implementation("com.kosherjava:zmanim:2.5.0")
+implementation("com.kosherjava:zmanim:3.0.0")
 ```
 
 

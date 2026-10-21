@@ -1,4 +1,4 @@
-## 3.0.0 (future)
+## [3.0.0](https://github.com/KosherJava/zmanim/compare/2.5.0...3.0.0) (2026-10-21)
 ### Includes breaking changes
 * Remove deprecated methods flagged for removal, including
   * `ComprehensiveZmanimcalendar` class
