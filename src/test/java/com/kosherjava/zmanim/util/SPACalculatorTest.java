@@ -116,6 +116,19 @@ public class SPACalculatorTest {
 		}
 	}
 
+	/**
+	 * Near the South Pole in March the closed-form first guess says the Sun reaches 10.2&deg; below the horizon, but the
+	 * topocentric Sun only gets to about 10.04&deg;. The secant iteration never converges and used to return an arbitrary
+	 * time. There is no event, so the result must be NaN.
+	 */
+	@Test
+	public void unconvergedRiseSetIsNoEvent() {
+		GeoLocation location = new GeoLocation("Antarctica", -77.26876171057897, -92.86928302120835, 3965.3333110036533,
+				java.time.ZoneId.of("Etc/GMT+6"));
+		double actual = calculator().getUTCSunrise(date("2127-03-14"), location, 100.2, false);
+		assertTrue("Sun never reaches 100.2° zenith; expected NaN but got " + actual, Double.isNaN(actual));
+	}
+
 	@Test
 	public void getUTCNoon() {
 		Object[][] cases = {

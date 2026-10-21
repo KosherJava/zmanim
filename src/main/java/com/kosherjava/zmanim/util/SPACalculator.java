@@ -79,6 +79,15 @@ public class SPACalculator extends AstronomicalCalculator {
 	/** Julian days per century. */
 	private static final double JULIAN_DAYS_PER_CENTURY = 36525.0;
 
+	/**
+	 * The largest difference, in degrees, between the Sun's zenith at the solved time and the requested zenith that is still
+	 * accepted as a sunrise or sunset. When the secant iteration in {@link #solveRiseSet} ends further off than this, it did
+	 * not converge, and there is no event on that date. Converged solutions end below 1e-6&deg; (floating-point noise in the
+	 * Julian day), and failed ones almost always above 1e-3&deg;. 1e-4&deg; leaves a wide margin above the noise and is still
+	 * below the SPA's stated accuracy of &plusmn;0.0003&deg;.
+	 */
+	private static final double MAX_ZENITH_RESIDUAL = 1e-4;
+
 	/** Whether to apply the ΔT (TT−UT) correction. Defaults to {@code true}. */
 	private boolean applyDeltaT = true;
 
@@ -330,6 +339,11 @@ public class SPACalculator extends AstronomicalCalculator {
 			t0 = t1; f0 = f1;
 			t1 = t2;
 			f1 = topocentricTrueZenith(jdDay + t1 / 1440.0, lat, geoLocation.getLongitude(), elevation) - adjustedZenith;
+		}
+		// Near the poles the closed-form guess can report an event the topocentric Sun never reaches. The iteration then
+		// wanders off without converging, and the last guess is an arbitrary time, not a solution.
+		if (!(Math.abs(f1) <= MAX_ZENITH_RESIDUAL)) {
+			return Double.NaN;
 		}
 		return t1;
 	}
