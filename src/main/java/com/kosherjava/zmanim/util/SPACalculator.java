@@ -207,7 +207,14 @@ public class SPACalculator extends AstronomicalCalculator {
 	 */
 	private double getUTCSunRiseSet(LocalDate localDate, GeoLocation geoLocation, double zenith,
 			boolean adjustForElevation, SolarEvent solarEvent) {
-		double elevation = adjustForElevation ? geoLocation.getElevation() : 0;
+		double elevation = 0;
+		if (adjustForElevation) {
+			if (solarEvent == SolarEvent.SUNRISE) {
+				elevation = geoLocation.getSunriseElevation();
+			} else {
+				elevation = geoLocation.getSunsetElevation();
+			}
+		}
 		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
 		double riseSet = solveRiseSet(localDate, geoLocation, adjustedZenith, solarEvent);
 		if (Double.isNaN(riseSet)) {

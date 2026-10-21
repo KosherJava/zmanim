@@ -64,6 +64,26 @@ public class GeoLocation implements Cloneable {
 	 * @see #setElevation(double)
 	 */
 	private double elevation;
+
+	/**
+	 * The elevation in Meters above sea level of the horizon at the point where the sun rises that day.
+	 * This point is not simply due east and shifts through the year as the sunrise azimuth changes with the season.
+	 * Defaults to 0.
+	 * @see #getHorizonElevationAtSunrise()
+	 * @see #setHorizonElevationAtSunrise(double)
+	 * @see #getSunriseElevation()
+	 */
+	private double horizonElevationAtSunrise = 0;
+
+	/**
+	 * The elevation in Meters above sea level of the horizon at the point where the sun sets that day.
+	 * This point is not simply due west and shifts through the year as the sunset azimuth changes with the season.
+	 * Defaults to 0.
+	 * @see #getHorizonElevationAtSunset()
+	 * @see #setHorizonElevationAtSunset(double)
+	 * @see #getSunsetElevation()
+	 */
+	private double horizonElevationAtSunset = 0;
 	
 	/**
 	 * Constant for a distance type calculation.
@@ -119,6 +139,87 @@ public class GeoLocation implements Cloneable {
 	}
 
 	/**
+	 * Method to return the elevation in Meters above sea level of the horizon at the point where the sun rises that day.
+	 *
+	 * @return the horizon elevation at sunrise in Meters.
+	 * @see #setHorizonElevationAtSunrise(double)
+	 */
+	public double getHorizonElevationAtSunrise() {
+		return horizonElevationAtSunrise;
+	}
+
+	/**
+	 * Method to set the elevation in Meters above sea level of the horizon at the point where the sun rises that day.
+	 * This point is not simply due east and shifts through the year as the sunrise azimuth changes with the season.
+	 * Sunrise is calculated with the observer's height above this horizon instead of above sea level.
+	 * @param horizonElevationAtSunrise the horizon elevation at sunrise in Meters. An IllegalArgumentException will be thrown
+	 *         if the value is a negative, {@link java.lang.Double#isNaN(double)} or {@link java.lang.Double#isInfinite(double)}.
+	 * @see #getSunriseElevation()
+	 */
+	public void setHorizonElevationAtSunrise(double horizonElevationAtSunrise) {
+		validateHorizonElevation(horizonElevationAtSunrise);
+		this.horizonElevationAtSunrise = horizonElevationAtSunrise;
+	}
+
+	/**
+	 * Method to return the elevation in Meters above sea level of the horizon at the point where the sun sets that day.
+	 *
+	 * @return the horizon elevation at sunset in Meters.
+	 * @see #setHorizonElevationAtSunset(double)
+	 */
+	public double getHorizonElevationAtSunset() {
+		return horizonElevationAtSunset;
+	}
+
+	/**
+	 * Method to set the elevation in Meters above sea level of the horizon at the point where the sun sets that day.
+	 * This point is not simply due west and shifts through the year as the sunset azimuth changes with the season.
+	 * Sunset is calculated with the observer's height above this horizon instead of above sea level.
+	 * @param horizonElevationAtSunset the horizon elevation at sunset in Meters. An IllegalArgumentException will be thrown
+	 *         if the value is a negative, {@link java.lang.Double#isNaN(double)} or {@link java.lang.Double#isInfinite(double)}.
+	 * @see #getSunsetElevation()
+	 */
+	public void setHorizonElevationAtSunset(double horizonElevationAtSunset) {
+		validateHorizonElevation(horizonElevationAtSunset);
+		this.horizonElevationAtSunset = horizonElevationAtSunset;
+	}
+
+	/**
+	 * Throws if a horizon elevation is not a usable height in Meters above sea level.
+	 * @param horizonElevation the value to check.
+	 */
+	private static void validateHorizonElevation(double horizonElevation) {
+		if (horizonElevation < 0) {
+			throw new IllegalArgumentException("Horizon elevation cannot be negative");
+		}
+		if (Double.isNaN(horizonElevation) || Double.isInfinite(horizonElevation)) {
+			throw new IllegalArgumentException("Horizon elevation cannot be NaN or infinite");
+		}
+	}
+
+	/**
+	 * The height in Meters of the observer above the {@link #getHorizonElevationAtSunrise() sunrise horizon}.
+	 * A higher horizon returns 0, since <em>halachically</em> land blocking the sun does not delay sunrise.
+	 *
+	 * @return the observer's height above the sunrise horizon in Meters, never negative. With the default sea-level horizon
+	 *         this is the same as {@link #getElevation()}.
+	 */
+	public double getSunriseElevation() {
+		return Math.max(elevation - horizonElevationAtSunrise, 0);
+	}
+
+	/**
+	 * The height in Meters of the observer above the {@link #getHorizonElevationAtSunset() sunset horizon}.
+	 * A higher horizon returns 0, since <em>halachically</em> land blocking the sun does not make sunset earlier.
+	 *
+	 * @return the observer's height above the sunset horizon in Meters, never negative. With the default sea-level horizon
+	 *         this is the same as {@link #getElevation()}.
+	 */
+	public double getSunsetElevation() {
+		return Math.max(elevation - horizonElevationAtSunset, 0);
+	}
+
+	/**
 	 * GeoLocation constructor with parameters for all required fields.
 	 * 
 	 * @param name The location name for display, for example "Lakewood, NJ".
@@ -151,6 +252,30 @@ public class GeoLocation implements Cloneable {
 		setLongitude(longitude);
 		setElevation(elevation);
 		setZoneId(zoneId);
+	}
+
+	/**
+	 * GeoLocation constructor for a location whose horizon at sunrise or sunset is not at sea level.
+	 *
+	 * @param name The location name for display, for example "Lakewood, NJ".
+	 * @param latitude the latitude as a {@code double}, for example 40.096 for Lakewood, NJ. <b>Note:</b> For latitudes south of
+	 *         the equator, a negative value should be used.
+	 * @param longitude the longitude as a {@code double}, for example -74.222 for Lakewood, NJ. <b>Note:</b> For longitudes west
+	 *         of the <a href="https://en.wikipedia.org/wiki/Prime_Meridian">Prime Meridian</a> (Greenwich), a negative value should
+	 *         be used.
+	 * @param elevation the elevation above sea level in Meters.
+	 * @param horizonElevationAtSunrise the elevation above sea level in Meters of the horizon at the point where the sun rises
+	 *         that day.
+	 * @param horizonElevationAtSunset the elevation above sea level in Meters of the horizon at the point where the sun sets
+	 *         that day.
+	 * @param zoneId the {@code ZoneId} for the location.
+	 * @see #setHorizonElevationAtSunrise(double)
+	 */
+	public GeoLocation(String name, double latitude, double longitude, double elevation, double horizonElevationAtSunrise,
+			double horizonElevationAtSunset, ZoneId zoneId) {
+		this(name, latitude, longitude, elevation, zoneId);
+		setHorizonElevationAtSunrise(horizonElevationAtSunrise);
+		setHorizonElevationAtSunset(horizonElevationAtSunset);
 	}
 
 	/**
@@ -487,6 +612,8 @@ public class GeoLocation implements Cloneable {
 				"\t<Latitude>" + getLatitude() + "</Latitude>\n" +
 				"\t<Longitude>" + getLongitude() + "</Longitude>\n" +
 				"\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
+				"\t<HorizonElevationAtSunrise>" + getHorizonElevationAtSunrise() + " Meters" + "</HorizonElevationAtSunrise>\n" +
+				"\t<HorizonElevationAtSunset>" + getHorizonElevationAtSunset() + " Meters" + "</HorizonElevationAtSunset>\n" +
 				"\t<TimezoneName>" + getZoneId().getId() + "</TimezoneName>\n" +
 				"\t<TimeZoneDisplayName>" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "</TimeZoneDisplayName>\n" +
 				"</GeoLocation>";
@@ -509,6 +636,8 @@ public class GeoLocation implements Cloneable {
 		return Double.compare(this.latitude, geo.latitude) == 0
 			&& Double.compare(this.longitude, geo.longitude) == 0
 			&& Double.compare(this.elevation, geo.elevation) == 0
+			&& Double.compare(this.horizonElevationAtSunrise, geo.horizonElevationAtSunrise) == 0
+			&& Double.compare(this.horizonElevationAtSunset, geo.horizonElevationAtSunset) == 0
 			&& Objects.equals(this.locationName, geo.locationName)
 			&& Objects.equals(this.zoneId, geo.zoneId);
 	}
@@ -518,7 +647,8 @@ public class GeoLocation implements Cloneable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getClass(), this.latitude, this.longitude, this.elevation, this.locationName, this.zoneId);
+		return Objects.hash(getClass(), this.latitude, this.longitude, this.elevation, this.horizonElevationAtSunrise,
+			this.horizonElevationAtSunset, this.locationName, this.zoneId);
 	}
 
 	/**
@@ -530,6 +660,8 @@ public class GeoLocation implements Cloneable {
 			"\nLatitude:\t\t\t" + getLatitude() + "\u00B0" +
 			"\nLongitude:\t\t\t" + getLongitude() + "\u00B0" +
 			"\nElevation:\t\t\t" + getElevation() + " Meters" +
+			"\nHorizon Elevation At Sunrise:\t" + getHorizonElevationAtSunrise() + " Meters" +
+			"\nHorizon Elevation At Sunset:\t" + getHorizonElevationAtSunset() + " Meters" +
 			"\nTimezone ID:\t\t\t" + getZoneId().getId() +
 			"\nTimezone Display Name:\t\t" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 	}
