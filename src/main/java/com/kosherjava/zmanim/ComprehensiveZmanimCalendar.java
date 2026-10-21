@@ -1275,7 +1275,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getSeaLevelSunset() sea level sunset}. This is the opinion of the <a href=
 	 * "https://hebrewbooks.org/40357">חידושי וכללות הרז״ה</a> in <a href="https://hebrewbooks.org/pdfpager.aspx?req=40357&pgnum=71"
 	 * >סימן ב׳ סע״ג וסע״ד</a> and <a href="https://hebrewbooks.org/pdfpager.aspx?req=40357&pgnum=93">סי׳ ז׳ סע״ב</a> and the <a href=
-	 * "https://hebrewbooks.org/14799">מנורה הטהורה</a> as mentioned by <span lang="he">ישראל והזמנים</span> <a href=
+	 * "https://hebrewbooks.org/14799">מנורה הטהורה</a> as mentioned by <span>ישראל והזמנים</span> <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=9765&pgnum=81">ח״א סי׳ ז׳ פ״ג או׳ ט״ז</a>. Also see <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=67890&pgnum=29">אשר לשלמה, מועד, סי׳ ה׳</a>. Three <em>shaos zmaniyos</em> are calculated
 	 * based on this day and added to {@link #getAlos16Point1Degrees() <em>alos</em>} to reach this time. This time is 3 <em>shaos
@@ -3917,7 +3917,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * In Polar regions during the period where the sun is above the horizon 24-hours a day, <a href=
 	 * "https://en.wikipedia.org/wiki/Moshe_Sternbuch">Rav Moshe Sternbuch</a> in <a href=
-	 * "https://hebrewbooks.org/pdfpager.aspx?req=19963&st=&pgnum=316">מועדים וזמנים ח״ב ס׳ קנ״ה הע׳ א׳</a> (<span lang="he">ח״ד ס׳ ת״א
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=19963&st=&pgnum=316">מועדים וזמנים ח״ב ס׳ קנ״ה הע׳ א׳</a> (<span>ח״ד ס׳ ת״א
 	 * הע׳ א׳</span> in the new edition) and in תשובות והנהגות <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=20025&st=&pgnum=224">ח״א ס׳ שט״ו,</a> and <a href=
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=69067&st=&pgnum=135">ח״ה ס׳ פ״ד</a> ruled that during the Polar summer night-based
@@ -3930,10 +3930,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * hashachar</em> only occurs in Antarctica and in uninhabited extreme northern regions. This means almost every northern
 	 * inhabited location has an <em>alos hashachar</em> and "day" even on December 21st. This method considers <em>alos</em> to be
 	 * {@link #getAlos16Point1Degrees()}.
-	 * <p> It should be noted that in the <span lang="he">מועדים וזמנים</span> linked above that was published in 1961, Rav Moshe
-	 * Sternbuch mentions that [<span lang="he">ולתפלה, היום מתהלק, עד י״ב שעות שחרית,  ומאז מנחה, ומעריב מתפלל סמוך ללילה כרבי יהודה כנל״ד ...</span>].
-	 * This comment (in () in the original, and [] in the new edition published in 2023) was not brought down in the <span lang="he"
-	 * >תשובות והנהגות</span> vol. 1 that was published in 1977 nor in vol. 5. published in 2009. Since it is not clear to me if this
+	 * <p> It should be noted that in the <span>מועדים וזמנים</span> linked above that was published in 1961, Rav Moshe
+	 * Sternbuch mentions that [<span>ולתפלה, היום מתהלק, עד י״ב שעות שחרית,  ומאז מנחה, ומעריב מתפלל סמוך ללילה כרבי יהודה כנל״ד ...</span>].
+	 * This comment (in () in the original, and [] in the new edition published in 2023) was not brought down in the
+	 * <span>תשובות והנהגות</span> vol. 1 that was published in 1977 nor in vol. 5. published in 2009. Since it is not clear to me if this
 	 * constitutes a retraction, the calculations for the start of <em>mincha</em> mentioned in the Moadim Uzmanim was omitted. This
 	 * is 12 hours after the start of the day (either {@link #getChatzosHalayla()}  in the Polar summer, or {@link #getChatzosHayom()}
 	 * in the Polar winter. {@link #getPolarPlagHaminchaTeshuvosVehanhagos()} was included and is the start of the time that
@@ -3973,7 +3973,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	/**
 	 * In Polar regions during the period where the sun is above the horizon 24-hours a day, <a href=
 	 * "https://en.wikipedia.org/wiki/Moshe_Sternbuch">Rav Moshe Sternbuch</a> in <a href=
-	 * "https://hebrewbooks.org/pdfpager.aspx?req=19963&st=&pgnum=316">מועדים וזמנים ח״ב ס׳ קנ״ה הע׳ א׳</a> (<span lang="he">ח״ד ס׳ ת״א
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=19963&st=&pgnum=316">מועדים וזמנים ח״ב ס׳ קנ״ה הע׳ א׳</a> (<span>ח״ד ס׳ ת״א
 	 * הע׳ א׳</span> in the new edition) mentions the concept of zmanim based on his {@link #getPolarStartOfDayTeshuvosVehanhagos()}.
 	 * This calculates {@link #getPlagHamincha(Instant, Instant, boolean)} as 10.75 <em>sha'os zmaniyos</em> starting 24 hours prior
 	 * to the current start/end of the current day. This will be very close to 2.5 clock hours before the start/end of the day.
