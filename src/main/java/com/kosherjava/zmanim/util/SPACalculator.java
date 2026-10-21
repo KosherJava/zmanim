@@ -101,6 +101,68 @@ public class SPACalculator extends AstronomicalCalculator {
 	}
 
 	/** Default constructor of the SPACalculator. */
+	/**
+	 * The part of a rise / set solution that does not depend on the zenith: the time of solar noon, and the declination and equation of
+	 * time at noon. Every zman of a day needs the same values, so the last one calculated is kept in {@link #lastNoonSolution} and reused.
+	 * The key is every input the values depend on (the Julian day, the longitude and the two &Delta;T settings), so a cached value is
+	 * only ever returned for identical inputs, and the results are bit-for-bit identical to calculating them each time. Immutable, so
+	 * it can be shared between threads and clones.
+	 */
+	private static final class NoonSolution {
+		final double jdDay;
+		final double lonWest;
+		final boolean applyDeltaT;
+		final Double deltaTOverride;
+		final double noonMin;
+		final double declNoon;
+		final double eot;
+
+		NoonSolution(double jdDay, double lonWest, boolean applyDeltaT, Double deltaTOverride, double noonMin, double declNoon, double eot) {
+			this.jdDay = jdDay;
+			this.lonWest = lonWest;
+			this.applyDeltaT = applyDeltaT;
+			this.deltaTOverride = deltaTOverride;
+			this.noonMin = noonMin;
+			this.declNoon = declNoon;
+			this.eot = eot;
+		}
+
+		boolean matches(double jdDay, double lonWest, boolean applyDeltaT, Double deltaTOverride) {
+			return this.jdDay == jdDay && this.lonWest == lonWest && this.applyDeltaT == applyDeltaT
+					&& Objects.equals(this.deltaTOverride, deltaTOverride);
+		}
+	}
+
+	/**
+	 * The last {@link NoonSolution} calculated. A single entry (callers almost always move one day at a time), so memory use is fixed
+	 * and nothing accumulates. Swapped atomically as one immutable object, so concurrent callers at most recalculate, and can never see a
+	 * partial or mismatched entry. Not part of {@link #equals(Object)} or {@link #hashCode()}.
+	 */
+	private transient volatile NoonSolution lastNoonSolution;
+
+	/**
+	 * Returns the noon solution for the day and longitude, reusing the last one when every input matches.
+	 * @param jdDay the Julian day
+	 * @param lonWest the longitude, positive west
+	 * @return the noon solution
+	 */
+	private NoonSolution getNoonSolution(double jdDay, double lonWest) {
+		boolean applyDeltaTNow = applyDeltaT; // read the settings once, so the key and the calculation use the same values
+		Double deltaTOverrideNow = deltaTOverride;
+		NoonSolution cached = lastNoonSolution;
+		if (cached != null && cached.matches(jdDay, lonWest, applyDeltaTNow, deltaTOverrideNow)) {
+			return cached;
+		}
+		double noonMin = solveNoonMidnight(jdDay, lonWest, SolarEvent.NOON);
+		double declNoon = solarCoords(jdDay + noonMin / 1440.0)[1];
+		double eot = equationOfTime(jdDay + noonMin / 1440.0);
+		NoonSolution solution = new NoonSolution(jdDay, lonWest, applyDeltaTNow, deltaTOverrideNow, noonMin, declNoon, eot);
+		if (applyDeltaT == applyDeltaTNow && Objects.equals(deltaTOverride, deltaTOverrideNow)) { // only cache if the settings did not change mid calculation
+			lastNoonSolution = solution;
+		}
+		return solution;
+	}
+
 	public SPACalculator() {
 		super();
 	}
@@ -241,10 +303,10 @@ public class SPACalculator extends AstronomicalCalculator {
 		double elevation = geoLocation.getElevation();
 
 		// Closed-form first guess using the geocentric declination at local apparent noon.
-		double noonMin = solveNoonMidnight(jdDay, lonWest, SolarEvent.NOON);
-		double[] noonCoords = solarCoords(jdDay + noonMin / 1440.0);
-		double declNoon = noonCoords[1];
-		double eot = equationOfTime(jdDay + noonMin / 1440.0);
+		NoonSolution noon = getNoonSolution(jdDay, lonWest); // independent of the zenith, so shared by every zman of the day
+		double noonMin = noon.noonMin;
+		double declNoon = noon.declNoon;
+		double eot = noon.eot;
 		double cosH0 = (cosDegrees(adjustedZenith) - sinDegrees(lat) * sinDegrees(declNoon))
 				/ (cosDegrees(lat) * cosDegrees(declNoon));
 		if (cosH0 < -1.0 || cosH0 > 1.0) {
