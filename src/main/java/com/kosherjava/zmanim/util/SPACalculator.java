@@ -73,6 +73,14 @@ import java.util.Objects;
  */
 public class SPACalculator extends AstronomicalCalculator {
 
+	/**
+	 * {@inheritDoc} This calculator's results depend only on the arguments and on settings whose setters clear the cache.
+	 */
+	@Override
+	protected boolean isResultCacheable() {
+		return true;
+	}
+
 	/** The <a href="https://en.wikipedia.org/wiki/Julian_day">Julian day</a> of J2000.0. */
 	private static final double JULIAN_DAY_JAN_1_2000 = 2451545.0;
 
@@ -179,6 +187,7 @@ public class SPACalculator extends AstronomicalCalculator {
 	 */
 	public void setApplyDeltaT(boolean applyDeltaT) {
 		this.applyDeltaT = applyDeltaT;
+		clearResultCache();
 	}
 
 	/**
@@ -196,6 +205,7 @@ public class SPACalculator extends AstronomicalCalculator {
 	 */
 	public void setDeltaTOverride(Double deltaTSeconds) {
 		this.deltaTOverride = deltaTSeconds;
+		clearResultCache();
 	}
 
 	/**
@@ -217,6 +227,7 @@ public class SPACalculator extends AstronomicalCalculator {
 	 */
 	public void setPressure(double pressureMillibars) {
 		this.pressure = pressureMillibars;
+		clearResultCache();
 	}
 
 	/**
@@ -236,6 +247,7 @@ public class SPACalculator extends AstronomicalCalculator {
 	 */
 	public void setTemperature(double temperatureCelsius) {
 		this.temperature = temperatureCelsius;
+		clearResultCache();
 	}
 
 	/**
@@ -310,28 +322,327 @@ public class SPACalculator extends AstronomicalCalculator {
 		double cosH0 = (cosDegrees(adjustedZenith) - sinDegrees(lat) * sinDegrees(declNoon))
 				/ (cosDegrees(lat) * cosDegrees(declNoon));
 		if (cosH0 < -1.0 || cosH0 > 1.0) {
-			return Double.NaN; // sun never reaches this zenith (polar day / night)
+			return bracketRiseSet(jdDay, lat, geoLocation.getLongitude(), elevation, adjustedZenith, solarEvent); // the estimate says no event: let the exact search decide
 		}
 		double h0 = acosDegrees(cosH0); // degrees, positive
 		double signed = (solarEvent == SolarEvent.SUNRISE) ? h0 : -h0;
 		double guess = 720 + 4 * (lonWest - signed) - eot; // minutes
 
-		// Secant refinement on f(t) = topocentricTrueZenith(t) - adjustedZenith.
+		// Fast path: the secant on interpolated solar coordinates, accepted only after it is verified exactly and lies in the window.
+		double[] stats = new double[2];
+		double ti = secant(jdDay, lat, geoLocation.getLongitude(), elevation, adjustedZenith, guess, true, stats);
+		double[] fastWindow = getRiseSetWindowMinutes(geoLocation.getLongitude(), solarEvent);
+		boolean fastInWindow = solarEvent == SolarEvent.SUNRISE ? ti > fastWindow[0] && ti <= fastWindow[1] : ti >= fastWindow[0] && ti < fastWindow[1];
+		if (fastInWindow && isInterpolatedSolutionAcceptable(ti, stats, jdDay, lat, geoLocation.getLongitude(), elevation, adjustedZenith)) {
+			return ti;
+		}
+
+		// Exact path: secant refinement on f(t) = topocentricTrueZenith(t) - adjustedZenith.
 		double t0 = guess;
 		double t1 = guess + 0.5;
 		double f0 = topocentricTrueZenith(jdDay + t0 / 1440.0, lat, geoLocation.getLongitude(), elevation) - adjustedZenith;
 		double f1 = topocentricTrueZenith(jdDay + t1 / 1440.0, lat, geoLocation.getLongitude(), elevation) - adjustedZenith;
+		double minSlope = Math.abs((f1 - f0) / (t1 - t0)); // degrees per minute
 		for (int i = 0; i < 12 && Math.abs(f1) > 1e-9; i++) {
 			double denom = (f1 - f0);
 			if (denom == 0) {
 				break;
 			}
+			minSlope = Math.min(minSlope, Math.abs(denom / (t1 - t0)));
 			double t2 = t1 - f1 * (t1 - t0) / denom;
 			t0 = t1; f0 = f1;
 			t1 = t2;
 			f1 = topocentricTrueZenith(jdDay + t1 / 1440.0, lat, geoLocation.getLongitude(), elevation) - adjustedZenith;
 		}
+		// Accept the secant result only if it converged onto the requested zenith inside this date's window. Otherwise (no
+		// convergence near the poles or on a grazing day, or a crossing belonging to a neighbouring date) use the bracketing search.
+		double[] window = getRiseSetWindowMinutes(geoLocation.getLongitude(), solarEvent);
+		boolean inWindow = solarEvent == SolarEvent.SUNRISE ? t1 > window[0] && t1 <= window[1] : t1 >= window[0] && t1 < window[1];
+		// A slow crossing anywhere along the path means a near-grazing day, where the secant can settle on a near miss (the closest
+		// approach to the zenith) or on another crossing; the bracketing search decides those days.
+		if (inWindow && Math.abs(f1) <= MAX_ZENITH_RESIDUAL && minSlope >= GRAZING_MIN_SLOPE) {
+			return t1;
+		}
+		return bracketRiseSet(jdDay, lat, geoLocation.getLongitude(), elevation, adjustedZenith, solarEvent);
+	}
+
+	/**
+	 * Verifies a rise / set time found with the interpolated solar coordinates. It is accepted only if the search was well conditioned
+	 * all along its path (the sun crossed the zenith at no less than {@link #GUARD_MIN_SLOPE}), so it converged to the same crossing the
+	 * exact solve would, and if the exact zenith at that time is within {@link #GUARD_TOLERANCE_MINUTES} of the target. Otherwise the
+	 * caller repeats the solve exactly.
+	 */
+	private boolean isInterpolatedSolutionAcceptable(double t, double[] stats, double jdDay, double lat, double longitude, double elevation,
+			double adjustedZenith) {
+		if (Double.isNaN(t) || Double.isInfinite(t) || !(stats[0] >= GUARD_MIN_SLOPE)) {
+			return false;
+		}
+		double exactResidual = topocentricTrueZenith(jdDay + t / 1440.0, lat, longitude, elevation, false) - adjustedZenith;
+		return Math.abs(exactResidual / stats[1]) <= GUARD_TOLERANCE_MINUTES;
+	}
+
+	/**
+	 * The secant search for the time (minutes from 0h UT) at which the topocentric true zenith equals the adjusted zenith. With
+	 * interpolate false this is exactly the original algorithm.
+	 * @param stats if not null, receives {minimum |slope| along the path (0 if not converged), last slope}, slopes in degrees per minute
+	 */
+	private double secant(double jdDay, double lat, double longitude, double elevation, double adjustedZenith, double guess, boolean interpolate,
+			double[] stats) {
+		double t0 = guess;
+		double t1 = guess + 0.5;
+		double f0 = topocentricTrueZenith(jdDay + t0 / 1440.0, lat, longitude, elevation, interpolate) - adjustedZenith;
+		double f1 = topocentricTrueZenith(jdDay + t1 / 1440.0, lat, longitude, elevation, interpolate) - adjustedZenith;
+		double minSlope = Double.MAX_VALUE;
+		double lastSlope = (f1 - f0) / (t1 - t0);
+		for (int i = 0; i < 12 && Math.abs(f1) > 1e-9; i++) {
+			double denom = (f1 - f0);
+			if (denom == 0) {
+				break;
+			}
+			lastSlope = denom / (t1 - t0);
+			minSlope = Math.min(minSlope, Math.abs(lastSlope));
+			double t2 = t1 - f1 * (t1 - t0) / denom;
+			t0 = t1; f0 = f1;
+			t1 = t2;
+			f1 = topocentricTrueZenith(jdDay + t1 / 1440.0, lat, longitude, elevation, interpolate) - adjustedZenith;
+		}
+		if (stats != null) {
+			stats[0] = Math.abs(f1) > 1e-6 ? 0 : Math.min(minSlope, Math.abs(lastSlope)); // not converged: use the exact path
+			stats[1] = lastSlope;
+		}
 		return t1;
+	}
+
+	/** Interpolation nodes per one day (TT) window: 5 nodes, so quartic interpolation. */
+	private static final int INTERPOLATION_NODES = 5;
+	/** Number of day windows kept. A day's zmanim span at most two or three UT/TT days, so 4 avoids thrashing. */
+	private static final int INTERPOLATION_WINDOWS = 4;
+	/** Minimum rate (degrees per minute) at which the sun must cross the zenith along the whole search for an interpolated result to be used. */
+	private static final double GUARD_MIN_SLOPE = 0.02;
+	/** Maximum time error (minutes) of an interpolated result, checked with one exact evaluation: 0.5 ms. */
+	private static final double GUARD_TOLERANCE_MINUTES = 0.5 / 60000.0;
+
+	/**
+	 * The exact VSOP87 Earth series (heliocentric longitude and latitude in degrees, radius vector in AU) and nutation
+	 * (&Delta;&psi;, &Delta;&epsilon; in degrees).
+	 */
+	private static double[] exactSeries(double jme, double jce) {
+		double[] nut = nutation(jce);
+		return new double[] { Math.toDegrees(sumSeries(EARTH_L, jme)), Math.toDegrees(sumSeries(EARTH_B, jme)), sumSeries(EARTH_R, jme),
+				nut[0], nut[1] };
+	}
+
+	/**
+	 * The exact series values at {@link #INTERPOLATION_NODES} evenly spaced times across one day (TT), used to interpolate the series
+	 * within that day. The series depend only on the time (TT), not on the location or any setting. Immutable.
+	 */
+	private static final class SeriesWindow {
+		final double start;
+		final double[][] nodes;
+
+		SeriesWindow(double start) {
+			this.start = start;
+			this.nodes = new double[INTERPOLATION_NODES][];
+			for (int k = 0; k < INTERPOLATION_NODES; k++) {
+				double jce = (start + (double) k / (INTERPOLATION_NODES - 1) - JULIAN_DAY_JAN_1_2000) / JULIAN_DAYS_PER_CENTURY;
+				nodes[k] = exactSeries(jce / 10.0, jce);
+			}
+		}
+	}
+
+	/**
+	 * The most recently used day windows, newest first, at most {@link #INTERPOLATION_WINDOWS}. The array is never modified after it
+	 * is published: a new window is added by publishing a new array, so concurrent callers can not see a partial state (at most one
+	 * window is computed twice). Fixed memory. Not part of {@link #equals(Object)} or {@link #hashCode()}.
+	 */
+	private transient volatile SeriesWindow[] seriesWindows;
+
+	/**
+	 * Returns the series values at a time, interpolated (Lagrange, through all nodes) within its one day window.
+	 * @param jde the Julian ephemeris day (TT)
+	 * @return {L, B, R, &Delta;&psi;, &Delta;&epsilon;} as {@link #exactSeries(double, double)}
+	 */
+	private double[] getInterpolatedSeries(double jde) {
+		double start = Math.floor(jde - 0.5) + 0.5;
+		SeriesWindow window = null;
+		SeriesWindow[] windows = seriesWindows;
+		if (windows != null) {
+			for (SeriesWindow w : windows) {
+				if (w.start == start) {
+					window = w;
+					break;
+				}
+			}
+		}
+		if (window == null) {
+			window = new SeriesWindow(start);
+			int keep = windows == null ? 0 : Math.min(windows.length, INTERPOLATION_WINDOWS - 1);
+			SeriesWindow[] updated = new SeriesWindow[keep + 1];
+			updated[0] = window;
+			if (keep > 0) {
+				System.arraycopy(windows, 0, updated, 1, keep);
+			}
+			seriesWindows = updated;
+		}
+		double x = (jde - start) * (INTERPOLATION_NODES - 1);
+		double[] weights = new double[INTERPOLATION_NODES];
+		for (int i = 0; i < INTERPOLATION_NODES; i++) {
+			double w = 1;
+			for (int j = 0; j < INTERPOLATION_NODES; j++) {
+				if (j != i) {
+					w *= (x - j) / (i - j);
+				}
+			}
+			weights[i] = w;
+		}
+		double[] result = new double[5];
+		for (int c = 0; c < 5; c++) {
+			double sum = 0;
+			for (int i = 0; i < INTERPOLATION_NODES; i++) {
+				sum += weights[i] * window.nodes[i][c];
+			}
+			result[c] = sum;
+		}
+		return result;
+	}
+
+	/**
+	 * Largest distance in degrees between the requested zenith and the Sun's zenith at an accepted secant result. Converged results end
+	 * within about 1e-7&deg; to 8e-7&deg; (the time resolution of a Julian date held in a double), failed ones far away; 1e-4&deg; is well
+	 * above the first and below SPA's stated &plusmn;0.0003&deg; accuracy.
+	 */
+	private static final double MAX_ZENITH_RESIDUAL = 1e-4;
+
+	/**
+	 * Minimum rate, in degrees per minute, at which the Sun must cross the zenith along the whole secant search for its result to be
+	 * used. Ordinary crossings are about 0.1 - 0.25&deg;/min; below this the day is near grazing and the bracketing search is used.
+	 */
+	private static final double GRAZING_MIN_SLOPE = 0.02;
+
+	/**
+	 * The window, in minutes from 0h UT of the date, in which a rise or set belongs to the date. These are exactly the windows
+	 * {@link com.kosherjava.zmanim.AstronomicalCalendar} uses when it converts the 0 - 24 hour result back to an instant (by local mean
+	 * time: a rise after 18:00 belongs to the previous date, a set before 06:00 to the next), so a result found here always maps back
+	 * to the right instant. Rises: (18:00 local mean time the evening before, 18:00]; sets: [06:00, 06:00 the next morning).
+	 * @param longitude the longitude in degrees, positive east
+	 * @param solarEvent {@link SolarEvent#SUNRISE} or {@link SolarEvent#SUNSET}
+	 * @return {start, end} in minutes from 0h UT of the date
+	 */
+	private static double[] getRiseSetWindowMinutes(double longitude, SolarEvent solarEvent) {
+		double startHours = (solarEvent == SolarEvent.SUNRISE ? -6.0 : 6.0) - longitude / 15.0;
+		return new double[] { startHours * 60.0, (startHours + 24.0) * 60.0 };
+	}
+
+	/** Bracket resolution of the search: one millisecond, in hours (as solarpositioning). */
+	private static final double TIME_TOLERANCE = 1.0 / 3600.0 / 1000.0;
+	/** Allowance for Julian date quantisation and floating point evaluation (as solarpositioning). */
+	private static final double ROUNDING_ERROR = 1e-8;
+
+	/**
+	 * Finds the first rise (or set) crossing of the adjusted zenith inside this date's window (see {@link
+	 * #getRiseSetWindowMinutes(double, SolarEvent)}) with the bracketing search of Klaus Brunner's solarpositioning library 3.0
+	 * ({@code SolarEvents}): the interval is split until a bracket with a guaranteed sign change is found, then refined with ITP to one
+	 * millisecond, keeping the later endpoint. A tangency is not a crossing. Returns NaN when no crossing exists in the window.
+	 * @return minutes from 0h UT of the date, or NaN
+	 */
+	private double bracketRiseSet(double jdDay, double latitude, double longitude, double elevation, double adjustedZenith,
+			SolarEvent solarEvent) {
+		double[] window = getRiseSetWindowMinutes(longitude, solarEvent);
+		double startHours = window[0] / 60.0;
+		double hours = (window[1] - window[0]) / 60.0;
+		double direction = solarEvent == SolarEvent.SUNRISE ? 1.0 : -1.0;
+		double horizon = Math.sin(Math.toRadians(90.0 - adjustedZenith));
+		// Engineering estimate for |f''| in hours, as solarpositioning: daily rotation contributes about (2*pi/24)^2 * cos(latitude).
+		double curvature = 0.1 * Math.abs(Math.cos(Math.toRadians(latitude))) + 0.0001;
+		java.util.function.DoubleUnaryOperator f = t -> direction
+				* (Math.sin(Math.toRadians(topocentric(jdDay + (startHours + t) / 24.0, latitude, longitude, elevation)[0])) - horizon);
+		CrossingSearch search = new CrossingSearch(f, curvature);
+		double b = search.value(hours);
+		double crossing = search.find(0.0, hours, search.value(0.0), b);
+		if (Double.isNaN(crossing) && b == 0.0) {
+			// Include a zero endpoint only when it crosses, rather than touches, the horizon.
+			if (search.value(Math.max(0.0, hours - TIME_TOLERANCE)) < 0.0 && search.value(hours + TIME_TOLERANCE) > 0.0) {
+				crossing = hours;
+			}
+		}
+		return Double.isNaN(crossing) ? Double.NaN : (startHours + crossing) * 60.0;
+	}
+
+	/** The bracketing crossing search of solarpositioning 3.0 ({@code SolarEvents.CrossingSearch}), unchanged. */
+	private static final class CrossingSearch {
+		private final java.util.function.DoubleUnaryOperator function;
+		private final double curvature;
+
+		CrossingSearch(java.util.function.DoubleUnaryOperator function, double curvature) {
+			this.function = function;
+			this.curvature = curvature;
+		}
+
+		double value(double time) {
+			return function.applyAsDouble(time);
+		}
+
+		double find(double start, double end, double a, double b) {
+			double width = end - start;
+			double slope = (b - a) / width;
+			double slopeError = curvature * width / 2.0 + 2.0 * ROUNDING_ERROR / width;
+			// Standard interpolation bounds, using the conservative curvature estimate above:
+			// slope error M*w/2, chord error M*w*w/8 (https://dlmf.nist.gov/3.3.E5).
+			// Discard only intervals that cannot rise through zero; otherwise search left first.
+			if (slope + slopeError <= 0.0
+					|| ((a > 0.0) == (b > 0.0) && Math.min(Math.abs(a), Math.abs(b)) > curvature * width * width / 8.0 + ROUNDING_ERROR)) {
+				return Double.NaN;
+			}
+			if (a < 0.0 && b >= 0.0 && slope > slopeError) {
+				return refine(start, end, a, b);
+			}
+			if (width <= TIME_TOLERANCE) {
+				return a < 0.0 && b > 0.0 ? end : Double.NaN;
+			}
+			double middle = start + width / 2.0;
+			double m = value(middle);
+			// Keep a shallow crossing inside a bracket instead of splitting at zero.
+			// Stay strictly inside the interval so both recursive searches progress.
+			if (m == 0.0 && (a != 0.0 || b != 0.0)) {
+				middle += Math.min(TIME_TOLERANCE, width / 4.0);
+				m = value(middle);
+			}
+			double left = find(start, middle, a, m);
+			return Double.isNaN(left) ? find(middle, end, m, b) : left;
+		}
+
+		double refine(double start, double end, double a, double b) {
+			// ITP (Oliveira & Takahashi): https://doi.org/10.1145/3423597.
+			// Use k1 = 0.2 / initial width, k2 = 2, n0 = 1. The projection allows
+			// at most one extra iteration over bisection while favouring interpolation.
+			double scale = 0.2 / (end - start);
+			// Maximum remaining width after a step; halve the allowance each time.
+			double maxWidth = TIME_TOLERANCE;
+			while (maxWidth < end - start) {
+				maxWidth *= 2.0;
+			}
+			while (end - start > TIME_TOLERANCE) {
+				double width = end - start;
+				double middle = start + width / 2.0;
+				// Equal values can occur on a rounded zero; use the midpoint then.
+				double interpolated = a == b ? middle : start - a * width / (b - a);
+				double towardsMiddle = middle - interpolated;
+				double truncated = interpolated + Math.copySign(Math.min(scale * width * width, Math.abs(towardsMiddle)), towardsMiddle);
+				double radius = Math.max(0.0, maxWidth - width / 2.0);
+				double trial = middle + Math.max(-radius, Math.min(radius, truncated - middle));
+				double value = value(trial);
+				if (value > 0.0) {
+					end = trial;
+					b = value;
+				} else {
+					start = trial;
+					a = value;
+				}
+				maxWidth /= 2.0;
+			}
+			// Keep the later endpoint, so the next search cannot rediscover this crossing.
+			return end;
+		}
 	}
 
 	/**
@@ -431,20 +742,32 @@ public class SPACalculator extends AstronomicalCalculator {
 	 *         obliquity, deg), nu (apparent Greenwich sidereal time, deg 0-360), radius (AU), lambda (apparent longitude, deg)}.
 	 */
 	private double[] solarCoords(double julianDayUT) {
+		return solarCoords(julianDayUT, false);
+	}
+
+	/**
+	 * Solar coordinates, optionally with the VSOP87 series and nutation taken from the per-day interpolation (see
+	 * {@link #getInterpolatedSeries(double)}). Only the first rise / set search uses interpolated values, and its result is always
+	 * verified exactly (see {@link #isInterpolatedSolutionAcceptable}); everything else is exact.
+	 * @param julianDayUT the Julian day (UT)
+	 * @param interpolate whether to use the interpolated series values
+	 */
+	private double[] solarCoords(double julianDayUT, boolean interpolate) {
 		double deltaTSeconds = applyDeltaT ? (deltaTOverride != null ? deltaTOverride : estimateDeltaT(julianDayUT)) : 0.0;
 		double jde = julianDayUT + deltaTSeconds / 86400.0;
 		double jce = (jde - JULIAN_DAY_JAN_1_2000) / JULIAN_DAYS_PER_CENTURY;
 		double jc = (julianDayUT - JULIAN_DAY_JAN_1_2000) / JULIAN_DAYS_PER_CENTURY;
 		double jme = jce / 10.0;
 
-		double earthL = Math.toDegrees(sumSeries(EARTH_L, jme));
-		double earthB = Math.toDegrees(sumSeries(EARTH_B, jme));
-		double radius = sumSeries(EARTH_R, jme); // AU
+		double[] series = interpolate ? getInterpolatedSeries(jde) : exactSeries(jme, jce);
+		double earthL = series[0];
+		double earthB = series[1];
+		double radius = series[2]; // AU
 
 		double theta = (earthL + 180.0) % 360.0;   // geocentric longitude
 		double beta = -earthB;                      // geocentric latitude
 
-		double[] nut = nutation(jce);               // {Δψ, Δε} in degrees
+		double[] nut = { series[3], series[4] };     // {Δψ, Δε} in degrees
 		double epsilon = meanObliquity(jme) + nut[1];
 		double aberration = -20.4898 / (3600.0 * radius); // degrees
 		double lambda = theta + nut[0] + aberration;      // apparent longitude
@@ -475,7 +798,11 @@ public class SPACalculator extends AstronomicalCalculator {
 	 *         azimuth (eastward from north, deg 0-360)}.
 	 */
 	private double[] topocentric(double julianDayUT, double latitude, double longitude, double elevationMeters) {
-		double[] sc = solarCoords(julianDayUT);
+		return topocentric(julianDayUT, latitude, longitude, elevationMeters, false);
+	}
+
+	private double[] topocentric(double julianDayUT, double latitude, double longitude, double elevationMeters, boolean interpolate) {
+		double[] sc = solarCoords(julianDayUT, interpolate);
 		double alpha = sc[0], delta = sc[1], nu = sc[3], radius = sc[4];
 
 		double h = (nu + longitude - alpha) % 360.0; // observer local hour angle (deg), positive west
@@ -518,7 +845,11 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * @return the topocentric true zenith in degrees.
 	 */
 	private double topocentricTrueZenith(double julianDayUT, double latitude, double longitude, double elevationMeters) {
-		return 90.0 - topocentric(julianDayUT, latitude, longitude, elevationMeters)[0];
+		return topocentricTrueZenith(julianDayUT, latitude, longitude, elevationMeters, false);
+	}
+
+	private double topocentricTrueZenith(double julianDayUT, double latitude, double longitude, double elevationMeters, boolean interpolate) {
+		return 90.0 - topocentric(julianDayUT, latitude, longitude, elevationMeters, interpolate)[0];
 	}
 
 	/**
@@ -614,17 +945,182 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * @param jce Julian centuries of ephemeris time since J2000.0.
 	 * @return {Δψ, Δε} in degrees.
 	 */
+	/**
+	 * Nutation in longitude and obliquity, using the full 63-term SPA series (Reda &amp; Andreas, Table A4.3) as implemented in
+	 * Klaus Brunner's solarpositioning library (same operations, including fused multiply-add).
+	 * @param jce Julian ephemeris century
+	 * @return {&Delta;&psi;, &Delta;&epsilon;} in degrees
+	 */
 	private static double[] nutation(double jce) {
-		double t = jce;
-		double omega = 125.04452 - 1934.136261 * t + 0.0020708 * t * t + t * t * t / 450000.0;
-		double lSun = 280.4665 + 36000.7698 * t;
-		double lMoon = 218.3165 + 481267.8813 * t;
-		double deltaPsiArcsec = -17.20 * sinDegrees(omega) - 1.32 * sinDegrees(2 * lSun)
-				- 0.23 * sinDegrees(2 * lMoon) + 0.21 * sinDegrees(2 * omega);
-		double deltaEpsArcsec = 9.20 * cosDegrees(omega) + 0.57 * cosDegrees(2 * lSun)
-				+ 0.10 * cosDegrees(2 * lMoon) - 0.09 * cosDegrees(2 * omega);
-		return new double[] { deltaPsiArcsec / 3600.0, deltaEpsArcsec / 3600.0 };
+		double[] x = new double[NUTATION_COEFFS.length];
+		for (int i = 0; i < x.length; i++) {
+			x[i] = polynomial(jce, NUTATION_COEFFS[i]);
+		}
+		double deltaPsi = 0;
+		double deltaEpsilon = 0;
+		for (int i = 0; i < TERMS_PE.length; i++) {
+			double sum = 0;
+			for (int j = 0; j < x.length; j++) {
+				sum = Math.fma(x[j], TERMS_Y[i][j], sum);
+			}
+			double xjYtermSum = Math.toRadians(sum);
+			double[] termsPeI = TERMS_PE[i];
+			deltaPsi = Math.fma(Math.fma(termsPeI[1], jce, termsPeI[0]), Math.sin(xjYtermSum), deltaPsi);
+			deltaEpsilon = Math.fma(Math.fma(termsPeI[3], jce, termsPeI[2]), Math.cos(xjYtermSum), deltaEpsilon);
+		}
+		return new double[] { deltaPsi / 36_000_000, deltaEpsilon / 36_000_000 };
 	}
+
+	/** Polynomial with coefficients in ascending order, evaluated with fused multiply-add (as solarpositioning's MathUtil). */
+	private static double polynomial(double x, double... coeffs) {
+		int n = coeffs.length - 1;
+		double sum = coeffs[n];
+		for (int i = n - 1; i >= 0; i--) {
+			sum = Math.fma(x, sum, coeffs[i]);
+		}
+		return sum;
+	}
+
+	private static final double[][] NUTATION_COEFFS = {
+		{297.85036, 445267.111480, -0.0019142, 1.0 / 189474},
+		{357.52772, 35999.050340, -0.0001603, -1.0 / 300000},
+		{134.96298, 477198.867398, 0.0086972, 1.0 / 56250},
+		{93.27191, 483202.017538, -0.0036825, 1.0 / 327270},
+		{125.04452, -1934.136261, 0.0020708, 1.0 / 450000},
+	};
+
+	private static final double[][] TERMS_Y = {
+		{0, 0, 0, 0, 1},
+		{-2, 0, 0, 2, 2},
+		{0, 0, 0, 2, 2},
+		{0, 0, 0, 0, 2},
+		{0, 1, 0, 0, 0},
+		{0, 0, 1, 0, 0},
+		{-2, 1, 0, 2, 2},
+		{0, 0, 0, 2, 1},
+		{0, 0, 1, 2, 2},
+		{-2, -1, 0, 2, 2},
+		{-2, 0, 1, 0, 0},
+		{-2, 0, 0, 2, 1},
+		{0, 0, -1, 2, 2},
+		{2, 0, 0, 0, 0},
+		{0, 0, 1, 0, 1},
+		{2, 0, -1, 2, 2},
+		{0, 0, -1, 0, 1},
+		{0, 0, 1, 2, 1},
+		{-2, 0, 2, 0, 0},
+		{0, 0, -2, 2, 1},
+		{2, 0, 0, 2, 2},
+		{0, 0, 2, 2, 2},
+		{0, 0, 2, 0, 0},
+		{-2, 0, 1, 2, 2},
+		{0, 0, 0, 2, 0},
+		{-2, 0, 0, 2, 0},
+		{0, 0, -1, 2, 1},
+		{0, 2, 0, 0, 0},
+		{2, 0, -1, 0, 1},
+		{-2, 2, 0, 2, 2},
+		{0, 1, 0, 0, 1},
+		{-2, 0, 1, 0, 1},
+		{0, -1, 0, 0, 1},
+		{0, 0, 2, -2, 0},
+		{2, 0, -1, 2, 1},
+		{2, 0, 1, 2, 2},
+		{0, 1, 0, 2, 2},
+		{-2, 1, 1, 0, 0},
+		{0, -1, 0, 2, 2},
+		{2, 0, 0, 2, 1},
+		{2, 0, 1, 0, 0},
+		{-2, 0, 2, 2, 2},
+		{-2, 0, 1, 2, 1},
+		{2, 0, -2, 0, 1},
+		{2, 0, 0, 0, 1},
+		{0, -1, 1, 0, 0},
+		{-2, -1, 0, 2, 1},
+		{-2, 0, 0, 0, 1},
+		{0, 0, 2, 2, 1},
+		{-2, 0, 2, 0, 1},
+		{-2, 1, 0, 2, 1},
+		{0, 0, 1, -2, 0},
+		{-1, 0, 1, 0, 0},
+		{-2, 1, 0, 0, 0},
+		{1, 0, 0, 0, 0},
+		{0, 0, 1, 2, 0},
+		{0, 0, -2, 2, 2},
+		{-1, -1, 1, 0, 0},
+		{0, 1, 1, 0, 0},
+		{0, -1, 1, 2, 2},
+		{2, -1, -1, 2, 2},
+		{0, 0, 3, 2, 2},
+		{2, -1, 0, 2, 2},
+	};
+
+	private static final double[][] TERMS_PE = {
+		{-171996, -174.2, 92025, 8.9},
+		{-13187, -1.6, 5736, -3.1},
+		{-2274, -0.2, 977, -0.5},
+		{2062, 0.2, -895, 0.5},
+		{1426, -3.4, 54, -0.1},
+		{712, 0.1, -7, 0},
+		{-517, 1.2, 224, -0.6},
+		{-386, -0.4, 200, 0},
+		{-301, 0, 129, -0.1},
+		{217, -0.5, -95, 0.3},
+		{-158, 0, 0, 0},
+		{129, 0.1, -70, 0},
+		{123, 0, -53, 0},
+		{63, 0, 0, 0},
+		{63, 0.1, -33, 0},
+		{-59, 0, 26, 0},
+		{-58, -0.1, 32, 0},
+		{-51, 0, 27, 0},
+		{48, 0, 0, 0},
+		{46, 0, -24, 0},
+		{-38, 0, 16, 0},
+		{-31, 0, 13, 0},
+		{29, 0, 0, 0},
+		{29, 0, -12, 0},
+		{26, 0, 0, 0},
+		{-22, 0, 0, 0},
+		{21, 0, -10, 0},
+		{17, -0.1, 0, 0},
+		{16, 0, -8, 0},
+		{-16, 0.1, 7, 0},
+		{-15, 0, 9, 0},
+		{-13, 0, 7, 0},
+		{-12, 0, 6, 0},
+		{11, 0, 0, 0},
+		{-10, 0, 5, 0},
+		{-8, 0, 3, 0},
+		{7, 0, -3, 0},
+		{-7, 0, 0, 0},
+		{-7, 0, 3, 0},
+		{-7, 0, 3, 0},
+		{6, 0, 0, 0},
+		{6, 0, -3, 0},
+		{6, 0, -3, 0},
+		{-6, 0, 3, 0},
+		{-6, 0, 3, 0},
+		{5, 0, 0, 0},
+		{-5, 0, 3, 0},
+		{-5, 0, 3, 0},
+		{-5, 0, 3, 0},
+		{4, 0, 0, 0},
+		{4, 0, 0, 0},
+		{4, 0, 0, 0},
+		{-4, 0, 0, 0},
+		{-4, 0, 0, 0},
+		{-4, 0, 0, 0},
+		{3, 0, 0, 0},
+		{-3, 0, 0, 0},
+		{-3, 0, 0, 0},
+		{-3, 0, 0, 0},
+		{-3, 0, 0, 0},
+		{-3, 0, 0, 0},
+		{-3, 0, 0, 0},
+		{-3, 0, 0, 0},
+	};
+
 
 	/**
 	 * Estimate ΔT = TT−UT in seconds (Espenak and Meeus polynomials). Approximate but good to a few seconds for
@@ -632,26 +1128,88 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * @param julianDay the (UT) Julian day.
 	 * @return ΔT in seconds.
 	 */
+	/**
+	 * &Delta;T (TT - UT) estimate in seconds for a Julian day, as solarpositioning's {@code DeltaT.estimate(LocalDate)}: the
+	 * Espenak &amp; Meeus polynomials with its post-2005 extrapolation, evaluated at the decimal year of the date's month. Beyond
+	 * the year 3000, where that library declines to estimate, its last branch is extrapolated.
+	 * @param julianDay the Julian day (UT)
+	 * @return &Delta;T in seconds
+	 */
 	private static double estimateDeltaT(double julianDay) {
-		double year = 2000.0 + (julianDay - JULIAN_DAY_JAN_1_2000) / 365.25;
-		double t;
-		if (year >= 2005 && year < 2050) {
-			t = year - 2000;
-			return 62.92 + 0.32217 * t + 0.005589 * t * t;
-		} else if (year >= 1986 && year < 2005) {
-			t = year - 2000;
-			return 63.86 + 0.3345 * t - 0.060374 * t * t + 0.0017275 * t * t * t
-					+ 0.000651814 * Math.pow(t, 4) + 0.00002373599 * Math.pow(t, 5);
-		} else if (year >= 1961 && year < 1986) {
-			t = year - 1975;
-			return 45.45 + 1.067 * t - t * t / 260.0 - t * t * t / 718.0;
-		} else if (year >= 2050 && year < 2150) {
-			return -20 + 32 * Math.pow((year - 1820) / 100.0, 2) - 0.5628 * (2150 - year);
-		} else {
-			double u = (year - 1820) / 100.0;
-			return -20 + 32 * u * u;
-		}
+		LocalDate date = LocalDate.ofEpochDay((long) Math.floor(julianDay - 2440587.5));
+		return estimateDeltaTForYear(date.getYear() + (date.getMonthValue() - 0.5) / 12);
 	}
+
+	private static double estimateDeltaTForYear(double year) {
+		final double deltaT;
+
+		if (year < -500) {
+			double u = (year - 1820) / 100.0;
+			deltaT = polynomial(u, -20, 0, 32);
+		} else if (year < 500) {
+			double u = year / 100.0;
+			deltaT =
+					polynomial(
+							u, 10583.6, -1014.41, 33.78311, -5.952053, -0.1798452, 0.022174192, 0.0090316521);
+		} else if (year < 1600) {
+			double u = (year - 1000) / 100.0;
+			deltaT =
+					polynomial(
+							u, 1574.2, -556.01, 71.23472, 0.319781, -0.8503463, -0.005050998, 0.0083572073);
+		} else if (year < 1700) {
+			double t = year - 1600;
+			deltaT = polynomial(t, 120, -0.9808, -0.01532, 1.0 / 7129);
+		} else if (year < 1800) {
+			double t = year - 1700;
+			deltaT = polynomial(t, 8.83, 0.1603, -0.0059285, 0.00013336, -1.0 / 1174000);
+		} else if (year < 1860) {
+			double t = year - 1800;
+			deltaT =
+					polynomial(
+							t,
+							13.72,
+							-0.332447,
+							0.0068612,
+							0.0041116,
+							-0.00037436,
+							0.0000121272,
+							-0.0000001699,
+							0.000000000875);
+		} else if (year < 1900) {
+			double t = year - 1860;
+			deltaT = polynomial(t, 7.62, 0.5737, -0.251754, 0.01680668, -0.0004473624, 1.0 / 233174);
+		} else if (year < 1920) {
+			double t = year - 1900;
+			deltaT = polynomial(t, -2.79, 1.494119, -0.0598939, 0.0061966, -0.000197);
+		} else if (year < 1941) {
+			double t = year - 1920;
+			deltaT = polynomial(t, 21.20, 0.84493, -0.076100, 0.0020936);
+		} else if (year < 1961) {
+			double t = year - 1950;
+			deltaT = polynomial(t, 29.07, 0.407, -1.0 / 233, 1.0 / 2547);
+		} else if (year < 1986) {
+			double t = year - 1975;
+			deltaT = polynomial(t, 45.45, 1.067, -1.0 / 260, -1.0 / 718);
+		} else if (year < 2005) {
+			double t = year - 2000;
+			deltaT = polynomial(t, 63.86, 0.3345, -0.060374, 0.0017275, 0.000651814, 0.00002373599);
+		} else if (year < 2015) {
+			double t = year - 2005;
+			deltaT = polynomial(t, 64.69, 0.2930);
+		} else if (year < 2026.5) {
+			double t = year - 2015;
+			// Retain full precision; the branches join in value and slope at 2015 and 2026.5.
+			deltaT =
+					polynomial(
+							t, 67.62, 0.2930, 0.08753166427153103, -0.020049795884351372, 0.0009758496126416308);
+		} else {
+			double t = year - 2026.5;
+			deltaT = polynomial(t, 69.14, 0.28805287963416737, 0.0057380400318460655); // beyond 3000 this branch is extrapolated
+		}
+
+		return deltaT;
+	}
+
 
 	/**
 	 * Evaluate a VSOP87 series Σ<sub>n</sub> (Σ<sub>i</sub> A<sub>i</sub>·cos(B<sub>i</sub> +
