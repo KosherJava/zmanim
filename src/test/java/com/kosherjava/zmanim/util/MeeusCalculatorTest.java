@@ -244,6 +244,30 @@ public class MeeusCalculatorTest {
 		}
 	}
 
+	/**
+	 * Days when the Sun only just reaches the zenith, around midnight. Using the Sun's declination at noon the zenith looks
+	 * out of reach, but using the declination at solar midnight it is reached, so these return a time rather than NaN.
+	 */
+	@Test
+	public void getUTCSunRiseSetWhenOnlyJustReached() {
+		GeoLocation london = new GeoLocation("London", 51.5074, -0.1278, 0, TestLocations.UTC);
+		GeoLocation arctic = new GeoLocation("Arctic", 75.51550698948259, -0.9961193842273985, 1516.0617032522935,
+				TestLocations.UTC);
+		Object[][] cases = {
+			{"London 16.1\u00b0 alos, Sun just reaches it", london, "2024-06-03", 106.1, true, 0.17268715},
+			{"London 18\u00b0 tzais, Sun just reaches it", london, "2024-07-20", 108.0, false, 23.85897993},
+			{"75.5\u00b0N sunrise just after midnight", arctic, "2093-04-22", ZENITH, true, 0.22098753},
+		};
+		for (Object[] c : cases) {
+			GeoLocation location = (GeoLocation) c[1];
+			double zenith = (double) c[3];
+			double actual = (boolean) c[4]
+					? calculator().getUTCSunrise(date((String) c[2]), location, zenith, zenith == ZENITH)
+					: calculator().getUTCSunset(date((String) c[2]), location, zenith, zenith == ZENITH);
+			assertUtcHour((String) c[0], (double) c[5], actual);
+		}
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void getTimeAtAzimuthRejectsUnsupportedAzimuth() {
 		calculator().getTimeAtAzimuth(date("2017-10-17"), geo("NJ"), 123.0);

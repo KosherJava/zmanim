@@ -475,6 +475,17 @@ public class NOAACalculator extends AstronomicalCalculator {
 		double equationOfTime = getEquationOfTime(tnoon);
 		double solarDeclination = getSunDeclination(tnoon);
 		double hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		if (Double.isNaN(hourAngle)) {
+			// Using the Sun's declination at noon, the Sun never reaches this zenith today. But the declination changes
+			// during the day (by up to about 0.2° in 12 hours), so the Sun may still just reach it around midnight, when it
+			// is at its lowest. Before reporting that there is no event, try again with the declination and equation of time
+			// at that solar midnight: the one before sunrise, or the one after sunset.
+			double midnight = noonmin + (solarEvent == SolarEvent.SUNRISE ? -720 : 720);
+			double tmidnight = getJulianCenturiesFromJulianDay(julianDay + midnight / 1440.0);
+			equationOfTime = getEquationOfTime(tmidnight);
+			solarDeclination = getSunDeclination(tmidnight);
+			hourAngle = getSunHourAngle(latitude, solarDeclination, zenith, solarEvent);
+		}
 		double delta = longitude - Math.toDegrees(hourAngle);
 		double timeDiff = 4 * delta;
 		double timeUTC = 720 + timeDiff - equationOfTime;
