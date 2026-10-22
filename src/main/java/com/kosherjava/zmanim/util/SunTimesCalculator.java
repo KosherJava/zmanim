@@ -51,6 +51,14 @@ import java.time.LocalDate;
  */
 @Deprecated  (since = "3.0.0", forRemoval=false)
 public class SunTimesCalculator extends AstronomicalCalculator {
+
+	/**
+	 * {@inheritDoc} This calculator's results depend only on the arguments and on settings whose setters clear the cache.
+	 */
+	@Override
+	protected boolean isResultCacheable() {
+		return true;
+	}
 	
 	/**
 	 * Default constructor of the SunTimesCalculator.
