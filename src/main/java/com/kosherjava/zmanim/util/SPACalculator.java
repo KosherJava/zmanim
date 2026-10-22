@@ -108,10 +108,9 @@ public class SPACalculator extends AstronomicalCalculator {
 		/**NOON A solar event related to noon*/NOON, /**MIDNIGHT A solar event related to midnight*/MIDNIGHT
 	}
 
-	/** Default constructor of the SPACalculator. */
 	/**
-	 * The part of a rise / set solution that does not depend on the zenith: the time of solar noon, and the declination and equation of
-	 * time at noon. Every zman of a day needs the same values, so the last one calculated is kept in {@link #lastNoonSolution} and reused.
+	 * The part of a rise / set solution that does not depend on the zenith: the declination and the equation of time at solar
+	 * noon. Every zman of a day needs the same values, so the last one calculated is kept in {@link #lastNoonSolution} and reused.
 	 * The key is every input the values depend on (the Julian day, the longitude and the two &Delta;T settings), so a cached value is
 	 * only ever returned for identical inputs, and the results are bit-for-bit identical to calculating them each time. Immutable, so
 	 * it can be shared between threads and clones.
@@ -121,16 +120,14 @@ public class SPACalculator extends AstronomicalCalculator {
 		final double lonWest;
 		final boolean applyDeltaT;
 		final Double deltaTOverride;
-		final double noonMin;
 		final double declNoon;
 		final double eot;
 
-		NoonSolution(double jdDay, double lonWest, boolean applyDeltaT, Double deltaTOverride, double noonMin, double declNoon, double eot) {
+		NoonSolution(double jdDay, double lonWest, boolean applyDeltaT, Double deltaTOverride, double declNoon, double eot) {
 			this.jdDay = jdDay;
 			this.lonWest = lonWest;
 			this.applyDeltaT = applyDeltaT;
 			this.deltaTOverride = deltaTOverride;
-			this.noonMin = noonMin;
 			this.declNoon = declNoon;
 			this.eot = eot;
 		}
@@ -164,13 +161,14 @@ public class SPACalculator extends AstronomicalCalculator {
 		double noonMin = solveNoonMidnight(jdDay, lonWest, SolarEvent.NOON);
 		double declNoon = solarCoords(jdDay + noonMin / 1440.0)[1];
 		double eot = equationOfTime(jdDay + noonMin / 1440.0);
-		NoonSolution solution = new NoonSolution(jdDay, lonWest, applyDeltaTNow, deltaTOverrideNow, noonMin, declNoon, eot);
+		NoonSolution solution = new NoonSolution(jdDay, lonWest, applyDeltaTNow, deltaTOverrideNow, declNoon, eot);
 		if (applyDeltaT == applyDeltaTNow && Objects.equals(deltaTOverride, deltaTOverrideNow)) { // only cache if the settings did not change mid calculation
 			lastNoonSolution = solution;
 		}
 		return solution;
 	}
 
+	/** Default constructor of the SPACalculator. */
 	public SPACalculator() {
 		super();
 	}
@@ -316,7 +314,6 @@ public class SPACalculator extends AstronomicalCalculator {
 
 		// Closed-form first guess using the geocentric declination at local apparent noon.
 		NoonSolution noon = getNoonSolution(jdDay, lonWest); // independent of the zenith, so shared by every zman of the day
-		double noonMin = noon.noonMin;
 		double declNoon = noon.declNoon;
 		double eot = noon.eot;
 		double cosH0 = (cosDegrees(adjustedZenith) - sinDegrees(lat) * sinDegrees(declNoon))
