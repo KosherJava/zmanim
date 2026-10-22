@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
@@ -81,15 +82,15 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCSunrise() {
 		Object[][] cases = {
-			{"NJ Standard Date", "2017-10-17", "NJ", 11.13593689},
-			{"LA Standard Date", "2017-10-17", "LA", 14.00756754},
-			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 4.11873932},
+			{"NJ Standard Date", "2017-10-17", "NJ", 11.13593479},
+			{"LA Standard Date", "2017-10-17", "LA", 14.00756564},
+			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 4.11873531},
 			{"Norway Polar Solstice", "2017-06-21", "NORWAY", NO_EVENT},
-			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 19.68293143},
-			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 9.38998685},
-			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 18.60534965},
-			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 12.95741199},
-			{"NJ Future DeltaT", "2100-07-04", "NJ", 9.44912615},
+			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 19.68292944},
+			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 9.38998717},
+			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 18.60534641},
+			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 12.95741136},
+			{"NJ Future DeltaT", "2100-07-04", "NJ", 9.44905416},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getUTCSunrise(date((String) c[1]), geo((String) c[2]), ZENITH, true);
@@ -100,15 +101,15 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCSunset() {
 		Object[][] cases = {
-			{"NJ Standard Date", "2017-10-17", "NJ", 22.24099415},
-			{"LA Standard Date", "2017-10-17", "LA", 1.31843857},
-			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 15.64512300},
+			{"NJ Standard Date", "2017-10-17", "NJ", 22.24099364},
+			{"LA Standard Date", "2017-10-17", "LA", 1.31843788},
+			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 15.64511647},
 			{"Norway Polar Solstice", "2017-06-21", "NORWAY", NO_EVENT},
-			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 8.56367402},
-			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 21.53102552},
-			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 5.65791427},
-			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 20.21191830},
-			{"NJ Future DeltaT", "2100-07-04", "NJ", 0.58028674},
+			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 8.56367311},
+			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 21.53102585},
+			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 5.65791097},
+			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 20.21191650},
+			{"NJ Future DeltaT", "2100-07-04", "NJ", 0.58022832},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getUTCSunset(date((String) c[1]), geo((String) c[2]), ZENITH, true);
@@ -119,15 +120,15 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCNoon() {
 		Object[][] cases = {
-			{"NJ Standard Date", "2017-10-17", "NJ", 16.69350885},
-			{"LA Standard Date", "2017-10-17", "LA", 19.66696009},
-			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 9.87817106},
-			{"Norway Polar Solstice", "2017-06-21", "NORWAY", 11.42056214},
-			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 2.12799525},
-			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 15.46051831},
-			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 0.13165740},
-			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 16.58459266},
-			{"NJ Future DeltaT", "2100-07-04", "NJ", 17.01689317},
+			{"NJ Standard Date", "2017-10-17", "NJ", 16.69350757},
+			{"LA Standard Date", "2017-10-17", "LA", 19.66695881},
+			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 9.87816576},
+			{"Norway Polar Solstice", "2017-06-21", "NORWAY", 11.42056091},
+			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 2.12799374},
+			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 15.46051863},
+			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 0.13165412},
+			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 16.58459142},
+			{"NJ Future DeltaT", "2100-07-04", "NJ", 17.01682783},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getUTCNoon(date((String) c[1]), geo((String) c[2]));
@@ -138,15 +139,15 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCMidnight() {
 		Object[][] cases = {
-			{"NJ Standard Date", "2017-10-17", "NJ", 4.69189152},
-			{"LA Standard Date", "2017-10-17", "LA", 7.66535335},
-			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 21.87680310},
-			{"Norway Polar Solstice", "2017-06-21", "NORWAY", 23.42238534},
-			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 14.12642351},
-			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 3.46446119},
-			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 12.13348552},
-			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 4.58641480},
-			{"NJ Future DeltaT", "2100-07-04", "NJ", 5.01835716},
+			{"NJ Standard Date", "2017-10-17", "NJ", 4.69189023},
+			{"LA Standard Date", "2017-10-17", "LA", 7.66535207},
+			{"Jerusalem Hist. Date", "1955-02-26", "JERUSALEM", 21.87679780},
+			{"Norway Polar Solstice", "2017-06-21", "NORWAY", 23.42238409},
+			{"Sydney Leap Day", "2020-02-29", "SYDNEY", 14.12642200},
+			{"Macapa Equator New Year", "2000-01-01", "MACAPA", 3.46446150},
+			{"Suva Fiji Solstice", "2023-06-21", "SUVA", 12.13348221},
+			{"Ushuaia Southern Winter", "2017-06-21", "USHUAIA", 4.58641356},
+			{"NJ Future DeltaT", "2100-07-04", "NJ", 5.01829184},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getUTCMidnight(date((String) c[1]), geo((String) c[2]));
@@ -157,14 +158,14 @@ public class SPACalculatorTest {
 	@Test
 	public void getTimeAtAzimuth() {
 		Object[][] cases = {
-			{"NJ East", "2017-10-17", "NJ", 90.0, 9.96630382},
-			{"NJ West", "2017-10-17", "NJ", 270.0, 23.43696229},
-			{"LA East", "2017-10-17", "LA", 90.0, 12.71802376},
-			{"LA West", "2017-10-17", "LA", 270.0, 2.63792595},
-			{"Sydney East", "2020-02-29", "SYDNEY", 90.0, 20.92601636},
-			{"Sydney West", "2020-02-29", "SYDNEY", 270.0, 7.34685680},
+			{"NJ East", "2017-10-17", "NJ", 90.0, 9.96630489},
+			{"NJ West", "2017-10-17", "NJ", 270.0, 23.43696124},
+			{"LA East", "2017-10-17", "LA", 90.0, 12.71802515},
+			{"LA West", "2017-10-17", "LA", 270.0, 2.63792459},
+			{"Sydney East", "2020-02-29", "SYDNEY", 90.0, 20.92601768},
+			{"Sydney West", "2020-02-29", "SYDNEY", 270.0, 7.34685571},
 			{"Macapa East No Cross", "2000-01-01", "MACAPA", 90.0, NO_EVENT},
-			{"Polar East", "2017-06-21", "NORWAY", 90.0, 6.01986373},
+			{"Polar East", "2017-06-21", "NORWAY", 90.0, 6.01986389},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getTimeAtAzimuth(date((String) c[1]), geo((String) c[2]), (double) c[3]);
@@ -175,13 +176,13 @@ public class SPACalculatorTest {
 	@Test
 	public void getSolarElevation() {
 		Object[][] cases = {
-			{"NJ Noon", "2017-10-17 12:00:00", "NJ", 8.24142367},
-			{"NJ Evening", "2017-10-17 18:30:00", "NJ", 33.57165658},
-			{"LA Evening", "2017-10-17 20:00:00", "LA", 46.19391692},
-			{"Polar Midnight", "2017-06-21 00:00:00", "NORWAY", 3.98549481},
-			{"Sydney Morning", "2020-02-29 20:00:00", "SYDNEY", 2.89087872},
-			{"Macapa Local Noon", "2000-01-01 15:00:00", "MACAPA", 65.99118480},
-			{"Suva Afternoon", "2023-06-21 02:00:00", "SUVA", 40.24649656},
+			{"NJ Noon", "2017-10-17 12:00:00", "NJ", 8.24144641},
+			{"NJ Evening", "2017-10-17 18:30:00", "NJ", 33.57166079},
+			{"LA Evening", "2017-10-17 20:00:00", "LA", 46.19392802},
+			{"Polar Midnight", "2017-06-21 00:00:00", "NORWAY", 3.98549992},
+			{"Sydney Morning", "2020-02-29 20:00:00", "SYDNEY", 2.89090468},
+			{"Macapa Local Noon", "2000-01-01 15:00:00", "MACAPA", 65.99118866},
+			{"Suva Afternoon", "2023-06-21 02:00:00", "SUVA", 40.24646972},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getSolarElevation(instant((String) c[1]), geo((String) c[2]));
@@ -192,13 +193,13 @@ public class SPACalculatorTest {
 	@Test
 	public void getSolarAzimuth() {
 		Object[][] cases = {
-			{"NJ Noon", "2017-10-17 12:00:00", "NJ", 110.13757333},
-			{"NJ Evening", "2017-10-17 18:30:00", "NJ", 212.62157928},
-			{"LA Evening", "2017-10-17 20:00:00", "LA", 187.12533185},
-			{"Polar Midnight", "2017-06-21 00:00:00", "NORWAY", 8.01127958},
-			{"Sydney Morning", "2020-02-29 20:00:00", "SYDNEY", 97.32308776},
-			{"Macapa Local Noon", "2000-01-01 15:00:00", "MACAPA", 164.22300003},
-			{"Suva Afternoon", "2023-06-21 02:00:00", "SUVA", 325.62786587},
+			{"NJ Noon", "2017-10-17 12:00:00", "NJ", 110.13757702},
+			{"NJ Evening", "2017-10-17 18:30:00", "NJ", 212.62160660},
+			{"LA Evening", "2017-10-17 20:00:00", "LA", 187.12536114},
+			{"Polar Midnight", "2017-06-21 00:00:00", "NORWAY", 8.01129603},
+			{"Sydney Morning", "2020-02-29 20:00:00", "SYDNEY", 97.32308820},
+			{"Macapa Local Noon", "2000-01-01 15:00:00", "MACAPA", 164.22298555},
+			{"Suva Afternoon", "2023-06-21 02:00:00", "SUVA", 325.62781823},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getSolarAzimuth(instant((String) c[1]), geo((String) c[2]));
@@ -209,10 +210,10 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCSunriseAtZenith() {
 		Object[][] cases = {
-			{"NJ Civil", "2017-10-17", "NJ", 96.0, 10.70943974},
-			{"NJ Nautical", "2017-10-17", "NJ", 102.0, 10.17613961},
-			{"NJ Astronomical", "2017-10-17", "NJ", 108.0, 9.64457480},
-			{"Sydney Civil", "2020-02-29", "SYDNEY", 96.0, 19.27874463},
+			{"NJ Civil", "2017-10-17", "NJ", 96.0, 10.70943766},
+			{"NJ Nautical", "2017-10-17", "NJ", 102.0, 10.17613755},
+			{"NJ Astronomical", "2017-10-17", "NJ", 108.0, 9.64457274},
+			{"Sydney Civil", "2020-02-29", "SYDNEY", 96.0, 19.27874263},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getUTCSunrise(date((String) c[1]), geo((String) c[2]), (double) c[3], true);
@@ -223,8 +224,8 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCSunriseWithoutElevationAdjustment() {
 		Object[][] cases = {
-			{"NJ No Elev Adj", "2017-10-17", "NJ", 11.17344334},
-			{"Jerusalem No Elev Adj", "1955-02-26", "JERUSALEM", 4.18885558},
+			{"NJ No Elev Adj", "2017-10-17", "NJ", 11.17344124},
+			{"Jerusalem No Elev Adj", "1955-02-26", "JERUSALEM", 4.18885159},
 		};
 		for (Object[] c : cases) {
 			double actual = calculator().getUTCSunrise(date((String) c[1]), geo((String) c[2]), ZENITH, false);
@@ -235,8 +236,8 @@ public class SPACalculatorTest {
 	@Test
 	public void getUTCSunriseWithDeltaTDisabled() {
 		Object[][] cases = {
-			{"NJ dT off", "2017-10-17", "NJ", 11.13586818},
-			{"Jerusalem dT off", "1955-02-26", "JERUSALEM", 4.11871824},
+			{"NJ dT off", "2017-10-17", "NJ", 11.13586773},
+			{"Jerusalem dT off", "1955-02-26", "JERUSALEM", 4.11871827},
 		};
 		for (Object[] c : cases) {
 			SPACalculator calc = calculator();
@@ -244,6 +245,19 @@ public class SPACalculatorTest {
 			double actual = calc.getUTCSunrise(date((String) c[1]), geo((String) c[2]), ZENITH, true);
 			assertUtcHour((String) c[0], (double) c[3], actual);
 		}
+	}
+
+	/**
+	 * Near the poles the closed-form first guess can say an event happens on a day the Sun only almost reaches the requested angle.
+	 * The secant search then never converges; it must report no event (NaN), not its last guess. Example from the kosher-rust
+	 * comparison: on 2127-03-14 at -77.2688, -92.8693 (3965 m) the Sun only gets about 10.04 degrees below the horizon, so there is no
+	 * 10.2 degree (misheyakir) time.
+	 */
+	@Test
+	public void unconvergedRiseSetIsNoEvent() {
+		GeoLocation location = new GeoLocation("Unconverged", -77.2688, -92.8693, 3965, ZoneId.of("UTC"));
+		double actual = calculator().getUTCSunrise(date("2127-03-14"), location, 100.2, true);
+		assertTrue("expected NaN but got " + actual, Double.isNaN(actual));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
