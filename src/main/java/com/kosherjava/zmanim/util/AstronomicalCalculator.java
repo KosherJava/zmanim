@@ -16,6 +16,7 @@ package com.kosherjava.zmanim.util;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Objects;
 
 /**
@@ -27,6 +28,229 @@ import java.util.Objects;
  * @author © Eliyahu Hershfeld 2004 - 2026
  */
 public abstract class AstronomicalCalculator implements Cloneable {
+
+	/**
+	 * Whether this calculator's rise / set / noon / midnight results may be cached (see {@link #isResultCacheable()}). On by default;
+	 * see {@link #setUseResultCache(boolean)}.
+	 */
+	private boolean useResultCache = true;
+
+	/**
+	 * The cached results for the most recently used dates, newest first, at most {@link #RESULT_CACHE_DATES}. The array is never
+	 * modified after it is published; a new date is added by publishing a new array. Each date's values are held in a concurrent
+	 * map, so a calculator shared between threads stays correct (at most a value is computed twice). Cleared by every setter that
+	 * can change a result, so a cached value is only ever returned for identical inputs and settings. Not part of {@link
+	 * #equals(Object)} or {@link #hashCode()}.
+	 */
+	private volatile ResultCache[] resultCaches;
+
+	/** Number of dates kept in the result cache. A day's zmanim use one date (and rarely a neighbouring one). */
+	private static final int RESULT_CACHE_DATES = 3;
+
+	/** The calculator method a cached result came from. A rise and a set at the same zenith are different times. */
+	private enum ResultEvent { SUNRISE, SUNSET, NOON, MIDNIGHT }
+
+	/** The cache key: every location input a calculator can use, the zenith, the elevation adjustment and the event. */
+	private static final class ResultKey {
+		private final double latitude;
+		private final double longitude;
+		private final double elevation;
+		private final double horizonElevationAtSunrise;
+		private final double horizonElevationAtSunset;
+		private final double zenith;
+		private final boolean adjustForElevation;
+		private final ResultEvent event;
+
+		ResultKey(GeoLocation geoLocation, double zenith, boolean adjustForElevation, ResultEvent event) {
+			this.latitude = geoLocation.getLatitude();
+			this.longitude = geoLocation.getLongitude();
+			this.elevation = geoLocation.getElevation();
+			this.horizonElevationAtSunrise = geoLocation.getHorizonElevationAtSunrise();
+			this.horizonElevationAtSunset = geoLocation.getHorizonElevationAtSunset();
+			this.zenith = zenith;
+			this.adjustForElevation = adjustForElevation;
+			this.event = event;
+		}
+
+		@Override
+		public boolean equals(Object object) {
+			if (this == object) {
+				return true;
+			}
+			if (!(object instanceof ResultKey)) {
+				return false;
+			}
+			ResultKey other = (ResultKey) object;
+			return Double.compare(latitude, other.latitude) == 0 && Double.compare(longitude, other.longitude) == 0
+					&& Double.compare(elevation, other.elevation) == 0
+					&& Double.compare(horizonElevationAtSunrise, other.horizonElevationAtSunrise) == 0
+					&& Double.compare(horizonElevationAtSunset, other.horizonElevationAtSunset) == 0
+					&& Double.compare(zenith, other.zenith) == 0 && adjustForElevation == other.adjustForElevation && event == other.event;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(latitude, longitude, elevation, horizonElevationAtSunrise, horizonElevationAtSunset, zenith,
+					adjustForElevation, event);
+		}
+	}
+
+	/** The cached results of one date. */
+	private static final class ResultCache {
+		private final LocalDate date;
+		private final ConcurrentHashMap<ResultKey, Double> values = new ConcurrentHashMap<ResultKey, Double>();
+
+		ResultCache(LocalDate date) {
+			this.date = date;
+		}
+	}
+
+	/**
+	 * Whether this calculator's results depend only on the method arguments and on settings whose setters call {@link
+	 * #clearResultCache()}, so they can be cached. Defaults to {@code false}, so a calculator written without the cache in mind is
+	 * never cached. A subclass that returns {@code true} must call {@link #clearResultCache()} from every setter that can change a
+	 * rise, set, noon or midnight result.
+	 * @return whether results may be cached
+	 */
+	protected boolean isResultCacheable() {
+		return false;
+	}
+
+	/**
+	 * Discards all cached results. Called by every setter that can change a result.
+	 */
+	protected void clearResultCache() {
+		resultCaches = null;
+	}
+
+	/**
+	 * Whether rise / set / noon / midnight results are cached (when the calculator supports it, see {@link #isResultCacheable()}).
+	 * Caching never changes a result. A full day of <em>zmanim</em> makes several hundred calculator calls that resolve to a few
+	 * dozen distinct solutions, so the cache removes most of the astronomical work.
+	 * @return whether results are cached. Defaults to {@code true}.
+	 */
+	public boolean isUseResultCache() {
+		return useResultCache;
+	}
+
+	/**
+	 * Sets whether rise / set / noon / midnight results are cached. Caching never changes a result; turning it off is only useful for
+	 * benchmarking, or as a safeguard if a subclass's results depend on state the cache can not see.
+	 * @param useResultCache whether to cache results
+	 */
+	public void setUseResultCache(boolean useResultCache) {
+		this.useResultCache = useResultCache;
+		clearResultCache();
+	}
+
+	private ConcurrentHashMap<ResultKey, Double> getResultCache(LocalDate localDate) {
+		ResultCache[] caches = resultCaches;
+		if (caches != null) {
+			for (ResultCache cache : caches) {
+				if (cache.date.equals(localDate)) {
+					return cache.values;
+				}
+			}
+		}
+		ResultCache cache = new ResultCache(localDate);
+		int keep = caches == null ? 0 : Math.min(caches.length, RESULT_CACHE_DATES - 1);
+		ResultCache[] updated = new ResultCache[keep + 1];
+		updated[0] = cache;
+		if (keep > 0) {
+			System.arraycopy(caches, 0, updated, 1, keep);
+		}
+		resultCaches = updated;
+		return cache.values;
+	}
+
+	private boolean isCaching() {
+		return useResultCache && isResultCacheable();
+	}
+
+	/**
+	 * {@link #getUTCSunrise(LocalDate, GeoLocation, double, boolean)} with result caching (see {@link #isUseResultCache()}). Used by
+	 * {@link com.kosherjava.zmanim.AstronomicalCalendar}; the result is always identical to the uncached method.
+	 * @param localDate the date
+	 * @param geoLocation the location
+	 * @param zenith the zenith
+	 * @param adjustForElevation whether to adjust for elevation
+	 * @return as {@link #getUTCSunrise(LocalDate, GeoLocation, double, boolean)}
+	 */
+	public final double getCachedUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+		if (!isCaching()) {
+			return getUTCSunrise(localDate, geoLocation, zenith, adjustForElevation);
+		}
+		ConcurrentHashMap<ResultKey, Double> cache = getResultCache(localDate);
+		ResultKey key = new ResultKey(geoLocation, zenith, adjustForElevation, ResultEvent.SUNRISE);
+		Double value = cache.get(key);
+		if (value == null) {
+			value = getUTCSunrise(localDate, geoLocation, zenith, adjustForElevation);
+			cache.putIfAbsent(key, value);
+		}
+		return value;
+	}
+
+	/**
+	 * {@link #getUTCSunset(LocalDate, GeoLocation, double, boolean)} with result caching (see {@link #isUseResultCache()}).
+	 * @param localDate the date
+	 * @param geoLocation the location
+	 * @param zenith the zenith
+	 * @param adjustForElevation whether to adjust for elevation
+	 * @return as {@link #getUTCSunset(LocalDate, GeoLocation, double, boolean)}
+	 */
+	public final double getCachedUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
+		if (!isCaching()) {
+			return getUTCSunset(localDate, geoLocation, zenith, adjustForElevation);
+		}
+		ConcurrentHashMap<ResultKey, Double> cache = getResultCache(localDate);
+		ResultKey key = new ResultKey(geoLocation, zenith, adjustForElevation, ResultEvent.SUNSET);
+		Double value = cache.get(key);
+		if (value == null) {
+			value = getUTCSunset(localDate, geoLocation, zenith, adjustForElevation);
+			cache.putIfAbsent(key, value);
+		}
+		return value;
+	}
+
+	/**
+	 * {@link #getUTCNoon(LocalDate, GeoLocation)} with result caching (see {@link #isUseResultCache()}).
+	 * @param localDate the date
+	 * @param geoLocation the location
+	 * @return as {@link #getUTCNoon(LocalDate, GeoLocation)}
+	 */
+	public final double getCachedUTCNoon(LocalDate localDate, GeoLocation geoLocation) {
+		if (!isCaching()) {
+			return getUTCNoon(localDate, geoLocation);
+		}
+		ConcurrentHashMap<ResultKey, Double> cache = getResultCache(localDate);
+		ResultKey key = new ResultKey(geoLocation, 0, false, ResultEvent.NOON);
+		Double value = cache.get(key);
+		if (value == null) {
+			value = getUTCNoon(localDate, geoLocation);
+			cache.putIfAbsent(key, value);
+		}
+		return value;
+	}
+
+	/**
+	 * {@link #getUTCMidnight(LocalDate, GeoLocation)} with result caching (see {@link #isUseResultCache()}).
+	 * @param localDate the date
+	 * @param geoLocation the location
+	 * @return as {@link #getUTCMidnight(LocalDate, GeoLocation)}
+	 */
+	public final double getCachedUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
+		if (!isCaching()) {
+			return getUTCMidnight(localDate, geoLocation);
+		}
+		ConcurrentHashMap<ResultKey, Double> cache = getResultCache(localDate);
+		ResultKey key = new ResultKey(geoLocation, 0, false, ResultEvent.MIDNIGHT);
+		Double value = cache.get(key);
+		if (value == null) {
+			value = getUTCMidnight(localDate, geoLocation);
+			cache.putIfAbsent(key, value);
+		}
+		return value;
+	}
 	/**
 	 * The commonly used average solar refraction in degrees that defaults to 34′, or 0.5666°.
 	 * <a href="https://www.cs.tau.ac.il//~nachum/calendar-book/index.shtml">Calendrical Calculations</a> lists a more accurate
@@ -76,6 +300,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	public void setUseApparentSolarRadius(boolean useApparentSolarRadius) {
 		this.useApparentSolarRadius = useApparentSolarRadius;
+		clearResultCache();
 	}
 
 	/**
@@ -114,6 +339,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	public void setEarthRadius(double earthRadius) {
 		this.earthRadius = earthRadius;
+		clearResultCache();
 	}
 
 	/**
@@ -347,6 +573,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	 */
 	public void setRefraction(double refraction) {
 		this.refraction = refraction;
+		clearResultCache();
 	}
 
 	/**
@@ -399,6 +626,7 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		}
 		this.solarRadius = solarRadius;
 		this.useApparentSolarRadius = false;
+		clearResultCache();
 	}
 
 	/**
