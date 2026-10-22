@@ -57,7 +57,7 @@ public class ZmanimFormatter {
 	/**
 	 * the formatter for minutes as seconds.
 	 */
-	private static final DecimalFormat minuteSecondNF = new DecimalFormat("00");
+	private final DecimalFormat minuteSecondNF = new DecimalFormat("00");
 
 	/**
 	 * the formatter for hours.
@@ -67,7 +67,7 @@ public class ZmanimFormatter {
 	/**
 	 * the formatter for minutes as milliseconds.
 	 */
-	private static final DecimalFormat milliNF = new DecimalFormat("000");
+	private final DecimalFormat milliNF = new DecimalFormat("000");
 
 	/**
 	 * The {@link DateTimeFormatter} class used by the formatter.
