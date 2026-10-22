@@ -55,7 +55,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	/**
 	 * {@inheritDoc} This calculator's results depend only on the arguments and on settings whose setters clear the cache.
 	 */
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	protected boolean isResultCacheable() {
 		return true;
 	}
@@ -63,23 +63,24 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	/**
 	 * Default constructor of the SunTimesCalculator.
 	 */
+	@Deprecated(forRemoval = false)
 	public SunTimesCalculator() {
 		super();
 	}
 
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public String getCalculatorName() {
 		return "US Naval Almanac Algorithm";
 	}
 
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getUTCSunrise(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getSunriseElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
 		return getTimeUTC(localDate, geoLocation, adjustedZenith, true);
 	}
 
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getUTCSunset(LocalDate localDate, GeoLocation geoLocation, double zenith, boolean adjustForElevation) {
 		double elevation = adjustForElevation ? geoLocation.getSunsetElevation() : 0;
 		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
@@ -219,7 +220,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		return (pocessedTime % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 	
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getUTCNoon(LocalDate localDate, GeoLocation geoLocation) {
 		double sunrise = getUTCSunrise(localDate, geoLocation, 90, false);
 		double sunset = getUTCSunset(localDate, geoLocation, 90, false);
@@ -230,7 +231,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 		return (noon % 24 + 24) % 24; // ensure that the time is >= 0 and < 24
 	}
 	
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getUTCMidnight(LocalDate localDate, GeoLocation geoLocation) {
 		return (getUTCNoon(localDate, geoLocation) + 12) % 24;
 	}
@@ -242,7 +243,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @throws UnsupportedOperationException This calculator class does not implement the getSolarAzimuth method. Use the
 	 *         {@link NOAACalculator} instead.
 	 */
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getSolarAzimuth(Instant instant, GeoLocation geoLocation) {
 		throw new UnsupportedOperationException(
 				"The SunTimesCalculator class does not implement the getSolarAzimuth method. Use the {@link NOAACalculator} instead.");
@@ -255,7 +256,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @throws UnsupportedOperationException This calculator class does not implement the getSolarElevation method. Use the
 	 *         {@link NOAACalculator} instead.
 	 */
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getSolarElevation(Instant instant, GeoLocation geoLocation) {
 		throw new UnsupportedOperationException(
 				"The SunTimesCalculator class does not implement the getSolarElevation method. Use the NOAACalculator instead.");
@@ -268,7 +269,7 @@ public class SunTimesCalculator extends AstronomicalCalculator {
 	 * @throws UnsupportedOperationException This calculator class does not implement the getTimeAtAzimuth method. Use the
 	 *         {@link NOAACalculator} instead.
 	 */
-	@Override
+	@Override @Deprecated(forRemoval = false)
 	public double getTimeAtAzimuth(LocalDate localDate, GeoLocation geoLocation, double azimuth) {
 		throw new UnsupportedOperationException(
 				"The SunTimesCalculator class does not implement the getTimeAtAzimuth method. Use the {@link NOAACalculator} instead.");
