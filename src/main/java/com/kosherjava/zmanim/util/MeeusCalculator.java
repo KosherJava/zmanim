@@ -552,16 +552,6 @@ public class MeeusCalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * Return the apparent geocentric <a href="https://en.wikipedia.org/wiki/Right_ascension">right ascension</a> of the
-	 * sun in degrees (0-360).
-	 * @param julianCenturies Terrestrial-Time centuries since J2000.0.
-	 * @return the sun's apparent right ascension in degrees.
-	 */
-	private static double getSunRightAscension(double julianCenturies) {
-		return getSunRightAscension(julianCenturies, getSunApparentEclipticCoordinates(julianCenturies));
-	}
-
-	/**
 	 * {@link #getSunRightAscension(double)} from already calculated apparent ecliptic coordinates.
 	 * @param julianCenturies the Julian centuries (TT)
 	 * @param sun {@link #getSunApparentEclipticCoordinates(double)} for the same time
