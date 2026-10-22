@@ -33,6 +33,14 @@ import java.time.ZonedDateTime;
  * @author © Eliyahu Hershfeld 2011 - 2026
  */
 public class NOAACalculator extends AstronomicalCalculator {
+
+	/**
+	 * {@inheritDoc} This calculator's results depend only on the arguments and on settings whose setters clear the cache.
+	 */
+	@Override
+	protected boolean isResultCacheable() {
+		return true;
+	}
 	
 	/**
 	 * The <a href="https://en.wikipedia.org/wiki/Julian_day">Julian day</a> of January 1, 2000, known as
