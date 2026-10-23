@@ -309,7 +309,7 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the {@code LocalDate}.
 	 */
 	private static LocalDate absDateToDate(int absDate) {
-	 	int year = absDate / 366; // Search forward year by year from approximate year
+	 	int year = Math.floorDiv(absDate, 366); // Search forward year by year from approximate year
 	 	while (absDate >= gregorianDateToAbsDate(year + 1, 1, 1)) {
 	 	 	year++;
 	 	}
@@ -347,11 +347,12 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         }
 
         int y = year - 1;
+        // Floor division, so that year 0, a leap year, gets its leap day
 		return (absDate // days this year
 				+ 365 * y // days in previous years ignoring leap days
-                + y / 4 // Julian leap days before this year
-                - y / 100 // minus prior century years
-                + y / 400); // plus prior years divisible by 400
+                + Math.floorDiv(y, 4) // Julian leap days before this year
+                - Math.floorDiv(y, 100) // minus prior century years
+                + Math.floorDiv(y, 400)); // plus prior years divisible by 400
     }
 
     /**
@@ -670,13 +671,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
     }
 
     /**
-     * Computes and sets the Jewish date fields based on the provided absolute (Gregorian) date.
+     * Computes and sets the Jewish date fields based on the provided absolute (Gregorian) date. The date may be before
+     * January 1, 0001, as the <em>molad</em> of Teves 3761 is, on December 12, 0000.
      * @param gregorianAbsDate the Gregorian absolute date.
      */
     private synchronized void setAbsDate(int gregorianAbsDate) {
-        if (gregorianAbsDate <= 0) {
-            throw new IllegalArgumentException("Dates in the BC era are not supported");
-        }
         this.gregorianAbsDate = gregorianAbsDate;
         // Approximation from below
         jewishYear = (gregorianAbsDate - JEWISH_EPOCH) / 366;
@@ -696,8 +695,8 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         // Calculate the day by subtraction
         jewishDay = gregorianAbsDate - jewishDateToAbsDate(jewishYear, jewishMonth, 1) + 1;
 
-        // day of week (same calculation as original)
-        dayOfWeek = Math.abs(gregorianAbsDate % 7) + 1;
+        // day of week, with floorMod so that a date before January 1, 0001 gets the right day
+        dayOfWeek = Math.floorMod(gregorianAbsDate, 7) + 1;
     }
 
     /**
@@ -855,6 +854,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
      */
     public void setGregorianDate(LocalDate localDate) {
         int absDate = gregorianDateToAbsDate(localDate.getYear(),  localDate.getMonth().getValue(), localDate.getDayOfMonth());
+        if (absDate <= 0) {
+            throw new IllegalArgumentException("Dates in the BC era are not supported");
+        }
         setAbsDate(absDate); // convert to Jewish date
     }
 
@@ -975,7 +977,11 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
         if (days < 1) {
             throw new IllegalArgumentException("The number of days to subtract must be greater than zero.");
         }
-        setAbsDate(getAbsDate() - days);
+        int absDate = getAbsDate() - days;
+        if (absDate <= 0) {
+            throw new IllegalArgumentException("Dates in the BC era are not supported");
+        }
+        setAbsDate(absDate);
 
     }
 

@@ -60,5 +60,18 @@ public class UT_JewishDateNavigation {
 		Assert.assertEquals(10, adarBeisDate.getJewishDayOfMonth());
 	}
 
+	/**
+	 * The molad of Teves 3761 is Tuesday 12 December of Gregorian year 0, which is a leap year.
+	 */
+	@Test
+	public void moladInGregorianYear0() {
+		JewishDate molad = new JewishDate(3761, JewishDate.TEVES, 20).getMolad();
+		Assert.assertEquals(LocalDate.of(0, 12, 12), molad.getLocalDate());
+		Assert.assertEquals(Calendar.TUESDAY, molad.getDayOfWeek());
+		Assert.assertEquals(20, molad.getMoladHours());
+		Assert.assertEquals(7, molad.getMoladMinutes());
+		Assert.assertEquals(2, molad.getMoladChalakim());
+	}
+
 
 } // End of UT_JewishDateNavigation class

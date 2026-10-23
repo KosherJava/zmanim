@@ -149,14 +149,15 @@ public class YerushalmiYomiCalculator {
 
 
     /**
-     * Checks if a date is after start and on or before end.
+     * Checks if a date is on or after start and on or before end. A cycle can start on, or be extended to start
+     * on, Yom Kippur or Tisha B'Av, so the start day is counted.
      * @param start the start <code>ZonedDateTime</code>
      * @param date the <code>ZonedDateTime</code> to check
      * @param end the end <code>ZonedDateTime</code>
      * @return if the date is between the two dates
      */
     private static boolean isBetween(LocalDate start, LocalDate date, LocalDate end) {
-        return start.isBefore(date) && !end.isBefore(date);
+        return !date.isBefore(start) && !end.isBefore(date);
     }
 
     /**
