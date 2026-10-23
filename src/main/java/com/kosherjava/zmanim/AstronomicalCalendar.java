@@ -553,10 +553,17 @@ public class AstronomicalCalendar implements Cloneable {
 		LocalDate date = getAdjustedLocalDate();
 		double localTimeHours = (getGeoLocation().getLongitude() / 15) + time;
 		
+		// A sunrise belongs to the date from 18:00 local mean time the evening before through 18:00, and a sunset from
+		// 06:00 through 06:00 the next morning. The time is in UTC hours folded into [0, 24), so near the date line an
+		// event can fold either way out of its window.
 		if (solarEvent == SolarEvent.SUNRISE && localTimeHours > 18) {
 			date = date.minusDays(1);
+		} else if (solarEvent == SolarEvent.SUNRISE && localTimeHours <= -6) {
+			date = date.plusDays(1);
 		} else if (solarEvent == SolarEvent.SUNSET && localTimeHours < 6) {
 			date = date.plusDays(1);
+		} else if (solarEvent == SolarEvent.SUNSET && localTimeHours >= 30) {
+			date = date.minusDays(1);
 		} else if (solarEvent == SolarEvent.MIDNIGHT && localTimeHours < 12) {
 			date = date.plusDays(1);
 		} else if (solarEvent == SolarEvent.NOON) {

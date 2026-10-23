@@ -17,13 +17,21 @@ package com.kosherjava.zmanim;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import org.junit.Test;
 
+import com.kosherjava.zmanim.util.AstronomicalCalculator;
+import com.kosherjava.zmanim.util.GeoLocation;
+import com.kosherjava.zmanim.util.MeeusCalculator;
+import com.kosherjava.zmanim.util.NOAACalculator;
+import com.kosherjava.zmanim.util.SPACalculator;
 import com.kosherjava.zmanim.util.SunTimesCalculator;
 
 /**
@@ -117,5 +125,25 @@ public class AstronomicalCalendarTest {
 		Instant sunTimesSunset = sunTimes.getSunset();
 
 		assertNotEquals(noaaSunset, sunTimesSunset);
+	}
+
+	/**
+	 * Near the date line a sunrise close to local noon has a UTC time just past 24:00. It must still fall on its own
+	 * date: Cape Schmidt, Chukotka, on 10 January 2021, where the sun is up for about ten minutes around noon.
+	 */
+	@Test
+	public void polarSunriseNearTheDateLineIsOnItsOwnDate() {
+		ZoneId anadyr = ZoneId.of("Asia/Anadyr");
+		LocalDate date = LocalDate.of(2021, 1, 10);
+		AstronomicalCalculator[] calculators = { new NOAACalculator(), new MeeusCalculator(), new SPACalculator() };
+		for (AstronomicalCalculator calculator : calculators) {
+			AstronomicalCalendar calendar = new AstronomicalCalendar(new GeoLocation("Cape Schmidt", 68.88, -179.37, anadyr));
+			calendar.setLocalDate(date);
+			calendar.setAstronomicalCalculator(calculator);
+			ZonedDateTime sunrise = calendar.getSeaLevelSunrise().atZone(anadyr);
+			ZonedDateTime sunset = calendar.getSeaLevelSunset().atZone(anadyr);
+			assertEquals(calculator.getCalculatorName(), date, sunrise.toLocalDate());
+			assertTrue(calculator.getCalculatorName(), sunrise.isBefore(sunset));
+		}
 	}
 }
