@@ -9,6 +9,8 @@
     * `getMinchaGedola30Minutes()` and `getMinchaGedolaGRAFixedLocalChatzos30Minutes()` when the result is after sunset (also avoids a `NullPointerException` during polar night).
     * `getSofZmanShma3HoursBeforeChatzos()` and `getSofZmanTfila2HoursBeforeChatzos()` when the result is before sunrise.
     * `getFixedLocalChatzosHayom()` when fixed local chatzos is before sunrise or after sunset, along with the half-day zmanim based on it.
+    * `getBainHashmashosYereim18Minutes()`, `getBainHashmashosYereim16Point875Minutes()` and `getBainHashmashosYereim13Point5Minutes()` when the result is before plag hamincha GRA.
+    * `getMinchaKetanaAteretTorah()`, `getPlagHaminchaAteretTorah()`, `getMinchaKetanaAhavatShalom()` and `getPlagAhavatShalom()` when the result is after sunset.
   * `ComprehensiveZmanimCalendar`: `getMinchaGedolaGreaterThan30()` and `getMinchaGedolaAhavatShalom()` fall back to the regular mincha gedola when 30 minutes after chatzos is after sunset.
   * `ZmanimCalendar`
     * `getCandleLighting()` returns `null` when candle lighting would be before plag hamincha GRA (very short winter days).
