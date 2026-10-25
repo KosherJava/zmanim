@@ -1239,12 +1239,17 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * This is a utility method to determine if the current Instant passed in has a <em>melacha</em> (work) prohibition.
 	 * Since there are many opinions on the time of <em>tzais</em>, the <em>tzais</em> for the current day has to be passed to this
 	 * class. Sunset is the classes current day's {@link #getSunsetBasedOnElevationSetting() elevation adjusted sunset} that observes the
-	 * {@link #isUseElevation()} settings. The {@link JewishCalendar#getInIsrael()} will be set by the inIsrael parameter.
+	 * {@link #isUseElevation()} settings. The {@link JewishCalendar#getInIsrael()} will be set by the inIsrael parameter. Since there
+	 * is no consensus on the day boundaries in polar regions, if a boundary needed for the date (sunset on <em>erev Shabbos</em> or
+	 * <em>Yom Tov</em>, <em>tzais</em> on <em>Shabbos</em> or <em>Yom Tov</em>) can't be determined, an {@link IllegalStateException}
+	 * is thrown rather than guessing.
 	 * 
 	 * @param currentTime the current time
 	 * @param tzais the time of tzais
 	 * @param inIsrael whether to use Israel holiday scheme or not
 	 * @return true if <em>melacha</em> is prohibited or false if it is not.
+	 * @throws IllegalStateException if sunset (on <em>erev Shabbos</em> or <em>Yom Tov</em>) or <em>tzais</em> (on <em>Shabbos</em>
+	 *         or <em>Yom Tov</em>) is needed but can't be determined, such as in polar regions.
 	 * @see JewishCalendar#isAssurBemelacha()
 	 * @see JewishCalendar#hasCandleLighting()
 	 * @see JewishCalendar#setInIsrael(boolean)
@@ -1255,12 +1260,22 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 		
 		jewishCalendar.setInIsrael(inIsrael);
 		
-		if (jewishCalendar.hasCandleLighting() && currentTime.compareTo(getSunsetBasedOnElevationSetting()) >= 0) { //erev shabbos, YT or YT sheni and after shkiah
-			return true;
+		boolean needsSunset = jewishCalendar.hasCandleLighting(); // erev shabbos, YT or YT sheni
+		boolean needsTzais = jewishCalendar.isAssurBemelacha(); // shabbos or YT
+		Instant sunset = needsSunset ? getSunsetBasedOnElevationSetting() : null;
+		
+		boolean noSunset = needsSunset && sunset == null;
+		boolean noTzais = needsTzais && tzais == null;
+		if (noSunset || noTzais) {
+			String missing = noSunset && noTzais ? "Sunset and tzais" : noSunset ? "Sunset" : "Tzais";
+			throw new IllegalStateException(missing + " can't be determined for " + getLocalDate()
+					+ " at this location; whether melacha is prohibited can't be determined");
 		}
 		
-		//is shabbos or YT and it is before tzais
-		return jewishCalendar.isAssurBemelacha() && currentTime.compareTo(tzais) <= 0;
+		if (needsSunset && !currentTime.isBefore(sunset)) { // after shkiah
+			return true;
+		}
+		return needsTzais && !currentTime.isAfter(tzais); // before tzais
 	}
 	
 	/**
