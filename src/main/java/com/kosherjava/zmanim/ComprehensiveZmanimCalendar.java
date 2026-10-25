@@ -1634,8 +1634,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * #getMinchaGedola30Minutes()}. In the winter when 1/2 of a {@link #getShaahZmanisGRA() <em>shaah zmanis</em>} is less
 	 * than 30 minutes {@link #getMinchaGedola30Minutes()} will be returned, otherwise the mincha gedola passed in will be
 	 * returned. Since this calculation can be an offset of <em>chatzos</em> (if 30 clock minutes > 1/2 of a <em>shaah
-	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is {@code false}, this <em>mincha</em>
-	 * time may be affected by {@link #isUseAstronomicalChatzos()}.
+	 * zmanis</em>), even if {@link #isUseAstronomicalChatzosForOtherZmanim()} is {@code false}, this <em>mincha</em> time
+	 * may be affected by {@link #isUseAstronomicalChatzos()}. In Polar regions of very short winter days it is possible that
+	 * Mincha Gedola will occur, but 30 minutes later will be after sunset. In those cases, Mincha Gedola will be returned.
 	 * 
 	 * @param minchaGedola the mincha gedola to be compared to {@link #getMinchaGedola30Minutes()}.
 	 * @return the {@code Instant} of the later of {@link #getMinchaGedolaGRA()} and {@link #getMinchaGedola30Minutes()}.
@@ -1651,6 +1652,10 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 		if (getMinchaGedola30Minutes() == null || minchaGedola == null) {
 			return null;
 		} else {
+			 // check for polar regions on a very short day where Mincha Gedola can occur, but 30 minutes later will be after sunset
+			if(getMinchaGedola30Minutes().compareTo(getSunset()) > 0) {
+				return minchaGedola;
+			}
 			return getMinchaGedola30Minutes().compareTo(minchaGedola) > 0 ? getMinchaGedola30Minutes()
 					: minchaGedola;
 		}
