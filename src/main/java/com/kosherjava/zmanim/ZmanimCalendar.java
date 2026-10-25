@@ -1266,7 +1266,7 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 		
 		boolean noSunset = needsSunset && sunset == null;
 		boolean noTzais = needsTzais && tzais == null;
-		if (noSunset || noTzais) {
+		if (noSunset || (noTzais && (sunset == null || currentTime.isBefore(sunset)))) { // tzais is irrelevant once past shkiah on erev Shabbos/Yom Tov
 			String missing = noSunset && noTzais ? "Sunset and tzais" : noSunset ? "Sunset" : "Tzais";
 			throw new IllegalStateException(missing + " can't be determined for " + getLocalDate()
 					+ " at this location; whether melacha is prohibited can't be determined");
