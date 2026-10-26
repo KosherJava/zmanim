@@ -48,19 +48,43 @@ public abstract class AstronomicalCalculator implements Cloneable {
 	private static final int RESULT_CACHE_DATES = 3;
 
 	/** The calculator method a cached result came from. A rise and a set at the same zenith are different times. */
-	private enum ResultEvent { SUNRISE, SUNSET, NOON, MIDNIGHT }
+	private enum ResultEvent {
+		/** Sunrise. */
+		SUNRISE,
+		/** Sunset. */
+		SUNSET,
+		/** Solar noon. */
+		NOON,
+		/** Solar midnight. */
+		MIDNIGHT
+	}
 
 	/** The cache key: every location input a calculator can use, the zenith, the elevation adjustment and the event. */
 	private static final class ResultKey {
+		/** The latitude in degrees. */
 		private final double latitude;
+		/** The longitude in degrees. */
 		private final double longitude;
+		/** The elevation in meters. */
 		private final double elevation;
+		/** The eastern (sunrise) horizon elevation. */
 		private final double horizonElevationAtSunrise;
+		/** The western (sunset) horizon elevation. */
 		private final double horizonElevationAtSunset;
+		/** The zenith in degrees. */
 		private final double zenith;
+		/** Whether the zenith was adjusted for elevation. */
 		private final boolean adjustForElevation;
+		/** The event calculated. */
 		private final ResultEvent event;
 
+		/**
+		 * Creates a key from every input the result depends on.
+		 * @param geoLocation the location
+		 * @param zenith the zenith in degrees
+		 * @param adjustForElevation whether the zenith is adjusted for elevation
+		 * @param event the event calculated
+		 */
 		ResultKey(GeoLocation geoLocation, double zenith, boolean adjustForElevation, ResultEvent event) {
 			this.latitude = geoLocation.getLatitude();
 			this.longitude = geoLocation.getLongitude();
@@ -97,9 +121,15 @@ public abstract class AstronomicalCalculator implements Cloneable {
 
 	/** The cached results of one date. */
 	private static final class ResultCache {
+		/** The date these results are for. */
 		private final LocalDate date;
+		/** The results, by key. */
 		private final ConcurrentHashMap<ResultKey, Double> values = new ConcurrentHashMap<ResultKey, Double>();
 
+		/**
+		 * Creates an empty cache for a date.
+		 * @param date the date
+		 */
 		ResultCache(LocalDate date) {
 			this.date = date;
 		}
@@ -143,6 +173,12 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		clearResultCache();
 	}
 
+	/**
+	 * Returns the result map for a date, creating it if needed. Up to {@link #RESULT_CACHE_DATES} dates are kept, newest first; the
+	 * array is replaced, never modified, so readers on other threads always see a consistent set.
+	 * @param localDate the date
+	 * @return the results for that date
+	 */
 	private ConcurrentHashMap<ResultKey, Double> getResultCache(LocalDate localDate) {
 		ResultCache[] caches = resultCaches;
 		if (caches != null) {
@@ -163,6 +199,10 @@ public abstract class AstronomicalCalculator implements Cloneable {
 		return cache.values;
 	}
 
+	/**
+	 * Whether results are cached: caching is on and the calculator supports it.
+	 * @return true if results are cached
+	 */
 	private boolean isCaching() {
 		return useResultCache && isResultCacheable();
 	}
