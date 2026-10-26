@@ -116,13 +116,28 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * it can be shared between threads and clones.
 	 */
 	private static final class NoonSolution {
+		/** The Julian day (0h UT) of the date. */
 		final double jdDay;
+		/** The longitude in degrees, positive west. */
 		final double lonWest;
+		/** The {@link SPACalculator#isApplyDeltaT()} setting the values were calculated with. */
 		final boolean applyDeltaT;
+		/** The &Delta;T override the values were calculated with, or {@code null} for the estimate. */
 		final Double deltaTOverride;
+		/** The solar declination at noon, in degrees. */
 		final double declNoon;
+		/** The equation of time at noon, in minutes. */
 		final double eot;
 
+		/**
+		 * Creates a noon solution.
+		 * @param jdDay the Julian day (0h UT) of the date
+		 * @param lonWest the longitude in degrees, positive west
+		 * @param applyDeltaT whether &Delta;T was applied
+		 * @param deltaTOverride the &Delta;T override, or {@code null}
+		 * @param declNoon the solar declination at noon, in degrees
+		 * @param eot the equation of time at noon, in minutes
+		 */
 		NoonSolution(double jdDay, double lonWest, boolean applyDeltaT, Double deltaTOverride, double declNoon, double eot) {
 			this.jdDay = jdDay;
 			this.lonWest = lonWest;
@@ -132,6 +147,14 @@ public class SPACalculator extends AstronomicalCalculator {
 			this.eot = eot;
 		}
 
+		/**
+		 * Whether this solution was calculated for exactly these inputs.
+		 * @param jdDay the Julian day (0h UT) of the date
+		 * @param lonWest the longitude in degrees, positive west
+		 * @param applyDeltaT whether &Delta;T is applied
+		 * @param deltaTOverride the &Delta;T override, or {@code null}
+		 * @return true if every input matches
+		 */
 		boolean matches(double jdDay, double lonWest, boolean applyDeltaT, Double deltaTOverride) {
 			return this.jdDay == jdDay && this.lonWest == lonWest && this.applyDeltaT == applyDeltaT
 					&& Objects.equals(this.deltaTOverride, deltaTOverride);
@@ -368,6 +391,14 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * all along its path (the sun crossed the zenith at no less than {@link #GUARD_MIN_SLOPE}), so it converged to the same crossing the
 	 * exact solve would, and if the exact zenith at that time is within {@link #GUARD_TOLERANCE_MINUTES} of the target. Otherwise the
 	 * caller repeats the solve exactly.
+	 * @param t the time found, in minutes from 0h UT of the date
+	 * @param stats the path statistics from {@link #secant}: {minimum |slope|, last slope}, in degrees per minute
+	 * @param jdDay the Julian day (0h UT) of the date
+	 * @param lat the latitude in degrees
+	 * @param longitude the longitude in degrees
+	 * @param elevation the elevation in meters
+	 * @param adjustedZenith the target zenith in degrees
+	 * @return true if the interpolated solution can be used, false if the solve must be repeated exactly
 	 */
 	private boolean isInterpolatedSolutionAcceptable(double t, double[] stats, double jdDay, double lat, double longitude, double elevation,
 			double adjustedZenith) {
@@ -381,7 +412,15 @@ public class SPACalculator extends AstronomicalCalculator {
 	/**
 	 * The secant search for the time (minutes from 0h UT) at which the topocentric true zenith equals the adjusted zenith. With
 	 * interpolate false this is exactly the original algorithm.
+	 * @param jdDay the Julian day (0h UT) of the date
+	 * @param lat the latitude in degrees
+	 * @param longitude the longitude in degrees
+	 * @param elevation the elevation in meters
+	 * @param adjustedZenith the target zenith in degrees
+	 * @param guess the starting guess, in minutes from 0h UT
+	 * @param interpolate whether to use the interpolated series values
 	 * @param stats if not null, receives {minimum |slope| along the path (0 if not converged), last slope}, slopes in degrees per minute
+	 * @return the time in minutes from 0h UT of the date (not checked for convergence; see the callers)
 	 */
 	private double secant(double jdDay, double lat, double longitude, double elevation, double adjustedZenith, double guess, boolean interpolate,
 			double[] stats) {
@@ -422,6 +461,9 @@ public class SPACalculator extends AstronomicalCalculator {
 	/**
 	 * The exact VSOP87 Earth series (heliocentric longitude and latitude in degrees, radius vector in AU) and nutation
 	 * (&Delta;&psi;, &Delta;&epsilon; in degrees).
+	 * @param jme the Julian ephemeris millennium
+	 * @param jce the Julian ephemeris century
+	 * @return {L, B, R, &Delta;&psi;, &Delta;&epsilon;}
 	 */
 	private static double[] exactSeries(double jme, double jce) {
 		double[] nut = nutation(jce);
@@ -434,9 +476,15 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * within that day. The series depend only on the time (TT), not on the location or any setting. Immutable.
 	 */
 	private static final class SeriesWindow {
+		/** The Julian ephemeris day (TT) at the start of the window. */
 		final double start;
+		/** The exact series values at each node, as {@link #exactSeries(double, double)}. */
 		final double[][] nodes;
 
+		/**
+		 * Calculates the exact series values at the window's nodes.
+		 * @param start the Julian ephemeris day (TT) at the start of the window
+		 */
 		SeriesWindow(double start) {
 			this.start = start;
 			this.nodes = new double[INTERPOLATION_NODES][];
@@ -540,6 +588,12 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * #getRiseSetWindowMinutes(double, SolarEvent)}) with the bracketing search of Klaus Brunner's solarpositioning library 3.0
 	 * ({@code SolarEvents}): the interval is split until a bracket with a guaranteed sign change is found, then refined with ITP to one
 	 * millisecond, keeping the later endpoint. A tangency is not a crossing. Returns NaN when no crossing exists in the window.
+	 * @param jdDay the Julian day (0h UT) of the date
+	 * @param latitude the latitude in degrees
+	 * @param longitude the longitude in degrees
+	 * @param elevation the elevation in meters
+	 * @param adjustedZenith the target zenith in degrees
+	 * @param solarEvent sunrise or sunset
 	 * @return minutes from 0h UT of the date, or NaN
 	 */
 	private double bracketRiseSet(double jdDay, double latitude, double longitude, double elevation, double adjustedZenith,
@@ -567,18 +621,38 @@ public class SPACalculator extends AstronomicalCalculator {
 
 	/** The bracketing crossing search of solarpositioning 3.0 ({@code SolarEvents.CrossingSearch}), unchanged. */
 	private static final class CrossingSearch {
+		/** The function whose sign change is searched for, of time in hours from the window start. */
 		private final java.util.function.DoubleUnaryOperator function;
+		/** An upper bound estimate of |f''|, used to decide when an interval can't hide a crossing. */
 		private final double curvature;
 
+		/**
+		 * Creates a search.
+		 * @param function the function whose sign change is searched for
+		 * @param curvature an upper bound estimate of |f''|
+		 */
 		CrossingSearch(java.util.function.DoubleUnaryOperator function, double curvature) {
 			this.function = function;
 			this.curvature = curvature;
 		}
 
+		/**
+		 * Evaluates the function.
+		 * @param time hours from the window start
+		 * @return the function value
+		 */
 		double value(double time) {
 			return function.applyAsDouble(time);
 		}
 
+		/**
+		 * Recursively splits the interval until a bracket with a sign change is found, then refines it.
+		 * @param start the interval start
+		 * @param end the interval end
+		 * @param a the function value at start
+		 * @param b the function value at end
+		 * @return the crossing time, or NaN if the interval holds none
+		 */
 		double find(double start, double end, double a, double b) {
 			double width = end - start;
 			double slope = (b - a) / width;
@@ -608,6 +682,14 @@ public class SPACalculator extends AstronomicalCalculator {
 			return Double.isNaN(left) ? find(middle, end, m, b) : left;
 		}
 
+		/**
+		 * Refines a bracket with a sign change to the crossing using ITP.
+		 * @param start the bracket start
+		 * @param end the bracket end
+		 * @param a the function value at start
+		 * @param b the function value at end
+		 * @return the crossing time (the later endpoint of the final bracket)
+		 */
 		double refine(double start, double end, double a, double b) {
 			// ITP (Oliveira & Takahashi): https://doi.org/10.1145/3423597.
 			// Use k1 = 0.2 / initial width, k2 = 2, n0 = 1. The projection allows
@@ -748,6 +830,7 @@ public class SPACalculator extends AstronomicalCalculator {
 	 * verified exactly (see {@link #isInterpolatedSolutionAcceptable}); everything else is exact.
 	 * @param julianDayUT the Julian day (UT)
 	 * @param interpolate whether to use the interpolated series values
+	 * @return the same values as {@link #solarCoords(double)}
 	 */
 	private double[] solarCoords(double julianDayUT, boolean interpolate) {
 		double deltaTSeconds = applyDeltaT ? (deltaTOverride != null ? deltaTOverride : estimateDeltaT(julianDayUT)) : 0.0;
@@ -798,6 +881,15 @@ public class SPACalculator extends AstronomicalCalculator {
 		return topocentric(julianDayUT, latitude, longitude, elevationMeters, false);
 	}
 
+	/**
+	 * As {@link #topocentric(double, double, double, double)}, optionally using the interpolated series values.
+	 * @param julianDayUT the Julian day (UT)
+	 * @param latitude the latitude in degrees
+	 * @param longitude the longitude in degrees
+	 * @param elevationMeters the elevation in meters
+	 * @param interpolate whether to use the interpolated series values
+	 * @return as {@link #topocentric(double, double, double, double)}
+	 */
 	private double[] topocentric(double julianDayUT, double latitude, double longitude, double elevationMeters, boolean interpolate) {
 		double[] sc = solarCoords(julianDayUT, interpolate);
 		double alpha = sc[0], delta = sc[1], nu = sc[3], radius = sc[4];
@@ -845,6 +937,15 @@ public class SPACalculator extends AstronomicalCalculator {
 		return topocentricTrueZenith(julianDayUT, latitude, longitude, elevationMeters, false);
 	}
 
+	/**
+	 * As {@link #topocentricTrueZenith(double, double, double, double)}, optionally using the interpolated series values.
+	 * @param julianDayUT the Julian day (UT)
+	 * @param latitude the latitude in degrees
+	 * @param longitude the longitude in degrees
+	 * @param elevationMeters the elevation in meters
+	 * @param interpolate whether to use the interpolated series values
+	 * @return the topocentric zenith angle in degrees, without refraction
+	 */
 	private double topocentricTrueZenith(double julianDayUT, double latitude, double longitude, double elevationMeters, boolean interpolate) {
 		return 90.0 - topocentric(julianDayUT, latitude, longitude, elevationMeters, interpolate)[0];
 	}
@@ -968,7 +1069,12 @@ public class SPACalculator extends AstronomicalCalculator {
 		return new double[] { deltaPsi / 36_000_000, deltaEpsilon / 36_000_000 };
 	}
 
-	/** Polynomial with coefficients in ascending order, evaluated with fused multiply-add (as solarpositioning's MathUtil). */
+	/**
+	 * Polynomial with coefficients in ascending order, evaluated with fused multiply-add (as solarpositioning's MathUtil).
+	 * @param x the variable
+	 * @param coeffs the coefficients, constant term first
+	 * @return the polynomial's value at x
+	 */
 	private static double polynomial(double x, double... coeffs) {
 		int n = coeffs.length - 1;
 		double sum = coeffs[n];
@@ -978,6 +1084,7 @@ public class SPACalculator extends AstronomicalCalculator {
 		return sum;
 	}
 
+	/** Polynomial coefficients of the nutation arguments X0 - X4 (Reda &amp; Andreas, equations 15 - 19). */
 	private static final double[][] NUTATION_COEFFS = {
 		{297.85036, 445267.111480, -0.0019142, 1.0 / 189474},
 		{357.52772, 35999.050340, -0.0001603, -1.0 / 300000},
@@ -986,6 +1093,7 @@ public class SPACalculator extends AstronomicalCalculator {
 		{125.04452, -1934.136261, 0.0020708, 1.0 / 450000},
 	};
 
+	/** Multipliers of X0 - X4 for each of the 63 nutation terms (Reda &amp; Andreas, Table A4.3). */
 	private static final double[][] TERMS_Y = {
 		{0, 0, 0, 0, 1},
 		{-2, 0, 0, 2, 2},
@@ -1052,6 +1160,7 @@ public class SPACalculator extends AstronomicalCalculator {
 		{2, -1, 0, 2, 2},
 	};
 
+	/** The a, b, c, d coefficients of &Delta;&psi; and &Delta;&epsilon; for each of the 63 nutation terms (Reda &amp; Andreas, Table A4.3). */
 	private static final double[][] TERMS_PE = {
 		{-171996, -174.2, 92025, 8.9},
 		{-13187, -1.6, 5736, -3.1},
@@ -1137,6 +1246,11 @@ public class SPACalculator extends AstronomicalCalculator {
 		return estimateDeltaTForYear(date.getYear() + (date.getMonthValue() - 0.5) / 12);
 	}
 
+	/**
+	 * Estimates &Delta;T for a decimal year, using the same branches and coefficients as solarpositioning 3.0.
+	 * @param year the decimal year
+	 * @return &Delta;T in seconds
+	 */
 	private static double estimateDeltaTForYear(double year) {
 		final double deltaT;
 
