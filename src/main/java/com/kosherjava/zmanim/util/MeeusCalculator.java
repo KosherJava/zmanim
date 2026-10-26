@@ -244,12 +244,25 @@ public class MeeusCalculator extends AstronomicalCalculator {
 	 * shared between threads and clones.
 	 */
 	private static final class NoonSolution {
+		/** The Julian day (0h UT) of the date. */
 		final double julianDay;
+		/** The longitude in degrees, positive west. */
 		final double longitude;
+		/** The {@link MeeusCalculator#isApplyDeltaT()} setting the values were calculated with. */
 		final boolean applyDeltaT;
+		/** The equation of time at noon, in minutes. */
 		final double equationOfTime;
+		/** The solar declination at noon, in degrees. */
 		final double solarDeclination;
 
+		/**
+		 * Creates a noon solution.
+		 * @param julianDay the Julian day (0h UT) of the date
+		 * @param longitude the longitude in degrees, positive west
+		 * @param applyDeltaT whether &Delta;T was applied
+		 * @param equationOfTime the equation of time at noon, in minutes
+		 * @param solarDeclination the solar declination at noon, in degrees
+		 */
 		NoonSolution(double julianDay, double longitude, boolean applyDeltaT, double equationOfTime, double solarDeclination) {
 			this.julianDay = julianDay;
 			this.longitude = longitude;
@@ -288,6 +301,16 @@ public class MeeusCalculator extends AstronomicalCalculator {
 		return solution;
 	}
 
+	/**
+	 * Calculates sunrise or sunset in minutes after 0h UTC, starting from the cached noon solution and refining it with two
+	 * further passes at the event time.
+	 * @param localDate the date
+	 * @param latitude the latitude in degrees
+	 * @param longitude the longitude in degrees, positive west
+	 * @param zenith the zenith in degrees
+	 * @param solarEvent sunrise or sunset
+	 * @return minutes after 0h UTC, or {@link Double#NaN} if the sun does not reach the zenith that day
+	 */
 	private double getSunRiseSetUTC(LocalDate localDate, double latitude, double longitude, double zenith,
 			SolarEvent solarEvent) {
 		double julianDay = getJulianDay(localDate);
@@ -552,7 +575,7 @@ public class MeeusCalculator extends AstronomicalCalculator {
 	}
 
 	/**
-	 * {@link #getSunRightAscension(double)} from already calculated apparent ecliptic coordinates.
+	 * Calculates the sun's right ascension from already calculated apparent ecliptic coordinates.
 	 * @param julianCenturies the Julian centuries (TT)
 	 * @param sun {@link #getSunApparentEclipticCoordinates(double)} for the same time
 	 * @return the right ascension in degrees
