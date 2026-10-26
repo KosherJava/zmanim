@@ -3,7 +3,7 @@
  * astronomical times including sunrise and sunset and Jewish <em><a href="https://en.wikipedia.org/wiki/Zmanim">zmanim</a></em> or religious
  * times for prayers and other Jewish religious duties. The calendars are built on {@code java.time}: the date is set with
  * {@link com.kosherjava.zmanim.AstronomicalCalendar#setLocalDate(java.time.LocalDate) setLocalDate(LocalDate)}, and <em>zmanim</em> are
- * returned as {@link java.time.Instant}s (or {@link java.time.Duration}s for temporal hours / <em>sha'os zmaniyos</em<). For non-religious
+ * returned as {@link java.time.Instant}s (or {@link java.time.Duration}s for temporal hours / <em>sha'os zmaniyos</em>). For non-religious
  * astronomical / solar calculations such as <a href="https://en.wikipedia.org/wiki/Sunrise">sunrise</a>,
  * <a href="https://en.wikipedia.org/wiki/Sunset">sunset</a> and <a href="https://en.wikipedia.org/wiki/Twilight">twilight</a>, use the
  * {@link com.kosherjava.zmanim.AstronomicalCalendar}. The {@link com.kosherjava.zmanim.ZmanimCalendar} contains the most commonly used zmanim or
