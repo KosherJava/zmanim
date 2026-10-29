@@ -15,7 +15,9 @@
  *   <li>{@link HebrewDateFormatter} formats dates, <em>Yamim Tovim</em>, <em>parshiyos</em> and numbers, in Hebrew or transliterated,
  *   with options such as final-form letters and <em>geresh</em> / <em>gershayim</em>.</li>
  *   <li>{@link YomiCalculator} calculates the {@link Daf} Yomi Bavli for a given JewishCalendar and {@link YerushalmiYomiCalculator} does the same
- *   for Yerushalmi Yomi.</li>
+ *   for Yerushalmi Yomi. Other daily limud calculators include {@link MishnaYomiCalculator}, {@link RambamYomiCalculator},
+ *   {@link TehillimYomiCalculator}, {@link TanachYomiCalculator}, {@link KitzurShulchanAruchYomiCalculator} and
+ *   {@link ShemirasHaLashonYomiCalculator}.</li>
  * </ul>
  *
  * <h2>Settings that change results:</h2>
