@@ -1,4 +1,4 @@
-## 3.1.0 (future)
+## [3.1.0](https://github.com/KosherJava/zmanim/compare/3.0.0...master)  (future)
   * `GeoLocation` Adds support for [eastern and western horizon elevation for sunrise and sunset](https://github.com/KosherJava/zmanim/commit/cb2b1835ae875c5fb2fbd3b35ae18f523ab93bfe).
   * [Significant rewrite of the SPACalculator](https://github.com/KosherJava/zmanim/commit/7cab372113391de800acaa73a12bb2f0e410c762) to more closely match other implementations, while boosting performance.
   * Calculators now [cache sunrise, sunset, noon and midnight results](https://github.com/KosherJava/zmanim/compare/11fd247^...32e514b), which significantly speeds up generating many zmanim. For example, a day’s calendar needs sunrise several times (for sunrise itself, sof zman krias shema GRA, and others); it is now calculated once. Cached results are only reused for identical inputs, so results are exactly the same as without caching. Caching is on by default and can be turned off with `setUseResultCache(false)`.
