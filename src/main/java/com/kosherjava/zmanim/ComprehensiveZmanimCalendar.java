@@ -3959,7 +3959,19 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * "https://hebrewbooks.org/pdfpager.aspx?req=1401&pgnum=461">רב פעלים – חלק ב׳, סוד ישרים ס׳ ד׳</a>. This time is close to six hours
 	 * before {@link #getSunTransit() astronomical <em>chatzos hayom</em>}, but depending on the time of year and location in the
 	 *  Arctic / Antarctic, it can be up to 46 minutes before or after this time.
-	 * 
+	 *  <p>All Polar zmanim can be calculated using the Ben Ish Chai's start and end of day using the following sample code.
+	 * {@snippet lang='java' :
+	 * String locationName = "Thule, Greenland";
+	 * double latitude =  79.997;
+	 * double longitude = -69.258;
+	 * ZoneId zoneId = ZoneId.of("America/Thule");
+	 * GeoLocation location = new GeoLocation(locationName, latitude, longitude, 0, zoneId);
+	 * ComprehensiveZmanimCalendar czc = new ComprehensiveZmanimCalendar(location);
+	 * Instant sofZmanKriasShema = czc.getSofZmanShma(czc.getPolarSunriseBenIshChai(), czc.getPolarSunsetBenIshChai());
+	 * Instant sofZmanTefila = czc.getSofZmanTfila(czc.getPolarSunriseBenIshChai(), czc.getPolarSunsetBenIshChai());
+	 * Instant minchaGedola = czc.getMinchaGedola(czc.getPolarSunriseBenIshChai(), czc.getPolarSunsetBenIshChai());
+	 * }
+	 * Dedicated methods for these zmanim may be added at a future point.
 	 * @return Sunrise calculated as the easternmost solar position (azimuth 90°) in Polar regions on days that there is no sunrise.
 	 *         If there is sunrise that day, a {@code null} will be returned. While unlikely, it is theoretically possible for a
 	 *         {@code null} to be returned by the code even in Polar regions.
@@ -4014,22 +4026,17 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * <p> It should be noted that in the <span>מועדים וזמנים</span> linked above that was published in 1961, Rav Moshe
 	 * Sternbuch mentions that [<span>ולתפלה, היום מתהלק, עד י״ב שעות שחרית,  ומאז מנחה, ומעריב מתפלל סמוך ללילה כרבי יהודה כנל״ד ...</span>].
 	 * This comment (in () in the original, and [] in the new edition published in 2023) was not brought down in the
-	 * <span>תשובות והנהגות</span> vol. 1 that was published in 1977 nor in vol. 5. published in 2009. Since it is not clear to me if this
-	 * constitutes a retraction, the calculations for the start of <em>mincha</em> mentioned in the Moadim Uzmanim was omitted. This
-	 * is 12 hours after the start of the day (either {@link #getChatzosHalayla()}  in the Polar summer, or {@link #getChatzosHayom()}
-	 * in the Polar winter. {@link #getPolarPlagHaminchaTeshuvosVehanhagos()} was included and is the start of the time that
-	 * <em>maariv</em> can be recited (until the end of the Polar day).
-	 * was omitted.
-	 * 
-	 *  <em>plag hamincha</em>
-	 * were not implemented. For those* who want the zmanim, the end of <em>Shacharis</em> is essentially 12 hours after the start of the day (either {@link
-	 * #getChatzosHalayla()}  in the Polar summer, or {@link #getChatzosHayom()} in the Polar winter, while mincha will start at that
-	 * point and can in daven mincha until night (or plag).
+	 * <span>תשובות והנהגות</span> vol. 1 that was published in 1977 nor in vol. 5. published in 2009. His grandson Rav Yonah Sternbuch
+	 * confirmed that it is not a retraction. The Moadim Uzmanim lists the end of Shacharis as 12 hours after the start of the day
+	 * (either {@link #getChatzosHalayla()}  in the Polar summer, or {@link #getChatzosHayom()} in the Polar winter). At this point
+	 * the time for <em>mincha</em> starts. The time for <em>maariv</em> in this opinion starts at {@link
+	 * #getPolarPlagHaminchaTeshuvosVehanhagos()} and ends at the end of the Polar day (the value returned by this method). Regarding
+	 * the time for Krias Shema, the מועדים וזמנים states that <span>ורק אני מסתפק בענין ק״ש שתלוי בעצם בשכיבה וקימה ולא ביום ולילה, אולי יש דין ק״ש יום
+	 * ולילה גם במקומות אלו...</span>. 
 	 * <p>FIXME:
 	 * <ul>
-	 *   <li>Attempt to clarify the discrepancy.</li>
-	 *   <li>Research if an earlier alos such as 18° should be used</li>
-	 *   <li>Consider logic for day with EITHER an <em>alos</em> or a sunset</li>
+	 *   <li>Research if an earlier alos such as 18° should be used.</li>
+	 *   <li>Consider logic for day with EITHER an <em>alos</em> or a sunset (the day of transit into 24-hour day/night.</li>
 	 * </ul>
 	 * @return the time of the Jewish calendar transition to the next day in Polar regions according to Rav Moshe Sternbuch.
 	 * @see #getPolarPlagHaminchaTeshuvosVehanhagos()
