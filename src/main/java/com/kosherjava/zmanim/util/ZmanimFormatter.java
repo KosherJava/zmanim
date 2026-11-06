@@ -162,9 +162,9 @@ public class ZmanimFormatter {
 	 * 
 	 * @param format the format constant to use. See {@link #ZmanimFormatter(int, DateTimeFormatter, ZoneId)} for documentation on
 	 *         the formats.
+	 * @throws IllegalArgumentException if the format is not one of the format constants. The formatter is then left unchanged.
 	 */
 	public void setTimeFormat(int format) {
-		this.timeFormat = format;
 		switch (format) {
 		case SEXAGESIMAL_XSD_FORMAT:
 			setSettings(true, true, true);
@@ -183,6 +183,8 @@ public class ZmanimFormatter {
 		default: throw new IllegalArgumentException("An invalid time format of " + format +
 				" was set. Please see the documentation for the list of valid formats.");
 		}
+		// set only once the format is known to be valid, so an invalid value can't leave the formatter half changed
+		this.timeFormat = format;
 	}
 
 	/**
