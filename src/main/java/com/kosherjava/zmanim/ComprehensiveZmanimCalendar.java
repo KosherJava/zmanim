@@ -1730,7 +1730,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * {@link #getTzaisGeonim3Point8Degrees()} with <em>shaos zmaniyos</em> calculated based on a day starting at {@link
 	 * #getAlos16Point1Degrees()} and ending at {@link #getTzaisGeonim3Point8Degrees()}. <em>Mincha ketana</em> is the preferred
 	 * earliest time to pray <em>mincha</em> according to the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides"
-	 * >Rambam</a> and others. For more information on <em>mincha ketana</em> see the documentation on {@link #getMinchaKetanaGRA()}. If the calculated time is after sunset (on very short winter days), a {@code null} will be returned.
+	 * >Rambam</a> and others. For more information on <em>mincha ketana</em> see the documentation on {@link #getMinchaKetanaGRA()}.
+	 * If the calculated time is after sunset (on very short winter days), a {@code null} will be returned.
 	 * 
 	 * @return the {@code Instant} of the time of <em>mincha ketana</em>. If the calculation can't be computed such as
 	 *         northern and southern locations even south of the Arctic Circle and north of the Antarctic Circle where the
@@ -2032,7 +2033,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * of the Bais Horaah of Yeshivat Chevrat Ahavat Shalom that that <em>plag hamincha</em> is calculated as 1.25 * {@link
 	 * #getShaahZmanisAlos16Point1DegreesToTzaisGeonim3Point8Degrees} before {@link #getTzaisGeonim3Point8Degrees()}. Sources for an
 	 * asymmetrical day-based calculation can be seen in the documentation of
-	 * {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}. If the calculated time is after sunset (on very short winter days), a {@code null} will be returned.
+	 * {@link #getSofZmanShmaAlos16Point1DegreesToTzaisGeonim7Point083Degrees}. If the calculated time is after sunset (on very short
+	 * winter days), a {@code null} will be returned.
 	 * 
 	 * @return the {@code Instant} of the <em>plag</em>. If the calculation can't be computed such as northern and
 	 *         southern locations even south of the Arctic Circle and north of the Antarctic Circle where the sun may not
@@ -2135,8 +2137,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 18 minutes or 3/4 of a
 	 * 24-minute <a href="https://en.wikipedia.org/wiki/Biblical_mile">mil</a> before sunset. According to the Yereim, <em>bain
-	 * hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at sunset. If the calculated time is before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>}
-	 * (on very short winter days), a {@code null} will be returned.
+	 * hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at sunset. If the calculated time
+	 * is before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>} (on very short winter days), <em>plag hamincha</em> will be
+	 * returned.
 	 * 
 	 * @return the {@code Instant} of 18 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
@@ -2145,7 +2148,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * @see #getBainHashmashosYereim3Point05Degrees()
 	 */
 	public Instant getBainHashmashosYereim18Minutes() {
-		return nullIfBeforePlagHaminchaGRA(getTimeOffset(getSunsetBasedOnElevationSetting(), Duration.ofMinutes(-18)));
+		return getPlagHaminchaGRAIfBeforePlagHaminchaGRA(getTimeOffset(getSunsetBasedOnElevationSetting(), Duration.ofMinutes(-18)));
 	}
 	
 	/**
@@ -2182,8 +2185,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 16.875 minutes or 3/4 of a
 	 * 22.5-minute <a href="https://en.wikipedia.org/wiki/Biblical_mile">mil</a> before sunset. According to the Yereim, <em>bain
-	 * hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at sunset. If the calculated time is before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>}
-	 * (on very short winter days), a {@code null} will be returned.
+	 * hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at sunset. If the calculated time is
+	 * before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>} (on very short winter days), <em>plag hamincha</em>will be
+	 * returned.
 	 * 
 	 * @return the {@code Instant} of 16.875 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
@@ -2193,7 +2197,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getBainHashmashosYereim16Point875Minutes() {
 		long totalNanos = (long) (-16.875 * MINUTE_NANOS);
-		return nullIfBeforePlagHaminchaGRA(getTimeOffset(getSunsetBasedOnElevationSetting(), Duration.ofNanos(totalNanos)));
+		return getPlagHaminchaGRAIfBeforePlagHaminchaGRA(getTimeOffset(getSunsetBasedOnElevationSetting(), Duration.ofNanos(totalNanos)));
 	}
 	
 	/**
@@ -2222,8 +2226,9 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * This method returns the beginning of <em>bain hashmashos</em> (twilight) according to the <a href=
 	 * "https://en.wikipedia.org/wiki/Eliezer_ben_Samuel">Yereim (Rabbi Eliezer of Metz)</a> calculated as 13.5 minutes or 3/4 of
 	 * an 18-minute <a href="https://en.wikipedia.org/wiki/Biblical_mile">mil</a> before sunset. According to the Yereim, <em>bain
-	 * hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at sunset. If the calculated time is before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>}
-	 * (on very short winter days), a {@code null} will be returned.
+	 * hashmashos</em> starts 3/4 of a mil before sunset and <em>tzais</em> or nightfall starts at sunset. If the calculated time is
+	 * before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>} (on very short winter days), <em>plag hamincha</em> will be
+	 * returned.
 	 * 
 	 * @return the {@code Instant} of 13.5 minutes before sunset. If the calculation can't be computed such as in the
 	 *         Arctic Circle where there is at least one day a year when the sun does not rise, and one where it does
@@ -2233,37 +2238,7 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 */
 	public Instant getBainHashmashosYereim13Point5Minutes() {
 		long totalNanos = (long) (-13.5 * MINUTE_NANOS);
-		return nullIfBeforePlagHaminchaGRA(getTimeOffset(getSunsetBasedOnElevationSetting(), Duration.ofNanos(totalNanos)));
-	}
-	
-	/**
-	 * Returns the time passed in, or {@code null} if it is after {@link #getSunsetBasedOnElevationSetting() sunset}, as can happen
-	 * on very short winter days for <em>zmanim</em> calculated from a day that extends past sunset.
-	 * 
-	 * @param zman the time to check
-	 * @return the time passed in, or {@code null} if it is {@code null} or after sunset
-	 */
-	private Instant nullIfAfterSunset(Instant zman) {
-		Instant sunset = getSunsetBasedOnElevationSetting();
-		if (zman != null && sunset != null && zman.isAfter(sunset)) { // very short winter day
-			return null;
-		}
-		return zman;
-	}
-	
-	/**
-	 * Returns the time passed in, or {@code null} if it is before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>}, as can
-	 * happen on very short winter days when a fixed offset before sunset reaches back into the morning.
-	 * 
-	 * @param zman the time to check
-	 * @return the time passed in, or {@code null} if it is {@code null} or before <em>plag hamincha</em>
-	 */
-	private Instant nullIfBeforePlagHaminchaGRA(Instant zman) {
-		Instant plagHamincha = getPlagHaminchaGRA();
-		if (zman != null && plagHamincha != null && zman.isBefore(plagHamincha)) { // very short winter day
-			return null;
-		}
-		return zman;
+		return getPlagHaminchaGRAIfBeforePlagHaminchaGRA(getTimeOffset(getSunsetBasedOnElevationSetting(), Duration.ofNanos(totalNanos)));
 	}
 	
 	/**
@@ -2711,7 +2686,8 @@ public class ComprehensiveZmanimCalendar extends ZmanimCalendar {
 	 * according to the opinion of the <a href="https://en.wikipedia.org/wiki/Maimonides">Rambam</a> and others.
 	 * For more information on this see the documentation on {@link #getMinchaGedolaGRA() <em>mincha gedola</em>}. This is
 	 * calculated as 9.5 {@link #getShaahZmanisAteretTorah() solar hours} after {@link #getAlos72Zmanis() <em>alos</em>}.
-	 * The calculation used is 9.5 * {@link #getShaahZmanisAteretTorah()} after {@link #getAlos72Zmanis() <em>alos</em>}. If the calculated time is after sunset (on very short winter days), a {@code null} will be returned.
+	 * The calculation used is 9.5 * {@link #getShaahZmanisAteretTorah()} after {@link #getAlos72Zmanis() <em>alos</em>}.
+	 * If the calculated time is after sunset (on very short winter days), a {@code null} will be returned.
 	 * 
 	 * @see #getAlos72Zmanis()
 	 * @see #getTzaisAteretTorah()
