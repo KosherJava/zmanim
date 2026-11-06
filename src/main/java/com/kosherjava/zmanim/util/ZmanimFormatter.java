@@ -259,16 +259,18 @@ public class ZmanimFormatter {
 	}
 
 	/**
-	 * Formats an {@link Instant} using this class's {@link #getDateTimeFormatter()}.
+	 * Formats an {@link Instant} in the given {@link ZoneId} using this class's {@link #getDateTimeFormatter()}.
 	 * 
 	 * @param instant the {@code Instant} to format.
-	 * @param zoneId the {@link ZoneId} used to help format based on the {@code Instant}'s DST and other settings.
+	 * @param zoneId the {@link ZoneId} to format the {@code Instant} in (including its DST and other settings).
 	 * @return the formatted String
 	 * @see #formatXSDateTime(Instant)
 	 */
 	public String formatInstant(Instant instant, ZoneId zoneId) {
 		ZonedDateTime dateTime = instant.atZone(zoneId);
-		return this.getDateTimeFormatter().format(dateTime);
+		// The formatter has this ZmanimFormatter's zone as its override zone (see the constructor), and an override zone converts
+		// the ZonedDateTime back to that zone, so it has to be replaced by the requested one.
+		return this.getDateTimeFormatter().withZone(zoneId).format(dateTime);
 	}
 	
 	/**
