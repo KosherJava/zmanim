@@ -48,4 +48,33 @@ public class SerializationRegressionTest {
 		assertFalse(actualEpochMillis % 1000 == 0);
 		assertTrue(Math.abs(expectedEpochMillis - actualEpochMillis) < 1000);
 	}
+
+	/** A location name with XML / JSON special characters, e.g. a name with an ampersand or a quote. */
+	private static final String SPECIAL_NAME = "Ta\"l & <Ma'alot> \\ x";
+
+	private static void assertWellFormedXml(String xml) throws Exception {
+		javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder()
+				.parse(new java.io.ByteArrayInputStream(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+	}
+
+	@Test
+	public void toXmlEscapesSpecialCharacters() throws Exception {
+		GeoLocation geoLocation = new GeoLocation(SPECIAL_NAME, 40.0828, -74.2094, ZoneId.of("America/New_York"));
+		com.kosherjava.zmanim.ComprehensiveZmanimCalendar calendar = new com.kosherjava.zmanim.ComprehensiveZmanimCalendar(geoLocation);
+		String xml = ZmanimFormatter.toXML(calendar);
+		assertWellFormedXml(xml);
+		assertTrue(xml.contains("location=\"Ta&quot;l &amp; &lt;Ma&apos;alot&gt; \\ x\""));
+
+		assertWellFormedXml(geoLocation.toXML());
+		Zman zman = new Zman(Instant.parse("2026-03-23T10:56:01.123Z"), geoLocation, "Alos & <Tzais>");
+		zman.setDescription("16.1\u00b0 \"degrees\"");
+		assertWellFormedXml(zman.toXML());
+	}
+
+	@Test
+	public void toJsonEscapesSpecialCharacters() {
+		GeoLocation geoLocation = new GeoLocation(SPECIAL_NAME + "\n", 40.0828, -74.2094, ZoneId.of("America/New_York"));
+		String json = ZmanimFormatter.toJSON(new com.kosherjava.zmanim.ComprehensiveZmanimCalendar(geoLocation));
+		assertTrue(json.contains("\"location\":\"Ta\\\"l & <Ma'alot> \\\\ x\\n\","));
+	}
 }
