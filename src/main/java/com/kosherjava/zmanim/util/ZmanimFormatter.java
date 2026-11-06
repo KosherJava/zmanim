@@ -282,8 +282,8 @@ public class ZmanimFormatter {
 	}
 
 	/**
-	 * This returns the xml representation of an xsd:duration object. This simply uses {@link Duration#toString()} that formats it
-	 * in the standard XSD ISO-8601 (e.g., "{@code PT1H30M}")
+	 * This returns the xml representation of an xsd:duration object, in the standard XSD ISO-8601 format (e.g., "{@code PT1H30M}",
+	 * or "{@code -PT1H30M}" for a negative duration).
 	 * 
 	 * @param duration the duration to format
 	 * @return the xsd:duration ISO-8601 formatted String
@@ -291,6 +291,11 @@ public class ZmanimFormatter {
 	public String formatXSDDurationTime(Duration duration) {
 		if (duration == null) {
 			return "";
+		}
+		if (duration.isNegative()) {
+			// Duration.toString() writes a negative duration with a sign on every field ("PT-1H-30M"), which isn't a valid
+			// xsd:duration. XSD puts a single sign in front of the whole value.
+			return "-" + duration.negated().toString();
 		}
 		return duration.toString(); // Java's native toString() outputs a standard XSD ISO-8601 (e.g., "PT1H30M")
 	}
