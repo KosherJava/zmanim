@@ -322,4 +322,28 @@ public class SPACalculatorTest {
 	public void getCalculatorName() {
 		assertEquals("NREL Solar Position Algorithm", calculator().getCalculatorName());
 	}
+
+	/**
+	 * A NaN target zenith (from a NaN / infinite zenith, refraction or solar radius, or a negative / NaN earth radius) used to
+	 * make the bracketing rise / set search run for hours. It must return NaN like the other calculators.
+	 */
+	@Test(timeout = 10_000)
+	public void nonFiniteZenithReturnsNaNPromptly() {
+		GeoLocation location = new GeoLocation("Lakewood, NJ", 40.0721087, -74.2400243, 5017, ZoneId.of("America/New_York"));
+		LocalDate date = LocalDate.of(2026, 1, 1);
+		assertTrue(Double.isNaN(calculator().getUTCSunrise(date, location, Double.POSITIVE_INFINITY, false)));
+		assertTrue(Double.isNaN(calculator().getUTCSunset(date, location, Double.NaN, false)));
+
+		SPACalculator negativeEarthRadius = calculator();
+		negativeEarthRadius.setEarthRadius(-6371);
+		assertTrue(Double.isNaN(negativeEarthRadius.getUTCSunrise(date, location, 90.0, true)));
+
+		SPACalculator nanRefraction = calculator();
+		nanRefraction.setRefraction(Double.NaN);
+		assertTrue(Double.isNaN(nanRefraction.getUTCSunset(date, location, 90.0, false)));
+
+		SPACalculator infiniteSolarRadius = calculator();
+		infiniteSolarRadius.setSolarRadius(Double.POSITIVE_INFINITY);
+		assertTrue(Double.isNaN(infiniteSolarRadius.getUTCSunrise(date, location, 90.0, false)));
+	}
 }
