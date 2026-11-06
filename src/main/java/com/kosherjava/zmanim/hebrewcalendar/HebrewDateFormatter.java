@@ -825,7 +825,7 @@ public class HebrewDateFormatter {
 	}
 
 	/**
-	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 to 9999.
+	 * Returns a Hebrew formatted string of a number. The method can calculate from 0 to 999,999.
 	 * <ul>
 	 * <li>Single digit numbers such as 3, 30 and 100 will be returned with a ׳ (<a
 	 * href="http://en.wikipedia.org/wiki/Geresh">Geresh</a>) appended as at the end. For example ג׳, ל׳ and ק׳</li>
@@ -834,10 +834,13 @@ public class HebrewDateFormatter {
 	 * example כ״א, תשכ״ט</li>
 	 * <li>15 and 16 will be returned as ט״ו and ט״ז</li>
 	 * <li>Single digit numbers (years assumed) such as 6000 (%1000=0) will be returned as ו׳אלפים</li>
+	 * <li>From 10,000 the thousands are written with the same letters as other numbers, for example י׳ אלפים for 10,000 and (with
+	 * {@link #isUseLongHebrewYears() long years}) יב׳ שמ״ה for 12,345. This allows formatting the Jewish years of dates past the
+	 * Gregorian year 6239.</li>
 	 * <li>0 will return אפס</li>
 	 * </ul>
 	 * 
-	 * @param number the number to be formatted. It will throw an IllegalArgumentException if the number is &lt; 0 or &gt; 9999.
+	 * @param number the number to be formatted. It will throw an IllegalArgumentException if the number is &lt; 0 or &gt; 999,999.
 	 * @return the Hebrew formatted number such as תשכ״ט
 	 * @see #isUseFinalFormLetters()
 	 * @see #isUseGershGershayim()
@@ -847,8 +850,8 @@ public class HebrewDateFormatter {
 	public String formatHebrewNumber(int number) {
 		if (number < 0) {
 			throw new IllegalArgumentException("negative numbers can't be formatted");
-		} else if (number > 9999) {
-			throw new IllegalArgumentException("numbers > 9999 can't be formatted");
+		} else if (number > 999_999) {
+			throw new IllegalArgumentException("numbers > 999,999 can't be formatted");
 		}
 
 		String ALAFIM = "אלפים";
@@ -871,7 +874,7 @@ public class HebrewDateFormatter {
 		StringBuilder sb = new StringBuilder();
 		// append thousands to String
 		if (number % 1000 == 0) { // in year is 5000, 4000 etc
-			sb.append(jOnes[thousands]);
+			sb.append(formatThousands(thousands, jHundreds, jTens, jOnes, tavTaz));
 			if (isUseGershGershayim()) {
 				sb.append(GERESH);
 			}
@@ -879,7 +882,7 @@ public class HebrewDateFormatter {
 			sb.append(ALAFIM); // add # of thousands plus the word "thousand" (override alafim boolean)
 			return sb.toString();
 		} else if (useLonghebrewYears && number >= 1000) { // if alafim boolean display thousands
-			sb.append(jOnes[thousands]);
+			sb.append(formatThousands(thousands, jHundreds, jTens, jOnes, tavTaz));
 			if (isUseGershGershayim()) {
 				sb.append(GERESH); // append thousands quote
 			}
@@ -917,6 +920,30 @@ public class HebrewDateFormatter {
 			} else { // append double quote before last digit
 				sb.insert(sb.length() - 1, GERSHAYIM);
 			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Returns the thousands of a number as Hebrew letters, without a <em>geresh</em>: a single letter for 1 to 9 thousand (as
+	 * before, for example ה for 5,000), and the same letters as for other numbers from 10 thousand on (for example יב for 12,000,
+	 * with ט״ו / ט״ז for 15 and 16).
+	 * @param thousands the number of thousands, 1 to 999
+	 * @param jHundreds the letters for the hundreds
+	 * @param jTens the letters for the tens
+	 * @param jOnes the letters for the ones
+	 * @param tavTaz the letters for 15 and 16
+	 * @return the letters
+	 */
+	private static String formatThousands(int thousands, String[] jHundreds, String[] jTens, String[] jOnes, String[] tavTaz) {
+		StringBuilder sb = new StringBuilder(jHundreds[thousands / 100]);
+		int rest = thousands % 100;
+		if (rest == 15) {
+			sb.append(tavTaz[0]);
+		} else if (rest == 16) {
+			sb.append(tavTaz[1]);
+		} else {
+			sb.append(jTens[rest / 10]).append(jOnes[rest % 10]);
 		}
 		return sb.toString();
 	}	
