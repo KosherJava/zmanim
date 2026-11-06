@@ -618,13 +618,19 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	 * #getSeaLevelSunset() sea level sunset}. This will return the time for any day of the week, since it can be used to calculate
 	 * candle lighting time for <em>Yom Tov</em> (mid-week holidays) as well. Elevation adjustments are intentionally not performed
 	 * by this method, but you can calculate it by passing the elevation adjusted sunset to {@link #getTimeOffset(Instant,
-	 * Duration)}. If the calculated time is before {@link #getPlagHaminchaGRA() <em>plag hamincha</em>} (on very short winter days),
-	 * a {@code null} will be returned.
+	 * Duration)}. The earliest time that Shabbos can start and candle lighting is valid is from {@link #getPlagHaminchaGRA()
+	 * <em>plag hamincha</em>}. See the Mechaber and Mishna Berura in <a href=
+	 * "https://hebrewbooks.org/pdfpager.aspx?req=60388&st=&pgnum=90">או״ח ס׳ רס״ז סע׳ ב׳</a>. Due to this, if the calculated candle
+	 * lighting time calculates to a time earlier than <em>plag hamincha</em>}, the time of <em>plag hamincha</em> will be returned.
+	 * <em>Plag hamincha</em> starting at the latitude of 66° (south of <a href="https://en.wikipedia.org/wiki/Arctic_Circle">Arctic
+	 * Circle</a> at ~66.5°) during the winter solstice, will occur 17.3 minutes before sunset. At a latitude of 65.9° or lower, the
+	 * earliest time that <em>plag hamincha</em> will occur is 18 minutes before sunset.
 	 * 
 	 * @return candle lighting time. If the calculation can't be computed such as in the Arctic Circle where there is at
-	 *         least one day a year where the sun does not rise, and one where it does not set, or if it is before {@link
-	 *         #getPlagHaminchaGRA() <em>plag hamincha</em>} on very short winter days, a {@code null} will be returned.
-	 *         See detailed explanation on top of the {@link AstronomicalCalendar} documentation.
+	 *         least one day a year where the sun does not rise, and one where it does not set, a {@code null} will be returned. See
+	 *         detailed explanation on top of the {@link AstronomicalCalendar} documentation. If it calculates earlier than
+	 *         {@link #getPlagHaminchaGRA() <em>plag hamincha</em>}, <em>plag hamincha</em>
+	 *         
 	 * @see #getSeaLevelSunset()
 	 * @see #getCandleLightingOffset()
 	 * @see #setCandleLightingOffset(double)
@@ -632,11 +638,38 @@ public class ZmanimCalendar extends AstronomicalCalendar {
 	public Instant getCandleLighting() {
 		long totalNanos = (long) (-getCandleLightingOffset() * MINUTE_NANOS);
 		Instant candleLighting = getTimeOffset(getSeaLevelSunset(), Duration.ofNanos(totalNanos));
-		Instant plagHamincha = getPlagHaminchaGRA();
-		if (candleLighting != null && plagHamincha != null && candleLighting.isBefore(plagHamincha)) { // very short winter day
+		return getPlagHaminchaGRAIfBeforePlagHaminchaGRA(candleLighting);
+	}
+	
+	/**
+	 * Returns the time passed in, or {@code null} if it is after {@link #getSunsetBasedOnElevationSetting() sunset}, as can happen
+	 * on very short winter days for <em>zmanim</em> calculated from a day that extends past sunset.
+	 * 
+	 * @param zman the time to check
+	 * @return the time passed in, or {@code null} if it is {@code null} or after sunset
+	 */
+	protected Instant nullIfAfterSunset(Instant zman) {
+		Instant sunset = getSunsetBasedOnElevationSetting();
+		if (zman != null && sunset != null && zman.isAfter(sunset)) { // very short winter day
 			return null;
 		}
-		return candleLighting;
+		return zman;
+	}
+	
+	/**
+	 * Returns the time passed in, or {@link #getPlagHaminchaGRA() <em>plag hamincha</em>} if the zman occurs before <em>plag
+	 * hamincha</em>, as can happen on very short winter days when a fixed offset before sunset reaches back into the morning.
+	 * 
+	 * @param zman the time to check
+	 * @return the time passed in, or {@code null} if it is {@code null} or {@link #getPlagHaminchaGRA() <em>plag hamincha</em>}
+	 *         if the zman occurs before <em>plag hamincha</em>.
+	 */
+	protected Instant getPlagHaminchaGRAIfBeforePlagHaminchaGRA(Instant zman) {
+		Instant plagHamincha = getPlagHaminchaGRA();
+		if (zman != null && plagHamincha != null && zman.isBefore(plagHamincha)) { // very short winter day
+			return plagHamincha;
+		}
+		return zman;
 	}
 
 	/**
