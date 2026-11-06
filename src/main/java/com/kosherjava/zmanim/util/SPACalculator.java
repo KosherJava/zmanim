@@ -311,6 +311,11 @@ public class SPACalculator extends AstronomicalCalculator {
 			}
 		}
 		double adjustedZenith = adjustZenith(zenith, elevation, localDate);
+		if (!Double.isFinite(adjustedZenith)) {
+			// A NaN or infinite zenith (or a NaN / infinite refraction, solar radius or earth radius, which make the adjusted
+			// zenith NaN) has no crossing, and the bracketing search can't rule out any interval of a NaN function.
+			return Double.NaN;
+		}
 		double riseSet = solveRiseSet(localDate, geoLocation, adjustedZenith, solarEvent);
 		if (Double.isNaN(riseSet)) {
 			return Double.NaN;
@@ -654,6 +659,11 @@ public class SPACalculator extends AstronomicalCalculator {
 		 * @return the crossing time, or NaN if the interval holds none
 		 */
 		double find(double start, double end, double a, double b) {
+			if (Double.isNaN(a) || Double.isNaN(b)) {
+				// No interval of a NaN function can be discarded, so without this the search would split all the way down to
+				// TIME_TOLERANCE in every branch (about 2^27 evaluations).
+				return Double.NaN;
+			}
 			double width = end - start;
 			double slope = (b - a) / width;
 			double slopeError = curvature * width / 2.0 + 2.0 * ROUNDING_ERROR / width;
