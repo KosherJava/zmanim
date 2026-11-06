@@ -350,13 +350,13 @@ public class ZmanimFormatter {
 		}
 		sb.append(" date=\"").append(df.format(localDate)).append("\"");
 		sb.append(" type=\"").append(astronomicalCalendar.getClass().getName()).append("\"");
-		sb.append(" algorithm=\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\"");
-		sb.append(" location=\"").append(astronomicalCalendar.getGeoLocation().getLocationName()).append("\"");
+		sb.append(" algorithm=\"").append(escapeXml(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName())).append("\"");
+		sb.append(" location=\"").append(escapeXml(astronomicalCalendar.getGeoLocation().getLocationName())).append("\"");
 		sb.append(" latitude=\"").append(astronomicalCalendar.getGeoLocation().getLatitude()).append("\"");
 		sb.append(" longitude=\"").append(astronomicalCalendar.getGeoLocation().getLongitude()).append("\"");
 		sb.append(" elevation=\"").append(astronomicalCalendar.getGeoLocation().getElevation()).append("\"");
-		sb.append(" timeZoneName=\"").append(timeZoneName).append("\"");
-		sb.append(" timeZoneID=\"").append(geoLocation.getZoneId().getId()).append("\"");
+		sb.append(" timeZoneName=\"").append(escapeXml(timeZoneName)).append("\"");
+		sb.append(" timeZoneID=\"").append(escapeXml(geoLocation.getZoneId().getId())).append("\"");
 		sb.append(" timeZoneOffset=\"").append(offsetHours).append("\"");
 		//sb.append(" useElevationAllZmanim=\"").append(astronomicalCalendar.useElevationAllZmanim()).append("\""); //TODO likely using reflection
 		sb.append(">\n");
@@ -380,7 +380,7 @@ public class ZmanimFormatter {
 					} else if (value instanceof Duration) {// shaah zmanis
 						durationList.add(new Zman((Duration)value, tagName));
 					} else { // will probably never enter this block, but is present to be future-proof
-						otherList.add("<" + tagName + ">" + value + "</" + tagName + ">");
+						otherList.add("<" + tagName + ">" + escapeXml(String.valueOf(value)) + "</" + tagName + ">");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -469,13 +469,13 @@ public class ZmanimFormatter {
 		StringBuilder sb = new StringBuilder("{\n\"metadata\":{\n");
 		sb.append("\t\"date\":\"").append(df.format(localDate)).append("\",\n");
 		sb.append("\t\"type\":\"").append(astronomicalCalendar.getClass().getName()).append("\",\n");
-		sb.append("\t\"algorithm\":\"").append(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName()).append("\",\n");
-		sb.append("\t\"location\":\"").append(geoLocation.getLocationName()).append("\",\n");
+		sb.append("\t\"algorithm\":\"").append(escapeJson(astronomicalCalendar.getAstronomicalCalculator().getCalculatorName())).append("\",\n");
+		sb.append("\t\"location\":\"").append(escapeJson(geoLocation.getLocationName())).append("\",\n");
 		sb.append("\t\"latitude\":\"").append(geoLocation.getLatitude()).append("\",\n");
 		sb.append("\t\"longitude\":\"").append(geoLocation.getLongitude()).append("\",\n");
 		sb.append("\t\"elevation\":\"").append(geoLocation.getElevation()).append("\",\n");
-		sb.append("\t\"timeZoneName\":\"").append(timeZoneName).append("\",\n");
-		sb.append("\t\"timeZoneID\":\"").append(geoLocation.getZoneId().getId()).append("\",\n");
+		sb.append("\t\"timeZoneName\":\"").append(escapeJson(timeZoneName)).append("\",\n");
+		sb.append("\t\"timeZoneID\":\"").append(escapeJson(geoLocation.getZoneId().getId())).append("\",\n");
 		sb.append("\t\"timeZoneOffset\":\"").append(offsetHours).append("\"");
 		sb.append("},\n\"");
 
@@ -510,7 +510,7 @@ public class ZmanimFormatter {
 					} else if (value instanceof Duration) {// shaah zmanis
 						durationList.add(new Zman((Duration)value, tagName));
 					} else { // will probably never enter this block, but is present to be future-proof
-						otherList.add("\"" + tagName + "\":\"" + value + "\",");
+						otherList.add("\"" + tagName + "\":\"" + escapeJson(String.valueOf(value)) + "\",");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -546,6 +546,63 @@ public class ZmanimFormatter {
 	 * @param method the method in question
 	 * @return if the method should be included in serialization
 	 */
+	/**
+	 * Escapes text for use in XML element content or a double quoted attribute value: {@code &}, {@code <}, {@code >},
+	 * {@code "} and {@code '} are replaced by their predefined entities.
+	 * @param text the text to escape. A {@code null} is written as "{@code null}", as before.
+	 * @return the escaped text
+	 */
+	static String escapeXml(String text) {
+		if (text == null) {
+			return "null";
+		}
+		StringBuilder sb = new StringBuilder(text.length());
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			switch (c) {
+				case '&': sb.append("&amp;"); break;
+				case '<': sb.append("&lt;"); break;
+				case '>': sb.append("&gt;"); break;
+				case '"': sb.append("&quot;"); break;
+				case '\'': sb.append("&apos;"); break;
+				default: sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Escapes text for use inside a JSON string: {@code "} and {@code \} are backslash escaped and control characters are
+	 * written as escape sequences, as <a href="https://www.rfc-editor.org/rfc/rfc8259#section-7">RFC 8259</a> requires.
+	 * @param text the text to escape. A {@code null} is written as "{@code null}", as before.
+	 * @return the escaped text
+	 */
+	static String escapeJson(String text) {
+		if (text == null) {
+			return "null";
+		}
+		StringBuilder sb = new StringBuilder(text.length());
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
+			switch (c) {
+				case '"': sb.append("\\\""); break;
+				case '\\': sb.append("\\\\"); break;
+				case '\n': sb.append("\\n"); break;
+				case '\r': sb.append("\\r"); break;
+				case '\t': sb.append("\\t"); break;
+				case '\b': sb.append("\\b"); break;
+				case '\f': sb.append("\\f"); break;
+				default:
+					if (c < 0x20) {
+						sb.append(String.format("\\u%04x", (int) c));
+					} else {
+						sb.append(c);
+					}
+			}
+		}
+		return sb.toString();
+	}
+
 	private static boolean includeMethod(Method method) {
 		if (method.getParameterTypes().length > 0)
 			return false; // Skip get methods with parameters since we do not know what value to pass

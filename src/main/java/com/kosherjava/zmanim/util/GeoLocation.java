@@ -608,14 +608,15 @@ public class GeoLocation implements Cloneable {
 	 */
 	public String toXML() {
 		return "<GeoLocation>\n" +
-				"\t<LocationName>" + getLocationName() + "</LocationName>\n" +
+				"\t<LocationName>" + ZmanimFormatter.escapeXml(getLocationName()) + "</LocationName>\n" +
 				"\t<Latitude>" + getLatitude() + "</Latitude>\n" +
 				"\t<Longitude>" + getLongitude() + "</Longitude>\n" +
 				"\t<Elevation>" + getElevation() + " Meters" + "</Elevation>\n" +
 				"\t<HorizonElevationAtSunrise>" + getHorizonElevationAtSunrise() + " Meters" + "</HorizonElevationAtSunrise>\n" +
 				"\t<HorizonElevationAtSunset>" + getHorizonElevationAtSunset() + " Meters" + "</HorizonElevationAtSunset>\n" +
-				"\t<TimezoneName>" + getZoneId().getId() + "</TimezoneName>\n" +
-				"\t<TimeZoneDisplayName>" + getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "</TimeZoneDisplayName>\n" +
+				"\t<TimezoneName>" + ZmanimFormatter.escapeXml(getZoneId().getId()) + "</TimezoneName>\n" +
+				"\t<TimeZoneDisplayName>" + ZmanimFormatter.escapeXml(getZoneId().getDisplayName(TextStyle.FULL, Locale.ENGLISH))
+				+ "</TimeZoneDisplayName>\n" +
 				"</GeoLocation>";
 	}
 

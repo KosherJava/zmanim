@@ -317,13 +317,13 @@ public class Zman {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").withZone(zoneId);
 		StringBuilder sb = new StringBuilder();
 		sb.append("<Zman>\n");
-		sb.append("\t<Label>").append(getLabel()).append("</Label>\n");
+		sb.append("\t<Label>").append(ZmanimFormatter.escapeXml(getLabel())).append("</Label>\n");
 		sb.append("\t<Zman>").append(getZman() == null ? "": formatter.format(getZman())).append("</Zman>\n");
 		if (getGeoLocation() != null) {
 			sb.append("\t").append(getGeoLocation().toXML().replaceAll("\n", "\n\t"));
 		}
 		sb.append("\n\t<Duration>").append(getDuration()).append("</Duration>\n");
-		sb.append("\t<Description>").append(getDescription()).append("</Description>\n");
+		sb.append("\t<Description>").append(ZmanimFormatter.escapeXml(getDescription())).append("</Description>\n");
 		sb.append("</Zman>");
 		return sb.toString();
 	}
