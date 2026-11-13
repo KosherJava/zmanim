@@ -346,4 +346,48 @@ public class SPACalculatorTest {
 		infiniteSolarRadius.setSolarRadius(Double.POSITIVE_INFINITY);
 		assertTrue(Double.isNaN(infiniteSolarRadius.getUTCSunrise(date, location, 90.0, false)));
 	}
+
+	/**
+	 * The calculator's own fused multiply-add must be bit for bit the same as {@link Math#fma(double, double, double)}, so that
+	 * using it changes no result. Covers random values, heavy cancellation, exact ties (products of 27 bit integers are exact in
+	 * 54 bits, so many sums fall exactly halfway between two doubles), the small integer multipliers of the nutation, and the
+	 * special values that are handed to {@code Math.fma}.
+	 */
+	@Test
+	public void fmaMatchesMathFma() {
+		java.util.SplittableRandom random = new java.util.SplittableRandom(42);
+		for (int i = 0; i < 200_000; i++) {
+			assertFmaMatches(randomDouble(random, 600), randomDouble(random, 600), randomDouble(random, 1100));
+			double a = randomDouble(random, 20);
+			double b = randomDouble(random, 20);
+			double product = a * b;
+			assertFmaMatches(a, b, randomDouble(random, 40));
+			assertFmaMatches(a, b, -product);
+			assertFmaMatches(a, b, -product + Math.ulp(product) * random.nextInt(-4, 5));
+			double ai = Math.scalb((double) (random.nextInt(1 << 26) | (1 << 26)), random.nextInt(-30, 30));
+			double bi = Math.scalb((double) (random.nextInt(1 << 26) | (1 << 26) | 1), random.nextInt(-30, 30));
+			double ulp = Math.ulp(ai * bi);
+			assertFmaMatches(ai, bi, ulp * (random.nextInt(-8, 9) + 0.5));
+			assertFmaMatches(ai, bi, -(ai * bi) + ulp * 0.25 * random.nextInt(-8, 9));
+			assertFmaMatches(randomDouble(random, 12), random.nextInt(-3, 4), randomDouble(random, 12));
+		}
+		double[] specials = {0.0, -0.0, 1.0, -1.0, Double.MIN_VALUE, Double.MIN_NORMAL, Double.MAX_VALUE, -Double.MAX_VALUE,
+				Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NaN, 0x1p500, 0x1p-900, 3.0, 1e-300, 1e300};
+		for (double x : specials) {
+			for (double y : specials) {
+				for (double z : specials) {
+					assertFmaMatches(x, y, z);
+				}
+			}
+		}
+	}
+
+	private static double randomDouble(java.util.SplittableRandom random, int maxExponent) {
+		return (random.nextBoolean() ? -1 : 1) * Math.scalb(1 + random.nextDouble(), random.nextInt(-maxExponent, maxExponent + 1));
+	}
+
+	private static void assertFmaMatches(double a, double b, double c) {
+		assertEquals("fma(" + a + ", " + b + ", " + c + ")", Double.doubleToLongBits(Math.fma(a, b, c)),
+				Double.doubleToLongBits(SPACalculator.fma(a, b, c)));
+	}
 }
