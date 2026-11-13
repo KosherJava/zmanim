@@ -1068,13 +1068,23 @@ public class SPACalculator extends AstronomicalCalculator {
 		double deltaEpsilon = 0;
 		for (int i = 0; i < TERMS_PE.length; i++) {
 			double sum = 0;
+			double[] termsYI = TERMS_Y[i];
 			for (int j = 0; j < x.length; j++) {
-				sum = Math.fma(x[j], TERMS_Y[i][j], sum);
+				double y = termsYI[j];
+				// The multipliers are small integers. Times 0, ±1 or ±2 the product is exact, so a plain multiply and add rounds once,
+				// exactly as the fused multiply-add does, and gives the identical result much faster.
+				sum = (y == 3 || y == -3) ? fma(x[j], y, sum) : sum + x[j] * y;
 			}
 			double xjYtermSum = Math.toRadians(sum);
 			double[] termsPeI = TERMS_PE[i];
-			deltaPsi = Math.fma(Math.fma(termsPeI[1], jce, termsPeI[0]), Math.sin(xjYtermSum), deltaPsi);
-			deltaEpsilon = Math.fma(Math.fma(termsPeI[3], jce, termsPeI[2]), Math.cos(xjYtermSum), deltaEpsilon);
+			// A zero coefficient makes a term exact (0 * jce + a is a, and adding 0 * cos changes nothing), so it is skipped: the
+			// result is identical, and 26 of the 63 cosines are never needed.
+			double psiCoefficient = termsPeI[1] == 0 ? termsPeI[0] : fma(termsPeI[1], jce, termsPeI[0]);
+			deltaPsi = fma(psiCoefficient, Math.sin(xjYtermSum), deltaPsi);
+			if (termsPeI[2] != 0 || termsPeI[3] != 0) {
+				double epsilonCoefficient = termsPeI[3] == 0 ? termsPeI[2] : fma(termsPeI[3], jce, termsPeI[2]);
+				deltaEpsilon = fma(epsilonCoefficient, Math.cos(xjYtermSum), deltaEpsilon);
+			}
 		}
 		return new double[] { deltaPsi / 36_000_000, deltaEpsilon / 36_000_000 };
 	}
@@ -1089,9 +1099,66 @@ public class SPACalculator extends AstronomicalCalculator {
 		int n = coeffs.length - 1;
 		double sum = coeffs[n];
 		for (int i = n - 1; i >= 0; i--) {
-			sum = Math.fma(x, sum, coeffs[i]);
+			sum = fma(x, sum, coeffs[i]);
 		}
 		return sum;
+	}
+
+	/** Veltkamp's splitting constant, 2<sup>27</sup> + 1, which splits a double into two halves whose products are exact. */
+	private static final double SPLITTER = 134217729.0;
+
+	/**
+	 * The fused multiply-add {@code a * b + c} rounded once, bit for bit the same as {@link Math#fma(double, double, double)}, without
+	 * its cost on Android. There {@code Math.fma} is not done by the hardware but in software with {@link java.math.BigDecimal}
+	 * (allocating several objects per call), and the nutation calls it hundreds of times per solar position, which made this
+	 * calculator many times slower than the others on Android.
+	 * <p>
+	 * This is the FMA emulation of Boldo and Melquiond (<a href="https://doi.org/10.1109/TC.2007.70819">"Emulation of FMA and
+	 * correctly rounded sums: proved algorithms using rounding to odd"</a>, IEEE Transactions on Computers 57(4), 2008): the product
+	 * is split exactly into two doubles (Dekker), added to {@code c} exactly (Knuth's TwoSum), the two small parts are added with
+	 * rounding to odd, and a final round to nearest gives the correctly rounded result. It is proven correct when nothing overflows
+	 * or underflows, so any other input (very large, very small, zero, infinite or NaN) is passed to {@code Math.fma}. The values of
+	 * this calculator are never near those limits.
+	 * @param a the first factor
+	 * @param b the second factor
+	 * @param c the addend
+	 * @return {@code a * b + c} rounded once to the nearest double, ties to even
+	 */
+	static double fma(double a, double b, double c) {
+		double absA = Math.abs(a);
+		double absB = Math.abs(b);
+		double absC = Math.abs(c);
+		double absP = absA * absB;
+		// The splitting can overflow above about 2^996, the low half of the product is not exact below about 2^-969 (it would
+		// be subnormal), and the sums must not overflow. The negated form is also false for NaN.
+		if (!(absA < 0x1p500 && absB < 0x1p500 && absC < 0x1p1000 && absP > 0x1p-900)) {
+			return Math.fma(a, b, c);
+		}
+		// Dekker's exact product: p + pErr == a * b
+		double p = a * b;
+		double t = SPLITTER * a;
+		double aHi = t - (t - a);
+		double aLo = a - aHi;
+		t = SPLITTER * b;
+		double bHi = t - (t - b);
+		double bLo = b - bHi;
+		double pErr = ((aHi * bHi - p) + aHi * bLo + aLo * bHi) + aLo * bLo;
+		// Knuth's TwoSum: s + sErr == c + p
+		double s = c + p;
+		double bp = s - c;
+		double sErr = (c - (s - bp)) + (p - bp);
+		// v = sErr + pErr rounded to odd
+		double v = sErr + pErr;
+		double bv = v - sErr;
+		double vErr = (sErr - (v - bv)) + (pErr - bv);
+		if (vErr != 0) {
+			long bits = Double.doubleToRawLongBits(v);
+			if ((bits & 1) == 0) { // inexact and even: take the neighbour on the side of the exact sum, which is odd
+				bits += (v > 0) == (vErr > 0) ? 1 : -1;
+				v = Double.longBitsToDouble(bits);
+			}
+		}
+		return s + v;
 	}
 
 	/** Polynomial coefficients of the nutation arguments X0 - X4 (Reda &amp; Andreas, equations 15 - 19). */
