@@ -69,6 +69,17 @@ import java.util.Objects;
  * <em>zmanim</em> requirements. For the full published SPA ±0.0003° envelope, the VSOP87 tables and the IAU 1980 nutation series can
  * be extended without changing the algorithm.
  *
+ * <p><b>Performance note (Android).</b> The nutation series calls {@link Math#fma(double, double, double)} about 580 times for each
+ * solar position. On the desktop JVM and on arm64 Android release builds this is a single hardware instruction, and three days of
+ * zmanim with a fresh calculator took about 1 - 12 ms in the measurements made for this note (a Galaxy S23 on Android 16). Android's
+ * runtime (ART) does not always do this, though. In debuggable apps (debug builds) and on x86 and x86_64 devices (emulators,
+ * Chromebooks) it can run the Java fallback of {@code Math.fma}, a {@link java.math.BigDecimal} multiply and add that allocates
+ * several objects per call. In the same measurements, three days of zmanim took about 200 - 1080 ms in a debug build on a Galaxy
+ * S23, and about 650 - 3100 ms on an Android 17 x86_64 emulator (not debuggable). The results are the same, only slower. If this
+ * matters for an app in those environments, test on a release build or on an arm64 device, use another {@link
+ * AstronomicalCalculator} such as {@link NOAACalculator} or {@link MeeusCalculator} (which do not use {@code Math.fma}), or create
+ * your own subclass of {@link AstronomicalCalculator}.
+ *
  * @author © Eliyahu Hershfeld 2026; NREL SPA (Reda and Andreas) port
  */
 public class SPACalculator extends AstronomicalCalculator {
