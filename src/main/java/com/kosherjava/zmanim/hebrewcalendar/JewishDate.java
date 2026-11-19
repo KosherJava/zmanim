@@ -309,7 +309,9 @@ public class JewishDate implements Comparable<JewishDate>, Cloneable {
 	 * @return the {@code LocalDate}.
 	 */
 	private static LocalDate absDateToDate(int absDate) {
-	 	int year = Math.floorDiv(absDate, 366); // Search forward year by year from approximate year
+	 	// Search forward year by year from an approximate year that is never after the correct one. Before January 1,
+	 	// 0001, absDate is negative, and dividing by 366 would round toward zero, to a year that may be too late.
+	 	int year = absDate > 0 ? Math.floorDiv(absDate, 366) : Math.floorDiv(absDate, 365);
 	 	while (absDate >= gregorianDateToAbsDate(year + 1, 1, 1)) {
 	 	 	year++;
 	 	}
